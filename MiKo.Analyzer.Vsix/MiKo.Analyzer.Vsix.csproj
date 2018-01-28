@@ -73,9 +73,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MiKo_Code_Analyzer\MiKo_Code_Analyzer.csproj">
-      <Project>{0E08768E-EB1C-4673-BE1D-B396B28BBA69}</Project>
-      <Name>MiKo_Code_Analyzer</Name>
+    <ProjectReference Include="..\MiKo.Analyzer\MiKo.Analyzer.csproj">
+      <Project>{0e08768e-eb1c-4673-be1d-b396b28bba69}</Project>
+      <Name>MiKo.Analyzer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

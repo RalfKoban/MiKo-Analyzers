@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiKo_Code_Analyzer\MiKo_Code_Analyzer.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer\MiKo.Analyzer.csproj" />
   </ItemGroup>
 
 </Project>
