@@ -1,2 +1,8 @@
 *.user
 /.vs/MiKo.Analyzer/v15/
+/MiKo.Analyzer/bin/
+/MiKo.Analyzer/obj/
+/MiKo.Analyzer.Tests/bin/
+/MiKo.Analyzer.Tests/obj/
+/MiKo.Analyzer.Vsix/bin/
+/MiKo.Analyzer.Vsix/obj/
