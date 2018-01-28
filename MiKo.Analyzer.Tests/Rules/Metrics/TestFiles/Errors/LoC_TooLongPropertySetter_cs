@@ -1,0 +1,24 @@
+﻿namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
+{
+    public class TypeWithProperties
+    {
+        public string BracketOnSameLineProperty
+        {
+            set {
+// Line 1
+// Line 2
+// Line 3
+            }
+        }
+
+        public string BracketOnOtherLineProperty
+        {
+            set
+            {
+// Line 1
+// Line 2
+// Line 3
+            }
+        }
+    }
+}

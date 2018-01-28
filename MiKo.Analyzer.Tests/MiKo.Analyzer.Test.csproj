@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>MiKoSolutions.Analyzers.Tests</AssemblyName>
+    <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongCtor_cs" />
+    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongMethod_cs" />
+    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertyGetter_cs" />
+    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertySetter_cs" />
+    <None Remove="Rules\Metrics\TestFiles\LoC_TypesWithErrors_cs" />
+    <None Remove="Rules\Metrics\TestFiles\Loc_ValidTypes_cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongCtor_cs" />
+    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongMethod_cs" />
+    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertyGetter_cs" />
+    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertySetter_cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Rules\Metrics\TestFiles\Valid\LoC_ValidTypes_cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.6.1" />
+    <PackageReference Include="NUnit" Version="3.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MiKo_Code_Analyzer\MiKo_Code_Analyzer.csproj" />
+  </ItemGroup>
+
+</Project>
