@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class LinesOfCodeAnalyzer : MetricsAnalyzer
     {
-        public LinesOfCodeAnalyzer() : base("MiKo_Metric_0001")
+        public LinesOfCodeAnalyzer() : base("MiKo_0001")
         {
         }
 

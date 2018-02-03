@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class CyclomaticComplexityAnalyzer : MetricsAnalyzer
     {
-        public CyclomaticComplexityAnalyzer() : base("MiKo_Metric_0002")
+        public CyclomaticComplexityAnalyzer() : base("MiKo_0002")
         {
         }
 
@@ -23,21 +23,23 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             return diagnostic;
         }
 
-        // if | while | for | foreach | case | default | continue | goto | && | || | catch | ternary operator ?: | ??
+        // if | while | for | foreach | case | continue | goto | && | || | catch | ternary operator ?: | ?? | ?.
         private static readonly SyntaxKind[] CCSyntaxKinds =
             {
                 SyntaxKind.IfStatement,
                 SyntaxKind.WhileStatement,
                 SyntaxKind.ForStatement,
                 SyntaxKind.ForEachStatement,
-                SyntaxKind.CasePatternSwitchLabel,
                 SyntaxKind.CaseSwitchLabel,
+                SyntaxKind.CasePatternSwitchLabel,
                 SyntaxKind.ContinueStatement,
                 SyntaxKind.GotoStatement,
-                SyntaxKind.AmpersandAmpersandToken,
+                SyntaxKind.LogicalAndExpression,
                 SyntaxKind.LogicalOrExpression,
-                SyntaxKind.CatchKeyword,
+                SyntaxKind.CatchDeclaration,
                 SyntaxKind.ConditionalExpression,
+                SyntaxKind.CoalesceExpression,
+                SyntaxKind.ConditionalAccessExpression,
             };
 
         private static int CountCyclomaticComplexity(BlockSyntax body)
