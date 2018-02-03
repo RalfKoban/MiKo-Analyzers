@@ -19,10 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol)
         {
             var cc = CountCyclomaticComplexity(body);
-
-            return cc > MaxCyclomaticComplexity
-                ? Diagnostic.Create(Rule, owningSymbol.Locations.First(), owningSymbol.Name, cc, MaxCyclomaticComplexity)
-                : null;
+            TryCreateDiagnostic(owningSymbol, cc, MaxCyclomaticComplexity, out var diagnostic);
+            return diagnostic;
         }
 
         // if | while | for | foreach | case | default | continue | goto | && | || | catch | ternary operator ?: | ??
@@ -44,10 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private static int CountCyclomaticComplexity(BlockSyntax body)
         {
-            var collector = new SyntaxNodeCollector<CSharpSyntaxNode>();
-            collector.Visit(body);
-
-            var count = collector.Nodes.Count(_ => CCSyntaxKinds.Any(_.IsKind));
+            var count = SyntaxNodeCollector<SyntaxNode>.Collect(body).Count(_ => CCSyntaxKinds.Any(_.IsKind));
             return 1 + count;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,15 +11,20 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         private const string Category = "Metrics";
 
+        private static readonly ConcurrentDictionary<string, DiagnosticDescriptor> KnownRules = new ConcurrentDictionary<string, DiagnosticDescriptor>();
+
         protected MetricsAnalyzer(string diagnosticId)
         {
-            // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat.
-            // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
-            var title = LocalizableResource("Title");
-            var messageFormat = LocalizableResource("MessageFormat");
-            var description = LocalizableResource("Description");
-
-            Rule = new DiagnosticDescriptor(diagnosticId, title, messageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: description);
+            Rule = KnownRules.GetOrAdd(
+                                       GetType().Name,
+                                       name => new DiagnosticDescriptor(
+                                                                        diagnosticId,
+                                                                        LocalizableResource(name, "Title"),
+                                                                        LocalizableResource(name, "MessageFormat"),
+                                                                        Category,
+                                                                        DiagnosticSeverity.Warning,
+                                                                        isEnabledByDefault: true,
+                                                                        description: LocalizableResource(name, "Description")));
         }
 
         protected DiagnosticDescriptor Rule { get; }
@@ -30,6 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         public override void Initialize(AnalysisContext context) => context.RegisterCodeBlockAction(AnalyzeCodeBlock);
 
         protected abstract Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol);
+
+        protected bool TryCreateDiagnostic(ISymbol owningSymbol, int metric, int limit, out Diagnostic diagnostic)
+        {
+            diagnostic = metric > limit ? Diagnostic.Create(Rule, owningSymbol.Locations[0], owningSymbol.Name, metric, limit) : null;
+            return diagnostic != null;
+        }
 
         private void AnalyzeCodeBlock(CodeBlockAnalysisContext context)
         {
@@ -53,6 +65,8 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
-        private LocalizableResourceString LocalizableResource(string suffix) => new LocalizableResourceString(GetType().Name + "_" + suffix, Resources.ResourceManager, typeof(Resources));
+        // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat.
+        // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
+        private LocalizableResourceString LocalizableResource(string prefix, string suffix) => new LocalizableResourceString(prefix + "_" + suffix, Resources.ResourceManager, typeof(Resources));
     }
 }

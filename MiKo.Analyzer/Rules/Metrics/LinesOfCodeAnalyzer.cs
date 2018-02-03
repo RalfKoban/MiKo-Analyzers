@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -19,20 +18,15 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol)
         {
             var loc = CountLinesOfCode(body);
-
-            return loc > MaxLinesOfCode
-                    ? Diagnostic.Create(Rule, owningSymbol.Locations.First(), owningSymbol.Name, loc, MaxLinesOfCode)
-                    : null;
+            TryCreateDiagnostic(owningSymbol, loc, MaxLinesOfCode, out var diagnostic);
+            return diagnostic;
         }
 
         private static int CountLinesOfCode(SyntaxNode body)
         {
-            var collector = new SyntaxNodeCollector<StatementSyntax>();
-            collector.Visit(body);
-
             var lines = new HashSet<int>();
 
-            foreach (var node in collector.Nodes)
+            foreach (var node in SyntaxNodeCollector<StatementSyntax>.Collect(body))
             {
                 CountLinesOfCode(node, lines);
             }
@@ -42,25 +36,28 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private static void CountLinesOfCode(SyntaxNode node, ISet<int> lines)
         {
-            switch (node)
+            while (node != null)
             {
-                case BlockSyntax _: return;
+                switch (node)
+                {
+                    case BlockSyntax _:
+                        return;
 
-                case ForEachStatementSyntax s:
-                    CountLinesOfCode(s.Expression, lines);
-                    return;
+                    case ForEachStatementSyntax s:
+                        node = s.Expression;
+                        continue;
 
-                case SwitchStatementSyntax s:
-                    CountLinesOfCode(s.Expression, lines);
-                    return;
+                    case SwitchStatementSyntax s:
+                        node = s.Expression;
+                        continue;
 
-                default:
-                    var lineSpan = node.GetLocation().GetLineSpan();
-                    lines.Add(lineSpan.StartLinePosition.Line);
-                    lines.Add(lineSpan.EndLinePosition.Line);
-                    return;
+                    default:
+                        var lineSpan = node.GetLocation().GetLineSpan();
+                        lines.Add(lineSpan.StartLinePosition.Line);
+                        lines.Add(lineSpan.EndLinePosition.Line);
+                        return;
+                }
             }
-
         }
     }
 }
