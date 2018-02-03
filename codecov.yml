@@ -1,0 +1,30 @@
+# https://docs.codecov.io/docs/codecov-yaml
+# https://github.com/codecov/support/wiki/Codecov-Yaml
+
+coverage:
+  range: 70..100
+  round: down
+  precision: 2
+  
+ignore:
+      - MiKo.Analyzer.Tests/
+      - MiKo.Analyzer.Vsix/
+
+coverage:
+  status:
+    project:
+      default: off
+      api:
+        target: 100%
+        flags: api
+
+flags:
+  api:
+    paths:
+      - MiKo.Analyzer/
+  test:
+    paths:
+      - MiKo.Analyzer.Tests/
+
+codecov:
+  token: 3599e0b3-8d22-44eb-a33d-58383db89b64
