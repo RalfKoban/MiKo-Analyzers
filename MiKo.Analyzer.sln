@@ -1,13 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer", "MiKo.Analyzer\MiKo.Analyzer.csproj", "{0E08768E-EB1C-4673-BE1D-B396B28BBA69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiKo.Analyzer", "MiKo.Analyzer\MiKo.Analyzer.csproj", "{0E08768E-EB1C-4673-BE1D-B396B28BBA69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer.Tests", "MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj", "{110CF3BC-190B-46A4-9525-A4DF6813D38D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiKo.Analyzer.Tests", "MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj", "{110CF3BC-190B-46A4-9525-A4DF6813D38D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer.Vsix", "MiKo.Analyzer.Vsix\MiKo.Analyzer.Vsix.csproj", "{15DEC8E6-2392-45BE-86E7-A5221F48047C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{E8DA3417-4698-4F8E-9D6A-715988F81B7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D373AFD7-B57A-4448-9D82-B9881A4F2350}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{65D8ACB8-FDD0-48FF-8FE9-1C8669BC750A}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +41,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0E08768E-EB1C-4673-BE1D-B396B28BBA69} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
+		{110CF3BC-190B-46A4-9525-A4DF6813D38D} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
+		{15DEC8E6-2392-45BE-86E7-A5221F48047C} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
+		{65D8ACB8-FDD0-48FF-8FE9-1C8669BC750A} = {D373AFD7-B57A-4448-9D82-B9881A4F2350}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7625E68D-A5A2-4509-A414-C33EB474E87C}

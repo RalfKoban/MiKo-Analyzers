@@ -61,29 +61,56 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should be short..
+        ///   Looks up a localized string similar to Methods should be simple..
         /// </summary>
-        internal static string LinesOfCodeAnalyzerDescription {
+        internal static string CyclomaticComplexityAnalyzer_Description {
             get {
-                return ResourceManager.GetString("LinesOfCodeAnalyzerDescription", resourceCulture);
+                return ResourceManager.GetString("CyclomaticComplexityAnalyzer_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} LoC, but allowed are only {2} LoC..
+        ///   Looks up a localized string similar to &apos;{0}&apos; has a Cyclomatic Complexity of {1} (allowed is {2}).
         /// </summary>
-        internal static string LinesOfCodeAnalyzerMessageFormat {
+        internal static string CyclomaticComplexityAnalyzer_MessageFormat {
             get {
-                return ResourceManager.GetString("LinesOfCodeAnalyzerMessageFormat", resourceCulture);
+                return ResourceManager.GetString("CyclomaticComplexityAnalyzer_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method is too complex..
+        /// </summary>
+        internal static string CyclomaticComplexityAnalyzer_Title {
+            get {
+                return ResourceManager.GetString("CyclomaticComplexityAnalyzer_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should be short..
+        /// </summary>
+        internal static string LinesOfCodeAnalyzer_Description {
+            get {
+                return ResourceManager.GetString("LinesOfCodeAnalyzer_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} Lines of Code (allowed are {2}).
+        /// </summary>
+        internal static string LinesOfCodeAnalyzer_MessageFormat {
+            get {
+                return ResourceManager.GetString("LinesOfCodeAnalyzer_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Method is too long.
         /// </summary>
-        internal static string LinesOfCodeAnalyzerTitle {
+        internal static string LinesOfCodeAnalyzer_Title {
             get {
-                return ResourceManager.GetString("LinesOfCodeAnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("LinesOfCodeAnalyzer_Title", resourceCulture);
             }
         }
     }

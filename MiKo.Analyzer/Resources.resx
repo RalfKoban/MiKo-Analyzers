@@ -117,16 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LinesOfCodeAnalyzerDescription" xml:space="preserve">
+  <data name="CyclomaticComplexityAnalyzer_Description" xml:space="preserve">
+    <value>Methods should be simple.</value>
+  </data>
+  <data name="CyclomaticComplexityAnalyzer_MessageFormat" xml:space="preserve">
+    <value>'{0}' has a Cyclomatic Complexity of {1} (allowed is {2})</value>
+  </data>
+  <data name="CyclomaticComplexityAnalyzer_Title" xml:space="preserve">
+    <value>Method is too complex.</value>
+  </data>
+  <data name="LinesOfCodeAnalyzer_Description" xml:space="preserve">
     <value>Methods should be short.</value>
-    <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
-  <data name="LinesOfCodeAnalyzerMessageFormat" xml:space="preserve">
-    <value>'{0}' has {1} LoC, but allowed are only {2} LoC.</value>
-    <comment>The format-able message the diagnostic displays.</comment>
+  <data name="LinesOfCodeAnalyzer_MessageFormat" xml:space="preserve">
+    <value>'{0}' has {1} Lines of Code (allowed are {2})</value>
   </data>
-  <data name="LinesOfCodeAnalyzerTitle" xml:space="preserve">
+  <data name="LinesOfCodeAnalyzer_Title" xml:space="preserve">
     <value>Method is too long</value>
-    <comment>The title of the diagnostic.</comment>
   </data>
 </root>
