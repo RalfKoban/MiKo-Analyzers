@@ -34,8 +34,8 @@
     <ProjectGuid>{15DEC8E6-2392-45BE-86E7-A5221F48047C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiKo_Code_Analyzer.Vsix</RootNamespace>
-    <AssemblyName>MiKo_Code_Analyzer</AssemblyName>
+    <RootNamespace>MiKoSolutions.Analyzers.Vsix</RootNamespace>
+    <AssemblyName>MiKoSolutions.Analyzers</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
