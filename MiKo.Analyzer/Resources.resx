@@ -126,6 +126,15 @@
   <data name="CyclomaticComplexityAnalyzer_Title" xml:space="preserve">
     <value>Method is too complex.</value>
   </data>
+  <data name="EventHandlingMethodParametersAnalyzer_Description" xml:space="preserve">
+    <value>The parameters of event handling methods should be named 'sender' and 'e',  according to the .NET Framework Guidelines.</value>
+  </data>
+  <data name="EventHandlingMethodParametersAnalyzer_MessageFormat" xml:space="preserve">
+    <value>'{0}' has wrong name for parameter '{1}' (should be named '{2}')</value>
+  </data>
+  <data name="EventHandlingMethodParametersAnalyzer_Title" xml:space="preserve">
+    <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
+  </data>
   <data name="LinesOfCodeAnalyzer_Description" xml:space="preserve">
     <value>Methods should be short.</value>
   </data>

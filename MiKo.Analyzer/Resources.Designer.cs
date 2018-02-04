@@ -88,6 +88,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameters of event handling methods should be named &apos;sender&apos; and &apos;e&apos;,  according to the .NET Framework Guidelines..
+        /// </summary>
+        internal static string EventHandlingMethodParametersAnalyzer_Description {
+            get {
+                return ResourceManager.GetString("EventHandlingMethodParametersAnalyzer_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has wrong name for parameter &apos;{1}&apos; (should be named &apos;{2}&apos;).
+        /// </summary>
+        internal static string EventHandlingMethodParametersAnalyzer_MessageFormat {
+            get {
+                return ResourceManager.GetString("EventHandlingMethodParametersAnalyzer_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
+        /// </summary>
+        internal static string EventHandlingMethodParametersAnalyzer_Title {
+            get {
+                return ResourceManager.GetString("EventHandlingMethodParametersAnalyzer_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods should be short..
         /// </summary>
         internal static string LinesOfCodeAnalyzer_Description {
