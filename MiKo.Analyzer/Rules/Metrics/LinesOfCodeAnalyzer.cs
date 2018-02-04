@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class LinesOfCodeAnalyzer : MetricsAnalyzer
+    public sealed class LinesOfCodeAnalyzer : MetricsAnalyzer
     {
         public const string Id = "MiKo_0001";
 
