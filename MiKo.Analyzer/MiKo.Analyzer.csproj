@@ -29,7 +29,9 @@
   </PropertyGroup>
    
   <ItemGroup>
+    <PackageReference Include="Codecov" Version="1.0.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.6.1" PrivateAssets="all" />
+    <PackageReference Include="OpenCover" Version="4.6.519" />
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
   </ItemGroup>
 
