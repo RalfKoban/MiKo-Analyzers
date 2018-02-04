@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CyclomaticComplexityAnalyzer_Description" xml:space="preserve">
-    <value>Methods should be simple.</value>
+    <value>Methods should be simple to ease maintenance.</value>
   </data>
   <data name="CyclomaticComplexityAnalyzer_MessageFormat" xml:space="preserve">
     <value>'{0}' has a Cyclomatic Complexity of {1} (allowed is {2})</value>
@@ -130,13 +130,13 @@
     <value>The parameters of event handling methods should be named 'sender' and 'e',  according to the .NET Framework Guidelines.</value>
   </data>
   <data name="EventHandlingMethodParametersAnalyzer_MessageFormat" xml:space="preserve">
-    <value>'{0}' has wrong name for parameter '{1}' (should be named '{2}')</value>
+    <value>'{0}' has wrong-named parameter '{1}' (should be '{2}')</value>
   </data>
   <data name="EventHandlingMethodParametersAnalyzer_Title" xml:space="preserve">
-    <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
+    <value>Parameter names do not follow .NET Framework Guidelines for event handlers/event handling methods.</value>
   </data>
   <data name="LinesOfCodeAnalyzer_Description" xml:space="preserve">
-    <value>Methods should be short.</value>
+    <value>Methods should be short to ease reading and maintenance.</value>
   </data>
   <data name="LinesOfCodeAnalyzer_MessageFormat" xml:space="preserve">
     <value>'{0}' has {1} Lines of Code (allowed are {2})</value>

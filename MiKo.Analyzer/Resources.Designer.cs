@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should be simple..
+        ///   Looks up a localized string similar to Methods should be simple to ease maintenance..
         /// </summary>
         internal static string CyclomaticComplexityAnalyzer_Description {
             get {
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has wrong name for parameter &apos;{1}&apos; (should be named &apos;{2}&apos;).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has wrong-named parameter &apos;{1}&apos; (should be &apos;{2}&apos;).
         /// </summary>
         internal static string EventHandlingMethodParametersAnalyzer_MessageFormat {
             get {
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers/event handling methods..
         /// </summary>
         internal static string EventHandlingMethodParametersAnalyzer_Title {
             get {
@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should be short..
+        ///   Looks up a localized string similar to Methods should be short to ease reading and maintenance..
         /// </summary>
         internal static string LinesOfCodeAnalyzer_Description {
             get {
