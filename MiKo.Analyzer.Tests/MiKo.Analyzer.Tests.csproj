@@ -7,19 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongCtor_cs" />
-    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongMethod_cs" />
-    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertyGetter_cs" />
-    <None Remove="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertySetter_cs" />
     <None Remove="Rules\Metrics\TestFiles\LoC_TypesWithErrors_cs" />
     <None Remove="Rules\Metrics\TestFiles\Loc_ValidTypes_cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongCtor_cs" />
-    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongMethod_cs" />
-    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertyGetter_cs" />
-    <EmbeddedResource Include="Rules\Metrics\TestFiles\Errors\LoC_TooLongPropertySetter_cs" />
   </ItemGroup>
 
   <ItemGroup>

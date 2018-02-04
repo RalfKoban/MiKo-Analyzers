@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.CodeAnalysis;
+
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using NUnit.Framework;
@@ -14,7 +13,101 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     public class LinesOfCodeAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent) => VerifyCSharpDiagnostic(fileContent);
+        public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent)
+        {
+            var results = GetDiagnostics(fileContent);
+
+            Assert.That(results, Is.Empty);
+        }
+
+        [Test]
+        public void Method_with_long_if_statement_is_reported() => Issue_gets_reported(@"
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            if (true)
+            {
+                var x = 0;
+                if (x == 0)
+                {
+                    return;
+                }
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Method_with_long_switch_statement_is_reported() => Issue_gets_reported(@"
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            switch (x)
+            {
+                case 1:
+                    var x = 0;
+                    break;
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Method_with_long_try_statement_is_reported() => Issue_gets_reported(@"
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            try
+            {
+                var x = 0;
+                var y = 1;
+                var z = x + y;
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Method_with_long_catch_statement_is_reported() => Issue_gets_reported(@"
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            catch (Exception ex)
+            {
+                var x = 0;
+                var y = 1;
+                var z = x + y;
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Method_with_long_finally_statement_is_reported() => Issue_gets_reported(@"
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            finally
+            {
+                var x = 0;
+                var y = 1;
+                var z = x + y;
+            }
+        }
+    }
+");
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider()
+        {
+            return null; // return new MiKo_Code_AnalyzerCodeFixProvider();
+        }
+
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
 
         private static IEnumerable<string> ValidFiles()
         {
@@ -22,35 +115,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             contents.AddRange(GetEmbeddedFileContents(".Valid.LoC_"));
 
             return contents;
-        }
-
-        [Test, Ignore("TODO")]
-        public void Files_with_issues_are_reported_as_warnings([ValueSource(nameof(FilesWithIssuses))] string fileContent)
-        {
-            var expected = new DiagnosticResult
-            {
-                Id = "MiKo_Code_Analyzer",
-                Message = String.Format("Type name '{0}' contains lowercase letters", "TypeName"),
-                Severity = DiagnosticSeverity.Warning,
-                Locations = new[]
-                    {
-                        new DiagnosticResultLocation("Test0.cs", 11, 15)
-                    }
-            };
-
-            VerifyCSharpDiagnostic(fileContent, expected);
-        }
-
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return null; // return new MiKo_Code_AnalyzerCodeFixProvider();
-        }
-
-        protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
-
-        private static IEnumerable<string> FilesWithIssuses()
-        {
-            return new List<string>(GetEmbeddedFileContents(".Errors.LoC_"));
         }
 
         private static IEnumerable<string> GetEmbeddedFileContents(string namePrefix)
@@ -64,6 +128,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                     yield return reader.ReadToEnd();
                 }
             }
+        }
+
+        private void Issue_gets_reported(string fileContent)
+        {
+            var results = GetDiagnostics(fileContent);
+
+            Assert.That(results.Single().Id, Is.EqualTo(LinesOfCodeAnalyzer.Id));
         }
     }
 }

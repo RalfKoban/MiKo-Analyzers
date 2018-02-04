@@ -10,7 +10,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class CyclomaticComplexityAnalyzer : MetricsAnalyzer
     {
-        public CyclomaticComplexityAnalyzer() : base("MiKo_0002")
+        public const string Id = "MiKo_0002";
+
+        public CyclomaticComplexityAnalyzer() : base(Id)
         {
         }
 

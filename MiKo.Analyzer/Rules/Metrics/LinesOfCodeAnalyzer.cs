@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,7 +10,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class LinesOfCodeAnalyzer : MetricsAnalyzer
     {
-        public LinesOfCodeAnalyzer() : base("MiKo_0001")
+        public const string Id = "MiKo_0001";
+
+        public LinesOfCodeAnalyzer() : base(Id)
         {
         }
 
@@ -24,40 +27,52 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private static int CountLinesOfCode(SyntaxNode body)
         {
-            var lines = new HashSet<int>();
+            var nodes = SyntaxNodeCollector<StatementSyntax>.Collect(body);
 
-            foreach (var node in SyntaxNodeCollector<StatementSyntax>.Collect(body))
+            var lines = new HashSet<int>();
+            CountLinesOfCode(nodes, lines);
+            return lines.Count;
+        }
+
+        private static void CountLinesOfCode(IEnumerable<SyntaxNode> nodes, ISet<int> lines)
+        {
+            foreach (var node in nodes)
             {
                 CountLinesOfCode(node, lines);
             }
-
-            return lines.Count;
         }
 
         private static void CountLinesOfCode(SyntaxNode node, ISet<int> lines)
         {
-            while (node != null)
+            switch (node)
             {
-                switch (node)
-                {
-                    case BlockSyntax _:
-                        return;
+                case BlockSyntax _:
+                    break;
 
-                    case ForEachStatementSyntax s:
-                        node = s.Expression;
-                        continue;
+                case IfStatementSyntax s:
+                    CountLinesOfCode(s.Condition, lines);
+                    break;
 
-                    case SwitchStatementSyntax s:
-                        node = s.Expression;
-                        continue;
+                case ForEachStatementSyntax s:
+                    CountLinesOfCode(s.Expression, lines);
+                    break;
 
-                    default:
-                        var lineSpan = node.GetLocation().GetLineSpan();
-                        lines.Add(lineSpan.StartLinePosition.Line);
-                        lines.Add(lineSpan.EndLinePosition.Line);
-                        return;
-                }
+                case SwitchStatementSyntax s:
+                    CountLinesOfCode(s.Expression, lines);
+                    CountLinesOfCode(s.Sections.SelectMany(_ => _.Labels), lines);
+                    break;
+
+                default:
+                    CountLinesOfCode(node.GetLocation(), lines);
+                    break;
             }
+        }
+
+        private static void CountLinesOfCode(Location location, ISet<int> lines)
+        {
+            var lineSpan = location.GetLineSpan();
+            lines.Add(lineSpan.StartLinePosition.Line);
+            lines.Add(lineSpan.EndLinePosition.Line);
         }
     }
 }
