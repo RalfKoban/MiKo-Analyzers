@@ -6,6 +6,14 @@
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Rules\Metrics\TestFiles\LoC_TypesWithErrors_cs" />
     <None Remove="Rules\Metrics\TestFiles\Loc_ValidTypes_cs" />
