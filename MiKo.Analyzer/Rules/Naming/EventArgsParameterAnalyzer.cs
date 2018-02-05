@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var diagnostics = method.Parameters
                                     .Where(_ => _.Type.InheritsFrom<System.EventArgs>() && _.Name != "e")
-                                    .Select(_ => Diagnostic.Create(Rule, method.Locations[0], method.Name, _.Name, "e"))
+                                    .Select(_ => Diagnostic.Create(Rule, method.Locations[0], method.Name, _.Name))
                                     .ToList();
             return diagnostics;
         }

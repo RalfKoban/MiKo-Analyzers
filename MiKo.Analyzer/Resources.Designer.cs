@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters that inherit from &apos;System.EventArgs&apos; should be named &apos;e&apos; to ease maintenance..
+        ///   Looks up a localized string similar to To ease maintenance, parameters that inherit from &apos;System.EventArgs&apos; should be named &apos;e&apos; ..
         /// </summary>
         internal static string EventArgsParameterAnalyzer_Description {
             get {
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has wrong-named parameter &apos;{1}&apos; (should be &apos;{2}&apos;).
+        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;e&apos;).
         /// </summary>
         internal static string EventArgsParameterAnalyzer_MessageFormat {
             get {
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods with &apos;System.EventArgs&apos; parameters should name them properly..
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly..
         /// </summary>
         internal static string EventArgsParameterAnalyzer_Title {
             get {
@@ -142,7 +142,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;,  according to the .NET Framework Guidelines..
+        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;..
         /// </summary>
         internal static string EventHandlingMethodParametersAnalyzer_Description {
             get {
@@ -151,7 +151,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has wrong-named parameter &apos;{1}&apos; (should be &apos;{2}&apos;).
+        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;{2}&apos;).
         /// </summary>
         internal static string EventHandlingMethodParametersAnalyzer_MessageFormat {
             get {
