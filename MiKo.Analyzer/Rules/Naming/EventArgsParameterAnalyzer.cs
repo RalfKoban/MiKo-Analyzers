@@ -19,12 +19,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
-            if (method.IsOverride) return base.AnalyzeMethod(method);
+            if (method.IsOverride) return Enumerable.Empty<Diagnostic>();
 
-            var diagnostics = method.Parameters
-                                        .Where(_ => _.Type.InheritsFrom<System.EventArgs>() && _.Name != "e")
-                                        .Select(_ => Diagnostic.Create(Rule, method.Locations[0], method.Name, _.Name, "e"))
-                                        .ToList();
+            var parameters = method.Parameters;
+            if (parameters.Length == 2 && parameters[0].Type.ToString() == "object" && parameters[1].Type.InheritsFrom<System.EventArgs>())
+            {
+                // ignore the method as it is handled by EventHandlingMethodParametersAnalyzer
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            var diagnostics = parameters
+                                    .Where(_ => _.Type.InheritsFrom<System.EventArgs>() && _.Name != "e")
+                                    .Select(_ => Diagnostic.Create(Rule, method.Locations[0], method.Name, _.Name, "e"))
+                                    .ToList();
             return diagnostics;
         }
     }
