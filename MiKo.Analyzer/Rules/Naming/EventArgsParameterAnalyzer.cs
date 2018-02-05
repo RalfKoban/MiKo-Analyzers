@@ -19,6 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
+            if (method.IsOverride) return base.AnalyzeMethod(method);
+
             var diagnostics = method.Parameters
                                         .Where(_ => _.Type.InheritsFrom<System.EventArgs>() && _.Name != "e")
                                         .Select(_ => Diagnostic.Create(Rule, method.Locations[0], method.Name, _.Name, "e"))
