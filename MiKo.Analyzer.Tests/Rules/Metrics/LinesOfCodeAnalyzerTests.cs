@@ -107,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             return null; // return new MiKo_Code_AnalyzerCodeFixProvider();
         }
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
+        protected override Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer GetObjectUnderTest() => new LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
 
         private static IEnumerable<string> ValidFiles()
         {
