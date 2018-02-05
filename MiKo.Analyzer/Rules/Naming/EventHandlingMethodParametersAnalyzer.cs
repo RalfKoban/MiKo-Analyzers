@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,22 +19,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
+            if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
+
             var parameters = method.Parameters;
-            if (parameters.Length == 2)
+
+            var diagnostics = new List<Diagnostic>();
+            VerifyParameterName("sender", parameters[0].Name, method, diagnostics);
+            VerifyParameterName("e", parameters[1].Name, method, diagnostics);
+            return diagnostics;
+        }
+
+        private void VerifyParameterName(string expected, string actual, IMethodSymbol method, ICollection<Diagnostic> diagnostics)
+        {
+            if (expected != actual)
             {
-                var parameter1 = parameters[0];
-                var parameter2 = parameters[1];
-
-                if (parameter1.Type.ToString() == "object" && parameter2.Type.InheritsFrom<System.EventArgs>())
-                {
-                    var diagnostics = new List<Diagnostic>();
-                    if (parameter1.Name != "sender") diagnostics.Add(Diagnostic.Create(Rule, method.Locations[0], method.Name, parameter1.Name, "sender"));
-                    if (parameter2.Name != "e") diagnostics.Add(Diagnostic.Create(Rule, method.Locations[0], method.Name, parameter2.Name, "e"));
-                    return diagnostics;
-                }
+                diagnostics.Add(Diagnostic.Create(Rule, method.Locations[0], method.Name, actual, expected));
             }
-
-            return base.AnalyzeMethod(method);
         }
     }
 }

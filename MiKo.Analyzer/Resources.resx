@@ -135,14 +135,23 @@
   <data name="EventArgsParameterAnalyzer_Title" xml:space="preserve">
     <value>Methods with 'System.EventArgs' parameters should name them properly.</value>
   </data>
+  <data name="EventHandlingMethodNamePrefixAnalyzer_Description" xml:space="preserve">
+    <value>Event handlers should start with 'On' to indicate that they handle events.</value>
+  </data>
+  <data name="EventHandlingMethodNamePrefixAnalyzer_MessageFormat" xml:space="preserve">
+    <value>'{0}' does not start with 'On'</value>
+  </data>
+  <data name="EventHandlingMethodNamePrefixAnalyzer_Title" xml:space="preserve">
+    <value>Name of event handler does not follow the .NET Framework Best practices.</value>
+  </data>
   <data name="EventHandlingMethodParametersAnalyzer_Description" xml:space="preserve">
-    <value>The parameters of event handling methods should be named 'sender' and 'e',  according to the .NET Framework Guidelines.</value>
+    <value>The parameters of event handlers should be named 'sender' and 'e',  according to the .NET Framework Guidelines.</value>
   </data>
   <data name="EventHandlingMethodParametersAnalyzer_MessageFormat" xml:space="preserve">
     <value>'{0}' has wrong-named parameter '{1}' (should be '{2}')</value>
   </data>
   <data name="EventHandlingMethodParametersAnalyzer_Title" xml:space="preserve">
-    <value>Parameter names do not follow .NET Framework Guidelines for event handlers/event handling methods.</value>
+    <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
   </data>
   <data name="LinesOfCodeAnalyzer_Description" xml:space="preserve">
     <value>Methods should be short to ease reading and maintenance.</value>

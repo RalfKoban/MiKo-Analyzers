@@ -115,7 +115,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The parameters of event handling methods should be named &apos;sender&apos; and &apos;e&apos;,  according to the .NET Framework Guidelines..
+        ///   Looks up a localized string similar to Event handlers should start with &apos;On&apos; to indicate that they handle events..
+        /// </summary>
+        internal static string EventHandlingMethodNamePrefixAnalyzer_Description {
+            get {
+                return ResourceManager.GetString("EventHandlingMethodNamePrefixAnalyzer_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not start with &apos;On&apos;.
+        /// </summary>
+        internal static string EventHandlingMethodNamePrefixAnalyzer_MessageFormat {
+            get {
+                return ResourceManager.GetString("EventHandlingMethodNamePrefixAnalyzer_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of event handler does not follow the .NET Framework Best practices..
+        /// </summary>
+        internal static string EventHandlingMethodNamePrefixAnalyzer_Title {
+            get {
+                return ResourceManager.GetString("EventHandlingMethodNamePrefixAnalyzer_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;,  according to the .NET Framework Guidelines..
         /// </summary>
         internal static string EventHandlingMethodParametersAnalyzer_Description {
             get {
@@ -133,7 +160,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers/event handling methods..
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
         /// </summary>
         internal static string EventHandlingMethodParametersAnalyzer_Title {
             get {
