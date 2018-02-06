@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var args = new List<object> { symbol.Name };
             args.AddRange(messageArgs);
 
-            return Diagnostic.Create(Rule, symbol.Locations[0], args);
+            return Diagnostic.Create(Rule, symbol.Locations[0], args.ToArray());
         }
 
         private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)

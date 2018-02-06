@@ -30,9 +30,18 @@ namespace TestHelper
 
         protected void Issue_is_reported(string fileContent)
         {
-            var results = GetDiagnostics(fileContent);
+            Assert.Multiple(() =>
+                                {
+                                    var results = GetDiagnostics(fileContent);
+                                    var result = results.Single();
 
-            Assert.That(results.Single().Id, Is.EqualTo(GetDiagnosticId()));
+                                    Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+
+                                    foreach (var placeholder in Enumerable.Range(0, 10).Select(_ => "{" + _ + "}"))
+                                    {
+                                        Assert.That(result.GetMessage(), Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
+                                    }
+                                });
         }
 
         protected void No_issue_is_reported(string fileContent)
