@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MiKoSolutions.Analyzers.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,191 +61,218 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should be simple to ease maintenance..
-        /// </summary>
-        internal static string CyclomaticComplexityAnalyzer_Description {
-            get {
-                return ResourceManager.GetString("CyclomaticComplexityAnalyzer_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has a Cyclomatic Complexity of {1} (allowed is {2}).
-        /// </summary>
-        internal static string CyclomaticComplexityAnalyzer_MessageFormat {
-            get {
-                return ResourceManager.GetString("CyclomaticComplexityAnalyzer_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Method is too complex..
-        /// </summary>
-        internal static string CyclomaticComplexityAnalyzer_Title {
-            get {
-                return ResourceManager.GetString("CyclomaticComplexityAnalyzer_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, parameters that inherit from &apos;System.EventArgs&apos; should be named &apos;e&apos; ..
-        /// </summary>
-        internal static string EventArgsParameterAnalyzer_Description {
-            get {
-                return ResourceManager.GetString("EventArgsParameterAnalyzer_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;e&apos;).
-        /// </summary>
-        internal static string EventArgsParameterAnalyzer_MessageFormat {
-            get {
-                return ResourceManager.GetString("EventArgsParameterAnalyzer_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly..
-        /// </summary>
-        internal static string EventArgsParameterAnalyzer_Title {
-            get {
-                return ResourceManager.GetString("EventArgsParameterAnalyzer_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Event handlers should start with &apos;On&apos; to indicate that they handle events..
-        /// </summary>
-        internal static string EventHandlingMethodNamePrefixAnalyzer_Description {
-            get {
-                return ResourceManager.GetString("EventHandlingMethodNamePrefixAnalyzer_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not start with &apos;On&apos;.
-        /// </summary>
-        internal static string EventHandlingMethodNamePrefixAnalyzer_MessageFormat {
-            get {
-                return ResourceManager.GetString("EventHandlingMethodNamePrefixAnalyzer_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Name of event handler does not follow the .NET Framework Best practices..
-        /// </summary>
-        internal static string EventHandlingMethodNamePrefixAnalyzer_Title {
-            get {
-                return ResourceManager.GetString("EventHandlingMethodNamePrefixAnalyzer_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;..
-        /// </summary>
-        internal static string EventHandlingMethodParametersAnalyzer_Description {
-            get {
-                return ResourceManager.GetString("EventHandlingMethodParametersAnalyzer_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;{2}&apos;).
-        /// </summary>
-        internal static string EventHandlingMethodParametersAnalyzer_MessageFormat {
-            get {
-                return ResourceManager.GetString("EventHandlingMethodParametersAnalyzer_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
-        /// </summary>
-        internal static string EventHandlingMethodParametersAnalyzer_Title {
-            get {
-                return ResourceManager.GetString("EventHandlingMethodParametersAnalyzer_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Methods should be short to ease reading and maintenance..
         /// </summary>
-        internal static string LinesOfCodeAnalyzer_Description {
+        public static string MiKo_0001_Description {
             get {
-                return ResourceManager.GetString("LinesOfCodeAnalyzer_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_0001_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; has {1} Lines of Code (allowed are {2}).
         /// </summary>
-        internal static string LinesOfCodeAnalyzer_MessageFormat {
+        public static string MiKo_0001_MessageFormat {
             get {
-                return ResourceManager.GetString("LinesOfCodeAnalyzer_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_0001_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Method is too long.
         /// </summary>
-        internal static string LinesOfCodeAnalyzer_Title {
+        public static string MiKo_0001_Title {
             get {
-                return ResourceManager.GetString("LinesOfCodeAnalyzer_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_0001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should be simple to ease maintenance..
+        /// </summary>
+        public static string MiKo_0002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has a Cyclomatic Complexity of {1} (allowed is {2}).
+        /// </summary>
+        public static string MiKo_0002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method is too complex..
+        /// </summary>
+        public static string MiKo_0002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;..
+        /// </summary>
+        public static string MiKo_1001_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;{2}&apos;).
+        /// </summary>
+        public static string MiKo_1001_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
+        /// </summary>
+        public static string MiKo_1001_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, parameters that inherit from &apos;System.EventArgs&apos; should be named &apos;e&apos; ..
+        /// </summary>
+        public static string MiKo_1002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;e&apos;).
+        /// </summary>
+        public static string MiKo_1002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly..
+        /// </summary>
+        public static string MiKo_1002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event handlers should start with &apos;On&apos; to indicate that they handle events..
+        /// </summary>
+        public static string MiKo_1003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; does not start with &apos;On&apos;.
+        /// </summary>
+        public static string MiKo_1003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of event handler does not follow the .NET Framework Best practices..
+        /// </summary>
+        public static string MiKo_1003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1003_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
+        /// </summary>
+        public static string MiKo_1004_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1004_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should not contain &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1004_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1004_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
+        /// </summary>
+        public static string MiKo_1004_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1004_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
         /// </summary>
-        internal static string SealedClassAnalyzer_Description {
+        public static string MiKo_2001_Description {
             get {
-                return ResourceManager.GetString("SealedClassAnalyzer_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2001_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; summary does not end with: &apos;{1}&apos;.
         /// </summary>
-        internal static string SealedClassAnalyzer_MessageFormat {
+        public static string MiKo_2001_MessageFormat {
             get {
-                return ResourceManager.GetString("SealedClassAnalyzer_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2001_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sealed classes should document being sealed.
         /// </summary>
-        internal static string SealedClassAnalyzer_Title {
+        public static string MiKo_2001_Title {
             get {
-                return ResourceManager.GetString("SealedClassAnalyzer_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2001_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Unsealed classes should not report that they are sealed..
         /// </summary>
-        internal static string UnsealedClassAnalyzer_Description {
+        public static string MiKo_2002_Description {
             get {
-                return ResourceManager.GetString("UnsealedClassAnalyzer_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2002_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; summary should not contain: &apos;{1}&apos;.
         /// </summary>
-        internal static string UnsealedClassAnalyzer_MessageFormat {
+        public static string MiKo_2002_MessageFormat {
             get {
-                return ResourceManager.GetString("UnsealedClassAnalyzer_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2002_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Unsealed classes should not lie about sealing..
         /// </summary>
-        internal static string UnsealedClassAnalyzer_Title {
+        public static string MiKo_2002_Title {
             get {
-                return ResourceManager.GetString("UnsealedClassAnalyzer_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
             }
         }
     }

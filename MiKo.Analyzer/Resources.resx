@@ -117,67 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CyclomaticComplexityAnalyzer_Description" xml:space="preserve">
-    <value>Methods should be simple to ease maintenance.</value>
-  </data>
-  <data name="CyclomaticComplexityAnalyzer_MessageFormat" xml:space="preserve">
-    <value>'{0}' has a Cyclomatic Complexity of {1} (allowed is {2})</value>
-  </data>
-  <data name="CyclomaticComplexityAnalyzer_Title" xml:space="preserve">
-    <value>Method is too complex.</value>
-  </data>
-  <data name="EventArgsParameterAnalyzer_Description" xml:space="preserve">
-    <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
-  </data>
-  <data name="EventArgsParameterAnalyzer_MessageFormat" xml:space="preserve">
-    <value>Parameter '{1}' of '{0}' has wrong name (should be 'e')</value>
-  </data>
-  <data name="EventArgsParameterAnalyzer_Title" xml:space="preserve">
-    <value>'System.EventArgs' parameters on methods should be named properly.</value>
-  </data>
-  <data name="EventHandlingMethodNamePrefixAnalyzer_Description" xml:space="preserve">
-    <value>Event handlers should start with 'On' to indicate that they handle events.</value>
-  </data>
-  <data name="EventHandlingMethodNamePrefixAnalyzer_MessageFormat" xml:space="preserve">
-    <value>'{0}' does not start with 'On'</value>
-  </data>
-  <data name="EventHandlingMethodNamePrefixAnalyzer_Title" xml:space="preserve">
-    <value>Name of event handler does not follow the .NET Framework Best practices.</value>
-  </data>
-  <data name="EventHandlingMethodParametersAnalyzer_Description" xml:space="preserve">
-    <value>To follow the .NET Framework Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
-  </data>
-  <data name="EventHandlingMethodParametersAnalyzer_MessageFormat" xml:space="preserve">
-    <value>Parameter '{1}' of '{0}' has wrong name (should be '{2}')</value>
-  </data>
-  <data name="EventHandlingMethodParametersAnalyzer_Title" xml:space="preserve">
-    <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
-  </data>
-  <data name="LinesOfCodeAnalyzer_Description" xml:space="preserve">
+  <data name="MiKo_0001_Description" xml:space="preserve">
     <value>Methods should be short to ease reading and maintenance.</value>
   </data>
-  <data name="LinesOfCodeAnalyzer_MessageFormat" xml:space="preserve">
+  <data name="MiKo_0001_MessageFormat" xml:space="preserve">
     <value>'{0}' has {1} Lines of Code (allowed are {2})</value>
   </data>
-  <data name="LinesOfCodeAnalyzer_Title" xml:space="preserve">
+  <data name="MiKo_0001_Title" xml:space="preserve">
     <value>Method is too long</value>
   </data>
-  <data name="SealedClassAnalyzer_Description" xml:space="preserve">
+  <data name="MiKo_0002_Description" xml:space="preserve">
+    <value>Methods should be simple to ease maintenance.</value>
+  </data>
+  <data name="MiKo_0002_MessageFormat" xml:space="preserve">
+    <value>'{0}' has a Cyclomatic Complexity of {1} (allowed is {2})</value>
+  </data>
+  <data name="MiKo_0002_Title" xml:space="preserve">
+    <value>Method is too complex.</value>
+  </data>
+  <data name="MiKo_1001_Description" xml:space="preserve">
+    <value>To follow the .NET Framework Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
+  </data>
+  <data name="MiKo_1001_MessageFormat" xml:space="preserve">
+    <value>Parameter '{1}' of '{0}' has wrong name (should be '{2}')</value>
+  </data>
+  <data name="MiKo_1001_Title" xml:space="preserve">
+    <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
+  </data>
+  <data name="MiKo_1002_Description" xml:space="preserve">
+    <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
+  </data>
+  <data name="MiKo_1002_MessageFormat" xml:space="preserve">
+    <value>Parameter '{1}' of '{0}' has wrong name (should be 'e')</value>
+  </data>
+  <data name="MiKo_1002_Title" xml:space="preserve">
+    <value>'System.EventArgs' parameters on methods should be named properly.</value>
+  </data>
+  <data name="MiKo_1003_Description" xml:space="preserve">
+    <value>Event handlers should start with 'On' to indicate that they handle events.</value>
+  </data>
+  <data name="MiKo_1003_MessageFormat" xml:space="preserve">
+    <value>'{0}' does not start with 'On'</value>
+  </data>
+  <data name="MiKo_1003_Title" xml:space="preserve">
+    <value>Name of event handler does not follow the .NET Framework Best practices.</value>
+  </data>
+  <data name="MiKo_1004_Description" xml:space="preserve">
+    <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'CanExecute' or 'Execute' in their names.</value>
+  </data>
+  <data name="MiKo_1004_MessageFormat" xml:space="preserve">
+    <value>'{0}' should not contain '{1}'</value>
+  </data>
+  <data name="MiKo_1004_Title" xml:space="preserve">
+    <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
+  </data>
+  <data name="MiKo_2001_Description" xml:space="preserve">
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
-  <data name="SealedClassAnalyzer_MessageFormat" xml:space="preserve">
+  <data name="MiKo_2001_MessageFormat" xml:space="preserve">
     <value>'{0}' summary does not end with: '{1}'</value>
   </data>
-  <data name="SealedClassAnalyzer_Title" xml:space="preserve">
+  <data name="MiKo_2001_Title" xml:space="preserve">
     <value>Sealed classes should document being sealed</value>
   </data>
-  <data name="UnsealedClassAnalyzer_Description" xml:space="preserve">
+  <data name="MiKo_2002_Description" xml:space="preserve">
     <value>Unsealed classes should not report that they are sealed.</value>
   </data>
-  <data name="UnsealedClassAnalyzer_MessageFormat" xml:space="preserve">
+  <data name="MiKo_2002_MessageFormat" xml:space="preserve">
     <value>'{0}' summary should not contain: '{1}'</value>
   </data>
-  <data name="UnsealedClassAnalyzer_Title" xml:space="preserve">
+  <data name="MiKo_2002_Title" xml:space="preserve">
     <value>Unsealed classes should not lie about sealing.</value>
   </data>
 </root>

@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class CyclomaticComplexityAnalyzer : MetricsAnalyzer
+    public sealed class MiKo_0002_CyclomaticComplexityAnalyzer : MetricsAnalyzer
     {
         public const string Id = "MiKo_0002";
 
-        public CyclomaticComplexityAnalyzer() : base(Id)
+        public MiKo_0002_CyclomaticComplexityAnalyzer() : base(Id)
         {
         }
 

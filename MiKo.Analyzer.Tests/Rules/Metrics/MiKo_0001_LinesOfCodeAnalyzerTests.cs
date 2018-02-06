@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     [TestFixture]
-    public class LinesOfCodeAnalyzerTests : CodeFixVerifier
+    public class MiKo_0001_LinesOfCodeAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent) => No_issue_is_reported(fileContent);
@@ -95,9 +95,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     }
 ");
 
-        protected override Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer GetObjectUnderTest() => new LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
+        protected override Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_0001_LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
 
-        protected override string GetDiagnosticId() => LinesOfCodeAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_0001_LinesOfCodeAnalyzer.Id;
 
         private static IEnumerable<string> ValidFiles()
         {

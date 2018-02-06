@@ -8,12 +8,12 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class SealedClassAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2001_SealedClassAnalyzer : DocumentationAnalyzer
     {
         public const string Id = "MiKo_2001";
         internal const string ExpectedComment = "This class cannot be inherited.";
 
-        public SealedClassAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2001_SealedClassAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 

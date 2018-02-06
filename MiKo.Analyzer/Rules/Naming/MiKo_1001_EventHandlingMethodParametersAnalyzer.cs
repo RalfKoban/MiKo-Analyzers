@@ -9,11 +9,11 @@ using MiKoSolutions.Analyzers.Extensions;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class EventHandlingMethodParametersAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1001_EventHandlingMethodParametersAnalyzer : NamingAnalyzer
     {
         public const string Id = "MiKo_1001";
 
-        public EventHandlingMethodParametersAnalyzer() : base(Id)
+        public MiKo_1001_EventHandlingMethodParametersAnalyzer() : base(Id)
         {
         }
 
