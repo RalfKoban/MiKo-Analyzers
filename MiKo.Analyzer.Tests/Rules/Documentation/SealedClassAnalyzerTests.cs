@@ -10,6 +10,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public class SealedClassAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void Struct_is_not_reported()
+        {
+            No_issue_gets_reported(@"
+/// <summary>
+/// Something.
+/// </summary>
+public struct TestMe
+{
+}
+");
+        }
+
+        [Test]
         public void Unsealed_class_is_not_reported()
         {
             No_issue_gets_reported(@"
@@ -23,13 +36,13 @@ public class TestMe
         }
 
         [Test]
-        public void Struct_is_not_reported()
+        public void Sealed_non_public_class_is_not_reported()
         {
             No_issue_gets_reported(@"
 /// <summary>
 /// Something.
 /// </summary>
-public struct TestMe
+private sealed class TestMe
 {
 }
 ");
