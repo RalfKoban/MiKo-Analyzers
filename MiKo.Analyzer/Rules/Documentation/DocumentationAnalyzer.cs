@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -43,6 +45,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                             ? Enumerable.Empty<Diagnostic>()
                                                                                             : AnalyzeSummary(symbol, GetComments(commentXml, "summary"));
 
-        private static IEnumerable<string> GetComments(string commentXml, string xmlElement) => XElement.Parse(commentXml).Descendants(xmlElement).Select(_ => _.Value.Trim());
+        private static IEnumerable<string> GetComments(string commentXml, string xmlElement)
+        {
+            // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
+            var xml = "<root>" + commentXml + "</root>";
+
+            return XElement.Parse(xml).Descendants(xmlElement).Select(_ => _.Value.Trim());
+        }
     }
 }

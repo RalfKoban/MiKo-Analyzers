@@ -98,6 +98,19 @@ public sealed class TestMe
 ");
         }
 
+        [Test]
+        public void Malformed_documentation_gets_reported()
+        {
+            Issue_gets_reported(@"
+/// <summary>
+/// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+        }
+
         protected override string GetDiagnosticId() => SealedClassAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new SealedClassAnalyzer();
