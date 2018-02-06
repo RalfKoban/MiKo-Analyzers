@@ -166,7 +166,7 @@
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
   <data name="SealedClassAnalyzer_MessageFormat" xml:space="preserve">
-    <value>'{0}' is sealed, so it's summary should end with '{1}'</value>
+    <value>'{0}' is sealed, hence the summary should end with '{1}'</value>
   </data>
   <data name="SealedClassAnalyzer_Title" xml:space="preserve">
     <value>Sealed classes should document being sealed</value>

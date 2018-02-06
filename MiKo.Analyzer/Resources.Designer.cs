@@ -205,7 +205,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is sealed, so it&apos;s summary should end with &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; is sealed, hence the summary should end with &apos;{1}&apos;.
         /// </summary>
         internal static string SealedClassAnalyzer_MessageFormat {
             get {
