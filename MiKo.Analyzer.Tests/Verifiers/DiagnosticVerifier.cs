@@ -1,5 +1,9 @@
+using System.Linq;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+
+using NUnit.Framework;
 
 namespace TestHelper
 {
@@ -15,9 +19,28 @@ namespace TestHelper
         /// </summary>
         protected virtual DiagnosticAnalyzer GetObjectUnderTest() => null;
 
+        /// <summary>
+        /// Gets the identifier of the CSharp analyzer being tested - to be implemented in non-abstract class.
+        /// </summary>
+        protected virtual string GetDiagnosticId() => null;
+
         #endregion
 
         #region Verifier wrappers
+
+        protected void Issue_gets_reported(string fileContent)
+        {
+            var results = GetDiagnostics(fileContent);
+
+            Assert.That(results.Single().Id, Is.EqualTo(GetDiagnosticId()));
+        }
+
+        protected void No_issue_gets_reported(string fileContent)
+        {
+            var results = GetDiagnostics(fileContent);
+
+            Assert.That(results, Is.Empty);
+        }
 
         /// <summary>
         /// Applies a C# <see cref="DiagnosticAnalyzer"/> on the single inputted string and returns the found results.

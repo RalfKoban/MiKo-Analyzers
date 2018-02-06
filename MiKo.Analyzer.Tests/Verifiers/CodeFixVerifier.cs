@@ -20,19 +20,7 @@ namespace TestHelper
         /// Returns the codefix being tested (C#) - to be implemented in non-abstract class
         /// </summary>
         /// <returns>The CodeFixProvider to be used for CSharp code</returns>
-        protected virtual CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the codefix being tested (VB) - to be implemented in non-abstract class
-        /// </summary>
-        /// <returns>The CodeFixProvider to be used for VisualBasic code</returns>
-        protected virtual CodeFixProvider GetBasicCodeFixProvider()
-        {
-            return null;
-        }
+        protected virtual CodeFixProvider GetCSharpCodeFixProvider() => null;
 
         /// <summary>
         /// Called to test a C# codefix when applied on the inputted string as a source

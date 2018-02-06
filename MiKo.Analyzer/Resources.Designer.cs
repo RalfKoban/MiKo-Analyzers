@@ -194,5 +194,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("LinesOfCodeAnalyzer_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
+        /// </summary>
+        internal static string SealedClassAnalyzer_Description {
+            get {
+                return ResourceManager.GetString("SealedClassAnalyzer_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class is sealed, so it&apos;s summary should end with &apos;This class cannot be inherited.&apos;.
+        /// </summary>
+        internal static string SealedClassAnalyzer_MessageFormat {
+            get {
+                return ResourceManager.GetString("SealedClassAnalyzer_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sealed classes should document being sealed.
+        /// </summary>
+        internal static string SealedClassAnalyzer_Title {
+            get {
+                return ResourceManager.GetString("SealedClassAnalyzer_Title", resourceCulture);
+            }
+        }
     }
 }

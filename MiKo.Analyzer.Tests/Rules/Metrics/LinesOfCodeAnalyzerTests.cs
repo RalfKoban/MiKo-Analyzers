@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.Diagnostics;
 using NUnit.Framework;
 using TestHelper;
 
@@ -13,12 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     public class LinesOfCodeAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent)
-        {
-            var results = GetDiagnostics(fileContent);
-
-            Assert.That(results, Is.Empty);
-        }
+        public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent) => No_issue_gets_reported(fileContent);
 
         [Test]
         public void Method_with_long_if_statement_is_reported() => Issue_gets_reported(@"
@@ -102,12 +95,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     }
 ");
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider()
-        {
-            return null; // return new MiKo_Code_AnalyzerCodeFixProvider();
-        }
-
         protected override Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer GetObjectUnderTest() => new LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
+
+        protected override string GetDiagnosticId() => LinesOfCodeAnalyzer.Id;
 
         private static IEnumerable<string> ValidFiles()
         {
@@ -128,13 +118,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                     yield return reader.ReadToEnd();
                 }
             }
-        }
-
-        private void Issue_gets_reported(string fileContent)
-        {
-            var results = GetDiagnostics(fileContent);
-
-            Assert.That(results.Single().Id, Is.EqualTo(LinesOfCodeAnalyzer.Id));
         }
     }
 }

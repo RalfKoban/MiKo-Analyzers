@@ -47,7 +47,6 @@
 
   <ItemGroup>
     <Folder Include="Rules\Maintainability\" />
-    <Folder Include="Rules\Documentation\" />
   </ItemGroup>
 
 </Project>
