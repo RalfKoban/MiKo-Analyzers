@@ -221,5 +221,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("SealedClassAnalyzer_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsealed classes should not report that they are sealed..
+        /// </summary>
+        internal static string UnsealedClassAnalyzer_Description {
+            get {
+                return ResourceManager.GetString("UnsealedClassAnalyzer_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; summary should not contain: &apos;{1}&apos;.
+        /// </summary>
+        internal static string UnsealedClassAnalyzer_MessageFormat {
+            get {
+                return ResourceManager.GetString("UnsealedClassAnalyzer_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsealed classes should not lie about sealing..
+        /// </summary>
+        internal static string UnsealedClassAnalyzer_Title {
+            get {
+                return ResourceManager.GetString("UnsealedClassAnalyzer_Title", resourceCulture);
+            }
+        }
     }
 }
