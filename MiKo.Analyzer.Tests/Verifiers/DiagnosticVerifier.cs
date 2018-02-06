@@ -28,14 +28,14 @@ namespace TestHelper
 
         #region Verifier wrappers
 
-        protected void Issue_gets_reported(string fileContent)
+        protected void Issue_is_reported(string fileContent)
         {
             var results = GetDiagnostics(fileContent);
 
             Assert.That(results.Single().Id, Is.EqualTo(GetDiagnosticId()));
         }
 
-        protected void No_issue_gets_reported(string fileContent)
+        protected void No_issue_is_reported(string fileContent)
         {
             var results = GetDiagnostics(fileContent);
 

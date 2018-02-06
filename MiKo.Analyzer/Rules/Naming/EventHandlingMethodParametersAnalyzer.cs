@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (expected != actual)
             {
-                diagnostics.Add(Diagnostic.Create(Rule, method.Locations[0], method.Name, actual, expected));
+                diagnostics.Add(ReportIssue(method, actual, expected));
             }
         }
     }

@@ -11,10 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     public class LinesOfCodeAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent) => No_issue_gets_reported(fileContent);
+        public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent) => No_issue_is_reported(fileContent);
 
         [Test]
-        public void Method_with_long_if_statement_is_reported() => Issue_gets_reported(@"
+        public void Method_with_long_if_statement_is_reported() => Issue_is_reported(@"
     public class TypeWithMethod
     {
         public void Method()
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 ");
 
         [Test]
-        public void Method_with_long_switch_statement_is_reported() => Issue_gets_reported(@"
+        public void Method_with_long_switch_statement_is_reported() => Issue_is_reported(@"
     public class TypeWithMethod
     {
         public void Method()
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 ");
 
         [Test]
-        public void Method_with_long_try_statement_is_reported() => Issue_gets_reported(@"
+        public void Method_with_long_try_statement_is_reported() => Issue_is_reported(@"
     public class TypeWithMethod
     {
         public void Method()
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 ");
 
         [Test]
-        public void Method_with_long_catch_statement_is_reported() => Issue_gets_reported(@"
+        public void Method_with_long_catch_statement_is_reported() => Issue_is_reported(@"
     public class TypeWithMethod
     {
         public void Method()
@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 ");
 
         [Test]
-        public void Method_with_long_finally_statement_is_reported() => Issue_gets_reported(@"
+        public void Method_with_long_finally_statement_is_reported() => Issue_is_reported(@"
     public class TypeWithMethod
     {
         public void Method()

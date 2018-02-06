@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected abstract Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol);
 
-        protected bool TryCreateDiagnostic(ISymbol owningSymbol, int metric, int limit, out Diagnostic diagnostic)
+        protected bool TryCreateDiagnostic(ISymbol symbol, int metric, int limit, out Diagnostic diagnostic)
         {
-            diagnostic = metric > limit ? Diagnostic.Create(Rule, owningSymbol.Locations[0], owningSymbol.Name, metric, limit) : null;
+            diagnostic = metric > limit ? ReportIssue(symbol, metric, limit) : null;
             return diagnostic != null;
         }
 

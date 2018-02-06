@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
             if (method.Name.StartsWith("On", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
 
-            return new[] { Diagnostic.Create(Rule, method.Locations[0], method.Name) };
+            return new[] { ReportIssue(method) };
         }
     }
 }

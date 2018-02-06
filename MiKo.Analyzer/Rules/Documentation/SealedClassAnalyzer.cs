@@ -11,26 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class SealedClassAnalyzer : DocumentationAnalyzer
     {
         public const string Id = "MiKo_2001";
-        private const string ExpectedComment = "This class cannot be inherited.";
+        internal const string ExpectedComment = "This class cannot be inherited.";
 
-        public SealedClassAnalyzer() : base(Id)
+        public SealedClassAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
-        protected override bool ShallAnalyzeClass(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public;
+        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public;
 
-        protected override IEnumerable<Diagnostic> AnalyzeClass(INamedTypeSymbol symbol, string commentXml) => AnalyzeSummary(symbol, commentXml);
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => AnalyzeSummary(symbol, commentXml);
 
-        protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
-        {
-            var containsComment = summaries.Any(_ => _.EndsWith(ExpectedComment, StringComparison.Ordinal));
-
-            if (symbol.IsSealed && !containsComment) return new[] { Diagnostic.Create(Rule, symbol.Locations[0], symbol.Name, ExpectedComment) };
-
-            // TODO: RKN find out how to set the localized text to indicate that the comment shall not be part of the summary
-            //// if (!symbol.IsSealed && containsComment) return new[] { Diagnostic.Create(Rule, symbol.Locations[0], symbol.Name, ExpectedComment) };
-
-            return Enumerable.Empty<Diagnostic>();
-        }
+        protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => !symbol.IsSealed || summaries.Any(_ => _.EndsWith(ExpectedComment, StringComparison.Ordinal))
+                                                                                                                         ? Enumerable.Empty<Diagnostic>()
+                                                                                                                         : new[] { ReportIssue(symbol, ExpectedComment) };
     }
 }
