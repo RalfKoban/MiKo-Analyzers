@@ -275,5 +275,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
+        /// </summary>
+        public static string MiKo_3001_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} parameters (allowed are {2}).
+        /// </summary>
+        public static string MiKo_3001_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not have too many parameters..
+        /// </summary>
+        public static string MiKo_3001_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3001_Title", resourceCulture);
+            }
+        }
     }
 }

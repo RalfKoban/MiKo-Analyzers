@@ -65,9 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             switch (analyzer.GetType().Namespace)
             {
+                case "MiKoSolutions.Analyzers.Rules.Documentation": return 2;
+                case "MiKoSolutions.Analyzers.Rules.Maintainability": return 3;
                 case "MiKoSolutions.Analyzers.Rules.Metrics": return 0;
                 case "MiKoSolutions.Analyzers.Rules.Naming": return 1;
-                case "MiKoSolutions.Analyzers.Rules.Documentation": return 2;
                 default: return -1;
             }
         }

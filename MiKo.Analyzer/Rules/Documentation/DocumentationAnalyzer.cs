@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationAnalyzer : Analyzer
     {
-        protected DocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base("Documentation", diagnosticId, symbolKind)
+        protected DocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base(nameof(Documentation), diagnosticId, symbolKind)
         {
         }
 

@@ -6,7 +6,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     public abstract class MetricsAnalyzer : Analyzer
     {
-        protected MetricsAnalyzer(string diagnosticId) : base("Metrics", diagnosticId)
+        protected MetricsAnalyzer(string diagnosticId) : base(nameof(Metrics), diagnosticId)
         {
         }
 
