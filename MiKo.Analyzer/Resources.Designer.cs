@@ -223,6 +223,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Event method parameters should define what exactly they are..
+        /// </summary>
+        public static string MiKo_2001_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong documentation (should be &apos;{2}&apos;).
+        /// </summary>
+        public static string MiKo_2001_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of parameter name does not follow .NET Framework Guidelines for event handlers..
+        /// </summary>
+        public static string MiKo_2001_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
         /// </summary>
         public static string MiKo_2002_Description {

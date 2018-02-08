@@ -33,13 +33,16 @@ namespace TestHelper
             Assert.Multiple(() =>
                                 {
                                     var results = GetDiagnostics(fileContent);
-                                    var result = results.Single();
+                                    Assert.That(results.Length, Is.GreaterThan(0));
 
-                                    Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
-
-                                    foreach (var placeholder in Enumerable.Range(0, 10).Select(_ => "{" + _ + "}"))
+                                    foreach (var result in results)
                                     {
-                                        Assert.That(result.GetMessage(), Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
+                                        Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+
+                                        foreach (var placeholder in Enumerable.Range(0, 10).Select(_ => "{" + _ + "}"))
+                                        {
+                                            Assert.That(result.GetMessage(), Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
+                                        }
                                     }
                                 });
         }

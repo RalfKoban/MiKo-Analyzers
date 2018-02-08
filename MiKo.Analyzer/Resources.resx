@@ -171,6 +171,15 @@
   <data name="MiKo_1004_Title" xml:space="preserve">
     <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
   </data>
+  <data name="MiKo_2001_Description" xml:space="preserve">
+    <value>Event method parameters should define what exactly they are.</value>
+  </data>
+  <data name="MiKo_2001_MessageFormat" xml:space="preserve">
+    <value>Parameter '{1}' of '{0}' has wrong documentation (should be '{2}')</value>
+  </data>
+  <data name="MiKo_2001_Title" xml:space="preserve">
+    <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
+  </data>
   <data name="MiKo_2002_Description" xml:space="preserve">
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>

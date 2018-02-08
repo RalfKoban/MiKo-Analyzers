@@ -17,21 +17,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual bool ShallAnalyzeType(INamedTypeSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
-                                                                                               ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
-                                                                                               : Enumerable.Empty<Diagnostic>();
+                                                                                           ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
+                                                                                           : Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
 
         protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml) => string.IsNullOrWhiteSpace(commentXml)
-                                                                                            ? Enumerable.Empty<Diagnostic>()
-                                                                                            : AnalyzeSummary(symbol, GetComments(commentXml, "summary"));
+                                                                                               ? Enumerable.Empty<Diagnostic>()
+                                                                                               : AnalyzeSummary(symbol, GetComments(commentXml, "summary"));
 
-        private static IEnumerable<string> GetComments(string commentXml, string xmlElement)
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Value.Trim());
+
+        protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
             var xml = "<root>" + commentXml + "</root>";
 
-            return XElement.Parse(xml).Descendants(xmlElement).Select(_ => _.Value.Trim());
+            return XElement.Parse(xml).Descendants(xmlElement);
         }
     }
 }
