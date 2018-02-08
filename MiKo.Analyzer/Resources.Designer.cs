@@ -232,7 +232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong documentation (should be &apos;{2}&apos;).
+        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; should be documented as: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2001_MessageFormat {
             get {

@@ -73,12 +73,17 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs)
-        {
-            var args = new List<object> { symbol.Name };
-            args.AddRange(messageArgs);
+        protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs) => ReportIssue(symbol.Name, symbol.Locations[0], messageArgs);
 
-            return Diagnostic.Create(Rule, symbol.Locations[0], args.ToArray());
+        protected Diagnostic ReportIssue(string name, ISymbol symbol, params object[] messageArgs) => ReportIssue(name, symbol.Locations[0], messageArgs);
+
+        private Diagnostic ReportIssue(string name, Location location, params object[] messageArgs)
+        {
+            var args = new object[messageArgs.Length + 1];
+            args[0] = name;
+            messageArgs.CopyTo(args, 1);
+
+            return Diagnostic.Create(Rule, location, args);
         }
 
         private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)
