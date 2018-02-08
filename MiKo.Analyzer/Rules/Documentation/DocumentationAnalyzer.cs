@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -22,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
 
-        protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml) => string.IsNullOrWhiteSpace(commentXml)
+        protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml) => commentXml.IsNullOrWhiteSpace()
                                                                                                ? Enumerable.Empty<Diagnostic>()
                                                                                                : AnalyzeSummary(symbol, GetComments(commentXml, "summary"));
 

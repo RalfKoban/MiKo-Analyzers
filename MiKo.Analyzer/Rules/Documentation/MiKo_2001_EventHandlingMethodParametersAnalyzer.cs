@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -23,19 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
 
             var xml = method.GetDocumentationCommentXml();
-            if (string.IsNullOrWhiteSpace(xml)) return Enumerable.Empty<Diagnostic>();
-
-           var eventArgs = method.Parameters[1].Type.Name;
+            if (xml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
             var diagnostics = new List<Diagnostic>();
-            VerifyParameterComment(diagnostics, method, xml, 0, "The source of the event.", "The source of the event", "Unused.", "Unused");
-            VerifyParameterComment(diagnostics, method, xml, 1,
-                                   $"A <see cref=\"{eventArgs}\" /> that contains the event data.",
-                                   $"A <see cref=\"{eventArgs}\" /> that contains the event data",
-                                   $"An <see cref=\"{eventArgs}\" /> that contains the event data.",
-                                   $"An <see cref=\"{eventArgs}\" /> that contains the event data",
-                                   "Unused.",
-                                   "Unused");
+            VerifyParameterComment(diagnostics, method, xml, 0, "The source of the event.", "Unused.");
+
+            var eventArgs = method.Parameters[1].Type.Name;
+            var defaultStart = eventArgs.StartsWithAny("A", "E", "I", "O", "U") ? "An" : "A";
+            VerifyParameterComment(diagnostics, method, xml, 1, $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", "Unused.");
             return diagnostics;
         }
 
@@ -45,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var paramElements = GetCommentElements(commentXml, @"param");
             var comments = paramElements.Where(_ => _.Attribute("name")?.Value == parameter.Name);
-            var comment = string.Join(string.Empty, comments.Nodes()).Replace("T:", string.Empty).Trim();
+            var comment = comments.Nodes().Concatenated().Replace("T:", string.Empty).Trim();
 
             if (allExpected.All(_ => _ != comment))
             {
