@@ -25,9 +25,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
 
-        protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml) => commentXml.IsNullOrWhiteSpace()
-                                                                                               ? Enumerable.Empty<Diagnostic>()
-                                                                                               : AnalyzeSummary(symbol, GetComments(commentXml, "summary"));
+        protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml)
+        {
+            if (!commentXml.IsNullOrWhiteSpace())
+            {
+                var summaries = GetComments(commentXml, "summary").ToList();
+                if (summaries.Any()) return AnalyzeSummary(symbol, summaries);
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
 
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Value.Trim());
 

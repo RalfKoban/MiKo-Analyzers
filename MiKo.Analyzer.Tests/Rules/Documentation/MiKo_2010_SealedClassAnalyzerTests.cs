@@ -77,7 +77,7 @@ public sealed class TestMe
 }
 ");
 
-        [Test]
+        [Test, Ignore("Separate analyzer")]
         public void Malformed_documentation_is_reported() => Issue_is_reported(@"
 /// <summary>
 /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>

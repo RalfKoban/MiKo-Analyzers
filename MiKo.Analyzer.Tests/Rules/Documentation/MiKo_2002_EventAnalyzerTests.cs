@@ -59,6 +59,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_inherited_comment() => No_issue_is_reported(@"
+public class TestMe
+{
+    /// <inheritdoc />
+    public event EventHandler MyEvent;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2002_EventAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2002_EventAnalyzer();
