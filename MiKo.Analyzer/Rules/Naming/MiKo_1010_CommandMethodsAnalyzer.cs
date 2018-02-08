@@ -11,11 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     // TODO: RKN temp. deactivated because of issues in name detection
     // [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1004_CommandMethodsAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1010_CommandMethodsAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1004";
+        public const string Id = "MiKo_1010";
 
-        public MiKo_1004_CommandMethodsAnalyzer() : base(Id)
+        public MiKo_1010_CommandMethodsAnalyzer() : base(Id)
         {
         }
 

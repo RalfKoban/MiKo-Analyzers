@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1004_CommandMethodsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1010_CommandMethodsAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_method_with_completely_different_name() => No_issue_is_reported(@"
@@ -45,8 +45,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1004_CommandMethodsAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1010_CommandMethodsAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1004_CommandMethodsAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1010_CommandMethodsAnalyzer();
     }
 }

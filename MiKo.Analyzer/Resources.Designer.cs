@@ -198,27 +198,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
-        public static string MiKo_1004_Description {
+        public static string MiKo_1010_Description {
             get {
-                return ResourceManager.GetString("MiKo_1004_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1010_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; should not contain &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_1004_MessageFormat {
+        public static string MiKo_1010_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1004_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1010_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
-        public static string MiKo_1004_Title {
+        public static string MiKo_1010_Title {
             get {
-                return ResourceManager.GetString("MiKo_1004_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1010_Title", resourceCulture);
             }
         }
         
@@ -252,54 +252,54 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
         /// </summary>
-        public static string MiKo_2002_Description {
+        public static string MiKo_2010_Description {
             get {
-                return ResourceManager.GetString("MiKo_2002_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2010_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; summary should end with: &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_2002_MessageFormat {
+        public static string MiKo_2010_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_2002_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2010_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sealed classes should document being sealed.
         /// </summary>
-        public static string MiKo_2002_Title {
+        public static string MiKo_2010_Title {
             get {
-                return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2010_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Unsealed classes should not report that they are sealed..
         /// </summary>
-        public static string MiKo_2003_Description {
+        public static string MiKo_2011_Description {
             get {
-                return ResourceManager.GetString("MiKo_2003_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2011_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; summary should not contain: &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_2003_MessageFormat {
+        public static string MiKo_2011_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_2003_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2011_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Unsealed classes should not lie about sealing..
         /// </summary>
-        public static string MiKo_2003_Title {
+        public static string MiKo_2011_Title {
             get {
-                return ResourceManager.GetString("MiKo_2003_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2011_Title", resourceCulture);
             }
         }
         
