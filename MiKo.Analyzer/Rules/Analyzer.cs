@@ -60,6 +60,19 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected void AnalyzeEvent(SymbolAnalysisContext context)
+        {
+            if (IsGeneratedCode(context)) return;
+
+            var diagnostics = AnalyzeEvent((IEventSymbol)context.Symbol);
+            foreach (var diagnostic in diagnostics)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
         protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeMethod(SymbolAnalysisContext context)
@@ -92,6 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 case SymbolKind.Method: return AnalyzeMethod;
                 case SymbolKind.NamedType: return AnalyzeType;
+                case SymbolKind.Event: return AnalyzeEvent;
                 default: return null;
             }
         }

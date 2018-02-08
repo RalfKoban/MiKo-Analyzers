@@ -180,6 +180,15 @@
   <data name="MiKo_2001_Title" xml:space="preserve">
     <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
   </data>
+  <data name="MiKo_2002_Description" xml:space="preserve">
+    <value>Documentation of events should start with 'Occurs' to indicate that events occur.</value>
+  </data>
+  <data name="MiKo_2002_MessageFormat" xml:space="preserve">
+    <value>'{0}' summary should start with: '{1}'</value>
+  </data>
+  <data name="MiKo_2002_Title" xml:space="preserve">
+    <value>Events should be documented properly.</value>
+  </data>
   <data name="MiKo_2010_Description" xml:space="preserve">
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>

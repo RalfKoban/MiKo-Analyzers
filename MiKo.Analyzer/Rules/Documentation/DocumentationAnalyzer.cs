@@ -21,6 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                            ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
                                                                                            : Enumerable.Empty<Diagnostic>();
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(IEventSymbol symbol) => AnalyzeSummary(symbol, symbol.GetDocumentationCommentXml());
+
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
 
         protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml) => commentXml.IsNullOrWhiteSpace()

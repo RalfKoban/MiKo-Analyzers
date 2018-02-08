@@ -250,6 +250,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation of events should start with &apos;Occurs&apos; to indicate that events occur..
+        /// </summary>
+        public static string MiKo_2002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; summary should start with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events should be documented properly..
+        /// </summary>
+        public static string MiKo_2002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
         /// </summary>
         public static string MiKo_2010_Description {
