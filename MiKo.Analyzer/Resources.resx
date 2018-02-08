@@ -139,7 +139,7 @@
     <value>To follow the .NET Framework Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
   </data>
   <data name="MiKo_1001_MessageFormat" xml:space="preserve">
-    <value>Parameter '{1}' of '{0}' has wrong name (should be '{2}')</value>
+    <value>'{1}' should be named '{2}'</value>
   </data>
   <data name="MiKo_1001_Title" xml:space="preserve">
     <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
@@ -148,7 +148,7 @@
     <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
   </data>
   <data name="MiKo_1002_MessageFormat" xml:space="preserve">
-    <value>Parameter '{1}' of '{0}' has wrong name (should be 'e')</value>
+    <value>'{1}' should be named 'e'</value>
   </data>
   <data name="MiKo_1002_Title" xml:space="preserve">
     <value>'System.EventArgs' parameters on methods should be named properly.</value>
@@ -157,7 +157,7 @@
     <value>Event handlers should start with 'On' to indicate that they handle events.</value>
   </data>
   <data name="MiKo_1003_MessageFormat" xml:space="preserve">
-    <value>'{0}' does not start with 'On'</value>
+    <value>'{0}' should start with 'On'</value>
   </data>
   <data name="MiKo_1003_Title" xml:space="preserve">
     <value>Name of event handler does not follow the .NET Framework Best practices.</value>
@@ -175,7 +175,7 @@
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2001_MessageFormat" xml:space="preserve">
-    <value>'{0}' should document '{1}' as:  '{2}'</value>
+    <value>'{1}' API comment should be : '{2}'</value>
   </data>
   <data name="MiKo_2001_Title" xml:space="preserve">
     <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
@@ -184,7 +184,7 @@
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
-    <value>'{0}' summary does not end with: '{1}'</value>
+    <value>'{0}' summary should end with: '{1}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>Sealed classes should document being sealed</value>

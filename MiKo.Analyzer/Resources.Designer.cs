@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;{2}&apos;).
+        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_1001_MessageFormat {
             get {
@@ -151,7 +151,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of &apos;{0}&apos; has wrong name (should be &apos;e&apos;).
+        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;e&apos;.
         /// </summary>
         public static string MiKo_1002_MessageFormat {
             get {
@@ -178,7 +178,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; does not start with &apos;On&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should start with &apos;On&apos;.
         /// </summary>
         public static string MiKo_1003_MessageFormat {
             get {
@@ -232,7 +232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should document &apos;{1}&apos; as:  &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &apos;{1}&apos; API comment should be : &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2001_MessageFormat {
             get {
@@ -259,7 +259,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; summary does not end with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; summary should end with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2002_MessageFormat {
             get {
