@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="MiKo_Analyzer.e6f8e373-5a44-4dde-80ae-68a22f8a1679" Version="0.0.4" Language="en-US" Publisher="Ralf Koban"/>
+        <Identity Id="MiKo_Analyzer.e6f8e373-5a44-4dde-80ae-68a22f8a1679" Version="0.0.5" Language="en-US" Publisher="Ralf Koban"/>
         <DisplayName>MiKo Analyzers</DisplayName>
         <Description xml:space="preserve">A diagnostic extension for the .NET Compiler Platform ("Roslyn") that checks for different metrics such as Lines of Code or Cyclomatic Complexity; in addition to several maintainability, naming and documentation rules.</Description>
     </Metadata>
