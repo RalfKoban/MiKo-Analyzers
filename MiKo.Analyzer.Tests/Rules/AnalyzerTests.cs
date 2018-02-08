@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
 
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+
 using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules
@@ -59,6 +62,12 @@ namespace MiKoSolutions.Analyzers.Rules
             var id = GetDiagnosticIdStartingNumber(analyzer);
 
             Assert.That(analyzer.DiagnosticId, Is.Not.Null.And.StartsWith("MiKo_" + id));
+        }
+
+        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        public static void Analyzer_are_marked_with_DiagnosticAnaylzer_attribute(Analyzer analyzer)
+        {
+            Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
         }
 
         private static int GetDiagnosticIdStartingNumber(Analyzer analyzer)

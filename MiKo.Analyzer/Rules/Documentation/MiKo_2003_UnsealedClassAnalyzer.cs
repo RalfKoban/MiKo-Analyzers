@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2002_UnsealedClassAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2003_UnsealedClassAnalyzer : DocumentationAnalyzer
     {
-        public const string Id = "MiKo_2002";
+        public const string Id = "MiKo_2003";
 
-        public MiKo_2002_UnsealedClassAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2003_UnsealedClassAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
@@ -21,10 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            var containsComment = summaries.Any(_ => _.Contains(MiKo_2001_SealedClassAnalyzer.ExpectedComment));
+            var containsComment = summaries.Any(_ => _.Contains(MiKo_2002_SealedClassAnalyzer.ExpectedComment));
 
             return !symbol.IsSealed && containsComment
-                       ? new[] { ReportIssue(symbol, MiKo_2001_SealedClassAnalyzer.ExpectedComment) }
+                       ? new[] { ReportIssue(symbol, MiKo_2002_SealedClassAnalyzer.ExpectedComment) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

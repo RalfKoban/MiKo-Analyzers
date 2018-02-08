@@ -225,33 +225,6 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
         /// </summary>
-        public static string MiKo_2001_Description {
-            get {
-                return ResourceManager.GetString("MiKo_2001_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; summary does not end with: &apos;{1}&apos;.
-        /// </summary>
-        public static string MiKo_2001_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_2001_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sealed classes should document being sealed.
-        /// </summary>
-        public static string MiKo_2001_Title {
-            get {
-                return ResourceManager.GetString("MiKo_2001_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unsealed classes should not report that they are sealed..
-        /// </summary>
         public static string MiKo_2002_Description {
             get {
                 return ResourceManager.GetString("MiKo_2002_Description", resourceCulture);
@@ -259,7 +232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; summary should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; summary does not end with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2002_MessageFormat {
             get {
@@ -268,11 +241,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unsealed classes should not lie about sealing..
+        ///   Looks up a localized string similar to Sealed classes should document being sealed.
         /// </summary>
         public static string MiKo_2002_Title {
             get {
                 return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsealed classes should not report that they are sealed..
+        /// </summary>
+        public static string MiKo_2003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; summary should not contain: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsealed classes should not lie about sealing..
+        /// </summary>
+        public static string MiKo_2003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2003_Title", resourceCulture);
             }
         }
         

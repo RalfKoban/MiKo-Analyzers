@@ -171,22 +171,22 @@
   <data name="MiKo_1004_Title" xml:space="preserve">
     <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
   </data>
-  <data name="MiKo_2001_Description" xml:space="preserve">
+  <data name="MiKo_2002_Description" xml:space="preserve">
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
-  <data name="MiKo_2001_MessageFormat" xml:space="preserve">
+  <data name="MiKo_2002_MessageFormat" xml:space="preserve">
     <value>'{0}' summary does not end with: '{1}'</value>
   </data>
-  <data name="MiKo_2001_Title" xml:space="preserve">
+  <data name="MiKo_2002_Title" xml:space="preserve">
     <value>Sealed classes should document being sealed</value>
   </data>
-  <data name="MiKo_2002_Description" xml:space="preserve">
+  <data name="MiKo_2003_Description" xml:space="preserve">
     <value>Unsealed classes should not report that they are sealed.</value>
   </data>
-  <data name="MiKo_2002_MessageFormat" xml:space="preserve">
+  <data name="MiKo_2003_MessageFormat" xml:space="preserve">
     <value>'{0}' summary should not contain: '{1}'</value>
   </data>
-  <data name="MiKo_2002_Title" xml:space="preserve">
+  <data name="MiKo_2003_Title" xml:space="preserve">
     <value>Unsealed classes should not lie about sealing.</value>
   </data>
   <data name="MiKo_3001_Description" xml:space="preserve">

@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2001_SealedClassAnalyzerTests : CodeFixVerifier
+    public class MiKo_2003_UnsealedClassAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void Struct_is_not_reported() => No_issue_is_reported(@"
@@ -20,11 +20,11 @@ public struct TestMe
 ");
 
         [Test]
-        public void Unsealed_class_is_not_reported() => No_issue_is_reported(@"
+        public void Sealed_public_class_is_not_reported() => No_issue_is_reported(@"
 /// <summary>
-/// Something.
+/// This class cannot be inherited.
 /// </summary>
-public class TestMe
+public sealed class TestMe
 {
 }
 ");
@@ -49,19 +49,9 @@ public sealed class TestMe
         [Test]
         public void Correct_documentation_is_not_reported() => No_issue_is_reported(@"
 /// <summary>
-/// This class cannot be inherited.
+/// Something.
 /// </summary>
-public sealed class TestMe
-{
-}
-");
-
-        [Test]
-        public void Missing_documentation_is_reported() => Issue_is_reported(@"
-/// <summary>
-/// Some documentation
-/// </summary>
-public sealed class TestMe
+public class TestMe
 {
 }
 ");
@@ -70,25 +60,26 @@ public sealed class TestMe
         public void Wrong_placed_documentation_is_reported() => Issue_is_reported(@"
 /// <summary>
 /// This class cannot be inherited.
-/// Some documentation
+/// Something.
 /// </summary>
-public sealed class TestMe
+public class TestMe
 {
 }
 ");
 
         [Test]
-        public void Malformed_documentation_is_reported() => Issue_is_reported(@"
+        public void Malformed_documentation_is_not_reported() => No_issue_is_reported(@"
 /// <summary>
 /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
+/// This class cannot be inherited.
 /// </summary>
-public sealed class TestMe
+public class TestMe
 {
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2001_SealedClassAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2003_UnsealedClassAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2001_SealedClassAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2003_UnsealedClassAnalyzer();
     }
 }
