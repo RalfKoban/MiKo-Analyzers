@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2002_EventHandlingMethodParametersAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_non_event_handling_method() => No_issue_is_reported(@"
+        public void No_issue_is_reported_for_non_event_handling_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething() { }
@@ -17,7 +17,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_undocumented_event_handling_method() => No_issue_is_reported(@"
+        public void No_issue_is_reported_for_undocumented_event_handling_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(object sender, MyEventArgs e) { }
@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_Issue_is_reported_for_correctly_documented_event_handling_method() => No_issue_is_reported(@"
+        public void No_Issue_is_reported_for_correctly_documented_event_handling_method() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -40,7 +40,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Issue_is_reported_for_partly_documented_event_handling_method_with_missing_docu_for_sender() => Issue_is_reported(@"
+        public void Issue_is_reported_for_partly_documented_event_handling_method_with_missing_docu_for_sender() => An_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe

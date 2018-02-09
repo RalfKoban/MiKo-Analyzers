@@ -28,7 +28,7 @@ namespace TestHelper
 
         #region Verifier wrappers
 
-        protected void Issue_is_reported(string fileContent)
+        protected void An_issue_is_reported_for(string fileContent)
         {
             Assert.Multiple(() =>
                                 {
@@ -47,7 +47,7 @@ namespace TestHelper
                                 });
         }
 
-        protected void No_issue_is_reported(string fileContent)
+        protected void No_issue_is_reported_for(string fileContent)
         {
             var results = GetDiagnostics(fileContent);
 

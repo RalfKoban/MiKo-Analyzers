@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1010_CommandMethodsAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_method_with_completely_different_name() => No_issue_is_reported(@"
+        public void No_issue_is_reported_for_method_with_completely_different_name() => No_issue_is_reported_for(@"
 public class TestMe
 {
     private int DoSomething() => 42;
@@ -18,7 +18,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_Issue_is_reported_for_ICommand_method() => No_issue_is_reported(@"
+        public void No_Issue_is_reported_for_ICommand_method() => No_issue_is_reported_for(@"
 public class TestMe : System.Windows.Input.ICommand
 {
     public bool CanExecute(object parameter) => true;
@@ -30,7 +30,7 @@ public class TestMe : System.Windows.Input.ICommand
 ");
 
         [Test]
-        public void Issue_is_reported_for_method_with_Execute_in_name() => Issue_is_reported(@"
+        public void Issue_is_reported_for_method_with_Execute_in_name() => An_issue_is_reported_for(@"
 public class TestMe
 {
     private int DoExecute() => 42;
@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Issue_is_reported_for_method_with_CanExecute_in_name() => Issue_is_reported(@"
+        public void Issue_is_reported_for_method_with_CanExecute_in_name() => An_issue_is_reported_for(@"
 public class TestMe
 {
     private int DoCanExecute() => 42;

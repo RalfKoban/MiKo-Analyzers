@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         [TestCase("int a, int b, int c")]
         [TestCase("int a, int b, int c, int d")]
         [TestCase("int a, int b, int c, int d, int e")]
-        public void Less_than_max_parameters_are_allowed(string parameters) => No_issue_is_reported(@"
+        public void Less_than_max_parameters_are_allowed(string parameters) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private bool DoSomething(" + parameters + @") => true;
@@ -24,7 +24,7 @@ public class TestMe
         [TestCase("int a, int b, int c, int d, int e, int f")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g, int h")]
-        public void More_than_max_parameters_are_reported(string parameters) => Issue_is_reported(@"
+        public void More_than_max_parameters_are_reported(string parameters) => An_issue_is_reported_for(@"
 public class TestMe
 {
     private bool DoSomething(" + parameters + @") => true;
@@ -33,7 +33,7 @@ public class TestMe
         [TestCase("int a, int b, int c, int d, int e, int f")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g, int h")]
-        public void More_than_max_parameters_are_reported_for_ctor(string parameters) => Issue_is_reported(@"
+        public void More_than_max_parameters_are_reported_for_ctor(string parameters) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public TestMe(" + parameters + @") { }

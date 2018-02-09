@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2001_EventAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_non_commented_event_on_class() => No_issue_is_reported(@"
+        public void No_issue_is_reported_for_non_commented_event_on_class() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public event EventHandler MyEvent;
@@ -18,7 +18,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_commented_event_on_interface() => No_issue_is_reported(@"
+        public void No_issue_is_reported_for_non_commented_event_on_interface() => No_issue_is_reported_for(@"
 public interface TestMe
 {
     event EventHandler MyEvent;
@@ -26,7 +26,7 @@ public interface TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_event_on_class() => No_issue_is_reported(@"
+        public void No_issue_is_reported_for_correctly_commented_event_on_class() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -39,7 +39,7 @@ public class TestMe
         [TestCase("Occur")]
         [TestCase("The")]
         [TestCase("Whatever that comment means")]
-        public void An_issue_is_reported_for_wrong_comment(string comment) => Issue_is_reported(@"
+        public void An_issue_is_reported_for_wrong_comment(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -50,7 +50,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_empty_comment() => Issue_is_reported(@"
+        public void An_issue_is_reported_for_empty_comment() => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -60,7 +60,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_inherited_comment() => No_issue_is_reported(@"
+        public void No_issue_is_reported_for_inherited_comment() => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <inheritdoc />
