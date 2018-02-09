@@ -22,7 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parameterCount = method.Parameters.Count();
             if (parameterCount <= MaxParametersCount) return Enumerable.Empty<Diagnostic>();
 
-            var name = method.Name == ".ctor" ? method.ContainingSymbol.Name : method.Name;
+            var name = method.Name == ".ctor"
+                           ? string.Concat(method.ContainingSymbol.Name, " (", method.Name, ")")
+                           : method.Name;
 
             return new[] { ReportIssue(name, method, parameterCount, MaxParametersCount) };
         }
