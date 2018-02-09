@@ -232,7 +232,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; documention is malformed and contains invalid characters such as &apos;&amp;&apos;..
+        ///   Looks up a localized string similar to &apos;{0}&apos; documention is malformed and contains invalid characters such as &apos;&amp;&apos;:
+        ///{1}.
         /// </summary>
         public static string MiKo_2000_MessageFormat {
             get {
@@ -259,7 +260,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{1}&apos; API comment should be : &apos;{2}&apos;.
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should be : &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2001_MessageFormat {
             get {
@@ -286,7 +287,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; summary should start with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should start with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2002_MessageFormat {
             get {
@@ -313,7 +314,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; summary should end with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should end with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2010_MessageFormat {
             get {
@@ -340,7 +341,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; summary should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should not contain: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2011_MessageFormat {
             get {

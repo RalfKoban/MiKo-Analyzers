@@ -175,7 +175,8 @@
     <value>The XML documentation should be valid XML so that it can be generated to support the developers.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>'{0}' documention is malformed and contains invalid characters such as '&amp;'.</value>
+    <value>'{0}' documention is malformed and contains invalid characters such as '&amp;':
+{1}</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>XML documentation should be valid XML.</value>
@@ -184,7 +185,7 @@
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2001_MessageFormat" xml:space="preserve">
-    <value>'{1}' API comment should be : '{2}'</value>
+    <value>XML comment for '{1}' should be : '{2}'</value>
   </data>
   <data name="MiKo_2001_Title" xml:space="preserve">
     <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
@@ -193,7 +194,7 @@
     <value>Documentation of events should start with 'Occurs' to indicate that events occur.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
-    <value>'{0}' summary should start with: '{1}'</value>
+    <value>Summary for '{0}' should start with: '{1}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>Events should be documented properly.</value>
@@ -202,7 +203,7 @@
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
   <data name="MiKo_2010_MessageFormat" xml:space="preserve">
-    <value>'{0}' summary should end with: '{1}'</value>
+    <value>Summary for '{0}' should end with: '{1}'</value>
   </data>
   <data name="MiKo_2010_Title" xml:space="preserve">
     <value>Sealed classes should document being sealed</value>
@@ -211,7 +212,7 @@
     <value>Unsealed classes should not report that they are sealed.</value>
   </data>
   <data name="MiKo_2011_MessageFormat" xml:space="preserve">
-    <value>'{0}' summary should not contain: '{1}'</value>
+    <value>Summary for '{0}' should not contain: '{1}'</value>
   </data>
   <data name="MiKo_2011_Title" xml:space="preserve">
     <value>Unsealed classes should not lie about sealing.</value>
