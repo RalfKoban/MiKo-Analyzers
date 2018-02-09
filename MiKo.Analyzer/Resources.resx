@@ -121,7 +121,7 @@
     <value>Methods should be short to ease reading and maintenance.</value>
   </data>
   <data name="MiKo_0001_MessageFormat" xml:space="preserve">
-    <value>'{0}' has {1} Lines of Code (allowed are {2})</value>
+    <value>'{0}' has {1} Lines of Code (allowed are max. {2})</value>
   </data>
   <data name="MiKo_0001_Title" xml:space="preserve">
     <value>Method is too long</value>
@@ -130,7 +130,7 @@
     <value>Methods should be simple to ease maintenance.</value>
   </data>
   <data name="MiKo_0002_MessageFormat" xml:space="preserve">
-    <value>'{0}' has a Cyclomatic Complexity of {1} (allowed is {2})</value>
+    <value>'{0}' has a Cyclomatic Complexity of {1} (allowed is max. {2})</value>
   </data>
   <data name="MiKo_0002_Title" xml:space="preserve">
     <value>Method is too complex.</value>
