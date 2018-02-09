@@ -9,6 +9,8 @@ namespace System
         public static bool StartsWithAny(this string value, params string[] prefixes)
         {
             if (value is null) throw new ArgumentNullException(nameof(value));
+            if (value == string.Empty) return false;
+
 
             return prefixes.Any(prefix => value.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
         }

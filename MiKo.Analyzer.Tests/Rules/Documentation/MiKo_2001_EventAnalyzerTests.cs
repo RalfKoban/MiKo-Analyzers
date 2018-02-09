@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2002_EventAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2001_EventAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_commented_event_on_class() => No_issue_is_reported(@"
@@ -68,8 +68,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2002_EventAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2001_EventAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2002_EventAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2001_EventAnalyzer();
     }
 }

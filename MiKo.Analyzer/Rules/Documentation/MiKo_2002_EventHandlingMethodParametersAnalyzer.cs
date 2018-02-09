@@ -11,11 +11,11 @@ using MiKoSolutions.Analyzers.Extensions;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2001_EventHandlingMethodParametersAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2002_EventHandlingMethodParametersAnalyzer : DocumentationAnalyzer
     {
-        public const string Id = "MiKo_2001";
+        public const string Id = "MiKo_2002";
 
-        public MiKo_2001_EventHandlingMethodParametersAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2002_EventHandlingMethodParametersAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 

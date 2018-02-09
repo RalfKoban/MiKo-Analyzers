@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;..
+        ///   Looks up a localized string similar to To ease maintenance, parameters that inherit from &apos;System.EventArgs&apos; should be named &apos;e&apos; ..
         /// </summary>
         public static string MiKo_1001_Description {
             get {
@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;e&apos;.
         /// </summary>
         public static string MiKo_1001_MessageFormat {
             get {
@@ -133,7 +133,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly..
         /// </summary>
         public static string MiKo_1001_Title {
             get {
@@ -142,7 +142,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, parameters that inherit from &apos;System.EventArgs&apos; should be named &apos;e&apos; ..
+        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;..
         /// </summary>
         public static string MiKo_1002_Description {
             get {
@@ -151,7 +151,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;e&apos;.
+        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_1002_MessageFormat {
             get {
@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly..
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
         /// </summary>
         public static string MiKo_1002_Title {
             get {
@@ -250,7 +250,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event method parameters should define what exactly they are..
+        ///   Looks up a localized string similar to Documentation of events should start with &apos;Occurs&apos; to indicate that events occur..
         /// </summary>
         public static string MiKo_2001_Description {
             get {
@@ -259,7 +259,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should be : &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should start with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2001_MessageFormat {
             get {
@@ -268,7 +268,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter name does not follow .NET Framework Guidelines for event handlers..
+        ///   Looks up a localized string similar to Events should be documented properly..
         /// </summary>
         public static string MiKo_2001_Title {
             get {
@@ -277,7 +277,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of events should start with &apos;Occurs&apos; to indicate that events occur..
+        ///   Looks up a localized string similar to Event method parameters should define what exactly they are..
         /// </summary>
         public static string MiKo_2002_Description {
             get {
@@ -286,7 +286,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should start with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should be : &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2002_MessageFormat {
             get {
@@ -295,7 +295,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events should be documented properly..
+        ///   Looks up a localized string similar to Documentation of parameter name does not follow .NET Framework Guidelines for event handlers..
         /// </summary>
         public static string MiKo_2002_Title {
             get {
