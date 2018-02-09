@@ -70,9 +70,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeProperty(SymbolAnalysisContext context) => ReportDiagnostics<IPropertySymbol>(context, AnalyzeProperty);
 
-        protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs) => ReportIssue(symbol.Name, symbol.Locations[0], messageArgs);
+        protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs)
+        {
+            var prefix = symbol.Name == ".ctor" || symbol.Name == ".cctor" ? symbol.ContainingSymbol.Name : string.Empty;
 
-        protected Diagnostic ReportIssue(string name, ISymbol symbol, params object[] messageArgs) => ReportIssue(name, symbol.Locations[0], messageArgs);
+            return ReportIssue(prefix + symbol.Name, symbol.Locations[0], messageArgs);
+        }
 
         private Diagnostic ReportIssue(string name, Location location, params object[] messageArgs)
         {
