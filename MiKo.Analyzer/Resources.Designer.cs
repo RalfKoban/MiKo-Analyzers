@@ -232,8 +232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; documention is malformed and contains invalid characters such as &apos;&amp;&apos;:
-        ///{1}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; documention is malformed and contains invalid characters such as &apos;&amp;&apos;.
         /// </summary>
         public static string MiKo_2000_MessageFormat {
             get {

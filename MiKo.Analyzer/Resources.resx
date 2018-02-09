@@ -175,8 +175,7 @@
     <value>The XML documentation should be valid XML so that it can be generated to support the developers.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>'{0}' documention is malformed and contains invalid characters such as '&amp;':
-{1}</value>
+    <value>'{0}' documention is malformed and contains invalid characters such as '&amp;'</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>XML documentation should be valid XML.</value>
