@@ -35,56 +35,40 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected DiagnosticDescriptor Rule { get; }
 
-        protected SymbolKind SymbolKind { get; }
+        private SymbolKind SymbolKind { get; }
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-        public override void Initialize(AnalysisContext context)
+        public override void Initialize(AnalysisContext context) => Initialize(context, SymbolKind);
+
+        protected void Initialize(AnalysisContext context, SymbolKind symbolKind)
         {
-            var action = GetAnalyzeMethod(SymbolKind);
-            if (action != null) context.RegisterSymbolAction(action, SymbolKind);
+            var action = GetAnalyzeMethod(symbolKind);
+            if (action != null)
+                context.RegisterSymbolAction(action, symbolKind);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
-        protected void AnalyzeType(SymbolAnalysisContext context)
-        {
-            if (IsGeneratedCode(context)) return;
-
-            var diagnostics = AnalyzeType((INamedTypeSymbol)context.Symbol);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
+        protected void AnalyzeType(SymbolAnalysisContext context) => ReportDiagnostics<INamedTypeSymbol>(context, AnalyzeType);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
-        protected void AnalyzeEvent(SymbolAnalysisContext context)
-        {
-            if (IsGeneratedCode(context)) return;
+        protected void AnalyzeEvent(SymbolAnalysisContext context) => ReportDiagnostics<IEventSymbol>(context, AnalyzeEvent);
 
-            var diagnostics = AnalyzeEvent((IEventSymbol)context.Symbol);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
+        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected void AnalyzeField(SymbolAnalysisContext context) => ReportDiagnostics<IFieldSymbol>(context, AnalyzeField);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => Enumerable.Empty<Diagnostic>();
 
-        protected void AnalyzeMethod(SymbolAnalysisContext context)
-        {
-            if (IsGeneratedCode(context)) return;
+        protected void AnalyzeMethod(SymbolAnalysisContext context) => ReportDiagnostics<IMethodSymbol>(context, AnalyzeMethod);
 
-            var diagnostics = AnalyzeMethod((IMethodSymbol)context.Symbol);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol method) => Enumerable.Empty<Diagnostic>();
+
+        protected void AnalyzeProperty(SymbolAnalysisContext context) => ReportDiagnostics<IPropertySymbol>(context, AnalyzeProperty);
 
         protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs) => ReportIssue(symbol.Name, symbol.Locations[0], messageArgs);
 
@@ -103,9 +87,11 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             switch (symbolKind)
             {
+                case SymbolKind.Event: return AnalyzeEvent;
+                case SymbolKind.Field: return AnalyzeField;
                 case SymbolKind.Method: return AnalyzeMethod;
                 case SymbolKind.NamedType: return AnalyzeType;
-                case SymbolKind.Event: return AnalyzeEvent;
+                case SymbolKind.Property: return AnalyzeProperty;
                 default: return null;
             }
         }
@@ -114,6 +100,21 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
         private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
 
-        private static bool IsGeneratedCode(SymbolAnalysisContext context) => context.Symbol.GetAttributes().Any(_ => _.AttributeClass.Name == typeof(System.CodeDom.Compiler.GeneratedCodeAttribute).FullName);
+        private static readonly string GeneratedCodeMarker = typeof(System.CodeDom.Compiler.GeneratedCodeAttribute).FullName;
+
+        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
+        {
+            var symbol = context.Symbol;
+
+            // filter generated code
+            var symbols = new[] { symbol, symbol.ContainingSymbol, symbol.ContainingType };
+            if (symbols.Any(s => s?.GetAttributes().Any(_ => _.AttributeClass.Name == GeneratedCodeMarker) == true)) return;
+
+            var diagnostics = analyzer((T)symbol);
+            foreach (var diagnostic in diagnostics)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
     }
 }

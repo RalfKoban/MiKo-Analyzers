@@ -77,16 +77,6 @@ public sealed class TestMe
 }
 ");
 
-        [Test, Ignore("Separate analyzer")]
-        public void Malformed_documentation_is_reported() => Issue_is_reported(@"
-/// <summary>
-/// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
-/// </summary>
-public sealed class TestMe
-{
-}
-");
-
         protected override string GetDiagnosticId() => MiKo_2010_SealedClassAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2010_SealedClassAnalyzer();

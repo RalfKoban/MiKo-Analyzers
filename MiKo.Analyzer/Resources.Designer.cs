@@ -223,6 +223,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
+        /// </summary>
+        public static string MiKo_2000_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2000_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; documention is malformed and contains invalid characters such as &apos;&amp;&apos;..
+        /// </summary>
+        public static string MiKo_2000_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2000_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should be valid XML..
+        /// </summary>
+        public static string MiKo_2000_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2000_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Event method parameters should define what exactly they are..
         /// </summary>
         public static string MiKo_2001_Description {
