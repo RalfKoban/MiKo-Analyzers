@@ -223,6 +223,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The term &apos;Fire&apos; is a negative term. Employees get fired (or guns), but not events. Events get raised. So use &apos;Raise&apos; instead..
+        /// </summary>
+        public static string MiKo_1012_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1012_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1012_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1012_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be named &apos;Fire&apos;.
+        /// </summary>
+        public static string MiKo_1012_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1012_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
