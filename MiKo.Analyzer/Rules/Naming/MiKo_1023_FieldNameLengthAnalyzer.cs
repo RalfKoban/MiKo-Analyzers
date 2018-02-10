@@ -15,10 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol)
-        {
-            if (symbol.IsConst) return Enumerable.Empty<Diagnostic>();
-            return Analyze(symbol);
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => symbol.IsConst ? Enumerable.Empty<Diagnostic>() : Analyze(symbol);
     }
 }
