@@ -1,0 +1,7 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <RequiredCapabilities>
+      <Value>DotNetCore20</Value>
+    </RequiredCapabilities>
+  </Settings>
+</ProjectConfiguration>
