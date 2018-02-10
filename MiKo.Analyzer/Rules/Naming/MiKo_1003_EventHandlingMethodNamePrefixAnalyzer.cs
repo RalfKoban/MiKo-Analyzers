@@ -22,8 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
             if (method.Name.StartsWith("On", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
+            if (method.IsOverride) return Enumerable.Empty<Diagnostic>();
 
-            return new[] { ReportIssue(method) };
+            return new[] { ReportIssue(method, FindProperName(method)) };
         }
+
+        private static string FindProperName(IMethodSymbol method) => "On" + method.Name;
     }
 }

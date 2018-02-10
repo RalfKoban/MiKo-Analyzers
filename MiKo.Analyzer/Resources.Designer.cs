@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} Lines of Code (allowed are {2}).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} Lines of Code (allowed are max. {2}).
         /// </summary>
         public static string MiKo_0001_MessageFormat {
             get {
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has a Cyclomatic Complexity of {1} (allowed is {2}).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has a Cyclomatic Complexity of {1} (allowed is max. {2}).
         /// </summary>
         public static string MiKo_0002_MessageFormat {
             get {
@@ -178,7 +178,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should start with &apos;On&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1003_MessageFormat {
             get {
@@ -394,7 +394,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} parameters (allowed are {2}).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} parameters (allowed are max. {2}).
         /// </summary>
         public static string MiKo_3001_MessageFormat {
             get {
