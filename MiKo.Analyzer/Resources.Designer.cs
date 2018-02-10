@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;e&apos;.
+        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_1001_MessageFormat {
             get {
