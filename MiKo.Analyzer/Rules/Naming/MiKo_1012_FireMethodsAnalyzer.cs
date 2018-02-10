@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -18,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
             var methodName = method.Name;
-            var forbidden = methodName.Contains("Fire") && !methodName.Contains("Firewall");
+            var forbidden = methodName.ContainsAny("Fire", "_fire") && !methodName.ContainsAny("Firewall", "_firewall");
             return forbidden
-                       ? new[] { ReportIssue(method, methodName.Replace("Fire", "Raise")) }
+                       ? new[] { ReportIssue(method, methodName.Replace("Fire", "Raise").Replace("_fire", "_raise")) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

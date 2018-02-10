@@ -11,6 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("DoSomething")]
         [TestCase("Raise")]
         [TestCase("Firewall")]
+        [TestCase("_firewall")]
         public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -21,6 +22,7 @@ public class TestMe
         [TestCase("OnFire")]
         [TestCase("FireEvent")]
         [TestCase("DoFireSomething")]
+        [TestCase("_fire")]
         public void An_issue_is_reported_for_wrong_named_method(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
