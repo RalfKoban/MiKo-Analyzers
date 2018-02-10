@@ -45,6 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void Initialize(AnalysisContext context, SymbolKind symbolKind)
         {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+
             var action = GetAnalyzeMethod(symbolKind);
             if (action != null)
                 context.RegisterSymbolAction(action, symbolKind);
@@ -110,8 +112,8 @@ namespace MiKoSolutions.Analyzers.Rules
             var symbol = context.Symbol;
 
             // filter generated code
-            var symbols = new[] { symbol, symbol.ContainingSymbol, symbol.ContainingType };
-            if (symbols.Any(s => s?.GetAttributes().Any(_ => _.AttributeClass.Name == GeneratedCodeMarker) == true)) return;
+            // var symbols = new[] { symbol, symbol.ContainingSymbol, symbol.ContainingType };
+            // if (symbols.Any(s => s?.GetAttributes().Any(_ => _.AttributeClass.Name == GeneratedCodeMarker) == true)) return;
 
             var diagnostics = analyzer((T)symbol);
             foreach (var diagnostic in diagnostics)
