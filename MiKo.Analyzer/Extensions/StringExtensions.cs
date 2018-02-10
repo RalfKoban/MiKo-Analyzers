@@ -11,8 +11,15 @@ namespace System
             if (value is null) throw new ArgumentNullException(nameof(value));
             if (value == string.Empty) return false;
 
-
             return prefixes.Any(prefix => value.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static bool ContainsAny(this string value, params string[] prefixes)
+        {
+            if (value is null) throw new ArgumentNullException(nameof(value));
+            if (value == string.Empty) return false;
+
+            return prefixes.Any(value.Contains);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

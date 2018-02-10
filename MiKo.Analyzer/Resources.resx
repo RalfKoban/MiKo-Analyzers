@@ -166,9 +166,18 @@
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'CanExecute' or 'Execute' in their names.</value>
   </data>
   <data name="MiKo_1010_MessageFormat" xml:space="preserve">
-    <value>'{0}' should not contain '{1}'</value>
+    <value>'{0}' should be named something like '{1}'</value>
   </data>
   <data name="MiKo_1010_Title" xml:space="preserve">
+    <value>Methods should not contain 'Do' in their names.</value>
+  </data>
+  <data name="MiKo_1011_Description" xml:space="preserve">
+    <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'Do' in their names.</value>
+  </data>
+  <data name="MiKo_1011_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named something like '{1}'</value>
+  </data>
+  <data name="MiKo_1011_Title" xml:space="preserve">
     <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
   </data>
   <data name="MiKo_1012_Description" xml:space="preserve">

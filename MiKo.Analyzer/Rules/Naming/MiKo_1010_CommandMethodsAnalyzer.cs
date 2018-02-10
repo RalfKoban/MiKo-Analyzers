@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var forbidden = method.Name.Contains(forbiddenName);
             if (forbidden)
             {
-                diagnostics.Add(ReportIssue(method, forbiddenName));
+                diagnostics.Add(ReportIssue(method, method.Name.Replace(nameof(ICommand.Execute), string.Empty)));
             }
 
             return forbidden;

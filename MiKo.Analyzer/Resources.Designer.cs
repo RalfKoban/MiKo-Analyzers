@@ -205,7 +205,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should not contain &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1010_MessageFormat {
             get {
@@ -214,11 +214,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
+        ///   Looks up a localized string similar to Methods should not contain &apos;Do&apos; in their names..
         /// </summary>
         public static string MiKo_1010_Title {
             get {
                 return ResourceManager.GetString("MiKo_1010_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;Do&apos; in their names..
+        /// </summary>
+        public static string MiKo_1011_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1011_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1011_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1011_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
+        /// </summary>
+        public static string MiKo_1011_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1011_Title", resourceCulture);
             }
         }
         
