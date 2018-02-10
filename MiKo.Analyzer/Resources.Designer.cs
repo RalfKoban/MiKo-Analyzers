@@ -277,6 +277,114 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
+        /// </summary>
+        public static string MiKo_1020_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1020_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        /// </summary>
+        public static string MiKo_1020_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1020_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type names should be limited to 40 characters..
+        /// </summary>
+        public static string MiKo_1020_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1020_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
+        /// </summary>
+        public static string MiKo_1021_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1021_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        /// </summary>
+        public static string MiKo_1021_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1021_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method names should be limited to 25 characters..
+        /// </summary>
+        public static string MiKo_1021_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1021_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
+        /// </summary>
+        public static string MiKo_1022_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1022_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        /// </summary>
+        public static string MiKo_1022_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1022_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names should be limited to 10 characters..
+        /// </summary>
+        public static string MiKo_1022_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1022_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
+        /// </summary>
+        public static string MiKo_1023_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1023_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        /// </summary>
+        public static string MiKo_1023_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1023_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field names should be limited to 10 characters..
+        /// </summary>
+        public static string MiKo_1023_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1023_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
