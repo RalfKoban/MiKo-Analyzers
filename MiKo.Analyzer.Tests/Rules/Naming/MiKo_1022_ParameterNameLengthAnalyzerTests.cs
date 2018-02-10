@@ -24,10 +24,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Abcdefghijklm")]
         [TestCase("Abcdefghijklmn")]
         [TestCase("Abcdefghijklmno")]
-        public void No_issue_is_reported_for_parameter_with_fitting_length(string name) => No_issue_is_reported_for("private bool DoSomething(int " + name + ") => true;");
-
         [TestCase("Abcdefghijklmnop")]
         [TestCase("Abcdefghijklmnopq")]
+        [TestCase("Abcdefghijklmnopqr")]
+        [TestCase("Abcdefghijklmnopqrs")]
+        [TestCase("Abcdefghijklmnopqrst")]
+        public void No_issue_is_reported_for_parameter_with_fitting_length(string name) => No_issue_is_reported_for("private bool DoSomething(int " + name + ") => true;");
+
+        [TestCase("Abcdefghijklmnopqrstu")]
+        [TestCase("Abcdefghijklmnopqrstuv")]
+        [TestCase("Abcdefghijklmnopqrstuvw")]
+        [TestCase("Abcdefghijklmnopqrstuvwx")]
+        [TestCase("Abcdefghijklmnopqrstuvwxy")]
         [TestCase("Abcdefghijklmnopqrstuvwxyz")]
         public void An_issue_is_reported_for_parameter_with_exceeding_length(string name) => An_issue_is_reported_for("private bool DoSomething(int " + name + ") => true;");
 
@@ -46,10 +54,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Abcdefghijklm")]
         [TestCase("Abcdefghijklmn")]
         [TestCase("Abcdefghijklmno")]
+        [TestCase("Abcdefghijklmnopq")]
+        [TestCase("Abcdefghijklmnopqr")]
+        [TestCase("Abcdefghijklmnopqrs")]
+        [TestCase("Abcdefghijklmnopqrst")]
         public void No_issue_is_reported_for_ctor_parameter_with_fitting_length(string name) => No_issue_is_reported_for("private DoSomething(int " + name + ") { }");
 
-        [TestCase("Abcdefghijklmnop")]
-        [TestCase("Abcdefghijklmnopq")]
+        [TestCase("Abcdefghijklmnopqrstu")]
+        [TestCase("Abcdefghijklmnopqrstuv")]
+        [TestCase("Abcdefghijklmnopqrstuvw")]
+        [TestCase("Abcdefghijklmnopqrstuvwx")]
+        [TestCase("Abcdefghijklmnopqrstuvwxy")]
         [TestCase("Abcdefghijklmnopqrstuvwxyz")]
         public void An_issue_is_reported_for_ctor_parameter_with_exceeding_length(string name) => An_issue_is_reported_for("private DoSomething(int " + name + ") { }");
 
