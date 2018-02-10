@@ -6,8 +6,6 @@ using System.Windows.Input;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using MiKoSolutions.Analyzers.Extensions;
-
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]

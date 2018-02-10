@@ -5,8 +5,6 @@ using System.Windows.Input;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using MiKoSolutions.Analyzers.Extensions;
-
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     // TODO: RKN temp. deactivated because of issues in name detection

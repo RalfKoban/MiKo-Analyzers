@@ -1,6 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
 
-namespace MiKoSolutions.Analyzers.Extensions
+namespace Microsoft.CodeAnalysis
 {
     internal static class ITypeSymbolExtensions
     {
@@ -15,6 +15,23 @@ namespace MiKoSolutions.Analyzers.Extensions
 
                 symbol = symbol.BaseType;
             }
+        }
+
+        internal static bool IsTestClass(this ITypeSymbol method)
+        {
+            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            {
+                switch (name)
+                {
+                    case "TestFixture":
+                    case "TestFixtureAttribute":
+                    case "TestClass":
+                    case "TestClassAttribute":
+                        return true;
+                }
+            }
+
+            return false;
         }
     }
 }
