@@ -24,10 +24,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Abcdefghijklm")]
         [TestCase("Abcdefghijklmn")]
         [TestCase("Abcdefghijklmno")]
-        public void No_issue_is_reported_for_field_with_fitting_length(string name) => No_issue_is_reported_for("private bool " + name + " = 42;");
-
         [TestCase("Abcdefghijklmnop")]
         [TestCase("Abcdefghijklmnopq")]
+        [TestCase("Abcdefghijklmnopqr")]
+        [TestCase("Abcdefghijklmnopqrs")]
+        [TestCase("Abcdefghijklmnopqrst")]
+        public void No_issue_is_reported_for_field_with_fitting_length(string name) => No_issue_is_reported_for("private bool " + name + " = 42;");
+
+        [TestCase("Abcdefghijklmnopqrstu")]
+        [TestCase("Abcdefghijklmnopqrstuv")]
+        [TestCase("Abcdefghijklmnopqrstuvw")]
+        [TestCase("Abcdefghijklmnopqrstuvwx")]
+        [TestCase("Abcdefghijklmnopqrstuvwxy")]
         [TestCase("Abcdefghijklmnopqrstuvwxyz")]
         public void An_issue_is_reported_for_field_with_exceeding_length(string name) => An_issue_is_reported_for("private bool " + name + " = 42;");
 
