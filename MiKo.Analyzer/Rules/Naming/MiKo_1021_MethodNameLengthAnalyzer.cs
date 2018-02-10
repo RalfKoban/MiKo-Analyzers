@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
         {
-            if (symbol.IsOverride) return Enumerable.Empty<Diagnostic>();
-
             switch (symbol.MethodKind)
             {
                 case MethodKind.EventAdd:

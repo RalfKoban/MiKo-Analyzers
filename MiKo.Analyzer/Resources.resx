@@ -193,7 +193,7 @@
     <value>Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder.</value>
   </data>
   <data name="MiKo_1020_MessageFormat" xml:space="preserve">
-    <value>Type '{0}' exceeds the limit of {2} by {1} characters</value>
+    <value>Type '{0}' exceeds limit of {2} characters (by {1})</value>
   </data>
   <data name="MiKo_1020_Title" xml:space="preserve">
     <value>Type names should be limited to 40 characters.</value>
@@ -202,7 +202,7 @@
     <value>Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder.</value>
   </data>
   <data name="MiKo_1021_MessageFormat" xml:space="preserve">
-    <value>Method '{0}' exceeds the limit of {2} by {1} characters</value>
+    <value>Method '{0}' exceeds limit of {2} characters (by {1})</value>
   </data>
   <data name="MiKo_1021_Title" xml:space="preserve">
     <value>Method names should be limited to 25 characters.</value>
@@ -211,7 +211,7 @@
     <value>Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder.</value>
   </data>
   <data name="MiKo_1022_MessageFormat" xml:space="preserve">
-    <value>Parameter '{0}' exceeds the limit of {2} by {1} characters</value>
+    <value>Parameter '{0}' exceeds limit of {2} characters (by {1})</value>
   </data>
   <data name="MiKo_1022_Title" xml:space="preserve">
     <value>Parameter names should be limited to 10 characters.</value>
@@ -220,7 +220,7 @@
     <value>Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder.</value>
   </data>
   <data name="MiKo_1023_MessageFormat" xml:space="preserve">
-    <value>Field '{0}' exceeds the limit of {2} by {1} characters</value>
+    <value>Field '{0}' exceeds limit of {2} characters (by {1})</value>
   </data>
   <data name="MiKo_1023_Title" xml:space="preserve">
     <value>Field names should be limited to 10 characters.</value>
@@ -229,7 +229,7 @@
     <value>Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder.</value>
   </data>
   <data name="MiKo_1024_MessageFormat" xml:space="preserve">
-    <value>Property '{0}' exceeds the limit of {2} by {1} characters</value>
+    <value>Property '{0}' exceeds limit of {2} characters (by {1})</value>
   </data>
   <data name="MiKo_1024_Title" xml:space="preserve">
     <value>Property names should be limited to 25 characters.</value>
@@ -238,7 +238,7 @@
     <value>Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder.</value>
   </data>
   <data name="MiKo_1025_MessageFormat" xml:space="preserve">
-    <value>Event '{0}' exceeds the limit of {2} by {1} characters</value>
+    <value>Event '{0}' exceeds limit of {2} characters (by {1})</value>
   </data>
   <data name="MiKo_1025_Title" xml:space="preserve">
     <value>Event names should be limited to 10 characters.</value>

@@ -286,7 +286,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; exceeds limit of {2} characters (by {1}).
         /// </summary>
         public static string MiKo_1020_MessageFormat {
             get {
@@ -313,7 +313,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        ///   Looks up a localized string similar to Method &apos;{0}&apos; exceeds limit of {2} characters (by {1}).
         /// </summary>
         public static string MiKo_1021_MessageFormat {
             get {
@@ -340,7 +340,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; exceeds limit of {2} characters (by {1}).
         /// </summary>
         public static string MiKo_1022_MessageFormat {
             get {
@@ -367,7 +367,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        ///   Looks up a localized string similar to Field &apos;{0}&apos; exceeds limit of {2} characters (by {1}).
         /// </summary>
         public static string MiKo_1023_MessageFormat {
             get {
@@ -394,7 +394,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        ///   Looks up a localized string similar to Property &apos;{0}&apos; exceeds limit of {2} characters (by {1}).
         /// </summary>
         public static string MiKo_1024_MessageFormat {
             get {
@@ -421,7 +421,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event &apos;{0}&apos; exceeds the limit of {2} by {1} characters.
+        ///   Looks up a localized string similar to Event &apos;{0}&apos; exceeds limit of {2} characters (by {1}).
         /// </summary>
         public static string MiKo_1025_MessageFormat {
             get {
