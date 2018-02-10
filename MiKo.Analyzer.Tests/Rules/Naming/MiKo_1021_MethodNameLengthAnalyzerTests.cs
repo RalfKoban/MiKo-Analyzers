@@ -34,18 +34,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Abcdefghijklmnopqrstuvw")]
         [TestCase("Abcdefghijklmnopqrstuvwx")]
         [TestCase("Abcdefghijklmnopqrstuvwxy")]
-        public void No_issue_is_reported_for_method_with_fitting_length(string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_fitting_length(string name) => No_issue_is_reported_for(@"
 
-public void " + methodName + @"()
+public void " + name + @"()
 {
 }
 ");
 
         [TestCase("Abcdefghijklmnopqrstuvwxyz")]
         [TestCase("Abcdefghijklmnopqrstuvwxyzß")]
-        public void An_issue_is_reported_for_method_with_exceeding_length(string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_exceeding_length(string name) => An_issue_is_reported_for(@"
 
-public void " + methodName + @"()
+public void " + name + @"()
 {
 }
 ");
@@ -60,13 +60,35 @@ public void " + methodName + @"()
         [TestCase("Theory()")]
         [TestCase("TestMethod")]
         [TestCase("TestMethod()")]
-        public void No_issue_is_reported_for_test_method_with_exceeding_length(string attributeName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_with_exceeding_length(string name) => No_issue_is_reported_for(@"
 
-[" + attributeName + @"]
+[" + name + @"]
 public void Abcdefghijklmnopqrstuvwxyz()
 {
 }
 ");
+
+        [Test]
+        public void No_issue_is_reported_for_property_accessor_with_exceeding_length() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int Abcdefghijklmnopqrstuvwxyz { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_accessor_with_exceeding_length() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public event EventHandler<EventArgs> Abcdefghijklmnopqrstuvwxyz { add; remove; }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_explicit_interface_method_with_exceeding_length() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    int IAbcdefghijklmnopqrstuvwxyz.Abcdefghijklmnopqrstuvwxyz() => 42;
+}");
 
         protected override string GetDiagnosticId() => MiKo_1021_MethodNameLengthAnalyzer.Id;
 
