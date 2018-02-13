@@ -11,11 +11,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         [TestCase("CanDock")]
         [TestCase("CanDouble")]
+        [TestCase("CanDown")]
         [TestCase("CanDownload")]
         [TestCase("Dock")]
         [TestCase("Dot")]
         [TestCase("Double")]
+        [TestCase("Down")]
         [TestCase("Download")]
+        [TestCase("IsDown")]
         [TestCase("Whatever")]
         public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
@@ -24,17 +27,20 @@ public class TestMe
 }
 ");
 
-        [TestCase("Do")]
         [TestCase("CanDo")]
-        [TestCase("DoWhatever")]
         [TestCase("CanDoWhatever")]
+        [TestCase("CanDoDock")]
+        [TestCase("CanDoDouble")]
+        [TestCase("CanDoDown")]
+        [TestCase("CanDoDownload")]
+        [TestCase("Do")]
         [TestCase("DoDock")]
         [TestCase("DoDot")]
         [TestCase("DoDouble")]
+        [TestCase("DoDown")]
         [TestCase("DoDownload")]
-        [TestCase("CanDoDock")]
-        [TestCase("CanDoDouble")]
-        [TestCase("CanDoDownload")]
+        [TestCase("DoWhatever")]
+        [TestCase("IsDoDown")]
         public void An_issue_is_reported_for_wrong_named_method(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {

@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var index = methodName.IndexOf("Do", Comparison);
             if (index == -1) return Enumerable.Empty<Diagnostic>();
 
-            if (index == methodName.LastIndexOf("Do", Comparison) && methodName.ContainsAny("Dock", "Double", "Download", "Dot")) return Enumerable.Empty<Diagnostic>();
+            if (index == methodName.LastIndexOf("Do", Comparison) && methodName.ContainsAny("Dock", "Double", "Down", "Dot")) return Enumerable.Empty<Diagnostic>();
 
             return new[] { ReportIssue(method, methodName.Replace("Do", string.Empty)) };
         }
