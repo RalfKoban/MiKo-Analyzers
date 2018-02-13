@@ -12,7 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-        public override void Initialize(AnalysisContext context) => context.RegisterCodeBlockAction(AnalyzeCodeBlock);
+        public override void Initialize(AnalysisContext context)
+        {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+
+            context.RegisterCodeBlockAction(AnalyzeCodeBlock);
+        }
 
         protected abstract Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol);
 
