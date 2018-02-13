@@ -297,4 +297,13 @@
   <data name="MiKo_3001_Title" xml:space="preserve">
     <value>Methods should not have too many parameters.</value>
   </data>
+  <data name="MiKo_3002_Description" xml:space="preserve">
+    <value>If a class has too many dependencies, that class is doing too much and does not follow the SRP.</value>
+  </data>
+  <data name="MiKo_3002_MessageFormat" xml:space="preserve">
+    <value>'{0}' has {1} MEF dependencies (allowed are max. {2})</value>
+  </data>
+  <data name="MiKo_3002_Title" xml:space="preserve">
+    <value>Classes should not have too many dependencies</value>
+  </data>
 </root>

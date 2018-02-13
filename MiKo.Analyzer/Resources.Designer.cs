@@ -599,5 +599,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_3001_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If a class has too many dependencies, that class is doing too much and does not follow the SRP..
+        /// </summary>
+        public static string MiKo_3002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} MEF dependencies (allowed are max. {2}).
+        /// </summary>
+        public static string MiKo_3002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classes should not have too many dependencies.
+        /// </summary>
+        public static string MiKo_3002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3002_Title", resourceCulture);
+            }
+        }
     }
 }

@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs)
         {
-            var prefix = symbol.Name == ".ctor" || symbol.Name == ".cctor" ? symbol.ContainingSymbol.Name : string.Empty;
+            var prefix = symbol.IsConstructor() || symbol.IsClassConstructor() ? symbol.ContainingSymbol.Name : string.Empty;
 
             return ReportIssue(prefix + symbol.Name, symbol.Locations[0], messageArgs);
         }

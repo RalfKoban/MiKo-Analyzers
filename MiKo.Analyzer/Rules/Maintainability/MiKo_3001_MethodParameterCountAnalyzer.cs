@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
             var parameterCount = method.Parameters.Count();
-            if (parameterCount <= MaxParametersCount) return Enumerable.Empty<Diagnostic>();
-
-            return new[] { ReportIssue(method, parameterCount, MaxParametersCount) };
+            return parameterCount > MaxParametersCount
+                       ? new[] { ReportIssue(method, parameterCount, MaxParametersCount) }
+                       : Enumerable.Empty<Diagnostic>();
         }
     }
 }

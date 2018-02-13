@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Composition;
+using System.Linq;
 
 namespace Microsoft.CodeAnalysis
 {
@@ -37,6 +38,42 @@ namespace Microsoft.CodeAnalysis
                     case "FactAttribute":
                     case "TestMethod":
                     case "TestMethodAttribute":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool IsConstructor(this ISymbol symbol) => symbol?.Name == ".ctor";
+
+        internal static bool IsClassConstructor(this ISymbol symbol) => symbol?.Name == ".cctor";
+
+        internal static bool IsImportingConstructor(this ISymbol symbol)
+        {
+            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
+            {
+                switch (name)
+                {
+                    case "ImportingConstructor":
+                    case nameof(ImportingConstructorAttribute):
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool IsImport(this ISymbol symbol)
+        {
+            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
+            {
+                switch (name)
+                {
+                    case "Import":
+                    case nameof(ImportAttribute):
+                    case "ImportMany":
+                    case nameof(ImportManyAttribute):
                         return true;
                 }
             }
