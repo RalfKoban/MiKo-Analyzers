@@ -38,19 +38,32 @@ public class TestMe
 public class TestMe
 {
     [ImportingConstructor]
-    public TestMe(string dependency1, string dependency2, string dependency3, string dependency4, string dependency5) { }
+    public TestMe(string dependency1, string dependency2, string dependency3) { }
 
     [Import]
-    public string Dependency6 { get; set; }
+    public string Dependency4 { get; set; }
 
     [Import]
-    public string Dependency7 { get; set; }
+    public string Dependency5 { get; set; }
 
     void DoSomething() { }
 }");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_more_than_allowed_dependencies() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_slightly_more_than_allowed_dependencies() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    [ImportingConstructor]
+    public TestMe(string dependency1, string dependency2, string dependency3, string dependency4, string dependency5) { }
+
+    [Import]
+    public string Dependency6 { get; set; }
+
+    void DoSomething() { }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_much_more_than_allowed_dependencies() => An_issue_is_reported_for(@"
 public class TestMe
 {
     [ImportingConstructor]
