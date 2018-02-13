@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 .Replace("Document", "##cument")
                                 .Replace("Does", "##es")
                                 .Replace("Double", "##uble")
+                                .Replace("Done", "##ne")
                                 .Replace("Dot", "##t")
                                 .Replace("Down", "##wn");
             if (escapedMethod.IndexOf("Do", Comparison) == -1) return Enumerable.Empty<Diagnostic>();
