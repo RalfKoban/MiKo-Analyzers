@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3002";
 
-        private const int MaxDependenciesCount = 7;
+        private const int MaxDependenciesCount = 5;
 
         public MiKo_3002_MEFDependencyAnalyzer() : base(Id, SymbolKind.NamedType)
         {
