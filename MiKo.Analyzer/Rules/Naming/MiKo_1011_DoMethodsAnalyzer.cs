@@ -29,9 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var escapedMethod = methodName
                                 .Replace("Dock", "##ck")
                                 .Replace("Document", "##cument")
+                                .Replace("Does", "##es")
                                 .Replace("Double", "##uble")
-                                .Replace("Down", "##wn")
-                                .Replace("Dot", "##t");
+                                .Replace("Dot", "##t")
+                                .Replace("Down", "##wn");
             if (escapedMethod.IndexOf("Do", Comparison) == -1) return Enumerable.Empty<Diagnostic>();
 
             return new[] { ReportIssue(method, escapedMethod.Replace("Do", string.Empty).Replace("##", "Do")) };
