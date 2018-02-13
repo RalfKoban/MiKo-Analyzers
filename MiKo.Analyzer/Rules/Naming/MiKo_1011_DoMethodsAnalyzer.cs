@@ -24,13 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var methodName = method.Name;
 
             const StringComparison Comparison = StringComparison.Ordinal;
+            if (methodName.IndexOf("Do", Comparison) == -1) return Enumerable.Empty<Diagnostic>();
 
-            var index = methodName.IndexOf("Do", Comparison);
-            if (index == -1) return Enumerable.Empty<Diagnostic>();
+            var escapedMethod = methodName.Replace("Dock", "##ck").Replace("Double", "##uble").Replace("Down", "##wn").Replace("Dot", "##t");
+            if (escapedMethod.IndexOf("Do", Comparison) == -1) return Enumerable.Empty<Diagnostic>();
 
-            if (index == methodName.LastIndexOf("Do", Comparison) && methodName.ContainsAny("Dock", "Double", "Down", "Dot")) return Enumerable.Empty<Diagnostic>();
-
-            return new[] { ReportIssue(method, methodName.Replace("Do", string.Empty)) };
+            return new[] { ReportIssue(method, escapedMethod.Replace("Do", string.Empty).Replace("##", "Do")) };
         }
     }
 }
