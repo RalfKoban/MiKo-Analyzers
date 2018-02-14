@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 .Replace("Doc", EscapedPhrase + "c")
                                 .Replace("Does", EscapedPhrase + "es")
                                 .Replace("Double", EscapedPhrase + "uble")
+                                .Replace("Domain", EscapedPhrase + "main")
                                 .Replace("Done", EscapedPhrase + "ne")
                                 .Replace("Dot", EscapedPhrase + "t")
                                 .Replace("Down", EscapedPhrase + "wn");

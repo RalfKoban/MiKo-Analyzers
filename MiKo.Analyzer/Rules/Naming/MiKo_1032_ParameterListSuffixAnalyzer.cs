@@ -40,7 +40,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.EndsWith("ss", comparison)) return name + "es";
             if (name.EndsWith("complete", comparison)) return "all";
             if (name.EndsWith("Data", comparison)) return name;
+            if (name.EndsWith("Datas", comparison)) return name.Substring(0, name.Length - 1);
             if (name.EndsWith("nformation", comparison)) return name;
+            if (name.EndsWith("nformations", comparison)) return name.Substring(0, name.Length - 1);
 
             var betterName = name;
             if (symbolName.IsEntityMarker())
