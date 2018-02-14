@@ -574,6 +574,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The term &apos;Fire&apos; is a negative term. Employees get fired (or guns), but not events. Events get raised. So use &apos;Raise&apos; instead..
+        /// </summary>
+        public static string MiKo_2012_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2012_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2012_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2012_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;raise&apos; instead of &apos;fire&apos;..
+        /// </summary>
+        public static string MiKo_2012_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2012_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
         /// </summary>
         public static string MiKo_3001_Description {
