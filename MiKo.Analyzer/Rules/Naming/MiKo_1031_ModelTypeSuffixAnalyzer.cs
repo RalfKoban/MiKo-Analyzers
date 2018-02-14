@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Name.EndsWith("Model", StringComparison.Ordinal) && !symbol.Name.EndsWith("ViewModel", StringComparison.Ordinal)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Name.IsEntityMarker()
                                                                                                ? new[] { ReportIssue(symbol, symbol.Name.Substring(0, symbol.Name.Length - 5)) }
                                                                                                : Enumerable.Empty<Diagnostic>();
     }

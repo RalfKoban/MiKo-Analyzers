@@ -29,9 +29,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var symbolName = symbol.Name;
             if (!symbolName.EndsWith(suffix, comparison)) return null;
 
+            var betterName = GetBetterName(symbolName, suffix, comparison);
+            return ReportIssue(symbol, betterName);
+        }
+
+        private static string GetBetterName(string symbolName, string suffix, StringComparison comparison)
+        {
             var name = symbolName.Substring(0, symbolName.Length - suffix.Length);
-            var expectedName = name.EndsWith("s", comparison) ? name : name + "s";
-            return ReportIssue(symbol, expectedName);
+            if (name.EndsWith("y", comparison)) return name.Substring(0, name.Length - 1) + "ies";
+            if (name.EndsWith("ss", comparison)) return name + "es";
+            if (name.EndsWith("complete", comparison)) return "all";
+            if (name.EndsWith("Data", comparison)) return name;
+            if (name.EndsWith("nformation", comparison)) return name;
+
+            var betterName = name;
+            if (symbolName.IsEntityMarker())
+                betterName = name.Substring(0, name.Length - 5);
+            else if (name.EndsWith("ToConvert", comparison))
+                betterName = name.Substring(0, name.Length - "ToConvert".Length);
+
+            return betterName.EndsWith("s", comparison) ? betterName : betterName + "s";
         }
     }
 }
