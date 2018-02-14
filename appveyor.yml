@@ -48,7 +48,7 @@ platform:
   - Any CPU
 
 configuration:
-  - Debug
+#  - Debug
   - Release
 
 # Currently, .NET Core 2.0 projects are not supported by NUnit 3, so we cannot yet run the tests (and same for Codecov code coverage)
