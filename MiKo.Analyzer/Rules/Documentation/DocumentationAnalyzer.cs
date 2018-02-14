@@ -45,5 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return XElement.Parse(xml).Descendants(xmlElement);
         }
+
+        protected static string GetCommentForParameter(IParameterSymbol parameter, string commentXml)
+        {
+            var paramElements = GetCommentElements(commentXml, @"param");
+            var comments = paramElements.Where(_ => _.Attribute("name")?.Value == parameter.Name);
+            var comment = comments.Nodes().Concatenated().Replace("T:", string.Empty).Trim();
+            return comment;
+        }
     }
 }

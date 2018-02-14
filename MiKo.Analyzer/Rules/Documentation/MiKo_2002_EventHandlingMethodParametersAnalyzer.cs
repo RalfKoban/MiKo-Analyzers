@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -24,6 +23,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var xml = method.GetDocumentationCommentXml();
             if (xml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
+            return VerifyParameterComments(method, xml);
+        }
+
+        private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
+        {
             var diagnostics = new List<Diagnostic>();
             VerifyParameterComment(diagnostics, method, xml, 0, "The source of the event.", "Unused.");
 
@@ -36,11 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private void VerifyParameterComment(ICollection<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, int parameterIndex, params string[] allExpected)
         {
             var parameter = method.Parameters[parameterIndex];
-
-            var paramElements = GetCommentElements(commentXml, @"param");
-            var comments = paramElements.Where(_ => _.Attribute("name")?.Value == parameter.Name);
-            var comment = comments.Nodes().Concatenated().Replace("T:", string.Empty).Trim();
-
+            var comment = GetCommentForParameter(parameter, commentXml);
             if (allExpected.All(_ => _ != comment))
             {
                 diagnostics.Add(ReportIssue(method, parameter.Name, allExpected[0]));
