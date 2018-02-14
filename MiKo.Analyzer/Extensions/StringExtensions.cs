@@ -2,25 +2,28 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+// ReSharper disable once CheckNamespace
 namespace System
 {
     internal static class StringExtensions
     {
-        public static bool StartsWithAny(this string value, params string[] prefixes)
+        public static bool StartsWithAnyChar(this string value, string characters)
         {
-            if (value is null) throw new ArgumentNullException(nameof(value));
-            if (value == string.Empty) return false;
+            if (string.IsNullOrEmpty(value)) return false;
 
-            return prefixes.Any(prefix => value.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
+            var character = value[0];
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < characters.Length; index++)
+            {
+                if (character == characters[index]) return true;
+            }
+
+            return false;
         }
 
-        public static bool ContainsAny(this string value, params string[] prefixes)
-        {
-            if (value is null) throw new ArgumentNullException(nameof(value));
-            if (value == string.Empty) return false;
-
-            return prefixes.Any(value.Contains);
-        }
+        public static bool ContainsAny(this string value, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(value.Contains);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);

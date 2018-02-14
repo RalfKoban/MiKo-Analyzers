@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             VerifyParameterComment(ref diagnostics, method, xml, 0, "The source of the event.", "Unused.");
 
             var eventArgs = method.Parameters[1].Type.Name;
-            var defaultStart = eventArgs.StartsWithAny("A", "E", "I", "O", "U") ? "An" : "A";
+            var defaultStart = eventArgs.StartsWithAnyChar("AEIOU") ? "An" : "A";
             VerifyParameterComment(ref diagnostics, method, xml, 1, $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", "Unused.");
 
             return diagnostics ?? Enumerable.Empty<Diagnostic>();

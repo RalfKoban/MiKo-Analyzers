@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol)
         {
             var comment = symbol.GetDocumentationCommentXml();
-            return comment.StartsWithAny("<!--")
+            return comment.StartsWith("<!--", StringComparison.OrdinalIgnoreCase)
                        ? new[] { ReportIssue(symbol) }
                        : Enumerable.Empty<Diagnostic>();
         }
