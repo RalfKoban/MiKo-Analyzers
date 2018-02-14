@@ -166,7 +166,7 @@
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'CanExecute' or 'Execute' in their names.</value>
   </data>
   <data name="MiKo_1010_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named something like '{1}'</value>
+    <value>'{0}' should be named '{1}'</value>
   </data>
   <data name="MiKo_1010_Title" xml:space="preserve">
     <value>Methods should not contain 'Do' in their names.</value>
@@ -175,7 +175,7 @@
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'Do' in their names.</value>
   </data>
   <data name="MiKo_1011_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named something like '{1}'</value>
+    <value>'{0}' should be named '{1}'</value>
   </data>
   <data name="MiKo_1011_Title" xml:space="preserve">
     <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
@@ -184,7 +184,7 @@
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
   </data>
   <data name="MiKo_1012_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named something like '{1}'</value>
+    <value>'{0}' should be named '{1}'</value>
   </data>
   <data name="MiKo_1012_Title" xml:space="preserve">
     <value>Methods should not be named 'Fire'</value>
@@ -274,7 +274,7 @@
     <value>The XML documentation should be valid XML so that it can be generated to support the developers.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>'{0}' documention is malformed and contains invalid characters such as '&amp;'</value>
+    <value>XML documention is malformed (contains invalid characters, eg. '&amp;')</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>XML documentation should be valid XML.</value>
@@ -283,7 +283,7 @@
     <value>Documentation of events should start with 'Occurs' to indicate that events occur.</value>
   </data>
   <data name="MiKo_2001_MessageFormat" xml:space="preserve">
-    <value>Summary for '{0}' should start with: '{1}'</value>
+    <value>XML summary should start with: '{1}'</value>
   </data>
   <data name="MiKo_2001_Title" xml:space="preserve">
     <value>Events should be documented properly.</value>
@@ -301,7 +301,7 @@
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
   <data name="MiKo_2010_MessageFormat" xml:space="preserve">
-    <value>Summary for '{0}' should end with: '{1}'</value>
+    <value>XML summary should end with: '{1}'</value>
   </data>
   <data name="MiKo_2010_Title" xml:space="preserve">
     <value>Sealed classes should document being sealed</value>
@@ -310,7 +310,7 @@
     <value>Unsealed classes should not report that they are sealed.</value>
   </data>
   <data name="MiKo_2011_MessageFormat" xml:space="preserve">
-    <value>Summary for '{0}' should not contain: '{1}'</value>
+    <value>XML summary should not contain: '{1}'</value>
   </data>
   <data name="MiKo_2011_Title" xml:space="preserve">
     <value>Unsealed classes should not lie about sealing.</value>
@@ -319,7 +319,7 @@
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named something like '{1}'</value>
+    <value>'{0}' should be '{1}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
     <value>Documentation should use 'raise' instead of 'fire'.</value>

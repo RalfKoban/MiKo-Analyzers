@@ -205,7 +205,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1010_MessageFormat {
             get {
@@ -232,7 +232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1011_MessageFormat {
             get {
@@ -259,7 +259,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1012_MessageFormat {
             get {
@@ -529,7 +529,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; documention is malformed and contains invalid characters such as &apos;&amp;&apos;.
+        ///   Looks up a localized string similar to XML documention is malformed (contains invalid characters, eg. &apos;&amp;&apos;).
         /// </summary>
         public static string MiKo_2000_MessageFormat {
             get {
@@ -556,7 +556,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should start with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML summary should start with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2001_MessageFormat {
             get {
@@ -610,7 +610,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should end with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML summary should end with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2010_MessageFormat {
             get {
@@ -637,7 +637,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Summary for &apos;{0}&apos; should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML summary should not contain: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2011_MessageFormat {
             get {
@@ -664,7 +664,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be named something like &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2012_MessageFormat {
             get {
