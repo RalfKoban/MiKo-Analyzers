@@ -243,6 +243,15 @@
   <data name="MiKo_1025_Title" xml:space="preserve">
     <value>Event names should be limited to 10 characters.</value>
   </data>
+  <data name="MiKo_1030_Description" xml:space="preserve">
+    <value>Indicating that a type is a base type by putting 'Base' in its name does not make sense. Every interface or class that is not sealed can act as a base class.</value>
+  </data>
+  <data name="MiKo_1030_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1030_Title" xml:space="preserve">
+    <value>Types should not have a 'Base' marker to indicate that they are base types</value>
+  </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>The XML documentation should be valid XML so that it can be generated to support the developers.</value>
   </data>

@@ -439,6 +439,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indicating that a type is a base type by putting &apos;Base&apos; in its name does not make sense. Every interface or class that is not sealed can act as a base class..
+        /// </summary>
+        public static string MiKo_1030_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1030_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1030_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1030_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should not have a &apos;Base&apos; marker to indicate that they are base types.
+        /// </summary>
+        public static string MiKo_1030_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1030_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
