@@ -11,14 +11,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1030";
 
-        private const string BaseMarker = "Base";
-
         public MiKo_1030_BaseTypePrefixSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Name.Contains(BaseMarker)
-                                                                                               ? new[] { ReportIssue(symbol, symbol.Name.Replace(BaseMarker, string.Empty)) }
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Name.Contains("Base")
+                                                                                               ? new[] { ReportIssue(symbol, symbol.Name.Replace("Base", string.Empty)) }
                                                                                                : Enumerable.Empty<Diagnostic>();
     }
 }

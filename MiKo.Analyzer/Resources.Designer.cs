@@ -466,6 +466,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indicating that a type is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all (eg. &apos;User&apos; instead of &apos;UserModel&apos;).
+        /// </summary>
+        public static string MiKo_1031_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1031_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1031_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1031_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entity types should not use a &apos;Model&apos; suffix.
+        /// </summary>
+        public static string MiKo_1031_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1031_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
