@@ -295,7 +295,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type names should be limited to 40 characters..
+        ///   Looks up a localized string similar to Type names should be limited in length.
         /// </summary>
         public static string MiKo_1020_Title {
             get {
@@ -322,7 +322,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method names should be limited to 25 characters..
+        ///   Looks up a localized string similar to Method names should be limited in length.
         /// </summary>
         public static string MiKo_1021_Title {
             get {
@@ -349,7 +349,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names should be limited to 10 characters..
+        ///   Looks up a localized string similar to Parameter names should be limited in length.
         /// </summary>
         public static string MiKo_1022_Title {
             get {
@@ -376,7 +376,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field names should be limited to 10 characters..
+        ///   Looks up a localized string similar to Field names should be limited in length.
         /// </summary>
         public static string MiKo_1023_Title {
             get {
@@ -403,7 +403,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names should be limited to 25 characters..
+        ///   Looks up a localized string similar to Property names should be limited in length.
         /// </summary>
         public static string MiKo_1024_Title {
             get {
@@ -430,7 +430,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event names should be limited to 10 characters..
+        ///   Looks up a localized string similar to Event names should be limited in length.
         /// </summary>
         public static string MiKo_1025_Title {
             get {
@@ -489,6 +489,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1031_Title {
             get {
                 return ResourceManager.GetString("MiKo_1031_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffixes on parameter names (such as &apos;List&apos;) are noise and should be avoided..
+        /// </summary>
+        public static string MiKo_1032_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1032_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1032_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1032_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with implementation details..
+        /// </summary>
+        public static string MiKo_1032_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1032_Title", resourceCulture);
             }
         }
         
