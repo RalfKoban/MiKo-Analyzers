@@ -20,15 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> Analyze(IParameterSymbol symbol)
         {
-            var diagnostics = new List<Diagnostic>();
-
-            var diagnostic = Analyze(symbol, "List");
-            if (diagnostic != null) diagnostics.Add(diagnostic);
-
-            diagnostic = Analyze(symbol, "Dictionary");
-            if (diagnostic != null) diagnostics.Add(diagnostic);
-
-            return diagnostics;
+            var diagnostic = Analyze(symbol, "List") ?? Analyze(symbol, "Dictionary");
+            return diagnostic != null ? new [] { diagnostic } : Enumerable.Empty<Diagnostic>();
         }
 
         private Diagnostic Analyze(IParameterSymbol symbol, string suffix, StringComparison comparison = StringComparison.Ordinal)

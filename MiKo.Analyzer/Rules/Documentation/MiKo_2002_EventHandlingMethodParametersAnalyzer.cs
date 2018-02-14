@@ -28,21 +28,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
         {
-            var diagnostics = new List<Diagnostic>();
-            VerifyParameterComment(diagnostics, method, xml, 0, "The source of the event.", "Unused.");
+            List<Diagnostic> diagnostics = null;
+            VerifyParameterComment(ref diagnostics, method, xml, 0, "The source of the event.", "Unused.");
 
             var eventArgs = method.Parameters[1].Type.Name;
             var defaultStart = eventArgs.StartsWithAny("A", "E", "I", "O", "U") ? "An" : "A";
-            VerifyParameterComment(diagnostics, method, xml, 1, $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", "Unused.");
-            return diagnostics;
+            VerifyParameterComment(ref diagnostics, method, xml, 1, $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", "Unused.");
+
+            return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private void VerifyParameterComment(ICollection<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, int parameterIndex, params string[] allExpected)
+        private void VerifyParameterComment(ref List<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, int parameterIndex, params string[] allExpected)
         {
             var parameter = method.Parameters[parameterIndex];
             var comment = GetCommentForParameter(parameter, commentXml);
             if (allExpected.All(_ => _ != comment))
             {
+                if (diagnostics == null) diagnostics = new List<Diagnostic>();
                 diagnostics.Add(ReportIssue(method, parameter.Name, allExpected[0]));
             }
         }

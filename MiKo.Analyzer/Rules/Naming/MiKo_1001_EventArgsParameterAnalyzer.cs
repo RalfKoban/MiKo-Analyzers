@@ -29,13 +29,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case 1:
                     {
                         var expected = method.Name != nameof(Equals) ? "e" : "other";
-                        return parameters.Select(_ => _.Name).Where(_ => _ != expected).Select(_ => ReportIssue(method, _, expected));
+
+                        var symbol = parameters[0];
+                        return symbol.Name != expected
+                                   ? new[] { ReportIssue(method, symbol.Name, expected) }
+                                   : Enumerable.Empty<Diagnostic>();
                     }
 
                 default:
                     {
                         var i = 0;
-                        var diagnostics = new List<Diagnostic>();
+                        var diagnostics = new List<Diagnostic>(parameters.Count);
                         foreach (var parameter in parameters)
                         {
                             var parameterName = parameter.Name;
