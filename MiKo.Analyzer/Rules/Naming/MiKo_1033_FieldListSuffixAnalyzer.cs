@@ -17,13 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol)
         {
-            var diagnostic = Analyze(symbol);
-
+            var diagnostic = AnalyzeCollectionSuffix(symbol);
             return diagnostic != null
                        ? new[] { diagnostic }
                        : Enumerable.Empty<Diagnostic>();
         }
-
-        private Diagnostic Analyze(ISymbol symbol) => AnalyzeSuffix(symbol, "List") ?? AnalyzeSuffix(symbol, "Dictionary");
     }
 }

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             List<Diagnostic> list = null;
 
-            foreach (var diagnostic in symbol.Parameters.Select(Analyze).Where(_ => _ != null))
+            foreach (var diagnostic in symbol.Parameters.Select(AnalyzeCollectionSuffix).Where(_ => _ != null))
             {
                 if (list == null) list = new List<Diagnostic>();
                 list.Add(diagnostic);
@@ -27,7 +27,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return list ?? Enumerable.Empty<Diagnostic>();
         }
-
-        private Diagnostic Analyze(ISymbol symbol) => AnalyzeSuffix(symbol, "List") ?? AnalyzeSuffix(symbol, "Dictionary");
     }
 }

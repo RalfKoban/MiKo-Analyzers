@@ -38,5 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var betterName = GetPluralName(symbolName, suffix, comparison);
             return ReportIssue(symbol, betterName);
         }
+
+        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => AnalyzeSuffix(symbol, "List") ?? AnalyzeSuffix(symbol, "Dictionary") ?? AnalyzeSuffix(symbol, "Collection");
     }
 }
