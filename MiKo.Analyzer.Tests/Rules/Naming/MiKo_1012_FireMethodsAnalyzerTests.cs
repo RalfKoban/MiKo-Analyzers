@@ -22,7 +22,9 @@ public class TestMe
         [TestCase("OnFire")]
         [TestCase("FireEvent")]
         [TestCase("DoFireSomething")]
+        [TestCase("IsFiringSomething")]
         [TestCase("_fire")]
+        [TestCase("_firing")]
         public void An_issue_is_reported_for_wrong_named_method(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
