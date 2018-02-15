@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -16,41 +15,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => symbol.Parameters.SelectMany(Analyze).ToList();
-
-        private IEnumerable<Diagnostic> Analyze(IParameterSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
         {
-            var diagnostic = Analyze(symbol, "List") ?? Analyze(symbol, "Dictionary");
-            return diagnostic != null ? new [] { diagnostic } : Enumerable.Empty<Diagnostic>();
+            List<Diagnostic> list = null;
+
+            foreach (var diagnostic in symbol.Parameters.Select(Analyze).Where(_ => _ != null))
+            {
+                if (list == null) list = new List<Diagnostic>();
+                list.Add(diagnostic);
+            }
+
+            return list ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private Diagnostic Analyze(IParameterSymbol symbol, string suffix, StringComparison comparison = StringComparison.Ordinal)
-        {
-            var symbolName = symbol.Name;
-            if (!symbolName.EndsWith(suffix, comparison)) return null;
-
-            var betterName = GetBetterName(symbolName, suffix, comparison);
-            return ReportIssue(symbol, betterName);
-        }
-
-        private static string GetBetterName(string symbolName, string suffix, StringComparison comparison)
-        {
-            var name = symbolName.Substring(0, symbolName.Length - suffix.Length);
-            if (name.EndsWith("y", comparison)) return name.Substring(0, name.Length - 1) + "ies";
-            if (name.EndsWith("ss", comparison)) return name + "es";
-            if (name.EndsWith("complete", comparison)) return "all";
-            if (name.EndsWith("Data", comparison)) return name;
-            if (name.EndsWith("Datas", comparison)) return name.Substring(0, name.Length - 1);
-            if (name.EndsWith("nformation", comparison)) return name;
-            if (name.EndsWith("nformations", comparison)) return name.Substring(0, name.Length - 1);
-
-            var betterName = name;
-            if (symbolName.IsEntityMarker())
-                betterName = name.Substring(0, name.Length - 5);
-            else if (name.EndsWith("ToConvert", comparison))
-                betterName = name.Substring(0, name.Length - "ToConvert".Length);
-
-            return betterName.EndsWith("s", comparison) ? betterName : betterName + "s";
-        }
+        private Diagnostic Analyze(ISymbol symbol) => AnalyzeSuffix(symbol, "List") ?? AnalyzeSuffix(symbol, "Dictionary");
     }
 }

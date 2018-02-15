@@ -547,6 +547,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Suffixes on field names (such as &apos;List&apos;) are noise and should be avoided..
+        /// </summary>
+        public static string MiKo_1033_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1033_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1033_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1033_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields should not be suffixed with implementation details..
+        /// </summary>
+        public static string MiKo_1033_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1033_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
