@@ -162,6 +162,15 @@
   <data name="MiKo_1003_Title" xml:space="preserve">
     <value>Name of event handler does not follow the .NET Framework Best practices.</value>
   </data>
+  <data name="MiKo_1004_Description" xml:space="preserve">
+    <value>'Event' as suffix in event names are noise and should be avoided.</value>
+  </data>
+  <data name="MiKo_1004_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1004_Title" xml:space="preserve">
+    <value>Events should not contain term 'Event' in their names</value>
+  </data>
   <data name="MiKo_1010_Description" xml:space="preserve">
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'CanExecute' or 'Execute' in their names.</value>
   </data>

@@ -196,6 +196,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;Event&apos; as suffix in event names are noise and should be avoided..
+        /// </summary>
+        public static string MiKo_1004_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1004_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1004_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1004_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events should not contain term &apos;Event&apos; in their names.
+        /// </summary>
+        public static string MiKo_1004_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1004_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
         public static string MiKo_1010_Description {
