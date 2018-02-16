@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MiKo_0001_Description" xml:space="preserve">
-    <value>Methods should be short to ease reading and maintenance.</value>
+    <value>Methods should be short to ease reading and maintenance (SRP).</value>
   </data>
   <data name="MiKo_0001_MessageFormat" xml:space="preserve">
     <value>'{0}' has {1} Lines of Code (allowed are max. {2})</value>
@@ -127,13 +127,22 @@
     <value>Method is too long</value>
   </data>
   <data name="MiKo_0002_Description" xml:space="preserve">
-    <value>Methods should be simple to ease maintenance.</value>
+    <value>Methods should be simple to ease maintenance (KISS).</value>
   </data>
   <data name="MiKo_0002_MessageFormat" xml:space="preserve">
     <value>'{0}' has a Cyclomatic Complexity of {1} (allowed is max. {2})</value>
   </data>
   <data name="MiKo_0002_Title" xml:space="preserve">
     <value>Method is too complex.</value>
+  </data>
+  <data name="MiKo_0003_Description" xml:space="preserve">
+    <value>Types should be limited in their size to ease reading and maintenance (SRP).</value>
+  </data>
+  <data name="MiKo_0003_MessageFormat" xml:space="preserve">
+    <value>'{0}' has {1} Lines of Code (allowed are max. {2})</value>
+  </data>
+  <data name="MiKo_0003_Title" xml:space="preserve">
+    <value>Type is too long</value>
   </data>
   <data name="MiKo_1001_Description" xml:space="preserve">
     <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
@@ -160,7 +169,7 @@
     <value>'{0}' should be named '{1}'</value>
   </data>
   <data name="MiKo_1003_Title" xml:space="preserve">
-    <value>Name of event handler does not follow the .NET Framework Best practices.</value>
+    <value>Name of event handler does not follow the .NET Framework Best Practices.</value>
   </data>
   <data name="MiKo_1004_Description" xml:space="preserve">
     <value>'Event' as suffix in event names are noise and should be avoided.</value>

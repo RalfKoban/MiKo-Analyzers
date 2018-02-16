@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should be short to ease reading and maintenance..
+        ///   Looks up a localized string similar to Methods should be short to ease reading and maintenance (SRP)..
         /// </summary>
         public static string MiKo_0001_Description {
             get {
@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should be simple to ease maintenance..
+        ///   Looks up a localized string similar to Methods should be simple to ease maintenance (KISS)..
         /// </summary>
         public static string MiKo_0002_Description {
             get {
@@ -111,6 +111,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_0002_Title {
             get {
                 return ResourceManager.GetString("MiKo_0002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should be limited in their size to ease reading and maintenance (SRP)..
+        /// </summary>
+        public static string MiKo_0003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} Lines of Code (allowed are max. {2}).
+        /// </summary>
+        public static string MiKo_0003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type is too long.
+        /// </summary>
+        public static string MiKo_0003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0003_Title", resourceCulture);
             }
         }
         
@@ -187,7 +214,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of event handler does not follow the .NET Framework Best practices..
+        ///   Looks up a localized string similar to Name of event handler does not follow the .NET Framework Best Practices..
         /// </summary>
         public static string MiKo_1003_Title {
             get {
