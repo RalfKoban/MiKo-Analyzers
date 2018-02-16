@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} Lines of Code (allowed are max. {2}).
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; has {1} Lines of Code (allowed are max. {2}).
         /// </summary>
         public static string MiKo_0003_MessageFormat {
             get {
