@@ -31,13 +31,15 @@ skip_commits:
 before_build:
 - nuget restore "c:\projects\MiKo.Analyzers\MiKo.Analyzer.sln"
 
-# enable patching of AssemblyInfo.* files (seems to not work for .NET Core projects as it would for .NET standard projects)
-#assembly_info:
-#  patch: true
-#  file: AssemblyInfo.*
-#  assembly_version: "{version}"
-#  assembly_file_version: "{version}"
-#  assembly_informational_version: "{version}"
+# enable patching of project file (.NET Core)
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
 
 build:
   parallel: true
