@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1031_ModelTypeSuffixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1031_TypeModelSuffixAnalyzerTests : CodeFixVerifier
     {
         [TestCase("interface", "ISomething")]
         [TestCase("class", "Something")]
@@ -27,8 +27,8 @@ public " + type + " " + name + @"
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1031_ModelTypeSuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1031_TypeModelSuffixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1031_ModelTypeSuffixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1031_TypeModelSuffixAnalyzer();
     }
 }
