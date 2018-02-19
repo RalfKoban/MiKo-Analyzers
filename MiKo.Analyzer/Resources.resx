@@ -121,17 +121,18 @@
     <value>Methods should be short to ease reading and maintenance (SRP).</value>
   </data>
   <data name="MiKo_0001_MessageFormat" xml:space="preserve">
-    <value>'{0}' has {1} LoC (allowed are max. {2})</value>
+    <value>'{0}' has {1} LoC ({2} allowed)</value>
   </data>
   <data name="MiKo_0001_Title" xml:space="preserve">
     <value>Method is too long</value>
   </data>
   <data name="MiKo_0002_Description" xml:space="preserve">
-    <value>Methods should be simple to ease maintenance (KISS). Following code constructs increase the Cyclomatic Complexity by +1:
-if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | ternary operator ?: | ?? | ?.</value>
+    <value>Methods should be simple to ease maintenance (KISS).
+Following code constructs increase the Cyclomatic Complexity (CC) by +1:
+    if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | ternary operator ?: | ?? | ?.</value>
   </data>
   <data name="MiKo_0002_MessageFormat" xml:space="preserve">
-    <value>'{0}' has a CC of {1} (allowed is max. {2})</value>
+    <value>'{0}' has a CC of {1} ({2} allowed)</value>
   </data>
   <data name="MiKo_0002_Title" xml:space="preserve">
     <value>Method is too complex.</value>
@@ -140,7 +141,7 @@ if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | 
     <value>Types should be limited in their size to ease reading and maintenance (SRP).</value>
   </data>
   <data name="MiKo_0003_MessageFormat" xml:space="preserve">
-    <value>Type '{0}' has {1} LoC (allowed are max. {2})</value>
+    <value>Type '{0}' has {1} LoC ({2} allowed)</value>
   </data>
   <data name="MiKo_0003_Title" xml:space="preserve">
     <value>Type is too long</value>
@@ -365,7 +366,7 @@ if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | 
     <value>To follow the SRP, methods should have as few parameters as possible.</value>
   </data>
   <data name="MiKo_3001_MessageFormat" xml:space="preserve">
-    <value>'{0}' has {1} parameters (allowed are max. {2})</value>
+    <value>'{0}' has {1} parameters ({2} allowed)</value>
   </data>
   <data name="MiKo_3001_Title" xml:space="preserve">
     <value>Methods should not have too many parameters.</value>
@@ -374,7 +375,7 @@ if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | 
     <value>If a class has too many dependencies, that class is doing too much and does not follow the SRP.</value>
   </data>
   <data name="MiKo_3002_MessageFormat" xml:space="preserve">
-    <value>'{0}' has {1} MEF dependencies (allowed are max. {2})</value>
+    <value>'{0}' has {1} MEF dependencies ({2} allowed)</value>
   </data>
   <data name="MiKo_3002_Title" xml:space="preserve">
     <value>Classes should not have too many dependencies</value>
