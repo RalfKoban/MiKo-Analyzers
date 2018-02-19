@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} Lines of Code (allowed are max. {2}).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} LoC (allowed are max. {2}).
         /// </summary>
         public static string MiKo_0001_MessageFormat {
             get {
@@ -88,7 +88,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should be simple to ease maintenance (KISS)..
+        ///   Looks up a localized string similar to Methods should be simple to ease maintenance (KISS). Following code constructs increase the Cyclomatic Complexity by +1:
+        ///if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | ternary operator ?: | ?? | ?..
         /// </summary>
         public static string MiKo_0002_Description {
             get {
@@ -97,7 +98,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has a Cyclomatic Complexity of {1} (allowed is max. {2}).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has a CC of {1} (allowed is max. {2}).
         /// </summary>
         public static string MiKo_0002_MessageFormat {
             get {
@@ -124,7 +125,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type &apos;{0}&apos; has {1} Lines of Code (allowed are max. {2}).
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; has {1} LoC (allowed are max. {2}).
         /// </summary>
         public static string MiKo_0003_MessageFormat {
             get {
