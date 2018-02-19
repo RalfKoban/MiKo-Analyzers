@@ -551,54 +551,54 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Suffixes on parameter names (such as &apos;List&apos;) are noise and should be avoided..
         /// </summary>
-        public static string MiKo_1032_Description {
+        public static string MiKo_1040_Description {
             get {
-                return ResourceManager.GetString("MiKo_1032_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1040_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_1032_MessageFormat {
+        public static string MiKo_1040_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1032_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1040_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameters should not be suffixed with implementation details..
         /// </summary>
-        public static string MiKo_1032_Title {
+        public static string MiKo_1040_Title {
             get {
-                return ResourceManager.GetString("MiKo_1032_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1040_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Suffixes on field names (such as &apos;List&apos;) are noise and should be avoided..
         /// </summary>
-        public static string MiKo_1033_Description {
+        public static string MiKo_1041_Description {
             get {
-                return ResourceManager.GetString("MiKo_1033_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1041_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_1033_MessageFormat {
+        public static string MiKo_1041_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1033_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1041_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Fields should not be suffixed with implementation details..
         /// </summary>
-        public static string MiKo_1033_Title {
+        public static string MiKo_1041_Title {
             get {
-                return ResourceManager.GetString("MiKo_1033_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1041_Title", resourceCulture);
             }
         }
         
