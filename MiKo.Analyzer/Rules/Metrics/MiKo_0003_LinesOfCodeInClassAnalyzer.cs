@@ -29,6 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
+            // ignore test classes
+            if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>();
+
             var loc = symbol
                       .GetMembers().OfType<IMethodSymbol>()
                       .SelectMany(_ => _.DeclaringSyntaxReferences.Select(__ => __.GetSyntaxAsync().Result).SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect))
