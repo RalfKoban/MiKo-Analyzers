@@ -13,7 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => AnalyzeSuffix(symbol, "List") ?? AnalyzeSuffix(symbol, "Dictionary") ?? AnalyzeSuffix(symbol, "Collection");
+        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => AnalyzeSuffix(symbol, "List")
+                                                                     ?? AnalyzeSuffix(symbol, "Dictionary")
+                                                                     ?? AnalyzeSuffix(symbol, "Collection")
+                                                                     ?? AnalyzeSuffix(symbol, "Array")
+                                                                     ?? AnalyzeSuffix(symbol, "HashSet");
 
         protected Diagnostic AnalyzeSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.Ordinal)
         {
