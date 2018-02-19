@@ -40,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var escapedMethod = methodName
                                 .Replace("Doc", EscapedPhrase + "c")
                                 .Replace("Does", EscapedPhrase + "es")
+                                .Replace("DoEvents", EscapedPhrase + "Events")
                                 .Replace("Double", EscapedPhrase + "uble")
                                 .Replace("Domain", EscapedPhrase + "main")
                                 .Replace("Done", EscapedPhrase + "ne")
