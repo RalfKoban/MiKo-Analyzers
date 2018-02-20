@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -16,8 +18,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => symbol.Type.Name == nameof(EventHandler)
-                                                                                            ? Enumerable.Empty<Diagnostic>()
-                                                                                            : new []{ ReportIssue(symbol) };
+        protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol)
+        {
+            switch (symbol.Type.Name)
+            {
+                case nameof(EventHandler):
+                case nameof(NotifyCollectionChangedEventHandler):
+                case nameof(PropertyChangedEventHandler):
+                case nameof(PropertyChangingEventHandler):
+                case nameof(CancelEventHandler):
+                    return Enumerable.Empty<Diagnostic>();
+
+                default:
+                    return new[] { ReportIssue(symbol) };
+            }
+        }
     }
 }

@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -9,25 +13,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3003_EventSignatureAnalyzerTests : CodeFixVerifier
     {
-        [Test]
-        public void No_issue_is_reported_for_EventHandler() => No_issue_is_reported_for(@"
+        [TestCase(nameof(EventHandler))]
+        [TestCase(nameof(EventHandler<EventArgs>))]
+        [TestCase(nameof(NotifyCollectionChangedEventHandler))]
+        [TestCase(nameof(PropertyChangedEventHandler))]
+        [TestCase(nameof(PropertyChangingEventHandler))]
+        [TestCase(nameof(CancelEventHandler))]
+        public void No_issue_is_reported_for_EventHandler(string handler) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
-    public event EventHandler MyEvent;
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_generic_EventHandler() => No_issue_is_reported_for(@"
-
-public class MyEventArgs : EventArgs
-{
-}
-
-public class TestMe
-{
-    public event EventHandler<MyEventArgs> MyEvent;
+    public event " + handler + @" MyEvent;
 }
 ");
 
