@@ -765,7 +765,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease their usage, enums should specify what kind of values they provide..
+        ///   Looks up a localized string similar to To ease their usage, enums should specify what kind of values they define..
         /// </summary>
         public static string MiKo_2013_Description {
             get {
@@ -774,7 +774,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML summary should start with:&apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML summary should start with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2013_MessageFormat {
             get {
@@ -783,7 +783,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enums should have a default starting phrase.
+        ///   Looks up a localized string similar to Enums XML summary should have a default starting phrase.
         /// </summary>
         public static string MiKo_2013_Title {
             get {

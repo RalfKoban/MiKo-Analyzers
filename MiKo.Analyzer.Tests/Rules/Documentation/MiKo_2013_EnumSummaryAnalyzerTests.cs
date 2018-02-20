@@ -35,7 +35,7 @@ public enum TestMe
         [Test]
         public void No_issue_is_reported_for_enum_with_correct_phrase() => No_issue_is_reported_for(@"
 /// <summary>
-/// Provides values that specify something.
+/// Defines values that specify something.
 /// </summary>
 public enum TestMe
 {
@@ -47,7 +47,7 @@ public enum TestMe
         public void No_issue_is_reported_for_enum_with_correct_phrase_in_para_tag() => No_issue_is_reported_for(@"
 /// <summary>
 /// <para>
-/// Provides values that specify something.
+/// Defines values that specify something.
 /// </para>
 /// </summary>
 public enum TestMe
@@ -70,7 +70,7 @@ public enum TestMe
         public void An_issue_is_reported_for_enum_with_wrong_phrase_in_para_tag() => An_issue_is_reported_for(@"
 /// <summary>
 /// <para>
-/// Provides something.
+/// Defines something.
 /// </para>
 /// </summary>
 public enum TestMe
