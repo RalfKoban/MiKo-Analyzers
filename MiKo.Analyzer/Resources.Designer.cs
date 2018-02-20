@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} LoC ({2} allowed).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} LoC (allowed: {2}).
         /// </summary>
         public static string MiKo_0001_MessageFormat {
             get {
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has a CC of {1} ({2} allowed).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has a CC of {1} (allowed: {2}).
         /// </summary>
         public static string MiKo_0002_MessageFormat {
             get {
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type &apos;{0}&apos; has {1} LoC ({2} allowed).
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; has {1} LoC (allowed: {2}).
         /// </summary>
         public static string MiKo_0003_MessageFormat {
             get {
@@ -801,7 +801,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} parameters ({2} allowed).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} parameters (allowed: {2}).
         /// </summary>
         public static string MiKo_3001_MessageFormat {
             get {
@@ -828,7 +828,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} MEF dependencies ({2} allowed).
+        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} MEF dependencies (allowed: {2}).
         /// </summary>
         public static string MiKo_3002_MessageFormat {
             get {
@@ -842,6 +842,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3002_Title {
             get {
                 return ResourceManager.GetString("MiKo_3002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease usage, events should follow the .NET Framework Guidelines..
+        /// </summary>
+        public static string MiKo_3003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should use EventHandler or EventHandler&lt;T&gt;.
+        /// </summary>
+        public static string MiKo_3003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events should follow .NET Framework Guidelines for events..
+        /// </summary>
+        public static string MiKo_3003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3003_Title", resourceCulture);
             }
         }
     }
