@@ -17,6 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol)
         {
+            // ignore enum definitions
+            if (symbol.ContainingType?.EnumUnderlyingType != null) return Enumerable.Empty<Diagnostic>();
+
             var diagnostic = AnalyzeCollectionSuffix(symbol);
             return diagnostic != null
                        ? new[] { diagnostic }

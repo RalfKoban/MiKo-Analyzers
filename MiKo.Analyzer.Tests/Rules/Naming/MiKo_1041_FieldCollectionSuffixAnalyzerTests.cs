@@ -18,6 +18,19 @@ public class TestMe
 }
 ");
 
+        [TestCase("blaList")]
+        [TestCase("blaCollection")]
+        [TestCase("blaObservableCollection")]
+        [TestCase("blaArray")]
+        [TestCase("blaHashSet")]
+        public void No_issue_is_reported_for_incorrectly_named_field_in_enum(string field) => No_issue_is_reported_for(@"
+
+public enum TestMe
+{
+    " + field + @",
+}
+");
+
         [TestCase("string blaList")]
         [TestCase("string blaCollection")]
         [TestCase("string blaObservableCollection")]
