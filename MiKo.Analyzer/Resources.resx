@@ -381,7 +381,8 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Classes should not have too many dependencies</value>
   </data>
   <data name="MiKo_3003_Description" xml:space="preserve">
-    <value>To ease usage, events should follow the .NET Framework Guidelines.</value>
+    <value>To ease usage, events should follow the .NET Framework Guidelines for Event Design.
+(see https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event)</value>
   </data>
   <data name="MiKo_3003_MessageFormat" xml:space="preserve">
     <value>'{0}' should use 'EventHandler' or 'EventHandler&lt;T&gt;'</value>
