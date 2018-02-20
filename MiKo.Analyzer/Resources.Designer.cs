@@ -855,7 +855,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should use EventHandler or EventHandler&lt;T&gt;.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should use &apos;EventHandler&apos; or &apos;EventHandler&lt;T&gt;&apos;.
         /// </summary>
         public static string MiKo_3003_MessageFormat {
             get {

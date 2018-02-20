@@ -27,6 +27,23 @@ public class TestMe
 }
 ");
 
+        [TestCase(nameof(EventHandler))]
+        [TestCase(nameof(EventHandler<EventArgs>))]
+        [TestCase(nameof(NotifyCollectionChangedEventHandler))]
+        [TestCase(nameof(PropertyChangedEventHandler))]
+        [TestCase(nameof(PropertyChangingEventHandler))]
+        [TestCase(nameof(CancelEventHandler))]
+        public void No_issue_is_reported_for_EventHandler_with_usings(string handler) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public event " + handler + @" MyEvent;
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_Action() => An_issue_is_reported_for(@"
 
