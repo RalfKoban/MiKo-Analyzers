@@ -792,6 +792,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It does not make sense to use XML summaries that only reference something else via &lt;see cref=&quot;...&quot; /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used..
+        /// </summary>
+        public static string MiKo_2020_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2020_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;inheritdoc /&gt; instead of XML summary.
+        /// </summary>
+        public static string MiKo_2020_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2020_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inherited documentation should be used with &lt;inheritdoc /&gt; marker..
+        /// </summary>
+        public static string MiKo_2020_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2020_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
         /// </summary>
         public static string MiKo_3001_Description {
@@ -846,7 +873,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease usage, events should follow the .NET Framework Guidelines..
+        ///   Looks up a localized string similar to To ease usage, events should follow the .NET Framework Guidelines for Event Design.
+        ///(see https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event).
         /// </summary>
         public static string MiKo_3003_Description {
             get {

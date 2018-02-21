@@ -25,6 +25,10 @@ namespace System
 
         public static bool ContainsAny(this string value, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(value.Contains);
 
+        public static bool StartsWithAny(this string value, StringComparison comparison, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.StartsWith(_, comparison));
+
+        public static bool EndsWithAny(this string value, StringComparison comparison, params string[] suffixes) => !string.IsNullOrEmpty(value) && suffixes.Any(_ => value.EndsWith(_, comparison));
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
 
@@ -32,5 +36,7 @@ namespace System
         public static string Concatenated<T>(this IEnumerable<T> values, string separator = "") => string.Join(separator, values);
 
         internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWith("Model", StringComparison.Ordinal) && !symbolName.EndsWith("ViewModel", StringComparison.Ordinal);
+
+        internal static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => _.Replace("<para>", string.Empty).Replace("<para />", string.Empty).Replace("</para>", string.Empty));
     }
 }

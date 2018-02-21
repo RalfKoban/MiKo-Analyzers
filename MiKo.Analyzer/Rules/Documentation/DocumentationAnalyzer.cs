@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                            ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
                                                                                            : Enumerable.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(IEventSymbol symbol) => AnalyzeSummary(symbol, symbol.GetDocumentationCommentXml());
-
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
+
+        protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol) => AnalyzeSummary(symbol, symbol.GetDocumentationCommentXml());
 
         protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml)
         {
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Enumerable.Empty<Diagnostic>();
         }
 
-        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Value.Trim());
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes().Concatenated().Replace("T:", string.Empty).Trim());
 
         protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
         {
