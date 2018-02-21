@@ -549,6 +549,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense..
+        /// </summary>
+        public static string MiKo_1032_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1032_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1032_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1032_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Enum&apos;.
+        /// </summary>
+        public static string MiKo_1032_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1032_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Suffixes on parameter names (such as &apos;List&apos;) are noise and should be avoided..
         /// </summary>
         public static string MiKo_1040_Description {

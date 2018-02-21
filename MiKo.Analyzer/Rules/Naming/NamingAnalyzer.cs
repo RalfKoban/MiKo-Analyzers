@@ -13,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => AnalyzeSuffix(symbol, "List")
-                                                                     ?? AnalyzeSuffix(symbol, "Dictionary")
-                                                                     ?? AnalyzeSuffix(symbol, "ObservableCollection")
-                                                                     ?? AnalyzeSuffix(symbol, "Collection")
-                                                                     ?? AnalyzeSuffix(symbol, "Array")
-                                                                     ?? AnalyzeSuffix(symbol, "HashSet");
+        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => AnalyzeCollectionSuffix(symbol, "List")
+                                                                     ?? AnalyzeCollectionSuffix(symbol, "Dictionary")
+                                                                     ?? AnalyzeCollectionSuffix(symbol, "ObservableCollection")
+                                                                     ?? AnalyzeCollectionSuffix(symbol, "Collection")
+                                                                     ?? AnalyzeCollectionSuffix(symbol, "Array")
+                                                                     ?? AnalyzeCollectionSuffix(symbol, "HashSet");
 
-        protected Diagnostic AnalyzeSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             var symbolName = symbol.Name;
             if (!symbolName.EndsWith(suffix, comparison)) return null;
@@ -37,11 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (symbolName.IsEntityMarker())
                 proposedName = proposedName.Substring(0, proposedName.Length - 5);
 
-            var betterName = PluralNames.GetOrAdd(symbolName, _ => GetPluralName(symbolName, proposedName, comparison));
+            var betterName = PluralNames.GetOrAdd(symbolName, _ => GetPluralName(proposedName, comparison));
             return ReportIssue(symbol, betterName);
         }
 
-        private static string GetPluralName(string symbolName, string proposedName, StringComparison comparison)
+        protected static string GetPluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EndsWith("y", comparison)) return proposedName.Substring(0, proposedName.Length - 1) + "ies";
             if (proposedName.EndsWith("ss", comparison)) return proposedName + "es";
