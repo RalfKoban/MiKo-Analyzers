@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -27,12 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml)
         {
-            if (!commentXml.IsNullOrWhiteSpace())
-            {
-                var summaries = GetComments(commentXml, "summary").ToList();
-                if (summaries.Any()) return AnalyzeSummary(symbol, summaries);
-            }
+            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
+            var summaries = GetComments(commentXml, "summary").WithoutParaTags().ToImmutableHashSet();
+            if (summaries.Any()) return AnalyzeSummary(symbol, summaries);
             return Enumerable.Empty<Diagnostic>();
         }
 
@@ -50,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var paramElements = GetCommentElements(commentXml, @"param");
             var comments = paramElements.Where(_ => _.Attribute("name")?.Value == parameter.Name);
-            var comment = comments.Nodes().Concatenated().Replace("T:", string.Empty).Trim();
+            var comment = comments.Nodes().Concatenated().WithoutParaTags().Replace("T:", string.Empty).Trim();
             return comment;
         }
     }

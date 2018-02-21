@@ -25,7 +25,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_Issue_is_reported_for_correctly_documented_event_handling_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_event_handling_method() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -40,7 +40,22 @@ public class TestMe
 ");
 
         [Test]
-        public void Issue_is_reported_for_partly_documented_event_handling_method_with_missing_docu_for_sender() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_event_handling_method_with_para_tags() => No_issue_is_reported_for(@"
+public class MyEventArgs : System.EventArgs { }
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name='sender'><para>The source of the event.</para></param>
+    /// <param name='e'><para>A <see cref='MyEventArgs' /> that contains the event data.</para></param>
+    public void DoSomething(object sender, MyEventArgs e) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_partly_documented_event_handling_method_with_missing_docu_for_sender() => An_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe

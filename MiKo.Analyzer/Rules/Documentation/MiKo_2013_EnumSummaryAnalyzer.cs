@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
             const string Phrase = "Defines values that specify ";
-            return summaries.WithoutParaTags().Any(_ => _.TrimStart().StartsWith(Phrase, StringComparison.Ordinal))
+            return summaries.Any(_ => _.TrimStart().StartsWith(Phrase, StringComparison.Ordinal))
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(symbol, Phrase) };
         }

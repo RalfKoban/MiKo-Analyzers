@@ -801,7 +801,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &lt;inheritdoc /&gt; instead of XML summary.
+        ///   Looks up a localized string similar to Use &lt;inheritdoc /&gt; instead.
         /// </summary>
         public static string MiKo_2020_MessageFormat {
             get {

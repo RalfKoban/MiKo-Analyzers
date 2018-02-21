@@ -36,6 +36,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_event_on_class_with_para_tags() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    /// Occurs always.
+    /// </para>
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+");
+
         [TestCase("Occur")]
         [TestCase("The")]
         [TestCase("Whatever that comment means")]
