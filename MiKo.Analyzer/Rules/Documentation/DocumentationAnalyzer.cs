@@ -14,13 +14,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
+                                                                                           ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
+                                                                                           : Enumerable.Empty<Diagnostic>();
+
         protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
 
         protected virtual bool ShallAnalyzeType(INamedTypeSymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
-                                                                                           ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
-                                                                                           : Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual bool ShallAnalyzeMethod(IMethodSymbol symbol) => true;
+
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyzeMethod(symbol)
+                                                                                               ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
+                                                                                               : Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
 
@@ -30,10 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
-            var summaries = GetComments(commentXml, "summary").WithoutParaTags().ToImmutableHashSet();
-            if (summaries.Any()) return AnalyzeSummary(symbol, summaries);
-            return Enumerable.Empty<Diagnostic>();
+            var summaries = GetSummaries(commentXml);
+            return summaries.Any() ? AnalyzeSummary(symbol, summaries) : Enumerable.Empty<Diagnostic>();
         }
+
+        protected static ImmutableHashSet<string> GetSummaries(string commentXml) => GetComments(commentXml, "summary").WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
 
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes().Concatenated().Replace("T:", string.Empty).Trim());
 

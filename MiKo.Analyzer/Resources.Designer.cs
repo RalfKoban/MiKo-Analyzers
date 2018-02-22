@@ -693,7 +693,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should be : &apos;{2}&apos;.
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should be: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2002_MessageFormat {
             get {
@@ -815,6 +815,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2013_Title {
             get {
                 return ResourceManager.GetString("MiKo_2013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of Dispose methods should follow .NET Framework..
+        /// </summary>
+        public static string MiKo_2014_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2014_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should be: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2014_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2014_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dispose methods should be documented properly.
+        /// </summary>
+        public static string MiKo_2014_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2014_Title", resourceCulture);
             }
         }
         

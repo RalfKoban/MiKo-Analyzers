@@ -330,7 +330,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
-    <value>XML comment for '{1}' should be : '{2}'</value>
+    <value>XML comment for '{1}' should be: '{2}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
@@ -370,6 +370,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_2013_Title" xml:space="preserve">
     <value>Enums XML summary should have a default starting phrase</value>
+  </data>
+  <data name="MiKo_2014_Description" xml:space="preserve">
+    <value>XML documentation of Dispose methods should follow .NET Framework.</value>
+  </data>
+  <data name="MiKo_2014_MessageFormat" xml:space="preserve">
+    <value>XML comment for '{1}' should be: '{2}'</value>
+  </data>
+  <data name="MiKo_2014_Title" xml:space="preserve">
+    <value>Dispose methods should be documented properly</value>
   </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use XML summaries that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used.</value>
