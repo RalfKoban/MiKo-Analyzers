@@ -35,9 +35,9 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Concatenated<T>(this IEnumerable<T> values, string separator = "") => string.Join(separator, values);
 
-        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWith("Model", StringComparison.Ordinal) && !symbolName.EndsWith("ViewModel", StringComparison.Ordinal);
+        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.Ordinal, "Model", "Models") && !symbolName.EndsWithAny(StringComparison.Ordinal, "ViewModel", "ViewModels");
 
-        internal static string WithoutParaTags(this string value) => value.Replace("<para>", string.Empty).Replace("<para />", string.Empty).Replace("</para>", string.Empty);
+        internal static string WithoutParaTags(this string value) => value.Replace("<para>", string.Empty).Replace("<para />", string.Empty).Replace("<para/>", string.Empty).Replace("</para>", string.Empty);
 
         internal static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
     }
