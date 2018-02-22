@@ -24,8 +24,19 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_correctly_documented_event_handling_method() => No_issue_is_reported_for(@"
+        [TestCase("The source of the event.", "A <see cref='MyEventArgs' /> that contains the event data.")]
+        [TestCase("The source of the event", "A <see cref='MyEventArgs' /> that contains the event data")]
+        [TestCase("<para>The source of the event.</para>", "<para>A <see cref='MyEventArgs' /> that contains the event data.</para>")]
+        [TestCase("<para>The source of the event</para>", "<para>A <see cref='MyEventArgs' /> that contains the event data</para>")]
+        [TestCase("Unused.", "A <see cref='MyEventArgs' /> that contains the event data.")]
+        [TestCase("Unused", "A <see cref='MyEventArgs' /> that contains the event data")]
+        [TestCase("<para>Unused.</para>", "<para>A <see cref='MyEventArgs' /> that contains the event data.</para>")]
+        [TestCase("<para>Unused</para>", "<para>A <see cref='MyEventArgs' /> that contains the event data</para>")]
+        [TestCase("The source of the event.", "Unused.")]
+        [TestCase("The source of the event", "Unused")]
+        [TestCase("<para>The source of the event.</para>", "<para>Unused.</para>")]
+        [TestCase("<para>The source of the event</para>", "<para>Unused</para>")]
+        public void No_issue_is_reported_for_correctly_documented_event_handling_method(string sender, string e) => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -33,23 +44,8 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <param name='sender'>The source of the event.</param>
-    /// <param name='e'>A <see cref='MyEventArgs' /> that contains the event data.</param>
-    public void DoSomething(object sender, MyEventArgs e) { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_correctly_documented_event_handling_method_with_para_tags() => No_issue_is_reported_for(@"
-public class MyEventArgs : System.EventArgs { }
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name='sender'><para>The source of the event.</para></param>
-    /// <param name='e'><para>A <see cref='MyEventArgs' /> that contains the event data.</para></param>
+    /// <param name='sender'>" + sender + @"</param>
+    /// <param name='e'>" + e + @"</param>
     public void DoSomething(object sender, MyEventArgs e) { }
 }
 ");

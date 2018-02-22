@@ -29,11 +29,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
         {
             List<Diagnostic> diagnostics = null;
-            VerifyParameterComment(ref diagnostics, method, xml, 0, "The source of the event.", "Unused.");
+            VerifyParameterComment(ref diagnostics, method, xml, 0, "The source of the event.", "The source of the event", "Unused.", "Unused");
 
             var eventArgs = method.Parameters[1].Type.Name;
             var defaultStart = eventArgs.StartsWithAnyChar("AEIOU") ? "An" : "A";
-            VerifyParameterComment(ref diagnostics, method, xml, 1, $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", "Unused.");
+            VerifyParameterComment(ref diagnostics, method, xml, 1, $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data", "Unused.", "Unused");
 
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
