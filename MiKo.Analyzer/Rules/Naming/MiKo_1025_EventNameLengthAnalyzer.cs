@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1025";
 
-        public MiKo_1025_EventNameLengthAnalyzer() : base(Id, SymbolKind.Property, 25)
+        public MiKo_1025_EventNameLengthAnalyzer() : base(Id, SymbolKind.Event, 25)
         {
         }
 
