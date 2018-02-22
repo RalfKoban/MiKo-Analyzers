@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1032_EnumSuffixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1037_EnumSuffixAnalyzerTests : CodeFixVerifier
     {
         [TestCase("interface")]
         [TestCase("class")]
@@ -44,8 +44,8 @@ public enum TestMeEnums
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1032_EnumSuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1037_EnumSuffixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1032_EnumSuffixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1037_EnumSuffixAnalyzer();
     }
 }

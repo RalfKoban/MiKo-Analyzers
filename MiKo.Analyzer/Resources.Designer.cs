@@ -551,27 +551,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense..
         /// </summary>
-        public static string MiKo_1032_Description {
+        public static string MiKo_1037_Description {
             get {
-                return ResourceManager.GetString("MiKo_1032_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1037_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_1032_MessageFormat {
+        public static string MiKo_1037_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1032_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1037_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Types should not be suffixed with &apos;Enum&apos;.
         /// </summary>
-        public static string MiKo_1032_Title {
+        public static string MiKo_1037_Title {
             get {
-                return ResourceManager.GetString("MiKo_1032_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1037_Title", resourceCulture);
             }
         }
         
