@@ -15,21 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
-        {
-            switch (symbol.MethodKind)
-            {
-                case MethodKind.EventAdd:
-                case MethodKind.EventRemove:
-                case MethodKind.ExplicitInterfaceImplementation:
-                case MethodKind.PropertyGet:
-                case MethodKind.PropertySet:
-                    return Enumerable.Empty<Diagnostic>();
-            }
-
-            if (symbol.IsTestMethod()) return Enumerable.Empty<Diagnostic>();
-
-            return Analyze(symbol);
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => symbol.IsSpecialAccessor() || symbol.IsTestMethod() ? Enumerable.Empty<Diagnostic>() : Analyze(symbol);
     }
 }

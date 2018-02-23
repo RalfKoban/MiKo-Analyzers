@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static ImmutableHashSet<string> GetSummaries(string commentXml) => GetComments(commentXml, "summary").WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
 
-        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes().Concatenated().Replace("T:", string.Empty).Trim());
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes().Concatenated().RemoveAll("T:").Trim());
 
         protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
         {
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var paramElements = GetCommentElements(commentXml, @"param");
             var comments = paramElements.Where(_ => _.Attribute("name")?.Value == parameter.Name);
-            var comment = comments.Nodes().Concatenated().WithoutParaTags().Replace("T:", string.Empty).Trim();
+            var comment = comments.Nodes().Concatenated().WithoutParaTags().RemoveAll("T:").Trim();
             return comment;
         }
     }

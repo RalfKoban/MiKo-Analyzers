@@ -47,6 +47,21 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
+        internal static bool IsSpecialAccessor(this IMethodSymbol method)
+        {
+            switch (method.MethodKind)
+            {
+                case MethodKind.EventAdd:
+                case MethodKind.EventRemove:
+                case MethodKind.PropertyGet:
+                case MethodKind.PropertySet:
+                case MethodKind.ExplicitInterfaceImplementation:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsConstructor(this ISymbol symbol) => symbol?.Name == ".ctor";
 
         internal static bool IsClassConstructor(this ISymbol symbol) => symbol?.Name == ".cctor";

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -16,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Name.Contains("Base")
-                                                                                               ? new[] { ReportIssue(symbol, symbol.Name.Replace("Base", string.Empty)) }
+                                                                                               ? new[] { ReportIssue(symbol, symbol.Name.RemoveAll("Base")) }
                                                                                                : Enumerable.Empty<Diagnostic>();
     }
 }

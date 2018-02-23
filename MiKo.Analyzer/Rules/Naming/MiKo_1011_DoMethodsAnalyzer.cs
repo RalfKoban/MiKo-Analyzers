@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var escapedMethod = EscapeValidPhrases(methodName);
             if (escapedMethod.IndexOf(DoPhrase, Comparison) == -1) return Enumerable.Empty<Diagnostic>();
 
-            return new[] { ReportIssue(method, UnescapeValidPhrases(escapedMethod.Replace(DoPhrase, string.Empty))) };
+            return new[] { ReportIssue(method, UnescapeValidPhrases(escapedMethod.RemoveAll(DoPhrase))) };
         }
 
         private static string EscapeValidPhrases(string methodName)

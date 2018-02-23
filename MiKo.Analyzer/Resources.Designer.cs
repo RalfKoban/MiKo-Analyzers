@@ -549,6 +549,141 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indicating that a method deals with an entity by using &apos;Model&apos; in its name does not make sense..
+        /// </summary>
+        public static string MiKo_1032_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1032_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1032_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1032_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods dealing with entities should not use a &apos;Model&apos; marker.
+        /// </summary>
+        public static string MiKo_1032_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1032_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicating that a parameter is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all (eg. &apos;user&apos; instead of &apos;userModel&apos;).
+        /// </summary>
+        public static string MiKo_1033_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1033_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1033_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1033_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters representing entities should not use a &apos;Model&apos; suffix.
+        /// </summary>
+        public static string MiKo_1033_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1033_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicating that a field is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all (eg. &apos;user&apos; instead of &apos;userModel&apos;).
+        /// </summary>
+        public static string MiKo_1034_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1034_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1034_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1034_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields representing entities should not use a &apos;Model&apos; suffix.
+        /// </summary>
+        public static string MiKo_1034_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1034_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicating that a property deals with an entity by using &apos;Model&apos; in its name does not make sense..
+        /// </summary>
+        public static string MiKo_1035_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1035_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1035_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1035_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties dealing with entities should not use a &apos;Model&apos; marker.
+        /// </summary>
+        public static string MiKo_1035_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1035_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicating that an event deals with an entity by using &apos;Model&apos; in its name does not make sense..
+        /// </summary>
+        public static string MiKo_1036_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1036_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1036_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1036_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events dealing with entities should not use a &apos;Model&apos; marker.
+        /// </summary>
+        public static string MiKo_1036_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1036_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense..
         /// </summary>
         public static string MiKo_1037_Description {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
@@ -35,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var forbidden = method.Name.Contains(forbiddenName);
             if (forbidden)
             {
-                diagnostics.Add(ReportIssue(method, method.Name.Replace(nameof(ICommand.Execute), string.Empty)));
+                diagnostics.Add(ReportIssue(method, method.Name.RemoveAll(nameof(ICommand.Execute))));
             }
 
             return forbidden;

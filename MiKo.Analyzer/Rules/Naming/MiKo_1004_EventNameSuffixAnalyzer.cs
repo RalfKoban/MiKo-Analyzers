@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol)
         {
             if (!symbol.IsOverride && symbol.Name.EndsWith(InvalidSuffix, StringComparison.Ordinal))
-                return new[] { ReportIssue(symbol, symbol.Name.Replace(InvalidSuffix, string.Empty)) };
+                return new[] { ReportIssue(symbol, symbol.Name.RemoveAll(InvalidSuffix)) };
 
             return Enumerable.Empty<Diagnostic>();
         }

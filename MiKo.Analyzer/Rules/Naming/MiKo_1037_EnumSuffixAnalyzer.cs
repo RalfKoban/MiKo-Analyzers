@@ -18,21 +18,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
+            var symbolName = symbol.Name;
+
             // not only for enums, but also for other types (hence we do not use 'symbol.EnumUnderlyingType' here)
-            if (!symbol.Name.EndsWithAny(StringComparison.OrdinalIgnoreCase, "Enum", "Enums")) return Enumerable.Empty<Diagnostic>();
+            if (!symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, "Enum", "Enums")) return Enumerable.Empty<Diagnostic>();
 
             var betterName = symbol.Name
                                    .Replace("TypeEnums", "Kinds")
                                    .Replace("TypeEnum", "Kind")
-                                   .Replace("Enums", string.Empty)
-                                   .Replace("Enum", string.Empty);
+                                   .RemoveAll("Enums", "Enum");
 
             // ReSharper disable once RedundantNameQualifier we need the complete name here
             if (symbol.EnumUnderlyingType != null
                 && symbol.GetAttributes().Any(_ => _.AttributeClass.Name == nameof(System.FlagsAttribute))
                 && !betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase))
             {
-                betterName = GetPluralName(betterName);
+                betterName = GetPluralName(symbolName, betterName);
             }
 
             return new[] { ReportIssue(symbol, betterName) };

@@ -281,6 +281,51 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1031_Title" xml:space="preserve">
     <value>Entity types should not use a 'Model' suffix</value>
   </data>
+  <data name="MiKo_1032_Description" xml:space="preserve">
+    <value>Indicating that a method deals with an entity by using 'Model' in its name does not make sense.</value>
+  </data>
+  <data name="MiKo_1032_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1032_Title" xml:space="preserve">
+    <value>Methods dealing with entities should not use a 'Model' marker</value>
+  </data>
+  <data name="MiKo_1033_Description" xml:space="preserve">
+    <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all (eg. 'user' instead of 'userModel')</value>
+  </data>
+  <data name="MiKo_1033_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1033_Title" xml:space="preserve">
+    <value>Parameters representing entities should not use a 'Model' suffix</value>
+  </data>
+  <data name="MiKo_1034_Description" xml:space="preserve">
+    <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all (eg. 'user' instead of 'userModel')</value>
+  </data>
+  <data name="MiKo_1034_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1034_Title" xml:space="preserve">
+    <value>Fields representing entities should not use a 'Model' suffix</value>
+  </data>
+  <data name="MiKo_1035_Description" xml:space="preserve">
+    <value>Indicating that a property deals with an entity by using 'Model' in its name does not make sense.</value>
+  </data>
+  <data name="MiKo_1035_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1035_Title" xml:space="preserve">
+    <value>Properties dealing with entities should not use a 'Model' marker</value>
+  </data>
+  <data name="MiKo_1036_Description" xml:space="preserve">
+    <value>Indicating that an event deals with an entity by using 'Model' in its name does not make sense.</value>
+  </data>
+  <data name="MiKo_1036_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1036_Title" xml:space="preserve">
+    <value>Events dealing with entities should not use a 'Model' marker</value>
+  </data>
   <data name="MiKo_1037_Description" xml:space="preserve">
     <value>Indicating that a type is an Enum by using 'Enum' as its suffix does not make sense.</value>
   </data>

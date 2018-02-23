@@ -72,6 +72,11 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeProperty(SymbolAnalysisContext context) => ReportDiagnostics<IPropertySymbol>(context, AnalyzeProperty);
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
+
+
         protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs)
         {
             var prefix = symbol.IsConstructor() || symbol.IsClassConstructor() ? symbol.ContainingSymbol.Name : string.Empty;
@@ -97,6 +102,8 @@ namespace MiKoSolutions.Analyzers.Rules
                 case SymbolKind.Method: return AnalyzeMethod;
                 case SymbolKind.NamedType: return AnalyzeType;
                 case SymbolKind.Property: return AnalyzeProperty;
+                case SymbolKind.Parameter: return AnalyzeParameter;
+
                 default: return null;
             }
         }

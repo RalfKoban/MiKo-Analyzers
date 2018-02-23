@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 
@@ -13,35 +15,76 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => AnalyzeCollectionSuffix(symbol, "List")
-                                                                     ?? AnalyzeCollectionSuffix(symbol, "Dictionary")
-                                                                     ?? AnalyzeCollectionSuffix(symbol, "ObservableCollection")
-                                                                     ?? AnalyzeCollectionSuffix(symbol, "Collection")
-                                                                     ?? AnalyzeCollectionSuffix(symbol, "Array")
-                                                                     ?? AnalyzeCollectionSuffix(symbol, "HashSet");
+        protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
+        {
+            if (!symbol.Name.HasEntityMarker()) return Enumerable.Empty<Diagnostic>();
+
+            var expected = HandleSpecialEntityMarkerSituations(symbol.Name.RemoveAll(Constants.EntityMarkers));
+
+            if (expected.HasCollectionMarker())
+                expected = FindPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.CollectionMarkers);
+
+            return new[] { ReportIssue(symbol, expected) };
+
+        }
+
+        private static string HandleSpecialEntityMarkerSituations(string name)
+        {
+            const string Item = "item";
+
+            switch (name.Length)
+            {
+                case 0: return Item;
+                case 1:
+                    switch (name[0])
+                    {
+                        case 's': return Item + "s";
+                        case '_': return "_" + Item;
+                        default: return name;
+                    }
+                case 2:
+                    switch (name)
+                    {
+                        case "s_": return "s_" + Item;
+                        case "m_": return "m_" + Item;
+                        default: return name;
+                    }
+                default: return name;
+            }
+        }
+
+        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => Constants.CollectionMarkers.Select(suffix => AnalyzeCollectionSuffix(symbol, suffix)).FirstOrDefault(_ => _ != null);
 
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            var symbolName = symbol.Name;
-            if (!symbolName.EndsWith(suffix, comparison)) return null;
-
-            if (symbolName == "blackList" || symbolName == "whiteList")
-            {
-                return null;
-            }
-
-            var length = symbolName.Length - suffix.Length;
-            if (length <= 0) return null; // use complete symbol name
-
-            var proposedName = symbolName.Substring(0, length);
-            if (symbolName.IsEntityMarker())
-                proposedName = proposedName.Substring(0, proposedName.Length - 5);
-
-            var betterName = PluralNames.GetOrAdd(symbolName, _ => GetPluralName(proposedName, comparison));
-            return ReportIssue(symbol, betterName);
+            var betterName = FindPluralName(symbol.Name, comparison, suffix);
+            return betterName.IsNullOrWhiteSpace() ? null : ReportIssue(symbol, betterName);
         }
 
-        protected static string GetPluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        protected static string FindPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
+        {
+            foreach (var suffix in suffixes)
+            {
+                if (!symbolName.EndsWith(suffix, comparison)) continue;
+
+                if (symbolName == "blackList" || symbolName == "whiteList") continue;
+
+                var length = symbolName.Length - suffix.Length;
+                if (length <= 0) continue;
+
+                var proposedName = symbolName.Substring(0, length);
+                if (symbolName.IsEntityMarker())
+                    proposedName = proposedName.RemoveAll(Constants.EntityMarkers);
+
+                return GetPluralName(symbolName, proposedName, comparison);
+            }
+
+            return null;
+        }
+
+        protected static string GetPluralName(string symbolName, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => PluralNames.GetOrAdd(symbolName, _ => CreatePluralName(proposedName, comparison));
+
+        private static string CreatePluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EndsWith("y", comparison)) return proposedName.Substring(0, proposedName.Length - 1) + "ies";
             if (proposedName.EndsWith("ss", comparison)) return proposedName + "es";
@@ -58,6 +101,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var pluralName = proposedName;
             if (proposedName.EndsWith("ToConvert", comparison))
                 pluralName = proposedName.Substring(0, proposedName.Length - "ToConvert".Length);
+
+            if (proposedName.EndsWith("ToModel", comparison))
+                pluralName = proposedName.Substring(0, proposedName.Length - "ToModel".Length);
+
+            if (proposedName.HasEntityMarker())
+                pluralName = proposedName.RemoveAll(Constants.EntityMarkers);
 
             var candidate = pluralName.EndsWith("s", comparison) ? pluralName : pluralName + "s";
 

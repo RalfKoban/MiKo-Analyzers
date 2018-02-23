@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+using MiKoSolutions.Analyzers;
+
 // ReSharper disable once CheckNamespace
 namespace System
 {
@@ -23,7 +25,7 @@ namespace System
             return false;
         }
 
-        public static bool ContainsAny(this string value, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(value.Contains);
+        public static bool ContainsAny(this string value, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.IndexOf(_, StringComparison.OrdinalIgnoreCase) >= 0);
 
         public static bool StartsWithAny(this string value, StringComparison comparison, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.StartsWith(_, comparison));
 
@@ -35,10 +37,24 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Concatenated<T>(this IEnumerable<T> values, string separator = "") => string.Join(separator, values);
 
-        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.Ordinal, "Model", "Models") && !symbolName.EndsWithAny(StringComparison.Ordinal, "ViewModel", "ViewModels");
+        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.EntityMarkers) && !symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.ViewModelMarkers);
 
-        internal static string WithoutParaTags(this string value) => value.Replace("<para>", string.Empty).Replace("<para />", string.Empty).Replace("<para/>", string.Empty).Replace("</para>", string.Empty);
+        internal static bool HasEntityMarker(this string symbolName)
+        {
+            if (!symbolName.ContainsAny(Constants.EntityMarkers)) return false;
+            if (symbolName.ContainsAny(Constants.ViewModelMarkers)) return false;
+            if (symbolName.ContainsAny(Constants.SpecialModelMarkers)) return false;
+
+            return true;
+
+        }
+
+        internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.CollectionMarkers);
+
+        internal static string WithoutParaTags(this string value) => value.RemoveAll("<para>", "<para />", "<para/>", "</para>");
 
         internal static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
+
+        internal static string RemoveAll(this string value, params string[] values) => values.Aggregate(value, (current, s) => current.Replace(s, string.Empty));
     }
 }
