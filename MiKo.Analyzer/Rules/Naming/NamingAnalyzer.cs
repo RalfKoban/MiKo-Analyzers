@@ -30,23 +30,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleSpecialEntityMarkerSituations(string name)
         {
-            const string Item = "item";
-
             switch (name.Length)
             {
-                case 0: return Item;
+                case 0: return "entity";
                 case 1:
                     switch (name[0])
                     {
-                        case 's': return Item + "s";
-                        case '_': return "_" + Item;
+                        case 's': return "entities";
+                        case '_': return "_entity";
                         default: return name;
                     }
                 case 2:
                     switch (name)
                     {
-                        case "s_": return "s_" + Item;
-                        case "m_": return "m_" + Item;
+                        case "s_": return "s_entity";
+                        case "m_": return "m_entity";
                         default: return name;
                     }
                 default: return name;
@@ -87,6 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string CreatePluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EndsWith("y", comparison)) return proposedName.Substring(0, proposedName.Length - 1) + "ies";
+            if (proposedName.EndsWith("ys", comparison)) return proposedName.Substring(0, proposedName.Length - 2) + "ies";
             if (proposedName.EndsWith("ss", comparison)) return proposedName + "es";
             if (proposedName.EndsWith("ed", comparison)) return proposedName;
             if (proposedName.EndsWith("child", comparison)) return proposedName + "ren";
