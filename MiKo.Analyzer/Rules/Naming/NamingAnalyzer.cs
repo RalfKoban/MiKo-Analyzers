@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (!symbol.Name.HasEntityMarker()) return Enumerable.Empty<Diagnostic>();
 
-            var expected = HandleSpecialEntityMarkerSituations(symbol.Name.RemoveAll(Constants.EntityMarkers));
+            var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
 
             if (expected.HasCollectionMarker())
                 expected = FindPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.CollectionMarkers);
@@ -28,11 +28,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         }
 
-        private static string HandleSpecialEntityMarkerSituations(string name)
+        private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {
+            var name = symbolName.RemoveAll(Constants.EntityMarkers);
             switch (name.Length)
             {
-                case 0: return "entity";
+                case 0: return symbolName[0].IsUpperCase() ? "Entity" : "entity";
                 case 1:
                     switch (name[0])
                     {
@@ -109,8 +110,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var candidate = pluralName.EndsWith("s", comparison) ? pluralName : pluralName + "s";
 
+            if (candidate.Equals("bases", comparison)) return "items"; // special handling
+            if (candidate.Equals("_bases", comparison)) return "_items"; // special handling
+            if (candidate.Equals("m_bases", comparison)) return "m_items"; // special handling
             if (candidate.Equals("sources", comparison)) return "source"; // special handling
             if (candidate.Equals("_sources", comparison)) return "_source"; // special handling
+            if (candidate.Equals("m_sources", comparison)) return "m_source"; // special handling
 
             return candidate;
         }
