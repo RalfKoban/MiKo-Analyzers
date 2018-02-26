@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
 using NUnit.Framework;
 using TestHelper;
 
@@ -11,7 +7,56 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     public class MiKo_0001_LinesOfCodeAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void Valid_files_are_not_reported_as_warnings([ValueSource(nameof(ValidFiles))] string fileContent) => No_issue_is_reported_for(fileContent);
+        public void Valid_files_are_not_reported_as_warnings() => No_issue_is_reported_for(@"
+namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
+{
+    public class EmptyType
+    {
+    }
+
+    public class TypeWithCtor
+    {
+        public TypeWithCtor()
+        {
+        }
+    }
+
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+        }
+    }
+
+    public class TypeWithProperties
+    {
+        public string SingleLineProperty
+        {
+            get { return string.Empty; }
+            set { }
+        }
+
+        public string BracketOnSameLineProperty
+        {
+            get {
+                return string.Empty;
+            }
+            set {
+            }
+        }
+
+        public string BracketOnOtherLineProperty
+        {
+            get
+            {
+                return string.Empty;
+            }
+            set
+            {
+            }
+        }
+    }
+}");
 
         [Test]
         public void Method_with_long_if_statement_is_reported() => An_issue_is_reported_for(@"
@@ -98,26 +143,5 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         protected override Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_0001_LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
 
         protected override string GetDiagnosticId() => MiKo_0001_LinesOfCodeAnalyzer.Id;
-
-        private static IEnumerable<string> ValidFiles()
-        {
-            var contents = new List<string> { string.Empty };
-            contents.AddRange(GetEmbeddedFileContents(".Valid.LoC_"));
-
-            return contents;
-        }
-
-        private static IEnumerable<string> GetEmbeddedFileContents(string namePrefix)
-        {
-            var assembly = typeof(DiagnosticResult).Assembly;
-            foreach (var resourceName in assembly.GetManifestResourceNames().Where(_ => _.Contains(namePrefix) && _.EndsWith("_cs")))
-            {
-                var stream = assembly.GetManifestResourceStream(resourceName);
-                using (var reader = new StreamReader(stream))
-                {
-                    yield return reader.ReadToEnd();
-                }
-            }
-        }
     }
 }

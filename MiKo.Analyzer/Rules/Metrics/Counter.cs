@@ -9,10 +9,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     internal static class Counter
     {
-        // if | while | for | foreach | case | continue | goto | && | || | catch | ternary operator ?: | ?? | ?.
+        // if | do... while | while | for | foreach | case | continue | goto | && | || | catch | ternary operator ?: | ?? | ?.
         private static readonly SyntaxKind[] CCSyntaxKinds =
             {
                 SyntaxKind.IfStatement,
+                SyntaxKind.DoStatement,
                 SyntaxKind.WhileStatement,
                 SyntaxKind.ForStatement,
                 SyntaxKind.ForEachStatement,
@@ -22,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 SyntaxKind.GotoStatement,
                 SyntaxKind.LogicalAndExpression,
                 SyntaxKind.LogicalOrExpression,
-                SyntaxKind.CatchDeclaration,
+                SyntaxKind.CatchClause,
                 SyntaxKind.ConditionalExpression,
                 SyntaxKind.CoalesceExpression,
                 SyntaxKind.ConditionalAccessExpression,
