@@ -46,6 +46,7 @@ public class TestMe
         [TestCase("bool result = true && false;")]
         [TestCase("bool result = true || false;")]
         [TestCase("try { throw new Exception(); } catch { }")]
+        [TestCase("try { throw new Exception(); } catch (Exception ex) when (ex is InvalidOperationException) { }")]
         public void Method_with_too_complex_term_is_reported(string term) => An_issue_is_reported_for(@"
 public class TestMe
 {

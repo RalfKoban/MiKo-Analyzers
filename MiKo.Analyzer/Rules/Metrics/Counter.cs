@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 SyntaxKind.LogicalAndExpression,
                 SyntaxKind.LogicalOrExpression,
                 SyntaxKind.CatchClause,
+                SyntaxKind.CatchFilterClause,
                 SyntaxKind.ConditionalExpression,
                 SyntaxKind.CoalesceExpression,
                 SyntaxKind.ConditionalAccessExpression,
