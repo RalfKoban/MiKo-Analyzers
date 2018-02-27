@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1101_TestClassesHaveTestsSuffixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1101_TestClassesSuffixAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"
@@ -36,9 +36,9 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1101_TestClassesHaveTestsSuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1101_TestClassesSuffixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1101_TestClassesHaveTestsSuffixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1101_TestClassesSuffixAnalyzer();
 
         private static IEnumerable<string> TestClassMarkers() => new[] { nameof(TestFixtureAttribute), "TestFixture", "TestClassAttribute", "TestClass" };
 
