@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             const string TestSuffix = "Test";
 
-            if (symbol.ContainingType.IsTestClass() && symbol.Name.Contains(TestSuffix))
+            if (symbol.IsTestMethod() && symbol.Name.Contains(TestSuffix))
                 return new[] { ReportIssue(symbol, symbol.Name.RemoveAll(TestSuffix)) };
 
             return Enumerable.Empty<Diagnostic>();
