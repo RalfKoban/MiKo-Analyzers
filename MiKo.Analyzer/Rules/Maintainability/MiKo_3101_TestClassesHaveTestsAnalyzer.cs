@@ -18,9 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
             if (!symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>();
-            if (symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsTestMethod())) return Enumerable.Empty<Diagnostic>();
+            if (HasTests(symbol)) return Enumerable.Empty<Diagnostic>();
+            if (symbol.AllBaseTypes().Any(HasTests)) return Enumerable.Empty<Diagnostic>();
 
             return new[] { ReportIssue(symbol) };
         }
+
+        private static bool HasTests(ITypeSymbol symbol) => symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsTestMethod());
     }
 }

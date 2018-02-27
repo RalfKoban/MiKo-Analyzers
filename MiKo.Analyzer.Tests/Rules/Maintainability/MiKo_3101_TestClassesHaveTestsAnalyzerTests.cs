@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Operations;
 
 using NUnit.Framework;
 
@@ -60,6 +59,37 @@ public partial class TestMe
 }
 ");
 
+        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
+        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
+        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
+        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
+        [TestCase("TestFixture", "Test")]
+        [TestCase("TestFixture", "TestCase")]
+        [TestCase("TestFixture", "TestCaseSource")]
+        [TestCase("TestFixture", "Theory")]
+        [TestCase("TestClassAttribute", "TestMethodAttribute")]
+        [TestCase("TestClass", "TestMethod")]
+        public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(string testClassAttribute, string testAttribute) => No_issue_is_reported_for(@"
+[" + testClassAttribute + @"]
+public class TestMe3 : TestMe2
+{
+    private void DoSomething3() { }
+}
+
+public class TestMe2 : TestMe1
+{
+    [" + testAttribute + @"]
+    private void DoSomething2() { }
+}
+
+public class TestMe1
+{
+    [" + testAttribute + @"]
+    private void DoSomething1() { }
+}
+");
+
+
         [TestCase(nameof(TestFixtureAttribute))]
         [TestCase("TestFixture")]
         [TestCase("TestClassAttribute")]
@@ -69,6 +99,28 @@ public partial class TestMe
 public class TestMe
 {
     private void DoSomethingElse() { }
+}
+");
+
+        [TestCase(nameof(TestFixtureAttribute))]
+        [TestCase("TestFixture")]
+        [TestCase("TestClassAttribute")]
+        [TestCase("TestClass")]
+        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_without_tests(string testClassAttribute) => An_issue_is_reported_for(@"
+[" + testClassAttribute + @"]
+public class TestMe3 : TestMe2
+{
+    private void DoSomething3() { }
+}
+
+public class TestMe2 : TestMe1
+{
+    private void DoSomething2() { }
+}
+
+public class TestMe1
+{
+    private void DoSomething1() { }
 }
 ");
 

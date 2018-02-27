@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -105,10 +106,27 @@ namespace Microsoft.CodeAnalysis
             while (true)
             {
                 if (symbol.ToString() == baseClass) return true;
-                if (symbol.BaseType == null) return false;
 
-                symbol = symbol.BaseType;
+                var baseType = symbol.BaseType;
+                if (baseType == null) return false;
+
+                symbol = baseType;
             }
+        }
+
+        internal static IEnumerable<ITypeSymbol> AllBaseTypes(this ITypeSymbol symbol)
+        {
+            var baseTypes = new List<ITypeSymbol>();
+            while (true)
+            {
+                var baseType = symbol.BaseType;
+                if (baseType == null) break;
+
+                baseTypes.Add(baseType);
+                symbol = baseType;
+            }
+
+            return baseTypes;
         }
 
         internal static bool IsTestClass(this ITypeSymbol method)
