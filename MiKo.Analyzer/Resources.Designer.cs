@@ -765,6 +765,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
+        /// </summary>
+        public static string MiKo_1101_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1101_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1101_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1101_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test classes should end with &apos;Tests&apos;.
+        /// </summary>
+        public static string MiKo_1101_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1101_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
