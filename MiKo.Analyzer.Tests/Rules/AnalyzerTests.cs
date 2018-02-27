@@ -33,6 +33,15 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [TestCaseSource(nameof(CreateAllAnalyzers))]
+        public static void Titles_should_end_with_dot(Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_Title"), Does.EndWith("."));
+
+        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        public static void Descriptions_should_end_with_dot(Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_Description"), Does.EndWith(".").Or.EndsWith(")"));
+
+        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        public static void Messages_should_not_end_with_dot(Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.EndWith("."));
+
+        [TestCaseSource(nameof(CreateAllAnalyzers))]
         public static void Analyzers_start_with_their_Id(Analyzer analyzer) => Assert.That(analyzer.GetType().Name, Is.Not.Null.And.StartsWith(analyzer.DiagnosticId + "_"));
 
         [Test]

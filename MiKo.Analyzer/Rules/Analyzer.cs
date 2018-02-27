@@ -27,8 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                       LocalizableResource(id, "MessageFormat"),
                                                                       category,
                                                                       DiagnosticSeverity.Warning,
-                                                                      isEnabledByDefault: isEnabledByDefault,
-                                                                      description: LocalizableResource(id, "Description")));
+                                                                      isEnabledByDefault,
+                                                                      LocalizableResource(id, "Description"),
+                                                                      LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
 
         public string DiagnosticId { get; }
