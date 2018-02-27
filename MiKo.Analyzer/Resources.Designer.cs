@@ -819,6 +819,60 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A method that is marked as unit test initialization method should be named &apos;PrepareTest&apos;..
+        /// </summary>
+        public static string MiKo_1103_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1103_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1103_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1103_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test initialization methods should be named &apos;PrepareTest&apos;..
+        /// </summary>
+        public static string MiKo_1103_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1103_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A method that is marked as unit test cleanup method should be named &apos;CleanupTest&apos;..
+        /// </summary>
+        public static string MiKo_1104_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1104_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1104_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1104_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test cleanup methods should be named &apos;CleanupTest&apos;..
+        /// </summary>
+        public static string MiKo_1104_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1104_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {

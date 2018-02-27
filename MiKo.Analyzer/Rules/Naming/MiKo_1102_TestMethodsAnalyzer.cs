@@ -18,10 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
         {
-            const string TestSuffix = "Test";
+            const string TestMarker = "Test";
 
-            if (symbol.IsTestMethod() && symbol.Name.Contains(TestSuffix))
-                return new[] { ReportIssue(symbol, symbol.Name.RemoveAll(TestSuffix)) };
+            if (symbol.IsTestMethod() && symbol.Name.Contains(TestMarker))
+                return new[] { ReportIssue(symbol, symbol.Name.RemoveAll(TestMarker)) };
 
             return Enumerable.Empty<Diagnostic>();
         }

@@ -371,6 +371,24 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1102_Title" xml:space="preserve">
     <value>Test methods should not contain 'Test'.</value>
   </data>
+  <data name="MiKo_1103_Description" xml:space="preserve">
+    <value>A method that is marked as unit test initialization method should be named 'PrepareTest'.</value>
+  </data>
+  <data name="MiKo_1103_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1103_Title" xml:space="preserve">
+    <value>Test initialization methods should be named 'PrepareTest'.</value>
+  </data>
+  <data name="MiKo_1104_Description" xml:space="preserve">
+    <value>A method that is marked as unit test cleanup method should be named 'CleanupTest'.</value>
+  </data>
+  <data name="MiKo_1104_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1104_Title" xml:space="preserve">
+    <value>Test cleanup methods should be named 'CleanupTest'.</value>
+  </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>The XML documentation should be valid XML so that it can be generated to support the developers.</value>
   </data>

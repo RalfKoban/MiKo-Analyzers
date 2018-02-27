@@ -48,6 +48,40 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
+        internal static bool IsTestSetupMethod(this IMethodSymbol method)
+        {
+            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            {
+                switch (name)
+                {
+                    case "SetUp":
+                    case "SetUpAttribute":
+                    case "TestInitialize":
+                    case "TestInitializeAttribute":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool IsTestTeardownMethod(this IMethodSymbol method)
+        {
+            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            {
+                switch (name)
+                {
+                    case "TearDown":
+                    case "TearDownAttribute":
+                    case "TestCleanup":
+                    case "TestCleanupAttribute":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsSpecialAccessor(this IMethodSymbol method)
         {
             switch (method.MethodKind)

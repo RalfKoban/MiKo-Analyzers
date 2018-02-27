@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -59,8 +57,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_1102_TestMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1102_TestMethodsAnalyzer();
-
-        private static IEnumerable<string> TestClassMarkers() => new[] { nameof(TestFixtureAttribute), "TestFixture", "TestClassAttribute", "TestClass" };
-
     }
 }
