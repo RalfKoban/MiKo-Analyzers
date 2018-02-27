@@ -1088,5 +1088,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_3003_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
+        /// </summary>
+        public static string MiKo_3101_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3101_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should contain test methods..
+        /// </summary>
+        public static string MiKo_3101_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3101_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test classes should contain tests..
+        /// </summary>
+        public static string MiKo_3101_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3101_Title", resourceCulture);
+            }
+        }
     }
 }
