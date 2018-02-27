@@ -792,6 +792,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A method that is marked as a unit test should not additionally indicate that it is a unit test by having &apos;Test&apos; in its name..
+        /// </summary>
+        public static string MiKo_1102_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1102_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1102_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1102_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not contain &apos;Test&apos;..
+        /// </summary>
+        public static string MiKo_1102_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1102_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
