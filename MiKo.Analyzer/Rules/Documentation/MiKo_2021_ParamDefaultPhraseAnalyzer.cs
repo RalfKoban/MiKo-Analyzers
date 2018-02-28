@@ -26,10 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (parameter.RefKind == RefKind.Out) continue;
 
-                var parameterType = parameter.Type as INamedTypeSymbol;
                 // ReSharper disable once RedundantNameQualifier
-                if (parameterType?.Name == nameof(System.Boolean)) continue;
-                if (parameterType.IsEnum()) continue;
+                if (parameter.Type.Name == nameof(System.Boolean)) continue;
+                if (parameter.Type.IsEnum()) continue;
                 if (CommentIsAcceptable(parameter, commentXml)) continue;
 
                 if (results == null) results = new List<Diagnostic>();

@@ -180,6 +180,6 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
-        internal static bool IsEnum(this INamedTypeSymbol symbol) => symbol.EnumUnderlyingType != null;
+        internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
     }
 }
