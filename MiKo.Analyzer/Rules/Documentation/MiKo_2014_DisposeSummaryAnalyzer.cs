@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // check for parameter
             foreach (var parameter in symbol.Parameters)
             {
-                var parameterComment = GetCommentForParameter(parameter, commentXml);
-                if (parameterComment is null) continue;
-                if (parameterComment == ParameterPhrase) continue;
+                var comment = GetCommentForParameter(parameter, commentXml);
+                if (comment is null) continue;
+                if (comment == ParameterPhrase) continue;
 
                 if (results == null) results = new List<Diagnostic>();
                 results.Add(ReportIssue(parameter, parameter.Name, ParameterPhrase));

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,41 +6,18 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2022_OutParamDefaultPhraseAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2022_OutParamDefaultPhraseAnalyzer : ParamDocumentationAnalyzer
     {
         public const string Id = "MiKo_2022";
 
-        public MiKo_2022_OutParamDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2022_OutParamDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml)
-        {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeParameters(symbol, commentXml);
 
-            List<Diagnostic> results = null;
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind == RefKind.Out;
 
-            foreach (var parameter in symbol.Parameters.Where(_ => _.RefKind == RefKind.Out))
-            {
-                if (CommentIsAcceptable(parameter, commentXml)) continue;
-
-                if (results == null) results = new List<Diagnostic>();
-                results.Add(ReportIssue(parameter, parameter.Name, Constants.Comments.OutParameterStartingPhrase.ConcatenatedWith(", ")));
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        private static bool CommentIsAcceptable(IParameterSymbol parameter, string commentXml)
-        {
-            const StringComparison Comparison = StringComparison.Ordinal;
-
-            var comment = GetCommentForParameter(parameter, commentXml);
-            if (comment is null) return true;
-            if (comment.StartsWithAny(Comparison, Constants.Comments.OutParameterStartingPhrase)) return true;
-            if (comment.EqualsAny(Comparison, Constants.Comments.UnusedPhrase)) return true;
-
-            return false;
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => AnalyzeStartingPhrase(parameter, comment, Constants.Comments.OutParameterStartingPhrase);
     }
 }

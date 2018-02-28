@@ -12,6 +12,7 @@
         {
             internal static readonly string[] ParameterStartingPhrase = { "A ", "An ", "The " };
             internal static readonly string[] OutParameterStartingPhrase = { "On successful return, contains " };
+            internal static readonly string[] EnumParameterStartingPhrase = { "One of the enumeration members that " };
             internal static readonly string[] UnusedPhrase = { "Unused", "Unused." };
         }
     }

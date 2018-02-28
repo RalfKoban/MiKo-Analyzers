@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,46 +6,27 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2021_ParamDefaultPhraseAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2021_ParamDefaultPhraseAnalyzer : ParamDocumentationAnalyzer
     {
         public const string Id = "MiKo_2021";
 
-        public MiKo_2021_ParamDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2021_ParamDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeParameters(symbol, commentXml);
+
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter)
         {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (parameter.RefKind == RefKind.Out) return false;
+            if (parameter.Type.IsEnum()) return false;
 
-            List<Diagnostic> results = null;
+            // ReSharper disable once RedundantNameQualifier
+            if (parameter.Type.Name == nameof(System.Boolean)) return false;
 
-            foreach (var parameter in symbol.Parameters)
-            {
-                if (parameter.RefKind == RefKind.Out) continue;
-
-                // ReSharper disable once RedundantNameQualifier
-                if (parameter.Type.Name == nameof(System.Boolean)) continue;
-                if (parameter.Type.IsEnum()) continue;
-                if (CommentIsAcceptable(parameter, commentXml)) continue;
-
-                if (results == null) results = new List<Diagnostic>();
-                results.Add(ReportIssue(parameter, parameter.Name, Constants.Comments.ParameterStartingPhrase.ConcatenatedWith(", ")));
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
+            return true;
         }
 
-        private static bool CommentIsAcceptable(IParameterSymbol parameter, string commentXml)
-        {
-            const StringComparison Comparison = StringComparison.Ordinal;
-
-            var comment = GetCommentForParameter(parameter, commentXml);
-            if (comment is null) return true;
-            if (comment.StartsWithAny(Comparison, Constants.Comments.ParameterStartingPhrase)) return true;
-            if (comment.EqualsAny(Comparison, Constants.Comments.UnusedPhrase)) return true;
-
-            return false;
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => AnalyzeStartingPhrase(parameter, comment, Constants.Comments.ParameterStartingPhrase);
     }
 }

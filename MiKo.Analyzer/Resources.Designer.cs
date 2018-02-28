@@ -1125,7 +1125,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should begin with any of the following: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should start with any of the following: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2021_MessageFormat {
             get {
@@ -1152,7 +1152,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should begin with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should start with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2022_MessageFormat {
             get {
@@ -1166,6 +1166,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2022_Title {
             get {
                 return ResourceManager.GetString("MiKo_2022_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML comment of enum parameters should start with a phrase that specifies what will be done with the enum..
+        /// </summary>
+        public static string MiKo_2023_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2023_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should start with: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2023_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2023_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum Parameter XML documentation should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2023_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2023_Title", resourceCulture);
             }
         }
         
