@@ -58,8 +58,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var paramElements = GetCommentElements(commentXml, @"param");
             var comments = paramElements.Where(_ => _.Attribute("name")?.Value == parameter.Name);
-            var comment = comments.Nodes().ConcatenatedWith().WithoutParaTags().RemoveAll("T:").Trim();
-            return comment;
+            if (comments.Any())
+            {
+                var comment = comments.Nodes().ConcatenatedWith().WithoutParaTags().RemoveAll("T:").Trim();
+                return comment;
+            }
+
+            return null;
         }
     }
 }

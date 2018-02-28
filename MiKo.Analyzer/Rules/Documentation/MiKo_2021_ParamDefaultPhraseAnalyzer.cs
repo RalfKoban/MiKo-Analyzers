@@ -42,6 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const StringComparison Comparison = StringComparison.Ordinal;
 
             var comment = GetCommentForParameter(parameter, commentXml);
+            if (comment is null) return true;
             if (comment.StartsWithAny(Comparison, Constants.Comments.ParameterStartingPhrase)) return true;
             if (comment.EqualsAny(Comparison, Constants.Comments.UnusedPhrase)) return true;
 

@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_partly_documented_event_handling_method_with_missing_docu_for_sender() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_sender() => An_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe

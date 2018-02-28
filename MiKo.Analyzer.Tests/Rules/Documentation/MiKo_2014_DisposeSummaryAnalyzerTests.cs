@@ -119,6 +119,31 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_empty_parameter_documentation() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    /// <param name='disposing'></param>
+    private void Dispose(bool disposing) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_missing_parameter_documentation() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    private void Dispose(bool disposing) { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2014_DisposeSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2014_DisposeSummaryAnalyzer();

@@ -56,11 +56,22 @@ public class TestMe
 
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
-        public void No_issue_is_reported_for_method_with_wrong_comment_phrase(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_comment_phrase(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
     /// <param name='o'>" + comment + @"</param>
+    public void DoSomething(object o) { }
+}
+");
+
+        [TestCase("<summary />")]
+        [TestCase("<inheritdoc />")]
+        [TestCase("<exclude />")]
+        public void No_issue_is_reported_for_method_with_missing_documentation(string xmlElement) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// " + xmlElement + @"
     public void DoSomething(object o) { }
 }
 ");
