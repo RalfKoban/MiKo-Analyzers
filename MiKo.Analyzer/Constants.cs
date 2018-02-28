@@ -11,6 +11,8 @@
         internal static class Comments
         {
             internal static readonly string[] ParameterStartingPhrase = { "A ", "An ", "The " };
+            internal static readonly string[] OutParameterStartingPhrase = { "On successful return, contains " };
+            internal static readonly string[] UnusedPhrase = { "Unused", "Unused." };
         }
     }
 }

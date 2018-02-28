@@ -1143,6 +1143,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML comment of [out] parameters should start with the success case..
+        /// </summary>
+        public static string MiKo_2022_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2022_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML comment for &apos;{1}&apos; should begin with: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2022_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2022_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [out] Parameter XML documentation should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2022_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2022_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
         /// </summary>
         public static string MiKo_3001_Description {
