@@ -41,7 +41,7 @@ namespace System
         public static bool IsUpperCase(this char value) => char.IsUpper(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string Concatenated<T>(this IEnumerable<T> values, string separator = "") => string.Join(separator, values);
+        public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator = "") => string.Join(separator, values);
 
         internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.EntityMarkers) && !symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.ViewModelMarkers);
 
