@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            // not only for enums, but also for other types (hence we do not use 'symbol.EnumUnderlyingType' here)
+            // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
             if (!symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, "Enum", "Enums")) return Enumerable.Empty<Diagnostic>();
 
             var betterName = symbol.Name
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .RemoveAll("Enums", "Enum");
 
             // ReSharper disable once RedundantNameQualifier we need the complete name here
-            if (symbol.EnumUnderlyingType != null
+            if (symbol.IsEnum()
                 && symbol.GetAttributes().Any(_ => _.AttributeClass.Name == nameof(System.FlagsAttribute))
                 && !betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase))
             {

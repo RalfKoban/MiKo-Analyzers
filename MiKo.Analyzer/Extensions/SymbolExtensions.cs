@@ -163,9 +163,9 @@ namespace Microsoft.CodeAnalysis
             return baseTypes;
         }
 
-        internal static bool IsTestClass(this ITypeSymbol method)
+        internal static bool IsTestClass(this ITypeSymbol symbol)
         {
-            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
             {
                 switch (name)
                 {
@@ -179,5 +179,7 @@ namespace Microsoft.CodeAnalysis
 
             return false;
         }
+
+        internal static bool IsEnum(this INamedTypeSymbol symbol) => symbol.EnumUnderlyingType != null;
     }
 }
