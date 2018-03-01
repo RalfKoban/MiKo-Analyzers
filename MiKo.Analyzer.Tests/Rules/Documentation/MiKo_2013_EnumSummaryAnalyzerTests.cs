@@ -42,7 +42,6 @@ public enum TestMe
 }
 ");
 
-
         [Test]
         public void No_issue_is_reported_for_enum_with_correct_phrase_in_para_tag() => No_issue_is_reported_for(@"
 /// <summary>

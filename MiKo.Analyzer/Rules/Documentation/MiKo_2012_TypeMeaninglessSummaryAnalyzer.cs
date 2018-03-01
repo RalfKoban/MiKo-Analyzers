@@ -11,6 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_TypeMeaninglessSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2012";
+
         private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
         public MiKo_2012_TypeMeaninglessSummaryAnalyzer() : base(Id, SymbolKind.NamedType)

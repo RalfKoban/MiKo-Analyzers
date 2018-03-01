@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [TestCaseSource(nameof(CreateAllAnalyzers))]
-        public static void Analyzer_are_marked_with_DiagnosticAnaylzer_attribute(Analyzer analyzer)
+        public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute(Analyzer analyzer)
         {
             Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
         }

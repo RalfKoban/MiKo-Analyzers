@@ -435,7 +435,8 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Unsealed classes should not lie about sealing.</value>
   </data>
   <data name="MiKo_2012_Description" xml:space="preserve">
-    <value>To ease development, types should have a summary documentation that describes their responsibility and which does not start with a meaningless phrase like 'Used to'.</value>
+    <value>To ease development, types should have a summary documentation that describes their responsibility.
+It should not start with a meaningless phrase like 'Used to'. Instead it should start with something like: 'Allows to ', 'Represents ' or 'Provides '.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
     <value>XML summary has meaningless starting phrase: '{1}'</value>
