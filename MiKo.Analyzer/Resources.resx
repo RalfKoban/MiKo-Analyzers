@@ -435,13 +435,13 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Unsealed classes should not lie about sealing.</value>
   </data>
   <data name="MiKo_2012_Description" xml:space="preserve">
-    <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
+    <value>To ease development, types should have a summary documentation that describes their responsibility and which does not start with a meaningless phrase like 'Used to'.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be '{1}'</value>
+    <value>XML summary has meaningless starting phrase: '{1}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
-    <value>Documentation should use 'raise' instead of 'fire'.</value>
+    <value>Types should have meaningful XML summary documentation.</value>
   </data>
   <data name="MiKo_2013_Description" xml:space="preserve">
     <value>To ease their usage, enums should specify what kind of values they define.</value>
@@ -460,6 +460,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_2014_Title" xml:space="preserve">
     <value>Dispose methods should be documented properly.</value>
+  </data>
+  <data name="MiKo_2015_Description" xml:space="preserve">
+    <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
+  </data>
+  <data name="MiKo_2015_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be '{1}'</value>
+  </data>
+  <data name="MiKo_2015_Title" xml:space="preserve">
+    <value>Documentation should use 'raise' instead of 'fire'.</value>
   </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use XML summaries that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used.</value>

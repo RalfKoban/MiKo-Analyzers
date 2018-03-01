@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2014_DisposeSummaryAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2014_DisposeSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2014";
 

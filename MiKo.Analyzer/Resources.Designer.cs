@@ -1008,7 +1008,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The term &apos;Fire&apos; is a negative term. Employees get fired (or guns), but not events. Events get raised. So use &apos;Raise&apos; instead..
+        ///   Looks up a localized string similar to To ease development, types should have a summary documentation that describes their responsibility and which does not start with a meaningless phrase like &apos;Used to&apos;..
         /// </summary>
         public static string MiKo_2012_Description {
             get {
@@ -1017,7 +1017,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML summary has meaningless starting phrase: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2012_MessageFormat {
             get {
@@ -1026,7 +1026,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &apos;raise&apos; instead of &apos;fire&apos;..
+        ///   Looks up a localized string similar to Types should have meaningful XML summary documentation..
         /// </summary>
         public static string MiKo_2012_Title {
             get {
@@ -1085,6 +1085,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2014_Title {
             get {
                 return ResourceManager.GetString("MiKo_2014_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The term &apos;Fire&apos; is a negative term. Employees get fired (or guns), but not events. Events get raised. So use &apos;Raise&apos; instead..
+        /// </summary>
+        public static string MiKo_2015_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2015_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2015_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2015_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;raise&apos; instead of &apos;fire&apos;..
+        /// </summary>
+        public static string MiKo_2015_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2015_Title", resourceCulture);
             }
         }
         

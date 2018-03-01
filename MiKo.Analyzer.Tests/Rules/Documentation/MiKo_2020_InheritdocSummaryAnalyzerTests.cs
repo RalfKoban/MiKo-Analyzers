@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -23,44 +26,44 @@ public " + type + @" TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_method([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// <see cref='bla' />
+    /// " + phrase + @"
     /// </summary>
     public void DoSomething() { }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_property([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// <see cref='bla' />
+    /// " + phrase + @"
     /// </summary>
     public int DoSomething { get; set; }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_field() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_field([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// <see cref='bla' />
+    /// " + phrase + @"
     /// </summary>
     private int doSomething;
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_event() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_event([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// <see cref='bla' />
+    /// " + phrase + @"
     /// </summary>
     public event EventHandler MyEvent;
 }
@@ -69,5 +72,25 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_2020_InheritdocSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2020_InheritdocSummaryAnalyzer();
+
+        private static IEnumerable<string> Phrases()
+        {
+            var phrases = new[]
+                              {
+                                  "<see cref='bla'/>",
+                                  "<see cref='bla' />",
+                                  "<seealso cref='bla'/>",
+                                  "<seealso cref='bla' />",
+                              };
+
+            var results = new List<string>(phrases);
+            results.AddRange(phrases.Select(_ => _ + "."));
+            results.AddRange(phrases.Select(_ => "see " + _));
+            results.AddRange(phrases.Select(_ => "see " + _ + "."));
+            results.AddRange(phrases.Select(_ => "seealso " + _));
+            results.AddRange(phrases.Select(_ => "seealso " + _ + "."));
+            results.AddRange(results.Select(_ => _.ToUpper()).ToList());
+            return results;
+        }
     }
 }

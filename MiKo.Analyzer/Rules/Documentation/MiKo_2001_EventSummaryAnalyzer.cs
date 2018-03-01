@@ -8,12 +8,12 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2001_EventAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2001_EventSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2001";
         private const string ExpectedComment = "Occurs ";
 
-        public MiKo_2001_EventAnalyzer() : base(Id, SymbolKind.Event)
+        public MiKo_2001_EventSummaryAnalyzer() : base(Id, SymbolKind.Event)
         {
         }
 

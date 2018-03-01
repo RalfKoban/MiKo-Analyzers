@@ -4,11 +4,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     // TODO: RKN [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2012_FireMethodsAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2015_FireMethodsAnalyzer : DocumentationAnalyzer
     {
-        public const string Id = "MiKo_2012";
+        public const string Id = "MiKo_2015";
 
-        public MiKo_2012_FireMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2015_FireMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
     }

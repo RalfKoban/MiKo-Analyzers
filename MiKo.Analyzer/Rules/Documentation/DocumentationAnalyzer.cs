@@ -30,20 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
                                                                                                : Enumerable.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
-
-        protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol) => AnalyzeSummary(symbol, symbol.GetDocumentationCommentXml());
-
-        protected IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, string commentXml)
-        {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
-
-            var summaries = GetSummaries(commentXml);
-            return summaries.Any() ? AnalyzeSummary(symbol, summaries) : Enumerable.Empty<Diagnostic>();
-        }
-
-        protected static ImmutableHashSet<string> GetSummaries(string commentXml) => GetComments(commentXml, "summary").WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
-
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes().ConcatenatedWith().RemoveAll("T:").Trim());
 
         protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)

@@ -9,9 +9,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
 
-    public sealed class MiKo_2020_InheritdocSummaryAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2020_InheritdocSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2020";
+
+        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
         public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -36,15 +38,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => AnalyzeSummary(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(summary => IsSeeCrefLink(summary.Trim()))
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(IsSeeCrefLink)
                                                                                                                         ? new[] { ReportIssue(symbol) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
-        private static bool IsSeeCrefLink(string summary)
-        {
-            const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
-            return summary.StartsWithAny(Comparison, "<see cref=", "<seealso cref=") && summary.EndsWithAny(Comparison, "/>", "/>.", "/see>", "/see>.", "/seealso>", "/seealso>.");
-        }
+        private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(Comparison, Constants.Comments.SeeStartingPhrase) && summary.EndsWithAny(Comparison, Constants.Comments.SeeEndingPhrase);
     }
 }
