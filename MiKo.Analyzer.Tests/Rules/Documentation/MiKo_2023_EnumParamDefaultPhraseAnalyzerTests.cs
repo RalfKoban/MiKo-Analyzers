@@ -45,8 +45,8 @@ public class TestMe
 }
 ");
 
-        [TestCase("One of the enumeration members that does something.")]
-        [TestCase("One of the enumeration members that does something")]
+        [TestCase("One of the enumeration members that specifies something.")]
+        [TestCase("One of the enumeration members that specifies something")]
         [TestCase("Unused")]
         [TestCase("Unused.")]
         public void No_issue_is_reported_for_method_with_correct_comment(string comment) => No_issue_is_reported_for(@"

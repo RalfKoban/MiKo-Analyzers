@@ -1296,7 +1296,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should have tests.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should contain tests.
         /// </summary>
         public static string MiKo_3101_MessageFormat {
             get {

@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2002";
 
-        public MiKo_2002_EventHandlingMethodParametersAnalyzer() : base(Id, SymbolKind.Method)
+    public MiKo_2002_EventHandlingMethodParametersAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
@@ -29,23 +29,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
         {
             List<Diagnostic> diagnostics = null;
-            VerifyParameterComment(ref diagnostics, method, xml, 0, "The source of the event.", "The source of the event", "Unused.", "Unused");
+            VerifyParameterComment(ref diagnostics, method, xml, 0, Constants.Comments.EventSourcePhrase);
 
             var eventArgs = method.Parameters[1].Type.Name;
             var defaultStart = eventArgs.StartsWithAnyChar("AEIOU") ? "An" : "A";
-            VerifyParameterComment(ref diagnostics, method, xml, 1, $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data", "Unused.", "Unused");
+            VerifyParameterComment(ref diagnostics, method, xml, 1, new [] { $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data" }.Concat(Constants.Comments.UnusedPhrase));
 
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private void VerifyParameterComment(ref List<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, int parameterIndex, params string[] allExpected)
+        private void VerifyParameterComment(ref List<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, int parameterIndex, IEnumerable<string> allExpected)
         {
             var parameter = method.Parameters[parameterIndex];
             var comment = GetCommentForParameter(parameter, commentXml);
+            var proposal = allExpected.ElementAt(0);
             if (allExpected.All(_ => _ != comment))
             {
                 if (diagnostics == null) diagnostics = new List<Diagnostic>();
-                diagnostics.Add(ReportIssue(method, parameter.Name, allExpected[0]));
+                diagnostics.Add(ReportIssue(method, parameter.Name, proposal));
             }
         }
     }
