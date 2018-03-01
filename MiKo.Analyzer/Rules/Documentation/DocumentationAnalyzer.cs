@@ -51,7 +51,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
             var xml = "<root>" + commentXml + "</root>";
 
-            return XElement.Parse(xml).Descendants(xmlElement);
+            try
+            {
+                return XElement.Parse(xml).Descendants(xmlElement);
+            }
+            catch (System.Xml.XmlException)
+            {
+                // invalid character
+                return Enumerable.Empty<XElement>();
+            }
         }
 
         protected static string GetCommentForParameter(IParameterSymbol parameter, string commentXml)
