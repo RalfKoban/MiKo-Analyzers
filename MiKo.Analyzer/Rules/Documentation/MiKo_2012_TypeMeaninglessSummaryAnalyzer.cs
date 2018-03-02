@@ -48,8 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> ReportIssue(ISymbol symbol, string summary, string defaultPhrase)
         {
-            var index = summary.IndexOfTimes(7, ' ');
-            var phrase = index > 0 ? summary.Substring(0, index) : defaultPhrase;
+            var index = summary.IndexOfTimes(6, ' ');
+            var phrase = index > 0 ? summary.Substring(0, index) + "..." : defaultPhrase;
             return new[] { ReportIssue(symbol, phrase) };
         }
     }

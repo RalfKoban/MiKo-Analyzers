@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeParameters(symbol, commentXml);
+
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;
 
         protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => Enumerable.Empty<Diagnostic>();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -50,15 +49,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string GetCommentForParameter(IParameterSymbol parameter, string commentXml)
         {
-            var paramElements = GetCommentElements(commentXml, @"param");
-            var comments = paramElements.Where(_ => _.Attribute("name")?.Value == parameter.Name);
-            if (comments.Any())
-            {
-                var comment = comments.Nodes().ConcatenatedWith().WithoutParaTags().RemoveAll("T:").Trim();
-                return comment;
-            }
+            var parameterName = parameter.Name;
+            return FlattenComment(GetCommentElements(commentXml, @"param").Where(_ => _.Attribute("name")?.Value == parameterName));
+        }
 
-            return null;
+        private static string FlattenComment(IEnumerable<XElement> comments)
+        {
+            if (!comments.Any()) return null;
+
+            var comment = comments.Nodes().ConcatenatedWith().WithoutParaTags().RemoveAll("T:").Trim();
+            return comment;
+
         }
     }
 }

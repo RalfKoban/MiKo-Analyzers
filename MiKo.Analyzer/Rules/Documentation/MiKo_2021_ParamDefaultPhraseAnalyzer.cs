@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeParameters(symbol, commentXml);
-
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter)
         {
             if (parameter.RefKind == RefKind.Out) return false;
