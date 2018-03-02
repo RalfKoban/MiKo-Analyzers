@@ -34,6 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (summary.StartsWith(phrase, Comparison)) return new[] { ReportIssue(symbol, phrase) };
                 }
+
+                if (summary.StartsWith("<", Comparison)) return new[] { ReportIssue(symbol, "<") };
             }
 
             return Enumerable.Empty<Diagnostic>();

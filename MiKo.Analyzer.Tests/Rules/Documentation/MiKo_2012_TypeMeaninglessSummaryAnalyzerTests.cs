@@ -71,6 +71,20 @@ public class TestMe : ITestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_class_with_see_cref_link([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+/// <summary>
+/// <see cref='" + phrase + @"' />.
+/// </summary>
+public class TestMe : ITestMe
+{
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2012_TypeMeaninglessSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_TypeMeaninglessSummaryAnalyzer();
