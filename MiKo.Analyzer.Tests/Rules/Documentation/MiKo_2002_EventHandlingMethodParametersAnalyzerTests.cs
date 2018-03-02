@@ -26,6 +26,8 @@ public class TestMe
 
         [TestCase("The source of the event.", "A <see cref='MyEventArgs' /> that contains the event data.")]
         [TestCase("The source of the event", "A <see cref='MyEventArgs' /> that contains the event data")]
+        [TestCase("The source of the event.", "A <see cref='MyEventArgs'/> that contains the event data.")]
+        [TestCase("The source of the event", "A <see cref='MyEventArgs'/> that contains the event data")]
         [TestCase("<para>The source of the event.</para>", "<para>A <see cref='MyEventArgs' /> that contains the event data.</para>")]
         [TestCase("<para>The source of the event</para>", "<para>A <see cref='MyEventArgs' /> that contains the event data</para>")]
         [TestCase("Unused.", "A <see cref='MyEventArgs' /> that contains the event data.")]

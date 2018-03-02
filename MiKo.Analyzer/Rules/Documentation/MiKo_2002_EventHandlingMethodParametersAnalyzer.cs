@@ -33,7 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var eventArgs = method.Parameters[1].Type.Name;
             var defaultStart = eventArgs.StartsWithAnyChar("AEIOU") ? "An" : "A";
-            VerifyParameterComment(ref diagnostics, method, xml, 1, new [] { $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.", $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data" }.Concat(Constants.Comments.UnusedPhrase));
+            var phrases = Constants.Comments.UnusedPhrase.Concat(new[]
+                                  {
+                                      $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.",
+                                      $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data",
+                                      $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data.",
+                                      $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data",
+                                  });
+            VerifyParameterComment(ref diagnostics, method, xml, 1, phrases);
 
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
