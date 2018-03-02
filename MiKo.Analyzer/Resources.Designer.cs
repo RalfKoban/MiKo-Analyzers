@@ -1018,7 +1018,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML summary has meaningless starting phrase: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML summary starts with meaningless phrase: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2012_MessageFormat {
             get {
@@ -1027,7 +1027,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types should have meaningful XML summary documentation..
+        ///   Looks up a localized string similar to XML summary documentation for types describes their responsibility..
         /// </summary>
         public static string MiKo_2012_Title {
             get {
