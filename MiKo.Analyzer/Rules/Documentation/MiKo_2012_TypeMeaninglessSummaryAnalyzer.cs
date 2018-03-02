@@ -25,24 +25,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var symbolNames = new List<string>(((INamedTypeSymbol)symbol).AllInterfaces.Select(_ => _.Name)) { symbol.Name };
             foreach (var summary in summaries)
             {
-                foreach (var symbolName in symbolNames)
+                foreach (var phrase in symbolNames.Where(phrase => summary.StartsWith(phrase, Comparison)))
                 {
-                    if (summary.StartsWith(symbolName, Comparison)) return new[] { ReportIssue(symbol, symbolName) };
+                    return ReportIssue(symbol, summary, phrase);
                 }
 
-                foreach (var phrase in Constants.Comments.MeaninglessTypeStartingPhrase)
+                foreach (var phrase in Constants.Comments.MeaninglessTypeStartingPhrase.Where(phrase => summary.StartsWith(phrase, Comparison)))
                 {
-                    if (summary.StartsWith(phrase, Comparison)) return new[] { ReportIssue(symbol, phrase) };
+                    return ReportIssue(symbol, summary, phrase);
                 }
 
                 if (summary.StartsWith("<", Comparison))
                 {
                     var index = summary.IndexOf("/>", Comparison);
-                    return new[] { ReportIssue(symbol, index > 0 ? summary.Substring(0, index + 2) : "<") };
+                    var phrase = index > 0 ? summary.Substring(0, index + 2) : "<";
+                    return ReportIssue(symbol, summary, phrase);
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
+        }
+
+        private IEnumerable<Diagnostic> ReportIssue(ISymbol symbol, string summary, string defaultPhrase)
+        {
+            var index = summary.IndexOfTimes(7, ' ');
+            var phrase = index > 0 ? summary.Substring(0, index) : defaultPhrase;
+            return new[] { ReportIssue(symbol, phrase) };
         }
     }
 }
