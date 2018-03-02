@@ -25,6 +25,7 @@ public class TestMe
 ");
 
         [TestCase("The source of the event.", "A <see cref='MyEventArgs' /> that contains the event data.")]
+        [TestCase("The source of the event.", "A <see cref=\"MyEventArgs\" /> that contains the event data.")]
         [TestCase("The source of the event", "A <see cref='MyEventArgs' /> that contains the event data")]
         [TestCase("The source of the event.", "A <see cref='MyEventArgs'/> that contains the event data.")]
         [TestCase("The source of the event", "A <see cref='MyEventArgs'/> that contains the event data")]
@@ -39,16 +40,41 @@ public class TestMe
         [TestCase("<para>The source of the event.</para>", "<para>Unused.</para>")]
         [TestCase("<para>The source of the event</para>", "<para>Unused</para>")]
         public void No_issue_is_reported_for_correctly_documented_event_handling_method(string sender, string e) => No_issue_is_reported_for(@"
-public class MyEventArgs : System.EventArgs { }
+using System;
 
-public class TestMe
+namespace Bla
 {
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name='sender'>" + sender + @"</param>
-    /// <param name='e'>" + e + @"</param>
-    public void DoSomething(object sender, MyEventArgs e) { }
+    public class MyEventArgs : System.EventArgs { }
+
+    public class TestMe
+    {
+        /// <summary>
+        /// Does something.
+        /// </summary>
+        /// <param name='sender'>" + sender + @"</param>
+        /// <param name='e'>" + e + @"</param>
+        public void DoSomething(object sender, MyEventArgs e) { }
+    }
+}");
+
+        [TestCase("The source of the event.", "An <see cref='EventArgs' /> that contains the event data.")]
+        [TestCase("The source of the event.", "An <see cref=\"EventArgs\" /> that contains the event data.")]
+        [TestCase("The source of the event.", "An <see cref='System.EventArgs' /> that contains the event data.")]
+        [TestCase("The source of the event.", "An <see cref=\"System.EventArgs\" /> that contains the event data.")]
+        public void No_issue_is_reported_for_correctly_documented_event_handling_method_with_vocal_at_begin(string sender, string e) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>
+        /// Does something.
+        /// </summary>
+        /// <param name='sender'>" + sender + @"</param>
+        /// <param name='e'>" + e + @"</param>
+        public void DoSomething(object sender, EventArgs e) { }
+    }
 }
 ");
 

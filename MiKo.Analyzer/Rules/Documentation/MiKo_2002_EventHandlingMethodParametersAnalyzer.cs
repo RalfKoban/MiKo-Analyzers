@@ -31,15 +31,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<Diagnostic> diagnostics = null;
             VerifyParameterComment(ref diagnostics, method, xml, 0, Constants.Comments.EventSourcePhrase);
 
-            var eventArgs = method.Parameters[1].Type.Name;
-            var defaultStart = eventArgs.StartsWithAnyChar("AEIOU") ? "An" : "A";
-            var phrases = Constants.Comments.UnusedPhrase.Concat(new[]
-                                  {
-                                      $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.",
-                                      $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data",
-                                      $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data.",
-                                      $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data",
-                                  });
+            var eventArgs = method.Parameters[1].Type;
+            var defaultStart = eventArgs.Name.StartsWithAnyChar("AEIOU") ? "An" : "A";
+            var phrases = new[]
+                              {
+                                  $"{defaultStart} <see cref=\"{eventArgs.Name}\" /> that contains the event data.",
+                                  $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.",
+                                  $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data",
+                                  $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data.",
+                                  $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data",
+                              }.Concat(Constants.Comments.UnusedPhrase).ToList();
+
             VerifyParameterComment(ref diagnostics, method, xml, 1, phrases);
 
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
