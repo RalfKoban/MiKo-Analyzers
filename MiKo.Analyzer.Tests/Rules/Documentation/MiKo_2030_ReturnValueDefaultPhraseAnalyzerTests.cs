@@ -38,10 +38,15 @@ public class TestMe
 
         [TestCase("string")]
         [TestCase("bool")]
+        [TestCase("Task")]
+        [TestCase("Task<string>")]
+        [TestCase("Task<bool>")]
         [TestCase(nameof(System.String))]
         [TestCase(nameof(System.Boolean))]
+        [TestCase(nameof(System.Threading.Tasks.Task))]
         public void No_issue_is_reported_for_method_that_returns_a(string returnType) => No_issue_is_reported_for(@"
 using System;
+using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -57,6 +62,25 @@ public class TestMe
                                                                     [Values("returns", "value")] string xmlTag,
                                                                     [Values("A whatever", "An whatever", "The whatever")] string comment)
             => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// " + comment + @"
+    /// </" + xmlTag + @">
+    public object DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_wrong_commented_method(
+                                                                [Values("returns", "value")] string xmlTag,
+                                                                [Values("Whatever")] string comment)
+            => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

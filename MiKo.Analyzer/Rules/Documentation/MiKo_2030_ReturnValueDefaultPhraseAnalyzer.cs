@@ -14,15 +14,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeReturnValue(ITypeSymbol returnValue)
+        protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType)
         {
-            if (returnValue.IsEnum()) return false;
+            if (returnType.IsEnum()) return false;
 
-            switch (returnValue.Name)
+            switch (returnType.Name)
             {
                 // ReSharper disable RedundantNameQualifier
-                case nameof(System.Boolean):
-                case nameof(System.String):
+                case nameof(System.Threading.Tasks.Task):   // checked by MiKo_2031
+                case nameof(System.Boolean):                // checked by MiKo_2032
+                case nameof(System.String):                 // checked by MiKo_2033
                     return false;
 
                 // ReSharper restore RedundantNameQualifier
@@ -31,6 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnValue(IMethodSymbol method, string comment, string xmlTag) => AnalyzeStartingPhrase(method, comment, xmlTag, Constants.Comments.ReturnValueStartingPhrase);
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol method, string comment, string xmlTag) => AnalyzeStartingPhrase(method, comment, xmlTag, Constants.Comments.ReturnTypeStartingPhrase);
     }
 }

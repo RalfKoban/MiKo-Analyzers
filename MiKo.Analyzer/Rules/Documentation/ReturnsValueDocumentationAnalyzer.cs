@@ -11,29 +11,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected ReturnsValueDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, SymbolKind.Method) // TODO: what about properties ???
         {
         }
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeReturnValues(symbol, commentXml);
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeReturnTypes(symbol, commentXml);
 
-        protected virtual bool ShallAnalyzeReturnValue(ITypeSymbol returnValue) => true;
+        protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeReturnValue(IMethodSymbol method, string comment, string xmlTag) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol method, string comment, string xmlTag) => Enumerable.Empty<Diagnostic>();
 
-        protected IEnumerable<Diagnostic> AnalyzeReturnValues(IMethodSymbol symbol, string commentXml)
+        protected IEnumerable<Diagnostic> AnalyzeReturnTypes(IMethodSymbol symbol, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
             if (symbol.ReturnsVoid) return Enumerable.Empty<Diagnostic>();
 
-            if (!ShallAnalyzeReturnValue(symbol.ReturnType)) return Enumerable.Empty<Diagnostic>();
+            if (!ShallAnalyzeReturnType(symbol.ReturnType)) return Enumerable.Empty<Diagnostic>();
 
-            return TryAnalyzeReturnValues(commentXml, symbol, "returns") ?? TryAnalyzeReturnValues(commentXml, symbol, "value") ?? Enumerable.Empty<Diagnostic>();
+            return TryAnalyzeReturnTypes(commentXml, symbol, "returns") ?? TryAnalyzeReturnTypes(commentXml, symbol, "value") ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> TryAnalyzeReturnValues(string commentXml, IMethodSymbol method, string xmlTag)
+        private IEnumerable<Diagnostic> TryAnalyzeReturnTypes(string commentXml, IMethodSymbol method, string xmlTag)
         {
             List<Diagnostic> results = null;
 
             foreach (var comment in GetComments(commentXml, xmlTag).Where(_ => _ != null))
             {
-                var findings = AnalyzeReturnValue(method, comment, xmlTag);
+                var findings = AnalyzeReturnType(method, comment, xmlTag);
                 if (findings.Any())
                 {
                     if (results == null) results = new List<Diagnostic>();
@@ -46,6 +46,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IMethodSymbol method, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(StringComparison.Ordinal, phrase)
                                                                                                                                     ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                    : new[] { ReportIssue(method, method.Name, xmlTag, phrase.ConcatenatedWith(", ")) };
+                                                                                                                                    : new[] { ReportIssue(method, method.Name, xmlTag, phrase[0]) };
+
+        protected IEnumerable<Diagnostic> AnalyzePhrase(IMethodSymbol method, string comment, string xmlTag, string[] phrase) => phrase.Any(_ => _.Equals(comment, StringComparison.Ordinal))
+                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                    : new[] { ReportIssue(method, method.Name, xmlTag, phrase[0]) };
     }
 }

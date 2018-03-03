@@ -1234,7 +1234,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should start with any of the following: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2030_MessageFormat {
             get {
