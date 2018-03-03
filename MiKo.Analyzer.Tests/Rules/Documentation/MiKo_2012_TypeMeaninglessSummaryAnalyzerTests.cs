@@ -130,7 +130,7 @@ public class TestMe : ITestMe
             results.AddRange(from type in types from phrase in phrases select type + " " + phrase);
             results.AddRange(phrases.Select(_ => _.ToLower()));
             results.AddRange(phrases.Select(_ => _.ToUpper()));
-            return results;
+            return new HashSet<string>(results);
         }
     }
 }
