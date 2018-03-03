@@ -25,11 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // we have a generic task
                 return GenericTypeAccepted(namedType.TypeArguments[0].Name)
-                           ? AnalyzeStartingPhrase(method, comment, xmlTag, Constants.Comments.ReturnTypeTaskWithResultStartingPhrase)
+                           ? AnalyzeStartingPhrase(method, comment, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase)
                            : Enumerable.Empty<Diagnostic>();
             }
 
-            return AnalyzePhrase(method, comment, xmlTag, Constants.Comments.ReturnTypeTaskWithoutResultPhrase);
+            return AnalyzePhrase(method, comment, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);
         }
 
         private static bool GenericTypeAccepted(string name)

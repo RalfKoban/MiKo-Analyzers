@@ -25,14 +25,14 @@ namespace MiKoSolutions.Analyzers
                     "Class", "Interface", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command",
                 };
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
-            internal static readonly string[] ReturnTypeTaskWithResultStartingPhrase =
+            internal static readonly string[] GenericTaskReturnTypeStartingPhrase =
                 {
                     "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> parameter contains ", // this is just to have a proposal how to optimize
                     "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
                     "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
                     "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
                 };
-            internal static readonly string[] ReturnTypeTaskWithoutResultPhrase =
+            internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
                     "A task that represents the asynchronous operation.",
                     "A <see cref=\"System.Threading.Tasks.Task\" /> that represents the asynchronous operation.",
