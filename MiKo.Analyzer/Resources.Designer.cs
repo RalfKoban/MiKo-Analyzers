@@ -1243,11 +1243,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation for of return value should have a default starting phrase..
         /// </summary>
         public static string MiKo_2030_Title {
             get {
                 return ResourceManager.GetString("MiKo_2030_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of Task return value should have a default (starting) phrase..
+        /// </summary>
+        public static string MiKo_2031_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2031_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
+        /// </summary>
+        public static string MiKo_2031_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2031_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of Task return value should have a default (starting) phrase..
+        /// </summary>
+        public static string MiKo_2031_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2031_Title", resourceCulture);
             }
         }
         
