@@ -508,22 +508,31 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of enum parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
-    <value>XML documentation of return value should have a default starting phrase.</value>
+    <value>To ease maintenance, the XML documentation of a return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2030_MessageFormat" xml:space="preserve">
     <value>&lt;{2}&gt; should start with: '{3}'</value>
   </data>
   <data name="MiKo_2030_Title" xml:space="preserve">
-    <value>XML documentation for of return value should have a default starting phrase.</value>
+    <value>XML documentation of return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2031_Description" xml:space="preserve">
-    <value>XML documentation of Task return value should have a default (starting) phrase.</value>
+    <value>To ease maintenance, the XML documentation of a Task as return value should have a default (starting) phrase.</value>
   </data>
   <data name="MiKo_2031_MessageFormat" xml:space="preserve">
     <value>&lt;{2}&gt; should start with: '{3}'</value>
   </data>
   <data name="MiKo_2031_Title" xml:space="preserve">
-    <value>XML documentation of Task return value should have a default (starting) phrase.</value>
+    <value>XML documentation of Task return value should have a specific (starting) phrase.</value>
+  </data>
+  <data name="MiKo_2032_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase.</value>
+  </data>
+  <data name="MiKo_2032_MessageFormat" xml:space="preserve">
+    <value>&lt;{2}&gt; should start with '{3}' and end with '{4}'</value>
+  </data>
+  <data name="MiKo_2032_Title" xml:space="preserve">
+    <value>XML documentation of Boolean return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To follow the SRP, methods should have as few parameters as possible.</value>

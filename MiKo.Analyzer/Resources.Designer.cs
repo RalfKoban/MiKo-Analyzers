@@ -1225,7 +1225,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of return value should have a default starting phrase..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a return value should have a default starting phrase..
         /// </summary>
         public static string MiKo_2030_Description {
             get {
@@ -1243,7 +1243,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation for of return value should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation of return value should have a default starting phrase..
         /// </summary>
         public static string MiKo_2030_Title {
             get {
@@ -1252,7 +1252,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of Task return value should have a default (starting) phrase..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a Task as return value should have a default (starting) phrase..
         /// </summary>
         public static string MiKo_2031_Description {
             get {
@@ -1270,11 +1270,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of Task return value should have a default (starting) phrase..
+        ///   Looks up a localized string similar to XML documentation of Task return value should have a specific (starting) phrase..
         /// </summary>
         public static string MiKo_2031_Title {
             get {
                 return ResourceManager.GetString("MiKo_2031_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase..
+        /// </summary>
+        public static string MiKo_2032_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2032_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with &apos;{3}&apos; and end with &apos;{4}&apos;.
+        /// </summary>
+        public static string MiKo_2032_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2032_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of Boolean return value should have a specific phrase..
+        /// </summary>
+        public static string MiKo_2032_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2032_Title", resourceCulture);
             }
         }
         
