@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2031_TaskReturnValueDefaultPhraseAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
@@ -134,8 +134,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2031_TaskReturnValueDefaultPhraseAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2031_TaskReturnValueDefaultPhraseAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer();
     }
 }

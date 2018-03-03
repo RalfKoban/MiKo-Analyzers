@@ -6,11 +6,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2030_ReturnValueDefaultPhraseAnalyzer : ReturnsValueDocumentationAnalyzer
+    public sealed class MiKo_2030_ReturnTypeDefaultPhraseAnalyzer : ReturnsValueDocumentationAnalyzer
     {
         public const string Id = "MiKo_2030";
 
-        public MiKo_2030_ReturnValueDefaultPhraseAnalyzer() : base(Id)
+        public MiKo_2030_ReturnTypeDefaultPhraseAnalyzer() : base(Id)
         {
         }
 

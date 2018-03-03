@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2031_TaskReturnValueDefaultPhraseAnalyzer : ReturnsValueDocumentationAnalyzer
+    public sealed class MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer : ReturnsValueDocumentationAnalyzer
     {
         public const string Id = "MiKo_2031";
 
-        public MiKo_2031_TaskReturnValueDefaultPhraseAnalyzer() : base(Id)
+        public MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
