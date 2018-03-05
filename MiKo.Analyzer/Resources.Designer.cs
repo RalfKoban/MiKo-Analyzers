@@ -1252,7 +1252,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a return value should have a default starting phrase..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {
             get {
@@ -1261,7 +1261,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2030_MessageFormat {
             get {
@@ -1288,7 +1288,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2031_MessageFormat {
             get {
@@ -1315,7 +1315,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should start with &apos;{3}&apos; and end with &apos;{4}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;
+        /// End &lt;{2}&gt; with: &apos;{4}&apos;.
         /// </summary>
         public static string MiKo_2032_MessageFormat {
             get {
@@ -1342,7 +1343,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2033_MessageFormat {
             get {
