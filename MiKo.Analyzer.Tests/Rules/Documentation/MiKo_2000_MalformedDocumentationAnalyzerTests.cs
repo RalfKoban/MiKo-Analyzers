@@ -48,7 +48,7 @@ public sealed class TestMe
     /// <summary>
     /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
     /// </summary>
-    public Event EventHandler Malform;
+    public event EventHandler Malform;
 }
 ");
 
@@ -102,7 +102,7 @@ public sealed class TestMe
     /// <summary>
     /// Something valid.
     /// </summary>
-    public Event EventHandler Malform;
+    public event EventHandler Malform;
 }
 ");
 

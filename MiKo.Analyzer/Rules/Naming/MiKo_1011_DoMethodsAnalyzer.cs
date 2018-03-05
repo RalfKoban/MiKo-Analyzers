@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var methodName = method.Name;
 
             const StringComparison Comparison = StringComparison.Ordinal;
-            if (methodName.IndexOf(DoPhrase, Comparison) == -1) return Enumerable.Empty<Diagnostic>();
+            if (!methodName.Contains(DoPhrase, Comparison)) return Enumerable.Empty<Diagnostic>();
 
             var escapedMethod = EscapeValidPhrases(methodName);
-            if (escapedMethod.IndexOf(DoPhrase, Comparison) == -1) return Enumerable.Empty<Diagnostic>();
+            if (!escapedMethod.Contains(DoPhrase, Comparison)) return Enumerable.Empty<Diagnostic>();
 
             return new[] { ReportIssue(method, UnescapeValidPhrases(escapedMethod.RemoveAll(DoPhrase))) };
         }

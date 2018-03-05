@@ -1361,6 +1361,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To support other languages than C#, use &lt;see langword=&quot;...&quot;/&gt; instead of &lt;c&gt;...&lt;/c&gt;..
+        /// </summary>
+        public static string MiKo_2040_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2040_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2040_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2040_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;see langword=&quot;...&quot;/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;..
+        /// </summary>
+        public static string MiKo_2040_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2040_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
         /// </summary>
         public static string MiKo_3001_Description {

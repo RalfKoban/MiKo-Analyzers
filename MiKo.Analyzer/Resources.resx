@@ -553,6 +553,15 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
   <data name="MiKo_2033_Title" xml:space="preserve">
     <value>XML documentation of String return value should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2040_Description" xml:space="preserve">
+    <value>To support other languages than C#, use &lt;see langword="..."/&gt; instead of &lt;c&gt;...&lt;/c&gt;.</value>
+  </data>
+  <data name="MiKo_2040_MessageFormat" xml:space="preserve">
+    <value>Use '{2}' instead of '{1}'</value>
+  </data>
+  <data name="MiKo_2040_Title" xml:space="preserve">
+    <value>&lt;see langword="..."/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;.</value>
+  </data>
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To follow the SRP, methods should have as few parameters as possible.</value>
   </data>

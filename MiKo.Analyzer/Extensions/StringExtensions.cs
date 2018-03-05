@@ -25,7 +25,9 @@ namespace System
             return false;
         }
 
-        public static bool ContainsAny(this string value, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.IndexOf(_, StringComparison.OrdinalIgnoreCase) >= 0);
+        public static bool Contains(this string value, string finding, StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
+
+        public static bool ContainsAny(this string value, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.Contains(_, StringComparison.OrdinalIgnoreCase));
 
         public static bool EqualsAny(this string value, StringComparison comparison, params string[] phrases) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Equals(_, comparison));
 
