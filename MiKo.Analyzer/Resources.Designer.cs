@@ -1117,6 +1117,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML documentation for asynchronous methods should indicate that method is run asynchronously..
+        /// </summary>
+        public static string MiKo_2016_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2016_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should start with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2016_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2016_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation for asynchronous methods should start with specific phrase..
+        /// </summary>
+        public static string MiKo_2016_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2016_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It does not make sense to use XML summaries that only reference something else via &lt;see cref=&quot;...&quot; /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used..
         /// </summary>
         public static string MiKo_2020_Description {

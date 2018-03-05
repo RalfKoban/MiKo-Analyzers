@@ -471,6 +471,15 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
   <data name="MiKo_2015_Title" xml:space="preserve">
     <value>XML documentation should use 'raise' instead of 'fire'.</value>
   </data>
+  <data name="MiKo_2016_Description" xml:space="preserve">
+    <value>XML documentation for asynchronous methods should indicate that method is run asynchronously.</value>
+  </data>
+  <data name="MiKo_2016_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should start with: '{1}'</value>
+  </data>
+  <data name="MiKo_2016_Title" xml:space="preserve">
+    <value>XML documentation for asynchronous methods should start with specific phrase.</value>
+  </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use XML summaries that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used.</value>
   </data>
