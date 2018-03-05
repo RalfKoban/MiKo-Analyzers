@@ -900,7 +900,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of events should start with &apos;Occurs&apos; to indicate that events occur..
+        ///   Looks up a localized string similar to Events should be documented with &apos;Occurs ...&apos; to indicate that events actually occur..
         /// </summary>
         public static string MiKo_2001_Description {
             get {
@@ -1063,7 +1063,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of Dispose methods should follow .NET Framework..
+        ///   Looks up a localized string similar to Dispose methods should be documented as by the .NET Framework..
         /// </summary>
         public static string MiKo_2014_Description {
             get {
@@ -1302,6 +1302,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2032_Title {
             get {
                 return ResourceManager.GetString("MiKo_2032_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a String as return value should have a specific phrase..
+        /// </summary>
+        public static string MiKo_2033_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2033_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
+        /// </summary>
+        public static string MiKo_2033_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2033_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of String return value should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2033_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2033_Title", resourceCulture);
             }
         }
         

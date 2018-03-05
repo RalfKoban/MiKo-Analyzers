@@ -57,10 +57,7 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Task_only_method(
                                                                                 [Values("returns", "value")] string xmlTag,
-                                                                                [Values(
-                                                                                    "A task that represents the asynchronous operation.",
-                                                                                    "A <see cref=\"Task\" /> that represents the asynchronous operation.",
-                                                                                    "A <see cref=\"Task\"/> that represents the asynchronous operation.")] string comment)
+                                                                                [Values("task", "<see cref=\"Task\" />", "<see cref=\"Task\"/>")] string comment)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -71,7 +68,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + comment + @"
+    /// A " + comment + @" that represents the asynchronous operation.
     /// </" + xmlTag + @">
     public Task DoSomething(object o) => null;
 }
@@ -97,10 +94,8 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_generic_Task_method(
             [Values("returns", "value")] string xmlTag,
-            [Values(
-                "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> parameter contains something.",
-                "A <see cref=\"Task{TResult}\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> parameter contains something.",
-                "A <see cref=\"Task{TResult}\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> parameter contains something.")] string comment)
+            [Values("task", "<see cref=\"Task{TResult}\" />", "<see cref=\"Task{TResult}\"/>", "<see cref=\"System.Threading.Tasks.Task{TResult}\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}\"/>")] string task,
+            [Values("<see cref=\"System.Threading.Tasks.Task{TResult}.Result\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/>")] string result)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -111,7 +106,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + comment + @"
+    /// A " + task + " that represents the asynchronous operation. The value of the " + result + @" parameter contains something.
     /// </" + xmlTag + @">
     public Task<int> DoSomething(object o) => null;
 }

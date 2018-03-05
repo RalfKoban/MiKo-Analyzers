@@ -112,7 +112,7 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer();
 
-        private static IEnumerable<string> BooleanOnlyReturnValues() => new[] { "bool", "Boolean", nameof(System.Boolean), }.ToHashSet();
+        private static IEnumerable<string> BooleanOnlyReturnValues() => new[] { "bool", "Boolean", "System.Boolean", nameof(System.Boolean), }.ToHashSet();
 
         private static IEnumerable<string> BooleanTaskReturnValues() => new[] { "Task<bool>", "Task<Boolean>", "Task<System.Boolean>", }.ToHashSet();
 

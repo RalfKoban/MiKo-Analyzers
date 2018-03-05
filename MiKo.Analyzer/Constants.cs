@@ -35,8 +35,11 @@ namespace MiKoSolutions.Analyzers
                 {
                     "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> parameter contains ", // this is just to have a proposal how to optimize
                     "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
+                    "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
                     "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
+                    "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
                     "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
+                    "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
                 };
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
@@ -56,6 +59,21 @@ namespace MiKoSolutions.Analyzers
                 {
                     ", otherwise with a result of <see langword=\"false\" />.",
                     ", otherwise with a result of <see langword=\"false\"/>."
+                };
+
+            internal static readonly string[] StringReturnTypeStartingPhrase =
+                {
+                    "A <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
+                    "A <see cref=\"System.String\" /> that contains ",
+                    "A <see cref=\"System.String\"/> that contains "
+                };
+            internal static readonly string[] StringTaskReturnTypeStartingPhrase =
+                {
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that contains ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that contains ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that contains ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\"/> that contains ",
                 };
         }
     }
