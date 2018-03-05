@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (returnType.Name)
             {
                 // ReSharper disable RedundantNameQualifier
-                case nameof(System.Threading.Tasks.Task):   // checked by MiKo_2031
+                case nameof(System.Threading.Tasks.Task):   // checked by MiKo_2031, MiKo_2032, MiKo_2033
                 case nameof(System.Boolean):                // checked by MiKo_2032
                 case nameof(System.String):                 // checked by MiKo_2033
                     return false;

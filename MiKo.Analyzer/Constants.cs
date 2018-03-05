@@ -45,8 +45,18 @@ namespace MiKoSolutions.Analyzers
                     "A <see cref=\"System.Threading.Tasks.Task\"/> that represents the asynchronous operation.",
                 };
 
-            internal static readonly string[] BooleanReturnTypeStartingPhrase = { "<see langword=\"true\" /> ", "<see langword=\"true\"/> " };
+            internal static readonly string[] BooleanReturnTypeStartingPhrase = { "<see langword=\"true\" /> if ", "<see langword=\"true\"/> if " };
             internal static readonly string[] BooleanReturnTypeEndingPhrase = { "; otherwise, <see langword=\"false\" />.", "; otherwise, <see langword=\"false\"/>." };
+            internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
+                {
+                    "A task that will complete with a result of <see langword=\"true\" /> if ",
+                    "A task that will complete with a result of <see langword=\"true\"/> if "
+                };
+            internal static readonly string[] BooleanTaskReturnTypeEndingPhrase =
+                {
+                    ", otherwise with a result of <see langword=\"false\" />.",
+                    ", otherwise with a result of <see langword=\"false\"/>."
+                };
         }
     }
 }

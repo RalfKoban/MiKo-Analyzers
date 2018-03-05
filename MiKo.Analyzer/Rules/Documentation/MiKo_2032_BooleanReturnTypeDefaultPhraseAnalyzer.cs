@@ -41,17 +41,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol method, string comment, string xmlTag)
         {
             // ReSharper disable once RedundantNameQualifier
-            if (method.ReturnType.Name == nameof(System.Boolean))
-            {
-                var startingPhrases = Constants.Comments.BooleanReturnTypeStartingPhrase;
-                var endingPhrases = Constants.Comments.BooleanReturnTypeEndingPhrase;
-                return comment.StartsWithAny(StringComparison.Ordinal, startingPhrases) && comment.EndsWithAny(StringComparison.Ordinal, endingPhrases)
-                        ? Enumerable.Empty<Diagnostic>()
-                        : new[] { ReportIssue(method, method.Name, xmlTag, startingPhrases[0], endingPhrases[0]) };
-            }
+            var isBoolean = method.ReturnType.Name == nameof(System.Boolean);
 
-            // TODO: analyze Task<bool>
-            return Enumerable.Empty<Diagnostic>();
+            var startingPhrases = isBoolean? Constants.Comments.BooleanReturnTypeStartingPhrase : Constants.Comments.BooleanTaskReturnTypeStartingPhrase;
+            var endingPhrases = isBoolean ? Constants.Comments.BooleanReturnTypeEndingPhrase : Constants.Comments.BooleanTaskReturnTypeEndingPhrase;
+
+            return comment.StartsWithAny(StringComparison.Ordinal, startingPhrases) && comment.EndsWithAny(StringComparison.Ordinal, endingPhrases)
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(method, method.Name, xmlTag, startingPhrases[0], endingPhrases[0]) };
         }
     }
 }
