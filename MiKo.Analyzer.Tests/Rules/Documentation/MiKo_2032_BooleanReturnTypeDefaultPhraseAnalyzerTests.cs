@@ -68,6 +68,28 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_Boolean_only_method_with_line_break(
+            [Values("returns", "value")] string xmlTag,
+            [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+            [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+            [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType) => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// " + trueValue + @" if something happens;
+    /// otherwise, " + falseValue + @".
+    /// </" + xmlTag + @">
+    public " + returnType + @" DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Boolean_Task_method(
             [Values("returns", "value")] string xmlTag,
             [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace MiKoSolutions.Analyzers
 {
@@ -8,7 +9,8 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string[] ViewModelMarkers = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
         internal static readonly string[] SpecialModelMarkers = { "Modeless", "modeless", "ModeLess", "modeLess" };
         internal static readonly string[] CollectionMarkers = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
-        internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:" };
+        internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:", "F:" };
+        internal static readonly string[] SymbolMarkersAndLineBreaks = SymbolMarkers.Concat(new[] { Environment.NewLine + "   " }).ToArray();
 
         internal static class Comments
         {
@@ -41,6 +43,7 @@ namespace MiKoSolutions.Analyzers
                     "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
                     "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
                 };
+
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
                     "A task that represents the asynchronous operation.",
@@ -48,13 +51,24 @@ namespace MiKoSolutions.Analyzers
                     "A <see cref=\"System.Threading.Tasks.Task\"/> that represents the asynchronous operation.",
                 };
 
-            internal static readonly string[] BooleanReturnTypeStartingPhrase = { "<see langword=\"true\" /> if ", "<see langword=\"true\"/> if " };
-            internal static readonly string[] BooleanReturnTypeEndingPhrase = { "; otherwise, <see langword=\"false\" />.", "; otherwise, <see langword=\"false\"/>." };
+            internal static readonly string[] BooleanReturnTypeStartingPhrase =
+                {
+                    "<see langword=\"true\" /> if ",
+                    "<see langword=\"true\"/> if ",
+                };
+
+            internal static readonly string[] BooleanReturnTypeEndingPhrase =
+                {
+                    "; otherwise, <see langword=\"false\" />.",
+                    "; otherwise, <see langword=\"false\"/>.",
+                };
+
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                 {
                     "A task that will complete with a result of <see langword=\"true\" /> if ",
                     "A task that will complete with a result of <see langword=\"true\"/> if "
                 };
+
             internal static readonly string[] BooleanTaskReturnTypeEndingPhrase =
                 {
                     ", otherwise with a result of <see langword=\"false\" />.",

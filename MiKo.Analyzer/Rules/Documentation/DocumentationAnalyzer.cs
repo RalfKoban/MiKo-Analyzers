@@ -29,7 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
                                                                                                : Enumerable.Empty<Diagnostic>();
 
-        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes().ConcatenatedWith().RemoveAll(Constants.SymbolMarkers).Trim());
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes()
+                                                                                                                                                          .ConcatenatedWith()
+                                                                                                                                                          .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
+                                                                                                                                                          .Trim());
 
         protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
         {
