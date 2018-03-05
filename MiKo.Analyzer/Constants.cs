@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] GenericTaskReturnTypeStartingPhrase =
                 {
-                    "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> parameter contains ", // this is just to have a proposal how to optimize
+                    "A task that represents the asynchronous operation. The value of the <see cref=\"Task{TResult}.Result\" /> parameter contains ", // this is just to have a proposal how to optimize
                     "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
                     "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
                     "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers
                 };
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
                 {
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
+                    "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that contains ",
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that contains ",
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that contains ",
