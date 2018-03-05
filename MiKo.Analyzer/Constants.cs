@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] MeaninglessTypeStartingPhrase =
                 {
-                    "A ", "An ", "Does implement ", "For ", "Implement ", "Implements ", "Is ", "This ", "That ", "The ", "To ", "Used ", "Which ",
+                    "A ", "An ", "Does implement ", "For ", "Implement ", "Implements ", "Is ", "This ", "That ", "The ", "To ", "Uses ", "Used ", "Which ",
                     "Class", "Interface", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command",
                 };
 

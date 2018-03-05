@@ -123,6 +123,7 @@ public class TestMe : ITestMe
                                   "That ",
                                   "Used for ",
                                   "Used to ",
+                                  "Uses ",
                               };
 
             results.AddRange(types);
