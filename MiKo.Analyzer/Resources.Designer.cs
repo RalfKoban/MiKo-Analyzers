@@ -873,6 +873,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, exceptions in catch blocks should be named consistently..
+        /// </summary>
+        public static string MiKo_1200_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1200_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1200_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1200_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name exceptions in catch blocks consistently..
+        /// </summary>
+        public static string MiKo_1200_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1200_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
@@ -1315,8 +1342,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;
-        /// End &lt;{2}&gt; with: &apos;{4}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3} ... {4}&apos;.
         /// </summary>
         public static string MiKo_2032_MessageFormat {
             get {

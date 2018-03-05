@@ -389,6 +389,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1104_Title" xml:space="preserve">
     <value>Test cleanup methods should be named 'CleanupTest'.</value>
   </data>
+  <data name="MiKo_1200_Description" xml:space="preserve">
+    <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
+  </data>
+  <data name="MiKo_1200_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be '{1}'</value>
+  </data>
+  <data name="MiKo_1200_Title" xml:space="preserve">
+    <value>Name exceptions in catch blocks consistently.</value>
+  </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>XML documentation should be valid XML so that it can be generated to support the developers.</value>
   </data>

@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return ReportIssue(prefix + symbol.Name, symbol.Locations[0], messageArgs);
         }
 
-        private Diagnostic ReportIssue(string name, Location location, params object[] messageArgs)
+        protected Diagnostic ReportIssue(string name, Location location, params object[] messageArgs)
         {
             var args = new object[messageArgs.Length + 1];
             args[0] = name;

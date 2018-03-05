@@ -125,6 +125,22 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 ");
 
         [Test]
+        public void Method_with_long_catch_filter_statement_is_reported() => An_issue_is_reported_for(@"
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            catch (Exception ex) when (ex != null)
+            {
+                var x = 0;
+                var y = 1;
+                var z = x + y;
+            }
+        }
+    }
+");
+
+        [Test]
         public void Method_with_long_finally_statement_is_reported() => An_issue_is_reported_for(@"
     public class TypeWithMethod
     {
