@@ -618,7 +618,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Use '==' operator instead of 'object.Equals()'</value>
   </data>
   <data name="MiKo_3004_Title" xml:space="preserve">
-    <value>Do not use object.Equals() on value types</value>
+    <value>Do not use object.Equals() on value types.</value>
   </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>

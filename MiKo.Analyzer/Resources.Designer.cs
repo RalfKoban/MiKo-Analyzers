@@ -1551,7 +1551,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use object.Equals() on value types.
+        ///   Looks up a localized string similar to Do not use object.Equals() on value types..
         /// </summary>
         public static string MiKo_3004_Title {
             get {
