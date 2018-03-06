@@ -1531,7 +1531,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when casted to objects which puts unnecessary pressure on the garbage collector as temporary objects get created and garbage collected.
+        ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
         ///
         ///Instead the equality operator should be used to compare value types..
         /// </summary>
