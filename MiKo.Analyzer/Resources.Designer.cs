@@ -333,6 +333,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validate&apos; or &apos;Verify&apos;. If a checkf for a specific state is meant, use &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos; instead..
+        /// </summary>
+        public static string MiKo_1013_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1013_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; contains ambiguous term &apos;Check&apos;.
+        /// </summary>
+        public static string MiKo_1013_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1013_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be named &apos;Check&apos;..
+        /// </summary>
+        public static string MiKo_1013_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
         /// </summary>
         public static string MiKo_1020_Description {
