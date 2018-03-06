@@ -35,6 +35,20 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_object_equals_method_on_dynamic() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+public class TestMe
+{
+    private static bool IsUnsetValue(dynamic itemToCheck)
+    {
+        return Equals(itemToCheck, DependencyProperty.UnsetValue);
+    }
+}
+");
+
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
         public void An_issue_is_reported_for_full_qualified_object_equals_method_on_structs(string x, string y) => An_issue_is_reported_for(@"
