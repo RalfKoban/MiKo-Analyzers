@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .Replace("TypeEnum", "Kind")
                                    .RemoveAll("Enums", "Enum");
 
+            if (betterName.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+
             // ReSharper disable once RedundantNameQualifier we need the complete name here
             if (symbol.IsEnum()
                 && symbol.GetAttributes().Any(_ => _.AttributeClass.Name == nameof(System.FlagsAttribute))

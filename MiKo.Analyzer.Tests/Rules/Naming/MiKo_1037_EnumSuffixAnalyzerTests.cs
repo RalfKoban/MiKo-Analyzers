@@ -21,6 +21,15 @@ public " + type + @" TestMe
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("struct")]
+        public void No_issue_is_reported_for_type_with_Enum_name_only(string type) => No_issue_is_reported_for(@"
+public " + type + @" Enum
+{
+}
+");
+
+        [TestCase("interface")]
+        [TestCase("class")]
+        [TestCase("struct")]
         public void An_issue_is_reported_for_type_with_Enum_suffix(string type) => An_issue_is_reported_for(@"
 public " + type + @" TestMeEnum
 {
