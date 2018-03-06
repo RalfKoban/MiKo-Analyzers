@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> GetSelfSymbolNames(ISymbol symbol)
         {
-            var names = new List<string> { symbol.Name };
+            var names = new List<string> { symbol.Name + " " };
 
             if (symbol is INamedTypeSymbol s) names.AddRange(s.AllInterfaces.Select(_ => _.Name));
 
