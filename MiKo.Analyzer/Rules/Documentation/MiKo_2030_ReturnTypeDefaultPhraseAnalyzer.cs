@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType)
         {
-            if (returnType.IsEnum()) return false;
+            if (returnType.IsEnum()) return false; // checked by MiKo_2034
 
             switch (returnType.Name)
             {

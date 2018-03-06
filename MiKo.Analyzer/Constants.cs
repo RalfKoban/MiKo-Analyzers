@@ -85,6 +85,7 @@ namespace MiKoSolutions.Analyzers
                     "A <see cref=\"System.String\" /> that contains ",
                     "A <see cref=\"System.String\"/> that contains "
                 };
+
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
                 {
                     "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
@@ -92,6 +93,20 @@ namespace MiKoSolutions.Analyzers
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that contains ",
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that contains ",
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\"/> that contains ",
+                };
+
+            internal static readonly string[] EnumReturnTypeStartingPhrase =
+                {
+                    "The enumerated constant that is the ",
+                };
+
+            internal static readonly string[] EnumTaskReturnTypeStartingPhrase =
+                {
+                    "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns the enumerated constant that is the ", // this is just to have a proposal how to optimize
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns the enumerated constant that is the ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns the enumerated constant that is the ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns the enumerated constant that is the ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns the enumerated constant that is the ",
                 };
         }
     }

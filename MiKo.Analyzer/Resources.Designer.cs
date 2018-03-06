@@ -1415,6 +1415,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an Enum as return value should have a specific phrase..
+        /// </summary>
+        public static string MiKo_2034_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2034_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
+        /// </summary>
+        public static string MiKo_2034_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2034_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of Enum return value should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2034_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2034_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To support other languages than C#, use &lt;see langword=&quot;...&quot;/&gt; instead of &lt;c&gt;...&lt;/c&gt;..
         /// </summary>
         public static string MiKo_2040_Description {
@@ -1543,7 +1570,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals()&apos;.
+        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals(object objA, object objB)&apos;.
         /// </summary>
         public static string MiKo_3004_MessageFormat {
             get {
