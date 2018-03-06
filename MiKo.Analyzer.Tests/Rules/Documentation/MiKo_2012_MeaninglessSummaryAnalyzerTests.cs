@@ -72,16 +72,130 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_see_cref_link([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_without_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    /// Some documentation.
+    /// </para>
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_meaningless_phrase([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
 
-/// <summary>
-/// <see cref='" + phrase + @"' />.
-/// </summary>
 public class TestMe : ITestMe
 {
+    /// <summary>
+    /// " + phrase + @" whatever
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+public class TestMe : ITestMe
+{
+    /// <summary>
+    /// <para>
+    /// " + phrase + @" whatever
+    /// </para>
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_without_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    private int DoSomething;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_with_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    private int DoSomething;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    /// Some documentation.
+    /// </para>
+    /// </summary>
+    private int DoSomething;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_field_with_meaningless_phrase([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+public class TestMe : ITestMe
+{
+    /// <summary>
+    /// " + phrase + @" whatever
+    /// </summary>
+    private int DoSomething;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+public class TestMe : ITestMe
+{
+    /// <summary>
+    /// <para>
+    /// " + phrase + @" whatever
+    /// </para>
+    /// </summary>
+    private int DoSomething;
 }
 ");
 
@@ -89,9 +203,11 @@ public class TestMe : ITestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
 
+        private static IEnumerable<string> MeaninglessFieldPhrases() => MeaninglessPhrases().Except(new[] { "A ", "An ", "The " });
+
         private static IEnumerable<string> MeaninglessPhrases()
         {
-            var types = new[] { "Class", "Interface", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command"};
+            var types = new[] { "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command" };
 
             var phrases = new[]
                               {
@@ -133,6 +249,9 @@ public class TestMe : ITestMe
             results.AddRange(from type in types from phrase in phrases select type + " " + phrase);
             results.AddRange(phrases.Select(_ => _.ToLower()));
             results.AddRange(phrases.Select(_ => _.ToUpper()));
+
+            results.Add("<see cref=\"ITestMe\" />");
+
             return new HashSet<string>(results);
         }
     }

@@ -21,6 +21,8 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] SeeStartingPhrase = { "<see cref=", "<seealso cref=", "see <see cref=", "see <seealso cref=", "seealso <see cref=", "seealso <seealso cref=" };
             internal static readonly string[] SeeEndingPhrase = { "/>", "/>.", "/see>", "/see>.", "/seealso>", "/seealso>." };
 
+            internal static readonly string[] FieldStartingPhrase = { "A ", "An ", "The " };
+
             internal static readonly string[] ParameterStartingPhrase = { "A ", "An ", "The " };
             internal static readonly string[] OutParameterStartingPhrase = { "On successful return, contains " };
             internal static readonly string[] EnumParameterStartingPhrase = { "One of the enumeration members that specifies " };
@@ -28,8 +30,10 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] MeaninglessStartingPhrase =
                 {
                     "A ", "An ", "Does implement ", "For ", "Implement ", "Implements ", "Is ", "This ", "That ", "The ", "To ", "Uses ", "Used ", "Which ", "Called ",
-                    "Class", "Interface", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command",
+                    "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command"
                 };
+
+            internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).ToArray();
 
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
 

@@ -31,6 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
+            var phrases = symbol.Kind == SymbolKind.Field
+                          ? Constants.Comments.MeaninglessFieldStartingPhrase
+                          : Constants.Comments.MeaninglessStartingPhrase;
+
             var symbolNames = GetSelfSymbolNames(symbol);
             foreach (var summary in summaries)
             {
@@ -39,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return ReportIssue(symbol, summary, phrase);
                 }
 
-                foreach (var phrase in Constants.Comments.MeaninglessStartingPhrase.Where(phrase => summary.StartsWith(phrase, Comparison)))
+                foreach (var phrase in phrases.Where(phrase => summary.StartsWith(phrase, Comparison)))
                 {
                     return ReportIssue(symbol, summary, phrase);
                 }
@@ -57,11 +61,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> GetSelfSymbolNames(ISymbol symbol)
         {
-            var names = new List<string> { symbol.Name + " " };
+            var names = new List<string> { symbol.Name };
 
-            if (symbol is INamedTypeSymbol s) names.AddRange(s.AllInterfaces.Select(_ => _.Name));
+            switch (symbol)
+            {
+                case INamedTypeSymbol s:
+                    {
+                        names.AddRange(s.AllInterfaces.Select(_ => _.Name));
+                        break;
+                    }
+                case ISymbol s:
+                    {
+                        names.Add(s.ContainingType.Name);
+                        names.AddRange(s.ContainingType.AllInterfaces.Select(_ => _.Name));
+                        break;
+                    }
+            }
 
-            return names;
+            return names.Select(_ => _ + " ");
         }
 
         private IEnumerable<Diagnostic> ReportIssue(ISymbol symbol, string summary, string defaultPhrase)
