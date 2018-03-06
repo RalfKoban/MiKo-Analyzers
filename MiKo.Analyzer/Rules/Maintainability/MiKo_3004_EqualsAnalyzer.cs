@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             foreach (var argument in arguments)
             {
                 var typeInfo = semanticModel.GetTypeInfo(argument.Expression);
-                if (typeInfo.Type.TypeKind == TypeKind.Struct) return true;
+                if (typeInfo.Type?.TypeKind == TypeKind.Struct) return true;
             }
 
             return false;
