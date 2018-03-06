@@ -609,6 +609,17 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
   <data name="MiKo_3003_Title" xml:space="preserve">
     <value>Events should follow .NET Framework Guidelines for events.</value>
   </data>
+  <data name="MiKo_3004_Description" xml:space="preserve">
+    <value>For performance reasons it makes no sense to use 'object.Equals()' on value types. Value types get boxed and unboxed when casted to objects which puts unnecessary pressure on the garbage collector as temporary objects get created and garbage collected.
+
+Instead the equality operator should be used to compare value types.</value>
+  </data>
+  <data name="MiKo_3004_MessageFormat" xml:space="preserve">
+    <value>Use '==' operator instead of 'object.Equals()'</value>
+  </data>
+  <data name="MiKo_3004_Title" xml:space="preserve">
+    <value>Do not use object.Equals() on value types</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
