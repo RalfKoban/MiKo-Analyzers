@@ -66,17 +66,5 @@ namespace System
         internal static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
 
         internal static string RemoveAll(this string value, params string[] values) => values.Aggregate(value, (current, s) => current.Replace(s, string.Empty));
-
-        internal static int IndexOfTimes(this string value, int times, char c)
-        {
-            var occurrences = Math.Min(value.Count(_ => _ == c), times);
-            var index = -1;
-            for (var i = 0; i < occurrences; i++)
-            {
-                index = value.IndexOf(c, ++index);
-            }
-
-            return index;
-        }
     }
 }
