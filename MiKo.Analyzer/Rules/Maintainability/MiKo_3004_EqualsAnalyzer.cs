@@ -50,16 +50,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var argument in arguments)
             {
-                if (IsStruct(semanticModel.GetSymbolInfo(argument.Expression))) return true;
+                var typeInfo = semanticModel.GetTypeInfo(argument.Expression);
+                if (typeInfo.Type.TypeKind == TypeKind.Struct) return true;
             }
 
             return false;
-        }
-
-        private static bool IsStruct(SymbolInfo info)
-        {
-            var symbol = info.Symbol as ILocalSymbol;
-            return symbol?.Type.TypeKind == TypeKind.Struct;
         }
     }
 }

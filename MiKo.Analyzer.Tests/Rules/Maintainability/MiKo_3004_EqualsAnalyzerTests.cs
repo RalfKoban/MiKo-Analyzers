@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -97,8 +100,112 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_object_equals_method_on_field_structs([ValueSource(nameof(ValueTypes))] string returnType) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private " + returnType + @" _isSomething;
+
+    public " + returnType + @" IsSomething
+    {
+        get { return _isSomething; }
+        protected set
+        {
+            if (Equals(_isSomething, value))
+                return;
+            _isSomething = value;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_object_equals_method_on_Method_structs([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private " + returnType + @" DoSomething();
+
+    public " + returnType + @" IsSomething
+    {
+        get { throw new NotSupportedException(); }
+        protected set
+        {
+            if (Equals(DoSomething(), value))
+                return;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_object_equals_method_on_inlined_Func_structs([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public " + returnType + @" IsSomething
+    {
+        get { throw new NotSupportedException(); }
+        protected set
+        {
+            if (Equals((Func<bool>)(() => true), value))
+                return;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_object_equals_method_on_Func_structs([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public " + returnType + @" IsSomething
+    {
+        get { throw new NotSupportedException(); }
+        protected set
+        {
+            Func<bool> something = () => true;
+            if (Equals(something(), value))
+                return;
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3004_EqualsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3004_EqualsAnalyzer();
+
+        private static IEnumerable<string> ValueTypes() => new[]
+                                                       {
+                                                           "bool",
+                                                           "char",
+                                                           "short",
+                                                           "int",
+                                                           "long",
+                                                           "ushort",
+                                                           "uint",
+                                                           "ulong",
+                                                           "byte",
+                                                           "sbyte",
+                                                           "Guid",
+                                                           nameof(System.Boolean),
+                                                           nameof(System.Char),
+                                                           nameof(System.Int16),
+                                                           nameof(System.Int32),
+                                                           nameof(System.Int64),
+                                                           nameof(System.UInt16),
+                                                           nameof(System.UInt32),
+                                                           nameof(System.UInt64),
+                                                           nameof(System.Byte),
+                                                           nameof(System.SByte),
+                                                           nameof(System.Guid),
+                                                       }.ToHashSet();
     }
 }
