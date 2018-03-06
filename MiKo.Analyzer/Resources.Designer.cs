@@ -1315,7 +1315,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2030_MessageFormat {
             get {
@@ -1342,7 +1342,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2031_MessageFormat {
             get {
@@ -1369,7 +1369,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3} ... {4}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;
+        ///&lt;{2}&gt; should end with: &apos;{4}&apos;.
         /// </summary>
         public static string MiKo_2032_MessageFormat {
             get {
@@ -1396,7 +1397,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2033_MessageFormat {
             get {

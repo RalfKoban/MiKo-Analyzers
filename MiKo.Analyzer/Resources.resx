@@ -538,7 +538,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>To ease maintenance, the XML documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
   </data>
   <data name="MiKo_2030_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>&lt;{2}&gt; should start with: '{3}'</value>
   </data>
   <data name="MiKo_2030_Title" xml:space="preserve">
     <value>XML documentation of return value should have a default starting phrase.</value>
@@ -547,7 +547,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>To ease maintenance, the XML documentation of a Task as return value should have a default (starting) phrase.</value>
   </data>
   <data name="MiKo_2031_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>&lt;{2}&gt; should start with: '{3}'</value>
   </data>
   <data name="MiKo_2031_Title" xml:space="preserve">
     <value>XML documentation of Task return value should have a specific (starting) phrase.</value>
@@ -556,7 +556,8 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3} ... {4}'</value>
+    <value>&lt;{2}&gt; should start with: '{3}'
+&lt;{2}&gt; should end with: '{4}'</value>
   </data>
   <data name="MiKo_2032_Title" xml:space="preserve">
     <value>XML documentation of Boolean return value should have a specific phrase.</value>
@@ -565,7 +566,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>To ease maintenance, the XML documentation of a String as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2033_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>&lt;{2}&gt; should start with: '{3}'</value>
   </data>
   <data name="MiKo_2033_Title" xml:space="preserve">
     <value>XML documentation of String return value should have a default starting phrase.</value>
