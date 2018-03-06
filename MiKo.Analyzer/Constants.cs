@@ -25,9 +25,9 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] OutParameterStartingPhrase = { "On successful return, contains " };
             internal static readonly string[] EnumParameterStartingPhrase = { "One of the enumeration members that specifies " };
 
-            internal static readonly string[] MeaninglessTypeStartingPhrase =
+            internal static readonly string[] MeaninglessStartingPhrase =
                 {
-                    "A ", "An ", "Does implement ", "For ", "Implement ", "Implements ", "Is ", "This ", "That ", "The ", "To ", "Uses ", "Used ", "Which ",
+                    "A ", "An ", "Does implement ", "For ", "Implement ", "Implements ", "Is ", "This ", "That ", "The ", "To ", "Uses ", "Used ", "Which ", "Called ",
                     "Class", "Interface", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command",
                 };
 

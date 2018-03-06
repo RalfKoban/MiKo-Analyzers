@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2012_TypeMeaninglessSummaryAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
@@ -85,9 +85,9 @@ public class TestMe : ITestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2012_TypeMeaninglessSummaryAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_TypeMeaninglessSummaryAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
 
         private static IEnumerable<string> MeaninglessPhrases()
         {
@@ -95,6 +95,7 @@ public class TestMe : ITestMe
 
             var phrases = new[]
                               {
+                                  "that is called ",
                                   "that is used for ",
                                   "that is used to ",
                                   "used for ",
@@ -111,6 +112,7 @@ public class TestMe : ITestMe
                                   "ITestMe",
                                   "A ",
                                   "An ",
+                                  "Called ",
                                   "Does implement ",
                                   "Implement ",
                                   "Implements ",

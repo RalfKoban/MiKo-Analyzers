@@ -17,17 +17,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                            ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
                                                                                            : Enumerable.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyzeMethod(symbol)
+                                                                                              ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
+                                                                                              : Enumerable.Empty<Diagnostic>();
+
+
+        protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => AnalyzeEvent(symbol, symbol.GetDocumentationCommentXml());
+
+        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => AnalyzeField(symbol, symbol.GetDocumentationCommentXml());
+
+        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => AnalyzeProperty(symbol, symbol.GetDocumentationCommentXml());
 
         protected virtual bool ShallAnalyzeType(INamedTypeSymbol symbol) => true;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
 
         protected virtual bool ShallAnalyzeMethod(IMethodSymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyzeMethod(symbol)
-                                                                                               ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
 
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes()
                                                                                                                                                           .ConcatenatedWith()

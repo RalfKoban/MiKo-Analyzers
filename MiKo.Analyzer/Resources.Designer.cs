@@ -1062,7 +1062,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease development, types should have a summary documentation that describes their responsibility.
+        ///   Looks up a localized string similar to To ease development and maintenance, the summary documentation should describe their responsibility.
         ///It should not start with a meaningless phrase like &apos;Used to&apos;. Instead it should start with something like: &apos;Allows to &apos;, &apos;Represents &apos; or &apos;Provides &apos;..
         /// </summary>
         public static string MiKo_2012_Description {
@@ -1081,7 +1081,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML summary documentation for types describes their responsibility..
+        ///   Looks up a localized string similar to XML summary documentation should describe their responsibility..
         /// </summary>
         public static string MiKo_2012_Title {
             get {

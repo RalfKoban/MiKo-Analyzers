@@ -28,16 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             Initialize(context, SymbolKind.Property);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => AnalyzeSummary(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => AnalyzeSummary(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => AnalyzeSummary(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => AnalyzeSummary(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => AnalyzeSummary(symbol);
-
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(IsSeeCrefLink)
                                                                                                                         ? new[] { ReportIssue(symbol) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
