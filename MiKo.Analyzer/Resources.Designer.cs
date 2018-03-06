@@ -1198,6 +1198,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dependency properties should be documented properly..
+        /// </summary>
+        public static string MiKo_2017_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2017_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{2}&gt; XML documentation for &apos;{1}&apos; should be: &apos;{3}&apos;.
+        /// </summary>
+        public static string MiKo_2017_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2017_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependency properties should be documented as by the .NET Framework..
+        /// </summary>
+        public static string MiKo_2017_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2017_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It does not make sense to use XML summaries that only reference something else via &lt;see cref=&quot;...&quot; /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used..
         /// </summary>
         public static string MiKo_2020_Description {

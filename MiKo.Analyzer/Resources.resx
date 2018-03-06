@@ -498,6 +498,15 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
   <data name="MiKo_2016_Title" xml:space="preserve">
     <value>XML documentation for asynchronous methods should start with specific phrase.</value>
   </data>
+  <data name="MiKo_2017_Description" xml:space="preserve">
+    <value>Dependency properties should be documented properly.</value>
+  </data>
+  <data name="MiKo_2017_MessageFormat" xml:space="preserve">
+    <value>&lt;{2}&gt; XML documentation for '{1}' should be: '{3}'</value>
+  </data>
+  <data name="MiKo_2017_Title" xml:space="preserve">
+    <value>Dependency properties should be documented as by the .NET Framework.</value>
+  </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use XML summaries that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used.</value>
   </data>

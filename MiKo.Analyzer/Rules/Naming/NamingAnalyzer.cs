@@ -64,14 +64,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var suffix in suffixes)
             {
-                if (!symbolName.EndsWith(suffix, comparison)) continue;
-
                 if (symbolName == "blackList" || symbolName == "whiteList") continue;
 
-                var length = symbolName.Length - suffix.Length;
-                if (length <= 0) continue;
+                if (!symbolName.EndsWith(suffix, comparison)) continue;
 
-                var proposedName = symbolName.Substring(0, length);
+                var proposedName = symbolName.WithoutSuffix(suffix);
                 if (symbolName.IsEntityMarker())
                     proposedName = proposedName.RemoveAll(Constants.EntityMarkers);
 

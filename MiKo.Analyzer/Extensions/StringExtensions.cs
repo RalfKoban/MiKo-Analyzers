@@ -66,5 +66,11 @@ namespace System
         internal static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
 
         internal static string RemoveAll(this string value, params string[] values) => values.Aggregate(value, (current, s) => current.Replace(s, string.Empty));
+
+        internal static string WithoutSuffix(this string value, string suffix)
+        {
+            var length = value.Length - suffix.Length;
+            return length > 0 ? value.Substring(0, length) : string.Empty;
+        }
     }
 }
