@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeField(IFieldSymbol symbol) => symbol.Type.Name == "System.Windows.DependencyObject";
+        protected override bool ShallAnalyzeField(IFieldSymbol symbol) => symbol.Type.Name == "DependencyProperty" || symbol.Type.Name == "System.Windows.DependencyProperty";
 
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml)
         {
@@ -29,27 +29,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (!symbolName.EndsWith(DependencyPropertyFieldSuffix, StringComparison.OrdinalIgnoreCase)) return Enumerable.Empty<Diagnostic>();
 
             var propertyName = symbolName.WithoutSuffix(DependencyPropertyFieldSuffix);
-            if (symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().All(_ => _.Name != propertyName)) return Enumerable.Empty<Diagnostic>();
+            var containingType = symbol.ContainingType;
+            if (containingType.GetMembers().OfType<IPropertySymbol>().All(_ => _.Name != propertyName)) return Enumerable.Empty<Diagnostic>();
 
-            // TODO: RKN loop over phrases for summaries and values
+            var link = containingType.Name + "." + propertyName;
 
-            var summaryPhrase = $"Identifies the <see cref=\"{propertyName}\"/> dependency property.";
-            var valuePhrase = $"The identifier for the <see cref=\"{propertyName}\"/> dependency property.";
+            List<Diagnostic> results = null;
 
-            var summaries = GetSummaries(commentXml);
-            var results = summaries.Any() && summaries.All(_ => _ != summaryPhrase)
-                              ? new List<Diagnostic> { ReportIssue(symbol, symbolName, "summary", summaryPhrase) }
-                              : null;
-
-            // check for field
-            var comments = GetComments(commentXml, "value").ToImmutableHashSet();
-            if (comments.Any() && comments.All(_ => _ != valuePhrase))
-            {
-                if (results == null) results = new List<Diagnostic>();
-                results.Add(ReportIssue(symbol, symbolName, "value", valuePhrase));
-            }
+            // loop over phrases for summaries and values
+            ValidatePhrases(symbol, GetSummaries(commentXml), () => GetSummaryPhrases(link), "summary", ref results);
+            ValidatePhrases(symbol, GetComments(commentXml, "value"), () => GetValuePhrases(link), "value", ref results);
 
             return results ?? Enumerable.Empty<Diagnostic>();
         }
+
+        private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<string> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
+        {
+            var phrases = phrasesProvider();
+            foreach (var comment in comments)
+            {
+                foreach (var phrase in phrases)
+                {
+                    if (phrase == comment) return;
+                }
+
+                if (results == null) results = new List<Diagnostic>();
+                results.Add(ReportIssue(symbol, symbol.Name, xmlElement, phrases[0]));
+            }
+        }
+
+        private static List<string> GetSummaryPhrases(string link) => Constants.Comments.DependencyPropertyFieldSummaryPhrase.Select(phrase => string.Format(phrase, link)).ToList();
+
+        private static List<string> GetValuePhrases(string link) => Constants.Comments.DependencyPropertyFieldValuePhrase.Select(phrase => string.Format(phrase, link)).ToList();
     }
 }
