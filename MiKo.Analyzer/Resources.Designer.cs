@@ -981,6 +981,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EventArgs should be documented with &apos;Provides data for the &lt;see cref=&quot;XYZ&quot; /&gt; event.&apos; to indicate for which event they are valid..
+        /// </summary>
+        public static string MiKo_2002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should follow th pattern: &apos;{1} ... {2}&apos;.
+        /// </summary>
+        public static string MiKo_2002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EventArgss should be documented properly..
+        /// </summary>
+        public static string MiKo_2002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Event method parameters should define what exactly they are..
         /// </summary>
         public static string MiKo_2003_Description {

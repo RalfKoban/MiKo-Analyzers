@@ -11,7 +11,7 @@ namespace Microsoft.CodeAnalysis
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
-            return parameters.Length == 2 && parameters[0].Type.ToString() == "object" && parameters[1].Type.InheritsFrom<EventArgs>();
+            return parameters.Length == 2 && parameters[0].Type.ToString() == "object" && parameters[1].Type.IsEventArgs();
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol method)
@@ -147,6 +147,8 @@ namespace Microsoft.CodeAnalysis
                 symbol = baseType;
             }
         }
+
+        internal static bool IsEventArgs(this ITypeSymbol symbol) => symbol.InheritsFrom<EventArgs>();
 
         internal static IEnumerable<ITypeSymbol> AllBaseTypes(this ITypeSymbol symbol)
         {

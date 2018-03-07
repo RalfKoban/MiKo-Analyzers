@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // ignore the method as it is handled by EventHandlingMethodParametersAnalyzer
             if (method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
 
-            var parameters = method.Parameters.Where(_ => _.Type.InheritsFrom<System.EventArgs>()).ToList();
+            var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs()).ToList();
             switch (parameters.Count)
             {
                 case 0: return Enumerable.Empty<Diagnostic>();
