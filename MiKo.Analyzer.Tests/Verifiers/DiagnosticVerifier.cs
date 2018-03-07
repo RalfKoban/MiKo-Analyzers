@@ -61,6 +61,10 @@ namespace TestHelper
         {
             Assert.Multiple(() =>
                                 {
+                                    foreach (var directory in Directory.EnumerateDirectories(path))
+                                    {
+                                        No_issue_is_reported_for_folder(directory);
+                                    }
 
                                     foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
                                     {
