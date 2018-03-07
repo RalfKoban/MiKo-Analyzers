@@ -33,9 +33,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             List<Diagnostic> results = null;
 
+            var containingTypeFullName = containingType.ToString();
+
             // loop over phrases for summaries and values
-            ValidatePhrases(symbol, GetSummaries(commentXml), () => Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingType.Name, propertyName), "summary", ref results);
-            ValidatePhrases(symbol, GetComments(commentXml, "value"), () => Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingType.Name, propertyName), "value", ref results);
+            ValidatePhrases(symbol, GetSummaries(commentXml), () => Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName), "summary", ref results);
+            ValidatePhrases(symbol, GetComments(commentXml, "value"), () => Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName), "value", ref results);
 
             return results ?? Enumerable.Empty<Diagnostic>();
         }

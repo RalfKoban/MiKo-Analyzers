@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -85,7 +83,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_correctly_commented_field_value() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_field_value() => An_issue_is_reported_for(@"
 using System.Windows;
 
 public class TestMe
