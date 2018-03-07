@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     internal static class Counter
     {
-        // if | do... while | while | for | foreach | case | continue | goto | && | || | catch | ternary operator ?: | ?? | ?.
+        // if | do... while | while | for | foreach | case | continue | goto | && | || | catch | catch when | ternary operator ?: | ?? | ?.
         private static readonly SyntaxKind[] CCSyntaxKinds =
             {
                 SyntaxKind.IfStatement,
