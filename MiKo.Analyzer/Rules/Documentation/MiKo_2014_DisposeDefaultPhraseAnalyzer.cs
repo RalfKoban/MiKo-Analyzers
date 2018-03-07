@@ -8,14 +8,14 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2014_DisposeSummaryAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2014_DisposeDefaultPhraseAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2014";
 
         private const string SummaryPhrase = "Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.";
         private const string ParameterPhrase = "Indicates whether unmanaged resources shall be freed.";
 
-        public MiKo_2014_DisposeSummaryAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2014_DisposeDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
