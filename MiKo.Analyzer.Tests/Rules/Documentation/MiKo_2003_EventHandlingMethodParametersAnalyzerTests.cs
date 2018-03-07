@@ -6,7 +6,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2002_EventHandlingMethodParametersAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2003_EventHandlingMethodParametersAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_event_handling_method() => No_issue_is_reported_for(@"
@@ -92,8 +92,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2002_EventHandlingMethodParametersAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2003_EventHandlingMethodParametersAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2002_EventHandlingMethodParametersAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2003_EventHandlingMethodParametersAnalyzer();
     }
 }

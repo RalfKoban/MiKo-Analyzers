@@ -983,27 +983,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Event method parameters should define what exactly they are..
         /// </summary>
-        public static string MiKo_2002_Description {
+        public static string MiKo_2003_Description {
             get {
-                return ResourceManager.GetString("MiKo_2002_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2003_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to XML documentation for &apos;{1}&apos; should be: &apos;{2}&apos;.
         /// </summary>
-        public static string MiKo_2002_MessageFormat {
+        public static string MiKo_2003_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_2002_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2003_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to XML documentation of parameter name does not follow .NET Framework Guidelines for event handlers..
         /// </summary>
-        public static string MiKo_2002_Title {
+        public static string MiKo_2003_Title {
             get {
-                return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2003_Title", resourceCulture);
             }
         }
         
