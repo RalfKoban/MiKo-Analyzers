@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnsValueDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected ReturnsValueDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, SymbolKind.Method) // TODO: what about properties ???
+        protected ReturnsValueDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, SymbolKind.Method)
         {
         }
+
+        public override void Initialize(AnalysisContext context)
+        {
+            base.Initialize(context);
+            Initialize(context, SymbolKind.Property);
+        }
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeReturnTypes(symbol, commentXml);
+
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeReturnTypes(symbol.GetMethod, symbol.GetDocumentationCommentXml());
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
