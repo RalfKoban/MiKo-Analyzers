@@ -57,6 +57,18 @@ namespace TestHelper
 
         protected void No_issue_is_reported_for_file(string path) => No_issue_is_reported_for(File.ReadAllText(path));
 
+        protected void No_issue_is_reported_for_folder(string path)
+        {
+            Assert.Multiple(() =>
+                                {
+
+                                    foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+                                    {
+                                        No_issue_is_reported_for(File.ReadAllText(file));
+                                    }
+                                });
+        }
+
         /// <summary>
         /// Applies a C# <see cref="DiagnosticAnalyzer"/> on the single inputted string and returns the found results.
         /// </summary>
