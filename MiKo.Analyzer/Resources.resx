@@ -562,7 +562,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of Task return value should have a specific (starting) phrase.</value>
   </data>
   <data name="MiKo_2032_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase.</value>
+    <value>To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
     <value>&lt;{2}&gt; should start with: '{3}'

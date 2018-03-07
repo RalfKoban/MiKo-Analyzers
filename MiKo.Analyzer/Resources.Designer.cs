@@ -1387,7 +1387,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
         /// </summary>
         public static string MiKo_2032_Description {
             get {
