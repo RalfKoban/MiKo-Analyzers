@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -32,13 +31,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var containingType = symbol.ContainingType;
             if (containingType.GetMembers().OfType<IPropertySymbol>().All(_ => _.Name != propertyName)) return Enumerable.Empty<Diagnostic>();
 
-            var link = containingType.Name + "." + propertyName;
-
             List<Diagnostic> results = null;
 
             // loop over phrases for summaries and values
-            ValidatePhrases(symbol, GetSummaries(commentXml), () => GetSummaryPhrases(link), "summary", ref results);
-            ValidatePhrases(symbol, GetComments(commentXml, "value"), () => GetValuePhrases(link), "value", ref results);
+            ValidatePhrases(symbol, GetSummaries(commentXml), () => Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingType.Name, propertyName), "summary", ref results);
+            ValidatePhrases(symbol, GetComments(commentXml, "value"), () => Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingType.Name, propertyName), "value", ref results);
 
             return results ?? Enumerable.Empty<Diagnostic>();
         }
@@ -58,8 +55,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static List<string> GetSummaryPhrases(string link) => Constants.Comments.DependencyPropertyFieldSummaryPhrase.Select(phrase => string.Format(phrase, link)).ToList();
-
-        private static List<string> GetValuePhrases(string link) => Constants.Comments.DependencyPropertyFieldValuePhrase.Select(phrase => string.Format(phrase, link)).ToList();
+        private static List<string> Phrases(string[] phrases, string typeName, string propertyName)
+        {
+            var results = new List<string>(2 * phrases.Length);
+            results.AddRange(phrases.Select(_ => string.Format(_, propertyName))); // output as message to user
+            results.AddRange(phrases.Select(_ => string.Format(_, typeName + "." + propertyName)));
+            return results;
+        }
     }
 }
