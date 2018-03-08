@@ -19,10 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            var containsComment = summaries.Any(_ => _.Contains(MiKo_2010_SealedClassSummaryAnalyzer.ExpectedComment));
+            var containsComment = summaries.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase));
 
             return !symbol.IsSealed && containsComment
-                       ? new[] { ReportIssue(symbol, MiKo_2010_SealedClassSummaryAnalyzer.ExpectedComment) }
+                       ? new[] { ReportIssue(symbol, Constants.Comments.SealedClassPhrase) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

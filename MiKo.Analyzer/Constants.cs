@@ -120,6 +120,8 @@ namespace MiKoSolutions.Analyzers
                     "The identifier for the <see cref=\"{0}\" /> dependency property.",
                     "The identifier for the <see cref=\"{0}\"/> dependency property.",
                 };
+
+            internal static readonly string SealedClassPhrase = "This class cannot be inherited.";
         }
     }
 }

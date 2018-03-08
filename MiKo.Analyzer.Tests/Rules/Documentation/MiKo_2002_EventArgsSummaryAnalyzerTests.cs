@@ -31,13 +31,26 @@ public class MyEventArgs // simply has event args indicator but does not inherit
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_EventArgs() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_unsealed_EventArgs() => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
 /// Provides data for the <see cref=""My"" /> event.
 /// </summary>
 public class MyEventArgs : EventArgs
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_sealed_EventArgs() => No_issue_is_reported_for(@"
+using System;
+
+/// <summary>
+/// Provides data for the <see cref=""My"" /> event.
+/// This class cannot be inherited.
+/// </summary>
+public sealed class MyEventArgs : EventArgs
 {
 }
 ");

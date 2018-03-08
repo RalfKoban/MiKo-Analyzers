@@ -12,16 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2010";
 
-        internal const string ExpectedComment = "This class cannot be inherited.";
-
         public MiKo_2010_SealedClassSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
         protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public;
 
-        protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => !symbol.IsSealed || summaries.Any(_ => _.EndsWith(ExpectedComment, StringComparison.Ordinal))
+        protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => !symbol.IsSealed || summaries.Any(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal))
                                                                                                                          ? Enumerable.Empty<Diagnostic>()
-                                                                                                                         : new[] { ReportIssue(symbol, ExpectedComment) };
+                                                                                                                         : new[] { ReportIssue(symbol, Constants.Comments.SealedClassPhrase) };
     }
 }
