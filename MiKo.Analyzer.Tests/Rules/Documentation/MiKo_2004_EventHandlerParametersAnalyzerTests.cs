@@ -10,17 +10,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         [Test]
         public void No_issue_is_reported_for_non_event_handling_method() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+namespace Bla
 {
-    public void DoSomething() { }
+    public class TestMe
+    {
+        public void DoSomething() { }
+    }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_undocumented_event_handling_method() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+namespace Bla
 {
-    public void DoSomething(object sender, MyEventArgs e) { }
+    public class MyEventArgs : System.EventArgs { }
+
+    public class TestMe
+    {
+        public void DoSomething(object sender, MyEventArgs e) { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_interitdoc_documented_event_handling_method() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class MyEventArgs : System.EventArgs { }
+
+    public class TestMe
+    {
+        /// <inheritdoc />
+        public void DoSomething(object sender, MyEventArgs e) { }
+    }
 }
 ");
 

@@ -9,12 +9,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1040_ParameterCollectionSuffixAnalyzerTests : CodeFixVerifier
     {
-        [Test]
-        public void No_issue_is_reported_for_correctly_named_parameter() => No_issue_is_reported_for(@"
+        [TestCase("string bla")]
+        [TestCase("int[] array")]
+        [TestCase("ICollection<int> collection")]
+        public void No_issue_is_reported_for_correctly_named_parameter(string parameter) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
 
 public class TestMe
 {
-    public void DoSomething(string bla);
+    public void DoSomething(" + parameter + @");
 }
 ");
 
