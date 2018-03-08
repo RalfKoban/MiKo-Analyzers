@@ -981,7 +981,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs should be documented with &apos;Provides data for the &lt;see cref=&quot;XYZ&quot; /&gt; event.&apos; to indicate for which event they are valid..
+        ///   Looks up a localized string similar to To ease maintenance, EventArgs should be documented with &apos;Provides data for the &lt;see cref=&quot;XYZ&quot; /&gt; event.&apos; to indicate for which event they are valid..
         /// </summary>
         public static string MiKo_2002_Description {
             get {
@@ -1004,6 +1004,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2002_Title {
             get {
                 return ResourceManager.GetString("MiKo_2002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an event handler should have a default starting phrase that describes what event gets handled..
+        /// </summary>
+        public static string MiKo_2003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should start with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of event handlers should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2003_Title", resourceCulture);
             }
         }
         

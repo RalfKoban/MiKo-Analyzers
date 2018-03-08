@@ -122,6 +122,14 @@ namespace MiKoSolutions.Analyzers
                 };
 
             internal static readonly string SealedClassPhrase = "This class cannot be inherited.";
+
+            internal static readonly string EventHandlerSummaryStartingPhrase = "Handles the ";
+
+            internal static readonly string[] EventHandlerSummaryPhrase =
+                {
+                    EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\" /> event",
+                    EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\"/> event",
+                };
         }
     }
 }

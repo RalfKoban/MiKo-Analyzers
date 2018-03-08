@@ -426,13 +426,22 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Events should be documented properly.</value>
   </data>
   <data name="MiKo_2002_Description" xml:space="preserve">
-    <value>EventArgs should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
+    <value>To ease maintenance, EventArgs should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should follow th pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>EventArgss should be documented properly.</value>
+  </data>
+  <data name="MiKo_2003_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of an event handler should have a default starting phrase that describes what event gets handled.</value>
+  </data>
+  <data name="MiKo_2003_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should start with: '{1}'</value>
+  </data>
+  <data name="MiKo_2003_Title" xml:space="preserve">
+    <value>XML documentation of event handlers should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2004_Description" xml:space="preserve">
     <value>Event method parameters should define what exactly they are.</value>
