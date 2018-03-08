@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2003_EventHandlingMethodParametersAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2004_EventHandlingMethodParametersAnalyzer : DocumentationAnalyzer
     {
-        public const string Id = "MiKo_2003";
+        public const string Id = "MiKo_2004";
 
-    public MiKo_2003_EventHandlingMethodParametersAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_2004_EventHandlingMethodParametersAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var defaultStart = eventArgs.Name.StartsWithAnyChar("AEIOU") ? "An" : "A";
             var phrases = new[]
                               {
-                                  $"{defaultStart} <see cref=\"{eventArgs.Name}\" /> that contains the event data.",
+                                  $"{defaultStart} <see cref=\"{eventArgs.Name}\" /> that contains the event data.", // just used for the proposal
                                   $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.",
                                   $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data",
                                   $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data.",
