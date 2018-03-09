@@ -19,8 +19,7 @@ namespace Microsoft.CodeAnalysis
         {
             var methodSymbols = method.ContainingType.AllInterfaces
                                       .Where(_ => _.Name == typeof(T).FullName)
-                                      .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>())
-                                      .ToList();
+                                      .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
             return methodSymbols.Any(_ => method.ContainingType.FindImplementationForInterfaceMember(_).Equals(method));
         }
 

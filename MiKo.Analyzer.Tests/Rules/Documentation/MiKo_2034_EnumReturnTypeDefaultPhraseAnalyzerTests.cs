@@ -79,7 +79,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// A task that represents the asynchronous operation. The <see cref=""System.Threading.Tasks.Task{TResult}.Result"" /> property on the task object returns the enumerated constant that is the value.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""System.Threading.Tasks.Task{TResult}.Result" + space + @"/> parameter contains the enumerated constant that is the value.
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }

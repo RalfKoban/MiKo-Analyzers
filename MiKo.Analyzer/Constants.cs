@@ -51,81 +51,68 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
                     "A task that represents the asynchronous operation.",
-                    "A <see cref=\"System.Threading.Tasks.Task\" /> that represents the asynchronous operation.",
                     "A <see cref=\"System.Threading.Tasks.Task\"/> that represents the asynchronous operation.",
+                    "A <see cref=\"System.Threading.Tasks.Task\" /> that represents the asynchronous operation.",
                 };
 
             internal static readonly string[] BooleanReturnTypeStartingPhrase =
                 {
-                    "<see langword=\"true\" /> if ",
                     "<see langword=\"true\"/> if ",
+                    "<see langword=\"true\" /> if ",
                 };
 
             internal static readonly string[] BooleanReturnTypeEndingPhrase =
                 {
-                    "; otherwise, <see langword=\"false\" />.",
                     "; otherwise, <see langword=\"false\"/>.",
+                    "; otherwise, <see langword=\"false\" />.",
                 };
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                 {
-                    "A task that will complete with a result of <see langword=\"true\" /> if ",
-                    "A task that will complete with a result of <see langword=\"true\"/> if "
+                    "A task that will complete with a result of <see langword=\"true\"/> if ",
+                        "A task that will complete with a result of <see langword=\"true\" /> if ",
                 };
 
             internal static readonly string[] BooleanTaskReturnTypeEndingPhrase =
                 {
+                    ", otherwise with a result of <see langword=\"false\"/>.",
                     ", otherwise with a result of <see langword=\"false\" />.",
-                    ", otherwise with a result of <see langword=\"false\"/>."
                 };
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
                     "A <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
+                    "A <see cref=\"System.String\"/> that contains ",
                     "A <see cref=\"System.String\" /> that contains ",
-                    "A <see cref=\"System.String\"/> that contains "
                 };
 
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
                 {
                     "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that contains ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that contains ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that contains ",
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\"/> that contains ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that contains ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that contains ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that contains ",
                 };
 
-            internal static readonly string[] EnumReturnTypeStartingPhrase =
-                {
-                    "The enumerated constant that is the ",
-                };
+            internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
 
-            internal static readonly string[] EnumTaskReturnTypeStartingPhrase =
-                {
-                    "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns the enumerated constant that is the ", // this is just to have a proposal how to optimize
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns the enumerated constant that is the ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns the enumerated constant that is the ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns the enumerated constant that is the ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns the enumerated constant that is the ",
-                };
+            internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "the enumerated constant that is the ").ToArray();
 
-            internal static readonly string[] EnumerableReturnTypeStartingPhrase =
-                {
-                    "A collection of ",
-                };
+            internal static readonly string[] EnumerableReturnTypeStartingPhrase = { "A collection of ", };
 
             internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a collection of ").ToArray();
 
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
-                    "Identifies the <see cref=\"{0}\" /> dependency property.",
                     "Identifies the <see cref=\"{0}\"/> dependency property.",
+                    "Identifies the <see cref=\"{0}\" /> dependency property.",
                 };
 
             internal static readonly string[] DependencyPropertyFieldValuePhrase =
                 {
-                    "The identifier for the <see cref=\"{0}\" /> dependency property.",
                     "The identifier for the <see cref=\"{0}\"/> dependency property.",
+                    "The identifier for the <see cref=\"{0}\" /> dependency property.",
                 };
 
             internal static readonly string SealedClassPhrase = "This class cannot be inherited.";
@@ -134,8 +121,8 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EventHandlerSummaryPhrase =
                 {
-                    EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\" /> event",
                     EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\"/> event",
+                    EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\" /> event",
                 };
         }
     }
