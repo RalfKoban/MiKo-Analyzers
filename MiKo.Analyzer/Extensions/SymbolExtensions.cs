@@ -164,7 +164,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsEventArgs(this ITypeSymbol symbol) => symbol.InheritsFrom<EventArgs>();
 
-        internal static bool IsEnumerable(this ITypeSymbol symbol) => symbol.Implements<IEnumerable>();
+        internal static bool IsEnumerable(this ITypeSymbol symbol) => symbol.Name != nameof(String) && symbol.Implements<IEnumerable>();
 
         internal static IEnumerable<ITypeSymbol> AllBaseTypes(this ITypeSymbol symbol)
         {
