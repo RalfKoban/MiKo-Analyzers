@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MiKo_0001_Description" xml:space="preserve">
-    <value>Methods should be short to ease reading and maintenance (SRP).</value>
+    <value>Methods should be short to ease reading and maintenance (SRP, SLoA).</value>
   </data>
   <data name="MiKo_0001_MessageFormat" xml:space="preserve">
-    <value>Too many LoC ({1} instead of allowed {2})</value>
+    <value>Too many LoC: {1} instead of {2}</value>
   </data>
   <data name="MiKo_0001_Title" xml:space="preserve">
     <value>Method is too long.</value>
@@ -132,7 +132,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | catch when | ternary operator ?: | ?? | ?.</value>
   </data>
   <data name="MiKo_0002_MessageFormat" xml:space="preserve">
-    <value>Too high CC ({1} instead of allowed {2})</value>
+    <value>Too high CC: {1} instead of {2}</value>
   </data>
   <data name="MiKo_0002_Title" xml:space="preserve">
     <value>Method is too complex.</value>
@@ -141,7 +141,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Types should be limited in their size to ease reading and maintenance (SRP).</value>
   </data>
   <data name="MiKo_0003_MessageFormat" xml:space="preserve">
-    <value>Too many LoC ({1} instead of allowed {2})</value>
+    <value>Too many LoC: {1} instead of {2}</value>
   </data>
   <data name="MiKo_0003_Title" xml:space="preserve">
     <value>Type is too long.</value>
@@ -366,7 +366,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>
   <data name="MiKo_1101_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named '{1}'</value>
+    <value>'{0}' should be '{1}'</value>
   </data>
   <data name="MiKo_1101_Title" xml:space="preserve">
     <value>Test classes should end with 'Tests'.</value>
@@ -375,7 +375,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A method that is marked as a unit test should not additionally indicate that it is a unit test by having 'Test' in its name.</value>
   </data>
   <data name="MiKo_1102_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named '{1}'</value>
+    <value>'{0}' should be '{1}'</value>
   </data>
   <data name="MiKo_1102_Title" xml:space="preserve">
     <value>Test methods should not contain 'Test'.</value>
@@ -384,7 +384,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A method that is marked as unit test initialization method should be named 'PrepareTest'.</value>
   </data>
   <data name="MiKo_1103_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named '{1}'</value>
+    <value>'{0}' should be '{1}'</value>
   </data>
   <data name="MiKo_1103_Title" xml:space="preserve">
     <value>Test initialization methods should be named 'PrepareTest'.</value>
@@ -393,7 +393,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A method that is marked as unit test cleanup method should be named 'CleanupTest'.</value>
   </data>
   <data name="MiKo_1104_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be named '{1}'</value>
+    <value>'{0}' should be '{1}'</value>
   </data>
   <data name="MiKo_1104_Title" xml:space="preserve">
     <value>Test cleanup methods should be named 'CleanupTest'.</value>
@@ -429,7 +429,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To ease maintenance, EventArgs should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; should follow th pattern: '{1} ... {2}'</value>
+    <value>&lt;summary&gt; should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>EventArgss should be documented properly.</value>
@@ -447,7 +447,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2004_MessageFormat" xml:space="preserve">
-    <value>XML documentation for '{1}' should be: '{2}'</value>
+    <value>&lt;param name="{1}"&gt; should be: '{2}'</value>
   </data>
   <data name="MiKo_2004_Title" xml:space="preserve">
     <value>XML documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
@@ -520,7 +520,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>Dependency properties should be documented properly.</value>
   </data>
   <data name="MiKo_2017_MessageFormat" xml:space="preserve">
-    <value>&lt;{2}&gt; XML documentation for '{1}' should be: '{3}'</value>
+    <value>&lt;{2}&gt; should be: '{3}'</value>
   </data>
   <data name="MiKo_2017_Title" xml:space="preserve">
     <value>Dependency properties should be documented as by the .NET Framework.</value>
@@ -538,7 +538,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>XML documentation for '{1}' should start with any of the following: '{2}'</value>
+    <value>&lt;param name="{1}"&gt; should start with any of the following: '{2}'</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>XML documentation of parameter should have a default starting phrase.</value>
@@ -547,7 +547,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>XML documentation for '{1}' should start with: '{2}'</value>
+    <value>&lt;param name="{1}"&gt; should start with: '{2}'</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>XML documentation of [out] parameters should have a default starting phrase.</value>
@@ -556,7 +556,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of enum parameters should start with a phrase that specifies what will be done with the enum.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>XML documentation for '{1}' should start with: '{2}'</value>
+    <value>&lt;param name="{1}"&gt; should start with: '{2}'</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>XML documentation of enum parameters should have a default starting phrase.</value>
@@ -620,7 +620,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>To follow the SRP, methods should have as few parameters as possible.</value>
   </data>
   <data name="MiKo_3001_MessageFormat" xml:space="preserve">
-    <value>Too many parameters ({1} instead of allowed {2})</value>
+    <value>Too many parameters: {1} instead of {2}</value>
   </data>
   <data name="MiKo_3001_Title" xml:space="preserve">
     <value>Methods should not have too many parameters.</value>
@@ -629,7 +629,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>If a class has too many dependencies, that class is doing too much and does not follow the SRP.</value>
   </data>
   <data name="MiKo_3002_MessageFormat" xml:space="preserve">
-    <value>Too many MEF dependencies ({1} instead of allowed {2})</value>
+    <value>Too many MEF dependencies: {1} instead of {2}</value>
   </data>
   <data name="MiKo_3002_Title" xml:space="preserve">
     <value>Classes should not have too many dependencies.</value>
