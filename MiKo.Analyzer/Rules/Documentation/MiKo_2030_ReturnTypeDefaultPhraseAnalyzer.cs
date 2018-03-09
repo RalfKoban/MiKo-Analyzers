@@ -32,6 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol method, string comment, string xmlTag) => AnalyzeStartingPhrase(method, comment, xmlTag, Constants.Comments.ReturnTypeStartingPhrase);
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag) => AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, Constants.Comments.ReturnTypeStartingPhrase);
     }
 }

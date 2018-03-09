@@ -17,19 +17,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType) => returnType.Name == nameof(System.Threading.Tasks.Task);
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol method, string comment, string xmlTag)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
-            var returnType = method.ReturnType;
-
             if (returnType is INamedTypeSymbol namedType && namedType.TypeArguments.Length > 0)
             {
                 // we have a generic task
                 return GenericTypeAccepted(namedType.TypeArguments[0].Name)
-                           ? AnalyzeStartingPhrase(method, comment, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase)
+                           ? AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase)
                            : Enumerable.Empty<Diagnostic>();
             }
 
-            return AnalyzePhrase(method, comment, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);
+            return AnalyzePhrase(owningSymbol, comment, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);
         }
 
         private static bool GenericTypeAccepted(string name)

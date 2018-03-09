@@ -36,14 +36,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol method, string comment, string xmlTag)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
             // ReSharper disable once RedundantNameQualifier
-            var isString = method.ReturnType.Name == nameof(System.String);
+            var isString = returnType.Name == nameof(System.String);
 
             var startingPhrases = isString ? Constants.Comments.StringReturnTypeStartingPhrase : Constants.Comments.StringTaskReturnTypeStartingPhrase;
 
-            return AnalyzeStartingPhrase(method, comment, xmlTag, startingPhrases);
+            return AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, startingPhrases);
         }
     }
 }

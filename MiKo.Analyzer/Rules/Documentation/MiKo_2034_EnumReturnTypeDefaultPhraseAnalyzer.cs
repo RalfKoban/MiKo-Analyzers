@@ -27,13 +27,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol method, string comment, string xmlTag)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
-            var isEnum = method.ReturnType.IsEnum();
+            var isEnum = returnType.IsEnum();
 
             var startingPhrases = isEnum ? Constants.Comments.EnumReturnTypeStartingPhrase : Constants.Comments.EnumTaskReturnTypeStartingPhrase;
 
-            return AnalyzeStartingPhrase(method, comment, xmlTag, startingPhrases);
+            return AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, startingPhrases);
         }
     }
 }
