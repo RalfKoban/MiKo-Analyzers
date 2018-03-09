@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} LoC (allowed: {2}).
+        ///   Looks up a localized string similar to Too many LoC ({1} instead of allowed {2}).
         /// </summary>
         public static string MiKo_0001_MessageFormat {
             get {
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has a CC of {1} (allowed: {2}).
+        ///   Looks up a localized string similar to Too high CC ({1} instead of allowed {2}).
         /// </summary>
         public static string MiKo_0002_MessageFormat {
             get {
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type &apos;{0}&apos; has {1} LoC (allowed: {2}).
+        ///   Looks up a localized string similar to Too many LoC ({1} instead of allowed {2}).
         /// </summary>
         public static string MiKo_0003_MessageFormat {
             get {
@@ -1559,7 +1559,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} parameters (allowed: {2}).
+        ///   Looks up a localized string similar to Too many parameters ({1} instead of allowed {2}).
         /// </summary>
         public static string MiKo_3001_MessageFormat {
             get {
@@ -1586,7 +1586,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has {1} MEF dependencies (allowed: {2}).
+        ///   Looks up a localized string similar to Too many MEF dependencies ({1} instead of allowed {2}).
         /// </summary>
         public static string MiKo_3002_MessageFormat {
             get {
