@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType)
         {
-            if (returnType.IsEnum()) return false; // checked by MiKo_2034
-
             switch (returnType.Name)
             {
                 // ReSharper disable RedundantNameQualifier
@@ -28,6 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // ReSharper restore RedundantNameQualifier
                 default:
+                    if (returnType.IsEnum()) return false; // checked by MiKo_2034
+                    if (returnType.IsEnumerable()) return false; // checked by MiKo_2035
+
                     return true;
             }
         }

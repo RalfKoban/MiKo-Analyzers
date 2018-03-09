@@ -109,6 +109,13 @@ namespace MiKoSolutions.Analyzers
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns the enumerated constant that is the ",
                 };
 
+            internal static readonly string[] EnumerableReturnTypeStartingPhrase =
+                {
+                    "A collection of ",
+                };
+
+            internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a collection of ").ToArray();
+
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
                     "Identifies the <see cref=\"{0}\" /> dependency property.",

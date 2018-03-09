@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (returnType is INamedTypeSymbol namedType && namedType.TypeArguments.Length > 0)
             {
                 // we have a generic task
-                return GenericTypeAccepted(namedType.TypeArguments[0].Name)
+                return GenericTypeAccepted(namedType.TypeArguments[0])
                            ? AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase)
                            : Enumerable.Empty<Diagnostic>();
             }
@@ -30,9 +30,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzePhrase(owningSymbol, comment, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);
         }
 
-        private static bool GenericTypeAccepted(string name)
+        private static bool GenericTypeAccepted(ITypeSymbol returnType)
         {
-            switch (name)
+            if (returnType.IsEnum()) return false; // checked by MiKo_2034
+            if (returnType.IsEnumerable()) return false; // checked by MiKo_2035
+
+            switch (returnType.Name)
             {
                 // ReSharper disable RedundantNameQualifier
                 case nameof(System.Boolean): // checked by MiKo_2032

@@ -132,7 +132,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | catch when | ternary operator ?: | ?? | ?.</value>
   </data>
   <data name="MiKo_0002_MessageFormat" xml:space="preserve">
-    <value>Too high CC: {1,4} (max. {2})</value>
+    <value>Too complex: {1,4} CC (max. {2})</value>
   </data>
   <data name="MiKo_0002_Title" xml:space="preserve">
     <value>Method is too complex.</value>
@@ -141,7 +141,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Types should be limited in their size to ease reading and maintenance (SRP).</value>
   </data>
   <data name="MiKo_0003_MessageFormat" xml:space="preserve">
-    <value>Too many LoC: {1,4} (max. {2})</value>
+    <value>Too many LoC: {1,4} LoC (max. {2})</value>
   </data>
   <data name="MiKo_0003_Title" xml:space="preserve">
     <value>Type is too long.</value>
@@ -606,6 +606,15 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
   </data>
   <data name="MiKo_2034_Title" xml:space="preserve">
     <value>XML documentation of Enum return value should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2035_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of a collection as return value should have a specific phrase.</value>
+  </data>
+  <data name="MiKo_2035_MessageFormat" xml:space="preserve">
+    <value>&lt;{2}&gt; should start with: '{3}'</value>
+  </data>
+  <data name="MiKo_2035_Title" xml:space="preserve">
+    <value>XML documentation of collection return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2040_Description" xml:space="preserve">
     <value>To support other languages than C#, use '&lt;see langword="..."/&gt;' instead of '&lt;c&gt;...&lt;/c&gt;'.</value>

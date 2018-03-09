@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too high CC: {1,4} (max. {2}).
+        ///   Looks up a localized string similar to Too complex: {1,4} CC (max. {2}).
         /// </summary>
         public static string MiKo_0002_MessageFormat {
             get {
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2}).
+        ///   Looks up a localized string similar to Too many LoC: {1,4} LoC (max. {2}).
         /// </summary>
         public static string MiKo_0003_MessageFormat {
             get {
@@ -1519,6 +1519,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2034_Title {
             get {
                 return ResourceManager.GetString("MiKo_2034_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a collection as return value should have a specific phrase..
+        /// </summary>
+        public static string MiKo_2035_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2035_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{2}&gt; should start with: &apos;{3}&apos;.
+        /// </summary>
+        public static string MiKo_2035_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2035_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of collection return value should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2035_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2035_Title", resourceCulture);
             }
         }
         

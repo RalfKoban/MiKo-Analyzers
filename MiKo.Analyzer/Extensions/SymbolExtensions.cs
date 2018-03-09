@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -148,7 +149,23 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
+        internal static bool Implements<T>(this ITypeSymbol symbol)
+        {
+            var interfaceType = typeof(T).FullName;
+
+            if (symbol.ToString() == interfaceType) return true;
+
+            foreach (var implementedInterface in symbol.AllInterfaces)
+            {
+                if (implementedInterface.ToString() == interfaceType) return true;
+            }
+
+            return false;
+        }
+
         internal static bool IsEventArgs(this ITypeSymbol symbol) => symbol.InheritsFrom<EventArgs>();
+
+        internal static bool IsEnumerable(this ITypeSymbol symbol) => symbol.Implements<IEnumerable>();
 
         internal static IEnumerable<ITypeSymbol> AllBaseTypes(this ITypeSymbol symbol)
         {
