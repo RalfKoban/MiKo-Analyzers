@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many LoC: {1} instead of {2}.
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2}).
         /// </summary>
         public static string MiKo_0001_MessageFormat {
             get {
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too high CC: {1} instead of {2}.
+        ///   Looks up a localized string similar to Too high CC: {1,4} (max. {2}).
         /// </summary>
         public static string MiKo_0002_MessageFormat {
             get {
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many LoC: {1} instead of {2}.
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2}).
         /// </summary>
         public static string MiKo_0003_MessageFormat {
             get {
@@ -1523,7 +1523,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To support other languages than C#, use &lt;see langword=&quot;...&quot;/&gt; instead of &lt;c&gt;...&lt;/c&gt;..
+        ///   Looks up a localized string similar to To support other languages than C#, use &apos;&lt;see langword=&quot;...&quot;/&gt;&apos; instead of &apos;&lt;c&gt;...&lt;/c&gt;&apos;..
         /// </summary>
         public static string MiKo_2040_Description {
             get {
@@ -1559,7 +1559,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many parameters: {1} instead of {2}.
+        ///   Looks up a localized string similar to Too many parameters: {1,4} (max. {2}).
         /// </summary>
         public static string MiKo_3001_MessageFormat {
             get {
@@ -1586,7 +1586,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many MEF dependencies: {1} instead of {2}.
+        ///   Looks up a localized string similar to Too many MEF dependencies: {1,4} (max. {2}).
         /// </summary>
         public static string MiKo_3002_MessageFormat {
             get {
