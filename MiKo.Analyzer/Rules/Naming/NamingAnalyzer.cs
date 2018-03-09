@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var suffix in suffixes)
             {
-                if (symbolName.EqualsAny(StringComparison.Ordinal, "blackList" ,"whiteList", "array", "collection")) continue;
+                if (symbolName.EqualsAny(StringComparison.Ordinal, "blackList" ,"whiteList", "array", "list", "collection")) continue;
 
                 if (!symbolName.EndsWith(suffix, comparison)) continue;
 
