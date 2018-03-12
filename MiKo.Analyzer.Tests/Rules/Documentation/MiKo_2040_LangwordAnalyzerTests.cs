@@ -139,6 +139,8 @@ public sealed class TestMe
                 results.Add("<c>" + token + "</c>");
                 results.Add(" " + token + " ");
                 results.Add("(" + token + " ");
+                results.Add("(" + token + ")");
+                results.Add(" " + token + ")");
                 results.Add(token + ",");
                 results.Add(token + ";");
                 results.Add(token + ".");

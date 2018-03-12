@@ -10,31 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_2040_LangwordAnalyzer : DocumentationAnalyzer
     {
-        private static readonly KeyValuePair<string, string>[] Items  = {
-                                                                            new KeyValuePair<string, string>("(null ", "<see langword=\"null\"/>"),
-                                                                            new KeyValuePair<string, string>("(true ", "<see langword=\"true\"/>"),
-                                                                            new KeyValuePair<string, string>("(false ", "<see langword=\"false\"/>"),
-
-                                                                            new KeyValuePair<string, string>(" null ", "<see langword=\"null\"/>"),
-                                                                            new KeyValuePair<string, string>(" true ", "<see langword=\"true\"/>"),
-                                                                            new KeyValuePair<string, string>(" false ", "<see langword=\"false\"/>"),
-
-                                                                            new KeyValuePair<string, string>(" null.", "<see langword=\"null\"/>"),
-                                                                            new KeyValuePair<string, string>(" true.", "<see langword=\"true\"/>"),
-                                                                            new KeyValuePair<string, string>(" false.", "<see langword=\"false\"/>"),
-
-                                                                            new KeyValuePair<string, string>(" null,", "<see langword=\"null\"/>"),
-                                                                            new KeyValuePair<string, string>(" true,", "<see langword=\"true\"/>"),
-                                                                            new KeyValuePair<string, string>(" false,", "<see langword=\"false\"/>"),
-
-                                                                            new KeyValuePair<string, string>(" null;", "<see langword=\"null\"/>"),
-                                                                            new KeyValuePair<string, string>(" true;", "<see langword=\"true\"/>"),
-                                                                            new KeyValuePair<string, string>(" false;", "<see langword=\"false\"/>"),
-
-                                                                            new KeyValuePair<string, string>("<c>null</c>", "<see langword=\"null\"/>"),
-                                                                            new KeyValuePair<string, string>("<c>true</c>", "<see langword=\"true\"/>"),
-                                                                            new KeyValuePair<string, string>("<c>false</c>", "<see langword=\"false\"/>"),
-                                                                        };
+        private static readonly KeyValuePair<string, string>[] Items  = CreateItems();
 
         public const string Id = "MiKo_2040";
 
@@ -74,6 +50,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return findings ?? Enumerable.Empty<Diagnostic>();
+        }
+
+        private static KeyValuePair<string, string>[] CreateItems()
+        {
+            var results = new Dictionary<string, string>();
+
+            foreach (var item in new[] { "true", "false", "null" })
+            {
+                results.Add($"({item} ", $"(<see langword=\"{item}\"/> ");
+                results.Add($"({item})", $"(<see langword=\"{item}\"/>)");
+                results.Add($" {item})", $" <see langword=\"{item}\"/>)");
+                results.Add($" {item} ", $" <see langword=\"{item}\"/> ");
+                results.Add($" {item}.", $" <see langword=\"{item}\"/>.");
+                results.Add($" {item},", $" <see langword=\"{item}\"/>,");
+                results.Add($" {item};", $" <see langword=\"{item}\"/>;");
+                results.Add($"<c>{item}</c>", $"<see langword=\"{item}\"/>");
+            }
+
+            return results.ToArray();
         }
     }
 }
