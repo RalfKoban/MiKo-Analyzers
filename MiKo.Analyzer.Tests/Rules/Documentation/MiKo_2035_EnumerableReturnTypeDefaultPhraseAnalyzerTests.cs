@@ -51,7 +51,8 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Array_only_method(
                                                                                     [Values("returns", "value")] string xmlTag,
-                                                                                    [Values("int", "string")] string returnType) => No_issue_is_reported_for(@"
+                                                                                    [Values("int", "string")] string returnType,
+                                                                                    [Values("An array of", "The array of")] string startingPhrase) => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// An array of whatever.
+    /// " + startingPhrase + @" whatever.
     /// </" + xmlTag + @">
     public " + returnType + @"[] DoSomething(object o) => null;
 }
