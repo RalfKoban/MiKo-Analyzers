@@ -156,6 +156,72 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
     }
 ");
 
+        [Test]
+        public void Method_with_too_long_returning_ObjectInitializer_statement_is_reported() => An_issue_is_reported_for(@"
+    public class TypeWithMethod
+    {
+        public DTO Create()
+        {
+            return new DTO
+                       {
+                           NodesToInsert = 4,
+                           TargetNodes = 5,
+                           TargetNodes2 = 56,
+                       };
+        }
+    }
+}
+");
+
+        [Test]
+        public void Method_with_exaclty_matching_ObjectInitializer_statement_as_return_statement_is_not_reported() => No_issue_is_reported_for(@"
+    public class TypeWithMethod
+    {
+        public DTO Create()
+        {
+            return new DTO
+                       {
+                           NodesToInsert = 4,
+                           TargetNodes = 5,
+                       };
+        }
+    }
+}
+");
+
+        [Test]
+        public void Method_with_long_ObjectInitializer_statement_is_reported() => An_issue_is_reported_for(@"
+    public class TypeWithMethod
+    {
+        public DTO Create()
+        {
+            var data = new DTO
+                           {
+                               NodesToInsert = 4,
+                               TargetNodes = 5,
+                           };
+            return data;
+        }
+    }
+}
+");
+
+        [Test]
+        public void Method_with_exaclty_matching_ObjectInitializer_statement_is_not_reported() => No_issue_is_reported_for(@"
+    public class TypeWithMethod
+    {
+        public DTO Create()
+        {
+            var data = new DTO
+                           {
+                               NodesToInsert = 4,
+                           };
+            return data;
+        }
+    }
+}
+");
+
         protected override Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_0001_LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
 
         protected override string GetDiagnosticId() => MiKo_0001_LinesOfCodeAnalyzer.Id;

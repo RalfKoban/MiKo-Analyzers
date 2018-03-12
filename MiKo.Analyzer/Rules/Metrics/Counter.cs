@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
@@ -42,6 +44,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
             var lines = new HashSet<int>();
             CountLinesOfCode(nodes, lines);
+
+            // var all = string.Join(Environment.NewLine, lines.OrderBy(_ => _));
+
             return lines.Count;
         }
 
@@ -60,6 +65,12 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 case BlockSyntax _:
                     break;
 
+                case ReturnStatementSyntax s:
+                    CountLinesOfCode(s.GetLocation().GetLineSpan().StartLinePosition, lines);
+                    if (s.Expression != null)
+                        CountLinesOfCode(s.Expression, lines);
+                    break;
+
                 case IfStatementSyntax s:
                     CountLinesOfCode(s.Condition, lines);
                     break;
@@ -73,17 +84,33 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                     CountLinesOfCode(s.Sections.SelectMany(_ => _.Labels), lines);
                     break;
 
+                case LocalDeclarationStatementSyntax s:
+                    CountLinesOfCode(s.Declaration.GetLocation().GetLineSpan().StartLinePosition, lines);
+
+                    // get normal initializers and object initializers
+                    CountLinesOfCode(s.Declaration.Variables.Select(_ => _.Initializer.Value).OfType<ObjectCreationExpressionSyntax>(), lines);
+                    break;
+
+                case ObjectCreationExpressionSyntax oces:
+                    if (oces.Initializer == null) // single line
+                        CountLinesOfCode(oces.GetLocation(), lines);
+                    else
+                        CountLinesOfCode(oces.Initializer.Expressions, lines);
+                    break;
+
                 default:
                     CountLinesOfCode(node.GetLocation(), lines);
                     break;
             }
         }
 
+        private static void CountLinesOfCode(LinePosition position, ISet<int> lines) => lines.Add(position.Line);
+
         private static void CountLinesOfCode(Location location, ISet<int> lines)
         {
             var lineSpan = location.GetLineSpan();
-            lines.Add(lineSpan.StartLinePosition.Line);
-            lines.Add(lineSpan.EndLinePosition.Line);
+            CountLinesOfCode(lineSpan.StartLinePosition, lines);
+            CountLinesOfCode(lineSpan.EndLinePosition, lines);
         }
     }
 }
