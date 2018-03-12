@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                     CountLinesOfCode(s.Declaration.GetLocation().GetLineSpan().StartLinePosition, lines);
 
                     // get normal initializers and object initializers
-                    CountLinesOfCode(s.Declaration.Variables.Select(_ => _.Initializer.Value).OfType<ObjectCreationExpressionSyntax>(), lines);
+                    CountLinesOfCode(s.Declaration.Variables.Select(_ => _.Initializer?.Value).OfType<ObjectCreationExpressionSyntax>(), lines);
                     break;
 
                 case ObjectCreationExpressionSyntax oces:
