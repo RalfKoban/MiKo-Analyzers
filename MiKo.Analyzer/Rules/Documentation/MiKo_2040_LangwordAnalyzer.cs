@@ -10,7 +10,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_2040_LangwordAnalyzer : DocumentationAnalyzer
     {
-        private static readonly KeyValuePair<string, string>[] Items  = new [] { "null", "true", "false" }.Select(_ => new KeyValuePair<string, string>("<c>" + _ + "</c>", "<see langword=\"" + _ + "\" />")).ToArray();
+        private static readonly KeyValuePair<string, string>[] Items  = {
+                                                                            new KeyValuePair<string, string>("(null ", "<see langword=\"null\"/>"),
+                                                                            new KeyValuePair<string, string>("(true ", "<see langword=\"true\"/>"),
+                                                                            new KeyValuePair<string, string>("(false ", "<see langword=\"false\"/>"),
+
+                                                                            new KeyValuePair<string, string>(" null ", "<see langword=\"null\"/>"),
+                                                                            new KeyValuePair<string, string>(" true ", "<see langword=\"true\"/>"),
+                                                                            new KeyValuePair<string, string>(" false ", "<see langword=\"false\"/>"),
+
+                                                                            new KeyValuePair<string, string>(" null.", "<see langword=\"null\"/>"),
+                                                                            new KeyValuePair<string, string>(" true.", "<see langword=\"true\"/>"),
+                                                                            new KeyValuePair<string, string>(" false.", "<see langword=\"false\"/>"),
+
+                                                                            new KeyValuePair<string, string>(" null,", "<see langword=\"null\"/>"),
+                                                                            new KeyValuePair<string, string>(" true,", "<see langword=\"true\"/>"),
+                                                                            new KeyValuePair<string, string>(" false,", "<see langword=\"false\"/>"),
+
+                                                                            new KeyValuePair<string, string>(" null;", "<see langword=\"null\"/>"),
+                                                                            new KeyValuePair<string, string>(" true;", "<see langword=\"true\"/>"),
+                                                                            new KeyValuePair<string, string>(" false;", "<see langword=\"false\"/>"),
+
+                                                                            new KeyValuePair<string, string>("<c>null</c>", "<see langword=\"null\"/>"),
+                                                                            new KeyValuePair<string, string>("<c>true</c>", "<see langword=\"true\"/>"),
+                                                                            new KeyValuePair<string, string>("<c>false</c>", "<see langword=\"false\"/>"),
+                                                                        };
 
         public const string Id = "MiKo_2040";
 

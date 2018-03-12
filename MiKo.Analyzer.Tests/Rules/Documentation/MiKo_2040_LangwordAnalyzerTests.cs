@@ -123,7 +123,29 @@ public sealed class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2040_LangwordAnalyzer();
 
-        private static IEnumerable<string> WrongItems() => new[] { "<c>true</c>", "<c>false</c>", "<c>null</c>", "<c>True</c>", "<c>False</c>", "<c>Null</c>", "<c>TRUE</c>", "<c>FALSE</c>", "<c>NULL</c>" };
+        private static IEnumerable<string> WrongItems()
+        {
+            var tokens = new List<string>();
+            foreach (var token in new[] { "true", "false", "null" })
+            {
+                tokens.Add(token);
+                tokens.Add(token.ToUpperInvariant());
+                tokens.Add(char.ToUpperInvariant(token[0]) + token.Substring(1));
+            }
+
+            var results = new HashSet<string>();
+            foreach (var token in tokens)
+            {
+                results.Add("<c>" + token + "</c>");
+                results.Add(" " + token + " ");
+                results.Add("(" + token + " ");
+                results.Add(token + ",");
+                results.Add(token + ";");
+                results.Add(token + ".");
+            }
+
+            return results;
+        }
 
         private static IEnumerable<string> CorrectItems() => new[] { "<see langword=\"true\" />", "<see langword=\"false\" />", "<see langword=\"null\" />", string.Empty };
     }
