@@ -954,7 +954,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, unimportant identifiers in lambdas should be named consistently..
+        ///   Looks up a localized string similar to To ease maintenance, unimportant identifiers in lambdas should be named consistently with &apos;_&apos;..
         /// </summary>
         public static string MiKo_1300_Description {
             get {
@@ -963,7 +963,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use &apos;_&apos; instead.
         /// </summary>
         public static string MiKo_1300_MessageFormat {
             get {
@@ -972,7 +972,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unimportant identifiers in lambda statements should be named consistently..
+        ///   Looks up a localized string similar to Unimportant identifiers in lambda statements should be named &apos;_&apos;..
         /// </summary>
         public static string MiKo_1300_Title {
             get {

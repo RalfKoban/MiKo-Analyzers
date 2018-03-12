@@ -417,13 +417,13 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Name exceptions in catch blocks consistently.</value>
   </data>
   <data name="MiKo_1300_Description" xml:space="preserve">
-    <value>To ease maintenance, unimportant identifiers in lambdas should be named consistently.</value>
+    <value>To ease maintenance, unimportant identifiers in lambdas should be named consistently with '_'.</value>
   </data>
   <data name="MiKo_1300_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be '{1}'</value>
+    <value>Use '_' instead</value>
   </data>
   <data name="MiKo_1300_Title" xml:space="preserve">
-    <value>Unimportant identifiers in lambda statements should be named consistently.</value>
+    <value>Unimportant identifiers in lambda statements should be named '_'.</value>
   </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>XML documentation should be valid XML so that it can be generated to support the developers.</value>
