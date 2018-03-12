@@ -360,6 +360,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The term &apos;Init&apos; is a lazy abbreviation and should not be used. &apos;Initialize&apos; should be used instead..
+        /// </summary>
+        public static string MiKo_1014_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1014_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1014_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1014_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be named &apos;Init&apos;..
+        /// </summary>
+        public static string MiKo_1014_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1014_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
         /// </summary>
         public static string MiKo_1020_Description {
