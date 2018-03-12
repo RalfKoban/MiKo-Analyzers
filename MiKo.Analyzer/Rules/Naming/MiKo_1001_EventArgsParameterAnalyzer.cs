@@ -30,9 +30,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     {
                         var expected = method.Name != nameof(Equals) ? "e" : "other";
 
-                        var symbol = parameters[0];
-                        return symbol.Name != expected
-                                   ? new[] { ReportIssue(method, symbol.Name, expected) }
+                        var parameter = parameters[0];
+                        return parameter.Name != expected
+                                   ? new[] { ReportIssue(parameter, parameter.Name, expected) }
                                    : Enumerable.Empty<Diagnostic>();
                     }
 
@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                             var expected = "e" + (++i);
                             if (parameterName != expected)
                             {
-                                diagnostics.Add(ReportIssue(method, parameterName, expected));
+                                diagnostics.Add(ReportIssue(parameter, parameterName, expected));
                             }
                         }
 

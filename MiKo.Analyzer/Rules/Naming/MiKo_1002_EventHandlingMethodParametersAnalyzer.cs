@@ -22,17 +22,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var parameters = method.Parameters;
 
             List<Diagnostic> diagnostics = null;
-            VerifyParameterName("sender", parameters[0].Name, method, ref diagnostics);
-            VerifyParameterName("e", parameters[1].Name, method, ref diagnostics);
+            VerifyParameterName("sender", parameters[0], ref diagnostics);
+            VerifyParameterName("e", parameters[1], ref diagnostics);
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private void VerifyParameterName(string expected, string actual, IMethodSymbol method, ref List<Diagnostic> diagnostics)
+        private void VerifyParameterName(string expected, IParameterSymbol parameter, ref List<Diagnostic> diagnostics)
         {
-            if (expected == actual) return;
+            if (expected == parameter.Name) return;
             if (diagnostics == null) diagnostics = new List<Diagnostic>();
 
-            diagnostics.Add(ReportIssue(method, actual, expected));
+            diagnostics.Add(ReportIssue(parameter, parameter.Name, expected));
         }
     }
 }
