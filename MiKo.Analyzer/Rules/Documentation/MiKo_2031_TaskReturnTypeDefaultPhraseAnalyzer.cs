@@ -35,14 +35,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (returnType.IsEnum()) return false; // checked by MiKo_2034
             if (returnType.IsEnumerable()) return false; // checked by MiKo_2035
 
-            switch (returnType.Name)
+            switch (returnType.SpecialType)
             {
-                // ReSharper disable RedundantNameQualifier
-                case nameof(System.Boolean): // checked by MiKo_2032
-                case nameof(System.String):  // checked by MiKo_2033
+                case SpecialType.System_Boolean: // checked by MiKo_2032
+                case SpecialType.System_String: // checked by MiKo_2033
                     return false;
 
-                // ReSharper restore RedundantNameQualifier
                 default:
                     return true;
             }

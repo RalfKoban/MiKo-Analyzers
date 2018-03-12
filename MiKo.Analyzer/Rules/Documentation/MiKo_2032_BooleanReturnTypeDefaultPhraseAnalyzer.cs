@@ -18,10 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
-            var isBoolean = IsAcceptedType(returnType);
-
-            var startingPhrases = GetStartingPhrases(isBoolean);
-            var endingPhrases = GeEndingPhrases(isBoolean);
+            var startingPhrases = GetStartingPhrases(returnType);
+            var endingPhrases = GeEndingPhrases(returnType);
 
             return comment.StartsWithAny(StringComparison.Ordinal, startingPhrases) && comment.EndsWithAny(StringComparison.Ordinal, endingPhrases)
                        ? Enumerable.Empty<Diagnostic>()
@@ -29,15 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         // ReSharper disable once RedundantNameQualifier
-        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.Name == nameof(System.Boolean);
+        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.SpecialType == SpecialType.System_Boolean;
 
-        protected override string[] GetStartingPhrases(bool isReturnType) => isReturnType
-                                                                                 ? Constants.Comments.BooleanReturnTypeStartingPhrase
-                                                                                 : Constants.Comments.BooleanTaskReturnTypeStartingPhrase;
+        protected override string[] GetStartingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
+                                                                                     ? Constants.Comments.BooleanReturnTypeStartingPhrase
+                                                                                     : Constants.Comments.BooleanTaskReturnTypeStartingPhrase;
 
-        private static string[] GeEndingPhrases(bool isReturnType) => isReturnType
-                                                                              ? Constants.Comments.BooleanReturnTypeEndingPhrase
-                                                                              : Constants.Comments.BooleanTaskReturnTypeEndingPhrase;
+        private string[] GeEndingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
+                                                                        ? Constants.Comments.BooleanReturnTypeEndingPhrase
+                                                                        : Constants.Comments.BooleanTaskReturnTypeEndingPhrase;
 
     }
 }

@@ -49,6 +49,27 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_Array_only_method(
+                                                                                    [Values("returns", "value")] string xmlTag,
+                                                                                    [Values("int", "string")] string returnType) => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// An array of whatever.
+    /// </" + xmlTag + @">
+    public " + returnType + @"[] DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method(
                                                                                     [Values("returns", "value")] string xmlTag,
                                                                                     [ValueSource(nameof(EnumerableOnlyReturnValues))] string returnType) => No_issue_is_reported_for(@"
@@ -117,7 +138,7 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer();
 
-        private static IEnumerable<string> EnumerableOnlyReturnValues() => new[] { "IEnumerable", "IEnumerable<int>", "IList<int>", "ICollection<int>", "List<int>", "Dictionary<int, int>", "int[]", }.ToHashSet();
+        private static IEnumerable<string> EnumerableOnlyReturnValues() => new[] { "IEnumerable", "IEnumerable<int>", "IList<int>", "ICollection<int>", "List<int>", "Dictionary<int, int>", }.ToHashSet();
 
         private static IEnumerable<string> EnumerableTaskReturnValues() => new[] { "Task<int[]>", "Task<IEnumerable>", "Task<List<int>>", }.ToHashSet();
 

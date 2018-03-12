@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                                                     ? ReportIssue(node.ToString(), node.GetLocation())
                                                                                                                                                     : null;
 
-        private static bool IsEqualsMethod(ISymbol method) => method != null && method.IsStatic && method.Name == nameof(object.Equals) && method.ContainingType.Name == nameof(System.Object);
+        private static bool IsEqualsMethod(ISymbol method) => method != null && method.ContainingType.SpecialType == SpecialType.System_Object && method.IsStatic && method.Name == nameof(object.Equals);
 
         private static bool IsStruct(SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {

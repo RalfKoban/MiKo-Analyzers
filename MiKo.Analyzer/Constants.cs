@@ -103,6 +103,10 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a collection of ").ToArray();
 
+            internal static readonly string[] ArrayReturnTypeStartingPhrase = { "An array of ", };
+
+            internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "an array of ").ToArray();
+
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
                     "Identifies the <see cref=\"{0}\"/> dependency property.",

@@ -150,6 +150,8 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool Implements<T>(this ITypeSymbol symbol)
         {
+            if (symbol.Kind == SymbolKind.ArrayType) return true;
+
             var interfaceType = typeof(T).FullName;
 
             if (symbol.ToString() == interfaceType) return true;
@@ -164,7 +166,26 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsEventArgs(this ITypeSymbol symbol) => symbol.InheritsFrom<EventArgs>();
 
-        internal static bool IsEnumerable(this ITypeSymbol symbol) => symbol.Name != nameof(String) && symbol.Implements<IEnumerable>();
+        internal static bool IsEnumerable(this ITypeSymbol symbol)
+        {
+            switch (symbol.SpecialType)
+            {
+                case SpecialType.System_String:
+                    return false;
+
+                case SpecialType.System_Array:
+                case SpecialType.System_Collections_IEnumerable:
+                case SpecialType.System_Collections_Generic_IEnumerable_T:
+                case SpecialType.System_Collections_Generic_IList_T:
+                case SpecialType.System_Collections_Generic_ICollection_T:
+                case SpecialType.System_Collections_Generic_IReadOnlyList_T:
+                case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
+                    return true;
+
+                default:
+                    return symbol.Implements<IEnumerable>();
+            }
+        }
 
         internal static IEnumerable<ITypeSymbol> AllBaseTypes(this ITypeSymbol symbol)
         {

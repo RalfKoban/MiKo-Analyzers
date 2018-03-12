@@ -14,8 +14,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsEnumerable();
 
-        protected override string[] GetStartingPhrases(bool isReturnType) => isReturnType
-                                                                                 ? Constants.Comments.EnumerableReturnTypeStartingPhrase
-                                                                                 : Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
+        protected override string[] GetStartingPhrases(ITypeSymbol returnType)
+        {
+            if (returnType.IsEnumerable())
+            {
+                return returnType.Kind == SymbolKind.ArrayType
+                           ? Constants.Comments.ArrayReturnTypeStartingPhrase
+                           : Constants.Comments.EnumerableReturnTypeStartingPhrase;
+            }
+
+            if (TryGetGenericArgumentType(returnType, out var argument))
+            {
+                return argument.Kind == SymbolKind.ArrayType
+                           ? Constants.Comments.ArrayTaskReturnTypeStartingPhrase
+                           : Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
+            }
+
+            return new string[0]; // should never happen
+        }
     }
 }

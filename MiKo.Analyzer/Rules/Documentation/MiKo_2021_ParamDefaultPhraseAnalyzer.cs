@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (parameter.Type.IsEnum()) return false;
 
             // ReSharper disable once RedundantNameQualifier
-            if (parameter.Type.Name == nameof(System.Boolean)) return false;
+            if (parameter.Type.SpecialType == SpecialType.System_Boolean) return false;
 
             return true;
         }

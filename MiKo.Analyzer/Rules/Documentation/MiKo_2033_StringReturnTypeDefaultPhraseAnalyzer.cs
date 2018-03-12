@@ -12,10 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.Name == nameof(System.String);
+        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.SpecialType == SpecialType.System_String;
 
-        protected override string[] GetStartingPhrases(bool isReturnType) => isReturnType
-                                                                                 ? Constants.Comments.StringReturnTypeStartingPhrase
-                                                                                 : Constants.Comments.StringTaskReturnTypeStartingPhrase;
+        protected override string[] GetStartingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
+                                                                                     ? Constants.Comments.StringReturnTypeStartingPhrase
+                                                                                     : Constants.Comments.StringTaskReturnTypeStartingPhrase;
     }
 }
