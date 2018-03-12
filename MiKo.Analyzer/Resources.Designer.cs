@@ -954,6 +954,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, unimportant identifiers in lambdas should be named consistently..
+        /// </summary>
+        public static string MiKo_1300_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1300_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1300_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1300_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unimportant identifiers in lambda statements should be named consistently..
+        /// </summary>
+        public static string MiKo_1300_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1300_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XML documentation should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
