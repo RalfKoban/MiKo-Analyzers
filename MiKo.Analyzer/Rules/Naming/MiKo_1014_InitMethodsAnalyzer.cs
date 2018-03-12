@@ -24,6 +24,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (!methodName.StartsWith("Init", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
             if (methodName.StartsWith("Initialize", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
 
+            var expectedName = GetExpectedName(methodName, "Initialize");
+
+            return new[] { ReportIssue(method, methodName, expectedName) };
+        }
+
+        private static string GetExpectedName(string methodName, string expectedName)
+        {
             var i = 1;
             for (; i < methodName.Length; i++)
             {
@@ -32,10 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (character.IsNumber()) break;
             }
 
-            var expectedName = "Initialize";
-            if (i < methodName.Length) expectedName += methodName.Substring(i);
-
-            return new[] { ReportIssue(method, methodName, expectedName) };
+            return i >= methodName.Length ? expectedName : expectedName + methodName.Substring(i);
         }
     }
 }
