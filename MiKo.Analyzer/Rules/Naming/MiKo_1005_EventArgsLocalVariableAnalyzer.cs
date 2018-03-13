@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     default:
                         if (results == null) results = new List<Diagnostic>();
                         var symbol = semanticModel.LookupSymbols(variable.Identifier.GetLocation().SourceSpan.Start, name:name).First();
-                        results.Add(ReportIssue(symbol, name, "e"));
+                        results.Add(ReportIssue(symbol, "e"));
                         break;
                 }
             }

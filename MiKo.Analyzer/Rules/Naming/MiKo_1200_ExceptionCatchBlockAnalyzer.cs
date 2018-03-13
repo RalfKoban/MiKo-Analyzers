@@ -10,8 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1200";
 
-        private const string ExceptionIdentifier = "ex";
-
         public MiKo_1200_ExceptionCatchBlockAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -35,6 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private Diagnostic AnalyzeCatchClause(CatchClauseSyntax node)
         {
             if (node.Declaration is null) return null; // we don't have an exception
+
+            const string ExceptionIdentifier = "ex";
 
             var identifier = node.Declaration.Identifier;
             switch (identifier.ValueText)

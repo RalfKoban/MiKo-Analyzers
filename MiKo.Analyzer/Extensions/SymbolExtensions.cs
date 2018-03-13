@@ -172,6 +172,14 @@ namespace Microsoft.CodeAnalysis
             return symbol.InheritsFrom<EventArgs>();
         }
 
+        internal static bool IsException(this ITypeSymbol symbol)
+        {
+            if (symbol.TypeKind != TypeKind.Class) return false;
+            if (symbol.SpecialType != SpecialType.None) return false;
+
+            return symbol.InheritsFrom<Exception>();
+        }
+
         internal static bool IsEnumerable(this ITypeSymbol symbol)
         {
             switch (symbol.SpecialType)
