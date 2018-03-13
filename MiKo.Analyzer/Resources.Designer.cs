@@ -360,7 +360,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validate&apos; or &apos;Verify&apos;. If a checkf for a specific state is meant, use &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos; instead..
+        ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validate&apos; or &apos;Verify&apos;. If a check for a specific state is meant, use &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos; instead..
         /// </summary>
         public static string MiKo_1013_Description {
             get {
@@ -1383,6 +1383,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2017_Title {
             get {
                 return ResourceManager.GetString("MiKo_2017_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validates&apos; or &apos;Verifies&apos;. If a check for a specific state is meant, use &apos;Determines&apos; instead..
+        /// </summary>
+        public static string MiKo_2018_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2018_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use ambiguous term &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2018_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2018_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should not use the ambiguous term &apos;Check&apos;..
+        /// </summary>
+        public static string MiKo_2018_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2018_Title", resourceCulture);
             }
         }
         
