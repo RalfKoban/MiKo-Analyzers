@@ -1125,7 +1125,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; should be: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should be: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2004_MessageFormat {
             get {
@@ -1261,7 +1261,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation for &apos;{1}&apos; should be: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should be: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2014_MessageFormat {
             get {
@@ -1396,7 +1396,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; should start with any of the following: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should start with any of the following: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2021_MessageFormat {
             get {
@@ -1423,7 +1423,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; should start with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should start with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2022_MessageFormat {
             get {
@@ -1450,7 +1450,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; should start with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should start with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2023_MessageFormat {
             get {
@@ -1640,7 +1640,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of &apos;{1}&apos; for documentation.
         /// </summary>
         public static string MiKo_2040_MessageFormat {
             get {
@@ -1759,7 +1759,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals(object objA, object objB)&apos;.
+        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals&apos;.
         /// </summary>
         public static string MiKo_3004_MessageFormat {
             get {

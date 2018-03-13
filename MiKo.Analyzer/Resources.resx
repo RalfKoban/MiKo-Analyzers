@@ -474,7 +474,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2004_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; should be: '{2}'</value>
+    <value>Documentation should be: '{2}'</value>
   </data>
   <data name="MiKo_2004_Title" xml:space="preserve">
     <value>XML documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
@@ -520,7 +520,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>Dispose methods should be documented as by the .NET Framework.</value>
   </data>
   <data name="MiKo_2014_MessageFormat" xml:space="preserve">
-    <value>XML documentation for '{1}' should be: '{2}'</value>
+    <value>Documentation should be: '{2}'</value>
   </data>
   <data name="MiKo_2014_Title" xml:space="preserve">
     <value>Dispose methods should be documented properly.</value>
@@ -565,7 +565,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; should start with any of the following: '{2}'</value>
+    <value>Documentation should start with any of the following: '{2}'</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>XML documentation of parameter should have a default starting phrase.</value>
@@ -574,7 +574,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; should start with: '{2}'</value>
+    <value>Documentation should start with: '{2}'</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>XML documentation of [out] parameters should have a default starting phrase.</value>
@@ -583,7 +583,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>XML documentation of enum parameters should start with a phrase that specifies what will be done with the enum.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; should start with: '{2}'</value>
+    <value>Documentation should start with: '{2}'</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>XML documentation of enum parameters should have a default starting phrase.</value>
@@ -647,7 +647,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
     <value>To support other languages than C#, use '&lt;see langword="..."/&gt;' instead of '&lt;c&gt;...&lt;/c&gt;'.</value>
   </data>
   <data name="MiKo_2040_MessageFormat" xml:space="preserve">
-    <value>Use '{2}' instead of '{1}'</value>
+    <value>Use '{2}' instead of '{1}' for documentation</value>
   </data>
   <data name="MiKo_2040_Title" xml:space="preserve">
     <value>&lt;see langword="..."/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;.</value>
@@ -688,7 +688,7 @@ It should not start with a meaningless phrase like 'Used to'. Instead it should 
 Instead the equality operator should be used to compare value types.</value>
   </data>
   <data name="MiKo_3004_MessageFormat" xml:space="preserve">
-    <value>Use '==' operator instead of 'object.Equals(object objA, object objB)'</value>
+    <value>Use '==' operator instead of 'object.Equals'</value>
   </data>
   <data name="MiKo_3004_Title" xml:space="preserve">
     <value>Do not use object.Equals() on value types.</value>
