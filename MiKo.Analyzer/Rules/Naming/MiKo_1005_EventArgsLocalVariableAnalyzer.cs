@@ -48,16 +48,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var variable in node.Variables)
             {
-                var value = variable.Identifier.ValueText;
-                switch (value)
+                var name = variable.Identifier.ValueText;
+                switch (name)
                 {
                     case "e":
                         break;
 
                     default:
                         if (results == null) results = new List<Diagnostic>();
-                        var symbol = semanticModel.LookupSymbols(variable.Identifier.GetLocation().SourceSpan.Start).First();
-                        results.Add(ReportIssue(symbol, value, "e"));
+                        var symbol = semanticModel.LookupSymbols(variable.Identifier.GetLocation().SourceSpan.Start, name:name).First();
+                        results.Add(ReportIssue(symbol, name, "e"));
                         break;
                 }
             }

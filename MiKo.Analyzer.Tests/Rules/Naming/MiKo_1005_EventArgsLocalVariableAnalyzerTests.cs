@@ -71,6 +71,7 @@ public class TestMe
     }
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_method_with_var_EventArgs_variable_with_incorrect_name() => An_issue_is_reported_for(@"
 using System;
@@ -80,6 +81,37 @@ public class TestMe
     public void DoSomething()
     {
         var eventArgs = EventArgs.Empty;
+    }
+}
+");
+
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_inherited_EventArgs_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+using System;
+
+public class MyEventArgs : EventArgs { }
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        MyEventArgs eventArgs = new MyEventArgs();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_var_inherited_EventArgs_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+using System;
+
+public class MyEventArgs : EventArgs { }
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var eventArgs = new MyEventArgs();
     }
 }
 ");
