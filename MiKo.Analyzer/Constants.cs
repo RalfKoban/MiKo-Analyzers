@@ -33,6 +33,8 @@ namespace MiKoSolutions.Analyzers
                     "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command",
                 };
 
+            internal static readonly string[] MeaninglessPhrase = { "does implement", "implements", "that is called", "that is used", "used for", "used to", "which is called", "which is used", };
+
             internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).ToArray();
 
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };

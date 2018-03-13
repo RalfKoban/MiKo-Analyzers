@@ -38,12 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var symbolNames = GetSelfSymbolNames(symbol);
             foreach (var summary in summaries)
             {
-                foreach (var phrase in symbolNames.Where(phrase => summary.StartsWith(phrase, Comparison)))
+                foreach (var phrase in symbolNames.Where(_ => summary.StartsWith(_, Comparison)))
                 {
                     return ReportIssue(symbol, summary, phrase);
                 }
 
-                foreach (var phrase in phrases.Where(phrase => summary.StartsWith(phrase, Comparison)))
+                foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
                 {
                     return ReportIssue(symbol, summary, phrase);
                 }
@@ -52,6 +52,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var index = summary.IndexOf("/>", Comparison);
                     var phrase = index > 0 ? summary.Substring(0, index + 2) : "<";
+                    return ReportIssue(symbol, summary, phrase);
+                }
+
+                foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
+                {
                     return ReportIssue(symbol, summary, phrase);
                 }
             }

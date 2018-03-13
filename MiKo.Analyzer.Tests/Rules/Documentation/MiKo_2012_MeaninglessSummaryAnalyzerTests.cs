@@ -136,6 +136,21 @@ public class TestMe : ITestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_text([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+public class TestMe : ITestMe
+{
+    /// <summary>
+    /// Some text " + phrase + @" whatever
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_field_without_documentation() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -198,6 +213,20 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
+        [Test]
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_text([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+public class TestMe : ITestMe
+{
+    /// <summary>
+    /// Some text " + phrase + @" whatever
+    /// </summary>
+    private int DoSomething;
+}
+");
 
         protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
@@ -205,22 +234,25 @@ public class TestMe : ITestMe
 
         private static IEnumerable<string> MeaninglessFieldPhrases() => MeaninglessPhrases().Except(new[] { "A ", "An ", "The " });
 
+        private static IEnumerable<string> MeaninglessTextPhrases() => new[]
+                                                                           {
+                                                                               "does implement",
+                                                                               "implements",
+                                                                               "that is called ",
+                                                                               "that is used for ",
+                                                                               "that is used to ",
+                                                                               "used for ",
+                                                                               "used to ",
+                                                                               "which is called ",
+                                                                               "which is used for ",
+                                                                               "which is used to ",
+                                                                           };
+
         private static IEnumerable<string> MeaninglessPhrases()
         {
             var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command" };
 
-            var phrases = new[]
-                              {
-                                  "that is called ",
-                                  "that is used for ",
-                                  "that is used to ",
-                                  "used for ",
-                                  "used to ",
-                                  "for ",
-                                  "to ",
-                                  "which is used for ",
-                                  "which is used to ",
-                              };
+            var phrases = MeaninglessTextPhrases();
 
             var results = new List<string>
                               {
