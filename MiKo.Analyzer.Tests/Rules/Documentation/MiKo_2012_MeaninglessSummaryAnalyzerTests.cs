@@ -207,7 +207,7 @@ public class TestMe : ITestMe
 
         private static IEnumerable<string> MeaninglessPhrases()
         {
-            var types = new[] { "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command" };
+            var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command" };
 
             var phrases = new[]
                               {
