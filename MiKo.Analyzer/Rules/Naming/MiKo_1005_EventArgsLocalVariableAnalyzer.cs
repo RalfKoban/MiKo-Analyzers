@@ -40,7 +40,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool ShallAnalyze(VariableDeclarationSyntax node, SemanticModel semanticModel) => semanticModel.GetTypeInfo(node.Type).Type?.IsEventArgs() == true;
+        private static bool ShallAnalyze(VariableDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            if (node.Parent is FieldDeclarationSyntax)
+                return false;
+
+            var type = semanticModel.GetTypeInfo(node.Type).Type;
+            return type?.IsEventArgs() == true;
+        }
 
         private IEnumerable<Diagnostic> Analyze(VariableDeclarationSyntax node, SemanticModel semanticModel)
         {
@@ -52,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 switch (name)
                 {
                     case "e":
+                    case "args":
                         break;
 
                     default:

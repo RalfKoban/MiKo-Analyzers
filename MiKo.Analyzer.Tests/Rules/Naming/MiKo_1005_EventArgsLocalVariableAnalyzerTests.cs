@@ -35,26 +35,26 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_EventArgs_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_EventArgs_variable_with_correct_name([Values("e", "args")] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething()
     {
-        EventArgs e = EventArgs.Empty;
+        EventArgs " + variableName + @" = EventArgs.Empty;
     }
 }
 ");
         [Test]
-        public void No_issue_is_reported_for_method_with_var_EventArgs_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_var_EventArgs_variable_with_correct_name([Values("e", "args")] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething()
     {
-        var e = EventArgs.Empty;
+        var " + variableName + @" = EventArgs.Empty;
     }
 }
 ");
@@ -112,6 +112,22 @@ public class TestMe
     public void DoSomething()
     {
         var eventArgs = new MyEventArgs();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_with_incorrect_name() => No_issue_is_reported_for(@"
+using System;
+
+public class MyEventArgs : EventArgs { }
+
+public class TestMe
+{
+    private MyEventArgs _eventArgs;
+
+    public void DoSomething()
+    {
     }
 }
 ");
