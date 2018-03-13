@@ -164,7 +164,13 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
-        internal static bool IsEventArgs(this ITypeSymbol symbol) => symbol.InheritsFrom<EventArgs>();
+        internal static bool IsEventArgs(this ITypeSymbol symbol)
+        {
+            if (symbol.TypeKind != TypeKind.Class) return false;
+            if (symbol.SpecialType != SpecialType.None) return false;
+
+            return symbol.InheritsFrom<EventArgs>();
+        }
 
         internal static bool IsEnumerable(this ITypeSymbol symbol)
         {

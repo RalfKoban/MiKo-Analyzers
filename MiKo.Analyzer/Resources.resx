@@ -182,6 +182,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1004_Title" xml:space="preserve">
     <value>Events should not contain term 'Event' in their names.</value>
   </data>
+  <data name="MiKo_1005_Description" xml:space="preserve">
+    <value>To ease maintenance, variables that are of type 'System.EventArgs' (or any inheritors) should be named 'e'.</value>
+  </data>
+  <data name="MiKo_1005_MessageFormat" xml:space="preserve">
+    <value>'{1}' should be named '{2}'</value>
+  </data>
+  <data name="MiKo_1005_Title" xml:space="preserve">
+    <value>'System.EventArgs' variables should be named properly.</value>
+  </data>
   <data name="MiKo_1010_Description" xml:space="preserve">
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'CanExecute' or 'Execute' in their names.</value>
   </data>

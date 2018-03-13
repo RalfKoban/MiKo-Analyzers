@@ -252,6 +252,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, variables that are of type &apos;System.EventArgs&apos; (or any inheritors) should be named &apos;e&apos;..
+        /// </summary>
+        public static string MiKo_1005_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1005_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{1}&apos; should be named &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_1005_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1005_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; variables should be named properly..
+        /// </summary>
+        public static string MiKo_1005_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
         public static string MiKo_1010_Description {
