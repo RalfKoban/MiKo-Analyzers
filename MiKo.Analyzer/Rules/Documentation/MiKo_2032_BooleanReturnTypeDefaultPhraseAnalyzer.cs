@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2032";
 
+        private const StringComparison Comparison = StringComparison.Ordinal;
+
         public MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer() : base(Id)
         {
         }
@@ -19,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
             var startingPhrases = GetStartingPhrases(returnType);
-            var endingPhrases = GeEndingPhrases(returnType);
+            var endingPhrases = GetEndingPhrases(returnType);
 
-            return comment.StartsWithAny(StringComparison.Ordinal, startingPhrases) && comment.EndsWithAny(StringComparison.Ordinal, endingPhrases)
+            return comment.StartsWithAny(Comparison, startingPhrases) && comment.ContainsAny(Comparison, endingPhrases)
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(owningSymbol, owningSymbol.Name, xmlTag, startingPhrases[0], endingPhrases[0]) };
         }
@@ -33,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                      ? Constants.Comments.BooleanReturnTypeStartingPhrase
                                                                                      : Constants.Comments.BooleanTaskReturnTypeStartingPhrase;
 
-        private string[] GeEndingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
+        private string[] GetEndingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
                                                                         ? Constants.Comments.BooleanReturnTypeEndingPhrase
                                                                         : Constants.Comments.BooleanTaskReturnTypeEndingPhrase;
 

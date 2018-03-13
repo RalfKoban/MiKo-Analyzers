@@ -1685,6 +1685,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
+        /// </summary>
+        public static string MiKo_2036_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2036_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{2}&gt; should end with: &apos;{3}&apos;.
+        /// </summary>
+        public static string MiKo_2036_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2036_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of Boolean or Enum properties shall describe the default value..
+        /// </summary>
+        public static string MiKo_2036_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2036_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To support other languages than C#, use &apos;&lt;see langword=&quot;...&quot;/&gt;&apos; instead of &apos;&lt;c&gt;...&lt;/c&gt;&apos;..
         /// </summary>
         public static string MiKo_2040_Description {

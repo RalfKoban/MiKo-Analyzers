@@ -63,6 +63,16 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_property_setter() => No_issue_is_reported_for(@"
+
+using System;
+
+public class TestMe
+{
+    public EventArgs Property { get; set; }
+}
+");
         protected override string GetDiagnosticId() => MiKo_1001_EventArgsParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1001_EventArgsParameterAnalyzer();

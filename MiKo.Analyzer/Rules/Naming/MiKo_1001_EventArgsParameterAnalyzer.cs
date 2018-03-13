@@ -22,6 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // ignore the method as it is handled by EventHandlingMethodParametersAnalyzer
             if (method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
 
+            // ignore the setter as the name there has to be 'value'
+            if (method.MethodKind == MethodKind.PropertySet) return Enumerable.Empty<Diagnostic>();
+
             var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs()).ToList();
             switch (parameters.Count)
             {

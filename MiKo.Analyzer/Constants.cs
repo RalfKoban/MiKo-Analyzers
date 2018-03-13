@@ -130,6 +130,24 @@ namespace MiKoSolutions.Analyzers
                     EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\"/> event",
                     EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\" /> event",
                 };
+
+            internal static readonly string DefaultCrefPhrase = "The default is <see cref=\"{0}\"/>.";
+
+            internal static readonly string[] DefaultCrefPhrases =
+                {
+                    "The default is <see cref=\"{0}\"/>.",
+                    "The default is <see cref=\"{0}\" />.",
+                };
+
+            internal static readonly string DefaultLangwordPhrase = "The default is <see langword=\"{0}\"/>.";
+
+            internal static readonly string[] DefaultBooleanLangwordPhrases =
+                {
+                    "The default is <see langword=\"true\"/>.",
+                    "The default is <see langword=\"false\"/>.",
+                    "The default is <see langword=\"true\" />.",
+                    "The default is <see langword=\"false\" />.",
+                };
         }
     }
 }
