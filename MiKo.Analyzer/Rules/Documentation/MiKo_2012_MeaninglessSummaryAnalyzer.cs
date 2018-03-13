@@ -40,29 +40,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var phrase in symbolNames.Where(_ => summary.StartsWith(_, Comparison)))
                 {
-                    return new[] { ReportIssue(symbol, phrase) };
+                    return ReportIssueStartingPhrase(symbol, phrase);
                 }
 
                 foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
                 {
-                    return new[] { ReportIssue(symbol, phrase) };
+                    return ReportIssueStartingPhrase(symbol, phrase);
                 }
 
                 if (summary.StartsWith("<", Comparison))
                 {
                     var index = summary.IndexOf("/>", Comparison);
                     var phrase = index > 0 ? summary.Substring(0, index + 2) : "<";
-                    return new[] { ReportIssue(symbol, phrase) };
+                    return ReportIssueStartingPhrase(symbol, phrase);
                 }
 
                 foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
                 {
-                    return new[] { ReportIssue(symbol, phrase) };
+                    return ReportIssueContainsPhrase(symbol, phrase);
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
+
+        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "contains", phrase) };
+
+        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "starts with", phrase) };
 
         private static IEnumerable<string> GetSelfSymbolNames(ISymbol symbol)
         {

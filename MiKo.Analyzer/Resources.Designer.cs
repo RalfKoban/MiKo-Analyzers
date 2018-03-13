@@ -1234,7 +1234,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; contains meaningless phrase: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; {1} meaningless phrase: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2012_MessageFormat {
             get {
