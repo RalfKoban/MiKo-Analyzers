@@ -1667,7 +1667,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of &apos;{1}&apos; for documentation.
+        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2040_MessageFormat {
             get {
