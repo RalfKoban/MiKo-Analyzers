@@ -12,7 +12,7 @@ namespace Microsoft.CodeAnalysis
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
-            return parameters.Length == 2 && parameters[0].Type.ToString() == "object" && parameters[1].Type.IsEventArgs();
+            return parameters.Length == 2 && parameters[0].Type.SpecialType == SpecialType.System_Object && parameters[1].Type.IsEventArgs();
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol method)
@@ -97,12 +97,14 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static bool IsConstructor(this ISymbol symbol) => symbol?.Name == ".ctor";
+        internal static bool IsConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.MethodKind == MethodKind.Constructor && !m.IsStatic;
 
-        internal static bool IsClassConstructor(this ISymbol symbol) => symbol?.Name == ".cctor";
+        internal static bool IsClassConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.MethodKind == MethodKind.Constructor && m.IsStatic;
 
         internal static bool IsImportingConstructor(this ISymbol symbol)
         {
+            if (!symbol.IsConstructor()) return false;
+
             foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
             {
                 switch (name)
