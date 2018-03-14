@@ -7,7 +7,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingLengthAnalyzer : NamingAnalyzer
     {
-        private const bool EnabledPerDefault = false; // TODO: RKN set to false to limit the default analyzing (but be aware to get the tests running)
+        private const bool EnabledPerDefault = true; // TODO: RKN set to false to limit the default analyzing (but be aware to get the tests running)
 
         private readonly int m_limit;
 
@@ -17,10 +17,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.IsOverride) return Enumerable.Empty<Diagnostic>();
 
-            var exceeding = symbol.Name.Length - m_limit;
+            var exceeding = GetExceedingCharacters(symbol.Name);
             return exceeding > 0
-                       ? new[] { ReportIssue(symbol, exceeding, m_limit) }
+                       ? new[] { ReportIssue(symbol, exceeding) }
                        : Enumerable.Empty<Diagnostic>();
         }
+
+        protected Diagnostic ReportIssue(ISymbol symbol, int exceeding) => ReportIssue(symbol, exceeding, m_limit);
+
+        protected int GetExceedingCharacters(string symbolName) => symbolName.Length - m_limit;
     }
 }
