@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2036_PropertyDefaultPhraseAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2036_PropertyDefaultValuePhraseAnalyzerTests : CodeFixVerifier
     {
         [Test, Combinatorial]
         public void No_issue_is_reported_for_commented_method([ValueSource(nameof(BooleanReturnValues))] string returnType, [Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
@@ -120,9 +120,79 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2036_PropertyDefaultPhraseAnalyzer.Id;
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_commented_Enum_property_with_missing_default_value([Values("returns", "value")] string xmlTag) => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2036_PropertyDefaultPhraseAnalyzer();
+public enum MyEnum
+{
+    A = 0,
+    B,
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// One of the MyEnum values.
+    /// </" + xmlTag + @">
+    public MyEnum DoSomething { get; set; }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_commented_Enum_property_with_default_value([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public enum MyEnum
+{
+    A = 0,
+    B,
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// One of the MyEnum values. The default is <see cref=""MyEnum.A""/>.
+    /// </" + xmlTag + @">
+    public MyEnum DoSomething { get; set; }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_commented_Enum_property_with_default_value_and_line_break([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public enum MyEnum
+{
+    A = 0,
+    B,
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// One of the MyEnum values.
+    /// The default is <see cref=""MyEnum.A"" />.
+    /// </" + xmlTag + @">
+    public MyEnum DoSomething { get; set; }
+}
+");
+
+        protected override string GetDiagnosticId() => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
+
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2036_PropertyDefaultValuePhraseAnalyzer();
 
         private static IEnumerable<string> BooleanReturnValues() => new[] { "bool", "Boolean", "System.Boolean", nameof(System.Boolean), }.ToHashSet();
     }
