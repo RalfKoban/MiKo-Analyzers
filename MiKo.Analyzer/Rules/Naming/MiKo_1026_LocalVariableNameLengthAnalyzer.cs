@@ -23,15 +23,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
         }
 
-        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
+        private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
-            var node = (VariableDeclarationSyntax)context.Node;
-            if (node.Parent is FieldDeclarationSyntax) return;
-
-            AnalyzeVariableDeclaration(context, node);
+            var node = (LocalDeclarationStatementSyntax)context.Node;
+            AnalyzeVariableDeclaration(context, node.Declaration);
         }
 
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context, VariableDeclarationSyntax node)

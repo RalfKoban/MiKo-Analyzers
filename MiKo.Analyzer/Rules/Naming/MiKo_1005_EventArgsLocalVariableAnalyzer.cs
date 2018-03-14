@@ -23,17 +23,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
         }
 
-        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
+        private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
-            var node = (VariableDeclarationSyntax)context.Node;
+            var node = (LocalDeclarationStatementSyntax)context.Node;
             var semanticModel = context.SemanticModel;
 
-            if (!ShallAnalyze(node, semanticModel)) return;
+            if (!ShallAnalyze(node.Declaration, semanticModel)) return;
 
-            var diagnostics = Analyze(node, semanticModel);
+            var diagnostics = Analyze(node.Declaration, semanticModel);
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
@@ -42,9 +42,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool ShallAnalyze(VariableDeclarationSyntax node, SemanticModel semanticModel)
         {
-            if (node.Parent is FieldDeclarationSyntax)
-                return false;
-
             var type = semanticModel.GetTypeInfo(node.Type).Type;
             return type?.IsEventArgs() == true;
         }
