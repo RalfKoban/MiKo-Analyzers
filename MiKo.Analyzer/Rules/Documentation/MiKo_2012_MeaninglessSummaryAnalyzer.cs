@@ -64,9 +64,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "contains", phrase) };
+        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "contains", phrase.GetBeginning(50)) };
 
-        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "starts with", phrase) };
+        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "starts with", phrase.GetBeginning(50)) };
 
         private static IEnumerable<string> GetSelfSymbolNames(ISymbol symbol)
         {

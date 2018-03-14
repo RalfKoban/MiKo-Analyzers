@@ -77,5 +77,13 @@ namespace System
             var length = value.Length - suffix.Length;
             return length > 0 ? value.Substring(0, length) : string.Empty;
         }
+
+        internal static string GetBeginning(this string value, int max)
+        {
+            var index = Math.Min(max, value.Length);
+            return index <= 0 || index == value.Length
+                       ? value
+                       : value.Substring(0, index) + "...";
+        }
     }
 }
