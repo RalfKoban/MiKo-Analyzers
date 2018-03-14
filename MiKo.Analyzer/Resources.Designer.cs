@@ -423,7 +423,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceeds limit of {2} chars by {1}.
+        ///   Looks up a localized string similar to Type name exceeds limit of {2} chars by {1}.
         /// </summary>
         public static string MiKo_1020_MessageFormat {
             get {
@@ -450,7 +450,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceeds limit of {2} chars by {1}.
+        ///   Looks up a localized string similar to Method name exceeds limit of {2} chars by {1}.
         /// </summary>
         public static string MiKo_1021_MessageFormat {
             get {
@@ -477,7 +477,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceeds limit of {2} chars by {1}.
+        ///   Looks up a localized string similar to Parameter name exceeds limit of {2} chars by {1}.
         /// </summary>
         public static string MiKo_1022_MessageFormat {
             get {
@@ -504,7 +504,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceeds limit of {2} chars by {1}.
+        ///   Looks up a localized string similar to Field name exceeds limit of {2} chars by {1}.
         /// </summary>
         public static string MiKo_1023_MessageFormat {
             get {
@@ -531,7 +531,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceeds limit of {2} chars by {1}.
+        ///   Looks up a localized string similar to Property name exceeds limit of {2} chars by {1}.
         /// </summary>
         public static string MiKo_1024_MessageFormat {
             get {
@@ -558,7 +558,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceeds limit of {2} chars by {1}.
+        ///   Looks up a localized string similar to Event name exceeds limit of {2} chars by {1}.
         /// </summary>
         public static string MiKo_1025_MessageFormat {
             get {
@@ -585,7 +585,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceeds limit of {2} chars by {1}.
+        ///   Looks up a localized string similar to Variable name exceeds limit of {2} chars by {1}.
         /// </summary>
         public static string MiKo_1026_MessageFormat {
             get {

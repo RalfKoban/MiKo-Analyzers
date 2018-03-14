@@ -29,6 +29,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
         {
             var node = (VariableDeclarationSyntax)context.Node;
+            if (node.Parent is FieldDeclarationSyntax) return;
+
+            AnalyzeVariableDeclaration(context, node);
+        }
+
+        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context, VariableDeclarationSyntax node)
+        {
             var semanticModel = context.SemanticModel;
 
             var diagnostics = Analyze(node, semanticModel);
