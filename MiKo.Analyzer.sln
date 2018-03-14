@@ -8,6 +8,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiKo.Analyzer.Tests", "MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj", "{110CF3BC-190B-46A4-9525-A4DF6813D38D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiKo.Analyzer.Vsix", "MiKo.Analyzer.Vsix\MiKo.Analyzer.Vsix.csproj", "{15DEC8E6-2392-45BE-86E7-A5221F48047C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0E08768E-EB1C-4673-BE1D-B396B28BBA69} = {0E08768E-EB1C-4673-BE1D-B396B28BBA69}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{E8DA3417-4698-4F8E-9D6A-715988F81B7A}"
 EndProject
