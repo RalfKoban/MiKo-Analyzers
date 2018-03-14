@@ -25,6 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected Diagnostic ReportIssue(ISymbol symbol, int exceeding) => ReportIssue(symbol, exceeding, m_limit);
 
-        protected int GetExceedingCharacters(string symbolName) => symbolName.Length - m_limit;
+        protected int GetExceedingCharacters(string symbolName)
+        {
+            var lastIndex = symbolName.LastIndexOf('.') + 1;
+            var length = symbolName.Substring(lastIndex).Length;
+            return length - m_limit;
+        }
     }
 }
