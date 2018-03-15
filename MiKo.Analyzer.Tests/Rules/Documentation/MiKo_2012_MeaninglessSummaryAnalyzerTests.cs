@@ -250,7 +250,7 @@ public class TestMe : ITestMe
 
         private static IEnumerable<string> MeaninglessPhrases()
         {
-            var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command" };
+            var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Delegate", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command", "Action", "Func" };
 
             var phrases = MeaninglessTextPhrases();
 
@@ -282,6 +282,7 @@ public class TestMe : ITestMe
             results.AddRange(phrases.Select(_ => _.ToLower()));
             results.AddRange(phrases.Select(_ => _.ToUpper()));
 
+            results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");
 
             return new HashSet<string>(results);

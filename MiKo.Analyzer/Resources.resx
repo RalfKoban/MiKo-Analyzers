@@ -579,6 +579,18 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2018_Title" xml:space="preserve">
     <value>XML documentation should not use the ambiguous term 'Check'.</value>
   </data>
+  <data name="MiKo_2019_Description" xml:space="preserve">
+    <value>The &lt;summary&gt; XML documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;.</value>
+  </data>
+  <data name="MiKo_2019_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
+  </data>
+  <data name="MiKo_2019_MessageFormat" xml:space="preserve">
+    <value>Do not place '{0}' inside of &lt;summary&gt; documentation</value>
+  </data>
+  <data name="MiKo_2019_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation should not contain other documentation tags.</value>
+  </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use XML summaries that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used.</value>
   </data>
