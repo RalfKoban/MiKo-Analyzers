@@ -1459,7 +1459,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not place &apos;{0}&apos; inside of &lt;summary&gt; documentation.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2019_MessageFormat {
             get {
