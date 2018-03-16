@@ -1802,6 +1802,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of exceptions should  follow the .NET Framework documentation..
+        /// </summary>
+        public static string MiKo_2050_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2050_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{1}&gt; should start with: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2050_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2050_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exceptions should be documented following the .NET Framework..
+        /// </summary>
+        public static string MiKo_2050_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2050_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
         /// </summary>
         public static string MiKo_3001_Description {

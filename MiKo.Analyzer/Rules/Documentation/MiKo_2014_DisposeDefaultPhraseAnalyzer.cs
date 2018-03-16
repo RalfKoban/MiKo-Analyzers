@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // check for parameter
             foreach (var parameter in symbol.Parameters)
             {
-                var comment = GetCommentForParameter(parameter, commentXml);
+                var comment = GetParameterComment(parameter, commentXml);
                 if (comment is null) continue;
                 if (comment == ParameterPhrase) continue;
 

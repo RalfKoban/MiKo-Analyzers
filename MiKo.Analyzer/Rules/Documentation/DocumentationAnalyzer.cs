@@ -57,6 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes()
                                                                                                                                                           .ConcatenatedWith()
                                                                                                                                                           .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
+                                                                                                                                                          .Replace("    ", " ")
                                                                                                                                                           .Trim());
 
         protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
@@ -75,19 +76,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static string GetCommentForParameter(IParameterSymbol parameter, string commentXml)
+        protected static string GetParameterComment(IParameterSymbol parameter, string commentXml)
         {
             var parameterName = parameter.Name;
-            return FlattenComment(GetCommentElements(commentXml, @"param").Where(_ => _.Attribute("name")?.Value == parameterName));
+            return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
         }
 
         private static string FlattenComment(IEnumerable<XElement> comments)
         {
             if (!comments.Any()) return null;
 
-            var comment = comments.Nodes().ConcatenatedWith().WithoutParaTags().RemoveAll(Constants.SymbolMarkers).Trim();
-            return comment;
-
+            var comment = comments.Nodes().ConcatenatedWith().WithoutParaTags().RemoveAll(Constants.SymbolMarkersAndLineBreaks).Trim();
+            return comment
+                   .Replace("    ", " ")
+                   .Replace("   ", " ")
+                   .Replace("  ", " ");
         }
     }
 }

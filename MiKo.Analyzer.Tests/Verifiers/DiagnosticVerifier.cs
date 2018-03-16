@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 
@@ -52,7 +53,7 @@ namespace TestHelper
         {
             var results = GetDiagnostics(fileContent);
 
-            Assert.That(results, Is.Empty);
+            Assert.That(results, Is.Empty, Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _)));
         }
 
         protected void No_issue_is_reported_for_file(string path) => No_issue_is_reported_for(File.ReadAllText(path));

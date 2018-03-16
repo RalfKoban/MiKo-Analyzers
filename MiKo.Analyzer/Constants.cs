@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string[] SpecialModelMarkers = { "Modeless", "modeless", "ModeLess", "modeLess" };
         internal static readonly string[] CollectionMarkers = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
         internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:", "F:" };
-        internal static readonly string[] SymbolMarkersAndLineBreaks = SymbolMarkers.Concat(new[] { Environment.NewLine + "   " }).ToArray();
+        internal static readonly string[] SymbolMarkersAndLineBreaks = SymbolMarkers.Concat(new[] { Environment.NewLine }).ToArray();
 
         internal static class Comments
         {
@@ -167,6 +167,30 @@ namespace MiKoSolutions.Analyzers
                     "<typeparamref ",
                     "<value",
                 };
+
+            internal static string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown ";
+
+            internal static string[] ExceptionCtorSummaryStartingPhrase =
+                {
+                    "Initializes a new instance of the <see cref=\"{0}\"/> class",
+                    "Initializes a new instance of the <see cref=\"{0}\" /> class",
+                };
+
+            internal static string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
+            internal static string ExceptionCtorExceptionParamSummaryContinueingPhrase = " and a reference to the inner exception that is the cause of this exception";
+            internal static string ExceptionCtorSerializationParamSummaryContinueingPhrase = " with serialized data";
+            internal static string ExceptionCtorSerializationParamRemarksPhrase = "This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.";
+
+            internal static string[] ExceptionCtorSerializationInfoParamPhrase = { "The object that holds the serialized object data." };
+            internal static string[] ExceptionCtorStreamingContextParamPhrase = { "The contextual information about the source or destination." };
+            internal static string[] ExceptionCtorMessageParamPhrase = { "The error message that explains the reason for the exception." };
+            internal static string[] ExceptionCtorExceptionParamPhrase =
+                {
+                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
+                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
+                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
+                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
+                };
         }
 
         public static class MaxNamingLengths
@@ -178,6 +202,14 @@ namespace MiKoSolutions.Analyzers
             public const int Parameters = 20;
             public const int Fields = 20;
             public const int LocalVariables = 15;
+        }
+
+        internal static class XmlTag
+        {
+            internal const string Summary = "summary";
+            internal const string Param = "param";
+            internal const string Returns = "returns";
+            internal const string Value = "value";
         }
     }
 }

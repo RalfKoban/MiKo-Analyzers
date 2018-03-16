@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (!ShallAnalyzeReturnType(returnType)) return Enumerable.Empty<Diagnostic>();
 
-            return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, "returns") ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, "value") ?? Enumerable.Empty<Diagnostic>();
+            return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Returns) ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Value) ?? Enumerable.Empty<Diagnostic>();
         }
 
         protected IEnumerable<Diagnostic> AnalyzeReturnType(IPropertySymbol symbol, string commentXml)
