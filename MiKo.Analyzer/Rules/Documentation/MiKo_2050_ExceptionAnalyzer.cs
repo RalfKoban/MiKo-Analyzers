@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, string[] phrase)
+        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, IReadOnlyList<string> phrase)
         {
             var comment = GetParameterComment(symbol, commentXml);
             if (phrase.Any(_ => _ == comment)) return Enumerable.Empty<Diagnostic>();
