@@ -10,6 +10,75 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2050_ExceptionAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_non_exception_class() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>
+/// Something...
+/// </summary>
+[Serializable]
+public sealed class BlaBla
+{
+    /// <overloads>
+    /// <summary>
+    /// Ctor.
+    /// </summary>
+    /// </overloads>
+    /// <summary>
+    /// Ctor.
+    /// </summary>
+    public BlaBla()
+    {
+    }
+
+    /// <summary>
+    /// Ctor.
+    /// </summary>
+    /// <param name=""message"">
+    /// whatever
+    /// </param>
+    public BlaBla(string message)
+        : base(message)
+    {
+    }
+
+    /// <summary>
+    /// Ctor.
+    /// </summary>
+    /// <param name=""message"">
+    /// whatever
+    /// </param>
+    /// <param name=""innerException"">
+    /// Some stuff.
+    /// </param>
+    public BlaBla(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+
+    /// <summary>
+    /// Ctor.
+    /// </summary>
+    /// <param name=""info"">
+    /// p1
+    /// </param>
+    /// <param name=""context"">
+    /// p2
+    /// </param>
+    /// <remarks>
+    /// Unimportant.
+    /// </remarks>
+    private BlaBla(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+}");
+
+
+        // TODO: Test for remarks
+        // TODO: Test for overloads
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_exception() => No_issue_is_reported_for(@"
 using System;
 using System.Runtime.Serialization;
