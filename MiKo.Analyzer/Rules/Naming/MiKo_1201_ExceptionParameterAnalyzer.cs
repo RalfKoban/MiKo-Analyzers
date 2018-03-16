@@ -13,7 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string ExceptionIdentifier1 = "ex";
         private const string ExceptionIdentifier2 = "exception";
-        private const string InnerExceptionIdentifier = "innerException";
+        private const string InnerExceptionIdentifier = "inner";
+        private const string InnerExceptionIdentifier2 = "innerException";
 
         public MiKo_1201_ExceptionParameterAnalyzer() : base(Id, SymbolKind.Parameter)
         {
@@ -32,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return Enumerable.Empty<Diagnostic>();
 
                 case InnerExceptionIdentifier:
+                case InnerExceptionIdentifier2:
                     if (symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException())
                         return Enumerable.Empty<Diagnostic>();
 
