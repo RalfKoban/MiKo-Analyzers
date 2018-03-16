@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -56,20 +57,25 @@ namespace System
         public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string HumanizedConcatenated<T>(this IReadOnlyList<T> values)
+        public static string HumanizedConcatenated<T>(this IEnumerable<T> values)
         {
+            var items = values.SurroundedWith('\'').ToImmutableList();
+
             const string Separator = ", ";
             const string SeparatorForLast = " or ";
 
-            var count = values.Count;
+            var count = items.Count;
             switch (count)
             {
                 case 0: return string.Empty;
-                case 1: return values[0].ToString();
-                case 2: return values.ConcatenatedWith(SeparatorForLast);
-                default: return string.Concat(values.Take(count - 2).ConcatenatedWith(Separator), SeparatorForLast, values.Last());
+                case 1: return items[0];
+                case 2: return items.ConcatenatedWith(SeparatorForLast);
+                default: return string.Concat(items.Take(count - 2).ConcatenatedWith(Separator), SeparatorForLast, items.Last());
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<string> SurroundedWith<T>(this IEnumerable<T> values, char surrounding) => values.Select(_ => string.Concat(surrounding, _, surrounding));
 
         internal static string HumanizedTakeFirst(this string value, int max)
         {

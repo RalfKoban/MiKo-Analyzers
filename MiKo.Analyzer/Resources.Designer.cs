@@ -1513,7 +1513,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with any of the following: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should start with any of the following: {2}.
         /// </summary>
         public static string MiKo_2021_MessageFormat {
             get {
@@ -1540,7 +1540,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should start with: {2}.
         /// </summary>
         public static string MiKo_2022_MessageFormat {
             get {
@@ -1567,7 +1567,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should start with: {2}.
         /// </summary>
         public static string MiKo_2023_MessageFormat {
             get {

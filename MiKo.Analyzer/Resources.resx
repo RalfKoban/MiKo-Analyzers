@@ -604,7 +604,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>XML documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>Documentation should start with any of the following: '{2}'</value>
+    <value>Documentation should start with any of the following: {2}</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>XML documentation of parameter should have a default starting phrase.</value>
@@ -613,7 +613,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>XML documentation of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>Documentation should start with: '{2}'</value>
+    <value>Documentation should start with: {2}</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>XML documentation of [out] parameters should have a default starting phrase.</value>
@@ -622,7 +622,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>XML documentation of enum parameters should start with a phrase that specifies what will be done with the enum.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>Documentation should start with: '{2}'</value>
+    <value>Documentation should start with: {2}</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>XML documentation of enum parameters should have a default starting phrase.</value>
