@@ -14,9 +14,16 @@ branches:
 init:
 - git config --global core.autocrlf true
 
+environment:
+    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/3.8/NUnit.Console-3.8.0.msi
+
 install:
   - choco install gitversion.portable -pre -y
-
+  
+# Install NUnit 3.8 console
+  - ps: Start-FileDownload $env:NUnitRunnerUri -FileName NUnitInstaller.msi
+  - ps: msiexec /i NUnitInstaller.msi /quiet /qn /norestart /log install.log
+ 
 # clone directory
 clone_folder: c:\projects\MiKo.Analyzers
 
@@ -54,11 +61,11 @@ configuration:
   - Release
 
 # Currently, .NET Core 2.0 projects are not supported by NUnit 3, so we cannot yet run the tests (and same for Codecov code coverage)
-#test_script:
-# -  '%USERPROFILE%\.nuget\packages\OpenCover\4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:" "".\MiKo.Analyzer.Tests\bin\netcoreapp2.0\MiKoSolutions.Analyzers.Tests.dll"" --workers=16" -returntargetcode -filter:"+[MiKo*]* -[*Test*]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -output:"c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" '
+test_script:
+-  '%USERPROFILE%\.nuget\packages\OpenCover\4.6.519\tools\OpenCover.Console.exe -register:user -target:"nunit3-console.exe" -targetargs:" "".\MiKo.Analyzer.Tests\bin\netcoreapp2.0\MiKoSolutions.Analyzers.Tests.dll"" --workers=16" -returntargetcode -filter:"+[MiKo*]* -[*Test*]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -output:"c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" '
 
-# Codecov Flags (https://docs.codecov.io/v4.3.6/docs/flags)
-# - '%USERPROFILE%\.nuget\packages\Codecov\1.0.3\tools\codecov.exe -f "c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" -t 3599e0b3-8d22-44eb-a33d-58383db89b64 --flag api '
+Codecov Flags (https://docs.codecov.io/v4.3.6/docs/flags)
+- '%USERPROFILE%\.nuget\packages\Codecov\1.0.3\tools\codecov.exe -f "c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" -t 3599e0b3-8d22-44eb-a33d-58383db89b64 --flag api '
 
 # Run SonarQube scanner
 
