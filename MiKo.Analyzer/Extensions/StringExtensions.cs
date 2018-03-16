@@ -50,7 +50,34 @@ namespace System
         public static bool IsNumber(this char value) => char.IsNumber(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator = "") => string.Join(separator, values);
+        public static string ConcatenatedWith<T>(this IEnumerable<T> values) => string.Concat(values);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string HumanizedConcatenated<T>(this IReadOnlyList<T> values)
+        {
+            const string Separator = ", ";
+            const string SeparatorForLast = " or ";
+
+            var count = values.Count;
+            switch (count)
+            {
+                case 0: return string.Empty;
+                case 1: return values[0].ToString();
+                case 2: return values.ConcatenatedWith(SeparatorForLast);
+                default: return string.Concat(values.Take(count - 2).ConcatenatedWith(Separator), SeparatorForLast, values.Last());
+            }
+        }
+
+        internal static string HumanizedTakeFirst(this string value, int max)
+        {
+            var index = Math.Min(max, value.Length);
+            return index <= 0 || index == value.Length
+                       ? value
+                       : value.Substring(0, index) + "...";
+        }
 
         internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.EntityMarkers) && !symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.ViewModelMarkers);
 
@@ -76,14 +103,6 @@ namespace System
         {
             var length = value.Length - suffix.Length;
             return length > 0 ? value.Substring(0, length) : string.Empty;
-        }
-
-        internal static string GetBeginning(this string value, int max)
-        {
-            var index = Math.Min(max, value.Length);
-            return index <= 0 || index == value.Length
-                       ? value
-                       : value.Substring(0, index) + "...";
         }
     }
 }

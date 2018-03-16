@@ -29,19 +29,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (comment is null) continue;
                 if (comment.EqualsAny(StringComparison.Ordinal, Constants.Comments.UnusedPhrase)) continue;
 
-                var findings = AnalyzeParameter(parameter, comment);
-                if (findings.Any())
-                {
-                    if (results == null) results = new List<Diagnostic>();
-                    results.AddRange(findings);
-                }
+                AnalyzeParameters(parameter, comment, ref results);
             }
 
             return results ?? Enumerable.Empty<Diagnostic>();
         }
 
+        private void AnalyzeParameters(IParameterSymbol parameter, string comment, ref List<Diagnostic> results)
+        {
+            var findings = AnalyzeParameter(parameter, comment);
+            if (findings.Any())
+            {
+                if (results == null) results = new List<Diagnostic>();
+                results.AddRange(findings);
+            }
+        }
+
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase) => comment.StartsWithAny(StringComparison.Ordinal, phrase)
                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                : new[] { ReportIssue(parameter, parameter.Name, phrase.ConcatenatedWith(", ")) };
+                                                                                                                                : new[] { ReportIssue(parameter, parameter.Name, phrase.HumanizedConcatenated()) };
     }
 }
