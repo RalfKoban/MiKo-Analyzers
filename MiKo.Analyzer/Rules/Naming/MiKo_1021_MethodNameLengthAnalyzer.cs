@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1021";
 
-        public MiKo_1021_MethodNameLengthAnalyzer() : base(Id, SymbolKind.Method, 25)
+        public MiKo_1021_MethodNameLengthAnalyzer() : base(Id, SymbolKind.Method, Constants.MaxNamingLengths.Methods)
         {
         }
 

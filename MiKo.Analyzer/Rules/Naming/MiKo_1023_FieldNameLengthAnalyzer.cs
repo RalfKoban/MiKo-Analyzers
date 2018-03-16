@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1023";
 
-        public MiKo_1023_FieldNameLengthAnalyzer() : base(Id, SymbolKind.Field, 20)
+        public MiKo_1023_FieldNameLengthAnalyzer() : base(Id, SymbolKind.Field, Constants.MaxNamingLengths.Fields)
         {
         }
 

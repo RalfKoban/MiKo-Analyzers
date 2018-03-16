@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1024";
 
-        public MiKo_1024_PropertyNameLengthAnalyzer() : base(Id, SymbolKind.Property, 25)
+        public MiKo_1024_PropertyNameLengthAnalyzer() : base(Id, SymbolKind.Property, Constants.MaxNamingLengths.Properties)
         {
         }
 

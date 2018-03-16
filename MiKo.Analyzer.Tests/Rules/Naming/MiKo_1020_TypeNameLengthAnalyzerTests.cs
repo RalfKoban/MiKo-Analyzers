@@ -4,12 +4,10 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
-using TestHelper;
-
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1020_TypeNameLengthAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1020_TypeNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
         [Test, Combinatorial]
         public void No_issue_is_reported_for_type_with_fitting_length(
@@ -49,39 +47,8 @@ public class Abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz
 
         private static IEnumerable<string> FittingTypes() => new[] { "interface", "class", "enum" };
 
-        private static IEnumerable<string> FittingNames() => new[]
-                                                          {
-                                                              "A",
-                                                              "Ab",
-                                                              "Abc",
-                                                              "Abcd",
-                                                              "Abcde",
-                                                              "Abcdef",
-                                                              "Abcdefg",
-                                                              "Abcdefgh",
-                                                              "Abcdefghi",
-                                                              "Abcdefghij",
-                                                              "Abcdefghijk",
-                                                              "Abcdefghijkl",
-                                                              "Abcdefghijklm",
-                                                              "Abcdefghijklmn",
-                                                              "Abcdefghijklmno",
-                                                              "Abcdefghijklmnop",
-                                                              "Abcdefghijklmnopq",
-                                                              "Abcdefghijklmnopqr",
-                                                              "Abcdefghijklmnopqrs",
-                                                              "Abcdefghijklmnopqrst",
-                                                              "Abcdefghijklmnopqrstu",
-                                                              "Abcdefghijklmnopqrstuv",
-                                                              "Abcdefghijklmnopqrstuvw",
-                                                              "Abcdefghijklmnopqrstuvwx",
-                                                              "Abcdefghijklmnopqrstuvwxy",
-                                                              "Abcdefghijklmnopqrstuvwxyz01234567890äöü",
-                                                          };
+        private static IEnumerable<string> FittingNames() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Types);
 
-        private static IEnumerable<string> ExceedingNames() => new[]
-                                                          {
-                                                              "Abcdefghijklmnopqrstuvwxyz01234567890äöüß",
-                                                          };
+        private static IEnumerable<string> ExceedingNames() => GetAllAboveLengthOf(Constants.MaxNamingLengths.Types);
     }
 }

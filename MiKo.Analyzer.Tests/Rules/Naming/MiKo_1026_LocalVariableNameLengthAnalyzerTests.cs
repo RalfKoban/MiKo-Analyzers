@@ -1,30 +1,16 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
-
-using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1026_LocalVariableNameLengthAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1026_LocalVariableNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
-        [TestCase("A")]
-        [TestCase("Ab")]
-        [TestCase("Abc")]
-        [TestCase("Abcd")]
-        [TestCase("Abcde")]
-        [TestCase("Abcdef")]
-        [TestCase("Abcdefg")]
-        [TestCase("Abcdefgh")]
-        [TestCase("Abcdefghi")]
-        [TestCase("Abcdefghij")]
-        [TestCase("Abcdefghijk")]
-        [TestCase("Abcdefghijkl")]
-        [TestCase("Abcdefghijklm")]
-        [TestCase("Abcdefghijklmn")]
-        [TestCase("Abcdefghijklmno")]
-        public void No_issue_is_reported_for_variable_with_fitting_length(string name) => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_variable_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething()
@@ -35,23 +21,25 @@ public class TestMe
 }
 ");
 
-        [TestCase("Abcdefghijklmnop")]
-        [TestCase("Abcdefghijklmnopq")]
-        [TestCase("Abcdefghijklmnopqr")]
-        [TestCase("Abcdefghijklmnopqrs")]
-        [TestCase("Abcdefghijklmnopqrst")]
-        [TestCase("Abcdefghijklmnopqrstu")]
-        [TestCase("Abcdefghijklmnopqrstuv")]
-        [TestCase("Abcdefghijklmnopqrstuvw")]
-        [TestCase("Abcdefghijklmnopqrstuvwx")]
-        [TestCase("Abcdefghijklmnopqrstuvwxy")]
-        [TestCase("Abcdefghijklmnopqrstuvwxyz")]
-        public void An_issue_is_reported_for_variable_with_exceeding_length(string name) => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_variable_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething()
     {
         var " + name + @" = 42;
+        return " + name + @"; 
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething()
+    {
+        const int " + name + @" = 42;
         return " + name + @"; 
     }
 }
@@ -60,5 +48,9 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_1026_LocalVariableNameLengthAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1026_LocalVariableNameLengthAnalyzer();
+
+        private static IEnumerable<string> Fitting() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.LocalVariables);
+
+        private static IEnumerable<string> NonFitting() => GetAllAboveLengthOf(Constants.MaxNamingLengths.LocalVariables);
     }
 }

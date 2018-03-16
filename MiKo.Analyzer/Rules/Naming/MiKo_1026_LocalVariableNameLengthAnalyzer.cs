@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1026";
 
-        public MiKo_1026_LocalVariableNameLengthAnalyzer() : base(Id, (SymbolKind)(-1), 15)
+        public MiKo_1026_LocalVariableNameLengthAnalyzer() : base(Id, (SymbolKind)(-1), Constants.MaxNamingLengths.LocalVariables)
         {
         }
 
@@ -29,6 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
+            if (node.IsConst) return;
+
             AnalyzeVariableDeclaration(context, node.Declaration);
         }
 

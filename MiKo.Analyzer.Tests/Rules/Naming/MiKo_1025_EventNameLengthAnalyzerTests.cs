@@ -1,47 +1,26 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
-
-using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1025_EventNameLengthAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1025_EventNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
-        [TestCase("A")]
-        [TestCase("Ab")]
-        [TestCase("Abc")]
-        [TestCase("Abcd")]
-        [TestCase("Abcde")]
-        [TestCase("Abcdef")]
-        [TestCase("Abcdefg")]
-        [TestCase("Abcdefgh")]
-        [TestCase("Abcdefghi")]
-        [TestCase("Abcdefghij")]
-        [TestCase("Abcdefghijk")]
-        [TestCase("Abcdefghijkl")]
-        [TestCase("Abcdefghijklm")]
-        [TestCase("Abcdefghijklmn")]
-        [TestCase("Abcdefghijklmno")]
-        [TestCase("Abcdefghijklmnop")]
-        [TestCase("Abcdefghijklmnopq")]
-        [TestCase("Abcdefghijklmnopqr")]
-        [TestCase("Abcdefghijklmnopqrs")]
-        [TestCase("Abcdefghijklmnopqrst")]
-        [TestCase("Abcdefghijklmnopqrstu")]
-        [TestCase("Abcdefghijklmnopqrstuv")]
-        [TestCase("Abcdefghijklmnopqrstuvw")]
-        [TestCase("Abcdefghijklmnopqrstuvwx")]
-        [TestCase("Abcdefghijklmnopqrstuvwxy")]
-        public void No_issue_is_reported_for_event_with_fitting_length(string name) => No_issue_is_reported_for("public event EventHandler " + name + ";");
+        [Test]
+        public void No_issue_is_reported_for_event_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("public event EventHandler " + name + ";");
 
-        [TestCase("Abcdefghijklmnopqrstuvwxyz")]
-        [TestCase("Abcdefghijklmnopqrstuvwxyzß")]
-        public void An_issue_is_reported_for_event_with_exceeding_length(string name) => An_issue_is_reported_for("public event EventHandler " + name + ";");
+        [Test]
+        public void An_issue_is_reported_for_event_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("public event EventHandler " + name + ";");
 
         protected override string GetDiagnosticId() => MiKo_1025_EventNameLengthAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1025_EventNameLengthAnalyzer();
+
+        private static IEnumerable<string> Fitting() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Events);
+
+        private static IEnumerable<string> NonFitting() => GetAllAboveLengthOf(Constants.MaxNamingLengths.Events);
     }
 }

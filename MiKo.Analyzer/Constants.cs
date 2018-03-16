@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MiKoSolutions.Analyzers
 {
-    internal static class Constants
+    public static class Constants
     {
         internal static readonly string[] EntityMarkers = { "Model", "Models", "model", "models" };
         internal static readonly string[] ViewModelMarkers = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
@@ -167,6 +167,17 @@ namespace MiKoSolutions.Analyzers
                     "<typeparamref ",
                     "<value",
                 };
+        }
+
+        public static class MaxNamingLengths
+        {
+            public const int Types = 40;
+            public const int Methods = 25;
+            public const int Events = 25;
+            public const int Properties = 25;
+            public const int Parameters = 20;
+            public const int Fields = 20;
+            public const int LocalVariables = 15;
         }
     }
 }
