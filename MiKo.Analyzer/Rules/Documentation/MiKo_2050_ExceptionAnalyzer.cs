@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = GetParameterComment(symbol, commentXml);
             if (phrase.Any(_ => _ == comment)) return Enumerable.Empty<Diagnostic>();
 
-            return new[] { ReportIssue(symbol, Constants.XmlTag.Param, phrase) };
+            return new[] { ReportIssue(symbol, Constants.XmlTag.Param, phrase[0]) };
         }
     }
 }
