@@ -1948,6 +1948,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, methods that are named &apos;Try&apos; should follow the Try-Pattern.
+        ///That is they should return a Boolean and have the last parameter as out-parameter for the result. In the success case the method should return true and provide valid out data; in all other cases the method should return false..
+        /// </summary>
+        public static string MiKo_3005_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3005_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should follow &apos;Try&apos;-pattern.
+        /// </summary>
+        public static string MiKo_3005_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3005_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods named &apos;Try&apos; should follow the &apos;Try&apos;-Pattern..
+        /// </summary>
+        public static string MiKo_3005_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
