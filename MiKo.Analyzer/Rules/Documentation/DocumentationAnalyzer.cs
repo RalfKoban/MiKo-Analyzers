@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -54,11 +55,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
 
-        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => GetCommentElements(commentXml, xmlElement).Select(_ => _.Nodes()
-                                                                                                                                                          .ConcatenatedWith()
-                                                                                                                                                          .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
-                                                                                                                                                          .Replace("    ", " ")
-                                                                                                                                                          .Trim());
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => Cleaned(GetCommentElements(commentXml, xmlElement));
+
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlElement).Descendants(xmlSubElement));
+
+        protected static ImmutableHashSet<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
 
         protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
         {
@@ -92,5 +93,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .Replace("   ", " ")
                    .Replace("  ", " ");
         }
+
+        protected static ImmutableHashSet<string> Cleaned(IEnumerable<string> comments) => comments.WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
+
+        private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements) => elements.Select(_ => _.Nodes()
+                                                                                                            .ConcatenatedWith()
+                                                                                                            .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
+                                                                                                            .Replace("    ", " ")
+                                                                                                            .Trim());
     }
 }

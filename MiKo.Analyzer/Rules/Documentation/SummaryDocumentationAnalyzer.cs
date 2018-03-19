@@ -33,6 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return summaries.Any() ? AnalyzeSummary(symbol, summaries) : Enumerable.Empty<Diagnostic>();
         }
 
-        protected static ImmutableHashSet<string> GetSummaries(string commentXml) => GetComments(commentXml, Constants.XmlTag.Summary).WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
+        protected static ImmutableHashSet<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
+
+        protected static ImmutableHashSet<string> GetOverloadSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Overloads, Constants.XmlTag.Summary));
     }
 }

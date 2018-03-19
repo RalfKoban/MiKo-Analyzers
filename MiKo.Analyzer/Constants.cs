@@ -121,9 +121,9 @@ namespace MiKoSolutions.Analyzers
                     "The identifier for the <see cref=\"{0}\" /> dependency property.",
                 };
 
-            internal static readonly string SealedClassPhrase = "This class cannot be inherited.";
+            internal const string SealedClassPhrase = "This class cannot be inherited.";
 
-            internal static readonly string EventHandlerSummaryStartingPhrase = "Handles the ";
+            internal const string EventHandlerSummaryStartingPhrase = "Handles the ";
 
             internal static readonly string[] EventHandlerSummaryPhrase =
                 {
@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers
                     EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\" /> event",
                 };
 
-            internal static readonly string DefaultCrefPhrase = "The default is <see cref=\"{0}\"/>.";
+            internal const string DefaultCrefPhrase = "The default is <see cref=\"{0}\"/>.";
 
             internal static readonly string[] DefaultCrefPhrases =
                 {
@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers
                     "The default is <see cref=\"{0}\" />.",
                 };
 
-            internal static readonly string DefaultLangwordPhrase = "The default is <see langword=\"{0}\"/>.";
+            internal const string DefaultLangwordPhrase = "The default is <see langword=\"{0}\"/>.";
 
             internal static readonly string[] DefaultBooleanLangwordPhrases =
                 {
@@ -168,23 +168,23 @@ namespace MiKoSolutions.Analyzers
                     "<value",
                 };
 
-            internal static string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown ";
+            internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown ";
 
-            internal static string[] ExceptionCtorSummaryStartingPhrase =
+            internal static readonly string[] ExceptionCtorSummaryStartingPhrase =
                 {
                     "Initializes a new instance of the <see cref=\"{0}\"/> class",
                     "Initializes a new instance of the <see cref=\"{0}\" /> class",
                 };
 
-            internal static string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
-            internal static string ExceptionCtorExceptionParamSummaryContinueingPhrase = " and a reference to the inner exception that is the cause of this exception";
-            internal static string ExceptionCtorSerializationParamSummaryContinueingPhrase = " with serialized data";
-            internal static string ExceptionCtorSerializationParamRemarksPhrase = "This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.";
+            internal const string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
+            internal const string ExceptionCtorExceptionParamSummaryContinueingPhrase = " and a reference to the inner exception that is the cause of this exception";
+            internal const string ExceptionCtorSerializationParamSummaryContinueingPhrase = " with serialized data";
+            internal const string ExceptionCtorSerializationParamRemarksPhrase = "This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.";
 
-            internal static string[] ExceptionCtorSerializationInfoParamPhrase = { "The object that holds the serialized object data." };
-            internal static string[] ExceptionCtorStreamingContextParamPhrase = { "The contextual information about the source or destination." };
-            internal static string[] ExceptionCtorMessageParamPhrase = { "The error message that explains the reason for the exception." };
-            internal static string[] ExceptionCtorExceptionParamPhrase =
+            internal static readonly string[] ExceptionCtorSerializationInfoParamPhrase = { "The object that holds the serialized object data." };
+            internal static readonly string[] ExceptionCtorStreamingContextParamPhrase = { "The contextual information about the source or destination." };
+            internal static readonly string[] ExceptionCtorMessageParamPhrase = { "The error message that explains the reason for the exception." };
+            internal static readonly string[] ExceptionCtorExceptionParamPhrase =
                 {
                     @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
                     @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
@@ -208,7 +208,9 @@ namespace MiKoSolutions.Analyzers
         {
             internal const string Summary = "summary";
             internal const string Param = "param";
+            internal const string Overloads = "overloads";
             internal const string Returns = "returns";
+            internal const string Remarks = "remarks";
             internal const string Value = "value";
         }
     }

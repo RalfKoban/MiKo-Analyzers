@@ -21,9 +21,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (!symbol.IsConstructor()) return false;
 
-            if (IsMessageCtor(symbol)) return true;
-            if (IsMessageExceptionCtor(symbol)) return true;
-            if (IsSerializationCtor(symbol)) return true;
+            if (IsParameterlessCtor(symbol)
+             || IsMessageCtor(symbol)
+             || IsMessageExceptionCtor(symbol)
+             || IsSerializationCtor(symbol))
+                return !symbol.GetDocumentationCommentXml().IsNullOrWhiteSpace();
 
             return false; // unknown ctor
         }
@@ -33,7 +35,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (!symbol.IsException()) return Enumerable.Empty<Diagnostic>();
 
             return base.AnalyzeType(symbol).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList();
-
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => base.AnalyzeMethod(symbol, commentXml).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
@@ -52,26 +53,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries)
         {
-            var phrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => string.Format(_, symbol.ContainingType)).ToArray();
+            var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => string.Format(_, symbol.ContainingType)).ToArray();
 
-            var findings = AnalyzeSummaryPhrase(symbol, summaries, phrases);
+            var findings = AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases);
             if (findings.Any()) return findings;
 
+            if (IsParameterlessCtor(symbol))
+                return AnalyzeOverloadsSummaryPhrase(symbol, defaultPhrases);
+
             if (IsMessageCtor(symbol))
-                return AnalyzeSummaryPhrase(symbol, summaries, phrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase).ToArray());
 
             if (IsMessageExceptionCtor(symbol))
-                return AnalyzeSummaryPhrase(symbol, summaries, phrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase).ToArray());
 
             if (IsSerializationCtor(symbol))
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, phrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray());
+                var otherFindings = AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray());
+                if (otherFindings.Any()) return otherFindings;
 
-                // TODO: RKN analyze remarks section
+                return AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase);
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
+
+        private IEnumerable<Diagnostic> AnalyzeOverloadsSummaryPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
+        {
+            var summaries = GetOverloadSummaries(symbol.GetDocumentationCommentXml());
+            return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeRemarksPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
+        {
+            var comments = GetRemarks(symbol.GetDocumentationCommentXml());
+            return AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, defaultPhrases);
+        }
+
+        private static bool IsParameterlessCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 0;
 
         private static bool IsMessageCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 1 && IsMessageParameter(symbol.Parameters[0]);
 
@@ -97,9 +116,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<string> summaries, params string[] phrases) => summaries.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
+        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases) => comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                : new[] { ReportIssue(symbol, Constants.XmlTag.Summary, phrases.First()) };
+                                                                                                                                                : new[] { ReportIssue(symbol, constant, phrases.First()) };
+
+        private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<string> summaries, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, phrases);
 
         private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml)
         {
