@@ -12,23 +12,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3005";
 
-        public MiKo_3005_TryMethodsAnalyzer() : base(Id)
+        public MiKo_3005_TryMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
-            if (method.IsOverride) return Enumerable.Empty<Diagnostic>();
+            if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>(); // ignore tests
 
-            if (!method.Name.StartsWith("Try", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
-
-            if (method.ReturnType.SpecialType == SpecialType.System_Boolean && (method.Parameters.Any() && method.Parameters.Last().RefKind == RefKind.Out))
+            List<Diagnostic> results = null;
+            foreach (var finding in symbol.GetMembers().OfType<IMethodSymbol>().Select(Analyze).Where(_ => _ != null))
             {
-                // correct
-                return Enumerable.Empty<Diagnostic>();
+                if (results == null) results = new List<Diagnostic>();
+                results.Add(finding);
             }
 
-            return new[] { ReportIssue(method) };
+            return results ?? Enumerable.Empty<Diagnostic>();
+        }
+
+        private Diagnostic Analyze(IMethodSymbol method)
+        {
+            if (method.IsOverride) return null;
+            if (!method.Name.StartsWith("Try", StringComparison.Ordinal)) return null;
+            if (method.ReturnType.SpecialType == SpecialType.System_Boolean && (method.Parameters.Any() && method.Parameters.Last().RefKind == RefKind.Out)) return null;
+
+            return ReportIssue(method);
         }
     }
 }

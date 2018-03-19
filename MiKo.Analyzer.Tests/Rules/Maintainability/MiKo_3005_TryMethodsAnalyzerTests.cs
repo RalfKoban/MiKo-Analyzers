@@ -20,6 +20,18 @@ public class TestMe
     }
 }
 ");
+        [Test]
+        public void No_issue_is_reported_for_test_class() => No_issue_is_reported_for(@"
+using System;
+
+[TestFixture]
+public class TestMe
+{
+    public void TryDoSomething()
+    {
+    }
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_correct_Try_method() => No_issue_is_reported_for(@"
