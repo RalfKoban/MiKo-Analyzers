@@ -1958,7 +1958,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should follow &apos;Try&apos;-pattern.
+        ///   Looks up a localized string similar to Follow the &apos;Try&apos;-Pattern.
         /// </summary>
         public static string MiKo_3005_MessageFormat {
             get {

@@ -755,7 +755,7 @@ Instead the equality operator should be used to compare value types.</value>
 That is they should return a Boolean and have the last parameter as out-parameter for the result. In the success case the method should return true and provide valid out data; in all other cases the method should return false.</value>
   </data>
   <data name="MiKo_3005_MessageFormat" xml:space="preserve">
-    <value>Should follow 'Try'-pattern</value>
+    <value>Follow the 'Try'-Pattern</value>
   </data>
   <data name="MiKo_3005_Title" xml:space="preserve">
     <value>Methods named 'Try' should follow the 'Try'-Pattern.</value>
