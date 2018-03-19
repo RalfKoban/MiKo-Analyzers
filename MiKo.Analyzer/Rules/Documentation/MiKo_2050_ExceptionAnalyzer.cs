@@ -69,10 +69,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (IsSerializationCtor(symbol))
             {
-                var otherFindings = AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray());
-                if (otherFindings.Any()) return otherFindings;
-
-                return AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase);
+                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray())
+                       .Concat(AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
             }
 
             return Enumerable.Empty<Diagnostic>();
@@ -81,13 +79,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeOverloadsSummaryPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
         {
             var summaries = GetOverloadSummaries(symbol.GetDocumentationCommentXml());
-            return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases);
+            return summaries.Any()
+                       ? AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases)
+                       : Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeRemarksPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
         {
             var comments = GetRemarks(symbol.GetDocumentationCommentXml());
-            return AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, defaultPhrases);
+            return comments.Any()
+                       ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, defaultPhrases)
+                       : Enumerable.Empty<Diagnostic>();
         }
 
         private static bool IsParameterlessCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 0;

@@ -212,6 +212,22 @@ public sealed class BlaBlaException : Exception
 }");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_but_missing_overloads_exception_ctor_without_params() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class.
+    /// </summary>
+    public BlaBlaException()
+    {
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_overloads_on_exception_ctor_without_params() => An_issue_is_reported_for(@"
 using System;
 using System.Runtime.Serialization;
@@ -530,6 +546,29 @@ public sealed class BlaBlaException : Exception
     /// <remarks>
     /// This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.
     /// </remarks>
+    private BlaBlaException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_but_missing_remarks_exception_ctor_with_serialization_param() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with serialized data.
+    /// </summary>
+    /// <param name=""info"">
+    /// The object that holds the serialized object data.
+    /// </param>
+    /// <param name=""context"">
+    /// The contextual information about the source or destination.
+    /// </param>
     private BlaBlaException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
