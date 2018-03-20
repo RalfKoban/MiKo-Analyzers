@@ -19,7 +19,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_empty_test_class() => No_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_named_field() => No_issue_is_reported_for(@"
+[TestFixture]
 public class TestMe
 {
     private int _something;
@@ -27,7 +36,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_incorrectly_named_field_in_non_test_class([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    private int _" + name + @";
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_field([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
 public class TestMe
 {
     private int _" + name + @";
@@ -36,6 +54,7 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_variable() => No_issue_is_reported_for(@"
+[TestFixture]
 public class TestMe
 {
     public void DoSomething()
@@ -46,7 +65,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_named_variable_in_non_test_class([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -57,7 +76,31 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_on_mukti_variable_declaration([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_variable([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int " + name + @" = 0;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_variable_on_multi_variable_declaration_in_non_test_class([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int i = 0, " + name + @" = 0;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_variable_on_multi_variable_declaration([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
 public class TestMe
 {
     public void DoSomething()

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.Diagnostics;
+
 // ReSharper disable once CheckNamespace
 namespace Microsoft.CodeAnalysis
 {
@@ -135,10 +137,10 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
-        internal static bool InheritsFrom<T>(this ITypeSymbol symbol)
-        {
-            var baseClass = typeof(T).FullName;
+        internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, typeof(T).FullName);
 
+        internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClass)
+        {
             while (true)
             {
                 if (symbol.ToString() == baseClass) return true;
@@ -150,12 +152,10 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static bool Implements<T>(this ITypeSymbol symbol)
+        internal static bool Implements<T>(this ITypeSymbol symbol) => Implements(symbol, typeof(T).FullName);
+
+        internal static bool Implements(this ITypeSymbol symbol, string interfaceType)
         {
-            if (symbol.Kind == SymbolKind.ArrayType) return true;
-
-            var interfaceType = typeof(T).FullName;
-
             if (symbol.ToString() == interfaceType) return true;
 
             foreach (var implementedInterface in symbol.AllInterfaces)
@@ -236,5 +236,19 @@ namespace Microsoft.CodeAnalysis
         }
 
         internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
+
+        internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext context) => FindContainingType(context.ContainingSymbol);
+
+        internal static INamedTypeSymbol FindContainingType(this ISymbol symbol)
+        {
+            while (symbol != null)
+            {
+                if (symbol is INamedTypeSymbol s) return s;
+
+                symbol = symbol.ContainingSymbol;
+            }
+
+            return null;
+        }
     }
 }

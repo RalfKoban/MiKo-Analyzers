@@ -29,9 +29,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var node = (VariableDeclarationSyntax)context.Node;
+            var type = context.FindContainingType();
+            if (type != null && type.IsTestClass())
+            {
+                var node = (VariableDeclarationSyntax)context.Node;
 
-            AnalyzeVariableDeclaration(context, node);
+                AnalyzeVariableDeclaration(context, node);
+            }
         }
 
 
