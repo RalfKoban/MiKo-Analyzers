@@ -981,6 +981,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For maintenance reasons, variables should be named about what they represent and not what they technically are.
+        ///Hence naming variables &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, they put the developers attention and focus on the wrong thing..
+        /// </summary>
+        public static string MiKo_1105_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1105_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Mock&apos; or &apos;Stub&apos; for the name.
+        /// </summary>
+        public static string MiKo_1105_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1105_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name variables &apos;Mock&apos; or &apos;Stub&apos;..
+        /// </summary>
+        public static string MiKo_1105_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1105_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, exceptions in catch blocks should be named consistently..
         /// </summary>
         public static string MiKo_1200_Description {
