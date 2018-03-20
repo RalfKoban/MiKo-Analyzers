@@ -7,7 +7,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingLengthAnalyzer : NamingAnalyzer
     {
-        private const bool EnabledPerDefault = true; // TODO: RKN set to false to limit the default analyzing (but be aware to get the tests running)
+        public const bool EnabledPerDefault = false; // TODO: RKN set to false to limit the default analyzing (but be aware to get the tests running)
 
         private readonly int m_limit;
 

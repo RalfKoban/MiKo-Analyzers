@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [TestFixture]
+    [TestFixture(Explicit = !NamingLengthAnalyzer.EnabledPerDefault)]
     public sealed class MiKo_1020_TypeNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
         [Test, Combinatorial]
