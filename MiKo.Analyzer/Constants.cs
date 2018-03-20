@@ -191,6 +191,14 @@ namespace MiKoSolutions.Analyzers
                     @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
                     @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
                 };
+
+            internal const string FactorySummaryPhrase = "Provides support for creating ";
+
+            internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =
+                {
+                    "Creates a new instance of the <see cref=\"{0}\"/> type with ",
+                    "Creates a new instance of the <see cref=\"{0}\" /> type with",
+                };
         }
 
         public static class MaxNamingLengths

@@ -720,13 +720,22 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;see langword="..."/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;.</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of exceptions should  follow the .NET Framework documentation.</value>
+    <value>To ease maintenance, the XML documentation of exceptions should follow the .NET Framework documentation.</value>
   </data>
   <data name="MiKo_2050_MessageFormat" xml:space="preserve">
     <value>&lt;{1}&gt; should start with: '{2}'</value>
   </data>
   <data name="MiKo_2050_Title" xml:space="preserve">
     <value>Exceptions should be documented following the .NET Framework.</value>
+  </data>
+  <data name="MiKo_2060_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of factories should be uniform.</value>
+  </data>
+  <data name="MiKo_2060_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should start with: '{1}'</value>
+  </data>
+  <data name="MiKo_2060_Title" xml:space="preserve">
+    <value>Factories should be documented in a uniform way.</value>
   </data>
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To follow the SRP, methods should have as few parameters as possible.</value>

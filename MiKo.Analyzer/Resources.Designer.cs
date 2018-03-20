@@ -1857,7 +1857,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of exceptions should  follow the .NET Framework documentation..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of exceptions should follow the .NET Framework documentation..
         /// </summary>
         public static string MiKo_2050_Description {
             get {
@@ -1880,6 +1880,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2050_Title {
             get {
                 return ResourceManager.GetString("MiKo_2050_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of factories should be uniform..
+        /// </summary>
+        public static string MiKo_2060_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2060_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should start with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2060_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2060_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Factories should be documented in a uniform way..
+        /// </summary>
+        public static string MiKo_2060_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2060_Title", resourceCulture);
             }
         }
         
