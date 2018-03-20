@@ -153,6 +153,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
+        /// </summary>
+        public static string MiKo_1001_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1001_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Should be named &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1001_MessageFormat {
@@ -180,6 +189,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
+        /// </summary>
+        public static string MiKo_1002_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1002_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Should be named &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1002_MessageFormat {
@@ -203,6 +221,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1003_Description {
             get {
                 return ResourceManager.GetString("MiKo_1003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/event-pattern.
+        /// </summary>
+        public static string MiKo_1003_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1003_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -982,7 +1009,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, variables should be named about what they represent and not what they technically are.
-        ///Hence naming variables &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, they put the developers attention and focus on the wrong thing..
+        ///Hence naming variables e.g. &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
         /// </summary>
         public static string MiKo_1105_Description {
             get {

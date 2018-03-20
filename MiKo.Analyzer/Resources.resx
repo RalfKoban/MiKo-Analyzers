@@ -149,6 +149,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1001_Description" xml:space="preserve">
     <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
   </data>
+  <data name="MiKo_1001_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
+  </data>
   <data name="MiKo_1001_MessageFormat" xml:space="preserve">
     <value>Should be named '{1}'</value>
   </data>
@@ -158,6 +161,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1002_Description" xml:space="preserve">
     <value>To follow the .NET Framework Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
   </data>
+  <data name="MiKo_1002_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
+  </data>
   <data name="MiKo_1002_MessageFormat" xml:space="preserve">
     <value>Should be named '{1}'</value>
   </data>
@@ -166,6 +172,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_1003_Description" xml:space="preserve">
     <value>Event handlers should start with 'On' to indicate that they handle events.</value>
+  </data>
+  <data name="MiKo_1003_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/csharp/event-pattern</value>
   </data>
   <data name="MiKo_1003_MessageFormat" xml:space="preserve">
     <value>Should be named '{1}'</value>
@@ -427,7 +436,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_1105_Description" xml:space="preserve">
     <value>For maintenance reasons, variables should be named about what they represent and not what they technically are.
-Hence naming variables 'Mock' or 'Stub' does not provide any additional value and is just some cluttering noise. In addition, they put the developers attention and focus on the wrong thing.</value>
+Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
   </data>
   <data name="MiKo_1105_MessageFormat" xml:space="preserve">
     <value>Do not use 'Mock' or 'Stub' for the name</value>
