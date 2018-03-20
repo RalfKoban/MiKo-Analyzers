@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
         }
 
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
@@ -31,28 +32,57 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var node = (LocalDeclarationStatementSyntax)context.Node;
             var semanticModel = context.SemanticModel;
 
-            if (!ShallAnalyze(node.Declaration, semanticModel)) return;
+            if (!ShallAnalyze(semanticModel, node.Declaration.Type)) return;
 
-            var diagnostics = Analyze(node.Declaration, semanticModel);
+            var diagnostics = Analyze(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private static bool ShallAnalyze(VariableDeclarationSyntax node, SemanticModel semanticModel)
+        private void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
         {
-            var type = semanticModel.GetTypeInfo(node.Type).Type;
+            var node = (DeclarationPatternSyntax)context.Node;
+            var semanticModel = context.SemanticModel;
+
+            if (!ShallAnalyze(semanticModel, node.Type)) return;
+
+            var diagnostics = Analyze(semanticModel, node.Designation);
+            foreach (var diagnostic in diagnostics)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, VariableDesignationSyntax node)
+        {
+            switch (node)
+            {
+                case SingleVariableDesignationSyntax s:
+                    return Analyze(semanticModel, s.Identifier);
+
+                case ParenthesizedVariableDesignationSyntax s:
+                    return s.Variables.SelectMany(_ => Analyze(semanticModel, _));
+
+                default:
+                    return Enumerable.Empty<Diagnostic>();
+            }
+        }
+
+        private static bool ShallAnalyze(SemanticModel semanticModel, TypeSyntax node)
+        {
+            var type = semanticModel.GetTypeInfo(node).Type;
             return type?.IsEventArgs() == true;
         }
 
-        private IEnumerable<Diagnostic> Analyze(VariableDeclarationSyntax node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
             List<Diagnostic> results = null;
 
-            foreach (var variable in node.Variables)
+            foreach (var identifier in identifiers)
             {
-                var name = variable.Identifier.ValueText;
+                var name = identifier.ValueText;
                 switch (name)
                 {
                     case "e":
@@ -61,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     default:
                         if (results == null) results = new List<Diagnostic>();
-                        var symbol = semanticModel.LookupSymbols(variable.Identifier.GetLocation().SourceSpan.Start, name:name).First();
+                        var symbol = semanticModel.LookupSymbols(identifier.GetLocation().SourceSpan.Start, name:name).First();
                         results.Add(ReportIssue(symbol, "e"));
                         break;
                 }

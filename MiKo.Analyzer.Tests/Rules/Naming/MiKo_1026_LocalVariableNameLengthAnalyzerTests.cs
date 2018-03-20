@@ -44,6 +44,34 @@ public class TestMe
     }
 }
 ");
+        [Test]
+        public void No_issue_is_reported_for_variable_declaration_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        switch (o)
+        {
+            case int " + name + @": return 42;
+            default: return -1;
+        }
+    }
+}
+");
+        [Test]
+        public void An_issue_is_reported_for_variable_declaration_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(object o)
+    {
+        switch (o)
+        {
+            case int " + name + @": return 42;
+            default: return -1;
+        }
+    }
+}
+");
 
         protected override string GetDiagnosticId() => MiKo_1026_LocalVariableNameLengthAnalyzer.Id;
 

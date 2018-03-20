@@ -245,7 +245,7 @@ namespace Microsoft.CodeAnalysis
             {
                 if (symbol is INamedTypeSymbol s) return s;
 
-                symbol = symbol.ContainingSymbol;
+                symbol = symbol.ContainingType;
             }
 
             return null;

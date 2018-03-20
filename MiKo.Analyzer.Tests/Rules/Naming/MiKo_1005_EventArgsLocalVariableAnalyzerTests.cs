@@ -132,6 +132,43 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_variable_declaration_pattern_for_EventArgs_variable_with_correct_name() => No_issue_is_reported_for(@"
+using System;
+
+public class MyEventArgs : EventArgs { }
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        switch (o)
+        {
+            case MyEventArgs e: return;
+            default: return;
+        }
+    }
+}
+");
+        [Test]
+        public void An_issue_is_reported_for_method_with_variable_declaration_pattern_for_EventArgs_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+using System;
+
+public class MyEventArgs : EventArgs { }
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        switch (o)
+        {
+            case MyEventArgs eventArgs: return;
+            default: return;
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1005_EventArgsLocalVariableAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1005_EventArgsLocalVariableAnalyzer();

@@ -25,36 +25,66 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
             context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
+        }
+
+        private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
+        {
+            var type = context.FindContainingType();
+            return type != null && type.IsTestClass();
         }
 
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var type = context.FindContainingType();
-            if (type != null && type.IsTestClass())
+            if (ShallAnalyze(context))
             {
-                var node = (VariableDeclarationSyntax)context.Node;
-
-                AnalyzeVariableDeclaration(context, node);
+                AnalyzeVariableDeclaration(context, ((VariableDeclarationSyntax)context.Node).Variables.Select(_ => _.Identifier).ToArray());
             }
         }
 
-
-        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context, VariableDeclarationSyntax node)
+        private void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
         {
-            var semanticModel = context.SemanticModel;
+            if (ShallAnalyze(context))
+            {
+                var node = (DeclarationPatternSyntax)context.Node;
 
-            var diagnostics = Analyze(node, semanticModel);
+                var diagnostics = Analyze(context.SemanticModel, node.Designation);
+                foreach (var diagnostic in diagnostics)
+                {
+                    context.ReportDiagnostic(diagnostic);
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, VariableDesignationSyntax node)
+        {
+            switch (node)
+            {
+                case SingleVariableDesignationSyntax s:
+                    return Analyze(semanticModel, s.Identifier);
+
+                case ParenthesizedVariableDesignationSyntax s:
+                    return s.Variables.SelectMany(_ => Analyze(semanticModel, _));
+
+                default:
+                    return Enumerable.Empty<Diagnostic>();
+            }
+        }
+
+        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context, params SyntaxToken[] identifiers)
+        {
+            var diagnostics = Analyze(context.SemanticModel, identifiers);
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private IEnumerable<Diagnostic> Analyze(VariableDeclarationSyntax node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
             List<Diagnostic> results = null;
 
-            foreach (var identifier in node.Variables.Select(_ => _.Identifier))
+            foreach (var identifier in identifiers)
             {
                 var variableName = identifier.ValueText;
 
