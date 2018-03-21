@@ -22,8 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
-            if (method.IsConstructor()) return Enumerable.Empty<Diagnostic>();
-            if (method.IsOverride) return Enumerable.Empty<Diagnostic>();
+            if (method.IsOverride || method.IsConstructor() || method.IsSpecialAccessor())
+                return Enumerable.Empty<Diagnostic>();
+
             if (method.Name.StartsWith("Create", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
 
             return new[] { ReportIssue(method) };
