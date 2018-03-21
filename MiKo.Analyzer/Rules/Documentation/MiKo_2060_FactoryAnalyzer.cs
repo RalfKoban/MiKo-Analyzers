@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
-            if (!symbol.Name.EndsWith("Factory", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
+            if (!symbol.IsFactory()) return Enumerable.Empty<Diagnostic>();
 
             return base.AnalyzeType(symbol).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList();
         }

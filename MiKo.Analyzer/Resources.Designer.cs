@@ -441,6 +441,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The method belongs to a factory and therefore its name should be started with &apos;Create&apos;..
+        /// </summary>
+        public static string MiKo_1015_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1015_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name should start with &apos;Create&apos;.
+        /// </summary>
+        public static string MiKo_1015_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1015_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Factory methods should be named &apos;Create&apos;..
+        /// </summary>
+        public static string MiKo_1015_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1015_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
         /// </summary>
         public static string MiKo_1020_Description {

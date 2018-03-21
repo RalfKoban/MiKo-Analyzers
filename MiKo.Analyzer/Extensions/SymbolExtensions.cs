@@ -250,5 +250,7 @@ namespace Microsoft.CodeAnalysis
 
             return null;
         }
+
+        internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal);
     }
 }
