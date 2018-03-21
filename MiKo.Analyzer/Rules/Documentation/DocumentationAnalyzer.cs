@@ -55,32 +55,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
 
+        protected  static string GetComment(ISymbol symbol) => Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
+
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => Cleaned(GetCommentElements(commentXml, xmlElement));
 
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlElement).Descendants(xmlSubElement));
 
         protected static ImmutableHashSet<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
 
+        protected static XElement GetCommentElement(ISymbol symbol) => GetCommentElement(symbol.GetDocumentationCommentXml());
+
         protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
         {
-            // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = "<root>" + commentXml + "</root>";
-
-            try
-            {
-                return XElement.Parse(xml).Descendants(xmlElement);
-            }
-            catch (System.Xml.XmlException)
-            {
-                // invalid character
-                return Enumerable.Empty<XElement>();
-            }
+            var element = GetCommentElement(commentXml);
+            return element == null
+                       ? Enumerable.Empty<XElement>() // invalid character
+                       : element.Descendants(xmlElement);
         }
 
         protected static string GetParameterComment(IParameterSymbol parameter, string commentXml)
         {
             var parameterName = parameter.Name;
             return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
+        }
+
+        private static XElement GetCommentElement(string commentXml)
+        {
+            // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
+            var xml = "<root>" + commentXml + "</root>";
+
+            try
+            {
+                return XElement.Parse(xml);
+            }
+            catch (System.Xml.XmlException)
+            {
+                // invalid character
+                return null;
+            }
         }
 
         private static string FlattenComment(IEnumerable<XElement> comments)
@@ -96,10 +108,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static ImmutableHashSet<string> Cleaned(IEnumerable<string> comments) => comments.WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
 
-        private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements) => elements.Select(_ => _.Nodes()
-                                                                                                            .ConcatenatedWith()
-                                                                                                            .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
-                                                                                                            .Replace("    ", " ")
-                                                                                                            .Trim());
+        protected static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
+
+        private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements)
+        {
+            foreach (var e in elements)
+            {
+                e.Descendants(Constants.XmlTag.Code).ToList().ForEach(_ => _.Remove());
+
+                yield return e.Nodes()
+                              .ConcatenatedWith()
+                              .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
+                              .Replace("    ", " ")
+                              .Trim();
+            }
+        }
     }
 }

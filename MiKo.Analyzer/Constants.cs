@@ -214,6 +214,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static class XmlTag
         {
+            internal const string Code = "code";
             internal const string Summary = "summary";
             internal const string Param = "param";
             internal const string Overloads = "overloads";

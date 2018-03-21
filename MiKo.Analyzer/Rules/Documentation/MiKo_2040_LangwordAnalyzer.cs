@@ -42,7 +42,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             List<Diagnostic> findings = null;
 
-            var comment = symbol.GetDocumentationCommentXml();
+            var comment = GetComment(symbol);
+
             foreach (var item in Items.Where(_ => comment.Contains(_.Key, StringComparison.OrdinalIgnoreCase)))
             {
                 if (findings == null) findings = new List<Diagnostic>();
