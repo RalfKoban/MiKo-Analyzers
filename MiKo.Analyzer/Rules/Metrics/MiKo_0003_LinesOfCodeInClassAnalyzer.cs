@@ -18,14 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         public int MaxLinesOfCode { get; set; } = 220;
 
-        // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
-        // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-        public override void Initialize(AnalysisContext context)
-        {
-            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-
-            context.RegisterSymbolAction(AnalyzeType, SymbolKind.NamedType);
-        }
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSymbolAction(AnalyzeType, SymbolKind.NamedType);
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {

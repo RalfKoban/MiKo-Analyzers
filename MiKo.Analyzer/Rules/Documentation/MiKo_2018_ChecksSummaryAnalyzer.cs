@@ -18,12 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        public override void Initialize(AnalysisContext context)
-        {
-            Initialize(context, SymbolKind.Method);
-            Initialize(context, SymbolKind.NamedType);
-            Initialize(context, SymbolKind.Property);
-        }
+        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.NamedType, SymbolKind.Property);
 
         protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => !symbol.IsNamespace && !symbol.IsEnum();
 

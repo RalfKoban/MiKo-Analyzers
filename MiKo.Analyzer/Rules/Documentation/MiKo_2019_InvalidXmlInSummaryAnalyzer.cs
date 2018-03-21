@@ -18,14 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        public override void Initialize(AnalysisContext context)
-        {
-            Initialize(context, SymbolKind.Event);
-            Initialize(context, SymbolKind.Field);
-            Initialize(context, SymbolKind.Method);
-            Initialize(context, SymbolKind.NamedType);
-            Initialize(context, SymbolKind.Property);
-        }
+        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Event, SymbolKind.Field, SymbolKind.Method, SymbolKind.NamedType, SymbolKind.Property);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {

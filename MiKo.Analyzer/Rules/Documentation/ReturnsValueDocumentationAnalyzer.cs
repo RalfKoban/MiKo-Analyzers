@@ -13,11 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        public override void Initialize(AnalysisContext context)
-        {
-            base.Initialize(context);
-            Initialize(context, SymbolKind.Property);
-        }
+        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeReturnType(symbol, commentXml);
 

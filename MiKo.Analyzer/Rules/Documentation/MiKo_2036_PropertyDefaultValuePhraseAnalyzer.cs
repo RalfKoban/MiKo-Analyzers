@@ -15,8 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public MiKo_2036_PropertyDefaultValuePhraseAnalyzer() : base(Id)
         {
         }
-
-        public override void Initialize(AnalysisContext context) => Initialize(context, SymbolKind.Property);
+        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Property);
 
         protected override bool ShallAnalyzeProperty(IPropertySymbol symbol)
         {

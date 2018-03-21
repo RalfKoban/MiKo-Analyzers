@@ -42,15 +42,23 @@ namespace MiKoSolutions.Analyzers.Rules
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
-        public override void Initialize(AnalysisContext context) => Initialize(context, SymbolKind);
-
-        protected void Initialize(AnalysisContext context, SymbolKind symbolKind)
+        public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
-            var action = GetAnalyzeMethod(symbolKind);
-            if (action != null)
-                context.RegisterSymbolAction(action, symbolKind);
+            InitializeCore(context);
+        }
+
+        protected virtual void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind);
+
+        protected void InitializeCore(AnalysisContext context, params SymbolKind[] symbolKinds)
+        {
+            foreach (var symbolKind in symbolKinds)
+            {
+                var action = GetAnalyzeMethod(symbolKind);
+                if (action != null)
+                    context.RegisterSymbolAction(action, symbolKind);
+            }
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
