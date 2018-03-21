@@ -25,6 +25,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return new[] { ReportIssue(method, FindProperName(method)) };
         }
 
-        private static string FindProperName(IMethodSymbol method) => "On" + method.Name;
+        private static string FindProperName(IMethodSymbol method) => "On" + method.Name.Replace("_", string.Empty);
     }
 }
