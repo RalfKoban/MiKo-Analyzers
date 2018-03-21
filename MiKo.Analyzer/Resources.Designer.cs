@@ -1045,7 +1045,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;Mock&apos; or &apos;Stub&apos; for the name.
+        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos; or &apos;Stub&apos;.
         /// </summary>
         public static string MiKo_1105_MessageFormat {
             get {
