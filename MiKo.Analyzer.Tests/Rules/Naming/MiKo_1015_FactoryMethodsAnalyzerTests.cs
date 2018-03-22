@@ -30,6 +30,19 @@ public class TestMeFactory
 ");
 
         [Test]
+        public void No_issue_is_reported_for_special_TaskFactory_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeTaskFactory
+{
+    public Task StartNew()
+    {
+        return null;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_constructor_of_factory_class() => No_issue_is_reported_for(@"
 using System;
 
