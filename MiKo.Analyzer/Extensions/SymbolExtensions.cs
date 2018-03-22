@@ -101,7 +101,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.MethodKind == MethodKind.Constructor && !m.IsStatic;
 
-        internal static bool IsClassConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.MethodKind == MethodKind.Constructor && m.IsStatic;
+        internal static bool IsClassConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.IsStatic && m.Name == ".cctor";
 
         internal static bool IsImportingConstructor(this ISymbol symbol)
         {

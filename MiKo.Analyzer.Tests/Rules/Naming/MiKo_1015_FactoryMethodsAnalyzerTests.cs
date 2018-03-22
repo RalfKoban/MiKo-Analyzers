@@ -55,6 +55,18 @@ public class TestMeFactory
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_constructor_of_factory_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeFactory
+{
+    static TestMeFactory()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_named_factory_method() => No_issue_is_reported_for(@"
 using System;
 
