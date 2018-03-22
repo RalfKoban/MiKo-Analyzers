@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2019_InvalidXmlInSummaryAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2041_InvalidXmlInSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
@@ -135,9 +135,9 @@ public class TestMe : ITestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2019_InvalidXmlInSummaryAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2041_InvalidXmlInSummaryAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2019_InvalidXmlInSummaryAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2041_InvalidXmlInSummaryAnalyzer();
 
         private static IEnumerable<string> AmbiguousPhrases()
         {

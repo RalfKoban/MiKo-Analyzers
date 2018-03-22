@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2019_InvalidXmlInSummaryAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2041_InvalidXmlInSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2019";
+        public const string Id = "MiKo_2041";
 
         private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
-        public MiKo_2019_InvalidXmlInSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2041_InvalidXmlInSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 

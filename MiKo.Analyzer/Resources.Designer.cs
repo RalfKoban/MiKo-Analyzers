@@ -1523,42 +1523,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; XML documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;..
-        /// </summary>
-        public static string MiKo_2019_Description {
-            get {
-                return ResourceManager.GetString("MiKo_2019_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments.
-        /// </summary>
-        public static string MiKo_2019_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_2019_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
-        /// </summary>
-        public static string MiKo_2019_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_2019_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain other documentation tags..
-        /// </summary>
-        public static string MiKo_2019_Title {
-            get {
-                return ResourceManager.GetString("MiKo_2019_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to It does not make sense to use XML summaries that only reference something else via &lt;see cref=&quot;...&quot; /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used..
         /// </summary>
         public static string MiKo_2020_Description {
@@ -1880,6 +1844,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2040_Title {
             get {
                 return ResourceManager.GetString("MiKo_2040_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &lt;summary&gt; XML documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;..
+        /// </summary>
+        public static string MiKo_2041_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2041_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments.
+        /// </summary>
+        public static string MiKo_2041_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_2041_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2041_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2041_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain other documentation tags..
+        /// </summary>
+        public static string MiKo_2041_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2041_Title", resourceCulture);
             }
         }
         
