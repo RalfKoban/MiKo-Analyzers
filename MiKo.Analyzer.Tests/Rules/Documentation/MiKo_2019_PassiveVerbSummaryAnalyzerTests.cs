@@ -27,30 +27,57 @@ public class TestMe
         public void No_issue_is_reported_for_correctly_documented_class() => No_issue_is_reported_for(@"
 using System;
 
-/// <summary>
-/// Contains some test data.
-/// </summary>
-public class TestMe
+using Bla
 {
     /// <summary>
-    /// Gets or sets some test data.
+    /// Contains some test data.
     /// </summary>
-    public int Age { get; set; }
+    public class TestMe
+    {
+        /// <summary>
+        /// Gets or sets some test data.
+        /// </summary>
+        public int Age { get; set; }
+
+        /// <summary>
+        /// Performs some test data.
+        /// </summary>
+        public virtual void DoSomething() { }
+
+        /// <summary>
+        /// Asynchronously provides some test data.
+        /// </summary>
+        public Task DoSomethingAsync() { }
+
+        /// <summary>
+        /// Occurs after some test data.
+        /// </summary>
+        public event EventHandler MyEvent;
+    }
 
     /// <summary>
-    /// Performs some test data.
+    /// Contains some test data.
     /// </summary>
-    public void DoSomething() { }
+    public class TestMe2
+    {
+        /// <summary>
+        /// Gets or sets some test data.
+        /// </summary>
+        public int Age { get; set; }
 
-    /// <summary>
-    /// Asynchronously provides some test data.
-    /// </summary>
-    public Task DoSomethingAsync() { }
+        /// <inheritdoc />
+        public override void DoSomething() { }
 
-    /// <summary>
-    /// Occurs after some test data.
-    /// </summary>
-    public event EventHandler MyEvent;
+        /// <summary>
+        /// Asynchronously provides some test data.
+        /// </summary>
+        public Task DoSomethingAsync() { }
+
+        /// <summary>
+        /// Occurs after some test data.
+        /// </summary>
+        public event EventHandler MyEvent;
+    }
 }
 ");
 
