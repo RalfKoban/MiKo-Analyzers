@@ -1523,6 +1523,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML summary documentation should start with a verb that is in passive form as it shall be a short description of the functionality that the class, property, etc. provides or represents..
+        /// </summary>
+        public static string MiKo_2019_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2019_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start with verb in passive form.
+        /// </summary>
+        public static string MiKo_2019_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2019_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML summary documentation should start with a verb that is in passive form (for example &quot;Provides &quot;)..
+        /// </summary>
+        public static string MiKo_2019_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2019_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It does not make sense to use XML summaries that only reference something else via &lt;see cref=&quot;...&quot; /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used..
         /// </summary>
         public static string MiKo_2020_Description {

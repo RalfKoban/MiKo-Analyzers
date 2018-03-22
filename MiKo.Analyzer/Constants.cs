@@ -199,6 +199,10 @@ namespace MiKoSolutions.Analyzers
                     "Creates a new instance of the <see cref=\"{0}\"/> type with ",
                     "Creates a new instance of the <see cref=\"{0}\" /> type with",
                 };
+
+
+            internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
+
         }
 
         public static class MaxNamingLengths
