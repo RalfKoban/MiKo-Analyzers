@@ -88,7 +88,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs)
         {
-            var prefix = symbol.IsConstructor() || symbol.IsClassConstructor() ? symbol.ContainingSymbol.Name : string.Empty;
+            var prefix = string.Empty;
+
+            if (symbol is IMethodSymbol m && (m.MethodKind == MethodKind.StaticConstructor || m.MethodKind == MethodKind.Constructor))
+                prefix = symbol.ContainingSymbol.Name;
 
             return ReportIssue(prefix + symbol.Name, symbol.Locations[0], messageArgs);
         }
