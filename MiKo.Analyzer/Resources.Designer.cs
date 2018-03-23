@@ -900,6 +900,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the &apos;this&apos; parameter of extension methods should have a default name..
+        /// </summary>
+        public static string MiKo_1039_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1039_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be named &apos;{1}&apos; or &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_1039_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1039_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension methods &apos;this&apos; parameter should have default name..
+        /// </summary>
+        public static string MiKo_1039_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1039_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Suffixes on parameter names (such as &apos;List&apos;) are noise and should be avoided..
         /// </summary>
         public static string MiKo_1040_Description {

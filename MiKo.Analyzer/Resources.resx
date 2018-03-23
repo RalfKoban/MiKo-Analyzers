@@ -398,6 +398,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1038_Title" xml:space="preserve">
     <value>Classes that contain extension methods should end with same suffix.</value>
   </data>
+  <data name="MiKo_1039_Description" xml:space="preserve">
+    <value>To ease maintenance, the 'this' parameter of extension methods should have a default name.</value>
+  </data>
+  <data name="MiKo_1039_MessageFormat" xml:space="preserve">
+    <value>Should be named '{1}' or '{2}'</value>
+  </data>
+  <data name="MiKo_1039_Title" xml:space="preserve">
+    <value>Extension methods 'this' parameter should have default name.</value>
+  </data>
   <data name="MiKo_1040_Description" xml:space="preserve">
     <value>Suffixes on parameter names (such as 'List') are noise and should be avoided.</value>
   </data>
