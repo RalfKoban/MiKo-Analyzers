@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public abstract class ReturnTypeDefaultPhraseAnalyzer : ReturnsValueDocumentationAnalyzer
     {
         protected ReturnTypeDefaultPhraseAnalyzer(string diagnosticId) : base(diagnosticId)
