@@ -126,13 +126,13 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method([Values("Perform", "Miss")] string verb) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
-    /// Perform some test data.
+    /// " + verb + @" some test data.
     /// </summary>
     public void DoSomething() { }
 }
