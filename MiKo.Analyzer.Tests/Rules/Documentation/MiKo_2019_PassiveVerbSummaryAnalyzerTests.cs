@@ -50,12 +50,17 @@ using Bla
         public virtual void DoSomething2() { }
 
         /// <summary>
-        /// Stops to do some test data.
+        /// Breaks to do some test data.
         /// </summary>
         public virtual void DoSomething2() { }
 
         /// <summary>
         /// Asynchronously provides some test data.
+        /// </summary>
+        public Task DoSomethingAsync() { }
+
+        /// <summary>
+        /// Asynchronously stops some test data.
         /// </summary>
         public Task DoSomethingAsync() { }
 
