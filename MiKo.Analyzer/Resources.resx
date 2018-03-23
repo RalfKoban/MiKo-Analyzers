@@ -389,6 +389,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1037_Title" xml:space="preserve">
     <value>Types should not be suffixed with 'Enum'.</value>
   </data>
+  <data name="MiKo_1038_Description" xml:space="preserve">
+    <value>To ease maintenance, the names of classes that contain extension methods should end with the the same suffix.</value>
+  </data>
+  <data name="MiKo_1038_MessageFormat" xml:space="preserve">
+    <value>Should end with '{1}'</value>
+  </data>
+  <data name="MiKo_1038_Title" xml:space="preserve">
+    <value>Classes that contain extension methods should end with same suffix.</value>
+  </data>
   <data name="MiKo_1040_Description" xml:space="preserve">
     <value>Suffixes on parameter names (such as 'List') are noise and should be avoided.</value>
   </data>
