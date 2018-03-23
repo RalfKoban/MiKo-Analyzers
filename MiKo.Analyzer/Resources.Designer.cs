@@ -2194,6 +2194,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, use &apos;&apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
+        /// </summary>
+        public static string MiKo_3006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
+        /// </summary>
+        public static string MiKo_3006_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3006_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead.
+        /// </summary>
+        public static string MiKo_3006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom delegates should not be used..
+        /// </summary>
+        public static string MiKo_3006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {

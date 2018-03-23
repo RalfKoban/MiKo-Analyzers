@@ -834,6 +834,18 @@ That is they should return a Boolean and have the last parameter as out-paramete
   <data name="MiKo_3005_Title" xml:space="preserve">
     <value>Methods named 'Try' should follow the Try-Pattern.</value>
   </data>
+  <data name="MiKo_3006_Description" xml:space="preserve">
+    <value>To ease maintenance, use ''Action', 'Func' or 'Expression' instead of custom delegates.</value>
+  </data>
+  <data name="MiKo_3006_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks</value>
+  </data>
+  <data name="MiKo_3006_MessageFormat" xml:space="preserve">
+    <value>Use 'Action', 'Func' or 'Expression' instead</value>
+  </data>
+  <data name="MiKo_3006_Title" xml:space="preserve">
+    <value>Custom delegates should not be used.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
