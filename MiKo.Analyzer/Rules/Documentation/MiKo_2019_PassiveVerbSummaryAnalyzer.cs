@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var firstSpace = summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
             var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);
 
-            return firstWord.EndsWithAny(StringComparison.Ordinal, "ds", "es", "ms", "ns", "ts");
+            return firstWord.EndsWithAny(StringComparison.Ordinal, "ds", "es", "ms", "ns", "ps", "ts", "ws");
         }
     }
 }
