@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1038_ExtensionMethodsSuffixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1038_ExtensionMethodsClassSuffixAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_struct() => No_issue_is_reported_for(@"
@@ -51,9 +51,9 @@ public static class " + name + @"
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1038_ExtensionMethodsSuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1038_ExtensionMethodsSuffixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1038_ExtensionMethodsClassSuffixAnalyzer();
 
         private static IEnumerable<string> WrongNames() => new[]
                                                                {

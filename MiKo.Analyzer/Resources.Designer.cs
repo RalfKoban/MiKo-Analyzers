@@ -1902,6 +1902,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of classes that contain extension methods should start with a specific phrase that describes what the class provides..
+        /// </summary>
+        public static string MiKo_2038_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2038_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{1}&gt; should start with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2038_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2038_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XMLdocumentation of classes that contain extension methods should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2038_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2038_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To support other languages than C#, use &apos;&lt;see langword=&quot;...&quot;/&gt;&apos; instead of &apos;&lt;c&gt;...&lt;/c&gt;&apos;..
         /// </summary>
         public static string MiKo_2040_Description {

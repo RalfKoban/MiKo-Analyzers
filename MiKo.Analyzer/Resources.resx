@@ -734,6 +734,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2036_Title" xml:space="preserve">
     <value>XML documentation of Boolean or Enum properties shall describe the default value.</value>
   </data>
+  <data name="MiKo_2038_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of classes that contain extension methods should start with a specific phrase that describes what the class provides.</value>
+  </data>
+  <data name="MiKo_2038_MessageFormat" xml:space="preserve">
+    <value>&lt;{1}&gt; should start with: '{1}'</value>
+  </data>
+  <data name="MiKo_2038_Title" xml:space="preserve">
+    <value>XMLdocumentation of classes that contain extension methods should have a default starting phrase.</value>
+  </data>
   <data name="MiKo_2040_Description" xml:space="preserve">
     <value>To support other languages than C#, use '&lt;see langword="..."/&gt;' instead of '&lt;c&gt;...&lt;/c&gt;'.</value>
   </data>

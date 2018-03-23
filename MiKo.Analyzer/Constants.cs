@@ -203,6 +203,11 @@ namespace MiKoSolutions.Analyzers
 
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
 
+            internal static readonly string[] ExtensionMethodClassStartingPhrase =
+                {
+                    "Provides a set of <see langword=\"static\"/> methods for ",
+                    "Provides a set of <see langword=\"static\" /> methods for ",
+                };
         }
 
         public static class MaxNamingLengths
