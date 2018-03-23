@@ -35,15 +35,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected abstract bool IsAcceptedType(ITypeSymbol returnType);
 
         protected abstract string[] GetStartingPhrases(ITypeSymbol returnType);
-
-        protected bool TryGetGenericArgumentType(ITypeSymbol symbol, out ITypeSymbol genericArgument, int index = 0)
-        {
-            genericArgument = null;
-
-            if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length == index + 1)
-                genericArgument = namedType.TypeArguments[index];
-
-            return genericArgument != null;
-        }
     }
 }

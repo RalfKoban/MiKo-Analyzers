@@ -84,6 +84,27 @@ public class TestMeFactory
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_type([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
+using System;
+
+public class Whatever<T> : IWhatever<T>
+{
+}
+
+public interface IWhatever<T>
+{
+}
+
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""IWhatever{T}""" + gap + @"/> type with a result.
+    /// </summary>
+    public IWhatever<int> Create() => new Whatever<int>();
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2060_FactoryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2060_FactoryAnalyzer();

@@ -79,6 +79,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
         }
 
+        protected bool TryGetGenericArgumentType(ITypeSymbol symbol, out ITypeSymbol genericArgument, int index = 0)
+        {
+            genericArgument = null;
+
+            if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length == index + 1)
+                genericArgument = namedType.TypeArguments[index];
+
+            return genericArgument != null;
+        }
+
+        protected bool TryGetGenericArgumentCount(ITypeSymbol symbol, out int index)
+        {
+            index = 0;
+            if (symbol is INamedTypeSymbol namedType) index = namedType.TypeArguments.Length;
+            return index > 0;
+        }
+
+        protected string GetGenericArgumentsAsTs(ITypeSymbol symbol)
+        {
+            if (symbol is INamedTypeSymbol namedType)
+            {
+                var count = namedType.TypeArguments.Length;
+                switch (count)
+                {
+                    case 0: return string.Empty;
+                    case 1: return "T";
+                    case 2: return "T1,T2";
+                    case 3: return "T1,T2,T3";
+                    case 4: return "T1,T2,T3,T4";
+                    case 5: return "T1,T2,T3,T4,T5";
+                    default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
+                }
+            }
+
+            return string.Empty;
+        }
+
         private static XElement GetCommentElement(string commentXml)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)

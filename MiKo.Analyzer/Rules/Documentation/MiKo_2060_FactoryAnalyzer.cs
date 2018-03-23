@@ -16,33 +16,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
-        {
-            if (!symbol.IsFactory()) return Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsFactory()
+                                                                                               ? base.AnalyzeType(symbol).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList()
+                                                                                               : Enumerable.Empty<Diagnostic>();
 
-            return base.AnalyzeType(symbol).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList();
-        }
+        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary;
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeTypeSummary(type, summaries);
-                case IMethodSymbol method: return AnalyzeMethodSummary(method, summaries);
+                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaries, Constants.Comments.FactorySummaryPhrase);
+                case IMethodSymbol method: return AnalyzeStartingPhrase(symbol, summaries, GetPhrases(method).ToArray());
                 default: return Enumerable.Empty<Diagnostic>();
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeTypeSummary(ITypeSymbol symbol, IEnumerable<string> summaries)
+        private IEnumerable<string> GetPhrases(IMethodSymbol symbol)
         {
-            return AnalyzeStartingPhrase(symbol, summaries, Constants.Comments.FactorySummaryPhrase);
-        }
+            var startingPhrases = Constants.Comments.FactoryCreateMethodSummaryStartingPhrase;
+            var returnType = symbol.ReturnType.ToString();
 
-        private IEnumerable<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries)
-        {
-            var phrases = Constants.Comments.FactoryCreateMethodSummaryStartingPhrase.Select(_ => string.Format(_, symbol.ReturnType)).ToArray();
+            TryGetGenericArgumentCount(symbol.ReturnType, out var count);
+            if (count <= 0) return startingPhrases.Select(_ => string.Format(_, returnType));
 
-            return AnalyzeStartingPhrase(symbol, summaries, phrases);
+            var ts = GetGenericArgumentsAsTs(symbol.ReturnType);
+
+            var length = returnType.IndexOf('<'); // just until the first one
+            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
+            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
+
+            return Enumerable.Empty<string>()
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
         }
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)
