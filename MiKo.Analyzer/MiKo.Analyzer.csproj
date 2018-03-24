@@ -11,9 +11,9 @@
     <PackageVersion>1.0.0.0</PackageVersion>
     <Authors>Ralf Koban</Authors>
     <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-    <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/RalfKoban/MiKo-Analyzers</PackageProjectUrl>
     <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-    <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+    <RepositoryUrl>https://github.com/RalfKoban/MiKo-Analyzers</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>A diagnostic extension for the .NET Compiler Platform ("Roslyn") that checks for different metrics such as Lines of Code or Cyclomatic Complexity; in addition to several maintainability, naming and documentation rules.</Description>
     <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
@@ -22,10 +22,11 @@
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <AssemblyName>MiKoSolutions.Analyzers</AssemblyName>
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
-    <AssemblyVersion>0.0.17.0</AssemblyVersion>
-    <FileVersion>0.0.17.0</FileVersion>
+    <AssemblyVersion>0.0.18.0</AssemblyVersion>
+    <FileVersion>0.0.18.0</FileVersion>
     <Company>MiKo Solutions</Company>
-    <Version>0.0.17</Version>
+    <Version>0.0.18</Version>
+    <RepositoryType>GIT</RepositoryType>
   </PropertyGroup>
    
   <ItemGroup>
