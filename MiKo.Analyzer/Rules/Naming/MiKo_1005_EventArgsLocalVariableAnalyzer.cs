@@ -26,6 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
+            if (node.IsConst) return;
+
             var semanticModel = context.SemanticModel;
 
             if (!ShallAnalyze(semanticModel, node.Declaration.Type)) return;
