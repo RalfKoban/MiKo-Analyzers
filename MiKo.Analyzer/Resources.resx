@@ -697,6 +697,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>XML documentation of enum parameters should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2024_Description" xml:space="preserve">
+    <value>XML documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
+  </data>
+  <data name="MiKo_2024_MessageFormat" xml:space="preserve">
+    <value>Documentation should start with: {2}</value>
+  </data>
+  <data name="MiKo_2024_Title" xml:space="preserve">
+    <value>XML documentation of 'CancellationToken' parameters should have a default starting phrase.</value>
+  </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
   </data>

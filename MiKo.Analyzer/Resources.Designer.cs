@@ -1793,6 +1793,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML documentation of &apos;CancellationToken&apos; parameters should start with a phrase that describes how it is used..
+        /// </summary>
+        public static string MiKo_2024_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2024_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should start with: {2}.
+        /// </summary>
+        public static string MiKo_2024_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2024_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation of &apos;CancellationToken&apos; parameters should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2024_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2024_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {

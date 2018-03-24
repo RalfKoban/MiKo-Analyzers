@@ -16,13 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter)
         {
-            if (parameter.RefKind == RefKind.Out) return false;
-            if (parameter.Type.IsEnum()) return false;
+            if (parameter.RefKind == RefKind.Out) return false; // MiKo 2022
+            if (parameter.Type.IsEnum()) return false; // MiKo 2023
+            if (parameter.Type.IsCancellationToken()) return false; // MiKo 2024
 
-            // ReSharper disable once RedundantNameQualifier
-            if (parameter.Type.SpecialType == SpecialType.System_Boolean) return false;
-
-            return true;
+            return parameter.Type.SpecialType != SpecialType.System_Boolean;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => AnalyzeStartingPhrase(parameter, comment, Constants.Comments.ParameterStartingPhrase);
