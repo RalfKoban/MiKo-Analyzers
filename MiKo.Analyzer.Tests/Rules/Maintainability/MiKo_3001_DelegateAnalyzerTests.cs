@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3006_DelegateAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3001_DelegateAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_class() => No_issue_is_reported_for(@"
@@ -31,8 +31,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3006_DelegateAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3001_DelegateAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3006_DelegateAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3001_DelegateAnalyzer();
     }
 }

@@ -2073,6 +2073,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, use the pre-defined .NET Framework delegate types such as &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
+        /// </summary>
+        public static string MiKo_3001_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
+        /// </summary>
+        public static string MiKo_3001_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3001_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead.
+        /// </summary>
+        public static string MiKo_3001_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom delegates should not be used..
+        /// </summary>
+        public static string MiKo_3001_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If a class has too many dependencies, that class is doing too much and does not follow the SRP..
         /// </summary>
         public static string MiKo_3002_Description {
@@ -2190,42 +2226,6 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3005_Title {
             get {
                 return ResourceManager.GetString("MiKo_3005_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, use &apos;&apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
-        /// </summary>
-        public static string MiKo_3006_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3006_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
-        /// </summary>
-        public static string MiKo_3006_HelpLinkUri {
-            get {
-                return ResourceManager.GetString("MiKo_3006_HelpLinkUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead.
-        /// </summary>
-        public static string MiKo_3006_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3006_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Custom delegates should not be used..
-        /// </summary>
-        public static string MiKo_3006_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3006_Title", resourceCulture);
             }
         }
         
