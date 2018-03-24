@@ -1008,7 +1008,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and being conform with the .NET Framework classes, &apos;CancellationToken&apos; parameters should have a very specific name..
+        ///   Looks up a localized string similar to To ease maintenance, and being consistent with the .NET Framework classes, &apos;CancellationToken&apos; parameters should have a very specific name..
         /// </summary>
         public static string MiKo_1042_Description {
             get {
@@ -1031,6 +1031,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1042_Title {
             get {
                 return ResourceManager.GetString("MiKo_1042_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, &apos;CancellationToken&apos; variables should have a very specific name..
+        /// </summary>
+        public static string MiKo_1043_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1043_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1043_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1043_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;CancellationToken&apos; variables should have specific name..
+        /// </summary>
+        public static string MiKo_1043_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1043_Title", resourceCulture);
             }
         }
         
@@ -1306,7 +1333,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, EventArgs should be documented with &apos;Provides data for the &lt;see cref=&quot;XYZ&quot; /&gt; event.&apos; to indicate for which event they are valid..
+        ///   Looks up a localized string similar to To ease maintenance, classes that inherit from &apos;System.EventArgs&apos; should be documented with &apos;Provides data for the &lt;see cref=&quot;XYZ&quot; /&gt; event.&apos; to indicate for which event they are valid..
         /// </summary>
         public static string MiKo_2002_Description {
             get {
@@ -1324,7 +1351,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgss should be documented properly..
+        ///   Looks up a localized string similar to EventArgs should be documented properly..
         /// </summary>
         public static string MiKo_2002_Title {
             get {
@@ -2257,7 +2284,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and being conform with the .NET Framework classes, &apos;CancellationToken&apos; parameters should come after all the other parameters of a method..
+        ///   Looks up a localized string similar to To ease maintenance, and being consistent with the .NET Framework classes, &apos;CancellationToken&apos; parameters should come after all the other parameters of a method..
         /// </summary>
         public static string MiKo_3006_Description {
             get {

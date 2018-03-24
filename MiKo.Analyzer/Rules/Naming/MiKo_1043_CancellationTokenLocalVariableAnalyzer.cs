@@ -8,11 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1005_EventArgsLocalVariableAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1043_CancellationTokenLocalVariableAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1005";
+        public const string Id = "MiKo_1043";
 
-        public MiKo_1005_EventArgsLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
+        private const string Name = "cancellationToken";
+
+        public MiKo_1043_CancellationTokenLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -22,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventArgs() == true;
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsCancellationToken() == true;
 
         protected override IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
@@ -31,18 +33,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var identifier in identifiers)
             {
                 var name = identifier.ValueText;
-                switch (name)
-                {
-                    case "e":
-                    case "args":
-                        break;
+                if (name == Name) continue;
 
-                    default:
-                        if (results == null) results = new List<Diagnostic>();
-                        var symbol = semanticModel.LookupSymbols(identifier.GetLocation().SourceSpan.Start, name:name).First();
-                        results.Add(ReportIssue(symbol, "e"));
-                        break;
-                }
+                if (results == null) results = new List<Diagnostic>();
+                var symbol = semanticModel.LookupSymbols(identifier.GetLocation().SourceSpan.Start, name: name).First();
+                results.Add(ReportIssue(symbol, Name));
             }
 
             return results ?? Enumerable.Empty<Diagnostic>();

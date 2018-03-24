@@ -24,10 +24,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
         }
 
+        protected override void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
+        {
+            if (ShallAnalyze(context))
+            {
+                base.AnalyzeDeclarationPattern(context);
+            }
+        }
+
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => true;
+
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
         {
             var type = context.FindContainingType();
-            return type != null && type.IsTestClass();
+            return type?.IsTestClass() == true;
         }
 
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
@@ -35,35 +45,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (ShallAnalyze(context))
             {
                 AnalyzeVariableDeclaration(context, ((VariableDeclarationSyntax)context.Node).Variables.Select(_ => _.Identifier).ToArray());
-            }
-        }
-
-        private void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
-        {
-            if (ShallAnalyze(context))
-            {
-                var node = (DeclarationPatternSyntax)context.Node;
-
-                var diagnostics = Analyze(context.SemanticModel, node.Designation);
-                foreach (var diagnostic in diagnostics)
-                {
-                    context.ReportDiagnostic(diagnostic);
-                }
-            }
-        }
-
-        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, VariableDesignationSyntax node)
-        {
-            switch (node)
-            {
-                case SingleVariableDesignationSyntax s:
-                    return Analyze(semanticModel, s.Identifier);
-
-                case ParenthesizedVariableDesignationSyntax s:
-                    return s.Variables.SelectMany(_ => Analyze(semanticModel, _));
-
-                default:
-                    return Enumerable.Empty<Diagnostic>();
             }
         }
 
@@ -76,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers)
+        protected override IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
             List<Diagnostic> results = null;
 

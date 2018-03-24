@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
@@ -59,6 +61,55 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var betterName = FindPluralName(symbol.Name, comparison, suffix);
             return betterName.IsNullOrWhiteSpace() ? null : ReportIssue(symbol, betterName);
         }
+
+        protected void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
+        {
+            var node = (LocalDeclarationStatementSyntax)context.Node;
+            if (node.IsConst) return;
+
+            var semanticModel = context.SemanticModel;
+            var type = semanticModel.GetTypeInfo(node.Declaration.Type).Type;
+            if (!ShallAnalyze(type)) return;
+
+            var diagnostics = Analyze(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+            foreach (var diagnostic in diagnostics)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        protected virtual void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
+        {
+            var node = (DeclarationPatternSyntax)context.Node;
+            var semanticModel = context.SemanticModel;
+
+            if (!ShallAnalyze(semanticModel.GetTypeInfo(node.Type).Type)) return;
+
+            var diagnostics = Analyze(semanticModel, node.Designation);
+            foreach (var diagnostic in diagnostics)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, VariableDesignationSyntax node)
+        {
+            switch (node)
+            {
+                case SingleVariableDesignationSyntax s:
+                    return Analyze(semanticModel, s.Identifier);
+
+                case ParenthesizedVariableDesignationSyntax s:
+                    return s.Variables.SelectMany(_ => Analyze(semanticModel, _));
+
+                default:
+                    return Enumerable.Empty<Diagnostic>();
+            }
+        }
+
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => false;
+
+        protected virtual IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
 
         protected static string FindPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {

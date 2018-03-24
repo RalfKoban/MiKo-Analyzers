@@ -435,13 +435,22 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Fields should not be suffixed with implementation details.</value>
   </data>
   <data name="MiKo_1042_Description" xml:space="preserve">
-    <value>To ease maintenance and being conform with the .NET Framework classes, 'CancellationToken' parameters should have a very specific name.</value>
+    <value>To ease maintenance, and being consistent with the .NET Framework classes, 'CancellationToken' parameters should have a very specific name.</value>
   </data>
   <data name="MiKo_1042_MessageFormat" xml:space="preserve">
     <value>'{0}' should be named '{1}'</value>
   </data>
   <data name="MiKo_1042_Title" xml:space="preserve">
     <value>'CancellationToken' parameters should have specific name.</value>
+  </data>
+  <data name="MiKo_1043_Description" xml:space="preserve">
+    <value>To ease maintenance, 'CancellationToken' variables should have a very specific name.</value>
+  </data>
+  <data name="MiKo_1043_MessageFormat" xml:space="preserve">
+    <value>'{0}' should be named '{1}'</value>
+  </data>
+  <data name="MiKo_1043_Title" xml:space="preserve">
+    <value>'CancellationToken' variables should have specific name.</value>
   </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
@@ -535,13 +544,13 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>Events should be documented properly.</value>
   </data>
   <data name="MiKo_2002_Description" xml:space="preserve">
-    <value>To ease maintenance, EventArgs should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
+    <value>To ease maintenance, classes that inherit from 'System.EventArgs' should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
-    <value>EventArgss should be documented properly.</value>
+    <value>EventArgs should be documented properly.</value>
   </data>
   <data name="MiKo_2003_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of an event handler should have a default starting phrase that describes what event gets handled.</value>
@@ -856,7 +865,7 @@ That is they should return a Boolean and have the last parameter as out-paramete
     <value>Methods named 'Try' should follow the Try-Pattern.</value>
   </data>
   <data name="MiKo_3006_Description" xml:space="preserve">
-    <value>To ease maintenance and being conform with the .NET Framework classes, 'CancellationToken' parameters should come after all the other parameters of a method.</value>
+    <value>To ease maintenance, and being consistent with the .NET Framework classes, 'CancellationToken' parameters should come after all the other parameters of a method.</value>
   </data>
   <data name="MiKo_3006_MessageFormat" xml:space="preserve">
     <value>'{0}' should be last parameter</value>
