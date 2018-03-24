@@ -1008,6 +1008,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance and being conform with the .NET Framework classes, &apos;CancellationToken&apos; parameters should have a very specific name..
+        /// </summary>
+        public static string MiKo_1042_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1042_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be named &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1042_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1042_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;CancellationToken&apos; parameters should have specific name..
+        /// </summary>
+        public static string MiKo_1042_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1042_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
@@ -2230,7 +2257,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;CancellationToken&apos; parameter should come after all the other parameters of a method..
+        ///   Looks up a localized string similar to To ease maintenance and being conform with the .NET Framework classes, &apos;CancellationToken&apos; parameters should come after all the other parameters of a method..
         /// </summary>
         public static string MiKo_3006_Description {
             get {
