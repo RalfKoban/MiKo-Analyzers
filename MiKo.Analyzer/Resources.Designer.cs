@@ -2230,6 +2230,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;CancellationToken&apos; parameter should come after all the other parameters of a method..
+        /// </summary>
+        public static string MiKo_3006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; should be last parameter.
+        /// </summary>
+        public static string MiKo_3006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;CancellationToken&apos; parameter should be last method parameter..
+        /// </summary>
+        public static string MiKo_3006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
