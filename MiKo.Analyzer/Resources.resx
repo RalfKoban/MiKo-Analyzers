@@ -146,6 +146,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_0003_Title" xml:space="preserve">
     <value>Type is too long.</value>
   </data>
+  <data name="MiKo_0004_Description" xml:space="preserve">
+    <value>To follow the SRP, methods should have as few parameters as possible.</value>
+  </data>
+  <data name="MiKo_0004_MessageFormat" xml:space="preserve">
+    <value>Too many parameters: {1,4} (max. {2})</value>
+  </data>
+  <data name="MiKo_0004_Title" xml:space="preserve">
+    <value>Methods should not have too many parameters.</value>
+  </data>
   <data name="MiKo_1001_Description" xml:space="preserve">
     <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
   </data>
@@ -781,15 +790,6 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2060_Title" xml:space="preserve">
     <value>Factories should be documented in a uniform way.</value>
-  </data>
-  <data name="MiKo_3001_Description" xml:space="preserve">
-    <value>To follow the SRP, methods should have as few parameters as possible.</value>
-  </data>
-  <data name="MiKo_3001_MessageFormat" xml:space="preserve">
-    <value>Too many parameters: {1,4} (max. {2})</value>
-  </data>
-  <data name="MiKo_3001_Title" xml:space="preserve">
-    <value>Methods should not have too many parameters.</value>
   </data>
   <data name="MiKo_3002_Description" xml:space="preserve">
     <value>If a class has too many dependencies, that class is doing too much and does not follow the SRP.</value>

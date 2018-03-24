@@ -4,10 +4,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     [TestFixture]
-    public sealed class MiKo_3001_MethodParameterCountAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_0004_MethodParameterCountAnalyzerTests : CodeFixVerifier
     {
         [TestCase("")]
         [TestCase("int a")]
@@ -39,8 +39,8 @@ public class TestMe
     public TestMe(" + parameters + @") { }
 }");
 
-        protected override string GetDiagnosticId() => MiKo_3001_MethodParameterCountAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_0004_MethodParameterCountAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3001_MethodParameterCountAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_0004_MethodParameterCountAnalyzer();
     }
 }

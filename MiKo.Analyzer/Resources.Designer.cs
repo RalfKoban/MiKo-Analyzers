@@ -144,6 +144,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
+        /// </summary>
+        public static string MiKo_0004_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0004_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many parameters: {1,4} (max. {2}).
+        /// </summary>
+        public static string MiKo_0004_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0004_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not have too many parameters..
+        /// </summary>
+        public static string MiKo_0004_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0004_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, parameters that inherit from &apos;System.EventArgs&apos; should be named &apos;e&apos; ..
         /// </summary>
         public static string MiKo_1001_Description {
@@ -2042,33 +2069,6 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2060_Title {
             get {
                 return ResourceManager.GetString("MiKo_2060_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To follow the SRP, methods should have as few parameters as possible..
-        /// </summary>
-        public static string MiKo_3001_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3001_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Too many parameters: {1,4} (max. {2}).
-        /// </summary>
-        public static string MiKo_3001_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3001_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Methods should not have too many parameters..
-        /// </summary>
-        public static string MiKo_3001_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3001_Title", resourceCulture);
             }
         }
         
