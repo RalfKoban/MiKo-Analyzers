@@ -29,10 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeException(string exceptionComment, IMethodSymbol methodSymbol)
         {
             if (methodSymbol is null) return Enumerable.Empty<Diagnostic>();
-            if (!methodSymbol.Parameters.Any()) return Enumerable.Empty<Diagnostic>();
-            if (!methodSymbol.Parameters.Any(_ => _.Type.TypeKind != TypeKind.Struct)) return Enumerable.Empty<Diagnostic>();
 
-            var parameters = methodSymbol.Parameters.Where(_ => _.Type.TypeKind != TypeKind.Struct);
+            var parameters = methodSymbol.Parameters.Where(_ => _.Type.TypeKind != TypeKind.Struct).ToList();
+            if (!parameters.Any()) return Enumerable.Empty<Diagnostic>();
 
             // create default proposal for parameter names
             var proposal = parameters
