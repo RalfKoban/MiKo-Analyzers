@@ -221,6 +221,7 @@ namespace MiKoSolutions.Analyzers
             internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
             internal const string ExceptionPhrase =@"<exception cref=""{0}"">";
 
+            internal const string ExceptionSplittingParaPhrase = "<para>-or-</para>";
             internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
         }
 

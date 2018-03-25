@@ -18,29 +18,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
         {
-            List<Diagnostic> results = null;
-
-            if (symbol is IMethodSymbol method && method.Parameters.Any())
+            switch (symbol)
             {
-                // remove -or- separators and split comment into parts to inspect individually
-                var parts = exceptionComment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
-
-                foreach (var parameter in method.Parameters.Where(_ => _.Type.TypeKind != TypeKind.Struct))
-                {
-                    var parameterIndicator = string.Format(Constants.Comments.ParamRefBeginningPhrase, parameter.Name);
-                    var phrases = Constants.Comments.ArgumentNullExceptionStartingPhrase.Select(_ => string.Format(_, parameter.Name)).ToArray();
-
-                    if (parts.Where(_ => _.Contains(parameterIndicator))
-                             .Select(_ => _.Trim()) // get rid of white-spaces
-                             .Any(_ => _.EqualsAny(StringComparison.Ordinal, phrases)))
-                        continue;
-
-                    if (results == null) results = new List<Diagnostic>();
-                    results.Add(ReportIssue(parameter, ExceptionPhrase, phrases[0]));
-                }
+                case IMethodSymbol method: return AnalyzeException(exceptionComment, method);
+                case IPropertySymbol property: return AnalyzeException(exceptionComment, property.SetMethod);
+                default: return Enumerable.Empty<Diagnostic>();
             }
+        }
 
-            return results ?? Enumerable.Empty<Diagnostic>();
+        private IEnumerable<Diagnostic> AnalyzeException(string exceptionComment, IMethodSymbol methodSymbol)
+        {
+            if (methodSymbol is null) return Enumerable.Empty<Diagnostic>();
+            if (!methodSymbol.Parameters.Any()) return Enumerable.Empty<Diagnostic>();
+            if (!methodSymbol.Parameters.Any(_ => _.Type.TypeKind != TypeKind.Struct)) return Enumerable.Empty<Diagnostic>();
+
+            var parameters = methodSymbol.Parameters.Where(_ => _.Type.TypeKind != TypeKind.Struct);
+
+            // create default proposal for parameter names
+            var proposal = parameters
+                                   .Select(_ => string.Format(Constants.Comments.ArgumentNullExceptionStartingPhrase[0], _.Name) + Environment.NewLine)
+                                   .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Environment.NewLine);
+
+            // remove -or- separators and split comment into parts to inspect individually
+            var parts = exceptionComment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
+
+            var results = from parameter in parameters
+                          let parameterIndicator = string.Format(Constants.Comments.ParamRefBeginningPhrase, parameter.Name)
+                          let phrases = Constants.Comments.ArgumentNullExceptionStartingPhrase.Select(_ => string.Format(_, parameter.Name)).ToArray()
+                          where !parts.Where(_ => _.Contains(parameterIndicator))
+                                      .Select(_ => _.Trim()) // get rid of white-spaces
+                                      .Any(_ => _.EqualsAny(StringComparison.Ordinal, phrases))
+                          select ReportIssue(methodSymbol, ExceptionPhrase, proposal);
+
+            return results.ToList();
         }
     }
 }
