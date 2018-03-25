@@ -30,7 +30,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
             var summaries = GetSummaries(commentXml);
-            return summaries.Any() ? AnalyzeSummary(symbol, summaries) : Enumerable.Empty<Diagnostic>();
+            return summaries.Any()
+                       ? AnalyzeSummary(symbol, summaries)
+                       : Enumerable.Empty<Diagnostic>();
         }
 
         protected static ImmutableHashSet<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
