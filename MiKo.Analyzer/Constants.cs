@@ -209,6 +209,19 @@ namespace MiKoSolutions.Analyzers
                     "Provides a set of <see langword=\"static\"/> methods for ",
                     "Provides a set of <see langword=\"static\" /> methods for ",
                 };
+
+            internal static readonly string[] ArgumentNullExceptionStartingPhrase =
+                {
+                    "<paramref name=\"{0}\"/> is <see langword=\"null\"/>.",
+                    "<paramref name=\"{0}\" /> is <see langword=\"null\"/>.",
+                    "<paramref name=\"{0}\"/> is <see langword=\"null\" />.",
+                    "<paramref name=\"{0}\" /> is <see langword=\"null\" />.",
+                };
+
+            internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
+            internal const string ExceptionPhrase =@"<exception cref=""{0}"">";
+
+            internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
         }
 
         public static class MaxNamingLengths
@@ -218,7 +231,7 @@ namespace MiKoSolutions.Analyzers
             public const int Events = 25;
             public const int Properties = 25;
             public const int Parameters = 20;
-            public const int Fields = 20;
+            public const int Fields = Parameters + 2;
             public const int LocalVariables = 15;
         }
 
@@ -231,6 +244,7 @@ namespace MiKoSolutions.Analyzers
             internal const string Returns = "returns";
             internal const string Remarks = "remarks";
             internal const string Value = "value";
+            internal const string Exception = "exception";
         }
     }
 }

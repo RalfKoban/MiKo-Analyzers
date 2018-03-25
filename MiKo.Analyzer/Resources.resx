@@ -809,6 +809,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2050_Title" xml:space="preserve">
     <value>Exceptions should be documented following the .NET Framework.</value>
   </data>
+  <data name="MiKo_2051_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
+  </data>
+  <data name="MiKo_2051_MessageFormat" xml:space="preserve">
+    <value>{1} content should contain: '{2}'</value>
+  </data>
+  <data name="MiKo_2051_Title" xml:space="preserve">
+    <value>Throwing ArgumentNullExceptions should be documented using a default phrase.</value>
+  </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of factories should be uniform.</value>
   </data>

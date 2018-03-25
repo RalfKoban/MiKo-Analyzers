@@ -79,6 +79,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
         }
 
+        protected static string GetExceptionComment(string exceptionTypeFullName, string commentXml)
+        {
+            var commentElements = GetCommentElements(commentXml.RemoveAll(Constants.SymbolMarkers), Constants.XmlTag.Exception);
+            return FlattenComment(commentElements.Where(_ => _.Attribute("cref")?.Value == exceptionTypeFullName));
+        }
+
         protected bool TryGetGenericArgumentType(ITypeSymbol symbol, out ITypeSymbol genericArgument, int index = 0)
         {
             genericArgument = null;

@@ -2127,6 +2127,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException being thrown should be a specific phrase..
+        /// </summary>
+        public static string MiKo_2051_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2051_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {1} content should contain: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2051_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2051_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throwing ArgumentNullExceptions should be documented using a default phrase..
+        /// </summary>
+        public static string MiKo_2051_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2051_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of factories should be uniform..
         /// </summary>
         public static string MiKo_2060_Description {
