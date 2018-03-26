@@ -20,13 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (symbol)
             {
-                case IMethodSymbol method: return AnalyzeException(exceptionComment, method);
-                case IPropertySymbol property: return AnalyzeException(exceptionComment, property.SetMethod);
+                case IMethodSymbol method: return AnalyzeException(method, method, exceptionComment);
+                case IPropertySymbol property: return AnalyzeException(property, property.SetMethod, exceptionComment);
                 default: return Enumerable.Empty<Diagnostic>();
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeException(string exceptionComment, IMethodSymbol methodSymbol)
+        private IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IMethodSymbol methodSymbol, string exceptionComment)
         {
             if (methodSymbol is null) return Enumerable.Empty<Diagnostic>();
 
@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                           where !parts.Where(_ => _.Contains(parameterIndicator))
                                       .Select(_ => _.Trim()) // get rid of white-spaces
                                       .Any(_ => _.EqualsAny(StringComparison.Ordinal, phrases))
-                          select ReportIssue(methodSymbol, ExceptionPhrase, proposal);
+                          select ReportIssue(owningSymbol, ExceptionPhrase, proposal);
 
             return results.ToList();
         }
