@@ -158,6 +158,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_documented_property_with_private_setter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// Something to return.
+    /// </value>
+    public object DoSomething { get; private set; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_property_throwing_an_ArgumentNullException() => No_issue_is_reported_for(@"
 using System;
 

@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IMethodSymbol methodSymbol, string exceptionComment)
         {
             if (methodSymbol is null) return Enumerable.Empty<Diagnostic>();
+            if (exceptionComment is null) return Enumerable.Empty<Diagnostic>();
 
             var parameters = methodSymbol.Parameters.Where(_ => _.Type.TypeKind != TypeKind.Struct).ToList();
             if (!parameters.Any()) return Enumerable.Empty<Diagnostic>();
