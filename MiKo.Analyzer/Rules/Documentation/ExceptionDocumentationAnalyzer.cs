@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeException(symbol, comment);
         }
 
-        protected string ExceptionPhrase => string.Format(Constants.Comments.ExceptionPhrase, m_exceptionTypeFullName);
+        protected string ExceptionPhrase => string.Format(Constants.Comments.ExceptionPhrase, m_exceptionTypeFullName.GetNameOnlyPart());
 
         private readonly string m_exceptionTypeFullName;
     }

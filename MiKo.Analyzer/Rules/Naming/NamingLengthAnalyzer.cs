@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -27,8 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected int GetExceedingCharacters(string symbolName)
         {
-            var lastIndex = symbolName.LastIndexOf('.') + 1;
-            var length = symbolName.Substring(lastIndex).Length;
+            var length = symbolName.GetNameOnlyPart().Length;
             return length - m_limit;
         }
     }

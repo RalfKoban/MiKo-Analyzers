@@ -110,5 +110,7 @@ namespace System
             var length = value.Length - suffix.Length;
             return length > 0 ? value.Substring(0, length) : string.Empty;
         }
+
+        internal static string GetNameOnlyPart(this string fullName) => fullName.Substring(fullName.LastIndexOf('.') + 1);
     }
 }
