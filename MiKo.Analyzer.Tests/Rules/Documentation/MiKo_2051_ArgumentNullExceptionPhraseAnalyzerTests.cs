@@ -221,6 +221,37 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_generic_type_that_is_a_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Verifies that a specific value is not <see langword=""null""/>.
+    /// </summary>
+    /// <typeparam name=""T"">
+    /// The type of <paramref name=""argument""/>.
+    /// </typeparam>
+    /// <param name=""argument"">
+    /// The value to verify.
+    /// </param>
+    /// <param name=""argumentName"">
+    /// The name of the value.
+    /// </param>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""argument""/> is <see langword=""null""/>.
+    /// </exception>
+    [Pure]
+    internal static void NotNull<T>(T argument, string argumentName) where T : class
+    {
+        if (argument is null)
+        {
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2051_ArgumentNullExceptionPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2051_ArgumentNullExceptionPhraseAnalyzer();

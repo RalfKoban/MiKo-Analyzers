@@ -2136,7 +2136,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} content should contain: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to {1} content should be something like:
+        ///&apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2051_MessageFormat {
             get {

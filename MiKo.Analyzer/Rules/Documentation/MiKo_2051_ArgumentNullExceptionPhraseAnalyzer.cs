@@ -32,25 +32,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (exceptionComment is null) return Enumerable.Empty<Diagnostic>();
 
             var parameters = methodSymbol.Parameters.Where(_ => _.Type.TypeKind != TypeKind.Struct).ToList();
-            if (!parameters.Any()) return Enumerable.Empty<Diagnostic>();
+            return parameters.Any()
+                       ? AnalyzeException(owningSymbol, parameters, exceptionComment)
+                       : Enumerable.Empty<Diagnostic>();
+        }
 
-            // create default proposal for parameter names
-            var proposal = parameters
-                                   .Select(_ => string.Format(Constants.Comments.ArgumentNullExceptionStartingPhrase[0], _.Name) + Environment.NewLine)
-                                   .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Environment.NewLine);
-
+        private IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, string exceptionComment)
+        {
             // remove -or- separators and split comment into parts to inspect individually
             var parts = exceptionComment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
 
-            var results = from parameter in parameters
-                          let parameterIndicator = string.Format(Constants.Comments.ParamRefBeginningPhrase, parameter.Name)
-                          let phrases = Constants.Comments.ArgumentNullExceptionStartingPhrase.Select(_ => string.Format(_, parameter.Name)).ToArray()
-                          where !parts.Where(_ => _.Contains(parameterIndicator))
-                                      .Select(_ => _.Trim()) // get rid of white-spaces
-                                      .Any(_ => _.EqualsAny(StringComparison.Ordinal, phrases))
-                          select ReportIssue(owningSymbol, ExceptionPhrase, proposal);
+            // create default proposal for parameter names
+            var proposal = parameters
+                           .Select(_ => string.Format(Constants.Comments.ArgumentNullExceptionStartingPhrase[0], _.Name) + Environment.NewLine)
+                           .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Environment.NewLine);
 
-            return results.ToList();
+            var results = new List<Diagnostic>();
+
+            var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
+            if (exceptionComment.ContainsAny(StringComparison.Ordinal, parameterIndicators.Values.ToArray()))
+            {
+                foreach (var parameter in parameters)
+                {
+                    var parameterIndicator = parameterIndicators[parameter];
+                    var phrases = Constants.Comments.ArgumentNullExceptionStartingPhrase.Select(_ => string.Format(_, parameter.Name)).ToArray();
+
+                    results.AddRange(
+                                     parts
+                                         .Where(_ => _.Contains(parameterIndicator))
+                                         .Where(_ => !_.Trim().EqualsAny(StringComparison.Ordinal, phrases))
+                                         .Select(_ => ReportIssue(owningSymbol, ExceptionPhrase, proposal)));
+                }
+            }
+            else
+            {
+                results.Add(ReportIssue(owningSymbol, ExceptionPhrase, proposal));
+            }
+
+            return results;
         }
     }
 }
