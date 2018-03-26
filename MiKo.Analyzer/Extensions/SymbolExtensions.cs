@@ -252,5 +252,7 @@ namespace Microsoft.CodeAnalysis
         internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal) && symbol.Name.EndsWith("TaskFactory", StringComparison.Ordinal) == false; // ignore special situation for task factory
 
         internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && symbol.ToString() == typeof(System.Threading.CancellationToken).FullName;
+
+        internal static bool IsNullable(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == "Nullable";
     }
 }

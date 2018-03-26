@@ -49,6 +49,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_Nullable_struct() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(int? o) { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_multiple_parameters() => No_issue_is_reported_for(@"
 using System;
 
@@ -79,6 +95,22 @@ public class TestMe
     /// The <paramref name=""o""/> is not set.
     /// </exception>
     public void DoSomething(object o) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_ArgumentNullException_for_Nullable_struct() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// The <paramref name=""o""/> is not set.
+    /// </exception>
+    public void DoSomething(int? o) { }
 }
 ");
 
@@ -222,7 +254,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_generic_type_that_is_a_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_generic_type_that_is_a_class() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -241,6 +273,37 @@ public class TestMe
     /// </param>
     /// <exception cref=""ArgumentNullException"">
     /// <paramref name=""argument""/> is <see langword=""null""/>.
+    /// </exception>
+    [Pure]
+    internal static void NotNull<T>(T argument, string argumentName) where T : class
+    {
+        if (argument is null)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_correctly_commented_generic_type_that_is_a_class() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Verifies that a specific value is not <see langword=""null""/>.
+    /// </summary>
+    /// <typeparam name=""T"">
+    /// The type of <paramref name=""argument""/>.
+    /// </typeparam>
+    /// <param name=""argument"">
+    /// The value to verify.
+    /// </param>
+    /// <param name=""argumentName"">
+    /// The name of the value.
+    /// </param>
+    /// <exception cref=""ArgumentNullException"">
+    /// The <paramref name=""argument""/> is <see langword=""null""/>.
     /// </exception>
     [Pure]
     internal static void NotNull<T>(T argument, string argumentName) where T : class
