@@ -2155,6 +2155,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null..
+        /// </summary>
+        public static string MiKo_2052_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2052_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{2}&apos; as &apos;{1}&apos; is a value type parameter.
+        /// </summary>
+        public static string MiKo_2052_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2052_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throwing ArgumentNullExceptions should be documented only for reference type parameters..
+        /// </summary>
+        public static string MiKo_2052_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2052_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of factories should be uniform..
         /// </summary>
         public static string MiKo_2060_Description {

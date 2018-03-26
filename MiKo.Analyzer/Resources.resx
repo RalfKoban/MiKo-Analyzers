@@ -819,6 +819,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2051_Title" xml:space="preserve">
     <value>Throwing ArgumentNullExceptions should be documented using a default phrase.</value>
   </data>
+  <data name="MiKo_2052_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
+  </data>
+  <data name="MiKo_2052_MessageFormat" xml:space="preserve">
+    <value>Remove '{2}' as '{1}' is a value type parameter</value>
+  </data>
+  <data name="MiKo_2052_Title" xml:space="preserve">
+    <value>Throwing ArgumentNullExceptions should be documented only for reference type parameters.</value>
+  </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of factories should be uniform.</value>
   </data>
