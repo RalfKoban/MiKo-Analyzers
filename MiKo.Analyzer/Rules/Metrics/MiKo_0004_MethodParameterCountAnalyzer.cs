@@ -22,6 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
+            if (method.IsExtern) return Enumerable.Empty<Diagnostic>();
+
             var parameterCount = method.Parameters.Count();
             return parameterCount > MaxParametersCount
                        ? new[] { ReportIssue(method, parameterCount, MaxParametersCount) }
