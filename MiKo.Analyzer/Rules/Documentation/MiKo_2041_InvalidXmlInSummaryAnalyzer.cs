@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var phrase in summaries.SelectMany(_ => Constants.Comments.InvalidSummaryCrefPhrases.Where(__ => _.Contains(__, Comparison))))
             {
                 if (findings == null) findings = new List<Diagnostic>();
-                findings.Add(ReportIssue(symbol, phrase + "/>"));
+                findings.Add(ReportIssue(symbol, phrase + Constants.Comments.XmlElementEndingTag));
             }
 
             return findings ?? Enumerable.Empty<Diagnostic>();

@@ -41,10 +41,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return ReportIssueStartingPhrase(symbol, phrase);
                 }
 
-                if (summary.StartsWith("<", Comparison))
+                if (summary.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison))
                 {
-                    var index = summary.IndexOf("/>", Comparison);
-                    var phrase = index > 0 ? summary.Substring(0, index + 2) : "<";
+                    var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
+                    var phrase = index > 0 ? summary.Substring(0, index + 2) : Constants.Comments.XmlElementStartingTag;
                     return ReportIssueStartingPhrase(symbol, phrase);
                 }
 

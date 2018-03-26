@@ -223,6 +223,9 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ExceptionSplittingParaPhrase = "<para>-or-</para>";
             internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
+
+            internal const string XmlElementStartingTag = "<";
+            internal const string XmlElementEndingTag = "/>";
         }
 
         public static class MaxNamingLengths

@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (methodSymbol is null) return Enumerable.Empty<Diagnostic>();
             if (exceptionComment is null) return Enumerable.Empty<Diagnostic>();
 
-            var parameters = methodSymbol.Parameters.Where(_ => _.Type.TypeKind != TypeKind.Struct).ToList();
+            var parameters = methodSymbol.Parameters.Where(_ => _.Type.IsReferenceType).ToList();
             return parameters.Any()
                        ? AnalyzeException(owningSymbol, parameters, exceptionComment)
                        : Enumerable.Empty<Diagnostic>();
