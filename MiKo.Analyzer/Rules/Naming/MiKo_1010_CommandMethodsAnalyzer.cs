@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method)
         {
-            if (method.MethodKind != MethodKind.Ordinary || method.IsOverride) return Enumerable.Empty<Diagnostic>();
-            if (method.IsInterfaceImplementationOf<ICommand>()) return Enumerable.Empty<Diagnostic>();
+            if (method.IsInterfaceImplementationOf<ICommand>())
+                return Enumerable.Empty<Diagnostic>();
 
             List<Diagnostic> diagnostics = null;
             if (!VerifyMethodName(nameof(ICommand.CanExecute), method, ref diagnostics))

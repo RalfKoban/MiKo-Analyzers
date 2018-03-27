@@ -16,13 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method)
         {
             if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
-            if (method.IsOverride) return Enumerable.Empty<Diagnostic>();
-            if (method.Name.StartsWith("On", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
 
-            return new[] { ReportIssue(method, FindProperName(method)) };
+            return method.Name.StartsWith("On", StringComparison.Ordinal)
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(method, FindProperName(method)) };
         }
 
         private static string FindProperName(IMethodSymbol method) => "On" + method.Name.Replace("_", string.Empty);

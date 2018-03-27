@@ -19,14 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsFactory()
                                                                                                ? symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod).ToList()
                                                                                                : Enumerable.Empty<Diagnostic>();
-
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
-        {
-            if (method.MethodKind != MethodKind.Ordinary || method.IsOverride) return Enumerable.Empty<Diagnostic>();
-
-            if (method.Name.StartsWith("Create", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
-
-            return new[] { ReportIssue(method) };
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method) => method.Name.StartsWith("Create", StringComparison.Ordinal)
+                                                                                                      ? Enumerable.Empty<Diagnostic>()
+                                                                                                      : new[] { ReportIssue(method) };
     }
 }

@@ -16,10 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method)
         {
-            if (method.MethodKind != MethodKind.Ordinary || method.IsOverride) return Enumerable.Empty<Diagnostic>();
-
             var methodName = method.Name;
             var forbidden = methodName.ContainsAny("Fire", "_fire", "Firing", "_firing") && !methodName.ContainsAny("Firewall", "_firewall");
             return forbidden

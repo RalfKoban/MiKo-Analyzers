@@ -11,10 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1032";
 
-        public MiKo_1032_MethodModelSuffixAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_1032_MethodModelSuffixAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => symbol.IsSpecialAccessor() ? Enumerable.Empty<Diagnostic>() : AnalyzeEntityMarkers(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => symbol.IsSpecialAccessor() ? Enumerable.Empty<Diagnostic>() : AnalyzeEntityMarkers(symbol);
     }
 }

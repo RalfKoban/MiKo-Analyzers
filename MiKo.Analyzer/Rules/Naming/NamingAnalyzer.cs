@@ -17,6 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        {
+            if (method.MethodKind == MethodKind.ExplicitInterfaceImplementation || method.IsOverride)
+                return Enumerable.Empty<Diagnostic>();
+
+            return method.MethodKind == MethodKind.Ordinary
+                       ? AnalyzeOrdinaryMethod(method)
+                       : Enumerable.Empty<Diagnostic>();
+        }
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method) => Enumerable.Empty<Diagnostic>();
+
         protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
         {
             if (!symbol.Name.HasEntityMarker()) return Enumerable.Empty<Diagnostic>();
