@@ -838,6 +838,16 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2053_Title" xml:space="preserve">
     <value>Throwing ArgumentExceptions should be documented using a default starting phrase.</value>
   </data>
+  <data name="MiKo_2054_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
+  </data>
+  <data name="MiKo_2054_MessageFormat" xml:space="preserve">
+    <value>{1} content should be something like:
+'{2}'</value>
+  </data>
+  <data name="MiKo_2054_Title" xml:space="preserve">
+    <value>Throwing ArgumentOutOfRangeExceptions should be documented using a default starting phrase.</value>
+  </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of factories should be uniform.</value>
   </data>

@@ -2210,6 +2210,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
+        /// </summary>
+        public static string MiKo_2054_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2054_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {1} content should be something like:
+        ///&apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2054_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2054_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throwing ArgumentOutOfRangeExceptions should be documented using a default starting phrase..
+        /// </summary>
+        public static string MiKo_2054_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2054_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of factories should be uniform..
         /// </summary>
         public static string MiKo_2060_Description {

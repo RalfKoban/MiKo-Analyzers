@@ -227,6 +227,8 @@ namespace MiKoSolutions.Analyzers
                     ParamRefBeginningPhrase + " /> is ",
                 };
 
+            internal static readonly string[] ArgumentOutOfRangeExceptionStartingPhrase = ArgumentExceptionStartingPhrase;
+
             internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
 
             internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
