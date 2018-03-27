@@ -19,7 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                             nameof(ICommand.Execute),
                                                                             nameof(ICommand.CanExecute) + "Async",
                                                                             nameof(ICommand.Execute) + "Async",
-                                                                            "OnCanExecuteChanged",
+                                                                            nameof(ICommand.CanExecuteChanged),
+                                                                            "On" + nameof(ICommand.CanExecuteChanged),
                                                                         };
 
         public MiKo_1010_CommandMethodsAnalyzer() : base(Id)
