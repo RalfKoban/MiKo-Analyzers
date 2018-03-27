@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 .Replace("Does", EscapedPhrase + "es")
                                 .Replace("DoEvents", EscapedPhrase + "Events")
                                 .Replace("Double", EscapedPhrase + "uble")
+                                .Replace("Doubt", EscapedPhrase + "ubt")
                                 .Replace("Domain", EscapedPhrase + "main")
                                 .Replace("Done", EscapedPhrase + "ne")
                                 .Replace("Dot", EscapedPhrase + "t")
