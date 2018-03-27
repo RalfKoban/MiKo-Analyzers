@@ -162,7 +162,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_1001_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1001_Title" xml:space="preserve">
     <value>'System.EventArgs' parameters on methods should be named properly.</value>
@@ -174,7 +174,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_1002_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1002_Title" xml:space="preserve">
     <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
@@ -186,7 +186,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>https://docs.microsoft.com/en-us/dotnet/csharp/event-pattern</value>
   </data>
   <data name="MiKo_1003_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1003_Title" xml:space="preserve">
     <value>Name of event handler does not follow the .NET Framework Best Practices.</value>
@@ -195,7 +195,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>'Event' as suffix in event names are noise and should be avoided.</value>
   </data>
   <data name="MiKo_1004_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1004_Title" xml:space="preserve">
     <value>Events should not contain term 'Event' in their names.</value>
@@ -204,7 +204,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To ease maintenance, variables that are of type 'System.EventArgs' (or any inheritors) should be named 'e'.</value>
   </data>
   <data name="MiKo_1005_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1005_Title" xml:space="preserve">
     <value>'System.EventArgs' variables should be named properly.</value>
@@ -213,7 +213,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'CanExecute' or 'Execute' in their names.</value>
   </data>
   <data name="MiKo_1010_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1010_Title" xml:space="preserve">
     <value>Methods should not contain 'Do' in their names.</value>
@@ -222,7 +222,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'Do' in their names.</value>
   </data>
   <data name="MiKo_1011_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1011_Title" xml:space="preserve">
     <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
@@ -231,7 +231,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
   </data>
   <data name="MiKo_1012_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1012_Title" xml:space="preserve">
     <value>Methods should not be named 'Fire'.</value>
@@ -249,7 +249,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>The term 'Init' is a lazy abbreviation and should not be used. 'Initialize' should be used instead.</value>
   </data>
   <data name="MiKo_1014_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1014_Title" xml:space="preserve">
     <value>Methods should not be named 'Init'.</value>
@@ -330,7 +330,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that a type is a base type by putting 'Base' in its name does not make sense. Every interface or class that is not sealed can act as a base class.</value>
   </data>
   <data name="MiKo_1030_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1030_Title" xml:space="preserve">
     <value>Types should not have a 'Base' marker to indicate that they are base types.</value>
@@ -339,7 +339,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that a type is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'User' instead of 'UserModel')</value>
   </data>
   <data name="MiKo_1031_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1031_Title" xml:space="preserve">
     <value>Entity types should not use a 'Model' suffix.</value>
@@ -348,7 +348,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that a method deals with an entity by using 'Model' in its name does not make sense.</value>
   </data>
   <data name="MiKo_1032_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1032_Title" xml:space="preserve">
     <value>Methods dealing with entities should not use a 'Model' marker.</value>
@@ -357,7 +357,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
   </data>
   <data name="MiKo_1033_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1033_Title" xml:space="preserve">
     <value>Parameters representing entities should not use a 'Model' suffix.</value>
@@ -366,7 +366,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
   </data>
   <data name="MiKo_1034_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1034_Title" xml:space="preserve">
     <value>Fields representing entities should not use a 'Model' suffix.</value>
@@ -375,7 +375,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that a property deals with an entity by using 'Model' in its name does not make sense.</value>
   </data>
   <data name="MiKo_1035_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1035_Title" xml:space="preserve">
     <value>Properties dealing with entities should not use a 'Model' marker.</value>
@@ -384,7 +384,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that an event deals with an entity by using 'Model' in its name does not make sense.</value>
   </data>
   <data name="MiKo_1036_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1036_Title" xml:space="preserve">
     <value>Events dealing with entities should not use a 'Model' marker.</value>
@@ -393,7 +393,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Indicating that a type is an Enum by using 'Enum' as its suffix does not make sense.</value>
   </data>
   <data name="MiKo_1037_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1037_Title" xml:space="preserve">
     <value>Types should not be suffixed with 'Enum'.</value>
@@ -411,7 +411,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To ease maintenance, the 'this' parameter of extension methods should have a default name.</value>
   </data>
   <data name="MiKo_1039_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}' or '{2}'</value>
+    <value>Name it '{1}' or '{2}'</value>
   </data>
   <data name="MiKo_1039_Title" xml:space="preserve">
     <value>Extension methods 'this' parameter should have default name.</value>
@@ -420,7 +420,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Suffixes on parameter names (such as 'List') are noise and should be avoided.</value>
   </data>
   <data name="MiKo_1040_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1040_Title" xml:space="preserve">
     <value>Parameters should not be suffixed with implementation details.</value>
@@ -429,7 +429,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Suffixes on field names (such as 'List') are noise and should be avoided.</value>
   </data>
   <data name="MiKo_1041_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1041_Title" xml:space="preserve">
     <value>Fields should not be suffixed with implementation details.</value>
@@ -438,7 +438,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To ease maintenance, and being consistent with the .NET Framework classes, 'CancellationToken' parameters should have a very specific name.</value>
   </data>
   <data name="MiKo_1042_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1042_Title" xml:space="preserve">
     <value>'CancellationToken' parameters should have specific name.</value>
@@ -447,7 +447,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To ease maintenance, 'CancellationToken' variables should have a very specific name.</value>
   </data>
   <data name="MiKo_1043_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1043_Title" xml:space="preserve">
     <value>'CancellationToken' variables should have specific name.</value>
@@ -456,7 +456,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>
   <data name="MiKo_1101_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1101_Title" xml:space="preserve">
     <value>Test classes should end with 'Tests'.</value>
@@ -465,7 +465,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A method that is marked as a unit test should not additionally indicate that it is a unit test by having 'Test' in its name.</value>
   </data>
   <data name="MiKo_1102_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1102_Title" xml:space="preserve">
     <value>Test methods should not contain 'Test'.</value>
@@ -474,7 +474,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A method that is marked as unit test initialization method should be named 'PrepareTest'.</value>
   </data>
   <data name="MiKo_1103_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1103_Title" xml:space="preserve">
     <value>Test initialization methods should be named 'PrepareTest'.</value>
@@ -483,7 +483,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>A method that is marked as unit test cleanup method should be named 'CleanupTest'.</value>
   </data>
   <data name="MiKo_1104_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1104_Title" xml:space="preserve">
     <value>Test cleanup methods should be named 'CleanupTest'.</value>
@@ -502,7 +502,7 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
   </data>
   <data name="MiKo_1200_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}'</value>
+    <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1200_Title" xml:space="preserve">
     <value>Name exceptions in catch blocks consistently.</value>
@@ -511,7 +511,7 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>To ease maintenance, exceptions as parameters should be named consistently.</value>
   </data>
   <data name="MiKo_1201_MessageFormat" xml:space="preserve">
-    <value>Should be named '{1}' or '{2}'</value>
+    <value>Name it '{1}' or '{2}'</value>
   </data>
   <data name="MiKo_1201_Title" xml:space="preserve">
     <value>Name exceptions as parameters consistently.</value>
