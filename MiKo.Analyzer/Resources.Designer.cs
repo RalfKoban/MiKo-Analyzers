@@ -423,7 +423,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; contains ambiguous term &apos;Check&apos;.
+        ///   Looks up a localized string similar to Do not use ambiguous term &apos;Check&apos; in &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_1013_MessageFormat {
             get {

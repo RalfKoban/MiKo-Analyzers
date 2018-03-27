@@ -240,7 +240,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>The term 'Check' is ambiguous. If validation of parameters is meant, use something like 'Validate' or 'Verify'. If a check for a specific state is meant, use 'Is', 'Can' or 'Has' instead.</value>
   </data>
   <data name="MiKo_1013_MessageFormat" xml:space="preserve">
-    <value>'{0}' contains ambiguous term 'Check'</value>
+    <value>Do not use ambiguous term 'Check' in '{0}'</value>
   </data>
   <data name="MiKo_1013_Title" xml:space="preserve">
     <value>Methods should not be named 'Check'.</value>
