@@ -2182,6 +2182,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase..
+        /// </summary>
+        public static string MiKo_2053_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2053_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {1} content should be something like:
+        ///&apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2053_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2053_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throwing ArgumentExceptions should be documented using a default starting phrase..
+        /// </summary>
+        public static string MiKo_2053_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2053_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of factories should be uniform..
         /// </summary>
         public static string MiKo_2060_Description {

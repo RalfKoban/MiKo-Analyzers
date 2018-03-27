@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                 {
                     "A task that will complete with a result of <see langword=\"true\"/> if ",
-                        "A task that will complete with a result of <see langword=\"true\" /> if ",
+                    "A task that will complete with a result of <see langword=\"true\" /> if ",
                 };
 
             internal static readonly string[] BooleanTaskReturnTypeEndingPhrase =
@@ -185,6 +185,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] ExceptionCtorSerializationInfoParamPhrase = { "The object that holds the serialized object data." };
             internal static readonly string[] ExceptionCtorStreamingContextParamPhrase = { "The contextual information about the source or destination." };
             internal static readonly string[] ExceptionCtorMessageParamPhrase = { "The error message that explains the reason for the exception." };
+
             internal static readonly string[] ExceptionCtorExceptionParamPhrase =
                 {
                     @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
@@ -204,6 +205,8 @@ namespace MiKoSolutions.Analyzers
 
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
 
+            internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
+
             internal static readonly string[] ExtensionMethodClassStartingPhrase =
                 {
                     "Provides a set of <see langword=\"static\"/> methods for ",
@@ -212,17 +215,22 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ArgumentNullExceptionStartingPhrase =
                 {
-                    "<paramref name=\"{0}\"/> is <see langword=\"null\"/>.",
-                    "<paramref name=\"{0}\" /> is <see langword=\"null\"/>.",
-                    "<paramref name=\"{0}\"/> is <see langword=\"null\" />.",
-                    "<paramref name=\"{0}\" /> is <see langword=\"null\" />.",
+                    ParamRefBeginningPhrase + "/> is <see langword=\"null\"/>.",
+                    ParamRefBeginningPhrase + " /> is <see langword=\"null\"/>.",
+                    ParamRefBeginningPhrase + "/> is <see langword=\"null\" />.",
+                    ParamRefBeginningPhrase + " /> is <see langword=\"null\" />.",
                 };
 
-            internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
-            internal const string ExceptionPhrase =@"<exception cref=""{0}"">";
+            internal static readonly string[] ArgumentExceptionStartingPhrase =
+                {
+                    ParamRefBeginningPhrase + "/> is ",
+                    ParamRefBeginningPhrase + " /> is ",
+                };
 
-            internal const string ExceptionSplittingParaPhrase = "<para>-or-</para>";
+            internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
+
             internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
+            internal const string ExceptionSplittingParaPhrase = "<para>-or-</para>";
 
             internal const string XmlElementStartingTag = "<";
             internal const string XmlElementEndingTag = "/>";
