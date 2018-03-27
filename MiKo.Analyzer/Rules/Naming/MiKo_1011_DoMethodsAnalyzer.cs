@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
+            if (method.MethodKind != MethodKind.Ordinary || method.IsOverride) return Enumerable.Empty<Diagnostic>();
             if (method.IsInterfaceImplementationOf<ICommand>()) return Enumerable.Empty<Diagnostic>();
 
             var methodName = method.Name;
