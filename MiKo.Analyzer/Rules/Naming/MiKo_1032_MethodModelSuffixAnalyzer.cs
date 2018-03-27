@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => symbol.IsSpecialAccessor() ? Enumerable.Empty<Diagnostic>() : AnalyzeEntityMarkers(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => symbol.IsSpecialAccessor()
+                                                                                                      ? Enumerable.Empty<Diagnostic>()
+                                                                                                      : AnalyzeEntityMarkers(symbol);
     }
 }
