@@ -18,19 +18,27 @@ public class TestMe
 ");
 
         [Test]
-        public void No_Issue_is_reported_for_ICommand_method() => No_issue_is_reported_for(@"
-public class TestMe : System.Windows.Input.ICommand
-{
-    public bool CanExecute(object parameter) => true;
+        public void No_issue_is_reported_for_ICommand_method() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
 
-    public void Execute(object parameter)
+namespace Bla
+{
+    public class TestMe : System.Windows.Input.ICommand
     {
+        public bool CanExecute(object parameter) => true;
+
+        public void Execute(object parameter)
+        {
+        }
+
+        public event EventHandler CanExecuteChanged;
     }
 }
 ");
 
         [Test]
-        public void Issue_is_reported_for_method_with_Execute_in_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_Execute_in_name() => An_issue_is_reported_for(@"
 public class TestMe
 {
     private int DoExecute() => 42;
@@ -38,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Issue_is_reported_for_method_with_CanExecute_in_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_CanExecute_in_name() => An_issue_is_reported_for(@"
 public class TestMe
 {
     private int DoCanExecute() => 42;

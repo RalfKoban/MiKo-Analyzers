@@ -19,10 +19,16 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol method)
         {
-            var methodSymbols = method.ContainingType.AllInterfaces
-                                      .Where(_ => _.Name == typeof(T).FullName)
-                                      .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
-            return methodSymbols.Any(_ => method.ContainingType.FindImplementationForInterfaceMember(_).Equals(method));
+            if (method.ContainingType.Implements<T>())
+            {
+                var fullName = typeof(T).FullName;
+                var methodSymbols = method.ContainingType.AllInterfaces
+                                          .Where(_ => _.Name == fullName)
+                                          .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
+                return methodSymbols.Any(_ => method.ContainingType.FindImplementationForInterfaceMember(_).Equals(method));
+            }
+
+            return false;
         }
 
         internal static bool IsTestMethod(this IMethodSymbol method)

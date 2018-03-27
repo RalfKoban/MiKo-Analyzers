@@ -8,11 +8,19 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    // TODO: RKN temp. deactivated because of issues in name detection
-    // [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1010_CommandMethodsAnalyzer : NamingAnalyzer
     {
         public const string Id = "MiKo_1010";
+
+        private static readonly ICollection<string> ExcludedNames = new HashSet<string>
+                                                                        {
+                                                                            nameof(ICommand.CanExecute),
+                                                                            nameof(ICommand.Execute),
+                                                                            nameof(ICommand.CanExecute) + "Async",
+                                                                            nameof(ICommand.Execute) + "Async",
+                                                                            "OnCanExecuteChanged",
+                                                                        };
 
         public MiKo_1010_CommandMethodsAnalyzer() : base(Id)
         {
@@ -20,22 +28,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
+            if (method.MethodKind != MethodKind.Ordinary || method.IsOverride) return Enumerable.Empty<Diagnostic>();
             if (method.IsInterfaceImplementationOf<ICommand>()) return Enumerable.Empty<Diagnostic>();
 
-            var diagnostics = new List<Diagnostic>();
-            if (!VerifyMethodName(nameof(ICommand.CanExecute), method, diagnostics))
+            List<Diagnostic> diagnostics = null;
+            if (!VerifyMethodName(nameof(ICommand.CanExecute), method, ref diagnostics))
             {
                 // CanExecute is not contained, thus we can check for execute (otherwise 'Execute' would already be part of the method's name)
-                VerifyMethodName(nameof(ICommand.Execute), method, diagnostics);
+                VerifyMethodName(nameof(ICommand.Execute), method, ref diagnostics);
             }
-            return diagnostics;
+
+            return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ICollection<Diagnostic> diagnostics)
+        private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ref List<Diagnostic> diagnostics)
         {
-            var forbidden = method.Name.Contains(forbiddenName);
+            var forbidden = method.Name.Contains(forbiddenName) && !ExcludedNames.Contains(method.Name);
             if (forbidden)
             {
+                if (diagnostics == null) diagnostics = new List<Diagnostic>();
                 diagnostics.Add(ReportIssue(method, method.Name.RemoveAll(nameof(ICommand.Execute))));
             }
 
