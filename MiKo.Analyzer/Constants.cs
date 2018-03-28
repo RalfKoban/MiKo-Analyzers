@@ -226,13 +226,15 @@ namespace MiKoSolutions.Analyzers
                 {
                     ParamRefBeginningPhrase + "/> is ",
                     ParamRefBeginningPhrase + " /> is ",
+                    ParamRefBeginningPhrase + "/> contains ",
+                    ParamRefBeginningPhrase + " /> contains ",
+                    ParamRefBeginningPhrase + "/> does ",
+                    ParamRefBeginningPhrase + " /> does ",
+                    ParamRefBeginningPhrase + "/> has ",
+                    ParamRefBeginningPhrase + " /> has ",
                 };
 
-            internal static readonly string[] ArgumentOutOfRangeExceptionStartingPhrase =
-                {
-                    ParamRefBeginningPhrase + "/> is ",
-                    ParamRefBeginningPhrase + " /> is ",
-                };
+            internal static readonly string[] ArgumentOutOfRangeExceptionStartingPhrase = ArgumentExceptionStartingPhrase;
 
             internal const string ObjectDisposedExceptionEndingPhrase = " has been disposed.";
 

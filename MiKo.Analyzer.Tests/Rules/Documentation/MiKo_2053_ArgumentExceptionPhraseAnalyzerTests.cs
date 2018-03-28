@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentException() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentException([Values("is", "does", "has", "contains")] string phrase) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -42,7 +42,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <exception cref=""ArgumentException"">
-    /// <paramref name=""o""/> is something.
+    /// <paramref name=""o""/> " + phrase + @" something.
     /// </exception>
     public void DoSomething(object o) { }
 }
@@ -218,6 +218,22 @@ public class TestMe
     /// Thrown if something is not set.
     /// </exception>
     public object DoSomething { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_an_ArgumentException_is_thrown_only_for_one_of_muliple_referenced_parameters() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    /// <paramref name=""o1""/> is not <paramref name=""o2""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
 }
 ");
 

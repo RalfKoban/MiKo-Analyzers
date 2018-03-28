@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private readonly string[] m_exceptionPhrases;
 
+        const StringComparison Comparison = StringComparison.Ordinal;
+
         protected ArgumentExceptionPhraseAnalyzer(string diagnosticId, Type exceptionType, params string[] phrases) : base(diagnosticId, exceptionType) => m_exceptionPhrases = phrases;
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
@@ -36,16 +38,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var results = new List<Diagnostic>();
 
             var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
-            if (exceptionComment.ContainsAny(StringComparison.Ordinal, parameterIndicators.Values.ToArray()))
+            var allParameterIndicatorPhrases = parameterIndicators.Values.ToArray();
+
+            if (exceptionComment.ContainsAny(Comparison, allParameterIndicatorPhrases))
             {
                 foreach (var parameter in parameters)
                 {
-                    var parameterIndicator = parameterIndicators[parameter];
+                    var parameterIndicatorPhrase = parameterIndicators[parameter];
                     var phrases = m_exceptionPhrases.Select(_ => string.Format(_, parameter.Name)).ToArray();
 
                     results.AddRange(parts
-                                     .Where(_ => _.Contains(parameterIndicator))
-                                     .Where(_ => !_.Trim().StartsWithAny(StringComparison.Ordinal, phrases))
+                                     .Where(_ => _.Contains(parameterIndicatorPhrase))
+                                     .Select(_ => _.Trim())
+                                     .Where(_ => !_.StartsWithAny(Comparison, phrases))
+                                     .Where(_ => !_.StartsWithAny(Comparison, allParameterIndicatorPhrases))
                                      .Select(_ => ReportExceptionIssue(owningSymbol, proposal)));
                 }
             }
