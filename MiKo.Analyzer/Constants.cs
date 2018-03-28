@@ -31,7 +31,8 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] MeaninglessStartingPhrase =
                 {
                     "A ", "An ", "Does implement ", "For ", "Implement ", "Implements ", "Is ", "This ", "That ", "The ", "To ", "Uses ", "Used ", "Which ", "Called ",
-                    "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Delegate", "Action", "Func", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command",
+                    "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Delegate", "Action", "Func", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command", "Converter",
+                    "Interaction logic",
                 };
 
             internal static readonly string[] MeaninglessPhrase = { "does implement", "implements", "that is called", "that is used", "used for", "used to", "which is called", "which is used", };

@@ -250,7 +250,7 @@ public class TestMe : ITestMe
 
         private static IEnumerable<string> MeaninglessPhrases()
         {
-            var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Delegate", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command", "Action", "Func" };
+            var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Delegate", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command", "Action", "Func", "Converter" };
 
             var phrases = MeaninglessTextPhrases();
 
@@ -264,6 +264,7 @@ public class TestMe : ITestMe
                                   "Does implement ",
                                   "Implement ",
                                   "Implements ",
+                                  "Interaction logic ",
                                   "Is for ",
                                   "Is to ",
                                   "Is used for ",
