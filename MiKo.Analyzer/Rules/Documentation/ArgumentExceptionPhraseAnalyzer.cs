@@ -46,12 +46,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     results.AddRange(parts
                                      .Where(_ => _.Contains(parameterIndicator))
                                      .Where(_ => !_.Trim().StartsWithAny(StringComparison.Ordinal, phrases))
-                                     .Select(_ => ReportIssue(owningSymbol, m_exceptionPhrases, proposal)));
+                                     .Select(_ => ReportExceptionIssue(owningSymbol, proposal)));
                 }
             }
             else
             {
-                results.Add(ReportIssue(owningSymbol, m_exceptionPhrases, proposal));
+                results.Add(ReportExceptionIssue(owningSymbol, proposal));
             }
 
             return results;

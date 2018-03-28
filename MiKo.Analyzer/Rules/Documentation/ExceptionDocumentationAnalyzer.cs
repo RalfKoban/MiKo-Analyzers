@@ -31,6 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeException(symbol, comment);
         }
 
+        protected Diagnostic ReportExceptionIssue(ISymbol owningSymbol, string proposal) => ReportIssue(owningSymbol, ExceptionPhrase, proposal);
+
         protected string ExceptionPhrase => string.Format(Constants.Comments.ExceptionPhrase, m_exceptionTypeFullName.GetNameOnlyPart());
 
         private readonly string m_exceptionTypeFullName;
