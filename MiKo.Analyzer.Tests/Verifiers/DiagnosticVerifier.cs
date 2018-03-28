@@ -41,9 +41,13 @@ namespace TestHelper
                                     {
                                         Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
 
+                                        var message = result.GetMessage();
+
+                                        Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
+
                                         foreach (var placeholder in Enumerable.Range(0, 10).Select(_ => "{" + _ + "}"))
                                         {
-                                            Assert.That(result.GetMessage(), Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
+                                            Assert.That(message, Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
                                         }
                                     }
                                 });
