@@ -279,7 +279,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Event&apos; as suffix in event names are noise and should be avoided..
+        ///   Looks up a localized string similar to &apos;Event&apos; as suffix in event names is noise and should be avoided..
         /// </summary>
         public static string MiKo_1004_Description {
             get {
