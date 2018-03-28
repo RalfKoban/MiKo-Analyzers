@@ -207,9 +207,9 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static IEnumerable<ITypeSymbol> AllBaseTypes(this ITypeSymbol symbol)
+        internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol symbol)
         {
-            var baseTypes = new List<ITypeSymbol>();
+            var baseTypes = new List<ITypeSymbol> { symbol };
             while (true)
             {
                 var baseType = symbol.BaseType;
