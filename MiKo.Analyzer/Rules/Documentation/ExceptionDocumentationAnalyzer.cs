@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
             var comment = GetExceptionComment(m_exceptionTypeFullName, commentXml);
+            if (comment is null) return Enumerable.Empty<Diagnostic>();
+
             return AnalyzeException(symbol, comment);
         }
 
