@@ -12,14 +12,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2055";
 
-        private const string Phrase = Constants.Comments.ObjectDisposedExceptionEndingPhrase;
+        private const StringComparison Comparison = StringComparison.Ordinal;
 
         public MiKo_2055_ObjectDisposedExceptionPhraseAnalyzer() : base(Id, typeof(ObjectDisposedException))
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment) => exceptionComment.EndsWith(Phrase, StringComparison.Ordinal)
-                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                    : new[] { ReportExceptionIssue(symbol, Phrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
+        {
+            if (exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison)) return Enumerable.Empty<Diagnostic>();
+
+            // alternative check for Closed methods
+            if (HasCloseMethod(symbol) && exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
+                return Enumerable.Empty<Diagnostic>();
+
+            return new[] { ReportExceptionIssue(symbol, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
+        }
+
+        private static bool HasCloseMethod(ISymbol symbol) => symbol.FindContainingType().GetMembers("Close").OfType<IMethodSymbol>().Any();
     }
 }

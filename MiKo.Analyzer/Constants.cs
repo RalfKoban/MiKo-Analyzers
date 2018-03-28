@@ -236,6 +236,8 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ObjectDisposedExceptionEndingPhrase = " has been disposed.";
 
+            internal const string ObjectDisposedExceptionAlternatingEndingPhrase = " has been closed.";
+
             internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
 
             internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
