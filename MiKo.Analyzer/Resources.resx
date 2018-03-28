@@ -817,7 +817,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
 '{2}'</value>
   </data>
   <data name="MiKo_2051_Title" xml:space="preserve">
-    <value>Throwing ArgumentNullExceptions should be documented using a default phrase.</value>
+    <value>Throwing of ArgumentNullException should be documented using a default phrase.</value>
   </data>
   <data name="MiKo_2052_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
@@ -826,7 +826,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Remove '{2}' as '{1}' is a value type parameter</value>
   </data>
   <data name="MiKo_2052_Title" xml:space="preserve">
-    <value>Throwing ArgumentNullExceptions should be documented only for reference type parameters.</value>
+    <value>Throwing of ArgumentNullException should be documented only for reference type parameters.</value>
   </data>
   <data name="MiKo_2053_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
@@ -836,7 +836,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
 '{2}'</value>
   </data>
   <data name="MiKo_2053_Title" xml:space="preserve">
-    <value>Throwing ArgumentExceptions should be documented using a default starting phrase.</value>
+    <value>Throwing of ArgumentException should be documented using a default starting phrase.</value>
   </data>
   <data name="MiKo_2054_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
@@ -846,7 +846,16 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
 '{2}'</value>
   </data>
   <data name="MiKo_2054_Title" xml:space="preserve">
-    <value>Throwing ArgumentOutOfRangeExceptions should be documented using a default starting phrase.</value>
+    <value>Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2055_Description" xml:space="preserve">
+    <value>To ease maintenance, the XML documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
+  </data>
+  <data name="MiKo_2055_MessageFormat" xml:space="preserve">
+    <value>{1} should end with: '{2}'</value>
+  </data>
+  <data name="MiKo_2055_Title" xml:space="preserve">
+    <value>Throwing of ObjectDisposedException should be documented using a default ending phrase.</value>
   </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of factories should be uniform.</value>

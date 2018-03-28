@@ -234,6 +234,8 @@ namespace MiKoSolutions.Analyzers
                     ParamRefBeginningPhrase + " /> is ",
                 };
 
+            internal const string ObjectDisposedExceptionEndingPhrase = " has been disposed.";
+
             internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
 
             internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
