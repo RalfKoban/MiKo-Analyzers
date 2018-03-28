@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2050_ExceptionAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2050_ExceptionSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2050";
 
-        public MiKo_2050_ExceptionAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_2050_ExceptionSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 

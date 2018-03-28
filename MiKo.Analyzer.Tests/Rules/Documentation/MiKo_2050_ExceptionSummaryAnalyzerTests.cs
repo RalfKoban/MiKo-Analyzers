@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2050_ExceptionAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2050_ExceptionSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_exception_class() => No_issue_is_reported_for(@"
@@ -601,8 +601,8 @@ public sealed class BlaBlaException : Exception
     }
 }");
 
-        protected override string GetDiagnosticId() => MiKo_2050_ExceptionAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2050_ExceptionSummaryAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2050_ExceptionAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2050_ExceptionSummaryAnalyzer();
     }
 }
