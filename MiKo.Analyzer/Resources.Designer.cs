@@ -2265,6 +2265,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Types that do not inherit from &apos;IDisposable&apos; cannot be disposed. Hence they shall not throw an ObjectDisposedException..
+        /// </summary>
+        public static string MiKo_2056_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2056_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; because type does not inherit from &apos;IDisposable&apos;.
+        /// </summary>
+        public static string MiKo_2056_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2056_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types that are not disposable shall not throw an ObjectDisposedException..
+        /// </summary>
+        public static string MiKo_2056_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2056_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of factories should be uniform..
         /// </summary>
         public static string MiKo_2060_Description {

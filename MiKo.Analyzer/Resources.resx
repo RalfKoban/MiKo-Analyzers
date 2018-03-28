@@ -857,6 +857,15 @@ End &lt;{2}&gt; with: '{4}'</value>
   <data name="MiKo_2055_Title" xml:space="preserve">
     <value>Throwing of ObjectDisposedException should be documented using a default ending phrase.</value>
   </data>
+  <data name="MiKo_2056_Description" xml:space="preserve">
+    <value>Types that do not inherit from 'IDisposable' cannot be disposed. Hence they shall not throw an ObjectDisposedException.</value>
+  </data>
+  <data name="MiKo_2056_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' because type does not inherit from 'IDisposable'</value>
+  </data>
+  <data name="MiKo_2056_Title" xml:space="preserve">
+    <value>Types that are not disposable shall not throw an ObjectDisposedException.</value>
+  </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of factories should be uniform.</value>
   </data>
