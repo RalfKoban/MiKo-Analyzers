@@ -1469,7 +1469,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to To ease development and maintenance, the summary documentation should describe their responsibility.
-        ///It should not start with or contain a meaningless phrase like &apos;Used to&apos;. Instead it should start with something like: &apos;Allows to &apos;, &apos;Represents &apos; or &apos;Provides &apos;..
+        ///It should not start with or contain a meaningless phrase like &apos;Used to&apos;. Instead it should start with something more descriptive, such as: &apos;Allows to &apos;, &apos;Represents &apos; or &apos;Provides &apos;..
         /// </summary>
         public static string MiKo_2012_Description {
             get {
@@ -1478,7 +1478,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &lt;summary&gt;&apos;s meaningless phrase: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not {1} meaningless phrase: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2012_MessageFormat {
             get {
