@@ -29,6 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return new[] { ReportExceptionIssue(symbol, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
         }
 
-        private static bool HasCloseMethod(ISymbol symbol) => symbol.FindContainingType().GetMembers("Close").OfType<IMethodSymbol>().Any();
+        private static bool HasCloseMethod(ISymbol symbol) => symbol
+                                                              .FindContainingType()
+                                                              .IncludingAllBaseTypes()
+                                                              .SelectMany(_ => _.GetMembers("Close").OfType<IMethodSymbol>())
+                                                              .Any();
     }
 }

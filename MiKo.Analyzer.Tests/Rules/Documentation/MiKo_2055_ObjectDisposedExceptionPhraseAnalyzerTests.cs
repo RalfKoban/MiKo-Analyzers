@@ -105,6 +105,29 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_Close_method_in_base_class() => No_issue_is_reported_for(@"
+using System;
+
+public class Base
+{
+    public void Close()
+    {
+    }
+}
+
+public class TestMe : Base
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException"">The object has been closed.</exception>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_with_Close_method() => An_issue_is_reported_for(@"
 using System;
 
