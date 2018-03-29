@@ -2129,34 +2129,6 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException being thrown should be a specific phrase..
         /// </summary>
-        public static string MiKo_2051_Description {
-            get {
-                return ResourceManager.GetString("MiKo_2051_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {1} content should be something like:
-        ///&apos;{2}&apos;.
-        /// </summary>
-        public static string MiKo_2051_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_2051_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented using a default phrase..
-        /// </summary>
-        public static string MiKo_2051_Title {
-            get {
-                return ResourceManager.GetString("MiKo_2051_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null..
-        /// </summary>
         public static string MiKo_2052_Description {
             get {
                 return ResourceManager.GetString("MiKo_2052_Description", resourceCulture);
@@ -2164,7 +2136,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{2}&apos; as &apos;{1}&apos; is a value type parameter.
+        ///   Looks up a localized string similar to {1} content should be something like:
+        ///&apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2052_MessageFormat {
             get {
@@ -2173,7 +2146,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented only for reference type parameters..
+        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented using a default phrase..
         /// </summary>
         public static string MiKo_2052_Title {
             get {
@@ -2182,7 +2155,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null..
         /// </summary>
         public static string MiKo_2053_Description {
             get {
@@ -2191,8 +2164,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} content should be something like:
-        ///&apos;{2}&apos;.
+        ///   Looks up a localized string similar to Remove &apos;{2}&apos; as &apos;{1}&apos; is a value type parameter.
         /// </summary>
         public static string MiKo_2053_MessageFormat {
             get {
@@ -2201,7 +2173,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentException should be documented using a default starting phrase..
+        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented only for reference type parameters..
         /// </summary>
         public static string MiKo_2053_Title {
             get {
@@ -2210,7 +2182,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase..
         /// </summary>
         public static string MiKo_2054_Description {
             get {
@@ -2229,7 +2201,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase..
+        ///   Looks up a localized string similar to Throwing of ArgumentException should be documented using a default starting phrase..
         /// </summary>
         public static string MiKo_2054_Title {
             get {
@@ -2238,7 +2210,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
         /// </summary>
         public static string MiKo_2055_Description {
             get {
@@ -2247,7 +2219,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} should end with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to {1} content should be something like:
+        ///&apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2055_MessageFormat {
             get {
@@ -2256,7 +2229,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ObjectDisposedException should be documented using a default ending phrase..
+        ///   Looks up a localized string similar to Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase..
         /// </summary>
         public static string MiKo_2055_Title {
             get {
@@ -2265,7 +2238,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types that do not inherit from &apos;IDisposable&apos; cannot be disposed. Hence they shall not throw an ObjectDisposedException..
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
         /// </summary>
         public static string MiKo_2056_Description {
             get {
@@ -2274,7 +2247,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{1}&apos; because type does not inherit from &apos;IDisposable&apos;.
+        ///   Looks up a localized string similar to {1} should end with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2056_MessageFormat {
             get {
@@ -2283,11 +2256,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types that are not disposable shall not throw an ObjectDisposedException..
+        ///   Looks up a localized string similar to Throwing of ObjectDisposedException should be documented using a default ending phrase..
         /// </summary>
         public static string MiKo_2056_Title {
             get {
                 return ResourceManager.GetString("MiKo_2056_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types that do not inherit from &apos;IDisposable&apos; cannot be disposed. Hence they shall not throw an ObjectDisposedException..
+        /// </summary>
+        public static string MiKo_2057_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2057_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; because type does not inherit from &apos;IDisposable&apos;.
+        /// </summary>
+        public static string MiKo_2057_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2057_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types that are not disposable shall not throw an ObjectDisposedException..
+        /// </summary>
+        public static string MiKo_2057_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2057_Title", resourceCulture);
             }
         }
         

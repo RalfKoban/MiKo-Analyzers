@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2055_ObjectDisposedExceptionPhraseAnalyzer : ExceptionDocumentationAnalyzer
+    public sealed class MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer : ExceptionDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2055";
+        public const string Id = "MiKo_2056";
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
-        public MiKo_2055_ObjectDisposedExceptionPhraseAnalyzer() : base(Id, typeof(ObjectDisposedException))
+        public MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer() : base(Id, typeof(ObjectDisposedException))
         {
         }
 

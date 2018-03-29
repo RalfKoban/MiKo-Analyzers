@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2051_ArgumentNullExceptionPhraseAnalyzer : ArgumentExceptionPhraseAnalyzer
+    public sealed class MiKo_2052_ArgumentNullExceptionPhraseAnalyzer : ArgumentExceptionPhraseAnalyzer
     {
-        public const string Id = "MiKo_2051";
+        public const string Id = "MiKo_2052";
 
-        public MiKo_2051_ArgumentNullExceptionPhraseAnalyzer() : base(Id, typeof(ArgumentNullException), Constants.Comments.ArgumentNullExceptionStartingPhrase)
+        public MiKo_2052_ArgumentNullExceptionPhraseAnalyzer() : base(Id, typeof(ArgumentNullException), Constants.Comments.ArgumentNullExceptionStartingPhrase)
         {
         }
 

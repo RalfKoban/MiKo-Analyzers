@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2056_ObjectDisposedExceptionWrongPlacedAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2057_ObjectDisposedExceptionWrongPlacedAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
@@ -111,8 +111,8 @@ public class TestMe : Base
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2056_ObjectDisposedExceptionWrongPlacedAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2057_ObjectDisposedExceptionWrongPlacedAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2056_ObjectDisposedExceptionWrongPlacedAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2057_ObjectDisposedExceptionWrongPlacedAnalyzer();
     }
 }

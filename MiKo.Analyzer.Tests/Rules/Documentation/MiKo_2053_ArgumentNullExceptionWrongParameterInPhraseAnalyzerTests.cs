@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2052_ArgumentNullExceptionWrongParameterInPhraseAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2053_ArgumentNullExceptionWrongParameterInPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
@@ -264,8 +264,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2052_ArgumentNullExceptionWrongParameterInPhraseAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2053_ArgumentNullExceptionWrongParameterInPhraseAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2052_ArgumentNullExceptionWrongParameterInPhraseAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2053_ArgumentNullExceptionWrongParameterInPhraseAnalyzer();
     }
 }

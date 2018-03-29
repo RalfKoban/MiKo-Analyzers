@@ -809,61 +809,61 @@ End &lt;{2}&gt; with: '{4}'</value>
   <data name="MiKo_2050_Title" xml:space="preserve">
     <value>Exceptions should be documented following the .NET Framework.</value>
   </data>
-  <data name="MiKo_2051_Description" xml:space="preserve">
+  <data name="MiKo_2052_Description" xml:space="preserve">
     <value>To ease maintenance, the XML documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
   </data>
-  <data name="MiKo_2051_MessageFormat" xml:space="preserve">
+  <data name="MiKo_2052_MessageFormat" xml:space="preserve">
     <value>{1} content should be something like:
 '{2}'</value>
-  </data>
-  <data name="MiKo_2051_Title" xml:space="preserve">
-    <value>Throwing of ArgumentNullException should be documented using a default phrase.</value>
-  </data>
-  <data name="MiKo_2052_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
-  </data>
-  <data name="MiKo_2052_MessageFormat" xml:space="preserve">
-    <value>Remove '{2}' as '{1}' is a value type parameter</value>
   </data>
   <data name="MiKo_2052_Title" xml:space="preserve">
-    <value>Throwing of ArgumentNullException should be documented only for reference type parameters.</value>
+    <value>Throwing of ArgumentNullException should be documented using a default phrase.</value>
   </data>
   <data name="MiKo_2053_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
+    <value>To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
   </data>
   <data name="MiKo_2053_MessageFormat" xml:space="preserve">
-    <value>{1} content should be something like:
-'{2}'</value>
+    <value>Remove '{2}' as '{1}' is a value type parameter</value>
   </data>
   <data name="MiKo_2053_Title" xml:space="preserve">
-    <value>Throwing of ArgumentException should be documented using a default starting phrase.</value>
+    <value>Throwing of ArgumentNullException should be documented only for reference type parameters.</value>
   </data>
   <data name="MiKo_2054_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
+    <value>To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
     <value>{1} content should be something like:
 '{2}'</value>
   </data>
   <data name="MiKo_2054_Title" xml:space="preserve">
-    <value>Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.</value>
+    <value>Throwing of ArgumentException should be documented using a default starting phrase.</value>
   </data>
   <data name="MiKo_2055_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
+    <value>To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
-    <value>{1} should end with: '{2}'</value>
+    <value>{1} content should be something like:
+'{2}'</value>
   </data>
   <data name="MiKo_2055_Title" xml:space="preserve">
-    <value>Throwing of ObjectDisposedException should be documented using a default ending phrase.</value>
+    <value>Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.</value>
   </data>
   <data name="MiKo_2056_Description" xml:space="preserve">
-    <value>Types that do not inherit from 'IDisposable' cannot be disposed. Hence they shall not throw an ObjectDisposedException.</value>
+    <value>To ease maintenance, the XML documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
   </data>
   <data name="MiKo_2056_MessageFormat" xml:space="preserve">
-    <value>Remove '{1}' because type does not inherit from 'IDisposable'</value>
+    <value>{1} should end with: '{2}'</value>
   </data>
   <data name="MiKo_2056_Title" xml:space="preserve">
+    <value>Throwing of ObjectDisposedException should be documented using a default ending phrase.</value>
+  </data>
+  <data name="MiKo_2057_Description" xml:space="preserve">
+    <value>Types that do not inherit from 'IDisposable' cannot be disposed. Hence they shall not throw an ObjectDisposedException.</value>
+  </data>
+  <data name="MiKo_2057_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' because type does not inherit from 'IDisposable'</value>
+  </data>
+  <data name="MiKo_2057_Title" xml:space="preserve">
     <value>Types that are not disposable shall not throw an ObjectDisposedException.</value>
   </data>
   <data name="MiKo_2060_Description" xml:space="preserve">

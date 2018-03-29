@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2056_ObjectDisposedExceptionWrongPlacedAnalyzer : ExceptionDocumentationAnalyzer
+    public sealed class MiKo_2057_ObjectDisposedExceptionWrongPlacedAnalyzer : ExceptionDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2056";
+        public const string Id = "MiKo_2057";
 
-        public MiKo_2056_ObjectDisposedExceptionWrongPlacedAnalyzer() : base(Id, typeof(ObjectDisposedException))
+        public MiKo_2057_ObjectDisposedExceptionWrongPlacedAnalyzer() : base(Id, typeof(ObjectDisposedException))
         {
         }
 
