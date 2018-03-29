@@ -813,7 +813,7 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>To ease maintenance, the XML documentation of a thrown exception should be a simple condition phrase.</value>
   </data>
   <data name="MiKo_2051_MessageFormat" xml:space="preserve">
-    <value>Use condition form instead</value>
+    <value>Use condition form to document a thrown exception</value>
   </data>
   <data name="MiKo_2051_Title" xml:space="preserve">
     <value>Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').</value>

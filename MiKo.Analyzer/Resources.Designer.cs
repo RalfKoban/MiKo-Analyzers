@@ -2136,7 +2136,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use condition form instead.
+        ///   Looks up a localized string similar to Use condition form to document a thrown exception.
         /// </summary>
         public static string MiKo_2051_MessageFormat {
             get {
