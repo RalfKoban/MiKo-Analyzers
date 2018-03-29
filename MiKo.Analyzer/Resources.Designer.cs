@@ -2127,6 +2127,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a thrown exception should be a simple condition phrase..
+        /// </summary>
+        public static string MiKo_2051_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2051_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use condition form instead.
+        /// </summary>
+        public static string MiKo_2051_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2051_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thrown Exceptions should be documented as kind of a condition (such as &apos;&lt;paramref name=&quot;xyz&quot;/&gt; is &lt;c&gt;42&lt;/c&gt;&apos;)..
+        /// </summary>
+        public static string MiKo_2051_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2051_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException being thrown should be a specific phrase..
         /// </summary>
         public static string MiKo_2052_Description {

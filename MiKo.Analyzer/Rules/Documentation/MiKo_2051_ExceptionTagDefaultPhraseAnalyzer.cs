@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+namespace MiKoSolutions.Analyzers.Rules.Documentation
+{
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public sealed class MiKo_2051_ExceptionTagDefaultPhraseAnalyzer : ExceptionDocumentationAnalyzer
+    {
+        public const string Id = "MiKo_2051";
+
+        public MiKo_2051_ExceptionTagDefaultPhraseAnalyzer() : base(Id, typeof(Exception))
+        {
+        }
+        protected override IEnumerable<Diagnostic> AnalyzeExceptionComment(ISymbol symbol, string commentXml)
+        {
+            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+
+            var results = GetExceptionComments(commentXml)
+                          .Where(_ => _ != null)
+                          .Where(_ => _.StartsWithAny(StringComparison.OrdinalIgnoreCase, Constants.Comments.ExceptionForbiddenStartingPhrase))
+                          .Select(_ => ReportIssue(symbol))
+                          .ToList();
+            return results;
+        }
+    }
+}

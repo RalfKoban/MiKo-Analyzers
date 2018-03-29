@@ -245,6 +245,18 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
             internal const string ExceptionSplittingParaPhrase = "<para>-or-</para>";
 
+            internal static readonly string[] ExceptionForbiddenStartingPhrase =
+                {
+                    "Thrown ",
+                    "Is thrown ",
+                    "Gets thrown ",
+                    "Will be thrown ",
+                    "If ",
+                    "In case ",
+                    "When ",
+                    "Throws ",
+                };
+
             internal const string XmlElementStartingTag = "<";
             internal const string XmlElementEndingTag = "/>";
         }
