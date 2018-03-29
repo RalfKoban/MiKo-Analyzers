@@ -15,8 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
-                                                                                           ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
-                                                                                           : Enumerable.Empty<Diagnostic>();
+                                                                                               ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
+                                                                                               : Enumerable.Empty<Diagnostic>();
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyzeMethod(symbol)
                                                                                               ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
@@ -79,11 +79,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
         }
 
-        protected static string GetExceptionComment(string exceptionTypeFullName, string commentXml)
+        private static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
             var commentElements = GetCommentElements(commentXml.RemoveAll(Constants.SymbolMarkers), Constants.XmlTag.Exception);
-            return FlattenComment(commentElements.Where(_ => _.Attribute("cref")?.Value == exceptionTypeFullName));
+            return commentElements;
         }
+
+        protected static string GetExceptionComment(string exceptionTypeFullName, string commentXml)
+        {
+            return FlattenComment(GetExceptionCommentElements(commentXml).Where(_ => _.Attribute("cref")?.Value == exceptionTypeFullName));
+        }
+
+        protected static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml));
 
         protected bool TryGetGenericArgumentType(ITypeSymbol symbol, out ITypeSymbol genericArgument, int index = 0)
         {
@@ -140,13 +147,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string FlattenComment(IEnumerable<XElement> comments)
         {
-            if (!comments.Any()) return null;
-
-            var comment = comments.Nodes().ConcatenatedWith().WithoutParaTags().RemoveAll(Constants.SymbolMarkersAndLineBreaks).Trim();
-            return comment
-                   .Replace("    ", " ")
-                   .Replace("   ", " ")
-                   .Replace("  ", " ");
+            var comment = comments.Any()
+                          ? Cleaned(comments.Nodes().ConcatenatedWith())
+                          : null;
+            return comment;
         }
 
         protected static ImmutableHashSet<string> Cleaned(IEnumerable<string> comments) => comments.WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
@@ -159,12 +163,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 e.Descendants(Constants.XmlTag.Code).ToList().ForEach(_ => _.Remove());
 
-                yield return e.Nodes()
-                              .ConcatenatedWith()
-                              .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
-                              .Replace("    ", " ")
-                              .Trim();
+                yield return Cleaned(e.Nodes().ConcatenatedWith());
             }
         }
+
+        private static string Cleaned(string value) => value.ConcatenatedWith()
+                                                            .WithoutParaTags()
+                                                            .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
+                                                            .Replace("    ", " ")
+                                                            .Replace("   ", " ")
+                                                            .Replace("  ", " ")
+                                                            .Trim();
     }
 }

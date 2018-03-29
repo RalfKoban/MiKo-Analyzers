@@ -15,15 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected ExceptionDocumentationAnalyzer(string diagnosticId, string exceptionTypeFullName) : base(diagnosticId, (SymbolKind)(-1)) => m_exceptionTypeFullName = exceptionTypeFullName;
 
-        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
+        protected sealed override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeExceptionComment(symbol, commentXml);
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeExceptionComment(symbol, commentXml);
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeExceptionComment(symbol, commentXml);
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeExceptionComment(symbol, commentXml);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment) => Enumerable.Empty<Diagnostic>();
 
-        protected IEnumerable<Diagnostic> AnalyzeExceptionComment(ISymbol symbol, string commentXml)
+        protected virtual IEnumerable<Diagnostic> AnalyzeExceptionComment(ISymbol symbol, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
