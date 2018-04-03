@@ -2346,6 +2346,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease usage by developers, XML example documentation should start with a phrase that shortly describes what the given example demonstrates..
+        /// </summary>
+        public static string MiKo_2100_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2100_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;example&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2100_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2100_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML example documentation should start with descriptive default phrase..
+        /// </summary>
+        public static string MiKo_2100_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2100_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, use the pre-defined .NET Framework delegate types such as &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
         /// </summary>
         public static string MiKo_3001_Description {

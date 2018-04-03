@@ -259,6 +259,8 @@ namespace MiKoSolutions.Analyzers
 
             internal const string XmlElementStartingTag = "<";
             internal const string XmlElementEndingTag = "/>";
+
+            internal const string ExampleDefaultPhrase = "The following example demonstrates ";
         }
 
         public static class MaxNamingLengths
@@ -282,6 +284,7 @@ namespace MiKoSolutions.Analyzers
             internal const string Remarks = "remarks";
             internal const string Value = "value";
             internal const string Exception = "exception";
+            internal const string Example = "example";
         }
     }
 }
