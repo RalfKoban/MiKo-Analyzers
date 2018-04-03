@@ -2557,6 +2557,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug..
+        /// </summary>
+        public static string MiKo_3010_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3010_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
+        /// </summary>
+        public static string MiKo_3010_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3010_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not create &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3010_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3010_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not create or throw reserved exception types..
+        /// </summary>
+        public static string MiKo_3010_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3010_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
