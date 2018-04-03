@@ -118,6 +118,7 @@ public sealed class TestMe
     private string Correct;
 }
 ");
+
         [Test]
         public void Valid_example_for_documentation_is_not_reported_on_class([ValueSource(nameof(WrongItems))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
@@ -125,6 +126,19 @@ public sealed class TestMe
 /// </summary>
 /// <example>
 /// <code>" + finding + @"</code>
+/// </example>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void Wrong_example_for_documentation_is_reported_on_class([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <example>
+/// " + finding + @"
 /// </example>
 public sealed class TestMe
 {
