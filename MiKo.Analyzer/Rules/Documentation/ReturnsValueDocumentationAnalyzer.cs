@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnsValueDocumentationAnalyzer : DocumentationAnalyzer
     {
-        protected ReturnsValueDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, SymbolKind.Method)
+        protected ReturnsValueDocumentationAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
         {
         }
 
@@ -65,11 +65,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(StringComparison.Ordinal, phrase)
-                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                    : new[] { ReportIssue(symbol, symbol.Name, xmlTag, phrase[0]) };
+                                                                                                                                       ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                       : new[] { ReportIssue(symbol, symbol.Name, xmlTag, phrase[0]) };
 
         protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => phrase.Any(_ => _.Equals(comment, StringComparison.Ordinal))
-                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                    : new[] { ReportIssue(symbol, symbol.Name, xmlTag, phrase[0]) };
+                                                                                                                               ? Enumerable.Empty<Diagnostic>()
+                                                                                                                               : new[] { ReportIssue(symbol, symbol.Name, xmlTag, phrase[0]) };
     }
 }
