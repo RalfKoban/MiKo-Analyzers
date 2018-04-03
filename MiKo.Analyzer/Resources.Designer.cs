@@ -1279,7 +1279,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should be valid XML so that it can be generated to support the developers..
+        ///   Looks up a localized string similar to XML documentation comment should be valid XML so that it can be generated to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
             get {
@@ -1288,7 +1288,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation is malformed (contains invalid characters, eg. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
+        ///   Looks up a localized string similar to XML documentation comment is malformed (contains invalid characters, eg. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
         /// </summary>
         public static string MiKo_2000_MessageFormat {
             get {
@@ -1297,7 +1297,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should be valid XML..
+        ///   Looks up a localized string similar to XML documentation comment should be valid XML..
         /// </summary>
         public static string MiKo_2000_Title {
             get {
@@ -1360,7 +1360,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an event handler should have a default starting phrase that describes what event gets handled..
+        ///   Looks up a localized string similar to XML documentation comment of an event handler should have a default starting phrase that describes what event gets handled..
         /// </summary>
         public static string MiKo_2003_Description {
             get {
@@ -1378,7 +1378,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of event handlers should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of event handlers should have a default starting phrase..
         /// </summary>
         public static string MiKo_2003_Title {
             get {
@@ -1405,7 +1405,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of parameter name does not follow .NET Framework Guidelines for event handlers..
+        ///   Looks up a localized string similar to XML documentation comment of parameter name does not follow .NET Framework Guidelines for event handlers..
         /// </summary>
         public static string MiKo_2004_Title {
             get {
@@ -1450,7 +1450,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment should not contain: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2011_MessageFormat {
             get {
@@ -1478,7 +1478,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should not {1} meaningless phrase: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment should not {1} meaningless phrase: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2012_MessageFormat {
             get {
@@ -1487,7 +1487,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML summary documentation should describe their responsibility..
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment should describe their responsibility..
         /// </summary>
         public static string MiKo_2012_Title {
             get {
@@ -1514,7 +1514,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML summary for enums should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment for enums should have a default starting phrase..
         /// </summary>
         public static string MiKo_2013_Title {
             get {
@@ -1568,7 +1568,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should use &apos;raise&apos; instead of &apos;fire&apos;..
+        ///   Looks up a localized string similar to XML documentation comment should use &apos;raise&apos; instead of &apos;fire&apos;..
         /// </summary>
         public static string MiKo_2015_Title {
             get {
@@ -1577,7 +1577,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation for asynchronous methods should indicate that method is run asynchronously..
+        ///   Looks up a localized string similar to XML documentation comment for asynchronous methods should indicate that method is run asynchronously..
         /// </summary>
         public static string MiKo_2016_Description {
             get {
@@ -1595,7 +1595,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation for asynchronous methods should start with specific phrase..
+        ///   Looks up a localized string similar to XML documentation comment for asynchronous methods should start with specific phrase..
         /// </summary>
         public static string MiKo_2016_Title {
             get {
@@ -1613,7 +1613,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should be: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; XML documentation comment should be: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2017_MessageFormat {
             get {
@@ -1649,7 +1649,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should not use the ambiguous term &apos;Check&apos;..
+        ///   Looks up a localized string similar to XML documentation comment should not use the ambiguous term &apos;Check&apos;..
         /// </summary>
         public static string MiKo_2018_Title {
             get {
@@ -1658,7 +1658,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML summary documentation should start with a verb that is in passive form as it shall be a short description of the functionality that the class, property, etc. provides or represents..
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment should start with a verb that is in passive form as it shall be a short description of the functionality that the class, property, etc. provides or represents..
         /// </summary>
         public static string MiKo_2019_Description {
             get {
@@ -1676,7 +1676,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML summary documentation should start with a verb that is in passive form (for example &quot;Provides &quot;)..
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment should start with a verb that is in passive form (for example &quot;Provides &quot;)..
         /// </summary>
         public static string MiKo_2019_Title {
             get {
@@ -1712,7 +1712,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of parameters should describe what they represent..
+        ///   Looks up a localized string similar to XML documentation comment of parameters should describe what they represent..
         /// </summary>
         public static string MiKo_2021_Description {
             get {
@@ -1730,7 +1730,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of parameter should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of parameter should have a default starting phrase..
         /// </summary>
         public static string MiKo_2021_Title {
             get {
@@ -1739,7 +1739,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of [out] parameters should start with the success case..
+        ///   Looks up a localized string similar to XML documentation comment of [out] parameters should start with the success case..
         /// </summary>
         public static string MiKo_2022_Description {
             get {
@@ -1757,7 +1757,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of [out] parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of [out] parameters should have a default starting phrase..
         /// </summary>
         public static string MiKo_2022_Title {
             get {
@@ -1766,7 +1766,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of enum parameters should start with a phrase that specifies what will be done with the enum..
+        ///   Looks up a localized string similar to XML documentation comment of enum parameters should start with a phrase that specifies what will be done with the enum..
         /// </summary>
         public static string MiKo_2023_Description {
             get {
@@ -1784,7 +1784,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of enum parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of enum parameters should have a default starting phrase..
         /// </summary>
         public static string MiKo_2023_Title {
             get {
@@ -1793,7 +1793,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of &apos;CancellationToken&apos; parameters should start with a phrase that describes how it is used..
+        ///   Looks up a localized string similar to XML documentation comment of &apos;CancellationToken&apos; parameters should start with a phrase that describes how it is used..
         /// </summary>
         public static string MiKo_2024_Description {
             get {
@@ -1811,7 +1811,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of &apos;CancellationToken&apos; parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of &apos;CancellationToken&apos; parameters should have a default starting phrase..
         /// </summary>
         public static string MiKo_2024_Title {
             get {
@@ -1820,7 +1820,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a return value should have a default starting phrase that describes the returned value in more detail..
+        ///   Looks up a localized string similar to XML documentation comment of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {
             get {
@@ -1838,7 +1838,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of return value should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of return value should have a default starting phrase..
         /// </summary>
         public static string MiKo_2030_Title {
             get {
@@ -1847,7 +1847,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a Task as return value should have a default (starting) phrase..
+        ///   Looks up a localized string similar to XML documentation comment of a Task as return value should have a default (starting) phrase..
         /// </summary>
         public static string MiKo_2031_Description {
             get {
@@ -1865,7 +1865,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of Task return value should have a specific (starting) phrase..
+        ///   Looks up a localized string similar to XML documentation comment of Task return value should have a specific (starting) phrase..
         /// </summary>
         public static string MiKo_2031_Title {
             get {
@@ -1874,7 +1874,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
+        ///   Looks up a localized string similar to XML documentation comment of a Boolean as return value should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
         /// </summary>
         public static string MiKo_2032_Description {
             get {
@@ -1893,7 +1893,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of Boolean return value should have a specific phrase..
+        ///   Looks up a localized string similar to XML documentation comment of Boolean return value should have a specific phrase..
         /// </summary>
         public static string MiKo_2032_Title {
             get {
@@ -1902,7 +1902,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a String as return value should have a specific phrase..
+        ///   Looks up a localized string similar to XML documentation comment of a String as return value should have a specific phrase..
         /// </summary>
         public static string MiKo_2033_Description {
             get {
@@ -1920,7 +1920,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of String return value should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of String return value should have a default starting phrase..
         /// </summary>
         public static string MiKo_2033_Title {
             get {
@@ -1929,7 +1929,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an Enum as return value should have a specific phrase..
+        ///   Looks up a localized string similar to XML documentation comment of an Enum as return value should have a specific phrase..
         /// </summary>
         public static string MiKo_2034_Description {
             get {
@@ -1947,7 +1947,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of Enum return value should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of Enum return value should have a default starting phrase..
         /// </summary>
         public static string MiKo_2034_Title {
             get {
@@ -1956,7 +1956,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a collection as return value should have a specific phrase..
+        ///   Looks up a localized string similar to XML documentation comment of a collection as return value should have a specific phrase..
         /// </summary>
         public static string MiKo_2035_Description {
             get {
@@ -1974,7 +1974,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of collection return value should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of collection return value should have a default starting phrase..
         /// </summary>
         public static string MiKo_2035_Title {
             get {
@@ -1983,7 +1983,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
+        ///   Looks up a localized string similar to XML documentation comment of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
         /// </summary>
         public static string MiKo_2036_Description {
             get {
@@ -2001,7 +2001,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation of Boolean or Enum properties shall describe the default value..
+        ///   Looks up a localized string similar to XML documentation comment of Boolean or Enum properties shall describe the default value..
         /// </summary>
         public static string MiKo_2036_Title {
             get {
@@ -2010,7 +2010,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of classes that contain extension methods should start with a specific phrase that describes what the class provides..
+        ///   Looks up a localized string similar to XML documentation comment of classes that contain extension methods should start with a specific phrase that describes what the class provides..
         /// </summary>
         public static string MiKo_2038_Description {
             get {
@@ -2028,7 +2028,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XMLdocumentation of classes that contain extension methods should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment of classes that contain extension methods should have a default starting phrase..
         /// </summary>
         public static string MiKo_2038_Title {
             get {
@@ -2064,7 +2064,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; XML documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;..
+        ///   Looks up a localized string similar to The &lt;summary&gt; XML documentation comment should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;..
         /// </summary>
         public static string MiKo_2041_Description {
             get {
@@ -2082,7 +2082,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment should not contain: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2041_MessageFormat {
             get {
@@ -2091,7 +2091,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain other documentation tags..
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment should not contain other documentation tags..
         /// </summary>
         public static string MiKo_2041_Title {
             get {
@@ -2100,7 +2100,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of exceptions should follow the .NET Framework documentation..
+        ///   Looks up a localized string similar to XML documentation comment of exceptions should follow the .NET Framework documentation..
         /// </summary>
         public static string MiKo_2050_Description {
             get {
@@ -2127,7 +2127,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of a thrown exception should be a simple condition phrase..
+        ///   Looks up a localized string similar to XML documentation comment of a thrown exception should be a simple condition phrase..
         /// </summary>
         public static string MiKo_2051_Description {
             get {
@@ -2154,7 +2154,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException being thrown should be a specific phrase..
+        ///   Looks up a localized string similar to XML documentation comment of an ArgumentNullException being thrown should be a specific phrase..
         /// </summary>
         public static string MiKo_2052_Description {
             get {
@@ -2163,7 +2163,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} content should be something like:
+        ///   Looks up a localized string similar to {1} XML documentation comment should be something like:
         ///&apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2052_MessageFormat {
@@ -2182,7 +2182,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null..
+        ///   Looks up a localized string similar to XML documentation comment of an ArgumentNullException should not refer to a value type parameter as that can never be null..
         /// </summary>
         public static string MiKo_2053_Description {
             get {
@@ -2209,7 +2209,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of an ArgumentException being thrown should have a specific starting phrase..
         /// </summary>
         public static string MiKo_2054_Description {
             get {
@@ -2218,7 +2218,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} content should be something like:
+        ///   Looks up a localized string similar to {1} XML documentation comment should be something like:
         ///&apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2054_MessageFormat {
@@ -2237,7 +2237,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
         /// </summary>
         public static string MiKo_2055_Description {
             get {
@@ -2246,7 +2246,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} content should be something like:
+        ///   Looks up a localized string similar to {1} XML documentation comment should be something like:
         ///&apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2055_MessageFormat {
@@ -2265,7 +2265,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
+        ///   Looks up a localized string similar to XML documentation comment of an ObjectDisposedException being thrown should have a specific ending phrase..
         /// </summary>
         public static string MiKo_2056_Description {
             get {
@@ -2274,7 +2274,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} should end with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to {1} XML documentation comment should end with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2056_MessageFormat {
             get {
@@ -2319,7 +2319,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the XML documentation of factories should be uniform..
+        ///   Looks up a localized string similar to XML documentation comment of factories should be uniform..
         /// </summary>
         public static string MiKo_2060_Description {
             get {
@@ -2364,7 +2364,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML example documentation should start with descriptive default phrase..
+        ///   Looks up a localized string similar to &lt;example&gt; XML documentation comment should start with descriptive default phrase..
         /// </summary>
         public static string MiKo_2100_Title {
             get {

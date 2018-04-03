@@ -526,13 +526,13 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>Unimportant identifiers in lambda statements should be named '_'.</value>
   </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
-    <value>XML documentation should be valid XML so that it can be generated to support the developers.</value>
+    <value>XML documentation comment should be valid XML so that it can be generated to support the developers.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>XML documentation is malformed (contains invalid characters, eg. '&amp;', '&gt;', '&lt;')</value>
+    <value>XML documentation comment is malformed (contains invalid characters, eg. '&amp;', '&gt;', '&lt;')</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
-    <value>XML documentation should be valid XML.</value>
+    <value>XML documentation comment should be valid XML.</value>
   </data>
   <data name="MiKo_2001_Description" xml:space="preserve">
     <value>Events should be documented with 'Occurs ...' to indicate that events actually occur.</value>
@@ -553,13 +553,13 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>EventArgs should be documented properly.</value>
   </data>
   <data name="MiKo_2003_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an event handler should have a default starting phrase that describes what event gets handled.</value>
+    <value>XML documentation comment of an event handler should have a default starting phrase that describes what event gets handled.</value>
   </data>
   <data name="MiKo_2003_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2003_Title" xml:space="preserve">
-    <value>XML documentation of event handlers should have a default starting phrase.</value>
+    <value>XML documentation comment of event handlers should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2004_Description" xml:space="preserve">
     <value>Event method parameters should define what exactly they are.</value>
@@ -568,7 +568,7 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>Documentation should be: '{2}'</value>
   </data>
   <data name="MiKo_2004_Title" xml:space="preserve">
-    <value>XML documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
+    <value>XML documentation comment of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
   </data>
   <data name="MiKo_2010_Description" xml:space="preserve">
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
@@ -583,7 +583,7 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>Unsealed classes should not report that they are sealed.</value>
   </data>
   <data name="MiKo_2011_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; should not contain: '{1}'</value>
+    <value>&lt;summary&gt; XML documentation comment should not contain: '{1}'</value>
   </data>
   <data name="MiKo_2011_Title" xml:space="preserve">
     <value>Unsealed classes should not lie about sealing.</value>
@@ -593,10 +593,10 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
 It should not start with or contain a meaningless phrase like 'Used to'. Instead it should start with something more descriptive, such as: 'Allows to ', 'Represents ' or 'Provides '.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; should not {1} meaningless phrase: '{2}'</value>
+    <value>&lt;summary&gt; XML documentation comment should not {1} meaningless phrase: '{2}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
-    <value>XML summary documentation should describe their responsibility.</value>
+    <value>&lt;summary&gt; XML documentation comment should describe their responsibility.</value>
   </data>
   <data name="MiKo_2013_Description" xml:space="preserve">
     <value>To ease their usage, enums should specify what kind of values they define.</value>
@@ -605,7 +605,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2013_Title" xml:space="preserve">
-    <value>XML summary for enums should have a default starting phrase.</value>
+    <value>&lt;summary&gt; XML documentation comment for enums should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2014_Description" xml:space="preserve">
     <value>Dispose methods should be documented as by the .NET Framework.</value>
@@ -623,22 +623,22 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>'{0}' should be: '{1}'</value>
   </data>
   <data name="MiKo_2015_Title" xml:space="preserve">
-    <value>XML documentation should use 'raise' instead of 'fire'.</value>
+    <value>XML documentation comment should use 'raise' instead of 'fire'.</value>
   </data>
   <data name="MiKo_2016_Description" xml:space="preserve">
-    <value>XML documentation for asynchronous methods should indicate that method is run asynchronously.</value>
+    <value>XML documentation comment for asynchronous methods should indicate that method is run asynchronously.</value>
   </data>
   <data name="MiKo_2016_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2016_Title" xml:space="preserve">
-    <value>XML documentation for asynchronous methods should start with specific phrase.</value>
+    <value>XML documentation comment for asynchronous methods should start with specific phrase.</value>
   </data>
   <data name="MiKo_2017_Description" xml:space="preserve">
     <value>Dependency properties should be documented properly.</value>
   </data>
   <data name="MiKo_2017_MessageFormat" xml:space="preserve">
-    <value>&lt;{2}&gt; should be: '{3}'</value>
+    <value>&lt;{2}&gt; XML documentation comment should be: '{3}'</value>
   </data>
   <data name="MiKo_2017_Title" xml:space="preserve">
     <value>Dependency properties should be documented as by the .NET Framework.</value>
@@ -650,16 +650,16 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Do not use ambiguous term '{1}'</value>
   </data>
   <data name="MiKo_2018_Title" xml:space="preserve">
-    <value>XML documentation should not use the ambiguous term 'Check'.</value>
+    <value>XML documentation comment should not use the ambiguous term 'Check'.</value>
   </data>
   <data name="MiKo_2019_Description" xml:space="preserve">
-    <value>XML summary documentation should start with a verb that is in passive form as it shall be a short description of the functionality that the class, property, etc. provides or represents.</value>
+    <value>&lt;summary&gt; XML documentation comment should start with a verb that is in passive form as it shall be a short description of the functionality that the class, property, etc. provides or represents.</value>
   </data>
   <data name="MiKo_2019_MessageFormat" xml:space="preserve">
     <value>Start with verb in passive form</value>
   </data>
   <data name="MiKo_2019_Title" xml:space="preserve">
-    <value>XML summary documentation should start with a verb that is in passive form (for example "Provides ").</value>
+    <value>&lt;summary&gt; XML documentation comment should start with a verb that is in passive form (for example "Provides ").</value>
   </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use XML summaries that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such scenario &lt;inheritdoc /&gt; should be used.</value>
@@ -671,113 +671,113 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Inherited documentation should be used with &lt;inheritdoc /&gt; marker.</value>
   </data>
   <data name="MiKo_2021_Description" xml:space="preserve">
-    <value>XML documentation of parameters should describe what they represent.</value>
+    <value>XML documentation comment of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
     <value>Start documentation with any of the following: {2}</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
-    <value>XML documentation of parameter should have a default starting phrase.</value>
+    <value>XML documentation comment of parameter should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2022_Description" xml:space="preserve">
-    <value>XML documentation of [out] parameters should start with the success case.</value>
+    <value>XML documentation comment of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {2}</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
-    <value>XML documentation of [out] parameters should have a default starting phrase.</value>
+    <value>XML documentation comment of [out] parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2023_Description" xml:space="preserve">
-    <value>XML documentation of enum parameters should start with a phrase that specifies what will be done with the enum.</value>
+    <value>XML documentation comment of enum parameters should start with a phrase that specifies what will be done with the enum.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {2}</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
-    <value>XML documentation of enum parameters should have a default starting phrase.</value>
+    <value>XML documentation comment of enum parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2024_Description" xml:space="preserve">
-    <value>XML documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
+    <value>XML documentation comment of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {2}</value>
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
-    <value>XML documentation of 'CancellationToken' parameters should have a default starting phrase.</value>
+    <value>XML documentation comment of 'CancellationToken' parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
+    <value>XML documentation comment of a return value should have a default starting phrase that describes the returned value in more detail.</value>
   </data>
   <data name="MiKo_2030_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
   </data>
   <data name="MiKo_2030_Title" xml:space="preserve">
-    <value>XML documentation of return value should have a default starting phrase.</value>
+    <value>XML documentation comment of return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2031_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of a Task as return value should have a default (starting) phrase.</value>
+    <value>XML documentation comment of a Task as return value should have a default (starting) phrase.</value>
   </data>
   <data name="MiKo_2031_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
   </data>
   <data name="MiKo_2031_Title" xml:space="preserve">
-    <value>XML documentation of Task return value should have a specific (starting) phrase.</value>
+    <value>XML documentation comment of Task return value should have a specific (starting) phrase.</value>
   </data>
   <data name="MiKo_2032_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
+    <value>XML documentation comment of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'
 End &lt;{2}&gt; with: '{4}'</value>
   </data>
   <data name="MiKo_2032_Title" xml:space="preserve">
-    <value>XML documentation of Boolean return value should have a specific phrase.</value>
+    <value>XML documentation comment of Boolean return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2033_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of a String as return value should have a specific phrase.</value>
+    <value>XML documentation comment of a String as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2033_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
   </data>
   <data name="MiKo_2033_Title" xml:space="preserve">
-    <value>XML documentation of String return value should have a default starting phrase.</value>
+    <value>XML documentation comment of String return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2034_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an Enum as return value should have a specific phrase.</value>
+    <value>XML documentation comment of an Enum as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2034_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
   </data>
   <data name="MiKo_2034_Title" xml:space="preserve">
-    <value>XML documentation of Enum return value should have a default starting phrase.</value>
+    <value>XML documentation comment of Enum return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2035_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of a collection as return value should have a specific phrase.</value>
+    <value>XML documentation comment of a collection as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2035_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
   </data>
   <data name="MiKo_2035_Title" xml:space="preserve">
-    <value>XML documentation of collection return value should have a default starting phrase.</value>
+    <value>XML documentation comment of collection return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2036_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
+    <value>XML documentation comment of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
   </data>
   <data name="MiKo_2036_MessageFormat" xml:space="preserve">
     <value>End &lt;{2}&gt; with: '{3}'</value>
   </data>
   <data name="MiKo_2036_Title" xml:space="preserve">
-    <value>XML documentation of Boolean or Enum properties shall describe the default value.</value>
+    <value>XML documentation comment of Boolean or Enum properties shall describe the default value.</value>
   </data>
   <data name="MiKo_2038_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of classes that contain extension methods should start with a specific phrase that describes what the class provides.</value>
+    <value>XML documentation comment of classes that contain extension methods should start with a specific phrase that describes what the class provides.</value>
   </data>
   <data name="MiKo_2038_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
   </data>
   <data name="MiKo_2038_Title" xml:space="preserve">
-    <value>XMLdocumentation of classes that contain extension methods should have a default starting phrase.</value>
+    <value>&lt;summary&gt; XML documentation comment of classes that contain extension methods should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2040_Description" xml:space="preserve">
     <value>To support other languages than C#, use '&lt;see langword="..."/&gt;' instead of '&lt;c&gt;...&lt;/c&gt;'.</value>
@@ -789,19 +789,19 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>&lt;see langword="..."/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;.</value>
   </data>
   <data name="MiKo_2041_Description" xml:space="preserve">
-    <value>The &lt;summary&gt; XML documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;.</value>
+    <value>The &lt;summary&gt; XML documentation comment should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;.</value>
   </data>
   <data name="MiKo_2041_HelpLinkUri" xml:space="preserve">
     <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
   </data>
   <data name="MiKo_2041_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; should not contain: '{1}'</value>
+    <value>&lt;summary&gt; XML documentation comment should not contain: '{1}'</value>
   </data>
   <data name="MiKo_2041_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should not contain other documentation tags.</value>
+    <value>&lt;summary&gt; XML documentation comment should not contain other documentation tags.</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of exceptions should follow the .NET Framework documentation.</value>
+    <value>XML documentation comment of exceptions should follow the .NET Framework documentation.</value>
   </data>
   <data name="MiKo_2050_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -810,7 +810,7 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>Exceptions should be documented following the .NET Framework.</value>
   </data>
   <data name="MiKo_2051_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of a thrown exception should be a simple condition phrase.</value>
+    <value>XML documentation comment of a thrown exception should be a simple condition phrase.</value>
   </data>
   <data name="MiKo_2051_MessageFormat" xml:space="preserve">
     <value>Use condition form to document a thrown exception</value>
@@ -819,17 +819,17 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').</value>
   </data>
   <data name="MiKo_2052_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
+    <value>XML documentation comment of an ArgumentNullException being thrown should be a specific phrase.</value>
   </data>
   <data name="MiKo_2052_MessageFormat" xml:space="preserve">
-    <value>{1} content should be something like:
+    <value>{1} XML documentation comment should be something like:
 '{2}'</value>
   </data>
   <data name="MiKo_2052_Title" xml:space="preserve">
     <value>Throwing of ArgumentNullException should be documented using a default phrase.</value>
   </data>
   <data name="MiKo_2053_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
+    <value>XML documentation comment of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
   </data>
   <data name="MiKo_2053_MessageFormat" xml:space="preserve">
     <value>Remove '{2}' as '{1}' is a value type parameter</value>
@@ -838,30 +838,30 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>Throwing of ArgumentNullException should be documented only for reference type parameters.</value>
   </data>
   <data name="MiKo_2054_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
+    <value>XML documentation comment of an ArgumentException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
-    <value>{1} content should be something like:
+    <value>{1} XML documentation comment should be something like:
 '{2}'</value>
   </data>
   <data name="MiKo_2054_Title" xml:space="preserve">
     <value>Throwing of ArgumentException should be documented using a default starting phrase.</value>
   </data>
   <data name="MiKo_2055_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
+    <value>XML documentation comment of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
-    <value>{1} content should be something like:
+    <value>{1} XML documentation comment should be something like:
 '{2}'</value>
   </data>
   <data name="MiKo_2055_Title" xml:space="preserve">
     <value>Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.</value>
   </data>
   <data name="MiKo_2056_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
+    <value>XML documentation comment of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
   </data>
   <data name="MiKo_2056_MessageFormat" xml:space="preserve">
-    <value>{1} should end with: '{2}'</value>
+    <value>{1} XML documentation comment should end with: '{2}'</value>
   </data>
   <data name="MiKo_2056_Title" xml:space="preserve">
     <value>Throwing of ObjectDisposedException should be documented using a default ending phrase.</value>
@@ -876,7 +876,7 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>Types that are not disposable shall not throw an ObjectDisposedException.</value>
   </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
-    <value>To ease maintenance, the XML documentation of factories should be uniform.</value>
+    <value>XML documentation comment of factories should be uniform.</value>
   </data>
   <data name="MiKo_2060_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -891,7 +891,7 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>Start &lt;example&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2100_Title" xml:space="preserve">
-    <value>XML example documentation should start with descriptive default phrase.</value>
+    <value>&lt;example&gt; XML documentation comment should start with descriptive default phrase.</value>
   </data>
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To ease maintenance, use the pre-defined .NET Framework delegate types such as 'Action', 'Func' or 'Expression' instead of custom delegates.</value>
