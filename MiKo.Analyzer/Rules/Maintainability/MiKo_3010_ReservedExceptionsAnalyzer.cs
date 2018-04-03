@@ -27,7 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private Diagnostic AnalyzeObjectCreation(ObjectCreationExpressionSyntax node)
         {
             var type = node.Type.ToString();
-            switch (type)
+
+            return IsForbiddenException(type)
+                       ? ReportIssue(type, node.GetLocation())
+                       : null;
+        }
+
+        private static bool IsForbiddenException(string exceptionType)
+        {
+            switch (exceptionType)
             {
                 case "Exception":
                 case "AccessViolationException":
@@ -51,11 +59,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "System.StackOverflowException":
                 case "System.Runtime.InteropServices.COMException":
                 case "System.Runtime.InteropServices.SEHException":
-                {
-                    return ReportIssue(type, node.GetLocation());
-                }
+                    return true;
 
-                default: return null;
+                default:
+                    return false;
             }
         }
     }
