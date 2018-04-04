@@ -2100,6 +2100,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The XML documentation comments should use the &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; HTML tags..
+        /// </summary>
+        public static string MiKo_2042_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2042_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para.
+        /// </summary>
+        public static string MiKo_2042_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_2042_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;&lt;br/&gt;&apos;.
+        /// </summary>
+        public static string MiKo_2042_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2042_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation comments should use &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; HTML tags..
+        /// </summary>
+        public static string MiKo_2042_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2042_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XML documentation comment of exceptions should follow the .NET Framework documentation..
         /// </summary>
         public static string MiKo_2050_Description {
