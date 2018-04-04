@@ -981,6 +981,15 @@ That is they should return a Boolean and have the last parameter as out-paramete
   <data name="MiKo_3011_Title" xml:space="preserve">
     <value>Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name.</value>
   </data>
+  <data name="MiKo_3012_Description" xml:space="preserve">
+    <value>Thrown ArgumentOutOfRangeExceptions (or its subtypes) should contain the actual value of the parameter that caused the exception to be thrown.</value>
+  </data>
+  <data name="MiKo_3012_MessageFormat" xml:space="preserve">
+    <value>Provide the actual value that causes the exception to be thrown</value>
+  </data>
+  <data name="MiKo_3012_Title" xml:space="preserve">
+    <value>Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>

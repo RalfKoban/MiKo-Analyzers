@@ -2629,6 +2629,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) should contain the actual value of the parameter that caused the exception to be thrown..
+        /// </summary>
+        public static string MiKo_3012_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3012_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide the actual value that causes the exception to be thrown.
+        /// </summary>
+        public static string MiKo_3012_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3012_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown..
+        /// </summary>
+        public static string MiKo_3012_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3012_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
