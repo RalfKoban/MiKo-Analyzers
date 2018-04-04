@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -61,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlElement).Descendants(xmlSubElement));
 
-        protected static ImmutableHashSet<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
+        protected static IEnumerable<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
 
         protected static XElement GetCommentElement(ISymbol symbol) => GetCommentElement(symbol.GetDocumentationCommentXml());
 
@@ -153,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected static ImmutableHashSet<string> Cleaned(IEnumerable<string> comments) => comments.WithoutParaTags().Select(_ => _.Trim()).ToImmutableHashSet();
+        protected static IEnumerable<string> Cleaned(IEnumerable<string> comments) => comments.WithoutParaTags().Select(_ => _.Trim()).ToHashSet();
 
         protected static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 

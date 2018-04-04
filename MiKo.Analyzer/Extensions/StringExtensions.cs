@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -59,7 +58,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string HumanizedConcatenated<T>(this IEnumerable<T> values)
         {
-            var items = values.SurroundedWith('\'').ToImmutableList();
+            var items = values.SurroundedWith('\'').ToList();
 
             const string Separator = ", ";
             const string SeparatorForLast = " or ";
@@ -112,5 +111,7 @@ namespace System
         }
 
         internal static string GetNameOnlyPart(this string fullName) => fullName.Substring(fullName.LastIndexOf('.') + 1);
+
+        internal static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
     }
 }
