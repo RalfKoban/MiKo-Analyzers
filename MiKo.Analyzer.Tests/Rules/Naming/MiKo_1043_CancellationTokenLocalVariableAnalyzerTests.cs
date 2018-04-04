@@ -43,7 +43,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        CancellationToken cancellationToken = CancellationToken.None;
+        CancellationToken token = CancellationToken.None;
     }
 }
 ");
@@ -56,7 +56,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        var cancellationToken = CancellationToken.None;
+        var token = CancellationToken.None;
     }
 }
 ");
@@ -70,7 +70,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        CancellationToken token = CancellationToken.None;
+        CancellationToken cancellationToken = CancellationToken.None;
     }
 }
 ");
@@ -84,7 +84,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        var token = CancellationToken.None;
+        var cancellationToken = CancellationToken.None;
     }
 }
 ");
@@ -115,7 +115,7 @@ public class TestMe
     {
         switch (o)
         {
-            case CancellationToken cancellationToken: return;
+            case CancellationToken token: return;
             default: return;
         }
     }
@@ -133,7 +133,7 @@ public class TestMe
     {
         switch (o)
         {
-            case CancellationToken token: return;
+            case CancellationToken cancellationToken: return;
             default: return;
         }
     }

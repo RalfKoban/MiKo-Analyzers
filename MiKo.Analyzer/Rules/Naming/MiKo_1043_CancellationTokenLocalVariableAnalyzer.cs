@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1043";
 
-        private const string Name = "cancellationToken";
+        private const string Name = "token";
 
         public MiKo_1043_CancellationTokenLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
         {
