@@ -59,47 +59,56 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private static void CountLinesOfCode(SyntaxNode node, ISet<int> lines)
         {
-            switch (node)
+            while (true)
             {
-                case BlockSyntax _:
-                    break;
+                switch (node)
+                {
+                    case BlockSyntax _:
+                        break;
 
-                case ReturnStatementSyntax s:
-                    CountLinesOfCode(s.GetLocation().GetLineSpan().StartLinePosition, lines);
-                    if (s.Expression != null)
+                    case ReturnStatementSyntax s:
+                        CountLinesOfCode(s.GetLocation().GetLineSpan().StartLinePosition, lines);
+                        if (s.Expression != null)
+                        {
+                            node = s.Expression;
+                            continue;
+                        }
+
+                        break;
+
+                    case IfStatementSyntax s:
+                        node = s.Condition;
+                        continue;
+
+                    case ForEachStatementSyntax s:
+                        node = s.Expression;
+                        continue;
+
+                    case SwitchStatementSyntax s:
                         CountLinesOfCode(s.Expression, lines);
-                    break;
+                        CountLinesOfCode(s.Sections.SelectMany(_ => _.Labels), lines);
+                        break;
 
-                case IfStatementSyntax s:
-                    CountLinesOfCode(s.Condition, lines);
-                    break;
+                    case LocalDeclarationStatementSyntax s:
+                        CountLinesOfCode(s.Declaration.GetLocation().GetLineSpan().StartLinePosition, lines);
 
-                case ForEachStatementSyntax s:
-                    CountLinesOfCode(s.Expression, lines);
-                    break;
+                        // get normal initializers and object initializers
+                        CountLinesOfCode(s.Declaration.Variables.Select(_ => _.Initializer?.Value).OfType<ObjectCreationExpressionSyntax>(), lines);
+                        break;
 
-                case SwitchStatementSyntax s:
-                    CountLinesOfCode(s.Expression, lines);
-                    CountLinesOfCode(s.Sections.SelectMany(_ => _.Labels), lines);
-                    break;
+                    case ObjectCreationExpressionSyntax oces:
+                        if (oces.Initializer == null) // single line
+                            CountLinesOfCode(oces.GetLocation(), lines);
+                        else
+                            CountLinesOfCode(oces.Initializer.Expressions, lines);
+                        break;
 
-                case LocalDeclarationStatementSyntax s:
-                    CountLinesOfCode(s.Declaration.GetLocation().GetLineSpan().StartLinePosition, lines);
+                    default:
+                        CountLinesOfCode(node.GetLocation(), lines);
+                        break;
+                }
 
-                    // get normal initializers and object initializers
-                    CountLinesOfCode(s.Declaration.Variables.Select(_ => _.Initializer?.Value).OfType<ObjectCreationExpressionSyntax>(), lines);
-                    break;
-
-                case ObjectCreationExpressionSyntax oces:
-                    if (oces.Initializer == null) // single line
-                        CountLinesOfCode(oces.GetLocation(), lines);
-                    else
-                        CountLinesOfCode(oces.Initializer.Expressions, lines);
-                    break;
-
-                default:
-                    CountLinesOfCode(node.GetLocation(), lines);
-                    break;
+                break;
             }
         }
 
