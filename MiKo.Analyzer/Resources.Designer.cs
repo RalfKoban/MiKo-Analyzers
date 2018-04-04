@@ -2593,6 +2593,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) should contain the name of the parameter that caused the exception to be thrown..
+        /// </summary>
+        public static string MiKo_3011_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3011_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types#argumentexception-argumentnullexception-and-argumentoutofrangeexception.
+        /// </summary>
+        public static string MiKo_3011_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3011_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throw the {0} with one of the following parameters: {1}.
+        /// </summary>
+        public static string MiKo_3011_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3011_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name..
+        /// </summary>
+        public static string MiKo_3011_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3011_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
