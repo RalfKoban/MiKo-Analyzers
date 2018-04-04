@@ -2611,7 +2611,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throw the {0} with one of the following parameters: {1}.
+        ///   Looks up a localized string similar to &apos;{0}&apos; should have set &apos;paramName&apos; to any of the following parameter names: {1}.
         /// </summary>
         public static string MiKo_3011_MessageFormat {
             get {
