@@ -26,6 +26,15 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_documented_exception_class() => No_issue_is_reported_for(@"
+/// <summary>
+/// The exception to be thrown.
+/// </summary>
+public class TestMeException : System.Exception
+{
+}
+");
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_class() => No_issue_is_reported_for(@"
 using System;
 

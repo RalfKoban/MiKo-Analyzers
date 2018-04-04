@@ -30,6 +30,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_exception_class_with_documentation() => No_issue_is_reported_for(@"
+/// <summary>
+/// The exception to be thrown.
+/// </summary>
+public class TestMeException : System.Exception
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
 /// <summary>
 /// <para>
