@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arguments.Count)
             {
                 case 2:
-                    // is it the message parameter?
+                    // is it the message parameter ctor?
                     if (IsStringParameter(arguments[0], semanticModel))
                         return InspectArgument(arguments[1], method, semanticModel);
 
@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return InspectArgument(arguments[0], method, semanticModel);
 
                 case 2:
-                    // is it the message parameter?
+                    // is it the message parameter ctor?
                     if (IsStringParameter(arguments[1], semanticModel))
                         return InspectArgument(arguments[0], method, semanticModel);
 
@@ -105,17 +105,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (arguments.Count)
             {
-                case 1:
-                    return InspectArgument(arguments[0], method, semanticModel);
-
                 case 2:
-                    // is it the message parameter?
+                    // is it the message parameter ctor?
                     if (IsStringParameter(arguments[1], semanticModel))
                         return InspectArgument(arguments[0], method, semanticModel);
 
                     // it is not, so we have to report it anyway
                     break;
 
+                case 1:
                 case 3:
                     return InspectArgument(arguments[0], method, semanticModel);
             }
@@ -125,6 +123,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InspectationResult InspectInvalidEnumArgumentException(SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol method, SemanticModel semanticModel)
         {
+            switch (arguments.Count)
+            {
+                case 3:
+                    return InspectArgument(arguments[0], method, semanticModel);
+            }
+
             return InspectationResult.Report;
         }
 
@@ -133,6 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (IsStringParameter(argument, semanticModel) && ParameterIsReferenced(argument, method))
                 return InspectationResult.None;
 
+            // no string, so no paramName; hence we have to report it anyway
             return InspectationResult.Report;
         }
 
