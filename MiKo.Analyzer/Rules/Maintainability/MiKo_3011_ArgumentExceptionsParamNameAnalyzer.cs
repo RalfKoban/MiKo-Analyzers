@@ -9,12 +9,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using MappingType = System.Func<Microsoft.CodeAnalysis.SeparatedSyntaxList<Microsoft.CodeAnalysis.CSharp.Syntax.ArgumentSyntax>, Microsoft.CodeAnalysis.IMethodSymbol, Microsoft.CodeAnalysis.SemanticModel, MiKoSolutions.Analyzers.Rules.Maintainability.MiKo_3011_ArgumentExceptionsAnalyzer.InspectationResult>;
+using MappingType = System.Func<Microsoft.CodeAnalysis.SeparatedSyntaxList<Microsoft.CodeAnalysis.CSharp.Syntax.ArgumentSyntax>, Microsoft.CodeAnalysis.IMethodSymbol, Microsoft.CodeAnalysis.SemanticModel, MiKoSolutions.Analyzers.Rules.Maintainability.MiKo_3011_ArgumentExceptionsParamNameAnalyzer.InspectationResult>;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3011_ArgumentExceptionsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3011_ArgumentExceptionsParamNameAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3011";
 
@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                                            { "System." + nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
                                                                                                                                        });
 
-        public MiKo_3011_ArgumentExceptionsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3011_ArgumentExceptionsParamNameAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 

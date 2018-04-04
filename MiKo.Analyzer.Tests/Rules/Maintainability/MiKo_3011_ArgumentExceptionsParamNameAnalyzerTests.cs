@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3011_ArgumentExceptionsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3011_ArgumentExceptionsParamNameAnalyzerTests : CodeFixVerifier
     {
         [TestCase("\"some message\", \"x\"")]
         [TestCase("\"some message\", nameof(x)")]
@@ -165,8 +165,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3011_ArgumentExceptionsAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3011_ArgumentExceptionsParamNameAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3011_ArgumentExceptionsAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3011_ArgumentExceptionsParamNameAnalyzer();
     }
 }
