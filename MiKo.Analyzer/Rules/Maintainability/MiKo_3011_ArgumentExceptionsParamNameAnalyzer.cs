@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                                            { "System." + nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
 
                                                                                                                                            { nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
-                                                                                                                                           { "System." + nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
+                                                                                                                                           { "System.ComponentModel." + nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
                                                                                                                                        });
 
         public MiKo_3011_ArgumentExceptionsParamNameAnalyzer() : base(Id, (SymbolKind)(-1))
