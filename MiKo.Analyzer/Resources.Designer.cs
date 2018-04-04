@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too complex: {1,4} CC (max. {2}).
+        ///   Looks up a localized string similar to Too high CC: {1,4} (max. {2}).
         /// </summary>
         public static string MiKo_0002_MessageFormat {
             get {
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many LoC: {1,4} LoC (max. {2}).
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (max. {2}).
         /// </summary>
         public static string MiKo_0003_MessageFormat {
             get {
