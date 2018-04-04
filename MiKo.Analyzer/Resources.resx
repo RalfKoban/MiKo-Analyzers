@@ -517,7 +517,7 @@ Hence naming variables e.g. 'Mock' or 'Stub' does not provide any additional val
     <value>Name exceptions as parameters consistently.</value>
   </data>
   <data name="MiKo_1300_Description" xml:space="preserve">
-    <value>To ease maintenance, unimportant identifiers in lambdas should be named consistently with '_'.</value>
+    <value>To ease maintenance and avoid visual noise, unimportant identifiers in lambdas should be consistently named '_'.</value>
   </data>
   <data name="MiKo_1300_MessageFormat" xml:space="preserve">
     <value>Use '_' instead</value>
@@ -885,7 +885,7 @@ End &lt;{2}&gt; with: '{4}'</value>
     <value>Factories should be documented in a uniform way.</value>
   </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
-    <value>To ease usage by developers, XML example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
+    <value>To ease usage, XML example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
   </data>
   <data name="MiKo_2100_MessageFormat" xml:space="preserve">
     <value>Start &lt;example&gt; with: '{1}'</value>

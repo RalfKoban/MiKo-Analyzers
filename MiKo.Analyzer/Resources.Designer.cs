@@ -1252,7 +1252,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, unimportant identifiers in lambdas should be named consistently with &apos;_&apos;..
+        ///   Looks up a localized string similar to To ease maintenance and avoid visual noise, unimportant identifiers in lambdas should be consistently named &apos;_&apos;..
         /// </summary>
         public static string MiKo_1300_Description {
             get {
@@ -2346,7 +2346,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease usage by developers, XML example documentation should start with a phrase that shortly describes what the given example demonstrates..
+        ///   Looks up a localized string similar to To ease usage, XML example documentation should start with a phrase that shortly describes what the given example demonstrates..
         /// </summary>
         public static string MiKo_2100_Description {
             get {
