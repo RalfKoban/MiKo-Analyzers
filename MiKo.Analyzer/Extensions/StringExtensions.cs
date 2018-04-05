@@ -55,7 +55,6 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string HumanizedConcatenated<T>(this IEnumerable<T> values)
         {
             var items = values.SurroundedWith('\'').ToList();
@@ -69,7 +68,7 @@ namespace System
                 case 0: return string.Empty;
                 case 1: return items[0];
                 case 2: return items.ConcatenatedWith(SeparatorForLast);
-                default: return string.Concat(items.Take(count - 2).ConcatenatedWith(Separator), SeparatorForLast, items.Last());
+                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), SeparatorForLast, items.Last());
             }
         }
 
