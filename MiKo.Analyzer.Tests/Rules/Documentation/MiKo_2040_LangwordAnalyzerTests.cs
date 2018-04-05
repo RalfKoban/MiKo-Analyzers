@@ -12,6 +12,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2040_LangwordAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public event EventHandler<T> MyEvent;
+
+    public void DoSomething() { }
+
+    public int Age { get; set; }
+
+    private bool m_field;
+}
+");
+
+        [Test]
         public void Wrong_documentation_is_reported_on_class([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + finding + @"
