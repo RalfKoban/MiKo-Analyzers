@@ -620,7 +620,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
   </data>
   <data name="MiKo_2015_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be: '{1}'</value>
+    <value>XML documentation comment should use {0} instead of any of following: {1}</value>
   </data>
   <data name="MiKo_2015_Title" xml:space="preserve">
     <value>XML documentation comment should use 'raise' instead of 'fire'.</value>

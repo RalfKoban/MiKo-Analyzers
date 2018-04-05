@@ -1559,7 +1559,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to XML documentation comment should use {0} instead of any of following: {1}.
         /// </summary>
         public static string MiKo_2015_MessageFormat {
             get {
