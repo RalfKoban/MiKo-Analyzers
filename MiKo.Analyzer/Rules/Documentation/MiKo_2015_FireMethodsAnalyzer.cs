@@ -32,6 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                             ? new[] { ReportIssue(symbol, AllowedWordsForRule, ForbiddenWordsForRule) }
                                                                                                             : Enumerable.Empty<Diagnostic>();
 
-        private static IEnumerable<string> CreateForbiddenPhrases(IEnumerable<string> forbiddenWords) => from suffix in new[] { " ", ".", ",", ";" } from forbiddenWord in forbiddenWords select forbiddenWord + suffix;
+        private static IEnumerable<string> CreateForbiddenPhrases(IEnumerable<string> forbiddenWords) => from suffix in new[] { " ", ".", ",", ";", ":" } from forbiddenWord in forbiddenWords select forbiddenWord + suffix;
     }
 }
