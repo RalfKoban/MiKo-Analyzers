@@ -2593,6 +2593,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintainability, methods should use only one single language. Hence they should not mix Linq extension methods with Linq query style..
+        /// </summary>
+        public static string MiKo_3007_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3007_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not mix Linq extension methods and Linq query style.
+        /// </summary>
+        public static string MiKo_3007_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3007_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not mix Linq extension methods and Linq query style in same method..
+        /// </summary>
+        public static string MiKo_3007_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3007_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug..
         /// </summary>
         public static string MiKo_3010_Description {
