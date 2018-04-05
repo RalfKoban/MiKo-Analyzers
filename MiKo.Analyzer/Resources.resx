@@ -970,13 +970,13 @@ That is they should return a Boolean and have the last parameter as out-paramete
     <value>'CancellationToken' parameter should be last method parameter.</value>
   </data>
   <data name="MiKo_3007_Description" xml:space="preserve">
-    <value>To ease maintainability, methods should use only one single language. Hence they should not mix Linq extension methods with Linq query style.</value>
+    <value>To ease maintainability and readability, methods should be written using only one single language. Hence LINQ method syntax and declarative query syntax should not be used within the same method.</value>
   </data>
   <data name="MiKo_3007_MessageFormat" xml:space="preserve">
-    <value>Do not mix Linq extension methods and Linq query style</value>
+    <value>Do not mix LINQ syntax</value>
   </data>
   <data name="MiKo_3007_Title" xml:space="preserve">
-    <value>Do not mix Linq extension methods and Linq query style in same method.</value>
+    <value>Do not use LINQ method and declarative query syntax in same method.</value>
   </data>
   <data name="MiKo_3010_Description" xml:space="preserve">
     <value>Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug.</value>

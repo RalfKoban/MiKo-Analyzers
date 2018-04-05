@@ -2593,7 +2593,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintainability, methods should use only one single language. Hence they should not mix Linq extension methods with Linq query style..
+        ///   Looks up a localized string similar to To ease maintainability and readability, methods should be written using only one single language. Hence LINQ method syntax and declarative query syntax should not be used within the same method..
         /// </summary>
         public static string MiKo_3007_Description {
             get {
@@ -2602,7 +2602,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not mix Linq extension methods and Linq query style.
+        ///   Looks up a localized string similar to Do not mix LINQ syntax.
         /// </summary>
         public static string MiKo_3007_MessageFormat {
             get {
@@ -2611,7 +2611,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not mix Linq extension methods and Linq query style in same method..
+        ///   Looks up a localized string similar to Do not use LINQ method and declarative query syntax in same method..
         /// </summary>
         public static string MiKo_3007_Title {
             get {
