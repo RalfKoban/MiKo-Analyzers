@@ -1883,8 +1883,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;
-        ///End &lt;{2}&gt; with: &apos;{4}&apos;.
+        ///   Looks up a localized string similar to Let &lt;{2}&gt; follow pattern: &apos;{3} ... {4}&apos;.
         /// </summary>
         public static string MiKo_2032_MessageFormat {
             get {
