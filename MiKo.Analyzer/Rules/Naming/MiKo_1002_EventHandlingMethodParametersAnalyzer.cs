@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void VerifyParameterName(string expected, IParameterSymbol parameter, ref List<Diagnostic> diagnostics)
         {
             if (expected == parameter.Name) return;
+
             if (diagnostics == null) diagnostics = new List<Diagnostic>();
 
             diagnostics.Add(ReportIssue(parameter, expected));

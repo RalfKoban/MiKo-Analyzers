@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             context.ReportDiagnostic(diagnostic);
         }
 
-        private BlockSyntax GetBody(CodeBlockAnalysisContext context)
+        private static BlockSyntax GetBody(CodeBlockAnalysisContext context)
         {
             switch (context.CodeBlock)
             {
