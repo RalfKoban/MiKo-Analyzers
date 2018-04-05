@@ -1559,7 +1559,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation comment should use {0} instead of any of following: {1}.
+        ///   Looks up a localized string similar to XML documentation comment should use {1} instead of {2}.
         /// </summary>
         public static string MiKo_2015_MessageFormat {
             get {
@@ -1721,7 +1721,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with any of the following: {2}.
+        ///   Looks up a localized string similar to Start documentation with: {2}.
         /// </summary>
         public static string MiKo_2021_MessageFormat {
             get {
@@ -2647,7 +2647,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set &apos;paramName&apos; to any of following parameter names: {1}.
+        ///   Looks up a localized string similar to Set &apos;paramName&apos; parameter to {1}.
         /// </summary>
         public static string MiKo_3011_MessageFormat {
             get {
