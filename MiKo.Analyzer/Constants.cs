@@ -285,6 +285,7 @@ namespace MiKoSolutions.Analyzers
             internal const string Value = "value";
             internal const string Exception = "exception";
             internal const string Example = "example";
+            internal const string Inheritdoc = "inheritdoc";
         }
     }
 }

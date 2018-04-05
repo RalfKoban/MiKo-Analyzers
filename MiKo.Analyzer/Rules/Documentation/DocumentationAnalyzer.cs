@@ -44,17 +44,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeProperty(IPropertySymbol symbol) => true;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
-        protected  static string GetComment(ISymbol symbol) => Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
+        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+
+        protected static string GetComment(ISymbol symbol) => Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
 
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => Cleaned(GetCommentElements(commentXml, xmlElement));
 

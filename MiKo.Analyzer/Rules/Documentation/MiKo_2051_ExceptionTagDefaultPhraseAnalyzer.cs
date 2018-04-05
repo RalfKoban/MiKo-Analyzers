@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public MiKo_2051_ExceptionTagDefaultPhraseAnalyzer() : base(Id, typeof(Exception))
         {
         }
-        protected override IEnumerable<Diagnostic> AnalyzeExceptionComment(ISymbol symbol, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 

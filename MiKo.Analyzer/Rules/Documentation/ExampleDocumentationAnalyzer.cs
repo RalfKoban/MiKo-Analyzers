@@ -15,15 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => AnalyzeExample(symbol, commentXml);
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeComment(symbol, symbol.GetDocumentationCommentXml());
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeExample(symbol, commentXml);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeExample(symbol, symbol.GetDocumentationCommentXml());
-
-        protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, string commentXml) => AnalyzeExample(symbol, commentXml);
-
-        protected IEnumerable<Diagnostic> AnalyzeExample(ISymbol symbol, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 

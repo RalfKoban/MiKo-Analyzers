@@ -15,19 +15,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeReturnType(symbol, commentXml);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeReturnType(symbol, symbol.GetDocumentationCommentXml());
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeComment(symbol, symbol.GetDocumentationCommentXml());
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
         protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag) => Enumerable.Empty<Diagnostic>();
 
-        protected IEnumerable<Diagnostic> AnalyzeReturnType(IMethodSymbol symbol, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
-            if (symbol.ReturnsVoid) return Enumerable.Empty<Diagnostic>();
+            var method = (IMethodSymbol)symbol;
+            if (method.ReturnsVoid) return Enumerable.Empty<Diagnostic>();
 
-            return AnalyzeReturnType(symbol, symbol.ReturnType, commentXml);
+            return AnalyzeReturnType(method, method.ReturnType, commentXml);
+        }
+
+        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, string commentXml)
+        {
+            if (symbol.GetMethod != null) return AnalyzeReturnType(symbol, symbol.GetMethod.ReturnType, commentXml);
+            if (symbol.SetMethod != null) return AnalyzeReturnType(symbol, symbol.SetMethod.Parameters[0].Type, commentXml);
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml)
@@ -37,14 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (!ShallAnalyzeReturnType(returnType)) return Enumerable.Empty<Diagnostic>();
 
             return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Returns) ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Value) ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        protected IEnumerable<Diagnostic> AnalyzeReturnType(IPropertySymbol symbol, string commentXml)
-        {
-            if (symbol.GetMethod != null) return AnalyzeReturnType(symbol, symbol.GetMethod.ReturnType, commentXml);
-            if (symbol.SetMethod != null) return AnalyzeReturnType(symbol, symbol.SetMethod.Parameters[0].Type, commentXml);
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> TryAnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag)
