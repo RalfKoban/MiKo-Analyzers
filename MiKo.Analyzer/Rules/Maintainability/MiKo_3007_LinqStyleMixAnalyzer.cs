@@ -35,11 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                          .DescendantNodes(_ => true)
                                          .OfType<MemberAccessExpressionSyntax>()
                                          .SelectMany(_ => semanticModel.LookupSymbols(_.GetLocation().SourceSpan.Start))
-                                         .Select(_ => _.ContainingNamespace)
-                                         .Any(_ => _.ToString().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
+                                         .Any(_ => _.ContainingNamespace.ToString().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
 
             return hasLinqMethods
-                       ? ReportIssue(GetEnclosingMethod(query, semanticModel))
+                       ? ReportIssue(methodSyntax.Identifier.ValueText, query.GetLocation())
                        : null;
         }
     }
