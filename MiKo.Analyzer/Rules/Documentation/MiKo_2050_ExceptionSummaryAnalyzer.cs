@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeRemarksPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
         {
-            var comments = GetRemarks(symbol.GetDocumentationCommentXml());
+            var comments = GetRemarks(symbol);
             return comments.Any()
                        ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, defaultPhrases)
                        : Enumerable.Empty<Diagnostic>();

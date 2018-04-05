@@ -60,6 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<string> GetComments(string commentXml, string xmlElement, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlElement).Descendants(xmlSubElement));
 
+        protected static IEnumerable<string> GetRemarks(ISymbol symbol) => GetRemarks(symbol.GetDocumentationCommentXml());
+
         protected static IEnumerable<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
 
         protected static XElement GetCommentElement(ISymbol symbol) => GetCommentElement(symbol.GetDocumentationCommentXml());
