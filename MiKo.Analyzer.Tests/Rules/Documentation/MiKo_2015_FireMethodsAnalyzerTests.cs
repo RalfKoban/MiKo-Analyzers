@@ -25,7 +25,6 @@ public class TestMe
 
     private bool m_field;
 }
-
 ");
 
         [Test]

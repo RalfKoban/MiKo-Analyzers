@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var exceeding = GetExceedingCharacters(identifier.ValueText);
                 if (exceeding <= 0) continue;
 
-                var symbol = semanticModel.LookupSymbols(identifier.GetLocation().SourceSpan.Start, name: identifier.ValueText).First();
+                var symbol = identifier.GetSymbol(semanticModel);
 
                 if (results == null) results = new List<Diagnostic>();
                 results.Add(ReportIssue(symbol, exceeding));

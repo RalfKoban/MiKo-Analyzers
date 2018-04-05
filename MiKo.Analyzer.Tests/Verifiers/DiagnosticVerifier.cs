@@ -53,6 +53,8 @@ namespace TestHelper
                                 });
         }
 
+        protected void An_issue_is_reported_for_file(string path) => An_issue_is_reported_for(File.ReadAllText(path));
+
         protected void No_issue_is_reported_for(string fileContent)
         {
             var results = GetDiagnostics(fileContent);

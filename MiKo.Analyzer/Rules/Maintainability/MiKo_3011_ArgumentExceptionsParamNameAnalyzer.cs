@@ -52,12 +52,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var type = node.Type.ToString();
             if (Mappings.TryGetValue(type, out var inspector))
             {
-                var location = node.GetLocation();
-                var method = semanticModel.GetEnclosingSymbol(location.SourceSpan.Start) as IMethodSymbol;
+                var method = GetEnclosingMethod(node, semanticModel);
 
                 if (inspector(node.ArgumentList.Arguments, method, semanticModel) == InspectationResult.Report)
                 {
-                    return ReportIssue(type, location, method?.Parameters.Select(_ => _.Name).HumanizedConcatenated());
+                    return ReportIssue(type, node.GetLocation(), method?.Parameters.Select(_ => _.Name).HumanizedConcatenated());
                 }
             }
             return null;

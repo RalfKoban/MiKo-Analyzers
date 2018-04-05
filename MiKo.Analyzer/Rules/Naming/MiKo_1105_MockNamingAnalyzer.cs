@@ -63,11 +63,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var identifier in identifiers)
             {
-                var variableName = identifier.ValueText;
+                if (!identifier.ValueText.ContainsAny(StringComparison.OrdinalIgnoreCase, "mock", "stub")) continue;
 
-                if (!variableName.ContainsAny(StringComparison.OrdinalIgnoreCase, "mock", "stub")) continue;
-
-                var symbol = semanticModel.LookupSymbols(identifier.GetLocation().SourceSpan.Start, name: variableName).First();
+                var symbol = identifier.GetSymbol(semanticModel);
 
                 if (results == null) results = new List<Diagnostic>();
                 results.Add(ReportIssue(symbol));

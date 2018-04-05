@@ -38,8 +38,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         break;
 
                     default:
+                        var symbol = identifier.GetSymbol(semanticModel);
+
                         if (results == null) results = new List<Diagnostic>();
-                        var symbol = semanticModel.LookupSymbols(identifier.GetLocation().SourceSpan.Start, name:name).First();
                         results.Add(ReportIssue(symbol, "e"));
                         break;
                 }
