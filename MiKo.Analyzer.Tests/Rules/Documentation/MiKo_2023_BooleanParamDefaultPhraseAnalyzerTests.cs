@@ -48,6 +48,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_boolean_parameter_with_additional_info() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to do something; otherwise, <see langword=""false""/>.
+    /// In addition, some more information.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_boolean_parameter() => An_issue_is_reported_for(@"
 using System;
 

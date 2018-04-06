@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var startingPhrase = Constants.Comments.BooleanParameterStartingPhrase;
             var endingPhrase = Constants.Comments.BooleanParameterEndingPhrase;
 
-            return comment.StartsWithAny(StringComparison.Ordinal, startingPhrase) && comment.EndsWithAny(StringComparison.Ordinal, endingPhrase)
+            return comment.StartsWithAny(StringComparison.Ordinal, startingPhrase) && comment.ContainsAny(StringComparison.Ordinal, endingPhrase)
                 ? Enumerable.Empty<Diagnostic>()
                 : new[] { ReportIssue(parameter, parameter.Name, startingPhrase[0], endingPhrase[0]) };
         }
