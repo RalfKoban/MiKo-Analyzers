@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (inspector(node.ArgumentList.Arguments, method, semanticModel) == InspectationResult.Report)
                 {
-                    return ReportIssue(type, node.GetLocation(), method?.Parameters.Select(_ => _.Name).HumanizedConcatenated());
+                    return ReportIssue(type, node.GetLocation(), method?.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
                 }
             }
             return null;
