@@ -767,10 +767,10 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>End &lt;{2}&gt; with: '{3}'</value>
   </data>
   <data name="MiKo_2036_Title" xml:space="preserve">
-    <value>XML documentation comment of Boolean or Enum properties shall describe the default value.</value>
+    <value>XML documentation comment of Boolean or Enum property shall describe the default value.</value>
   </data>
   <data name="MiKo_2038_Description" xml:space="preserve">
-    <value>XML documentation comment of classes that contain extension methods should start with a specific phrase that describes what the class provides.</value>
+    <value>XML documentation comment of a class that contains extension methods should start with a specific phrase that describes what the class provides.</value>
   </data>
   <data name="MiKo_2038_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -810,6 +810,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2042_Title" xml:space="preserve">
     <value>XML documentation comments should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.</value>
+  </data>
+  <data name="MiKo_2043_Description" xml:space="preserve">
+    <value>XML documentation comment of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates.</value>
+  </data>
+  <data name="MiKo_2043_MessageFormat" xml:space="preserve">
+    <value>Start &lt;{1}&gt; with: '{2}'</value>
+  </data>
+  <data name="MiKo_2043_Title" xml:space="preserve">
+    <value>&lt;summary&gt; XML documentation comment of custom delegates should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
     <value>XML documentation comment of exceptions should follow the .NET Framework documentation.</value>

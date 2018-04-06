@@ -261,6 +261,8 @@ namespace MiKoSolutions.Analyzers
             internal const string XmlElementEndingTag = "/>";
 
             internal const string ExampleDefaultPhrase = "The following example demonstrates ";
+
+            internal const string DelegateSummaryStartingPhrase = "Encapsulates a method that ";
         }
 
         public static class MaxNamingLengths

@@ -2000,7 +2000,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation comment of Boolean or Enum properties shall describe the default value..
+        ///   Looks up a localized string similar to XML documentation comment of Boolean or Enum property shall describe the default value..
         /// </summary>
         public static string MiKo_2036_Title {
             get {
@@ -2009,7 +2009,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation comment of classes that contain extension methods should start with a specific phrase that describes what the class provides..
+        ///   Looks up a localized string similar to XML documentation comment of a class that contains extension methods should start with a specific phrase that describes what the class provides..
         /// </summary>
         public static string MiKo_2038_Description {
             get {
@@ -2131,6 +2131,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2042_Title {
             get {
                 return ResourceManager.GetString("MiKo_2042_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation comment of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates..
+        /// </summary>
+        public static string MiKo_2043_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2043_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2043_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2043_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; XML documentation comment of custom delegates should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2043_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2043_Title", resourceCulture);
             }
         }
         
