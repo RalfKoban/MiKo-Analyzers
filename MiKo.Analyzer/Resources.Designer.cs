@@ -2745,6 +2745,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;default&apos; clause in &apos;switch&apos; statements should throw an ArgumentOutOfRangeException (or subtype) to indicate that the given argument is out of range, but no ArgumentException..
+        /// </summary>
+        public static string MiKo_3013_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3013_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throw &apos;{0}&apos; instead of &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_3013_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3013_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;default&apos; clause in &apos;switch&apos; statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException..
+        /// </summary>
+        public static string MiKo_3013_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
