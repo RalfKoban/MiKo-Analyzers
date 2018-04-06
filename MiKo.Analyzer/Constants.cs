@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string[] ViewModelMarkers = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
         internal static readonly string[] SpecialModelMarkers = { "Modeless", "modeless", "ModeLess", "modeLess" };
         internal static readonly string[] CollectionMarkers = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
-        internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:", "F:" };
+        internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:", "F:", "!:" };
         internal static readonly string[] SymbolMarkersAndLineBreaks = SymbolMarkers.Concat(new[] { Environment.NewLine }).ToArray();
 
         internal static class Comments

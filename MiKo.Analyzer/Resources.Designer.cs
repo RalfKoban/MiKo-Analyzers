@@ -2189,6 +2189,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Method parameters should be referenced via &lt;paramref name=&quot;...&quot;/&gt; inside the documentation..
+        /// </summary>
+        public static string MiKo_2044_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2044_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix documented parameter reference &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2044_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2044_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation references method parameters correctly..
+        /// </summary>
+        public static string MiKo_2044_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2044_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation of exceptions should follow the .NET Framework documentation..
         /// </summary>
         public static string MiKo_2050_Description {
