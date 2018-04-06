@@ -1541,7 +1541,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods should be documented properly..
+        ///   Looks up a localized string similar to Dispose methods should be documented in the same way as they are documented by the .NET Framework..
         /// </summary>
         public static string MiKo_2014_Title {
             get {
@@ -1604,7 +1604,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dependency properties should be documented properly..
+        ///   Looks up a localized string similar to Dependency properties should be documented in the same way as they are documented by the .NET Framework..
         /// </summary>
         public static string MiKo_2017_Description {
             get {
