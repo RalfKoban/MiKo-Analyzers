@@ -1768,27 +1768,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to XML documentation comment of enum parameters should start with a phrase that specifies what will be done with the enum..
         /// </summary>
-        public static string MiKo_2023_Description {
+        public static string MiKo_2024_Description {
             get {
-                return ResourceManager.GetString("MiKo_2023_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2024_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Start documentation with: {2}.
         /// </summary>
-        public static string MiKo_2023_MessageFormat {
+        public static string MiKo_2024_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_2023_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2024_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to XML documentation comment of enum parameters should have a default starting phrase..
         /// </summary>
-        public static string MiKo_2023_Title {
+        public static string MiKo_2024_Title {
             get {
-                return ResourceManager.GetString("MiKo_2023_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2024_Title", resourceCulture);
             }
         }
         
