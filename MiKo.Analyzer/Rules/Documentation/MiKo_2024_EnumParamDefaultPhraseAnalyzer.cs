@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_2024_EnumParamDefaultPhraseAnalyzer : ParamDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2023";
+        public const string Id = "MiKo_2024";
 
         public MiKo_2024_EnumParamDefaultPhraseAnalyzer() : base(Id)
         {
