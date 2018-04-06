@@ -1766,7 +1766,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation comment of enum parameters should start with a phrase that specifies what will be done with the enum..
+        ///   Looks up a localized string similar to XML documentation comment of a Boolean as parameter should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
+        /// </summary>
+        public static string MiKo_2023_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2023_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Let &lt;param name=&quot;{0}&quot;&gt; follow pattern: &apos;{1} ... {2}&apos;.
+        /// </summary>
+        public static string MiKo_2023_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2023_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation comment of Boolean parameters should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2023_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2023_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation comment of Enum parameters should start with a phrase that specifies what will be done with the Enum..
         /// </summary>
         public static string MiKo_2024_Description {
             get {
@@ -1784,7 +1811,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation comment of enum parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to XML documentation comment of Enum parameters should have a default starting phrase..
         /// </summary>
         public static string MiKo_2024_Title {
             get {

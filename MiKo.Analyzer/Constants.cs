@@ -71,6 +71,18 @@ namespace MiKoSolutions.Analyzers
                     "; otherwise, <see langword=\"false\" />.",
                 };
 
+            internal static readonly string[] BooleanParameterStartingPhrase =
+                {
+                    "<see langword=\"true\"/> to ",
+                    "<see langword=\"true\" /> to ",
+                };
+
+            internal static readonly string[] BooleanParameterEndingPhrase =
+                {
+                    "; otherwise, <see langword=\"false\"/>.",
+                    "; otherwise, <see langword=\"false\" />.",
+                };
+
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                 {
                     "A task that will complete with a result of <see langword=\"true\"/> if ",
