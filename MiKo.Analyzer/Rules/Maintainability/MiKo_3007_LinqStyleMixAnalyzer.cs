@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)
         {
-            var methodSyntax = GetEnclosingMethodSyntax(query);
+            var methodSyntax = query.GetEnclosing<MethodDeclarationSyntax>();
 
             var hasLinqMethods = methodSyntax
                                          .DescendantNodes(_ => true)

@@ -259,8 +259,28 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && symbol.ToString() == typeof(System.Threading.CancellationToken).FullName;
 
-        internal static bool IsNullable(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == "Nullable";
+        internal static bool IsNullable(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Nullable);
 
         internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel) => semanticModel.LookupSymbols(token.GetLocation().SourceSpan.Start, name: token.ValueText).First();
+
+        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode node, SemanticModel semanticModel)
+        {
+            var symbol = semanticModel.GetEnclosingSymbol(node.GetLocation().SourceSpan.Start);
+            return symbol as IMethodSymbol;
+        }
+
+        internal static T GetEnclosing<T>(this SyntaxNode node) where T : SyntaxNode
+        {
+            while (true)
+            {
+                switch (node)
+                {
+                    case null: return null;
+                    case T t: return t;
+                }
+
+                node = node.Parent;
+            }
+        }
     }
 }

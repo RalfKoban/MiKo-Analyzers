@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var type = node.Type.ToString();
             if (Mappings.TryGetValue(type, out var inspector))
             {
-                var method = GetEnclosingMethod(node, semanticModel);
+                var method = node.GetEnclosingMethod(semanticModel);
 
                 if (inspector(node.ArgumentList.Arguments, method, semanticModel) == InspectationResult.Report)
                 {
