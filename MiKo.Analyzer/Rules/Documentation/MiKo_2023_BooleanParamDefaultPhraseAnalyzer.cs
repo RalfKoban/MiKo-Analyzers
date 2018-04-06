@@ -20,12 +20,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
         {
+            if (parameter.ContainingSymbol.Name == nameof(IDisposable.Dispose))
+                return Enumerable.Empty<Diagnostic>();
+
             var startingPhrase = Constants.Comments.BooleanParameterStartingPhrase;
             var endingPhrase = Constants.Comments.BooleanParameterEndingPhrase;
 
             return comment.StartsWithAny(StringComparison.Ordinal, startingPhrase) && comment.ContainsAny(StringComparison.Ordinal, endingPhrase)
-                ? Enumerable.Empty<Diagnostic>()
-                : new[] { ReportIssue(parameter, parameter.Name, startingPhrase[0], endingPhrase[0]) };
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(parameter, parameter.Name, startingPhrase[0], endingPhrase[0]) };
         }
     }
 }
