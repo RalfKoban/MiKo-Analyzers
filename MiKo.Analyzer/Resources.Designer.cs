@@ -1795,27 +1795,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to XML documentation comment of &apos;CancellationToken&apos; parameters should start with a phrase that describes how it is used..
         /// </summary>
-        public static string MiKo_2024_Description {
+        public static string MiKo_2025_Description {
             get {
-                return ResourceManager.GetString("MiKo_2024_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2025_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Start documentation with: {2}.
         /// </summary>
-        public static string MiKo_2024_MessageFormat {
+        public static string MiKo_2025_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_2024_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2025_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to XML documentation comment of &apos;CancellationToken&apos; parameters should have a default starting phrase..
         /// </summary>
-        public static string MiKo_2024_Title {
+        public static string MiKo_2025_Title {
             get {
-                return ResourceManager.GetString("MiKo_2024_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2025_Title", resourceCulture);
             }
         }
         
