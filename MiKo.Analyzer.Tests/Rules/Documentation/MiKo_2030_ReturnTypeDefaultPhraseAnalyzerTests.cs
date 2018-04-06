@@ -40,7 +40,8 @@ public class TestMe
         public void No_issue_is_reported_for_method_that_returns_a(
                                                             [Values("returns", "value")] string xmlTag,
                                                             [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                            [Values("string", "bool", "Task", "Task<string>", "Task<bool>", nameof(System.String), nameof(System.Boolean), nameof(System.Threading.Tasks.Task))] string returnType) => No_issue_is_reported_for(@"
+                                                            [Values("string", "bool", "Task", "Task<string>", "Task<bool>", nameof(System.String), nameof(System.Boolean))] string returnType)
+            => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
