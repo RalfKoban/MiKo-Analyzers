@@ -2198,7 +2198,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix documented parameter reference &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Fix incorrect parameter reference &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2044_MessageFormat {
             get {
