@@ -692,7 +692,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>XML documentation comment of a Boolean as parameter should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>Let &lt;param name="{0}"&gt; follow pattern: '{1} ... {2}'</value>
+    <value>Let &lt;param name="{1}"&gt; follow pattern: '{2} ... {3}'</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>XML documentation comment of Boolean parameters should have a default starting phrase.</value>

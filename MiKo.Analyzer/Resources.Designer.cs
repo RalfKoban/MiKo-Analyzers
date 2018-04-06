@@ -1775,7 +1775,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Let &lt;param name=&quot;{0}&quot;&gt; follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to Let &lt;param name=&quot;{1}&quot;&gt; follow pattern: &apos;{2} ... {3}&apos;.
         /// </summary>
         public static string MiKo_2023_MessageFormat {
             get {
