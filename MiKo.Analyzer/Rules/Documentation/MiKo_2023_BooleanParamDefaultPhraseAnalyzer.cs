@@ -16,13 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out && parameter.Type.SpecialType == SpecialType.System_Boolean;
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out
+                                                                                  && parameter.Type.SpecialType == SpecialType.System_Boolean
+                                                                                  && parameter.ContainingSymbol.Name != nameof(IDisposable.Dispose);
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
         {
-            if (parameter.ContainingSymbol.Name == nameof(IDisposable.Dispose))
-                return Enumerable.Empty<Diagnostic>();
-
             var startingPhrase = Constants.Comments.BooleanParameterStartingPhrase;
             var endingPhrase = Constants.Comments.BooleanParameterEndingPhrase;
 
