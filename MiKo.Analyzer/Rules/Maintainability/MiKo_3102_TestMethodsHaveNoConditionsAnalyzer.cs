@@ -12,24 +12,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3102";
 
-        public MiKo_3102_TestMethodsHaveNoConditionsAnalyzer() : base(Id)
+        public MiKo_3102_TestMethodsHaveNoConditionsAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol)
-        {
-            var testMethods = GetTestMethods(symbol).ToList();
-
-            return testMethods.Any()
-                       ? testMethods.SelectMany(AnalyzeMethod).ToList()
-                       : Enumerable.Empty<Diagnostic>();
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => method.DeclaringSyntaxReferences // get the syntax tree
-                                                                                                .SelectMany(_ => _.GetSyntax().DescendantNodes(__ => true))
-                                                                                                .Any(IsCondition)
-                                                                                              ? new[] { ReportIssue(method) }
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => method.IsTestMethod()
+                                                                                              ? AnalyzeTestMethod(method)
                                                                                               : Enumerable.Empty<Diagnostic>();
+
+        private IEnumerable<Diagnostic> AnalyzeTestMethod(IMethodSymbol method)
+        {
+            var methodName = method.Name;
+            var conditions = method.DeclaringSyntaxReferences // get the syntax tree
+                                   .SelectMany(_ => _.GetSyntax().DescendantNodes())
+                                   .Where(IsCondition)
+                                   .Select(_ => ReportIssue(methodName, _.GetLocation()))
+                                   .ToList();
+            return conditions;
+        }
 
         private static bool IsCondition(SyntaxNode syntaxNode)
         {
