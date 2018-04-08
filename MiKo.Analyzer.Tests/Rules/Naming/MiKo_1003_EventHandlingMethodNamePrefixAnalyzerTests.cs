@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method_2() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_method_with_own_event_assignment() => An_issue_is_reported_for(@"
 
 using System;
 
@@ -63,6 +63,28 @@ public class TestMe
     public event EventHandler MyEvent;
 
     public void Initialize() => MyEvent += Whatever;
+
+    public void Whatever(object sender, EventArgs e) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_method_with_other_event_assignment() => An_issue_is_reported_for(@"
+
+using System;
+
+public class TestMeEvent
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public TestMe(TestMeEvent tme) => TME = tme;
+
+    public TestMeEvent TME { get; set; }
+
+    public void Initialize() => TME.MyEvent += Whatever;
 
     public void Whatever(object sender, EventArgs e) { }
 }
