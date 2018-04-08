@@ -31,6 +31,23 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
+        internal static bool IsTestClass(this ITypeSymbol symbol)
+        {
+            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
+            {
+                switch (name)
+                {
+                    case "TestFixture":
+                    case "TestFixtureAttribute":
+                    case "TestClass":
+                    case "TestClassAttribute":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsTestMethod(this IMethodSymbol method)
         {
             foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
@@ -220,23 +237,6 @@ namespace Microsoft.CodeAnalysis
             }
 
             return baseTypes;
-        }
-
-        internal static bool IsTestClass(this ITypeSymbol symbol)
-        {
-            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
-            {
-                switch (name)
-                {
-                    case "TestFixture":
-                    case "TestFixtureAttribute":
-                    case "TestClass":
-                    case "TestClassAttribute":
-                        return true;
-                }
-            }
-
-            return false;
         }
 
         internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;

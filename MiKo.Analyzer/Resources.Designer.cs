@@ -2851,5 +2851,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_3101_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tests should test a very specific scenario. Therefore there is no need to have a condition, because in that situation a test tests more than one scenario. So having a condition inside a test is a huge code smell..
+        /// </summary>
+        public static string MiKo_3102_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3102_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refactor test to get rid of condition.
+        /// </summary>
+        public static string MiKo_3102_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3102_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not contain conditional statements such as &apos;if&apos;, &apos;switch&apos;, etc..
+        /// </summary>
+        public static string MiKo_3102_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3102_Title", resourceCulture);
+            }
+        }
     }
 }
