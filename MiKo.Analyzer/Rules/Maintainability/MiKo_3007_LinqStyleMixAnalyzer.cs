@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var methodSyntax = query.GetEnclosing<MethodDeclarationSyntax>();
 
             var hasLinqMethods = methodSyntax
-                                         .DescendantNodes(_ => true)
+                                         .DescendantNodes()
                                          .OfType<MemberAccessExpressionSyntax>()
                                          .SelectMany(_ => semanticModel.LookupSymbols(_.GetLocation().SourceSpan.Start))
                                          .Any(_ => _.ContainingNamespace.ToString().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
