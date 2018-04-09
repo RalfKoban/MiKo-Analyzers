@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType) => returnType.Name == nameof(System.Threading.Tasks.Task);
+        protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType) => returnType.IsTask();
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {

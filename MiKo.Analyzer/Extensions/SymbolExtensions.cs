@@ -241,6 +241,8 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
 
+        internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(System.Threading.Tasks.Task);
+
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext context) => FindContainingType(context.ContainingSymbol);
 
         internal static INamedTypeSymbol FindContainingType(this ISymbol symbol)

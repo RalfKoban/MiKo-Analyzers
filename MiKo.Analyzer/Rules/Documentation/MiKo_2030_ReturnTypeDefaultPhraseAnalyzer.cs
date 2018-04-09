@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 default:
                     if (returnType.IsEnum()) return false; // checked by MiKo_2034
                     if (returnType.IsEnumerable()) return false; // checked by MiKo_2035
-                    if (returnType.Name == nameof(System.Threading.Tasks.Task)) return false; // checked by MiKo_2031, MiKo_2032, MiKo_2033
+                    if (returnType.IsTask()) return false; // checked by MiKo_2031, MiKo_2032, MiKo_2033
 
                     return true;
             }
