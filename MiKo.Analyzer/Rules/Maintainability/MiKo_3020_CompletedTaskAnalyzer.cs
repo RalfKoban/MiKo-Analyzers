@@ -21,8 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
-            var returnType = (INamedTypeSymbol)method.ReturnType;
-            if (returnType.IsTask() && returnType.TypeArguments.Length == 0)
+            var returnType = method.ReturnType;
+
+            if (returnType.IsTask() && (returnType as INamedTypeSymbol)?.TypeArguments.Length == 0)
             {
                 // we have a plain task
                 return method.DeclaringSyntaxReferences
