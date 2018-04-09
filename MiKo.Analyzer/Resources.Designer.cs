@@ -2826,6 +2826,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For performance reasons it&apos;s better to use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult()&apos; as the returned task is internally cached..
+        /// </summary>
+        public static string MiKo_3020_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3020_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Task.CompletedTask&apos; instead.
+        /// </summary>
+        public static string MiKo_3020_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3020_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult&apos;..
+        /// </summary>
+        public static string MiKo_3020_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3020_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {

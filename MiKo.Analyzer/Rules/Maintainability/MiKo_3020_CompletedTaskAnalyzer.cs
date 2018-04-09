@@ -1,0 +1,40 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+namespace MiKoSolutions.Analyzers.Rules.Maintainability
+{
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public sealed class MiKo_3020_CompletedTaskAnalyzer : MaintainabilityAnalyzer
+    {
+        public const string Id = "MiKo_3020";
+
+        private const string TaskFromResultInvocation = nameof(Task) + "." + nameof(Task.FromResult);
+
+        public MiKo_3020_CompletedTaskAnalyzer() : base(Id)
+        {
+        }
+
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        {
+            var returnType = (INamedTypeSymbol)method.ReturnType;
+            if (returnType.IsTask() && returnType.TypeArguments.Length == 0)
+            {
+                // we have a plain task
+                return method.DeclaringSyntaxReferences
+                             .SelectMany(_ => _.GetSyntax().DescendantNodes())
+                             .OfType<MemberAccessExpressionSyntax>()
+                             .Where(_ => _.ToString() == TaskFromResultInvocation)
+                             .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>().GetLocation())
+                             .Select(_ => ReportIssue(TaskFromResultInvocation, _))
+                             .ToList();
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
+    }
+}
