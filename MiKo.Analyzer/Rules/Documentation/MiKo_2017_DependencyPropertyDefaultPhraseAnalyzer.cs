@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2017_DependencyDefaultPhraseAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2017_DependencyPropertyDefaultPhraseAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2017";
 
         private const string DependencyPropertyFieldSuffix = "Property";
 
-        public MiKo_2017_DependencyDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_2017_DependencyPropertyDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
 
