@@ -163,6 +163,17 @@ public class TestMe
     }
 }
 ");
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_parameter_in_lambda([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public int DoSomething()
+    {
+        return Get(" + name + @" => " + name + @".Data);
+    }
+}
+");
 
         protected override string GetDiagnosticId() => MiKo_1105_MockNamingAnalyzer.Id;
 
