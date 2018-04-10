@@ -269,10 +269,12 @@ namespace Microsoft.CodeAnalysis
             var position = token.GetLocation().SourceSpan.Start;
             var name = token.ValueText;
 
-            if (token.Parent is ParameterSyntax)
+            if (token.Parent is ParameterSyntax node)
             {
-                var methodSymbol = semanticModel.LookupSymbols(position).OfType<IMethodSymbol>().First();
-                return methodSymbol.Parameters.First(_ => _.Name == name);
+                var method = node.GetEnclosing<MethodDeclarationSyntax>();
+                var methodName = method.Identifier.ValueText;
+                var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
+                return methodSymbols.SelectMany(_ => _.Parameters).First(_ => _.Name == name);
             }
 
             return semanticModel.LookupSymbols(position, name: name).First();

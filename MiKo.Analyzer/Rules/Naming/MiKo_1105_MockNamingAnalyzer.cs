@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (ShallAnalyze(context))
             {
-                var parameterSyntax = ((ParameterSyntax)context.Node);
+                var parameterSyntax = (ParameterSyntax)context.Node;
                 if (parameterSyntax.GetEnclosing<InvocationExpressionSyntax>() is null) // ignore invocations eg. in lambdas
                 {
                     AnalyzeIdentifiers(context, parameterSyntax.Identifier);
