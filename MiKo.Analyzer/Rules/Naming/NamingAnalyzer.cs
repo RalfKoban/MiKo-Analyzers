@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var type = semanticModel.GetTypeInfo(node.Declaration.Type).Type;
             if (!ShallAnalyze(type)) return;
 
-            var diagnostics = Analyze(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+            var diagnostics = AnalyzeIdentifiers(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (node)
             {
                 case SingleVariableDesignationSyntax s:
-                    return Analyze(semanticModel, s.Identifier);
+                    return AnalyzeIdentifiers(semanticModel, s.Identifier);
 
                 case ParenthesizedVariableDesignationSyntax s:
                     return s.Variables.SelectMany(_ => Analyze(semanticModel, _));
@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected virtual bool ShallAnalyze(ITypeSymbol symbol) => false;
 
-        protected virtual IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
 
         protected static string FindPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {

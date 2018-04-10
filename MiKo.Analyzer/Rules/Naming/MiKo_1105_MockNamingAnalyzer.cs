@@ -22,14 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
-        }
-
-        protected override void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
-        {
-            if (ShallAnalyze(context))
-            {
-                base.AnalyzeDeclarationPattern(context);
-            }
+            context.RegisterSyntaxNodeAction(AnalyzeParameter, SyntaxKind.Parameter);
         }
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => true;
@@ -40,38 +33,41 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return type?.IsTestClass() == true;
         }
 
+        protected override void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
+        {
+            if (ShallAnalyze(context))
+            {
+                base.AnalyzeDeclarationPattern(context);
+            }
+        }
+
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
         {
             if (ShallAnalyze(context))
             {
-                AnalyzeVariableDeclaration(context, ((VariableDeclarationSyntax)context.Node).Variables.Select(_ => _.Identifier).ToArray());
+                AnalyzeIdentifiers(context, ((VariableDeclarationSyntax)context.Node).Variables.Select(_ => _.Identifier).ToArray());
             }
         }
 
-        private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context, params SyntaxToken[] identifiers)
+        private void AnalyzeParameter(SyntaxNodeAnalysisContext context)
         {
-            var diagnostics = Analyze(context.SemanticModel, identifiers);
+            if (ShallAnalyze(context))
+            {
+                AnalyzeIdentifiers(context, ((ParameterSyntax)context.Node).Identifier);
+            }
+        }
+
+        private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, params SyntaxToken[] identifiers)
+        {
+            var diagnostics = AnalyzeIdentifiers(context.SemanticModel, identifiers);
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, params SyntaxToken[] identifiers)
-        {
-            List<Diagnostic> results = null;
-
-            foreach (var identifier in identifiers)
-            {
-                if (!identifier.ValueText.ContainsAny(StringComparison.OrdinalIgnoreCase, "mock", "stub")) continue;
-
-                var symbol = identifier.GetSymbol(semanticModel);
-
-                if (results == null) results = new List<Diagnostic>();
-                results.Add(ReportIssue(symbol));
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => identifiers
+                                                                                                                                            .Where(_ => _.ValueText.ContainsAny(StringComparison.OrdinalIgnoreCase, "mock", "stub"))
+                                                                                                                                            .Select(_ => ReportIssue(_.GetSymbol(semanticModel)));
     }
 }

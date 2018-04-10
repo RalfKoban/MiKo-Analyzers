@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 // ReSharper disable once CheckNamespace
@@ -263,7 +264,19 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsNullable(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Nullable);
 
-        internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel) => semanticModel.LookupSymbols(token.GetLocation().SourceSpan.Start, name: token.ValueText).First();
+        internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
+        {
+            var position = token.GetLocation().SourceSpan.Start;
+            var name = token.ValueText;
+
+            if (token.Parent is ParameterSyntax)
+            {
+                var methodSymbol = semanticModel.LookupSymbols(position).OfType<IMethodSymbol>().First();
+                return methodSymbol.Parameters.First(_ => _.Name == name);
+            }
+
+            return semanticModel.LookupSymbols(position, name: name).First();
+        }
 
         internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode node, SemanticModel semanticModel)
         {

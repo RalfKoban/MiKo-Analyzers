@@ -142,6 +142,28 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_parameter() => No_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public void DoSomething(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_parameter([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public void DoSomething(int " + name + @")
+    {
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1105_MockNamingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1105_MockNamingAnalyzer();
