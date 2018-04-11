@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2038_ExtensionMethodsClassSummaryAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2039_ExtensionMethodsClassSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_undocumented_non_static_class() => No_issue_is_reported_for(@"
@@ -57,9 +57,9 @@ public static class TestMeExtensions
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2038_ExtensionMethodsClassSummaryAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2038_ExtensionMethodsClassSummaryAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2039_ExtensionMethodsClassSummaryAnalyzer();
 
         private static IEnumerable<string> ValidPhrases() => new[]
                                                                  {

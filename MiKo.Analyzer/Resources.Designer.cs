@@ -2065,27 +2065,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides..
         /// </summary>
-        public static string MiKo_2038_Description {
+        public static string MiKo_2039_Description {
             get {
-                return ResourceManager.GetString("MiKo_2038_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_2039_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
         /// </summary>
-        public static string MiKo_2038_MessageFormat {
+        public static string MiKo_2039_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_2038_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_2039_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase..
         /// </summary>
-        public static string MiKo_2038_Title {
+        public static string MiKo_2039_Title {
             get {
-                return ResourceManager.GetString("MiKo_2038_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_2039_Title", resourceCulture);
             }
         }
         

@@ -787,13 +787,13 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2036_Title" xml:space="preserve">
     <value>Documentation of Boolean or Enum property shall describe the default value.</value>
   </data>
-  <data name="MiKo_2038_Description" xml:space="preserve">
+  <data name="MiKo_2039_Description" xml:space="preserve">
     <value>Documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides.</value>
   </data>
-  <data name="MiKo_2038_MessageFormat" xml:space="preserve">
+  <data name="MiKo_2039_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
   </data>
-  <data name="MiKo_2038_Title" xml:space="preserve">
+  <data name="MiKo_2039_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2040_Description" xml:space="preserve">
