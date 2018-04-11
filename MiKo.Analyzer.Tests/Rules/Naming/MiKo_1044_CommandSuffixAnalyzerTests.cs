@@ -22,6 +22,16 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_non_command_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething() {}
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_non_command_property() => No_issue_is_reported_for(@"
 using System;
 
@@ -53,6 +63,17 @@ public class TestMe : ICommand
     public bool CanExecute(object parameter) => true;
 
     public void Execute(object parameter) { }
+}
+");
+
+        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        public void An_issue_is_reported_for_incorrectly_named_command_method() => An_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    public ICommand DoSomething() => null;
 }
 ");
 
