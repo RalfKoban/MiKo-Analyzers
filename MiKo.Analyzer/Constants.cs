@@ -275,7 +275,27 @@ namespace MiKoSolutions.Analyzers
             internal const string ExampleDefaultPhrase = "The following example demonstrates ";
 
             internal const string DelegateSummaryStartingPhrase = "Encapsulates a method that ";
-        }
+
+            internal const string CommandSummaryStartingPhrase = "Represents a command that can ";
+
+            internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =
+                {
+                    @"Gets or sets the <see cref=""ICommand""/> that can ",
+                    @"Gets or sets the <see cref=""ICommand"" /> that can ",
+                };
+
+            internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
+                {
+                    @"Gets the <see cref=""ICommand""/> that can ",
+                    @"Gets the <see cref=""ICommand"" /> that can ",
+                };
+
+            internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
+                {
+                    @"Sets the <see cref=""ICommand""/> that can ",
+                    @"Sets the <see cref=""ICommand"" /> that can ",
+                };
+    }
 
         public static class MaxNamingLengths
         {

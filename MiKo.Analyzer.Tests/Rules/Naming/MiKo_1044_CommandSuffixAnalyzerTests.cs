@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -17,6 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 using System;
 
 public class TestMe
+{
+}
+");
+        [Test]
+        public void No_issue_is_reported_for_non_command_interface() => No_issue_is_reported_for(@"
+using System;
+
+public interface ITestMe
 {
 }
 ");
@@ -52,7 +57,7 @@ public class TestMe
 ");
 
         [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
-        public void An_issue_is_reported_for_incorrectly_named_command_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_command_class() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -63,6 +68,16 @@ public class TestMe : ICommand
     public bool CanExecute(object parameter) => true;
 
     public void Execute(object parameter) { }
+}
+");
+
+        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        public void An_issue_is_reported_for_incorrectly_named_command_interface() => An_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public interface ITestMe : ICommand
+{
 }
 ");
 

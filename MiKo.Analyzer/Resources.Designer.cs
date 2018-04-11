@@ -2063,6 +2063,60 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation of a property that returns a command should start with a specific phrase that describes what command the property returns..
+        /// </summary>
+        public static string MiKo_2037_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2037_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2037_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2037_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of command properties should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2037_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2037_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of a command should start with a specific phrase that describes what the command does..
+        /// </summary>
+        public static string MiKo_2038_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2038_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2038_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2038_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of command should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2038_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2038_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides..
         /// </summary>
         public static string MiKo_2039_Description {

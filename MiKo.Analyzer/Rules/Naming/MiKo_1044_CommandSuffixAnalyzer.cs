@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.Implements<ICommand>() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Implements<ICommand>() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
                                                                                                ? new[] { ReportIssue(symbol, Suffix) }
                                                                                                : Enumerable.Empty<Diagnostic>();
 
