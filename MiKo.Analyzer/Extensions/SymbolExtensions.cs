@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -298,6 +299,23 @@ namespace Microsoft.CodeAnalysis
                 {
                     case null: return null;
                     case T t: return t;
+                }
+
+                node = node.Parent;
+            }
+        }
+
+        internal static SyntaxNode GetEnclosing(this SyntaxNode node, params SyntaxKind[] syntaxKinds)
+        {
+            while (true)
+            {
+                if (node == null)
+                    return null;
+
+                foreach (var syntaxKind in syntaxKinds)
+                {
+                    if (node.IsKind(syntaxKind))
+                        return node;
                 }
 
                 node = node.Parent;

@@ -1055,6 +1055,18 @@ That is they should return a Boolean and have the last parameter as out-paramete
   <data name="MiKo_3020_Title" xml:space="preserve">
     <value>Use 'Task.CompletedTask' instead of 'Task.FromResult'.</value>
   </data>
+  <data name="MiKo_3021_Description" xml:space="preserve">
+    <value>If you use 'Task.Run' to return a Task because a method is a long-running operation, then this most probably means that you've doing something wrong. If you have a long-running operation, use 'Task.Run' to call it.</value>
+  </data>
+  <data name="MiKo_3021_HelpLinkUri" xml:space="preserve">
+    <value>https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html</value>
+  </data>
+  <data name="MiKo_3021_MessageFormat" xml:space="preserve">
+    <value>Do not use 'Task.Run'; instead, use 'Task.Run' to call the method</value>
+  </data>
+  <data name="MiKo_3021_Title" xml:space="preserve">
+    <value>Do not use 'Task.Run' in the implementation.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>

@@ -2853,6 +2853,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you use &apos;Task.Run&apos; to return a Task because a method is a long-running operation, then this most probably means that you&apos;ve doing something wrong. If you have a long-running operation, use &apos;Task.Run&apos; to call it..
+        /// </summary>
+        public static string MiKo_3021_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3021_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html.
+        /// </summary>
+        public static string MiKo_3021_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3021_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Task.Run&apos;; instead, use &apos;Task.Run&apos; to call the method.
+        /// </summary>
+        public static string MiKo_3021_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3021_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Task.Run&apos; in the implementation..
+        /// </summary>
+        public static string MiKo_3021_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3021_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
