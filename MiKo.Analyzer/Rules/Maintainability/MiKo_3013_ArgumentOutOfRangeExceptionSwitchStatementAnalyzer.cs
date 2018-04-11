@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // if there is a 'default' switch label in the specific switch section, then we are in the 'default:' clause
                     var isBelow = switchSection.DescendantNodes().OfType<DefaultSwitchLabelSyntax>().Any();
                     return isBelow
-                               ? ReportIssue(type, node.GetLocation(), nameof(ArgumentOutOfRangeException))
+                               ? ReportIssue(type, node.GetLocation())
                                : null;
                 }
 

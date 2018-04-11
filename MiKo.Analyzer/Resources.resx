@@ -848,10 +848,10 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Exceptions should be documented following the .NET Framework.</value>
   </data>
   <data name="MiKo_2051_Description" xml:space="preserve">
-    <value>Documentation of a thrown exception should be a simple condition phrase.</value>
+    <value>Documentation of a thrown exception should be a simple condition phrase, such as: 'The item is not available'.</value>
   </data>
   <data name="MiKo_2051_MessageFormat" xml:space="preserve">
-    <value>Use condition form to document a thrown exception</value>
+    <value>Use condition form to document thrown exception</value>
   </data>
   <data name="MiKo_2051_Title" xml:space="preserve">
     <value>Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').</value>
@@ -861,7 +861,8 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2052_MessageFormat" xml:space="preserve">
     <value>{1} documentation should be something like:
-'{2}'</value>
+
+{2}</value>
   </data>
   <data name="MiKo_2052_Title" xml:space="preserve">
     <value>Throwing of ArgumentNullException should be documented using a default phrase.</value>
@@ -1011,7 +1012,7 @@ That is they should return a Boolean and have the last parameter as out-paramete
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
   </data>
   <data name="MiKo_3010_MessageFormat" xml:space="preserve">
-    <value>Do not create '{0}'</value>
+    <value>Do not create a '{0}'</value>
   </data>
   <data name="MiKo_3010_Title" xml:space="preserve">
     <value>Do not create or throw reserved exception types.</value>
@@ -1041,7 +1042,7 @@ That is they should return a Boolean and have the last parameter as out-paramete
     <value>The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype) to indicate that the given argument is out of range, but no ArgumentException.</value>
   </data>
   <data name="MiKo_3013_MessageFormat" xml:space="preserve">
-    <value>Throw '{0}' instead of '{1}'</value>
+    <value>Throw an 'ArgumentOutOfRangeException' instead</value>
   </data>
   <data name="MiKo_3013_Title" xml:space="preserve">
     <value>The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException.</value>
@@ -1062,7 +1063,7 @@ That is they should return a Boolean and have the last parameter as out-paramete
     <value>https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html</value>
   </data>
   <data name="MiKo_3021_MessageFormat" xml:space="preserve">
-    <value>Do not use 'Task.Run'; instead, use 'Task.Run' to call the method</value>
+    <value>Do not use 'Task.Run'; instead, use 'Task.Run' to call method '{1}'</value>
   </data>
   <data name="MiKo_3021_Title" xml:space="preserve">
     <value>Do not use 'Task.Run' in the implementation.</value>

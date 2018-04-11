@@ -31,29 +31,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeTask(IMethodSymbol method)
         {
+            var methodName = method.Name;
+
             foreach (var methodNode in method.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
             {
-                foreach (var taskRunExpression in methodNode.DescendantNodes().OfType<MemberAccessExpressionSyntax>()
-                                                            .Where(_ => _.ToString() == TaskRunInvocation)
-                                                            .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>()))
+                foreach (var taskRunExpression in methodNode.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToString() == TaskRunInvocation))
                 {
-                    var node = taskRunExpression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
+                    var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
+                    var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
                     switch (node?.Kind())
                     {
                         case SyntaxKind.ReturnStatement:
                         case SyntaxKind.ArrowExpressionClause:
-                            yield return ReportIssue(taskRunExpression);
+                            yield return ReportIssue(taskRunExpression, methodName);
+
                             break;
 
                         case SyntaxKind.VariableDeclarator:
                             var variable = (VariableDeclaratorSyntax)node;
                             var variableName = variable.Identifier.ValueText;
 
-                            foreach (var unused in methodNode.DescendantNodes().OfType<ReturnStatementSyntax>()
-                                                             .Select(_ => _.Expression).OfType<IdentifierNameSyntax>()
+                            foreach (var unused in methodNode.DescendantNodes()
+                                                             .OfType<ReturnStatementSyntax>()
+                                                             .Select(_ => _.Expression)
+                                                             .OfType<IdentifierNameSyntax>()
                                                              .Where(_ => _.Identifier.ValueText == variableName))
                             {
-                                yield return ReportIssue(taskRunExpression);
+                                yield return ReportIssue(taskRunExpression, methodName);
                             }
 
                             break;
@@ -62,6 +66,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic ReportIssue(CSharpSyntaxNode expression) => ReportIssue(TaskRunInvocation, expression.GetLocation());
+        private Diagnostic ReportIssue(CSharpSyntaxNode expression, string methodName) => ReportIssue(TaskRunInvocation, expression.GetLocation(), methodName);
     }
 }

@@ -2243,7 +2243,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a thrown exception should be a simple condition phrase..
+        ///   Looks up a localized string similar to Documentation of a thrown exception should be a simple condition phrase, such as: &apos;The item is not available&apos;..
         /// </summary>
         public static string MiKo_2051_Description {
             get {
@@ -2252,7 +2252,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use condition form to document a thrown exception.
+        ///   Looks up a localized string similar to Use condition form to document thrown exception.
         /// </summary>
         public static string MiKo_2051_MessageFormat {
             get {
@@ -2280,7 +2280,8 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to {1} documentation should be something like:
-        ///&apos;{2}&apos;.
+        ///
+        ///{2}.
         /// </summary>
         public static string MiKo_2052_MessageFormat {
             get {
@@ -2718,7 +2719,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not create &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Do not create a &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_3010_MessageFormat {
             get {
@@ -2808,7 +2809,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throw &apos;{0}&apos; instead of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Throw an &apos;ArgumentOutOfRangeException&apos; instead.
         /// </summary>
         public static string MiKo_3013_MessageFormat {
             get {
@@ -2871,7 +2872,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;Task.Run&apos;; instead, use &apos;Task.Run&apos; to call the method.
+        ///   Looks up a localized string similar to Do not use &apos;Task.Run&apos;; instead, use &apos;Task.Run&apos; to call method &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_3021_MessageFormat {
             get {
