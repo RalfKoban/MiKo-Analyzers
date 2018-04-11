@@ -274,7 +274,11 @@ namespace Microsoft.CodeAnalysis
                 var method = node.GetEnclosing<MethodDeclarationSyntax>();
                 var methodName = method.Identifier.ValueText;
                 var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
-                return methodSymbols.SelectMany(_ => _.Parameters).First(_ => _.Name == name);
+                var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
+                return parameterSymbol;
+
+                // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently)
+                //var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
             }
 
             return semanticModel.LookupSymbols(position, name: name).First();

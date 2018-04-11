@@ -70,8 +70,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => identifiers
-                                                                                                                                            .Where(_ => _.ValueText.ContainsAny(StringComparison.OrdinalIgnoreCase, "mock", "stub"))
-                                                                                                                                            .Select(_ => ReportIssue(_.GetSymbol(semanticModel)));
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
+        {
+            foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny(StringComparison.OrdinalIgnoreCase, "mock", "stub")))
+            {
+                var symbol = syntaxToken.GetSymbol(semanticModel);
+                var diagnostic = symbol != null
+                                     ? ReportIssue(symbol)
+                                     : ReportIssue(syntaxToken.ValueText, syntaxToken.GetLocation());
+                yield return diagnostic;
+            }
+        }
     }
 }
