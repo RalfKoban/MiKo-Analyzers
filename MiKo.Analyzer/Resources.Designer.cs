@@ -2872,7 +2872,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;Task.Run&apos;; instead, use &apos;Task.Run&apos; to call method &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos;; instead, use &apos;{0}&apos; to call method &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_3021_MessageFormat {
             get {
