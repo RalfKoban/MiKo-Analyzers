@@ -1062,6 +1062,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, add the suffix &apos;Command&apos;..
+        /// </summary>
+        public static string MiKo_1044_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1044_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add &apos;{1}&apos; as suffix.
+        /// </summary>
+        public static string MiKo_1044_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1044_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commands should be suffixed with &apos;Command&apos;..
+        /// </summary>
+        public static string MiKo_1044_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1044_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
