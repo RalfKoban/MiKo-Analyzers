@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -46,11 +47,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return null;
             }
 
-            if (returnType.ToString() == "byte[]") return null;
+            return AnalyzeReturnType(method, returnType);
+        }
 
-            return ForbiddenTypes.Any(returnType.ImplementsPotentialGeneric)
-                       ? ReportIssue(returnType)
-                       : null;
+        private Diagnostic AnalyzeReturnType(IMethodSymbol method, ITypeSymbol returnType)
+        {
+            var returnTypeString = returnType.ToString();
+            if (returnTypeString == "byte[]")
+                return null;
+
+            if (ForbiddenTypes.Any(returnType.ImplementsPotentialGeneric))
+            {
+                if (returnType.Locations.IsEmpty)
+                {
+                    var syntax = (MethodDeclarationSyntax)method.DeclaringSyntaxReferences[0].GetSyntax();
+                    return ReportIssue(returnTypeString, syntax.ReturnType.GetLocation());
+                }
+
+                return ReportIssue(returnType);
+            }
+
+            return null;
         }
     }
 }
