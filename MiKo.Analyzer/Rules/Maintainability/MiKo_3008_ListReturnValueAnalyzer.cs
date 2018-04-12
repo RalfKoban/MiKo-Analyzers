@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -26,12 +24,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Interface
-                                                                                               ? symbol.GetMembers().OfType<IMethodSymbol>().Where(_ => _.MethodKind == MethodKind.Ordinary).SelectMany(AnalyzeMethod)
+                                                                                               ? symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeOrdinaryMethod).Where(_ => _ != null).ToList()
                                                                                                : Enumerable.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        private Diagnostic AnalyzeOrdinaryMethod(IMethodSymbol method)
         {
-            if (method.ReturnsVoid) return Enumerable.Empty<Diagnostic>();
+            if (method.MethodKind != MethodKind.Ordinary) return null;
+            if (method.ReturnsVoid) return null;
 
             var returnType = method.ReturnType;
 
@@ -40,18 +39,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SpecialType.System_Array:
                 case SpecialType.System_Collections_Generic_IList_T:
                 case SpecialType.System_Collections_Generic_ICollection_T:
-                    return new[] { ReportIssue(method) };
+                    return ReportIssue(method);
 
                 case SpecialType.System_Collections_Generic_IReadOnlyList_T:
                 case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
-                    return Enumerable.Empty<Diagnostic>();
+                    return null;
             }
 
-            if (returnType.ToString() == "byte[]") return Enumerable.Empty<Diagnostic>();
+            if (returnType.ToString() == "byte[]") return null;
 
             return ForbiddenTypes.Any(returnType.ImplementsPotentialGeneric)
-                       ? new[] { ReportIssue(returnType) }
-                       : Enumerable.Empty<Diagnostic>();
+                       ? ReportIssue(returnType)
+                       : null;
         }
     }
 }
