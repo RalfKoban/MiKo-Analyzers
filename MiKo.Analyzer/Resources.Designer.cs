@@ -2809,6 +2809,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods should not return changeable collections such as &apos;ICollection&lt;T&gt;&apos; because those can be changed from outside. Instead they should return the read-only variants (e.g. &apos;IReadOnlyCollection&lt;T&gt;&apos;)..
+        /// </summary>
+        public static string MiKo_3008_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3008_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a read-only immutable variant instead.
+        /// </summary>
+        public static string MiKo_3008_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3008_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should not return collections that can be changed from outside..
+        /// </summary>
+        public static string MiKo_3008_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3008_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug..
         /// </summary>
         public static string MiKo_3010_Description {

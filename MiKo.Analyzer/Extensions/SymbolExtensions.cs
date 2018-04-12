@@ -189,6 +189,27 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
+        internal static bool ImplementsPotentialGeneric(this ITypeSymbol symbol, Type interfaceType) => ImplementsPotentialGeneric(symbol, interfaceType.FullName);
+
+        internal static bool ImplementsPotentialGeneric(this ITypeSymbol symbol, string interfaceType)
+        {
+            var index = interfaceType.IndexOf('`');
+            var interfaceTypeWithoutGeneric = index > -1
+                                                  ? interfaceType.Substring(0, index)
+                                                  : interfaceType;
+
+            if (symbol.ToString().StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            foreach (var implementedInterface in symbol.AllInterfaces)
+            {
+                if (implementedInterface.ToString().StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
+        }
+
         internal static bool IsEventArgs(this ITypeSymbol symbol)
         {
             if (symbol.TypeKind != TypeKind.Class) return false;
