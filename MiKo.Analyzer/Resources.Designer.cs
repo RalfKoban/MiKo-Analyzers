@@ -1694,7 +1694,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start with verb in passive form.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with verb in passive form.
         /// </summary>
         public static string MiKo_2019_MessageFormat {
             get {
