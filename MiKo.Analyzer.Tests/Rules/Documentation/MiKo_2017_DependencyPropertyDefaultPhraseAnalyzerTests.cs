@@ -53,6 +53,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_commented_field_summary_with_readonly_comment() => No_issue_is_reported_for(@"
+using System.Windows;
+
+public class TestMe
+{
+    public int MyDependency { get; set; }
+
+    /// <summary>
+    /// Identifies the <see cref=""MyDependency""/> dependency property. This field is read-only.
+    /// </summary>
+    private static readonly DependencyProperty MyDependencyProperty;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_commented_field_value() => No_issue_is_reported_for(@"
 using System.Windows;
 

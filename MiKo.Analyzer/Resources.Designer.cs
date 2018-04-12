@@ -2297,6 +2297,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation of a public-visible read-only fields should indicate that they are read-only..
+        /// </summary>
+        public static string MiKo_2045_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2045_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2045_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2045_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase..
+        /// </summary>
+        public static string MiKo_2045_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2045_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation of exceptions should follow the .NET Framework documentation..
         /// </summary>
         public static string MiKo_2050_Description {

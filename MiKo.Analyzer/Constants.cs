@@ -301,7 +301,9 @@ namespace MiKoSolutions.Analyzers
                     @"Sets the <see cref=""System.Windows.Input.ICommand""/> that can ",
                     @"Sets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
                 };
-    }
+
+            internal const string FieldIsReadOnly = "This field is read-only.";
+        }
 
         public static class MaxNamingLengths
         {

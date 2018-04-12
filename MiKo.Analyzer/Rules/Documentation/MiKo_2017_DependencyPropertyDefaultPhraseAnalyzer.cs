@@ -47,9 +47,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = phrasesProvider();
             foreach (var comment in comments)
             {
-                foreach (var phrase in phrases)
+                if (phrases.Any(_ => comment.StartsWith(_, StringComparison.Ordinal)))
                 {
-                    if (phrase == comment) return;
+                    return;
                 }
 
                 if (results == null) results = new List<Diagnostic>();
