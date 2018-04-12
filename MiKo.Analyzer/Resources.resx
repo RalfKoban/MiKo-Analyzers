@@ -1045,7 +1045,7 @@ That is they should return a Boolean and have the last parameter as out-paramete
     <value>Methods should not return changeable collections such as 'ICollection&lt;T&gt;' because those can be changed from outside. Instead they should return the read-only variants (e.g. 'IReadOnlyCollection&lt;T&gt;').</value>
   </data>
   <data name="MiKo_3008_MessageFormat" xml:space="preserve">
-    <value>Use a read-only immutable variant instead</value>
+    <value>Use a read-only immutable variant or 'IEnumerable&lt;T&gt;' instead</value>
   </data>
   <data name="MiKo_3008_Title" xml:space="preserve">
     <value>Method should not return collections that can be changed from outside.</value>

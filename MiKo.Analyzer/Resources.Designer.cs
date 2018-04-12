@@ -2818,7 +2818,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a read-only immutable variant instead.
+        ///   Looks up a localized string similar to Use a read-only immutable variant or &apos;IEnumerable&lt;T&gt;&apos; instead.
         /// </summary>
         public static string MiKo_3008_MessageFormat {
             get {
