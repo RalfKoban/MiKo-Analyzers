@@ -282,18 +282,24 @@ namespace MiKoSolutions.Analyzers
                 {
                     @"Gets or sets the <see cref=""ICommand""/> that can ",
                     @"Gets or sets the <see cref=""ICommand"" /> that can ",
+                    @"Gets or sets the <see cref=""System.Windows.Input.ICommand""/> that can ",
+                    @"Gets or sets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
                 };
 
             internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
                 {
                     @"Gets the <see cref=""ICommand""/> that can ",
                     @"Gets the <see cref=""ICommand"" /> that can ",
+                    @"Gets the <see cref=""System.Windows.Input.ICommand""/> that can ",
+                    @"Gets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
                 };
 
             internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
                 {
                     @"Sets the <see cref=""ICommand""/> that can ",
                     @"Sets the <see cref=""ICommand"" /> that can ",
+                    @"Sets the <see cref=""System.Windows.Input.ICommand""/> that can ",
+                    @"Sets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
                 };
     }
 
