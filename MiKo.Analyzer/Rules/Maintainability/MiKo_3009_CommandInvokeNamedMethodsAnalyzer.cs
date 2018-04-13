@@ -33,13 +33,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeCommandCreation(ObjectCreationExpressionSyntax node)
         {
-            var arguments = node.ArgumentList.Arguments;
+            var argumentList = node.ArgumentList;
+            if (argumentList is null) return Enumerable.Empty<Diagnostic>();
+
+            var arguments = argumentList.Arguments;
             if (arguments.Count == 0) return Enumerable.Empty<Diagnostic>();
 
             return arguments
-                   .Where(_ => _.Expression is LambdaExpressionSyntax)
-                   .Select(_ => ReportIssue(_.ToString(), _.GetLocation()))
-                   .ToList();
+                           .Where(_ => _.Expression is LambdaExpressionSyntax)
+                           .Select(_ => ReportIssue(_.ToString(), _.GetLocation()))
+                           .ToList();
         }
     }
 }

@@ -39,7 +39,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeCommandCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            var arguments = node.ArgumentList.Arguments;
+            var argumentList = node.ArgumentList;
+            if (argumentList is null) return Enumerable.Empty<Diagnostic>();
+
+            var arguments = argumentList.Arguments;
             if (arguments.Count == 0) return Enumerable.Empty<Diagnostic>();
 
             var list = new List<Diagnostic>();

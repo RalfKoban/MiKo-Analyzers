@@ -78,6 +78,33 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_command_with_no_arguments() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand() { }
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => true;
+
+    public void Execute(object parameter) { };
+
+    public string Text { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var testMeCommand = new TestMeCommand { Text=""something"" };
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1045_CommandInvokeMethodsSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1045_CommandInvokeMethodsSuffixAnalyzer();
