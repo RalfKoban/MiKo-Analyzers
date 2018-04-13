@@ -25,17 +25,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
         {
             var node = (ObjectCreationExpressionSyntax)context.Node;
-            var type = node.Type.ToString();
-            if (!type.Contains(Suffix)) return;
-
-            var diagnostics = AnalyzeObjectCreation(node, context.SemanticModel);
-            foreach (var diagnostic in diagnostics)
+            if (node.Type.IsCommand())
             {
-                context.ReportDiagnostic(diagnostic);
+                var diagnostics = AnalyzeCommandCreation(node, context.SemanticModel);
+                foreach (var diagnostic in diagnostics)
+                {
+                    context.ReportDiagnostic(diagnostic);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzeCommandCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var arguments = node.ArgumentList.Arguments;
             if (arguments.Count == 0) return Enumerable.Empty<Diagnostic>();
