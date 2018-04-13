@@ -46,6 +46,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "StackOverflowException":
                 case "COMException":
                 case "SEHException":
+                case "ApplicationException":
+                case "SystemException":
                 case "InteropServices.COMException":
                 case "InteropServices.SEHException":
                 case "Runtime.InteropServices.COMException":
@@ -59,6 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "System.StackOverflowException":
                 case "System.Runtime.InteropServices.COMException":
                 case "System.Runtime.InteropServices.SEHException":
+                case "System.ApplicationException":
+                case "System.SystemException":
                     return true;
 
                 default:

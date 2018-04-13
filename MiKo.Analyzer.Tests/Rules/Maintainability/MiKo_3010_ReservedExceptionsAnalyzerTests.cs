@@ -28,7 +28,7 @@ public class TestMe
 }
 ");
         [Test]
-        public void An_issue_is_reported_for_forbidden_object([ValueSource(nameof(ForbiddenExceptions))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_forbidden_exception([ValueSource(nameof(ForbiddenExceptions))] string type) => An_issue_is_reported_for(@"
 using System;
 using System.Runtime.InteropServices;
 
@@ -52,6 +52,8 @@ public class TestMe
                                                                                                 nameof(StackOverflowException),
                                                                                                 nameof(COMException),
                                                                                                 nameof(SEHException),
+                                                                                                nameof(ApplicationException),
+                                                                                                nameof(SystemException),
                                                                                                 "System.Exception",
                                                                                                 "System.AccessViolationException",
                                                                                                 "System.IndexOutOfRangeException",
