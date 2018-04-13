@@ -28,21 +28,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var type = node.Type.ToString();
             if (!type.Contains(Suffix)) return;
 
-            var diagnostics = AnalyzeObjectCreation(node);
+            var diagnostics = AnalyzeObjectCreation(node, context.SemanticModel);
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node)
+        private IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var arguments = node.ArgumentList.Arguments;
-            return arguments.Any()
-                       ? arguments.Where(_ => _.ToString().EndsWith(Suffix, StringComparison.Ordinal))
-                                  .Select(_ => ReportIssue(_.ToString(), _.GetLocation(), Suffix))
-                                  .ToList()
-                       : Enumerable.Empty<Diagnostic>();
+            if (arguments.Count == 0) return Enumerable.Empty<Diagnostic>();
+
+            var list = new List<Diagnostic>();
+            foreach (var argument in arguments)
+            {
+                var argumentName = argument.ToString();
+                if (argumentName.EndsWith(Suffix, StringComparison.Ordinal))
+                {
+                    var location = argument.GetLocation();
+                    var symbol = semanticModel.LookupSymbols(location.SourceSpan.Start, name: argumentName).FirstOrDefault();
+                    if (symbol != null)
+                    {
+                        list.Add(ReportIssue(symbol, argumentName.WithoutSuffix(Suffix)));
+                    }
+                }
+            }
+
+            return list;
         }
     }
 }

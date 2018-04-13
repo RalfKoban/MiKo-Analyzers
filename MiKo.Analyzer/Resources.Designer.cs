@@ -1089,7 +1089,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, remove the suffix &apos;Command&apos;..
+        ///   Looks up a localized string similar to To ease maintenance, remove the suffix &apos;Command&apos; as the method itself is invoked by a command..
         /// </summary>
         public static string MiKo_1045_Description {
             get {
@@ -1098,7 +1098,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove the &apos;{1}&apos; suffix.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1045_MessageFormat {
             get {
