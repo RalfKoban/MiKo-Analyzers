@@ -182,7 +182,7 @@ namespace MiKoSolutions.Analyzers
                     "<value",
                 };
 
-            internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown ";
+            internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
 
             internal static readonly string[] ExceptionCtorSummaryStartingPhrase =
                 {

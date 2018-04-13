@@ -80,7 +80,7 @@ using System;
 using System.Runtime.Serialization;
 
 /// <summary>
-/// The exception that is thrown ...
+/// The exception that is thrown when ...
 /// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
@@ -147,7 +147,7 @@ using System;
 using System.Runtime.Serialization;
 
 /// <summary>
-/// The exception that is thrown ...
+/// The exception that is thrown when ...
 /// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
