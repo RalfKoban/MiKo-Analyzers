@@ -1059,6 +1059,15 @@ That is they should return a Boolean and have the last parameter as out-paramete
   <data name="MiKo_3008_Title" xml:space="preserve">
     <value>Method should not return collections that can be changed from outside.</value>
   </data>
+  <data name="MiKo_3009_Description" xml:space="preserve">
+    <value>Methods that are invoked by commands should not be lambda expressions as that makes them hard to read, understand and maintain. Instead they should be named methods that have a meaningful name.</value>
+  </data>
+  <data name="MiKo_3009_MessageFormat" xml:space="preserve">
+    <value>Use named method instead</value>
+  </data>
+  <data name="MiKo_3009_Title" xml:space="preserve">
+    <value>Commands should invoke only named methods and no lambda expressions.</value>
+  </data>
   <data name="MiKo_3010_Description" xml:space="preserve">
     <value>Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug.</value>
   </data>

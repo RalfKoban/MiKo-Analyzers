@@ -2863,6 +2863,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that are invoked by commands should not be lambda expressions as that makes them hard to read, understand and maintain. Instead they should be named methods that have a meaningful name..
+        /// </summary>
+        public static string MiKo_3009_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3009_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use named method instead.
+        /// </summary>
+        public static string MiKo_3009_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3009_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commands should invoke only named methods and no lambda expressions..
+        /// </summary>
+        public static string MiKo_3009_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3009_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug..
         /// </summary>
         public static string MiKo_3010_Description {

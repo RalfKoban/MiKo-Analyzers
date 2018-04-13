@@ -342,5 +342,7 @@ namespace Microsoft.CodeAnalysis
                 node = node.Parent;
             }
         }
+
+        internal static bool IsCommand(this TypeSyntax syntax) => syntax.ToString().Contains("Command");
     }
 }
