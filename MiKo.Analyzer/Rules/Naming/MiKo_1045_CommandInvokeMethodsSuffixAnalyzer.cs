@@ -48,19 +48,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var list = new List<Diagnostic>();
             foreach (var argument in arguments)
             {
-                var argumentName = argument.ToString();
-                if (argumentName.EndsWith(Suffix, StringComparison.Ordinal))
-                {
-                    var location = argument.GetLocation();
-                    var symbol = semanticModel.LookupSymbols(location.SourceSpan.Start, name: argumentName).FirstOrDefault();
-                    if (symbol != null)
-                    {
-                        list.Add(ReportIssue(symbol, argumentName.WithoutSuffix(Suffix)));
-                    }
-                }
+                AnalyzeSuffix(argument, semanticModel, list);
             }
 
             return list;
+        }
+
+        private void AnalyzeSuffix(ArgumentSyntax argument, SemanticModel semanticModel, ICollection<Diagnostic> list)
+        {
+            var argumentName = argument.ToString();
+            if (argumentName.EndsWith(Suffix, StringComparison.Ordinal))
+            {
+                var location = argument.GetLocation();
+                var symbol = semanticModel.LookupSymbols(location.SourceSpan.Start, name: argumentName).FirstOrDefault();
+                if (symbol != null)
+                {
+                    list.Add(ReportIssue(symbol, argumentName.WithoutSuffix(Suffix)));
+                }
+            }
         }
     }
 }
