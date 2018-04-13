@@ -1089,6 +1089,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, remove the suffix &apos;Command&apos;..
+        /// </summary>
+        public static string MiKo_1045_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1045_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the &apos;{1}&apos; suffix.
+        /// </summary>
+        public static string MiKo_1045_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1045_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that are invoked by commands should not be suffixed with &apos;Command&apos;..
+        /// </summary>
+        public static string MiKo_1045_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1045_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
