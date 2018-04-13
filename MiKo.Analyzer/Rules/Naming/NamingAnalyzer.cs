@@ -145,25 +145,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string CreatePluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (proposedName.EndsWith("y", comparison)) return proposedName.Substring(0, proposedName.Length - 1) + "ies";
-            if (proposedName.EndsWith("ys", comparison)) return proposedName.Substring(0, proposedName.Length - 2) + "ies";
+            if (proposedName.EndsWith("y", comparison)) return proposedName.WithoutSuffix("y") + "ies";
+            if (proposedName.EndsWith("ys", comparison)) return proposedName.WithoutSuffix("ys") + "ies";
             if (proposedName.EndsWith("ss", comparison)) return proposedName + "es";
             if (proposedName.EndsWith("ed", comparison)) return proposedName;
             if (proposedName.EndsWith("child", comparison)) return proposedName + "ren";
             if (proposedName.EndsWith("children", comparison)) return proposedName;
             if (proposedName.EndsWith("complete", comparison)) return "all";
             if (proposedName.EndsWith("Data", comparison)) return proposedName;
-            if (proposedName.EndsWith("Datas", comparison)) return proposedName.Substring(0, proposedName.Length - 1);
-            if (proposedName.EndsWith("ndex", comparison)) return proposedName.Substring(0, proposedName.Length - 2) + "ices";
+            if (proposedName.EndsWith("Datas", comparison)) return proposedName.WithoutSuffix("s");
+            if (proposedName.EndsWith("ndex", comparison)) return proposedName.WithoutSuffix("ex") + "ices";
             if (proposedName.EndsWith("nformation", comparison)) return proposedName;
-            if (proposedName.EndsWith("nformations", comparison)) return proposedName.Substring(0, proposedName.Length - 1);
+            if (proposedName.EndsWith("nformations", comparison)) return proposedName.WithoutSuffix("s");
 
             var pluralName = proposedName;
             if (proposedName.EndsWith("ToConvert", comparison))
-                pluralName = proposedName.Substring(0, proposedName.Length - "ToConvert".Length);
+                pluralName = proposedName.WithoutSuffix("ToConvert");
 
             if (proposedName.EndsWith("ToModel", comparison))
-                pluralName = proposedName.Substring(0, proposedName.Length - "ToModel".Length);
+                pluralName = proposedName.WithoutSuffix("ToModel");
 
             if (proposedName.HasEntityMarker())
                 pluralName = proposedName.RemoveAll(Constants.EntityMarkers);
