@@ -1568,7 +1568,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation for Enums should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Enums should have a default starting phrase..
         /// </summary>
         public static string MiKo_2013_Title {
             get {
@@ -2347,6 +2347,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2045_Title {
             get {
                 return ResourceManager.GetString("MiKo_2045_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of a Attributes should start with a specific phrase that describes their purpose..
+        /// </summary>
+        public static string MiKo_2046_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2046_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with {1}.
+        /// </summary>
+        public static string MiKo_2046_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2046_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a  default starting phrase..
+        /// </summary>
+        public static string MiKo_2046_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2046_Title", resourceCulture);
             }
         }
         

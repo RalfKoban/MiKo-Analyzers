@@ -623,7 +623,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2013_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation for Enums should have a default starting phrase.</value>
+    <value>&lt;summary&gt; documentation of Enums should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2014_Description" xml:space="preserve">
     <value>Dispose methods should be documented as by the .NET Framework.</value>
@@ -882,6 +882,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2045_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.</value>
+  </data>
+  <data name="MiKo_2046_Description" xml:space="preserve">
+    <value>Documentation of a Attributes should start with a specific phrase that describes their purpose.</value>
+  </data>
+  <data name="MiKo_2046_MessageFormat" xml:space="preserve">
+    <value>Start &lt;summary&gt; with {1}</value>
+  </data>
+  <data name="MiKo_2046_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation of Attributes should have a  default starting phrase.</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
     <value>Documentation of exceptions should follow the .NET Framework documentation.</value>

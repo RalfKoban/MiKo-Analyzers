@@ -303,6 +303,16 @@ namespace MiKoSolutions.Analyzers
                 };
 
             internal const string FieldIsReadOnly = "This field is read-only.";
+
+            internal static readonly string[] AttributeSummaryStartingPhrase =
+                {
+                    "Specifies ",
+                    "Indicates ",
+                    "Defines ",
+                    "Provides ",
+                    "Allows ",
+                    "Represents ",
+                };
         }
 
         public static class MaxNamingLengths
