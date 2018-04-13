@@ -671,13 +671,13 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation should not use the ambiguous term 'Check'.</value>
   </data>
   <data name="MiKo_2019_Description" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should start with a verb that is in passive form as it shall be a short description of the functionality that the class, property, etc. provides or represents.</value>
+    <value>&lt;summary&gt; documentation should start with a third person singular verb as it shall be a short description of the functionality that the class, property, etc. provides or represents.</value>
   </data>
   <data name="MiKo_2019_MessageFormat" xml:space="preserve">
-    <value>Start &lt;summary&gt; with verb in passive form</value>
+    <value>Start &lt;summary&gt; with a third person singular verb</value>
   </data>
   <data name="MiKo_2019_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should start with a verb that is in passive form (for example "Provides ").</value>
+    <value>&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ").</value>
   </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use a &lt;summary&gt; documentation that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such a scenario &lt;inheritdoc /&gt; should be used.</value>

@@ -1712,7 +1712,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should start with a verb that is in passive form as it shall be a short description of the functionality that the class, property, etc. provides or represents..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should start with a third person singular verb as it shall be a short description of the functionality that the class, property, etc. provides or represents..
         /// </summary>
         public static string MiKo_2019_Description {
             get {
@@ -1721,7 +1721,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;summary&gt; with verb in passive form.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with a third person singular verb.
         /// </summary>
         public static string MiKo_2019_MessageFormat {
             get {
@@ -1730,7 +1730,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should start with a verb that is in passive form (for example &quot;Provides &quot;)..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should start with a third person singular verb (for example &quot;Provides &quot;)..
         /// </summary>
         public static string MiKo_2019_Title {
             get {
