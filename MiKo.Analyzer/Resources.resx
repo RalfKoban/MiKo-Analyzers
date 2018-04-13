@@ -986,6 +986,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2100_Title" xml:space="preserve">
     <value>&lt;example&gt; documentation should start with descriptive default phrase.</value>
   </data>
+  <data name="MiKo_2200_Description" xml:space="preserve">
+    <value>Documentation should start with a capizalized letter to  have a full sentence.</value>
+  </data>
+  <data name="MiKo_2200_MessageFormat" xml:space="preserve">
+    <value>Start &lt;{1}&gt; with capitalized letter</value>
+  </data>
+  <data name="MiKo_2200_Title" xml:space="preserve">
+    <value>Use a capitalized letter to start the comment.</value>
+  </data>
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To ease maintenance, use the pre-defined .NET Framework delegate types such as 'Action', 'Func' or 'Expression' instead of custom delegates.</value>
   </data>

@@ -2652,6 +2652,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation should start with a capizalized letter to  have a full sentence..
+        /// </summary>
+        public static string MiKo_2200_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2200_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with capitalized letter.
+        /// </summary>
+        public static string MiKo_2200_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2200_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a capitalized letter to start the comment..
+        /// </summary>
+        public static string MiKo_2200_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2200_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, use the pre-defined .NET Framework delegate types such as &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
         /// </summary>
         public static string MiKo_3001_Description {
