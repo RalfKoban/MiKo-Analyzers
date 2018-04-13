@@ -25,9 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
         {
             var node = (ObjectCreationExpressionSyntax)context.Node;
-            if (node.Type.IsCommand())
+            var semanticModel = context.SemanticModel;
+
+            if (node.Type.IsCommand(semanticModel))
             {
-                var diagnostics = AnalyzeCommandCreation(node, context.SemanticModel);
+                var diagnostics = AnalyzeCommandCreation(node, semanticModel);
                 foreach (var diagnostic in diagnostics)
                 {
                     context.ReportDiagnostic(diagnostic);

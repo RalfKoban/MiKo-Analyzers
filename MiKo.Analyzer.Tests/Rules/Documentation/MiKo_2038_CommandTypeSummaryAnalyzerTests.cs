@@ -65,8 +65,8 @@ public interface ITestMe : ICommand
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
-        public void An_issue_is_reported_for_correctly_documented_class() => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_class() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -83,8 +83,8 @@ public class TestMe : ICommand
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
-        public void An_issue_is_reported_for_correctly_documented_interface() => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_interface() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 

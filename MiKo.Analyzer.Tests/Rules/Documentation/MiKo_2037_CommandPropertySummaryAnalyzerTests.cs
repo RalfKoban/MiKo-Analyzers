@@ -60,7 +60,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_readwrite_property() => An_issue_is_reported_for(@"
 using System.Windows.Input;
 
@@ -73,7 +73,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_readonly_property() => An_issue_is_reported_for(@"
 using System.Windows.Input;
 
@@ -86,7 +86,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_writeonly_property() => An_issue_is_reported_for(@"
 using System.Windows.Input;
 

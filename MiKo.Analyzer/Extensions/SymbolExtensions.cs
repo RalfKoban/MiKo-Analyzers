@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Windows.Input;
 
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -343,6 +344,24 @@ namespace Microsoft.CodeAnalysis
             }
         }
 
-        internal static bool IsCommand(this TypeSyntax syntax) => syntax.ToString().Contains("Command");
+        internal static bool IsCommand(this IErrorTypeSymbol symbol) => symbol.Name == nameof(ICommand);
+
+        internal static bool IsCommand(this ITypeSymbol symbol)
+        {
+            if (symbol.Implements<ICommand>())
+                return true;
+
+            // TODO: refactor this as we do this for tests
+            return symbol.IncludingAllBaseTypes().Concat(symbol.AllInterfaces).OfType<IErrorTypeSymbol>().Any(IsCommand);
+        }
+
+        internal static bool IsCommand(this TypeSyntax syntax, SemanticModel semanticModel)
+        {
+            var name = syntax.ToString();
+
+            return name.Contains("Command")
+                && semanticModel.LookupSymbols(syntax.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol
+                && symbol.IsCommand();
+        }
     }
 }

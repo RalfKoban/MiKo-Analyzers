@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
         {
             var node = (ObjectCreationExpressionSyntax)context.Node;
-            if (!node.Type.IsCommand()) return;
+            if (!node.Type.IsCommand(context.SemanticModel)) return;
 
             var diagnostics = AnalyzeCommandCreation(node);
             foreach (var diagnostic in diagnostics)

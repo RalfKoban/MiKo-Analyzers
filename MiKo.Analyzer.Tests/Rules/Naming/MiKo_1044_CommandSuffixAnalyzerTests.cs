@@ -56,7 +56,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_command_class() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
@@ -71,7 +71,7 @@ public class TestMe : ICommand
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_command_interface() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
@@ -81,7 +81,7 @@ public interface ITestMe : ICommand
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_command_method() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
@@ -92,7 +92,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_command_property() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
@@ -103,7 +103,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently, ICommand is not detected properly by Roslyn when run within unit test")]
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_command_field() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
