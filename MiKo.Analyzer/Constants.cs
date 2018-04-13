@@ -329,22 +329,24 @@ namespace MiKoSolutions.Analyzers
         internal static class XmlTag
         {
             internal const string Code = "code";
-            internal const string Summary = "summary";
+            internal const string Example = "example";
+            internal const string Exception = "exception";
+            internal const string Include = "include";
+            internal const string Inheritdoc = "inheritdoc";
+            internal const string Note = "note";
+            internal const string Overloads = "overloads";
+            internal const string Para = "para";
             internal const string Param = "param";
             internal const string ParamRef = "paramref";
-            internal const string Overloads = "overloads";
-            internal const string Returns = "returns";
-            internal const string Remarks = "remarks";
-            internal const string Value = "value";
-            internal const string Exception = "exception";
-            internal const string Example = "example";
-            internal const string Inheritdoc = "inheritdoc";
-            internal const string TypeParam = "typeparam";
-            internal const string TypeParamRef = "typeparamref";
             internal const string Permission = "permission";
-            internal const string Include = "include";
+            internal const string Remarks = "remarks";
+            internal const string Returns = "returns";
             internal const string See = "see";
             internal const string SeeAlso = "seealso";
+            internal const string Summary = "summary";
+            internal const string TypeParam = "typeparam";
+            internal const string TypeParamRef = "typeparamref";
+            internal const string Value = "value";
         }
     }
 }

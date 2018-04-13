@@ -41,26 +41,27 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [TestCase(@"D:\Private\MiKo Solutions\MiKo Aspects\Source\MiKo Aspects\ComponentModel\UndoableAttribute.cs")]
+        [TestCase(@"D:\Private\MiKo Solutions\MiKo Aspects\Source\MiKo Aspects\ComponentModel\UndoScopeAttribute.cs")]
+        public void Isse_in_(string file) => No_issue_is_reported_for_file(file);
+
         protected override string GetDiagnosticId() => MiKo_2200_DocumentationStartsCapitalizedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2200_DocumentationStartsCapitalizedAnalyzer();
 
         private static IEnumerable<string> XmlTags() => new[]
                                                             {
-                                                                "code",
                                                                 "example",
                                                                 "exception",
+                                                                "note",
                                                                 "overloads",
+                                                                "para",
                                                                 "param",
-                                                                "paramref",
                                                                 "permission",
                                                                 "remarks",
                                                                 "returns",
-                                                                "see",
-                                                                "seealso",
                                                                 "summary",
                                                                 "typeparam",
-                                                                "typeparamref",
                                                                 "value",
                                                             };
 
