@@ -165,21 +165,21 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] InvalidSummaryCrefPhrases =
                 {
-                    "<example",
-                    "<exception",
-                    "<include",
-                    "<inheritdoc",
-                    "<overloads",
-                    "<param ",
-                    "<paramref ",
-                    "<permission",
-                    "<remarks",
-                    "<returns",
-                    "<seealso",
-                    "<summary",
-                    "<typeparam ",
-                    "<typeparamref ",
-                    "<value",
+                    "<" + XmlTag.Example,
+                    "<" + XmlTag.Exception,
+                    "<" + XmlTag.Include,
+                    "<" + XmlTag.Inheritdoc,
+                    "<" + XmlTag.Overloads,
+                    "<" + XmlTag.Param,
+                    "<" + XmlTag.ParamRef,
+                    "<" + XmlTag.Permission,
+                    "<" + XmlTag.Remarks,
+                    "<" + XmlTag.Returns,
+                    "<" + XmlTag.SeeAlso,
+                    "<" + XmlTag.Summary,
+                    "<" + XmlTag.TypeParam,
+                    "<" + XmlTag.TypeParamRef,
+                    "<" + XmlTag.Value,
                 };
 
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
@@ -331,6 +331,7 @@ namespace MiKoSolutions.Analyzers
             internal const string Code = "code";
             internal const string Summary = "summary";
             internal const string Param = "param";
+            internal const string ParamRef = "paramref";
             internal const string Overloads = "overloads";
             internal const string Returns = "returns";
             internal const string Remarks = "remarks";
@@ -338,6 +339,12 @@ namespace MiKoSolutions.Analyzers
             internal const string Exception = "exception";
             internal const string Example = "example";
             internal const string Inheritdoc = "inheritdoc";
+            internal const string TypeParam = "typeparam";
+            internal const string TypeParamRef = "typeparamref";
+            internal const string Permission = "permission";
+            internal const string Include = "include";
+            internal const string See = "see";
+            internal const string SeeAlso = "seealso";
         }
     }
 }
