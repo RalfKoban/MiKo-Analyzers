@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -26,8 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var xmlTag in XmlTags)
             {
-                foreach (var _ in GetCommentElements(commentXml, xmlTag).Nodes()
-                                                                        .Select(_ => _.ToString().TrimStart())
+                foreach (var _ in GetCommentElements(commentXml, xmlTag).Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
                                                                         .Where(_ => _.Length > 0)
                                                                         .Select(_ => _[0])
                                                                         .Where(_ => !_.IsUpperCase() && _ != '<'))
