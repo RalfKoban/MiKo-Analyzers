@@ -164,18 +164,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var e in elements)
             {
-                e.Descendants(Constants.XmlTag.Code).ToList().ForEach(_ => _.Remove());
+                if (e is null) continue;
 
+                e.Descendants(Constants.XmlTag.Code).ToList().ForEach(_ => _.Remove());
                 yield return Cleaned(e.Nodes().ConcatenatedWith());
             }
         }
 
-        private static string Cleaned(string value) => value.ConcatenatedWith()
-                                                            .WithoutParaTags()
-                                                            .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
-                                                            .Replace("    ", " ")
-                                                            .Replace("   ", " ")
-                                                            .Replace("  ", " ")
-                                                            .Trim();
+        private static string Cleaned(string value)
+        {
+            if (value is null)
+                return string.Empty;
+
+            return value
+                   .WithoutParaTags()
+                   .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
+                   .Replace("    ", " ")
+                   .Replace("   ", " ")
+                   .Replace("  ", " ")
+                   .Trim();
+        }
     }
 }
