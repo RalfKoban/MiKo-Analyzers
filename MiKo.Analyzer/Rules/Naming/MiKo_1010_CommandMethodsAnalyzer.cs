@@ -17,8 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                         {
                                                                             nameof(ICommand.CanExecute),
                                                                             nameof(ICommand.Execute),
-                                                                            nameof(ICommand.CanExecute) + "Async",
-                                                                            nameof(ICommand.Execute) + "Async",
+                                                                            nameof(ICommand.CanExecute) + Constants.AsyncSuffix,
+                                                                            nameof(ICommand.Execute) + Constants.AsyncSuffix,
                                                                             nameof(ICommand.CanExecuteChanged),
                                                                             "On" + nameof(ICommand.CanExecuteChanged),
                                                                         };

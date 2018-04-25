@@ -363,5 +363,7 @@ namespace Microsoft.CodeAnalysis
                 && semanticModel.LookupSymbols(syntax.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol
                 && symbol.IsCommand();
         }
+
+        internal static bool IsAsyncCandidate(this IMethodSymbol method) => method.IsAsync || method.ReturnType.IsTask();
     }
 }

@@ -11,6 +11,7 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string[] CollectionMarkers = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
         internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:", "F:", "!:" };
         internal static readonly string[] SymbolMarkersAndLineBreaks = SymbolMarkers.Concat(new[] { Environment.NewLine }).ToArray();
+        internal const string AsyncSuffix = "Async";
 
         internal static class Comments
         {

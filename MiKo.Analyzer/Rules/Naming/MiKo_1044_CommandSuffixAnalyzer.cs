@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                ? new[] { ReportIssue(symbol, Suffix) }
                                                                                                : Enumerable.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && symbol.ReturnType.IsCommand() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => symbol.ReturnType.IsCommand() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
                                                                                               ? new[] { ReportIssue(symbol, Suffix) }
                                                                                               : Enumerable.Empty<Diagnostic>();
 
