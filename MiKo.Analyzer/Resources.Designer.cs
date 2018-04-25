@@ -909,7 +909,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should end with &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Name should end with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1038_MessageFormat {
             get {
