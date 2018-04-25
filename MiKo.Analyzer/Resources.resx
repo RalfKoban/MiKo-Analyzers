@@ -482,6 +482,18 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1046_Title" xml:space="preserve">
     <value>Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).</value>
   </data>
+  <data name="MiKo_1047_Description" xml:space="preserve">
+    <value>To ease maintenance, methods that do not follow the Task-based Asynchronous Pattern (TAP) should not be suffixed with 'Async' as that would indicate that they would follow the pattern.</value>
+  </data>
+  <data name="MiKo_1047_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
+  </data>
+  <data name="MiKo_1047_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1047_Title" xml:space="preserve">
+    <value>Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>

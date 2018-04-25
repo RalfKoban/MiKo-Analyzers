@@ -1152,6 +1152,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, methods that do not follow the Task-based Asynchronous Pattern (TAP) should not be suffixed with &apos;Async&apos; as that would indicate that they would follow the pattern..
+        /// </summary>
+        public static string MiKo_1047_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1047_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.
+        /// </summary>
+        public static string MiKo_1047_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1047_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1047_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1047_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous..
+        /// </summary>
+        public static string MiKo_1047_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1047_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
