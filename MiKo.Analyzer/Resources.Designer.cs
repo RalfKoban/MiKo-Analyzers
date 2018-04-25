@@ -3070,6 +3070,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, a thrown InvalidOperationException, NotImplementedException or NotSupportedException should have a reason that explains the circumstances why the exception has been thrown and - ideally - how to solve the situation..
+        /// </summary>
+        public static string MiKo_3014_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3014_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide a reason why the &apos;{0}&apos; is thrown.
+        /// </summary>
+        public static string MiKo_3014_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3014_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message..
+        /// </summary>
+        public static string MiKo_3014_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3014_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For performance reasons it&apos;s better to use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult()&apos; as the returned task is internally cached..
         /// </summary>
         public static string MiKo_3020_Description {
