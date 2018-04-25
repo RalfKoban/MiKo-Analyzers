@@ -364,6 +364,6 @@ namespace Microsoft.CodeAnalysis
                 && symbol.IsCommand();
         }
 
-        internal static bool IsAsyncCandidate(this IMethodSymbol method) => method.IsAsync || method.ReturnType.IsTask();
+        internal static bool IsAsyncTaskBased(this IMethodSymbol method) => method.IsAsync || method.ReturnType.IsTask();
     }
 }
