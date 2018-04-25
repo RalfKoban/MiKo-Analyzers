@@ -2,36 +2,23 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3009_CommandInvokeNamedMethodsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3009_CommandInvokeNamedMethodsAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3009";
 
-        public MiKo_3009_CommandInvokeNamedMethodsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3009_CommandInvokeNamedMethodsAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => node.Type.IsCommand(semanticModel);
 
-        private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
-        {
-            var node = (ObjectCreationExpressionSyntax)context.Node;
-            if (!node.Type.IsCommand(context.SemanticModel)) return;
-
-            var diagnostics = AnalyzeCommandCreation(node);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeCommandCreation(ObjectCreationExpressionSyntax node)
+        protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var argumentList = node.ArgumentList;
             if (argumentList is null) return Enumerable.Empty<Diagnostic>();

@@ -1,37 +1,23 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3010_ReservedExceptionsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3010_ReservedExceptionsAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3010";
 
-        public MiKo_3010_ReservedExceptionsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3010_ReservedExceptionsAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => IsForbiddenException(node.Type.ToString());
 
-        private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
-        {
-            var node = (ObjectCreationExpressionSyntax)context.Node;
-
-            var diagnostic = AnalyzeObjectCreation(node);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
-        }
-
-        private Diagnostic AnalyzeObjectCreation(ObjectCreationExpressionSyntax node)
-        {
-            var type = node.Type.ToString();
-
-            return IsForbiddenException(type)
-                       ? ReportIssue(type, node.GetLocation())
-                       : null;
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => new[] { ReportIssue(node.Type.ToString(), node.GetLocation()) };
 
         private static bool IsForbiddenException(string exceptionType)
         {

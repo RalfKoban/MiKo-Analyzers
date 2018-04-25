@@ -14,7 +14,7 @@ using MappingType = System.Func<Microsoft.CodeAnalysis.SeparatedSyntaxList<Micro
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3011_ArgumentExceptionsParamNameAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3011_ArgumentExceptionsParamNameAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3011";
 
@@ -33,33 +33,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                                            { "System.ComponentModel." + nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
                                                                                                                                        });
 
-        public MiKo_3011_ArgumentExceptionsParamNameAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3011_ArgumentExceptionsParamNameAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => Mappings.ContainsKey(node.Type.ToString());
 
-        private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
-        {
-            var node = (ObjectCreationExpressionSyntax)context.Node;
-
-            var diagnostic = AnalyzeObjectCreation(node, context.SemanticModel);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
-        }
-
-        private Diagnostic AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
+        protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var type = node.Type.ToString();
-            if (Mappings.TryGetValue(type, out var inspector))
-            {
-                var method = node.GetEnclosingMethod(semanticModel);
 
-                if (inspector(node.ArgumentList.Arguments, method, semanticModel) == InspectationResult.Report)
-                {
-                    return ReportIssue(type, node.GetLocation(), method?.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
-                }
+            var inspector = Mappings[type];
+            var method = node.GetEnclosingMethod(semanticModel);
+
+            if (inspector(node.ArgumentList.Arguments, method, semanticModel) == InspectationResult.Report)
+            {
+                var issue = ReportIssue(type, node.GetLocation(), method?.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
+                return new []{ issue };
             }
-            return null;
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static InspectationResult InspectArgumentException(SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol method, SemanticModel semanticModel)

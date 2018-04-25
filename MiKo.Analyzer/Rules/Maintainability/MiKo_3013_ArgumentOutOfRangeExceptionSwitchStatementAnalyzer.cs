@@ -1,53 +1,45 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3013";
 
-        public MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
-
-        private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
-        {
-            var node = (ObjectCreationExpressionSyntax)context.Node;
-
-            var diagnostic = AnalyzeObjectCreation(node);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
-        }
-
-        private Diagnostic AnalyzeObjectCreation(ObjectCreationExpressionSyntax node)
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var type = node.Type.ToString();
             switch (type)
             {
                 case nameof(ArgumentException):
                 case nameof(ArgumentNullException):
-                {
-                    var switchSection = node.GetEnclosing<SwitchSectionSyntax>();
-                    if (switchSection == null) return null;
-
-                    // if there is a 'default' switch label in the specific switch section, then we are in the 'default:' clause
-                    var isBelow = switchSection.DescendantNodes().OfType<DefaultSwitchLabelSyntax>().Any();
-                    return isBelow
-                               ? ReportIssue(type, node.GetLocation())
-                               : null;
-                }
+                    return true;
 
                 default:
-                    return null;
+                    return false;
             }
+        }
+
+        protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
+        {
+            var switchSection = node.GetEnclosing<SwitchSectionSyntax>();
+
+            // if there is a 'default' switch label in the specific switch section, then we are in the 'default:' clause
+            var isDefaultClause = switchSection?.DescendantNodes().OfType<DefaultSwitchLabelSyntax>().Any() == true;
+            return isDefaultClause
+                       ? new []{ ReportIssue(node.Type.ToString(), node.GetLocation()) }
+                       : Enumerable.Empty<Diagnostic>();
         }
     }
 }

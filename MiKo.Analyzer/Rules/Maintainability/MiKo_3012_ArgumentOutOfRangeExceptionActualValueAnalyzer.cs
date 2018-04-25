@@ -1,50 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3012";
 
-        public MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
-
-        private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            var node = (ObjectCreationExpressionSyntax)context.Node;
-
-            var diagnostic = AnalyzeObjectCreation(node);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
-        }
-
-        private Diagnostic AnalyzeObjectCreation(ObjectCreationExpressionSyntax node)
-        {
-            var type = node.Type.ToString();
-            switch (type)
+            switch (node.Type.ToString())
             {
                 case nameof(ArgumentOutOfRangeException):
                 case nameof(InvalidEnumArgumentException):
                 case "System." + nameof(ArgumentOutOfRangeException):
                 case "System.ComponentModel." + nameof(InvalidEnumArgumentException):
-                {
-                    if (node.ArgumentList.Arguments.Count != 3)
-                        return ReportIssue(type, node.GetLocation());
+                    return true;
 
-                    break;
-                }
+                default:
+                    return false;
             }
-
-            return null;
         }
+
+        protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => node.ArgumentList.Arguments.Count == 3
+                                                                                                                                                  ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                  : new []{ ReportIssue(node.Type.ToString(), node.GetLocation()) };
     }
 }
