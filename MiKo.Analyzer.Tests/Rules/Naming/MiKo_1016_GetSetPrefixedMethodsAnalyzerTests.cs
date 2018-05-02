@@ -22,10 +22,36 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_prefix_([ValueSource(nameof(InvalidPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameterless_method_with_prefix_([ValueSource(nameof(InvalidPrefixes))] string prefix) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + prefix + @"Something()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_parameter_method_with_prefix_([ValueSource(nameof(InvalidPrefixes))] string prefix) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void " + prefix + @"Something(object o)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_dependency_properties() => No_issue_is_reported_for(@"
+using System.Windows;
+
+public class TestMe
+{
+    public void GetIsEnabled(DependencyObject do)
+    {
+    }
+
+    public void SetIsEnabled(DependencyObject do)
     {
     }
 }
@@ -37,6 +63,6 @@ public class TestMe
 
         private static IEnumerable<string> ValidPrefixes() => new[] { string.Empty, "Get", "Set", "GetCanceled", "SetCanceled", "HasCanceled", "GetHashCode", "SetHash" };
 
-        private static IEnumerable<string> InvalidPrefixes() => new[] { "GetIs", "SetIs", "GetCan", "SetCan", "GetHas", "SetHas" };
+        private static IEnumerable<string> InvalidPrefixes() => new[] { "GetIs", "SetIs", "GetCan", "SetCan", "GetHas", "SetHas", "CanHas", "CanIs", "HasIs", "HasCan", "IsCan", "IsHas" };
     }
 }

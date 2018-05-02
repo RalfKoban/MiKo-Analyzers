@@ -12,18 +12,40 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1016";
 
-        private static readonly string[] Prefixes = { "GetCan", "GetHas", "GetIs", "SetCan", "SetHas", "SetIs" };
+        private static readonly string[] Prefixes = { "GetCan", "GetHas", "GetIs", "SetCan", "SetHas", "SetIs", "CanHas", "CanIs", "HasCan", "HasIs", "IsCan", "IsHas" };
 
         public MiKo_1016_GetSetPrefixedMethodsAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method) => Prefixes.Any(_ => HasStrangePrefix(method.Name, _))
-                                                                                                  ? new []{ ReportIssue(method, method.Name.Substring(3)) }
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method) => Prefixes.Any(_ => HasStrangePrefix(method, _))
+                                                                                                  ? new[] { ReportIssue(method, FindBetterName(method.Name)) }
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
-        private static bool HasStrangePrefix(string methodName, string prefix) => methodName.StartsWith(prefix, StringComparison.Ordinal)
-                                                                               && methodName.Length > prefix.Length
-                                                                               && methodName[prefix.Length].IsUpperCase();
+        private static string FindBetterName(string name)
+        {
+            var startIndex = 1;
+            while (startIndex < name.Length)
+            {
+                if (name[startIndex].IsUpperCase())
+                    break;
+
+                startIndex++;
+            }
+
+            return name.Substring(startIndex);
+        }
+
+        private static bool HasStrangePrefix(IMethodSymbol method, string prefix)
+        {
+            var methodName = method.Name;
+
+            return methodName.StartsWith(prefix, StringComparison.Ordinal)
+                && methodName.Length > prefix.Length
+                && methodName[prefix.Length].IsUpperCase()
+                && !HasDependencyObjectParameter(method);
+        }
+
+        private static bool HasDependencyObjectParameter(IMethodSymbol method) => method.Parameters.Select(_ => _.Type.Name).Any(_ => _ == "DependencyObject" || _ == "System.Windows.DependencyObject");
     }
 }
