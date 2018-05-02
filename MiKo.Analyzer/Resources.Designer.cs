@@ -495,6 +495,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;. That &apos;Get&apos; or &apos;Set&apos; is just additional noise and should be avoided..
+        /// </summary>
+        public static string MiKo_1016_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1016_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1016_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1016_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;..
+        /// </summary>
+        public static string MiKo_1016_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1016_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
         /// </summary>
         public static string MiKo_1020_Description {
