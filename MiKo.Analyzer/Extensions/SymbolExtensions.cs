@@ -163,11 +163,11 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, typeof(T).FullName);
 
-        internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClass)
+        internal static bool InheritsFrom(this ITypeSymbol symbol, params string[] baseClasses)
         {
             while (true)
             {
-                if (symbol.ToString() == baseClass) return true;
+                if (baseClasses.Any(_ => _ == symbol.ToString())) return true;
 
                 var baseType = symbol.BaseType;
                 if (baseType == null) return false;

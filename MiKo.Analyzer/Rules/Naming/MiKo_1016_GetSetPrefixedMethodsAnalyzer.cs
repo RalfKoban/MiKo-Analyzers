@@ -46,6 +46,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 && !HasDependencyObjectParameter(method);
         }
 
-        private static bool HasDependencyObjectParameter(IMethodSymbol method) => method.Parameters.Select(_ => _.Type.Name).Any(_ => _ == "DependencyObject" || _ == "System.Windows.DependencyObject");
+        private static bool HasDependencyObjectParameter(IMethodSymbol method) => method.Parameters.Select(_ => _.Type).Any(_ => _.InheritsFrom("DependencyObject", "System.Windows.DependencyObject"));
     }
 }
