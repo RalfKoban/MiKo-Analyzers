@@ -365,5 +365,17 @@ namespace Microsoft.CodeAnalysis
         }
 
         internal static bool IsAsyncTaskBased(this IMethodSymbol method) => method.IsAsync || method.ReturnType.IsTask();
+
+        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel)
+        {
+            var typeInfo = semanticModel.GetTypeInfo(syntax);
+            return typeInfo.Type?.SpecialType == SpecialType.System_String;
+        }
+
+        internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
+        {
+            var typeInfo = semanticModel.GetTypeInfo(syntax);
+            return typeInfo.Type?.TypeKind == TypeKind.Struct;
+        }
     }
 }

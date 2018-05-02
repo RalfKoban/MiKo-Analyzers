@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -133,11 +132,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return InspectationResult.Report;
         }
 
-        private static bool IsStringParameter(ArgumentSyntax argument, SemanticModel semanticModel)
-        {
-            var typeInfo = semanticModel.GetTypeInfo(argument.Expression);
-            return typeInfo.Type.SpecialType == SpecialType.System_String;
-        }
+        private static bool IsStringParameter(ArgumentSyntax argument, SemanticModel semanticModel) => argument.Expression.IsString(semanticModel);
 
         private static bool ParameterIsReferenced(ArgumentSyntax argument, IMethodSymbol method)
         {
