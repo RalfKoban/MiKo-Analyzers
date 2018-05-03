@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary
-                                                                                              ? method.Parameters.Where(_ => _.Type.SpecialType == SpecialType.System_Boolean).Select(_ => ReportIssue(_.Type))
+                                                                                              ? method.Parameters.Where(_ => _.Type.SpecialType == SpecialType.System_Boolean).Select(_ => ReportIssue(_))
                                                                                               : Enumerable.Empty<Diagnostic>();
     }
 }
