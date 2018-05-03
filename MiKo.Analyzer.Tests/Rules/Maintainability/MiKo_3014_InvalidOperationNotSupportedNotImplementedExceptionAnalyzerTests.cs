@@ -58,8 +58,24 @@ public class TestMe
 
         private static IEnumerable<string> Exceptions() => MatchingExceptions().Concat(NonMatchingExceptions());
 
-        private static IEnumerable<string> MatchingExceptions() => new[] { nameof(InvalidOperationException), nameof(NotSupportedException), nameof(NotImplementedException) };
+        private static IEnumerable<string> MatchingExceptions() => new[]
+                                                                       {
+                                                                           nameof(InvalidOperationException),
+                                                                           nameof(NotSupportedException),
+                                                                           nameof(NotImplementedException),
+                                                                           typeof(InvalidOperationException).FullName,
+                                                                           typeof(NotSupportedException).FullName,
+                                                                           typeof(NotImplementedException).FullName,
+                                                                       };
 
-        private static IEnumerable<string> NonMatchingExceptions() => new[] { nameof(Exception), nameof(ArgumentException), nameof(ArgumentNullException) };
+        private static IEnumerable<string> NonMatchingExceptions() => new[]
+                                                                          {
+                                                                              nameof(Exception),
+                                                                              nameof(ArgumentException),
+                                                                              nameof(ArgumentNullException),
+                                                                              typeof(Exception).FullName,
+                                                                              typeof(ArgumentException).FullName,
+                                                                              typeof(ArgumentNullException).FullName,
+                                                                          };
     }
 }

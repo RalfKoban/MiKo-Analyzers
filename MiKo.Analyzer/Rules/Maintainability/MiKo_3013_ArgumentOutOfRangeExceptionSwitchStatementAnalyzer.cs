@@ -13,23 +13,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3013";
 
+        private static readonly HashSet<string> AllowedExceptionTypes = new HashSet<string>
+                                                                            {
+                                                                                nameof(ArgumentException),
+                                                                                nameof(ArgumentNullException),
+                                                                                typeof(ArgumentException).FullName,
+                                                                                typeof(ArgumentNullException).FullName,
+                                                                            };
+
+
         public MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
-        {
-            var type = node.Type.ToString();
-            switch (type)
-            {
-                case nameof(ArgumentException):
-                case nameof(ArgumentNullException):
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => AllowedExceptionTypes.Contains(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,49 +13,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3010";
 
+        private static readonly HashSet<string> ForbiddenExceptionTypes = new HashSet<string>
+                                                                            {
+                                                                                nameof(Exception),
+                                                                                nameof(AccessViolationException),
+                                                                                nameof(IndexOutOfRangeException),
+                                                                                nameof(ExecutionEngineException),
+                                                                                nameof(NullReferenceException),
+                                                                                nameof(OutOfMemoryException),
+                                                                                nameof(StackOverflowException),
+                                                                                nameof(COMException),
+                                                                                nameof(SEHException),
+                                                                                nameof(ApplicationException),
+                                                                                nameof(SystemException),
+                                                                                "InteropServices.COMException",
+                                                                                "InteropServices.SEHException",
+                                                                                "Runtime.InteropServices.COMException",
+                                                                                "Runtime.InteropServices.SEHException",
+                                                                                typeof(Exception).FullName,
+                                                                                typeof(AccessViolationException).FullName,
+                                                                                typeof(IndexOutOfRangeException).FullName,
+                                                                                typeof(ExecutionEngineException).FullName,
+                                                                                typeof(NullReferenceException).FullName,
+                                                                                typeof(OutOfMemoryException).FullName,
+                                                                                typeof(StackOverflowException).FullName,
+                                                                                typeof(COMException).FullName,
+                                                                                typeof(SEHException).FullName,
+                                                                                typeof(ApplicationException).FullName,
+                                                                                typeof(SystemException).FullName,
+                                                                            };
+
+
         public MiKo_3010_ReservedExceptionsAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => IsForbiddenException(node.Type.ToString());
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => ForbiddenExceptionTypes.Contains(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => new[] { ReportIssue(node.Type.ToString(), node.GetLocation()) };
-
-        private static bool IsForbiddenException(string exceptionType)
-        {
-            switch (exceptionType)
-            {
-                case "Exception":
-                case "AccessViolationException":
-                case "IndexOutOfRangeException":
-                case "ExecutionEngineException":
-                case "NullReferenceException":
-                case "OutOfMemoryException":
-                case "StackOverflowException":
-                case "COMException":
-                case "SEHException":
-                case "ApplicationException":
-                case "SystemException":
-                case "InteropServices.COMException":
-                case "InteropServices.SEHException":
-                case "Runtime.InteropServices.COMException":
-                case "Runtime.InteropServices.SEHException":
-                case "System.Exception":
-                case "System.AccessViolationException":
-                case "System.IndexOutOfRangeException":
-                case "System.ExecutionEngineException":
-                case "System.NullReferenceException":
-                case "System.OutOfMemoryException":
-                case "System.StackOverflowException":
-                case "System.Runtime.InteropServices.COMException":
-                case "System.Runtime.InteropServices.SEHException":
-                case "System.ApplicationException":
-                case "System.SystemException":
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
     }
 }

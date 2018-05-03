@@ -20,13 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly ConcurrentDictionary<string, MappingType> Mappings = new ConcurrentDictionary<string, MappingType>(new Dictionary<string, MappingType>
                                                                                                                                        {
                                                                                                                                            { nameof(ArgumentException), InspectArgumentException },
-                                                                                                                                           { "System." + nameof(ArgumentException), InspectArgumentException },
+                                                                                                                                           { typeof(ArgumentException).FullName, InspectArgumentException },
 
                                                                                                                                            { nameof(ArgumentNullException), InspectArgumentNullException },
-                                                                                                                                           { "System." + nameof(ArgumentNullException), InspectArgumentNullException },
+                                                                                                                                           { typeof(ArgumentNullException).FullName, InspectArgumentNullException },
 
                                                                                                                                            { nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
-                                                                                                                                           { "System." + nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
+                                                                                                                                           { typeof(ArgumentOutOfRangeException).FullName, InspectArgumentOutOfRangeException },
 
                                                                                                                                            { nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
                                                                                                                                            { "System.ComponentModel." + nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },

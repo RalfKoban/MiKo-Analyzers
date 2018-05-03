@@ -13,24 +13,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3014";
 
+        private static readonly HashSet<string> AllowedExceptionTypes = new HashSet<string>
+                                                                            {
+                                                                                nameof(InvalidOperationException),
+                                                                                nameof(NotImplementedException),
+                                                                                nameof(NotSupportedException),
+                                                                                typeof(InvalidOperationException).FullName,
+                                                                                typeof(NotImplementedException).FullName,
+                                                                                typeof(NotSupportedException).FullName,
+                                                                            };
+
         public MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
-        {
-            var type = node.Type.ToString();
-            switch (type)
-            {
-                case nameof(InvalidOperationException):
-                case nameof(NotImplementedException):
-                case nameof(NotSupportedException):
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => AllowedExceptionTypes.Contains(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => node.ArgumentList.Arguments.Count == 0
                                                                                                                                                   ? new []{ ReportIssue(node.Type.ToString(), node.GetLocation()) }

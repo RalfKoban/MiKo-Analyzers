@@ -14,24 +14,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3012";
 
+        private static readonly HashSet<string> AllowedExceptionTypes = new HashSet<string>
+                                                                            {
+                                                                                nameof(ArgumentOutOfRangeException),
+                                                                                nameof(InvalidEnumArgumentException),
+                                                                                typeof(ArgumentOutOfRangeException).FullName,
+                                                                                "System.ComponentModel." + nameof(InvalidEnumArgumentException),
+                                                                            };
+
+
         public MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
-        {
-            switch (node.Type.ToString())
-            {
-                case nameof(ArgumentOutOfRangeException):
-                case nameof(InvalidEnumArgumentException):
-                case "System." + nameof(ArgumentOutOfRangeException):
-                case "System.ComponentModel." + nameof(InvalidEnumArgumentException):
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
+        protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => AllowedExceptionTypes.Contains(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => node.ArgumentList.Arguments.Count == 3
                                                                                                                                                   ? Enumerable.Empty<Diagnostic>()
