@@ -3286,6 +3286,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
+        /// </summary>
+        public static string MiKo_3040_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3040_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
+        /// </summary>
+        public static string MiKo_3040_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3040_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use an Enum instead.
+        /// </summary>
+        public static string MiKo_3040_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3040_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use Booleans unless you are absolutely sure there will never be a need for more than two values..
+        /// </summary>
+        public static string MiKo_3040_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3040_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
