@@ -43,9 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return methodName.StartsWith(prefix, StringComparison.Ordinal)
                 && methodName.Length > prefix.Length
                 && methodName[prefix.Length].IsUpperCase()
-                && !HasDependencyObjectParameter(method);
+                && !method.HasDependencyObjectParameter();
         }
-
-        private static bool HasDependencyObjectParameter(IMethodSymbol method) => method.Parameters.Select(_ => _.Type).Any(_ => _.InheritsFrom("DependencyObject", "System.Windows.DependencyObject"));
     }
 }

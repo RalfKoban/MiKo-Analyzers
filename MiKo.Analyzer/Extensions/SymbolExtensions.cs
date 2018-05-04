@@ -377,5 +377,9 @@ namespace Microsoft.CodeAnalysis
             var typeInfo = semanticModel.GetTypeInfo(syntax);
             return typeInfo.Type?.TypeKind == TypeKind.Struct;
         }
+
+        internal static bool IsDependencyObject(this ITypeSymbol symbol) => symbol.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
+
+        internal static bool HasDependencyObjectParameter(this IMethodSymbol method) => method.Parameters.Any(_ => _.Type.IsDependencyObject());
     }
 }

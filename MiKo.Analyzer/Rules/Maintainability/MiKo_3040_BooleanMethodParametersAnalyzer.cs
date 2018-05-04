@@ -16,13 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary
-                                                                                              ? method.Parameters
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => method.MethodKind != MethodKind.Ordinary || (method.Parameters.Length == 2 && method.HasDependencyObjectParameter())
+                                                                                              ? Enumerable.Empty<Diagnostic>()
+                                                                                              : method.Parameters
                                                                                                       .Where(_ => _.Type.SpecialType == SpecialType.System_Boolean)
                                                                                                       .SelectMany(_ => _.DeclaringSyntaxReferences)
                                                                                                       .Select(_ => _.GetSyntax())
                                                                                                       .OfType<ParameterSyntax>()
-                                                                                                      .Select(_ => ReportIssue(_.Identifier.ValueText, _.Type.GetLocation()))
-                                                                                              : Enumerable.Empty<Diagnostic>();
+                                                                                                      .Select(_ => ReportIssue(_.Identifier.ValueText, _.Type.GetLocation()));
     }
 }
