@@ -41,9 +41,11 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
-        [TestCase(@"D:\Private\MiKo Solutions\MiKo Aspects\Source\MiKo Aspects\ComponentModel\UndoableAttribute.cs")]
-        [TestCase(@"D:\Private\MiKo Solutions\MiKo Aspects\Source\MiKo Aspects\ComponentModel\UndoScopeAttribute.cs")]
-        public void Isse_in_(string file) => No_issue_is_reported_for_file(file);
+        [Test]
+        public void Special_Or_phrase_in_Para_tag_of_XML_documentation_is_not_reported() => No_issue_is_reported_for(@"
+/// <para>-or-</para>
+public sealed class TestMe { }
+");
 
         protected override string GetDiagnosticId() => MiKo_2200_DocumentationStartsCapitalizedAnalyzer.Id;
 

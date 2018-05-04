@@ -166,21 +166,21 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] InvalidSummaryCrefPhrases =
                 {
-                    "<" + XmlTag.Example,
-                    "<" + XmlTag.Exception,
-                    "<" + XmlTag.Include,
-                    "<" + XmlTag.Inheritdoc,
-                    "<" + XmlTag.Overloads,
-                    "<" + XmlTag.Param,
-                    "<" + XmlTag.ParamRef,
-                    "<" + XmlTag.Permission,
-                    "<" + XmlTag.Remarks,
-                    "<" + XmlTag.Returns,
-                    "<" + XmlTag.SeeAlso,
-                    "<" + XmlTag.Summary,
-                    "<" + XmlTag.TypeParam,
-                    "<" + XmlTag.TypeParamRef,
-                    "<" + XmlTag.Value,
+                    XmlElementStartingTag + XmlTag.Example,
+                    XmlElementStartingTag + XmlTag.Exception,
+                    XmlElementStartingTag + XmlTag.Include,
+                    XmlElementStartingTag + XmlTag.Inheritdoc,
+                    XmlElementStartingTag + XmlTag.Overloads,
+                    XmlElementStartingTag + XmlTag.Param,
+                    XmlElementStartingTag + XmlTag.ParamRef,
+                    XmlElementStartingTag + XmlTag.Permission,
+                    XmlElementStartingTag + XmlTag.Remarks,
+                    XmlElementStartingTag + XmlTag.Returns,
+                    XmlElementStartingTag + XmlTag.SeeAlso,
+                    XmlElementStartingTag + XmlTag.Summary,
+                    XmlElementStartingTag + XmlTag.TypeParam,
+                    XmlElementStartingTag + XmlTag.TypeParamRef,
+                    XmlElementStartingTag + XmlTag.Value,
                 };
 
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
@@ -255,8 +255,9 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
 
-            internal static readonly string[] ExceptionSplittingPhrase = { "-or-" };
-            internal const string ExceptionSplittingParaPhrase = "<para>-or-</para>";
+            internal const string SpecialOrPhrase = "-or-";
+            internal static readonly string[] ExceptionSplittingPhrase = { SpecialOrPhrase };
+            internal const string ExceptionSplittingParaPhrase = "<para>" + SpecialOrPhrase + "</para>";
 
             internal static readonly string[] ExceptionForbiddenStartingPhrase =
                 {
