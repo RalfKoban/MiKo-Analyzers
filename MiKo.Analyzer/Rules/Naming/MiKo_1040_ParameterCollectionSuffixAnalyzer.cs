@@ -15,11 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol method) => method.Parameters.Length > 0;
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             List<Diagnostic> list = null;
 
-            foreach (var diagnostic in symbol.Parameters.Select(AnalyzeCollectionSuffix).Where(_ => _ != null))
+            foreach (var diagnostic in method.Parameters.Select(AnalyzeCollectionSuffix).Where(_ => _ != null))
             {
                 if (list == null) list = new List<Diagnostic>();
                 list.Add(diagnostic);

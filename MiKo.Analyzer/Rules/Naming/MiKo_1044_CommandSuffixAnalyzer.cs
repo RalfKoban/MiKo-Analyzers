@@ -22,11 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCommand();
 
+        protected override bool ShallAnalyze(IMethodSymbol method) => ShallAnalyze(method.ReturnType);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => ShallAnalyze(symbol.ReturnType)
-                                                                                                  ? AnalyzeName(symbol)
-                                                                                                  : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeName(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyze(symbol.Type)
                                                                                               ? AnalyzeName(symbol)

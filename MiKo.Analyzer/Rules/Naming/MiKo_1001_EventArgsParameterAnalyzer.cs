@@ -15,16 +15,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override bool ShallAnalyze(IMethodSymbol method) => !method.IsOverride
+                                                                      && method.MethodKind != MethodKind.PropertySet // ignore the setter as the name there has to be 'value'
+                                                                      && !method.IsEventHandler(); // ignore the method as it is handled by EventHandlingMethodParametersAnalyzer
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
-            if (method.IsOverride) return Enumerable.Empty<Diagnostic>();
-
-            // ignore the method as it is handled by EventHandlingMethodParametersAnalyzer
-            if (method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
-
-            // ignore the setter as the name there has to be 'value'
-            if (method.MethodKind == MethodKind.PropertySet) return Enumerable.Empty<Diagnostic>();
-
             var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs()).ToList();
             switch (parameters.Count)
             {

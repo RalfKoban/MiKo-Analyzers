@@ -16,8 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal) && !symbol.IsAsyncTaskBased()
-                                                                                                      ? new[] { ReportIssue(symbol, symbol.Name.WithoutSuffix(Constants.AsyncSuffix)) }
-                                                                                                      : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && !method.IsAsyncTaskBased();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal)
+                                                                                        ? new[] { ReportIssue(symbol, symbol.Name.WithoutSuffix(Constants.AsyncSuffix)) }
+                                                                                        : Enumerable.Empty<Diagnostic>();
     }
 }

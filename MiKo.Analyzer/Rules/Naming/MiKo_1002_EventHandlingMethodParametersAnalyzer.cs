@@ -15,10 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
-        {
-            if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IMethodSymbol method) => method.IsEventHandler();
 
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        {
             var parameters = method.Parameters;
 
             List<Diagnostic> diagnostics = null;

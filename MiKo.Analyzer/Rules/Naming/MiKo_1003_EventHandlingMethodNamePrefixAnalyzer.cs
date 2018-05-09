@@ -18,10 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method)
-        {
-            if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsEventHandler();
 
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        {
             var expectedName = FindProperName(method);
 
             return method.Name == expectedName

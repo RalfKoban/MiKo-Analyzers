@@ -16,14 +16,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsTestMethod();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
             const string TestMarker = "Test";
 
-            if (symbol.IsTestMethod() && symbol.Name.Contains(TestMarker))
-                return new[] { ReportIssue(symbol, symbol.Name.RemoveAll(TestMarker)) };
-
-            return Enumerable.Empty<Diagnostic>();
+            return symbol.Name.Contains(TestMarker)
+                       ? new[] { ReportIssue(symbol, symbol.Name.RemoveAll(TestMarker)) }
+                       : Enumerable.Empty<Diagnostic>();
         }
     }
 }

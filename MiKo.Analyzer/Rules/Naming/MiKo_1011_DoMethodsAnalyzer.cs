@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,11 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
-            if (method.IsInterfaceImplementationOf<ICommand>())
-                return Enumerable.Empty<Diagnostic>();
-
             var methodName = method.Name;
 
             const StringComparison Comparison = StringComparison.Ordinal;

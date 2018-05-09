@@ -15,14 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsTestTeardownMethod();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
             const string Marker = "CleanupTest";
 
-            if (symbol.IsTestTeardownMethod() && symbol.Name != Marker)
-                return new[] { ReportIssue(symbol, Marker) };
-
-            return Enumerable.Empty<Diagnostic>();
+            return symbol.Name == Marker
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(symbol, Marker) };
         }
     }
 }

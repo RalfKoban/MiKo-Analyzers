@@ -18,16 +18,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
-        {
-            if (method.IsExtensionMethod)
-            {
-                var parameter = method.Parameters[0];
-                if (parameter.Name != Name1 && parameter.Name != Name2)
-                    return new[] { ReportIssue(parameter, Name1, Name2) };
-            }
+        protected override bool ShallAnalyze(IMethodSymbol method) => method.IsExtensionMethod;
 
-            return Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        {
+            var parameter = method.Parameters[0];
+
+            return parameter.Name == Name1 || parameter.Name == Name2
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(parameter, Name1, Name2) };
         }
     }
 }

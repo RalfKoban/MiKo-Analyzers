@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,8 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => symbol.IsSpecialAccessor() || symbol.IsTestMethod()
-                                                                                                      ? Enumerable.Empty<Diagnostic>()
-                                                                                                      : Analyze(symbol);
+        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && !method.IsSpecialAccessor() && !method.IsTestMethod();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => Analyze(symbol);
     }
 }
