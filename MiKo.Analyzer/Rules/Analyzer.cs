@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected DiagnosticDescriptor Rule { get; }
 
-        private SymbolKind SymbolKind { get; }
+        protected SymbolKind SymbolKind { get; }
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 

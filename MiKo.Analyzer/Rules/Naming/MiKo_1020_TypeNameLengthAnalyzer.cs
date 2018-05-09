@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsTestClass() ? Enumerable.Empty<Diagnostic>() : Analyze(symbol);
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => !symbol.IsTestClass();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => Analyze(symbol);
     }
 }

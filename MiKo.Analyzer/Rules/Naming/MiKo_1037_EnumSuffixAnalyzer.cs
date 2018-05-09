@@ -16,14 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(StringComparison.OrdinalIgnoreCase, "Enum", "Enums"); // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
             var symbolName = symbol.Name;
 
-            // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
-            if (!symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, "Enum", "Enums")) return Enumerable.Empty<Diagnostic>();
-
-            var betterName = symbol.Name
+            var betterName = symbolName
                                    .Replace("TypeEnums", "Kinds")
                                    .Replace("TypeEnum", "Kind")
                                    .RemoveAll("Enums", "Enum");
@@ -32,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // ReSharper disable once RedundantNameQualifier we need the complete name here
             if (symbol.IsEnum()
-                && symbol.GetAttributes().Any(_ => _.AttributeClass.Name == nameof(System.FlagsAttribute))
+                && symbol.GetAttributes().Any(_ => _.AttributeClass.Name == nameof(FlagsAttribute))
                 && !betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase))
             {
                 betterName = GetPluralName(symbolName, betterName);

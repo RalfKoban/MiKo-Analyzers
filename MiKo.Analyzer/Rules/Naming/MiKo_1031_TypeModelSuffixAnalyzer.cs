@@ -14,10 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => AnalyzeEntityMarkers(symbol);
-//
-//        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Name.IsEntityMarker()
-//                                                                                               ? new[] { ReportIssue(symbol, symbol.Name.RemoveAll(Constants.EntityMarkers)) }
-//                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeEntityMarkers(symbol);
     }
 }

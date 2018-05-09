@@ -17,6 +17,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyze(symbol)
+                                                                                                  ? AnalyzeName(symbol)
+                                                                                                  : Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
             if (method.MethodKind == MethodKind.ExplicitInterfaceImplementation || method.IsOverride)
@@ -119,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => false;
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => SymbolKind == SymbolKind.NamedType;
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
 

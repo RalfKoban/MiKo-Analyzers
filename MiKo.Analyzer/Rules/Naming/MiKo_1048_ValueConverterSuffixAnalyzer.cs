@@ -20,16 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsValueConverter() || symbol.IsMultiValueConverter();
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
-        {
-            if (ShallAnalyze(symbol))
-                return AnalyzeSuffix(symbol);
-
-            return Enumerable.Empty<Diagnostic>();
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeSuffix(INamedTypeSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                      ? Enumerable.Empty<Diagnostic>()
-                                                                                      : new[] { ReportIssue(symbol, Suffix) };
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
+                                                                                           ? Enumerable.Empty<Diagnostic>()
+                                                                                           : new[] { ReportIssue(symbol, Suffix) };
     }
 }

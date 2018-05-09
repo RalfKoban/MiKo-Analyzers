@@ -20,20 +20,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsCommand() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                               ? new[] { ReportIssue(symbol, Suffix) }
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCommand();
 
-        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => symbol.ReturnType.IsCommand() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                              ? new[] { ReportIssue(symbol, Suffix) }
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeName(symbol);
+
+        protected override IEnumerable<Diagnostic> AnalyzeOrdinaryMethod(IMethodSymbol symbol) => ShallAnalyze(symbol.ReturnType)
+                                                                                                  ? AnalyzeName(symbol)
+                                                                                                  : Enumerable.Empty<Diagnostic>();
+
+        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyze(symbol.Type)
+                                                                                              ? AnalyzeName(symbol)
                                                                                               : Enumerable.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => symbol.Type.IsCommand() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                              ? new[] { ReportIssue(symbol, Suffix) }
-                                                                                              : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => ShallAnalyze(symbol.Type)
+                                                                                        ? AnalyzeName(symbol)
+                                                                                        : Enumerable.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => symbol.Type.IsCommand() && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                            ? new[] { ReportIssue(symbol, Suffix) }
-                                                                                            : Enumerable.Empty<Diagnostic>();
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
+                                                                       ? Enumerable.Empty<Diagnostic>()
+                                                                       : new[] { ReportIssue(symbol, Suffix) };
     }
 }

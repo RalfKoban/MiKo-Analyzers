@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.Name.Contains("Base")
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.Name.Contains("Base")
                                                                                                ? new[] { ReportIssue(symbol, symbol.Name.RemoveAll("Base")) }
                                                                                                : Enumerable.Empty<Diagnostic>();
     }

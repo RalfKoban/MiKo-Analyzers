@@ -18,11 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Class
-                                                                                        && symbol.IsStatic
-                                                                                        && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod)
-                                                                                        && !symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                               ? new[] { ReportIssue(symbol, Suffix) }
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
+                                                                                               ? Enumerable.Empty<Diagnostic>()
+                                                                                               : new[] { ReportIssue(symbol, Suffix) };
     }
 }
