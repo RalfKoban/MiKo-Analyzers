@@ -3376,6 +3376,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease their finding, value converters should be placed and grouped in a specific namespace called &apos;Converters&apos;..
+        /// </summary>
+        public static string MiKo_3047_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3047_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place in &apos;Converters&apos; namespace.
+        /// </summary>
+        public static string MiKo_3047_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3047_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value converters shall be located in &apos;Converters&apos; namespace..
+        /// </summary>
+        public static string MiKo_3047_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3047_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
