@@ -315,6 +315,8 @@ namespace MiKoSolutions.Analyzers
                     "Allows ",
                     "Represents ",
                 };
+
+            internal static readonly string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
         }
 
         public static class MaxNamingLengths

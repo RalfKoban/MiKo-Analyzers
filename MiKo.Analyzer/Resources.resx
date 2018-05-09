@@ -925,6 +925,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2046_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of Attributes should have a  default starting phrase.</value>
   </data>
+  <data name="MiKo_2047_Description" xml:space="preserve">
+    <value>Documentation of a value converters should start with a specific phrase that describes what they convert.</value>
+  </data>
+  <data name="MiKo_2047_MessageFormat" xml:space="preserve">
+    <value>Start &lt;summary&gt; with: '{1}'</value>
+  </data>
+  <data name="MiKo_2047_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation of value converters should have a  default starting phrase.</value>
+  </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
     <value>Documentation of exceptions should follow the .NET Framework documentation.</value>
   </data>

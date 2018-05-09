@@ -2477,6 +2477,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation of a value converters should start with a specific phrase that describes what they convert..
+        /// </summary>
+        public static string MiKo_2047_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2047_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2047_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2047_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a  default starting phrase..
+        /// </summary>
+        public static string MiKo_2047_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2047_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation of exceptions should follow the .NET Framework documentation..
         /// </summary>
         public static string MiKo_2050_Description {
