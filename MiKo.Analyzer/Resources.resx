@@ -408,7 +408,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Types should not be suffixed with 'Enum'.</value>
   </data>
   <data name="MiKo_1038_Description" xml:space="preserve">
-    <value>To ease maintenance, the names of classes that contain extension methods should end with the the same suffix.</value>
+    <value>To ease maintenance, the names of classes that contain extension methods should end with the same suffix.</value>
   </data>
   <data name="MiKo_1038_MessageFormat" xml:space="preserve">
     <value>Name should end with '{1}'</value>
@@ -502,6 +502,15 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_1047_Title" xml:space="preserve">
     <value>Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.</value>
+  </data>
+  <data name="MiKo_1048_Description" xml:space="preserve">
+    <value>Classes that are value converters should end with a specific suffix.</value>
+  </data>
+  <data name="MiKo_1048_MessageFormat" xml:space="preserve">
+    <value>Name should end with '{1}'</value>
+  </data>
+  <data name="MiKo_1048_Title" xml:space="preserve">
+    <value>To ease maintenance, the names of classes that are value converters should end with the same suffix.</value>
   </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>

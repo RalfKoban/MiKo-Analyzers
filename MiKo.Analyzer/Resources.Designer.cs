@@ -927,7 +927,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the names of classes that contain extension methods should end with the the same suffix..
+        ///   Looks up a localized string similar to To ease maintenance, the names of classes that contain extension methods should end with the same suffix..
         /// </summary>
         public static string MiKo_1038_Description {
             get {
@@ -1211,6 +1211,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1047_Title {
             get {
                 return ResourceManager.GetString("MiKo_1047_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classes that are value converters should end with a specific suffix..
+        /// </summary>
+        public static string MiKo_1048_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1048_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name should end with &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1048_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1048_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, the names of classes that are value converters should end with the same suffix..
+        /// </summary>
+        public static string MiKo_1048_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1048_Title", resourceCulture);
             }
         }
         
