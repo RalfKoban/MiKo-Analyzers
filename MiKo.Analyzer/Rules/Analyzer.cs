@@ -85,7 +85,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
-
         protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs)
         {
             var prefix = string.Empty;
