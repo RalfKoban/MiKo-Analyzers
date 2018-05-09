@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 

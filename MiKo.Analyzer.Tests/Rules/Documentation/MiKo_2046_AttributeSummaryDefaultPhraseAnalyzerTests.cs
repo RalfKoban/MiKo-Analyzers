@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Operations;
 
 using NUnit.Framework;
 
