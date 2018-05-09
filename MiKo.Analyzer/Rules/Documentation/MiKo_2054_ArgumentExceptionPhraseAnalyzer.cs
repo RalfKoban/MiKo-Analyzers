@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2054";
 
-        public MiKo_2054_ArgumentExceptionPhraseAnalyzer() : base(Id, typeof(ArgumentException), Constants.Comments.ArgumentExceptionStartingPhrase)
+        public MiKo_2054_ArgumentExceptionPhraseAnalyzer() : base(Id, typeof(ArgumentException), true, Constants.Comments.ArgumentExceptionStartingPhrase)
         {
         }
     }

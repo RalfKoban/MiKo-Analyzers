@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -23,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             const string TestMarker = "Test";
 
             return symbol.Name.Contains(TestMarker)
-                       ? new[] { ReportIssue(symbol, symbol.Name.RemoveAll(TestMarker)) }
+                       ? new[] { ReportIssue(symbol, TestMarker) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

@@ -8,11 +8,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ArgumentExceptionPhraseAnalyzer : ExceptionDocumentationAnalyzer
     {
+        private readonly bool m_addDotsToProposal;
         private readonly string[] m_exceptionPhrases;
 
         const StringComparison Comparison = StringComparison.Ordinal;
 
-        protected ArgumentExceptionPhraseAnalyzer(string diagnosticId, Type exceptionType, params string[] phrases) : base(diagnosticId, exceptionType) => m_exceptionPhrases = phrases;
+        protected ArgumentExceptionPhraseAnalyzer(string diagnosticId, Type exceptionType, bool addDotsToProposal, params string[] phrases) : base(diagnosticId, exceptionType)
+        {
+            m_addDotsToProposal = addDotsToProposal;
+            m_exceptionPhrases = phrases;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
         {
@@ -31,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // create default proposal for parameter names
             var proposal = parameters
-                           .Select(_ => string.Format(m_exceptionPhrases[0], _.Name) + Environment.NewLine)
+                           .Select(_ => string.Format(m_exceptionPhrases[0], _.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Environment.NewLine)
                            .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Environment.NewLine);
 
             var results = new List<Diagnostic>();

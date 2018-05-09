@@ -1278,7 +1278,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
         /// </summary>
         public static string MiKo_1102_MessageFormat {
             get {
@@ -2651,7 +2651,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to {1} documentation should be something like:
-        ///&apos;{2}&apos;.
+        ///{2}.
         /// </summary>
         public static string MiKo_2054_MessageFormat {
             get {
@@ -2679,7 +2679,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to {1} documentation should be something like:
-        ///&apos;{2}&apos;.
+        ///{2}.
         /// </summary>
         public static string MiKo_2055_MessageFormat {
             get {

@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2055";
 
-        public MiKo_2055_ArgumentOutOfRangeExceptionPhraseAnalyzer() : base(Id, typeof(ArgumentOutOfRangeException), Constants.Comments.ArgumentOutOfRangeExceptionStartingPhrase)
+        public MiKo_2055_ArgumentOutOfRangeExceptionPhraseAnalyzer() : base(Id, typeof(ArgumentOutOfRangeException), true, Constants.Comments.ArgumentOutOfRangeExceptionStartingPhrase)
         {
         }
     }
