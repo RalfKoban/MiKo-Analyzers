@@ -39,7 +39,7 @@ using System;
 using System.Windows.Data;
 
 /// <summary>
-/// Represents a value converter that converts something.
+/// Represents a converter that converts something.
 /// </summary>
 public class TestMe : " + interfaceName + @"
 {
