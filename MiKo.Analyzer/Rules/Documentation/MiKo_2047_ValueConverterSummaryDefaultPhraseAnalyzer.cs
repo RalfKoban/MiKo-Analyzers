@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter", "IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");
+        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsValueConverter() || symbol.IsMultiValueConverter();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWithAny(Comparison, StartingPhrases))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
