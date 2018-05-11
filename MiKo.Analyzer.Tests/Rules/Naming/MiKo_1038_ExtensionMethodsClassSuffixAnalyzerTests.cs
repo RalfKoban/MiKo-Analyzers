@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -55,6 +56,7 @@ public static class " + name + @"
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1038_ExtensionMethodsClassSuffixAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongNames() => new[]
                                                                {
                                                                    "ExtensionsClass",

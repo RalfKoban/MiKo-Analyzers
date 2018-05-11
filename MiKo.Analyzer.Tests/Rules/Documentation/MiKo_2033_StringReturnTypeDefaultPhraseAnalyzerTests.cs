@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -110,10 +111,13 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> StringOnlyReturnValues() => new[] { "string", "String", "System.String", nameof(System.String), }.ToHashSet();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> StringTaskReturnValues() => new[] { "Task<string>", "Task<String>", "Task<System.String>", }.ToHashSet();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> StringReturnValues() => StringOnlyReturnValues().Concat(StringTaskReturnValues()).ToHashSet();
     }
 }

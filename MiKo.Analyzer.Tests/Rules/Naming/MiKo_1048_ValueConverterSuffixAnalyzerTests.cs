@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -44,6 +45,7 @@ public class TestMe : " + interfaceName + @"
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1048_ValueConverterSuffixAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ConverterInterfaces() => new[]
                                                                {
                                                                    "IValueConverter",

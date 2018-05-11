@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -51,6 +52,7 @@ public namespace Bla.Blubb
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3047_ValueConvertersAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValidTypes() => new[]
                                                                {
                                                                    "IValueConverter",

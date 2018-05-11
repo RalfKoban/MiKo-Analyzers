@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -155,10 +156,13 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> BooleanOnlyReturnValues() => new[] { "bool", "Boolean", "System.Boolean", nameof(System.Boolean), }.ToHashSet();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> BooleanTaskReturnValues() => new[] { "Task<bool>", "Task<Boolean>", "Task<System.Boolean>", }.ToHashSet();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> BooleanReturnValues() => BooleanOnlyReturnValues().Concat(BooleanTaskReturnValues()).ToHashSet();
     }
 }

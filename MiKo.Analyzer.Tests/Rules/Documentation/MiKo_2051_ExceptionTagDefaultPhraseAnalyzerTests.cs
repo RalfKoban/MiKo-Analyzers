@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -74,6 +75,7 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2051_ExceptionTagDefaultPhraseAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ExceptionTypes() => new[]
                                                                    {
                                                                        typeof(ArgumentNullException).Name,
@@ -82,6 +84,7 @@ public class TestMe
                                                                        typeof(Exception).Name,
                                                                    };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ForbiddenExceptionStartingPhrases()
         {
             var phrases = new[]

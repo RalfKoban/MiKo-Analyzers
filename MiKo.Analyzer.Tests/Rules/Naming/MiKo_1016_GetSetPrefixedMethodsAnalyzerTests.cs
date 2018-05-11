@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -61,8 +62,10 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1016_GetSetPrefixedMethodsAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValidPrefixes() => new[] { string.Empty, "Get", "Set", "GetCanceled", "SetCanceled", "HasCanceled", "GetHashCode", "SetHash" };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> InvalidPrefixes() => new[] { "GetIs", "SetIs", "GetCan", "SetCan", "GetHas", "SetHas", "CanHas", "CanIs", "HasIs", "HasCan", "IsCan", "IsHas" };
     }
 }

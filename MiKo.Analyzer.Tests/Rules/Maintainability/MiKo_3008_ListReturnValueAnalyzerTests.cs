@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -39,6 +40,7 @@ public interface TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3008_ListReturnValueAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> AllowedTypes() => new[]
                                                                  {
                                                                      "string",
@@ -50,6 +52,7 @@ public interface TestMe
                                                                      "IReadOnlyDictionary<string, string>",
                                                                  };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ForbiddenTypes() => new[]
                                                                    {
                                                                        "ICollection<string>",

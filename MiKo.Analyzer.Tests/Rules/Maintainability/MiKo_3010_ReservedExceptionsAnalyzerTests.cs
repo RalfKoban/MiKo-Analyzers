@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -41,6 +41,7 @@ public class TestMe
 }
 ");
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ForbiddenExceptions() => new HashSet<string>(new[]
                                                                                             {
                                                                                                 nameof(Exception),

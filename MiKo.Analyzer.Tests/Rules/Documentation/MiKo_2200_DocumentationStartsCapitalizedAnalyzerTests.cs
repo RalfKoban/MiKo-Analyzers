@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -51,6 +52,7 @@ public sealed class TestMe { }
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2200_DocumentationStartsCapitalizedAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> XmlTags() => new[]
                                                             {
                                                                 "example",
@@ -67,8 +69,10 @@ public sealed class TestMe { }
                                                                 "value",
                                                             };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<char> ValidStartingCharacter() => "abcdefghijklmnopqrstuvwxyz".ToUpperInvariant().ToCharArray();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<char> InvalidStartingCharacter() => "abcdefghijklmnopqrstuvwxyz1234567890-#+*.,;".ToCharArray();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -103,18 +104,21 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2037_CommandPropertySummaryAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValidPhrases_ReadWrite() => new[]
                                                                            {
                                                                                "Gets or sets the <see cref=\"ICommand\" /> that can ",
                                                                                "Gets or sets the <see cref=\"ICommand\"/> that can ",
                                                                            };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValidPhrases_ReadOnly() => new[]
                                                                           {
                                                                               "Gets the <see cref=\"ICommand\" /> that can ",
                                                                               "Gets the <see cref=\"ICommand\"/> that can ",
                                                                           };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValidPhrases_WriteOnly() => new[]
                                                                            {
                                                                                "Sets the <see cref=\"ICommand\" /> that can ",

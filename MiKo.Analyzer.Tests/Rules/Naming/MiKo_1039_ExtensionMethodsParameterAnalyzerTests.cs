@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -47,8 +48,10 @@ public static class TestMeExtensions
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1039_ExtensionMethodsParameterAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CorrectNames() => new[] { "value", "source" };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongNames() => new[] { "o", "something", "v" };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -111,6 +112,7 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2015_FireMethodsAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> XmlTags() => new[] { "summary", "remarks", "returns", "example" };
     }
 }

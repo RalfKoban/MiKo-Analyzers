@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -242,8 +243,10 @@ public class TestMe : ITestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> MeaninglessFieldPhrases() => MeaninglessPhrases().Except(new[] { "A ", "An ", "The " });
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> MeaninglessTextPhrases() => new[]
                                                                            {
                                                                                "does implement",
@@ -258,6 +261,7 @@ public class TestMe : ITestMe
                                                                                "which is used to ",
                                                                            };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> MeaninglessPhrases()
         {
             var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Delegate", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command", "Action", "Func", "Converter" };

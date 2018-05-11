@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -19,8 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1024_PropertyNameLengthAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> Fitting() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Properties);
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> NonFitting() => GetAllAboveLengthOf(Constants.MaxNamingLengths.Properties);
     }
 }

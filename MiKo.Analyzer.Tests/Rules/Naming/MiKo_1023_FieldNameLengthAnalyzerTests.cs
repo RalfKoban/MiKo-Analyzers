@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -30,8 +31,10 @@ public enum MyEnum
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1023_FieldNameLengthAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> Fitting() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Fields);
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> NonFitting() => GetAllAboveLengthOf(Constants.MaxNamingLengths.Fields);
     }
 }

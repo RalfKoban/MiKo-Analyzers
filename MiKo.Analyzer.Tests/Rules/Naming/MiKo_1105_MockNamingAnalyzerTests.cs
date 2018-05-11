@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -179,6 +180,7 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1105_MockNamingAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongNames() => new[]
                                                                {
                                                                    "somethingMock",

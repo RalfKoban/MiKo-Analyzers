@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -40,7 +41,7 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1101_TestClassesSuffixAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> TestClassMarkers() => new[] { nameof(TestFixtureAttribute), "TestFixture", "TestClassAttribute", "TestClass" };
-
     }
 }

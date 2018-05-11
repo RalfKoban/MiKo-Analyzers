@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -62,6 +63,7 @@ public class TestMe : " + interfaceName + @"
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2047_ValueConverterSummaryDefaultPhraseAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValidTypes() => new[]
                                                                {
                                                                    "IValueConverter",

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -182,6 +183,7 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3004_EqualsAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValueTypes() => new[]
                                                        {
                                                            "bool",

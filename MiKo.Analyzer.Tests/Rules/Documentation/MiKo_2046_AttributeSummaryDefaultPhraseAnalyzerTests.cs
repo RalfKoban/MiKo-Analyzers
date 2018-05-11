@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -60,6 +61,7 @@ public class TestMe : Attribute
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2046_AttributeSummaryDefaultPhraseAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ValidPhrases() => new []
                                                                  {
                                                                      "Specifies ",
@@ -70,6 +72,7 @@ public class TestMe : Attribute
                                                                      "Allows ",
                                                                  };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> InvalidPhrases() => new []
                                                                  {
                                                                      "The ",

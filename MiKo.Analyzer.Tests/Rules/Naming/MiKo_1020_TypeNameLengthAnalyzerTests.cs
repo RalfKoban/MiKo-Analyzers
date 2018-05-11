@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -45,10 +46,13 @@ public class Abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1020_TypeNameLengthAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> FittingTypes() => new[] { "interface", "class", "enum" };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> FittingNames() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Types);
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ExceedingNames() => GetAllAboveLengthOf(Constants.MaxNamingLengths.Types);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -56,8 +57,10 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> Exceptions() => MatchingExceptions().Concat(NonMatchingExceptions());
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> MatchingExceptions() => new[]
                                                                        {
                                                                            nameof(InvalidOperationException),
@@ -68,6 +71,7 @@ public class TestMe
                                                                            typeof(NotImplementedException).FullName,
                                                                        };
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> NonMatchingExceptions() => new[]
                                                                           {
                                                                               nameof(Exception),

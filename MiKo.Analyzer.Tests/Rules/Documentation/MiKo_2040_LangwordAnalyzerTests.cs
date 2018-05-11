@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -165,6 +166,7 @@ public sealed class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2040_LangwordAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongItems()
         {
             var tokens = new List<string>();
@@ -191,6 +193,7 @@ public sealed class TestMe
             return results;
         }
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CorrectItems() => new[] { "<see langword=\"true\" />", "<see langword=\"false\" />", "<see langword=\"null\" />", string.Empty };
     }
 }
