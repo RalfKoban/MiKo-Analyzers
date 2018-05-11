@@ -3250,6 +3250,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods..
+        /// </summary>
+        public static string MiKo_3015_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3015_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
+        /// </summary>
+        public static string MiKo_3015_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3015_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throw an &apos;InvalidOperationException&apos; instead.
+        /// </summary>
+        public static string MiKo_3015_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3015_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods. Instead an InvalidOperationException should be thrown to indicate that the object is in an inappropriate state..
+        /// </summary>
+        public static string MiKo_3015_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3015_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For performance reasons it&apos;s better to use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult()&apos; as the returned task is internally cached..
         /// </summary>
         public static string MiKo_3020_Description {

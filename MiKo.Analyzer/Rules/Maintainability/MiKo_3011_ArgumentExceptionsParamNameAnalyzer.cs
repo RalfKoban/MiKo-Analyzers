@@ -40,14 +40,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            var type = node.Type.ToString();
-
-            var inspector = Mappings[type];
             var method = node.GetEnclosingMethod(semanticModel);
+            if (method is null || method.Parameters.Length == 0)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            var type = node.Type.ToString();
+            var inspector = Mappings[type];
 
             if (inspector(node.ArgumentList.Arguments, method, semanticModel) == InspectationResult.Report)
             {
-                var issue = ReportIssue(type, node.GetLocation(), method?.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
+                var issue = ReportIssue(type, node.GetLocation(), method.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
                 return new []{ issue };
             }
 
@@ -136,9 +140,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool ParameterIsReferenced(ArgumentSyntax argument, IMethodSymbol method)
         {
-            if (method is null)
-                return false;
-
             var argumentName = argument.ToString();
             return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == string.Concat("\"", _, "\"") || argumentName == string.Concat("nameof(", _, ")"));
         }

@@ -35,6 +35,28 @@ public class TestMe
         [TestCase("\"some message\", \"X\", null")]
         [TestCase("\"some message\", nameof(TestMe), null")]
         [TestCase("\"some message\", new Exception()")]
+        public void No_issue_is_reported_for_incorrectly_thrown_ArgumentException_on_parameterless_method(string parameters) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        throw new ArgumentException(" + parameters + @");
+    }
+}
+");
+
+        [TestCase("")]
+        [TestCase("\"some message\"")]
+        [TestCase("nameof(x)")]
+        [TestCase("\"x\", \"some message\", null")]
+        [TestCase("nameof(x), \"some message\", null")]
+        [TestCase("\"some message\", \"X\"")]
+        [TestCase("\"some message\", nameof(TestMe)")]
+        [TestCase("\"some message\", \"X\", null")]
+        [TestCase("\"some message\", nameof(TestMe), null")]
+        [TestCase("\"some message\", new Exception()")]
         public void An_issue_is_reported_for_incorrectly_thrown_ArgumentException(string parameters) => An_issue_is_reported_for(@"
 using System;
 
