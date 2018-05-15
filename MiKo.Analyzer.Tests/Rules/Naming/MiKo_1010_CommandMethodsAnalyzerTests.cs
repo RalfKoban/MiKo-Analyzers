@@ -38,6 +38,28 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_CanExecuteChanged_trigger_method([Values("OnCanExecuteChanged", "RaiseCanExecuteChanged")] string methodName) => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+namespace Bla
+{
+    public class TestMe : System.Windows.Input.ICommand
+    {
+        public bool CanExecute(object parameter) => true;
+
+        public void Execute(object parameter)
+        {
+        }
+
+        public event EventHandler CanExecuteChanged;
+
+        public void " + methodName + @"() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_Execute_in_name() => An_issue_is_reported_for(@"
 public class TestMe
 {
