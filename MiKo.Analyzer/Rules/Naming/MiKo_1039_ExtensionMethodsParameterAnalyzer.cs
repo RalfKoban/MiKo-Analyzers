@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -11,8 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1039";
 
-        private const string Name1 = "value";
-        private const string Name2 = "source";
+        private const string Value = "value";
+        private const string Source = "source";
 
         public MiKo_1039_ExtensionMethodsParameterAnalyzer() : base(Id)
         {
@@ -24,9 +25,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameter = method.Parameters[0];
 
-            return parameter.Name == Name1 || parameter.Name == Name2
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(parameter, Name1, Name2) };
+            return IsConversionExtension(method)
+                   ? AnalyzeName(parameter, Source)
+                   : AnalyzeName(parameter, Value, Source);
         }
+
+        private static bool IsConversionExtension(IMethodSymbol method) => !method.ReturnsVoid
+                                                                        && method.Name.Length > 2
+                                                                        && method.Name[2].IsUpperCase()
+                                                                        && method.Name.StartsWith("To", StringComparison.Ordinal);
+
+        private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names) => names.Any(_ => _ == parameter.Name)
+                                                                                                          ? Enumerable.Empty<Diagnostic>()
+                                                                                                          : new[] { ReportIssue(parameter, names.HumanizedConcatenated()) };
     }
 }

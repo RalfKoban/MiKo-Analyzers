@@ -963,7 +963,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos; or &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Name it {1}.
         /// </summary>
         public static string MiKo_1039_MessageFormat {
             get {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -29,7 +30,7 @@ public static class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name([ValueSource(nameof(CorrectParameterNames))] string name) => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int " + name + @") { }
@@ -37,10 +38,26 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name([ValueSource(nameof(WrongParameterNames))] string name) => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int " + name + @") { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ToXyz_extension_method_with_correct_parameter_name([ValueSource(nameof(CorrectConversionParameterNames))] string name) => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    public static int ToSomething(this int " + name + @") => 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_ToXyz_extension_method_with_incorrect_parameter_name([ValueSource(nameof(WrongConversionParameterNames))] string name) => An_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    public static int ToSomething(this int " + name + @") => 42;
 }
 ");
 
@@ -49,9 +66,15 @@ public static class TestMeExtensions
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1039_ExtensionMethodsParameterAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CorrectNames() => new[] { "value", "source" };
+        private static IEnumerable<string> CorrectParameterNames() => new[] { "value", "source" };
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongNames() => new[] { "o", "something", "v" };
+        private static IEnumerable<string> WrongParameterNames() => new[] { "o", "something", "v" };
+
+        [ExcludeFromCodeCoverage]
+        private static IEnumerable<string> CorrectConversionParameterNames() => new[] { "source" };
+
+        [ExcludeFromCodeCoverage]
+        private static IEnumerable<string> WrongConversionParameterNames() => new[] { "o", "something", "v", "value" };
     }
 }

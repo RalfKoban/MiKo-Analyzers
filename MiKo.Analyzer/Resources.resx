@@ -420,7 +420,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To ease maintenance, the 'this' parameter of extension methods should have a default name.</value>
   </data>
   <data name="MiKo_1039_MessageFormat" xml:space="preserve">
-    <value>Name it '{1}' or '{2}'</value>
+    <value>Name it {1}</value>
   </data>
   <data name="MiKo_1039_Title" xml:space="preserve">
     <value>Extension methods 'this' parameter should have default name.</value>
