@@ -8,6 +8,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2035";
 
+        private static readonly string[] Empty = new string[0];
+
         public MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer() : base(Id)
         {
         }
@@ -30,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                            : Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
             }
 
-            return new string[0]; // should never happen
+            return Empty; // should never happen
         }
     }
 }
