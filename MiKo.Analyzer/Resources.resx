@@ -586,7 +586,7 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
     <value>Unimportant identifiers in lambda statements should be named '_'.</value>
   </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
-    <value>Documentation should be valid XML so that it can be generated to support the developers.</value>
+    <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
     <value>Documentation is malformed (contains invalid characters, eg. '&amp;', '&gt;', '&lt;')</value>
@@ -926,7 +926,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.</value>
   </data>
   <data name="MiKo_2046_Description" xml:space="preserve">
-    <value>Documentation of a Attributes should start with a specific phrase that describes their purpose.</value>
+    <value>Documentation of an Attribute should start with a specific phrase that describes its purpose.</value>
   </data>
   <data name="MiKo_2046_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with {1}</value>
@@ -1038,7 +1038,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;example&gt; documentation should start with descriptive default phrase.</value>
   </data>
   <data name="MiKo_2200_Description" xml:space="preserve">
-    <value>Documentation should start with a capizalized letter to  have a full sentence.</value>
+    <value>Documentation should start with a capizalized letter to have a full sentence.</value>
   </data>
   <data name="MiKo_2200_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with capitalized letter</value>

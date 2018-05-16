@@ -1459,7 +1459,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated to support the developers..
+        ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
             get {
@@ -2477,7 +2477,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a Attributes should start with a specific phrase that describes their purpose..
+        ///   Looks up a localized string similar to Documentation of an Attribute should start with a specific phrase that describes its purpose..
         /// </summary>
         public static string MiKo_2046_Description {
             get {
@@ -2805,7 +2805,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with a capizalized letter to  have a full sentence..
+        ///   Looks up a localized string similar to Documentation should start with a capizalized letter to have a full sentence..
         /// </summary>
         public static string MiKo_2200_Description {
             get {
