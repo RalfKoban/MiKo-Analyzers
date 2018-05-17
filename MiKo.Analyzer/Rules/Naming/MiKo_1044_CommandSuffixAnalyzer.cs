@@ -24,17 +24,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol method) => ShallAnalyze(method.ReturnType);
 
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => ShallAnalyze(symbol.Type);
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => ShallAnalyze(symbol.Type);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeName(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyze(symbol.Type)
-                                                                                              ? AnalyzeName(symbol)
-                                                                                              : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => ShallAnalyze(symbol.Type)
-                                                                                        ? AnalyzeName(symbol)
-                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeName(symbol);
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
                                                                        ? Enumerable.Empty<Diagnostic>()

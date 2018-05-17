@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => Analyze(symbol);
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => !symbol.IsOverride;
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => Analyze(symbol);
     }
 }

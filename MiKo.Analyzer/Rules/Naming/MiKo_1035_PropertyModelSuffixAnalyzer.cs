@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => symbol.ExplicitInterfaceImplementations.Length != 0 ? Enumerable.Empty<Diagnostic>() : AnalyzeEntityMarkers(symbol);
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.ExplicitInterfaceImplementations.Length == 0;
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => AnalyzeEntityMarkers(symbol);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => symbol.IsConst ? Enumerable.Empty<Diagnostic>() : Analyze(symbol);
+        protected override bool ShallAnalyze(IFieldSymbol field) => !field.IsConst;
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => Analyze(symbol);
     }
 }

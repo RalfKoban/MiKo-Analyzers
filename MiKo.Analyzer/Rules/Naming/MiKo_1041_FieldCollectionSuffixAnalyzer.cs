@@ -15,11 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol)
-        {
-            // ignore enum definitions
-            if (symbol.ContainingType?.IsEnum() == true) return Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IFieldSymbol field) => field.ContainingType?.IsEnum() == false; // ignore enum definitions
 
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
+        {
             var diagnostic = AnalyzeCollectionSuffix(symbol);
             return diagnostic != null
                        ? new[] { diagnostic }

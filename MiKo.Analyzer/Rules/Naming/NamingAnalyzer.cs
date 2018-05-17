@@ -17,22 +17,37 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => SymbolKind == SymbolKind.NamedType;
-
-        protected virtual bool ShallAnalyze(IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && !method.IsOverride;
-
-
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyze(symbol)
                                                                                                   ? AnalyzeName(symbol)
                                                                                                   : Enumerable.Empty<Diagnostic>();
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => ShallAnalyze(method)
                                                                                                  ? AnalyzeName(method)
                                                                                                  : Enumerable.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => Enumerable.Empty<Diagnostic>();
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol property) => ShallAnalyze(property)
+                                                                                                       ? AnalyzeName(property)
+                                                                                                       : Enumerable.Empty<Diagnostic>();
+
+        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol field) => ShallAnalyze(field)
+                                                                                                       ? AnalyzeName(field)
+                                                                                                       : Enumerable.Empty<Diagnostic>();
+
+        protected virtual bool ShallAnalyze(ITypeSymbol symbol) => SymbolKind == SymbolKind.NamedType;
+
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => !symbol.IsOverride && symbol.MethodKind == MethodKind.Ordinary;
+
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => SymbolKind == SymbolKind.Property;
+
+        protected virtual bool ShallAnalyze(IFieldSymbol field) => SymbolKind == SymbolKind.Field;
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
         {
