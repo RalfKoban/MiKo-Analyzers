@@ -11,19 +11,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1103";
 
+        private const string Marker = "PrepareTest";
+
         public MiKo_1103_TestSetupMethodsAnalyzer() : base(Id)
         {
         }
 
         protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsTestSetupMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
-        {
-            const string Marker = "PrepareTest";
-
-            return symbol.Name == Marker
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, Marker) };
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name == Marker
+                                                                                        ? Enumerable.Empty<Diagnostic>()
+                                                                                        : new[] { ReportIssue(symbol, Marker) };
     }
 }
