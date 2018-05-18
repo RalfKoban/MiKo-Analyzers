@@ -22,8 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => true;
-
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
 
         private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers)

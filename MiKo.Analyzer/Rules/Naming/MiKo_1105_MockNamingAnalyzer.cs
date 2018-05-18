@@ -25,8 +25,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeParameter, SyntaxKind.Parameter);
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => true;
-
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
         {
             var type = context.FindContainingType();

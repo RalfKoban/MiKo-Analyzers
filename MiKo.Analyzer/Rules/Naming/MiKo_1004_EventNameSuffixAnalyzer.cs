@@ -12,18 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1004";
 
-        private const string InvalidSuffix = "Event";
+        private const string Suffix = "Event";
 
         public MiKo_1004_EventNameSuffixAnalyzer() : base(Id, SymbolKind.Event)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol)
-        {
-            if (!symbol.IsOverride && symbol.Name.EndsWith(InvalidSuffix, StringComparison.Ordinal))
-                return new[] { ReportIssue(symbol, symbol.Name.RemoveAll(InvalidSuffix)) };
-
-            return Enumerable.Empty<Diagnostic>();
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
+                                                                                           ? new[] { ReportIssue(symbol, symbol.Name.RemoveAll(Suffix)) }
+                                                                                           : Enumerable.Empty<Diagnostic>();
     }
 }
