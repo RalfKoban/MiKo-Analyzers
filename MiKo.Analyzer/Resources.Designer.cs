@@ -1242,6 +1242,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The term &apos;Should&apos; within a name as that is not explicit enough. Instead, it should be something like &apos;Is&apos;, &apos;Has&apos;, &apos;Can&apos;, etc..
+        /// </summary>
+        public static string MiKo_1049_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1049_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in name.
+        /// </summary>
+        public static string MiKo_1049_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1049_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Should&apos; for names..
+        /// </summary>
+        public static string MiKo_1049_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1049_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
