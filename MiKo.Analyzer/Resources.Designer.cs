@@ -1242,7 +1242,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The term &apos;Should&apos; within a name as that is not explicit enough. Instead, it should be something like &apos;Is&apos;, &apos;Has&apos;, &apos;Can&apos;, etc..
+        ///   Looks up a localized string similar to Requirement terms such as &apos;Should&apos; or &apos;Must&apos; within a name are not explicit enough. Instead, use a positive verb or an adjective like &apos;Is&apos;, &apos;Has&apos;, &apos;Can&apos;, etc..
         /// </summary>
         public static string MiKo_1049_Description {
             get {
@@ -1260,7 +1260,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;Should&apos; for names..
+        ///   Looks up a localized string similar to Do not use requirement terms such as &apos;Shall&apos;, &apos;Should&apos;, &apos;Must&apos; or &apos;Need&apos; for names..
         /// </summary>
         public static string MiKo_1049_Title {
             get {

@@ -8,13 +8,12 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1049_ShouldAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1049_RequirementTermAnalyzer : NamingAnalyzer
     {
         public const string Id = "MiKo_1049";
 
-        private const string Marker = "Should";
 
-        public MiKo_1049_ShouldAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_1049_RequirementTermAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -30,8 +29,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeName(symbol);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => symbol.Name.Contains(Marker, StringComparison.OrdinalIgnoreCase)
-                                                                       ? new[] { ReportIssue(symbol, Marker) }
-                                                                       : Enumerable.Empty<Diagnostic>();
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        {
+            foreach (var marker in Constants.RequirementMarkers)
+            {
+                if (symbol.Name.Contains(marker, StringComparison.OrdinalIgnoreCase))
+                {
+                    return new[] { ReportIssue(symbol, marker) };
+                }
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }

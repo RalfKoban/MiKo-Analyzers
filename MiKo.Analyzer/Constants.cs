@@ -5,13 +5,14 @@ namespace MiKoSolutions.Analyzers
 {
     public static class Constants
     {
+        internal const string AsyncSuffix = "Async";
         internal static readonly string[] EntityMarkers = { "Model", "Models", "model", "models" };
         internal static readonly string[] ViewModelMarkers = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
         internal static readonly string[] SpecialModelMarkers = { "Modeless", "modeless", "ModeLess", "modeLess" };
         internal static readonly string[] CollectionMarkers = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
         internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:", "F:", "!:" };
         internal static readonly string[] SymbolMarkersAndLineBreaks = SymbolMarkers.Concat(new[] { Environment.NewLine }).ToArray();
-        internal const string AsyncSuffix = "Async";
+        internal static readonly string[] RequirementMarkers = { "Must", "Need", "Shall", "Should", "Will", "Would" };
 
         internal static class Comments
         {
