@@ -29,17 +29,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeName(symbol);
 
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => !symbol.IsConst && base.ShallAnalyze(symbol);
+
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            foreach (var marker in Constants.RequirementMarkers)
-            {
-                if (symbol.Name.Contains(marker, StringComparison.OrdinalIgnoreCase))
-                {
-                    return new[] { ReportIssue(symbol, marker) };
-                }
-            }
+            var symbolName = symbol.Name;
 
-            return Enumerable.Empty<Diagnostic>();
+            return Constants.RequirementMarkers.Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))
+                                               .Select(_ => ReportIssue(symbol, _));
         }
     }
 }

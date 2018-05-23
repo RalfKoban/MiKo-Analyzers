@@ -47,6 +47,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_incorrectly_named_const_field([ValueSource(nameof(Marker))] string marker) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private const string Bla" + marker + @" = ""something"";
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_event([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
