@@ -686,13 +686,13 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Dispose methods should be documented in the same way as they are documented by the .NET Framework.</value>
   </data>
   <data name="MiKo_2015_Description" xml:space="preserve">
-    <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
+    <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events or exceptions. Events get raised and exceptions get thrown.</value>
   </data>
   <data name="MiKo_2015_MessageFormat" xml:space="preserve">
     <value>Documentation should use {1} instead of {2}</value>
   </data>
   <data name="MiKo_2015_Title" xml:space="preserve">
-    <value>Documentation should use 'raise' instead of 'fire'.</value>
+    <value>Documentation should use 'raise' or 'throw' instead of 'fire'.</value>
   </data>
   <data name="MiKo_2016_Description" xml:space="preserve">
     <value>Documentation for asynchronous methods should indicate that method is run asynchronously.</value>
@@ -951,6 +951,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2047_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of value converters should have a  default starting phrase.</value>
+  </data>
+  <data name="MiKo_2048_Description" xml:space="preserve">
+    <value>The term 'will be' is not explicit enough and it uses the wrong tense. Instead, a term such as 'is' gets to the point and uses present tense.</value>
+  </data>
+  <data name="MiKo_2048_MessageFormat" xml:space="preserve">
+    <value>Documentation should use 'is' instead of 'will be'</value>
+  </data>
+  <data name="MiKo_2048_Title" xml:space="preserve">
+    <value>Documentation should be more explicit and not use 'will be'.</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
     <value>Documentation of exceptions should follow the .NET Framework documentation.</value>

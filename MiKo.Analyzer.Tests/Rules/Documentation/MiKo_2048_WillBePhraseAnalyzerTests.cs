@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2015_FireMethodsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2048_WillBePhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
@@ -58,7 +58,7 @@ public class TestMe
         public void An_issue_is_reported_for_correctly_documented_summary_on_class([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
-/// <" + tag + @">Does fire.</" + tag + @">
+/// <" + tag + @">It will be.</" + tag + @">
 public class TestMe
 {
 }
@@ -70,7 +70,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + @">It will be.</" + tag + @">
     public void DoSomething() { }
 }
 ");
@@ -81,7 +81,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + @">It will be.</" + tag + @">
     public int Age { get; set; }
 }
 ");
@@ -92,7 +92,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + @">It will be.</" + tag + @">
     public event EventHandler<T> MyEvent;
 }
 ");
@@ -103,14 +103,14 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + @">It will be.</" + tag + @">
     private bool m_field;
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2015_FireMethodsAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2048_WillBePhraseAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2015_FireMethodsAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2048_WillBePhraseAnalyzer();
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> XmlTags() => new[] { "summary", "remarks", "returns", "example", "value", "exception" };

@@ -1757,7 +1757,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The term &apos;Fire&apos; is a negative term. Employees get fired (or guns), but not events. Events get raised. So use &apos;Raise&apos; instead..
+        ///   Looks up a localized string similar to The term &apos;Fire&apos; is a negative term. Employees get fired (or guns), but not events or exceptions. Events get raised and exceptions get thrown..
         /// </summary>
         public static string MiKo_2015_Description {
             get {
@@ -1775,7 +1775,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &apos;raise&apos; instead of &apos;fire&apos;..
+        ///   Looks up a localized string similar to Documentation should use &apos;raise&apos; or &apos;throw&apos; instead of &apos;fire&apos;..
         /// </summary>
         public static string MiKo_2015_Title {
             get {
@@ -2554,6 +2554,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2047_Title {
             get {
                 return ResourceManager.GetString("MiKo_2047_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The term &apos;will be&apos; is not explicit enough and it uses the wrong tense. Instead, a term such as &apos;is&apos; gets to the point and uses present tense..
+        /// </summary>
+        public static string MiKo_2048_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2048_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;is&apos; instead of &apos;will be&apos;.
+        /// </summary>
+        public static string MiKo_2048_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2048_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should be more explicit and not use &apos;will be&apos;..
+        /// </summary>
+        public static string MiKo_2048_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2048_Title", resourceCulture);
             }
         }
         
