@@ -443,27 +443,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to The term &apos;Init&apos; is a lazy abbreviation and should not be used. &apos;Initialize&apos; should be used instead..
         /// </summary>
-        public static string MiKo_1014_Description {
+        public static string MiKo_1015_Description {
             get {
-                return ResourceManager.GetString("MiKo_1014_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1015_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_1014_MessageFormat {
+        public static string MiKo_1015_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1014_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1015_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Methods should not be named &apos;Init&apos;..
         /// </summary>
-        public static string MiKo_1014_Title {
+        public static string MiKo_1015_Title {
             get {
-                return ResourceManager.GetString("MiKo_1014_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1015_Title", resourceCulture);
             }
         }
         
