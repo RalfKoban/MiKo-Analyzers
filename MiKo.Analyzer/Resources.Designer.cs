@@ -414,6 +414,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Many times, the term &apos;Notify&apos; indicates that an event shall be raised. In such case, the prefix &apos;On&apos; should be used instead.
+        ///Example: Instead of &apos;NotifyPropertyChanged&apos; use &apos;OnPropertyChanged&apos;..
+        /// </summary>
+        public static string MiKo_1013_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1013_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use term &apos;Notify&apos;.
+        /// </summary>
+        public static string MiKo_1013_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1013_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be named &apos;Notify&apos; or &apos;OnNotify&apos;..
+        /// </summary>
+        public static string MiKo_1013_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validate&apos; or &apos;Verify&apos;. If a check for a specific state is meant, use &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos; instead..
         /// </summary>
         public static string MiKo_1014_Description {

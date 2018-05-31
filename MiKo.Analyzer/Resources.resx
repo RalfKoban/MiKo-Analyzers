@@ -236,6 +236,16 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1012_Title" xml:space="preserve">
     <value>Methods should not be named 'Fire'.</value>
   </data>
+  <data name="MiKo_1013_Description" xml:space="preserve">
+    <value>Many times, the term 'Notify' indicates that an event shall be raised. In such case, the prefix 'On' should be used instead.
+Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
+  </data>
+  <data name="MiKo_1013_MessageFormat" xml:space="preserve">
+    <value>Do not use term 'Notify'</value>
+  </data>
+  <data name="MiKo_1013_Title" xml:space="preserve">
+    <value>Methods should not be named 'Notify' or 'OnNotify'.</value>
+  </data>
   <data name="MiKo_1014_Description" xml:space="preserve">
     <value>The term 'Check' is ambiguous. If validation of parameters is meant, use something like 'Validate' or 'Verify'. If a check for a specific state is meant, use 'Is', 'Can' or 'Has' instead.</value>
   </data>
