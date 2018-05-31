@@ -14,7 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] WillBePhrases = CreateWillBePhrases(" will be").ToArray();
 
-
         public MiKo_2048_WillBePhraseAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
