@@ -263,13 +263,13 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1015_Title" xml:space="preserve">
     <value>Factory methods should be named 'Create'.</value>
   </data>
-  <data name="MiKo_1016_Description" xml:space="preserve">
+  <data name="MiKo_1017_Description" xml:space="preserve">
     <value>Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'. That 'Get' or 'Set' is just additional noise and should be avoided.</value>
   </data>
-  <data name="MiKo_1016_MessageFormat" xml:space="preserve">
+  <data name="MiKo_1017_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
-  <data name="MiKo_1016_Title" xml:space="preserve">
+  <data name="MiKo_1017_Title" xml:space="preserve">
     <value>Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.</value>
   </data>
   <data name="MiKo_1020_Description" xml:space="preserve">

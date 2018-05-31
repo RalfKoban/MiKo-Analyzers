@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1016_GetSetPrefixedMethodsAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1017_GetSetPrefixedMethodsAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1016";
+        public const string Id = "MiKo_1017";
 
         private static readonly string[] Prefixes = { "GetCan", "GetHas", "GetIs", "SetCan", "SetHas", "SetIs", "CanHas", "CanIs", "HasCan", "HasIs", "IsCan", "IsHas" };
 
-        public MiKo_1016_GetSetPrefixedMethodsAnalyzer() : base(Id)
+        public MiKo_1017_GetSetPrefixedMethodsAnalyzer() : base(Id)
         {
         }
 

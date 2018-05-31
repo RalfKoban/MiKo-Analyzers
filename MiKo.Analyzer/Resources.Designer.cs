@@ -497,27 +497,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;. That &apos;Get&apos; or &apos;Set&apos; is just additional noise and should be avoided..
         /// </summary>
-        public static string MiKo_1016_Description {
+        public static string MiKo_1017_Description {
             get {
-                return ResourceManager.GetString("MiKo_1016_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1017_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_1016_MessageFormat {
+        public static string MiKo_1017_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1016_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1017_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;..
         /// </summary>
-        public static string MiKo_1016_Title {
+        public static string MiKo_1017_Title {
             get {
-                return ResourceManager.GetString("MiKo_1016_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1017_Title", resourceCulture);
             }
         }
         
