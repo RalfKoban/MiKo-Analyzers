@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1013_CheckMethodsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1014_CheckMethodsAnalyzerTests : CodeFixVerifier
     {
         [TestCase("DoSomething")]
         [TestCase("CheckIn")]
@@ -31,8 +31,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1013_CheckMethodsAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1014_CheckMethodsAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1013_CheckMethodsAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1014_CheckMethodsAnalyzer();
     }
 }

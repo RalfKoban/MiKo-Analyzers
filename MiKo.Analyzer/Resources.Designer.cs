@@ -416,27 +416,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validate&apos; or &apos;Verify&apos;. If a check for a specific state is meant, use &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos; instead..
         /// </summary>
-        public static string MiKo_1013_Description {
+        public static string MiKo_1014_Description {
             get {
-                return ResourceManager.GetString("MiKo_1013_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1014_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Do not use ambiguous term &apos;Check&apos; in &apos;{0}&apos;.
         /// </summary>
-        public static string MiKo_1013_MessageFormat {
+        public static string MiKo_1014_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1013_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1014_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Methods should not be named &apos;Check&apos;..
         /// </summary>
-        public static string MiKo_1013_Title {
+        public static string MiKo_1014_Title {
             get {
-                return ResourceManager.GetString("MiKo_1013_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1014_Title", resourceCulture);
             }
         }
         

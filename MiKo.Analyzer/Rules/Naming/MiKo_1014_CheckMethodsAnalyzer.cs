@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1013_CheckMethodsAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1014_CheckMethodsAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1013";
+        public const string Id = "MiKo_1014";
 
-        public MiKo_1013_CheckMethodsAnalyzer() : base(Id)
+        public MiKo_1014_CheckMethodsAnalyzer() : base(Id)
         {
         }
 
