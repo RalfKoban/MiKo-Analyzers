@@ -470,27 +470,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to The method belongs to a factory and therefore its name should be started with &apos;Create&apos;..
         /// </summary>
-        public static string MiKo_1015_Description {
+        public static string MiKo_1016_Description {
             get {
-                return ResourceManager.GetString("MiKo_1015_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1016_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Name should start with &apos;Create&apos;.
         /// </summary>
-        public static string MiKo_1015_MessageFormat {
+        public static string MiKo_1016_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1015_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1016_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Factory methods should be named &apos;Create&apos;..
         /// </summary>
-        public static string MiKo_1015_Title {
+        public static string MiKo_1016_Title {
             get {
-                return ResourceManager.GetString("MiKo_1015_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1016_Title", resourceCulture);
             }
         }
         

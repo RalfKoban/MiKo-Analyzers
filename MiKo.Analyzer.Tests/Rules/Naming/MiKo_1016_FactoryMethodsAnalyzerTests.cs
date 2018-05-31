@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1015_FactoryMethodsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1016_FactoryMethodsAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_factory_class() => No_issue_is_reported_for(@"
@@ -106,8 +106,8 @@ public class TestMeFactory : BaseFactory
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1015_FactoryMethodsAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1016_FactoryMethodsAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1015_FactoryMethodsAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1016_FactoryMethodsAnalyzer();
     }
 }
