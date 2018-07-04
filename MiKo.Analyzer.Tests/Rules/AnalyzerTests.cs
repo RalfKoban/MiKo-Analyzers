@@ -90,10 +90,27 @@ namespace MiKoSolutions.Analyzers.Rules
                                                      .AppendFormat(format, "Category", "ID", "Title", "Enabled by default")
                                                      .AppendFormat(format, ":-------", ":-", ":----", ":----------------:");
 
+            var oldCategory = string.Empty;
+
             var analyzers = CreateAllAnalyzers();
             foreach (var descriptor in analyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {
-                markdownBuilder.AppendFormat(format, descriptor.Category, descriptor.Id, descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"), descriptor.IsEnabledByDefault);
+                if (oldCategory != descriptor.Category)
+                {
+                    markdownBuilder.AppendFormat(format,
+                                                 string.Empty,
+                                                 string.Empty,
+                                                 string.Empty,
+                                                 string.Empty);
+
+                    oldCategory = descriptor.Category;
+                }
+
+                markdownBuilder.AppendFormat(format,
+                                             descriptor.Category,
+                                             descriptor.Id,
+                                             descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
+                                             descriptor.IsEnabledByDefault ? ":white_check_mark:" : ":white_large_square:");
             }
 
             var markdown = markdownBuilder.ToString();
