@@ -84,30 +84,28 @@ namespace MiKoSolutions.Analyzers.Rules
         [Test, Explicit("Test shall be run explicitly as it generates some markdown for the README.md file")]
         public static void Analyzer_documentation_for_Markdown()
         {
-            var format = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
-
             var markdownBuilder = new StringBuilder().AppendLine()
-                                                     .AppendFormat(format, "Category", "ID", "Title", "Enabled by default")
-                                                     .AppendFormat(format, ":-------", ":-", ":----", ":----------------:");
+                                                     .AppendLine("## Available Rules")
+                                                     .AppendLine("The following table shows which rules are currently provided by the analyzer.");
 
-            var oldCategory = string.Empty;
+            var category = string.Empty;
+            var tableFormat = "|{0}|{1}|{2}|" + Environment.NewLine;
 
             var analyzers = CreateAllAnalyzers();
             foreach (var descriptor in analyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {
-                if (oldCategory != descriptor.Category)
+                if (category != descriptor.Category)
                 {
-                    markdownBuilder.AppendFormat(format,
-                                                 string.Empty,
-                                                 string.Empty,
-                                                 string.Empty,
-                                                 string.Empty);
+                    category = descriptor.Category;
 
-                    oldCategory = descriptor.Category;
+                    markdownBuilder
+                        .AppendLine()
+                        .AppendLine("### " + category)
+                        .AppendFormat(tableFormat, "ID", "Title", "Enabled by default")
+                        .AppendFormat(tableFormat, ":-", ":----", ":----------------:");
                 }
 
-                markdownBuilder.AppendFormat(format,
-                                             descriptor.Category,
+                markdownBuilder.AppendFormat(tableFormat,
                                              descriptor.Id,
                                              descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
                                              descriptor.IsEnabledByDefault ? ":white_check_mark:" : ":white_large_square:");
