@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Resources;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -77,6 +79,25 @@ namespace MiKoSolutions.Analyzers.Rules
         public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute(Analyzer analyzer)
         {
             Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
+        }
+
+        [Test, Explicit("Test shall be run explicitly as it generates some markdown for the README.md file")]
+        public static void Analyzer_documentation_for_Markdown()
+        {
+            var format = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
+
+            var markdownBuilder = new StringBuilder().AppendLine()
+                                                     .AppendFormat(format, "Category", "Identifier", "Title", "Enabled by default")
+                                                     .AppendFormat(format, ":-------", ":---------", ":----", ":----------------:");
+
+            var analyzers = CreateAllAnalyzers();
+            foreach (var descriptor in analyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
+            {
+                markdownBuilder.AppendFormat(format, descriptor.Category, descriptor.Id, descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"), descriptor.IsEnabledByDefault);
+            }
+
+            var markdown = markdownBuilder.ToString();
+            Assert.That(markdown, Is.Empty);
         }
 
         private static int GetDiagnosticIdStartingNumber(Analyzer analyzer)
