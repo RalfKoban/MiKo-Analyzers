@@ -12,11 +12,11 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 [![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]()
 
-## Implemented Rules
+## Available Rules
 The following table shows which rules are currently provided by the analyzer.
 
-|Category|Identifier|Title|Enabled by default|
-|:-------|:---------|:----|:----------------:|
+|Category|Id|Title|Enabled by default|
+|:-------|:-|:----|:----------------:|
 |Metrics|MiKo_0001|Method is too long.|True|
 |Metrics|MiKo_0002|Method is too complex.|True|
 |Metrics|MiKo_0003|Type is too long.|True|

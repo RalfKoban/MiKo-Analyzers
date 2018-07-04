@@ -87,8 +87,8 @@ namespace MiKoSolutions.Analyzers.Rules
             var format = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
 
             var markdownBuilder = new StringBuilder().AppendLine()
-                                                     .AppendFormat(format, "Category", "Identifier", "Title", "Enabled by default")
-                                                     .AppendFormat(format, ":-------", ":---------", ":----", ":----------------:");
+                                                     .AppendFormat(format, "Category", "ID", "Title", "Enabled by default")
+                                                     .AppendFormat(format, ":-------", ":-", ":----", ":----------------:");
 
             var analyzers = CreateAllAnalyzers();
             foreach (var descriptor in analyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
