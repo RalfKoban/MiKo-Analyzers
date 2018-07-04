@@ -13,7 +13,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]()
 
 ## Available Rules
-The following table shows which rules are currently provided by the analyzer.
+The following tables list all the rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
