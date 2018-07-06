@@ -567,6 +567,16 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   <data name="MiKo_1104_Title" xml:space="preserve">
     <value>Test cleanup methods should be named 'CleanupTest'.</value>
   </data>
+  <data name="MiKo_1105_Description" xml:space="preserve">
+    <value>For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
+To ease reading, use underscores between the different words instead.</value>
+  </data>
+  <data name="MiKo_1105_MessageFormat" xml:space="preserve">
+    <value>Use underscores instead of Pascal-casing</value>
+  </data>
+  <data name="MiKo_1105_Title" xml:space="preserve">
+    <value>Test methods should not be in Pascal-casing.</value>
+  </data>
   <data name="MiKo_1106_Description" xml:space="preserve">
     <value>For maintenance reasons, variables and parameters should be named about what they represent and not what they technically are.
 Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>

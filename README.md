@@ -70,6 +70,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
 |MiKo_1104|Test cleanup methods should be named 'CleanupTest'.|:white_check_mark:|
+|MiKo_1106|Test methods should not be in Pascal-casing.|:white_check_mark:|
 |MiKo_1106|Do not name variables or parameters 'Mock' or 'Stub'.|:white_check_mark:|
 |MiKo_1200|Name exceptions in catch blocks consistently.|:white_check_mark:|
 |MiKo_1201|Name exceptions as parameters consistently.|:white_check_mark:|

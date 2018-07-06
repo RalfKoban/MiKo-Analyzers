@@ -1405,6 +1405,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
+        ///To ease reading, use underscores between the different words instead..
+        /// </summary>
+        public static string MiKo_1105_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1105_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use underscores instead of Pascal-casing.
+        /// </summary>
+        public static string MiKo_1105_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1105_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not be in Pascal-casing..
+        /// </summary>
+        public static string MiKo_1105_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1105_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, variables and parameters should be named about what they represent and not what they technically are.
         ///Hence naming them e.g. &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
         /// </summary>
