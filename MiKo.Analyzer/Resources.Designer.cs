@@ -3041,35 +3041,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
-        ///
-        ///Instead the equality operator should be used to compare value types..
-        /// </summary>
-        public static string MiKo_3004_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3004_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals&apos;.
-        /// </summary>
-        public static string MiKo_3004_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3004_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do not use object.Equals() on value types..
-        /// </summary>
-        public static string MiKo_3004_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3004_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, methods that are named &apos;Try&apos; should follow the Trier-Doer-Pattern.
         ///
         ///That is they should return a Boolean and have the last parameter as out-parameter for the result. In the success case the method should return true and provide valid out data; in all other cases the method should return false..
@@ -3455,6 +3426,35 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3021_Title {
             get {
                 return ResourceManager.GetString("MiKo_3021_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
+        ///
+        ///Instead the equality operator should be used to compare value types..
+        /// </summary>
+        public static string MiKo_3030_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3030_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals&apos;.
+        /// </summary>
+        public static string MiKo_3030_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3030_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use object.Equals() on value types..
+        /// </summary>
+        public static string MiKo_3030_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3030_Title", resourceCulture);
             }
         }
         

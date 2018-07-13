@@ -137,7 +137,6 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3001|Custom delegates should not be used.|:white_check_mark:|
 |MiKo_3002|Classes should not have too many dependencies.|:white_check_mark:|
 |MiKo_3003|Events should follow .NET Framework Guidelines for events.|:white_check_mark:|
-|MiKo_3004|Do not use object.Equals() on value types.|:white_check_mark:|
 |MiKo_3005|Methods named 'Try' should follow the Trier-Doer-Pattern.|:white_check_mark:|
 |MiKo_3006|'CancellationToken' parameter should be last method parameter.|:white_check_mark:|
 |MiKo_3007|Do not use LINQ method and declarative query syntax in same method.|:white_check_mark:|
@@ -151,6 +150,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3015|ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods. Instead an InvalidOperationException should be thrown to indicate that the object is in an inappropriate state.|:white_check_mark:|
 |MiKo_3020|Use 'Task.CompletedTask' instead of 'Task.FromResult'.|:white_check_mark:|
 |MiKo_3021|Do not use 'Task.Run' in the implementation.|:white_check_mark:|
+|MiKo_3030|Do not use object.Equals() on value types.|:white_check_mark:|
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|:white_check_mark:|
 |MiKo_3047|Value converters shall be located in 'Converters' namespace.|:white_check_mark:|
