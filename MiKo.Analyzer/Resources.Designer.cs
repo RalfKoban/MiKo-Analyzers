@@ -3461,27 +3461,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to For performance reasons (and to avoid large pressure on the garbage collector) strings should be concatenated with &apos;string.Concat()&apos;, &apos;string.Join()&apos; or by using a &apos;StringBuilder&apos;..
         /// </summary>
-        public static string MiKo_3030_Description {
+        public static string MiKo_3031_Description {
             get {
-                return ResourceManager.GetString("MiKo_3030_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_3031_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Use &apos;string.Concat()&apos; or &apos;string.Join()&apos; instead.
         /// </summary>
-        public static string MiKo_3030_MessageFormat {
+        public static string MiKo_3031_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_3030_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_3031_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Do not concatenate strings with += operator..
         /// </summary>
-        public static string MiKo_3030_Title {
+        public static string MiKo_3031_Title {
             get {
-                return ResourceManager.GetString("MiKo_3030_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_3031_Title", resourceCulture);
             }
         }
         

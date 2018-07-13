@@ -151,7 +151,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3015|ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods. Instead an InvalidOperationException should be thrown to indicate that the object is in an inappropriate state.|:white_check_mark:|
 |MiKo_3020|Use 'Task.CompletedTask' instead of 'Task.FromResult'.|:white_check_mark:|
 |MiKo_3021|Do not use 'Task.Run' in the implementation.|:white_check_mark:|
-|MiKo_3030|Do not concatenate strings with += operator.|:white_check_mark:|
+|MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|:white_check_mark:|
 |MiKo_3047|Value converters shall be located in 'Converters' namespace.|:white_check_mark:|
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
