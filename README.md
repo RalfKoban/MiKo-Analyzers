@@ -137,6 +137,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3001|Custom delegates should not be used.|:white_check_mark:|
 |MiKo_3002|Classes should not have too many dependencies.|:white_check_mark:|
 |MiKo_3003|Events should follow .NET Framework Guidelines for events.|:white_check_mark:|
+|MiKo_3004|Property setters of EventArgs shall be private.|:white_check_mark:|
 |MiKo_3005|Methods named 'Try' should follow the Trier-Doer-Pattern.|:white_check_mark:|
 |MiKo_3006|'CancellationToken' parameter should be last method parameter.|:white_check_mark:|
 |MiKo_3007|Do not use LINQ method and declarative query syntax in same method.|:white_check_mark:|

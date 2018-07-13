@@ -3041,6 +3041,37 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EventArgs exist only to raise events and to pass some data that to the listening event handlers.
+        ///If the carried event data now changes between the different handlers, the behavior gets unpredictable and a race condition occurs.
+        ///
+        ///To avoid that situation, the properties of EventArgs shall be read-only or only privately settable. If you have to set the event data, provide a method to do so and ensure that the method acts as circuit breaker (that is you can set the data exactly once).
+        ///.
+        /// </summary>
+        public static string MiKo_3004_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3004_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make setter private or property read-only.
+        /// </summary>
+        public static string MiKo_3004_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3004_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property setters of EventArgs shall be private..
+        /// </summary>
+        public static string MiKo_3004_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3004_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, methods that are named &apos;Try&apos; should follow the Trier-Doer-Pattern.
         ///
         ///That is they should return a Boolean and have the last parameter as out-parameter for the result. In the success case the method should return true and provide valid out data; in all other cases the method should return false..
