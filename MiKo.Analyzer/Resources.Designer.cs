@@ -3044,8 +3044,7 @@ namespace MiKoSolutions.Analyzers {
         ///   Looks up a localized string similar to EventArgs exist only to raise events and to pass some data that to the listening event handlers.
         ///If the carried event data now changes between the different handlers, the behavior gets unpredictable and a race condition occurs.
         ///
-        ///To avoid that situation, the properties of EventArgs shall be read-only or only privately settable. If you have to set the event data, provide a method to do so and ensure that the method acts as circuit breaker (that is you can set the data exactly once).
-        ///.
+        ///To avoid that situation, the properties of EventArgs shall be read-only or only privately settable. If you have to set the event data, provide a method to do so and ensure that the method acts as circuit breaker (that is you can set the data exactly once)..
         /// </summary>
         public static string MiKo_3004_Description {
             get {
