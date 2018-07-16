@@ -531,6 +531,16 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   <data name="MiKo_1049_Title" xml:space="preserve">
     <value>Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.</value>
   </data>
+  <data name="MiKo_1050_Description" xml:space="preserve">
+    <value>Variables for return values should describe what data they contain and not what they technical are.
+So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</value>
+  </data>
+  <data name="MiKo_1050_MessageFormat" xml:space="preserve">
+    <value>Use a more descriptive name than '{1}'</value>
+  </data>
+  <data name="MiKo_1050_Title" xml:space="preserve">
+    <value>Return values should have descriptive names.</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>

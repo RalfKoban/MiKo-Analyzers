@@ -1297,6 +1297,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Variables for return values should describe what data they contain and not what they technical are.
+        ///So they should have better names than e.g. &apos;ret&apos;, &apos;retVal&apos; or &apos;returnValue&apos;..
+        /// </summary>
+        public static string MiKo_1050_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1050_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a more descriptive name than &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1050_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1050_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return values should have descriptive names..
+        /// </summary>
+        public static string MiKo_1050_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1050_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {

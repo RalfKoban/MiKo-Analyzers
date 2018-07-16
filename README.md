@@ -66,6 +66,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1047|Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.|:white_check_mark:|
 |MiKo_1048|To ease maintenance, the names of classes that are value converters should end with the same suffix.|:white_check_mark:|
 |MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|:white_check_mark:|
+|MiKo_1050|Return values should have descriptive names.|:white_check_mark:|
 |MiKo_1101|Test classes should end with 'Tests'.|:white_check_mark:|
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
