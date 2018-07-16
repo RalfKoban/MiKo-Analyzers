@@ -22,14 +22,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (symbol.SetMethod.DeclaredAccessibility == Accessibility.Private)
+            var setter = symbol.SetMethod;
+            if (setter == null)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (symbol.ContainingType.IsEventArgs())
+            if (setter.DeclaredAccessibility == Accessibility.Private)
             {
-                return new[] { ReportIssue(symbol.SetMethod) };
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            if (symbol.ContainingType?.IsEventArgs() == true)
+            {
+                return new[] { ReportIssue(setter) };
             }
 
             return Enumerable.Empty<Diagnostic>();

@@ -9,15 +9,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3004_EventArgsPropertySettersAnalyzerTests : CodeFixVerifier
     {
-        [Test]
-        public void No_issue_is_reported_for_non_EventArgs() => No_issue_is_reported_for(@"
+        private const string FileContent = @"
 public class TestMe
 {
     public int Bla1 { get; set; }
 
     public int Bla2 { get; }
+
+    public int Bla3 { get; } = 42;
+
+    public int Bla4 => 42;
 }
-");
+";
+
+        [Test]
+        public void No_issue_is_reported_for_non_EventArgs() => No_issue_is_reported_for(FileContent);
 
         [Test]
         public void No_issue_is_reported_for_EventArgs_with_readonly_property() => No_issue_is_reported_for(@"
