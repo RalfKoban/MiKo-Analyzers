@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1011";
 
         private const string DoPhrase = "Do";
+        private const string DoesPhrase = "Does";
         private const string EscapedPhrase = "##";
 
         public MiKo_1011_DoMethodsAnalyzer() : base(Id)
@@ -27,12 +28,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var found = ContainsPhrase(methodName);
             if (found)
             {
-                escapedMethod = EscapeValidPhrases(methodName);
-                found = ContainsPhrase(escapedMethod);
-
-                if (found && method.IsTestMethod())
+                // special case "Does"
+                if (ContainsPhrase(methodName, DoesPhrase))
                 {
-                    escapedMethod = EscapeValidTestPhrases(escapedMethod);
+                    escapedMethod = EscapeValidPhrases(methodName.Replace(DoesPhrase, string.Empty));
+                    found = !method.IsTestMethod(); // ignore tests
+                }
+                else
+                {
+                    escapedMethod = EscapeValidPhrases(methodName);
                     found = ContainsPhrase(escapedMethod);
                 }
             }
@@ -42,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                    : Enumerable.Empty<Diagnostic>();
         }
 
-        private static bool ContainsPhrase(string methodName) => methodName.Contains(DoPhrase, StringComparison.Ordinal);
+        private static bool ContainsPhrase(string methodName, string phrase = DoPhrase) => methodName.Contains(phrase, StringComparison.Ordinal);
 
         private static string EscapeValidPhrases(string methodName)
         {
@@ -55,13 +59,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 .Replace("Done", EscapedPhrase + "ne")
                                 .Replace("Dot", EscapedPhrase + "t")
                                 .Replace("Down", EscapedPhrase + "wn");
-            return escapedMethod;
-        }
-
-        private static string EscapeValidTestPhrases(string methodName)
-        {
-            var escapedMethod = methodName
-                                .Replace("Does", EscapedPhrase + "es");
             return escapedMethod;
         }
 
