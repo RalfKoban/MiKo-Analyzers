@@ -27,7 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("IsDown")]
         [TestCase("IsInDoubt")]
         [TestCase("Whatever")]
-        [TestCase("Whatever_it_Does")]
         [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
         public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
@@ -60,6 +59,26 @@ public class TestMe
 public class TestMe
 {
     public void " + methodName + @"() { }
+}
+");
+
+        [TestCase("DoesSupport")]
+        public void An_issue_is_reported_for_wrong_interface_named_method(string methodName) => An_issue_is_reported_for(@"
+public interface TestMe
+{
+    public bool " + methodName + @"();
+}
+");
+
+        [TestCase("Whatever_it_Does")]
+        public void No_issue_is_reported_for_test_method(string methodName) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void " + methodName + @"();
 }
 ");
 

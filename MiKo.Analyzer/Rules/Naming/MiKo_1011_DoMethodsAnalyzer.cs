@@ -22,23 +22,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
+            var escapedMethod = methodName;
 
-            const StringComparison Comparison = StringComparison.Ordinal;
-            if (!methodName.Contains(DoPhrase, Comparison))
-                return Enumerable.Empty<Diagnostic>();
+            var found = ContainsPhrase(methodName);
+            if (found)
+            {
+                escapedMethod = EscapeValidPhrases(methodName);
+                found = ContainsPhrase(escapedMethod);
 
-            var escapedMethod = EscapeValidPhrases(methodName);
-            if (escapedMethod.Contains(DoPhrase, Comparison))
-                return new[] { ReportIssue(method, UnescapeValidPhrases(escapedMethod.RemoveAll(DoPhrase))) };
+                if (found && method.IsTestMethod())
+                {
+                    escapedMethod = EscapeValidTestPhrases(escapedMethod);
+                    found = ContainsPhrase(escapedMethod);
+                }
+            }
 
-            return Enumerable.Empty<Diagnostic>();
+            return found
+                   ? new[] { ReportIssue(method, UnescapeValidPhrases(escapedMethod.RemoveAll(DoPhrase))) }
+                   : Enumerable.Empty<Diagnostic>();
         }
+
+        private static bool ContainsPhrase(string methodName) => methodName.Contains(DoPhrase, StringComparison.Ordinal);
 
         private static string EscapeValidPhrases(string methodName)
         {
             var escapedMethod = methodName
                                 .Replace("Doc", EscapedPhrase + "c")
-                                .Replace("Does", EscapedPhrase + "es")
                                 .Replace("DoEvents", EscapedPhrase + "Events")
                                 .Replace("Double", EscapedPhrase + "uble")
                                 .Replace("Doubt", EscapedPhrase + "ubt")
@@ -46,6 +55,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 .Replace("Done", EscapedPhrase + "ne")
                                 .Replace("Dot", EscapedPhrase + "t")
                                 .Replace("Down", EscapedPhrase + "wn");
+            return escapedMethod;
+        }
+
+        private static string EscapeValidTestPhrases(string methodName)
+        {
+            var escapedMethod = methodName
+                                .Replace("Does", EscapedPhrase + "es");
             return escapedMethod;
         }
 
