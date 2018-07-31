@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
         }
 
-        [Test, Explicit("Test shall be run explicitly as it generates some markdown for the README.md file")]
+        [Test, Explicit("Test shall be run explicitly as it generates some markdown for the README.md file"), Ignore("Disabled")]
         public static void Analyzer_documentation_for_Markdown()
         {
             var markdownBuilder = new StringBuilder().AppendLine()
