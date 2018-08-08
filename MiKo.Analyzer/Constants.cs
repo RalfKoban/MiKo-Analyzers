@@ -101,8 +101,13 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
                     "A <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
-                    "A <see cref=\"System.String\"/> that contains ",
+                    "A <see cref=\"string\"/> that contains ",
                     "A <see cref=\"System.String\" /> that contains ",
+                    "A <see cref=\"System.String\"/> that contains ",
+                    "A <see cref=\"string\" /> that represents ",
+                    "A <see cref=\"string\"/> that represents ",
+                    "A <see cref=\"System.String\" /> that represents ",
+                    "A <see cref=\"System.String\"/> that represents ",
                 };
 
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =

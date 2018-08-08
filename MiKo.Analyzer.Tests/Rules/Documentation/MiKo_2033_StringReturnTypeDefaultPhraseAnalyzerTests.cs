@@ -68,6 +68,26 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_ToString_method(
+            [Values("returns")] string xmlTag,
+            [Values("", " ")] string space,
+            [ValueSource(nameof(StringOnlyReturnValues))] string returnType) => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// A " + "<see cref=\"" + returnType + "\"" + space + @"/> that represents the current object.
+    /// </" + xmlTag + @">
+    public " + returnType + @" ToString() => null;
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_String_Task_method(
             [Values("returns", "value")] string xmlTag,
             [Values("", " ")] string space,
