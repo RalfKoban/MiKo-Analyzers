@@ -2003,7 +2003,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameters should describe what they represent..
+        ///   Looks up a localized string similar to The documentation of parameters should describe what they represent..
         /// </summary>
         public static string MiKo_2021_Description {
             get {
@@ -2030,7 +2030,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of [out] parameters should start with the success case..
+        ///   Looks up a localized string similar to The documentation of [out] parameters should start with the success case..
         /// </summary>
         public static string MiKo_2022_Description {
             get {
@@ -2057,7 +2057,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a Boolean as parameter should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
+        ///   Looks up a localized string similar to The documentation of a Boolean as parameter should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
         /// </summary>
         public static string MiKo_2023_Description {
             get {
@@ -2084,7 +2084,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum..
+        ///   Looks up a localized string similar to The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum..
         /// </summary>
         public static string MiKo_2024_Description {
             get {
@@ -2111,7 +2111,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of &apos;CancellationToken&apos; parameters should start with a phrase that describes how it is used..
+        ///   Looks up a localized string similar to The documentation of &apos;CancellationToken&apos; parameters should start with a phrase that describes how it is used..
         /// </summary>
         public static string MiKo_2025_Description {
             get {
@@ -2138,7 +2138,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a return value should have a default starting phrase that describes the returned value in more detail..
+        ///   Looks up a localized string similar to The documentation of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {
             get {
@@ -2165,7 +2165,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a Task as return value should have a default (starting) phrase..
+        ///   Looks up a localized string similar to The documentation of a Task as return value should have a default (starting) phrase..
         /// </summary>
         public static string MiKo_2031_Description {
             get {
@@ -2192,7 +2192,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a Boolean as return value should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
+        ///   Looks up a localized string similar to The documentation of a Boolean as return value should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
         /// </summary>
         public static string MiKo_2032_Description {
             get {
@@ -2219,7 +2219,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a String as return value should have a specific phrase..
+        ///   Looks up a localized string similar to The documentation of a String as return value should have a specific phrase..
         /// </summary>
         public static string MiKo_2033_Description {
             get {
@@ -2246,7 +2246,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of an Enum as return value should have a specific phrase..
+        ///   Looks up a localized string similar to The documentation of an Enum as return value should have a specific phrase..
         /// </summary>
         public static string MiKo_2034_Description {
             get {
@@ -2273,7 +2273,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a collection as return value should have a specific phrase..
+        ///   Looks up a localized string similar to The documentation of a collection as return value should have a specific phrase..
         /// </summary>
         public static string MiKo_2035_Description {
             get {
@@ -2300,7 +2300,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
+        ///   Looks up a localized string similar to The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
         /// </summary>
         public static string MiKo_2036_Description {
             get {
@@ -2327,7 +2327,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a property that returns a command should start with a specific phrase that describes what command the property returns..
+        ///   Looks up a localized string similar to The documentation of a property that returns a command should start with a specific phrase that describes what command the property returns..
         /// </summary>
         public static string MiKo_2037_Description {
             get {
@@ -2354,7 +2354,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a command should start with a specific phrase that describes what the command does..
+        ///   Looks up a localized string similar to The documentation of a command should start with a specific phrase that describes what the command does..
         /// </summary>
         public static string MiKo_2038_Description {
             get {
@@ -2381,7 +2381,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides..
+        ///   Looks up a localized string similar to The documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides..
         /// </summary>
         public static string MiKo_2039_Description {
             get {
@@ -2507,7 +2507,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates..
+        ///   Looks up a localized string similar to The documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates..
         /// </summary>
         public static string MiKo_2043_Description {
             get {
@@ -2561,7 +2561,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a public-visible read-only fields should indicate that they are read-only..
+        ///   Looks up a localized string similar to The documentation of a public-visible read-only fields should indicate that they are read-only..
         /// </summary>
         public static string MiKo_2045_Description {
             get {
@@ -2588,7 +2588,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of an Attribute should start with a specific phrase that describes its purpose..
+        ///   Looks up a localized string similar to The documentation of an Attribute should start with a specific phrase that describes its purpose..
         /// </summary>
         public static string MiKo_2046_Description {
             get {
@@ -2615,7 +2615,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a value converters should start with a specific phrase that describes what they convert..
+        ///   Looks up a localized string similar to The documentation of a value converters should start with a specific phrase that describes what they convert..
         /// </summary>
         public static string MiKo_2047_Description {
             get {
@@ -2669,7 +2669,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of exceptions should follow the .NET Framework documentation..
+        ///   Looks up a localized string similar to The documentation of exceptions should follow the .NET Framework documentation..
         /// </summary>
         public static string MiKo_2050_Description {
             get {
@@ -2696,7 +2696,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of a thrown exception should be a simple condition phrase, such as: &apos;The item is not available&apos;..
+        ///   Looks up a localized string similar to The documentation of a thrown exception should be a simple condition phrase, such as: &apos;The item is not available&apos;..
         /// </summary>
         public static string MiKo_2051_Description {
             get {
@@ -2723,7 +2723,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of an ArgumentNullException being thrown should be a specific phrase..
+        ///   Looks up a localized string similar to The documentation of an ArgumentNullException being thrown should be a specific phrase..
         /// </summary>
         public static string MiKo_2052_Description {
             get {
@@ -2752,7 +2752,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null..
+        ///   Looks up a localized string similar to The documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null..
         /// </summary>
         public static string MiKo_2053_Description {
             get {
@@ -2779,7 +2779,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of an ArgumentException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to The documentation of an ArgumentException being thrown should have a specific starting phrase..
         /// </summary>
         public static string MiKo_2054_Description {
             get {
@@ -2807,7 +2807,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
+        ///   Looks up a localized string similar to The documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase..
         /// </summary>
         public static string MiKo_2055_Description {
             get {
@@ -2835,7 +2835,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
+        ///   Looks up a localized string similar to The documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
         /// </summary>
         public static string MiKo_2056_Description {
             get {
@@ -2889,7 +2889,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of factories should be uniform..
+        ///   Looks up a localized string similar to The documentation of factories should be uniform and consistent..
         /// </summary>
         public static string MiKo_2060_Description {
             get {
@@ -2943,7 +2943,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with a capizalized letter to have a full sentence..
+        ///   Looks up a localized string similar to Documentation should start with a capitalized letter to have a full sentence..
         /// </summary>
         public static string MiKo_2200_Description {
             get {

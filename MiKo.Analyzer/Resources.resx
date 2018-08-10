@@ -770,7 +770,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Inherited documentation should be used with &lt;inheritdoc /&gt; marker.</value>
   </data>
   <data name="MiKo_2021_Description" xml:space="preserve">
-    <value>Documentation of parameters should describe what they represent.</value>
+    <value>The documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {2}</value>
@@ -779,7 +779,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of parameter should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2022_Description" xml:space="preserve">
-    <value>Documentation of [out] parameters should start with the success case.</value>
+    <value>The documentation of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {2}</value>
@@ -788,7 +788,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of [out] parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2023_Description" xml:space="preserve">
-    <value>Documentation of a Boolean as parameter should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
+    <value>The documentation of a Boolean as parameter should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
     <value>&lt;param name="{1}"&gt; documentation should follow pattern: '{2} ... {3}'</value>
@@ -797,7 +797,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of Boolean parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2024_Description" xml:space="preserve">
-    <value>Documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
+    <value>The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {2}</value>
@@ -806,7 +806,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of Enum parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2025_Description" xml:space="preserve">
-    <value>Documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
+    <value>The documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {2}</value>
@@ -815,7 +815,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of 'CancellationToken' parameters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
-    <value>Documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
+    <value>The documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
   </data>
   <data name="MiKo_2030_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
@@ -824,7 +824,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2031_Description" xml:space="preserve">
-    <value>Documentation of a Task as return value should have a default (starting) phrase.</value>
+    <value>The documentation of a Task as return value should have a default (starting) phrase.</value>
   </data>
   <data name="MiKo_2031_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
@@ -833,7 +833,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of Task return value should have a specific (starting) phrase.</value>
   </data>
   <data name="MiKo_2032_Description" xml:space="preserve">
-    <value>Documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
+    <value>The documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
     <value>&lt;{2}&gt; documentation should follow pattern: '{3} ... {4}'</value>
@@ -842,7 +842,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of Boolean return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2033_Description" xml:space="preserve">
-    <value>Documentation of a String as return value should have a specific phrase.</value>
+    <value>The documentation of a String as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2033_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
@@ -851,7 +851,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of String return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2034_Description" xml:space="preserve">
-    <value>Documentation of an Enum as return value should have a specific phrase.</value>
+    <value>The documentation of an Enum as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2034_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
@@ -860,7 +860,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of Enum return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2035_Description" xml:space="preserve">
-    <value>Documentation of a collection as return value should have a specific phrase.</value>
+    <value>The documentation of a collection as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2035_MessageFormat" xml:space="preserve">
     <value>Start &lt;{2}&gt; with: '{3}'</value>
@@ -869,7 +869,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of collection return value should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2036_Description" xml:space="preserve">
-    <value>Documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
+    <value>The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
   </data>
   <data name="MiKo_2036_MessageFormat" xml:space="preserve">
     <value>End &lt;{2}&gt; with: '{3}'</value>
@@ -878,7 +878,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation of Boolean or Enum property shall describe the default value.</value>
   </data>
   <data name="MiKo_2037_Description" xml:space="preserve">
-    <value>Documentation of a property that returns a command should start with a specific phrase that describes what command the property returns.</value>
+    <value>The documentation of a property that returns a command should start with a specific phrase that describes what command the property returns.</value>
   </data>
   <data name="MiKo_2037_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -887,7 +887,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation of command properties should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2038_Description" xml:space="preserve">
-    <value>Documentation of a command should start with a specific phrase that describes what the command does.</value>
+    <value>The documentation of a command should start with a specific phrase that describes what the command does.</value>
   </data>
   <data name="MiKo_2038_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -896,7 +896,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation of command should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2039_Description" xml:space="preserve">
-    <value>Documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides.</value>
+    <value>The documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides.</value>
   </data>
   <data name="MiKo_2039_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -938,7 +938,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.</value>
   </data>
   <data name="MiKo_2043_Description" xml:space="preserve">
-    <value>Documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates.</value>
+    <value>The documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates.</value>
   </data>
   <data name="MiKo_2043_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -956,7 +956,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation references method parameters correctly.</value>
   </data>
   <data name="MiKo_2045_Description" xml:space="preserve">
-    <value>Documentation of a public-visible read-only fields should indicate that they are read-only.</value>
+    <value>The documentation of a public-visible read-only fields should indicate that they are read-only.</value>
   </data>
   <data name="MiKo_2045_MessageFormat" xml:space="preserve">
     <value>End &lt;summary&gt; with: '{1}'</value>
@@ -965,7 +965,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.</value>
   </data>
   <data name="MiKo_2046_Description" xml:space="preserve">
-    <value>Documentation of an Attribute should start with a specific phrase that describes its purpose.</value>
+    <value>The documentation of an Attribute should start with a specific phrase that describes its purpose.</value>
   </data>
   <data name="MiKo_2046_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with {1}</value>
@@ -974,7 +974,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation of Attributes should have a  default starting phrase.</value>
   </data>
   <data name="MiKo_2047_Description" xml:space="preserve">
-    <value>Documentation of a value converters should start with a specific phrase that describes what they convert.</value>
+    <value>The documentation of a value converters should start with a specific phrase that describes what they convert.</value>
   </data>
   <data name="MiKo_2047_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -992,7 +992,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation should be more explicit and not use 'will be'.</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
-    <value>Documentation of exceptions should follow the .NET Framework documentation.</value>
+    <value>The documentation of exceptions should follow the .NET Framework documentation.</value>
   </data>
   <data name="MiKo_2050_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -1001,7 +1001,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Exceptions should be documented following the .NET Framework.</value>
   </data>
   <data name="MiKo_2051_Description" xml:space="preserve">
-    <value>Documentation of a thrown exception should be a simple condition phrase, such as: 'The item is not available'.</value>
+    <value>The documentation of a thrown exception should be a simple condition phrase, such as: 'The item is not available'.</value>
   </data>
   <data name="MiKo_2051_MessageFormat" xml:space="preserve">
     <value>Use condition form to document thrown exception</value>
@@ -1010,7 +1010,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').</value>
   </data>
   <data name="MiKo_2052_Description" xml:space="preserve">
-    <value>Documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
+    <value>The documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
   </data>
   <data name="MiKo_2052_MessageFormat" xml:space="preserve">
     <value>{1} documentation should be something like:
@@ -1021,7 +1021,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Throwing of ArgumentNullException should be documented using a default phrase.</value>
   </data>
   <data name="MiKo_2053_Description" xml:space="preserve">
-    <value>Documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
+    <value>The documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
   </data>
   <data name="MiKo_2053_MessageFormat" xml:space="preserve">
     <value>Remove '{2}' as '{1}' is a value type parameter</value>
@@ -1030,7 +1030,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Throwing of ArgumentNullException should be documented only for reference type parameters.</value>
   </data>
   <data name="MiKo_2054_Description" xml:space="preserve">
-    <value>Documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
+    <value>The documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
     <value>{1} documentation should be something like:
@@ -1040,7 +1040,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Throwing of ArgumentException should be documented using a default starting phrase.</value>
   </data>
   <data name="MiKo_2055_Description" xml:space="preserve">
-    <value>Documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
+    <value>The documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
     <value>{1} documentation should be something like:
@@ -1050,7 +1050,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.</value>
   </data>
   <data name="MiKo_2056_Description" xml:space="preserve">
-    <value>Documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
+    <value>The documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
   </data>
   <data name="MiKo_2056_MessageFormat" xml:space="preserve">
     <value>{1} documentation should end with: '{2}'</value>
@@ -1068,7 +1068,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Types that are not disposable shall not throw an ObjectDisposedException.</value>
   </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
-    <value>Documentation of factories should be uniform.</value>
+    <value>The documentation of factories should be uniform and consistent.</value>
   </data>
   <data name="MiKo_2060_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -1086,7 +1086,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;example&gt; documentation should start with descriptive default phrase.</value>
   </data>
   <data name="MiKo_2200_Description" xml:space="preserve">
-    <value>Documentation should start with a capizalized letter to have a full sentence.</value>
+    <value>Documentation should start with a capitalized letter to have a full sentence.</value>
   </data>
   <data name="MiKo_2200_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with capitalized letter</value>
