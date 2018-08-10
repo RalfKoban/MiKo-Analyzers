@@ -1778,7 +1778,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should describe their responsibility..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should describe its responsibility..
         /// </summary>
         public static string MiKo_2012_Title {
             get {

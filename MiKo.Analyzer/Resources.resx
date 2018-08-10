@@ -695,7 +695,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation should not {1} meaningless phrase: '{2}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should describe their responsibility.</value>
+    <value>&lt;summary&gt; documentation should describe its responsibility.</value>
   </data>
   <data name="MiKo_2013_Description" xml:space="preserve">
     <value>To ease their usage, enums should specify what kind of values they define.</value>
