@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IMethodSymbol method) => ShallAnalyze(method.ReturnType);
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => ShallAnalyze(symbol.Type);
+
         protected override bool ShallAnalyze(IFieldSymbol symbol) => ShallAnalyze(symbol.Type);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeName(symbol);
@@ -33,10 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeName(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeNames(symbol, "_command", Suffix);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                       ? Enumerable.Empty<Diagnostic>()
-                                                                       : new[] { ReportIssue(symbol, Suffix) };
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol, string suffix = Suffix) => AnalyzeNames(symbol, suffix);
+
+        private IEnumerable<Diagnostic> AnalyzeNames(ISymbol symbol, params string[] suffixes) => suffixes.Any(_ => symbol.Name.EndsWith(_, StringComparison.Ordinal))
+                                                                                                  ? Enumerable.Empty<Diagnostic>()
+                                                                                                  : new[] { ReportIssue(symbol, Suffix) };
     }
 }

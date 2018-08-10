@@ -113,6 +113,19 @@ public class TestMe
     private ICommand m_bla;
 }
 ");
+        [TestCase("_command")]
+        [TestCase("m_command")]
+        [TestCase("_myCommand")]
+        [TestCase("m_myCommand")]
+        public void No_issue_is_reported_for_correctly_named_command_field(string fieldName) => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    private ICommand " + fieldName + @";
+}
+");
 
         protected override string GetDiagnosticId() => MiKo_1044_CommandSuffixAnalyzer.Id;
 
