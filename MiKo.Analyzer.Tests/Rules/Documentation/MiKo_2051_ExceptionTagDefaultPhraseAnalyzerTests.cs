@@ -89,14 +89,15 @@ public class TestMe
         {
             var phrases = new[]
                               {
+                                  "If ",
+                                  "In case ",
+                                  "When ",
+                                  "Throw ",
+                                  "Throws ",
                                   "Thrown ",
                                   "Is thrown ",
                                   "Gets thrown ",
                                   "Will be thrown ",
-                                  "If ",
-                                  "In case ",
-                                  "When ",
-                                  "Throws ",
                               };
 
             return phrases.Concat(phrases.Select(_ => _.ToLower())).ToList();

@@ -276,6 +276,7 @@ namespace MiKoSolutions.Analyzers
                     "In case ",
                     "When ",
                     "Throws ",
+                    "Throw ",
                 };
 
             internal const string XmlElementStartingTag = "<";
