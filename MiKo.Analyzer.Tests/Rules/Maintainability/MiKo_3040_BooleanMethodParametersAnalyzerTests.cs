@@ -41,6 +41,17 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_boolean_parameter_on_Dispose_method() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+public class TestMe
+{
+    protected virtual void Dispose(bool disposing) { }
+}
+");
+
         [TestCase("bool b")]
         [TestCase("bool b, int x")]
         [TestCase("int x, bool b, int y")]
