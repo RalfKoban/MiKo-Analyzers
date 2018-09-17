@@ -800,7 +800,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {2}</value>
+    <value>&lt;param name="{1}"&gt; documentation should start with: {2}</value>
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
     <value>Documentation of Enum parameters should have a default starting phrase.</value>
@@ -809,7 +809,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {2}</value>
+    <value>&lt;param name="{1}"&gt; documentation should start with: {2}</value>
   </data>
   <data name="MiKo_2025_Title" xml:space="preserve">
     <value>Documentation of 'CancellationToken' parameters should have a default starting phrase.</value>

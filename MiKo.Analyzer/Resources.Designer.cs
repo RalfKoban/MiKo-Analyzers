@@ -2093,7 +2093,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {2}.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should start with: {2}.
         /// </summary>
         public static string MiKo_2024_MessageFormat {
             get {
@@ -2120,7 +2120,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {2}.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should start with: {2}.
         /// </summary>
         public static string MiKo_2025_MessageFormat {
             get {
