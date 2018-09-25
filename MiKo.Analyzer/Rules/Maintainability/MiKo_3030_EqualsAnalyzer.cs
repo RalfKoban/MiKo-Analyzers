@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -32,10 +33,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                    : null;
         }
 
-        private Diagnostic AnalyzeMethod(ExpressionSyntax node, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments) => IsEqualsMethod(semanticModel.GetSymbolInfo(node).Symbol)
-                                                                                                                                            && IsStruct(semanticModel, arguments)
-                                                                                                                                                    ? ReportIssue(node.ToString(), node.GetLocation())
-                                                                                                                                                    : null;
+        private Diagnostic AnalyzeMethod(ExpressionSyntax node, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var isEquals = IsEqualsMethod(semanticModel.GetSymbolInfo(node).Symbol) && IsStruct(semanticModel, arguments);
+            if (isEquals)
+            {
+                var method = node.GetEnclosingMethod(semanticModel);
+                if (method.MethodKind != MethodKind.UserDefinedOperator)
+                {
+                    return ReportIssue(node.ToString(), node.GetLocation());
+                }
+            }
+
+            return null;
+        }
 
         private static bool IsEqualsMethod(ISymbol method) => method != null && method.ContainingType.SpecialType == SpecialType.System_Object && method.IsStatic && method.Name == nameof(object.Equals);
 

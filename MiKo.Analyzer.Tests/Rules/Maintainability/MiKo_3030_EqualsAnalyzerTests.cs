@@ -64,6 +64,7 @@ public class TestMe
     {
         var x = " + x + @";
         var y = " + y + @";
+
         if (object.Equals(x, y)) throw new NotSupportedException();
     }
 }
@@ -80,6 +81,7 @@ public class TestMe
     {
         var x = " + x + @";
         var y = " + y + @";
+
         if (Equals(x, y)) throw new NotSupportedException();
     }
 }
@@ -96,6 +98,7 @@ public class TestMe
     {
         var x = " + x + @";
         var y = " + y + @";
+
         if (x.Equals(y)) throw new NotSupportedException();
     }
 }
@@ -176,6 +179,21 @@ public class TestMe
                 return;
         }
     }
+}
+");
+        [TestCase("==")]
+        [TestCase("!=")]
+        [TestCase(">=")]
+        [TestCase("<=")]
+        [TestCase("+")]
+        [TestCase("-")]
+        [TestCase("whatever")]
+        public void No_issue_is_reported_for_operator_(string operatorName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static bool operator " + operatorName + @" (TestMe left, TestMe right) => Equals(left, right);
 }
 ");
 
