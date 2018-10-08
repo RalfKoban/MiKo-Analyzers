@@ -1329,4 +1329,13 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_3102_Title" xml:space="preserve">
     <value>Test methods should not contain conditional statements such as 'if', 'switch', etc.</value>
   </data>
+  <data name="MiKo_3103_Description" xml:space="preserve">
+    <value>Tests should be specific to make the reproducible and easy to maintain. A GUID that is generated is not reproducible at all and cannot be easily found in case a test fails. Therefore, a hard-coded GUID should be used instead.</value>
+  </data>
+  <data name="MiKo_3103_MessageFormat" xml:space="preserve">
+    <value>Use a hard-coded GUID instead</value>
+  </data>
+  <data name="MiKo_3103_Title" xml:space="preserve">
+    <value>Test methods should not use 'Guid.NewGuid()'.</value>
+  </data>
 </root>

@@ -3659,5 +3659,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_3102_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tests should be specific to make the reproducible and easy to maintain. A GUID that is generated is not reproducible at all and cannot be easily found in case a test fails. Therefore, a hard-coded GUID should be used instead..
+        /// </summary>
+        public static string MiKo_3103_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3103_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a hard-coded GUID instead.
+        /// </summary>
+        public static string MiKo_3103_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3103_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not use &apos;Guid.NewGuid()&apos;..
+        /// </summary>
+        public static string MiKo_3103_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3103_Title", resourceCulture);
+            }
+        }
     }
 }
