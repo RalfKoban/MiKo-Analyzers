@@ -14,7 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly KeyValuePair<string, string>[] Endings =
             {
+                new KeyValuePair<string, string>("estination", "estination"),
+                new KeyValuePair<string, string>("unction", "unction"),
+                new KeyValuePair<string, string>("ptation", "pt"),
+                new KeyValuePair<string, string>("rmation", "rm"),
                 new KeyValuePair<string, string>("llation", "ll"),
+                new KeyValuePair<string, string>("ration", "re"),
+                new KeyValuePair<string, string>("isation", "ise"),
+                new KeyValuePair<string, string>("ization", "ize"),
                 new KeyValuePair<string, string>("ation", "ate"),
                 new KeyValuePair<string, string>("ction", "ct"),
                 new KeyValuePair<string, string>("ption", "pt"),
@@ -29,18 +36,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                             ? new[] { ReportIssue(method, betterName) }
                                                                                             : Enumerable.Empty<Diagnostic>();
 
-        private static bool TryFindBetterName(string name, out string betterName)
+        public static bool TryFindBetterName(string name, out string betterName)
         {
-            foreach (var pair in Endings)
+            betterName = name;
+
+            if (name == null)
+                return false;
+
+            foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
             {
-                if (name.EndsWith(pair.Key, StringComparison.Ordinal))
-                {
-                    betterName = name.Substring(0, name.Length - pair.Key.Length) + pair.Value;
-                    return true;
-                }
+                betterName = name.Substring(0, name.Length - pair.Key.Length) + pair.Value;
+                return !string.Equals(betterName, name, StringComparison.Ordinal);
             }
 
-            betterName = name;
             return false;
         }
     }
