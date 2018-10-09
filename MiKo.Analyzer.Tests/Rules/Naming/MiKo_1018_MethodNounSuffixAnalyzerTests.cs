@@ -37,9 +37,9 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1018_MethodNounSuffixAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidMethodNames() => new[] { "DoSomething", "Compare", "Manipulate", "Adopt", "FindBison" };
+        private static IEnumerable<string> ValidMethodNames() => new[] { "DoSomething", "Compare", "Manipulate", "Adopt", "FindBison", "Install", "Act" };
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> InvalidMethodNames() => new[] { "DoComparison", "ApplyComparison", "ExecuteManipulation", "RunAdoption", "Installation" };
+        private static IEnumerable<string> InvalidMethodNames() => new[] { "DoComparison", "ApplyComparison", "ExecuteManipulation", "RunAdoption", "Installation", "DoAction" };
     }
 }

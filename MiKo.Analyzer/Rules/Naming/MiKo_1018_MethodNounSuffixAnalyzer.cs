@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 new KeyValuePair<string, string>("llation", "ll"),
                 new KeyValuePair<string, string>("ation", "ate"),
+                new KeyValuePair<string, string>("ction", "ct"),
                 new KeyValuePair<string, string>("ption", "pt"),
                 new KeyValuePair<string, string>("rison", "re"),
             };
