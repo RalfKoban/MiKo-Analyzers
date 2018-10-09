@@ -3443,7 +3443,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods. Instead an InvalidOperationException should be thrown to indicate that the object is in an inappropriate state..
+        ///   Looks up a localized string similar to Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states..
         /// </summary>
         public static string MiKo_3015_Title {
             get {

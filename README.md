@@ -150,7 +150,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3012|Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown.|:white_check_mark:|
 |MiKo_3013|The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException.|:white_check_mark:|
 |MiKo_3014|InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message.|:white_check_mark:|
-|MiKo_3015|ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods. Instead an InvalidOperationException should be thrown to indicate that the object is in an inappropriate state.|:white_check_mark:|
+|MiKo_3015|Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states.|:white_check_mark:|
 |MiKo_3020|Use 'Task.CompletedTask' instead of 'Task.FromResult'.|:white_check_mark:|
 |MiKo_3021|Do not use 'Task.Run' in the implementation.|:white_check_mark:|
 |MiKo_3030|Do not use object.Equals() on value types.|:white_check_mark:|

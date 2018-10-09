@@ -1256,7 +1256,7 @@ That is they should return a Boolean and have the last parameter as out-paramete
     <value>Throw an 'InvalidOperationException' instead</value>
   </data>
   <data name="MiKo_3015_Title" xml:space="preserve">
-    <value>ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods. Instead an InvalidOperationException should be thrown to indicate that the object is in an inappropriate state.</value>
+    <value>Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states.</value>
   </data>
   <data name="MiKo_3020_Description" xml:space="preserve">
     <value>For performance reasons it's better to use 'Task.CompletedTask' instead of 'Task.FromResult()' as the returned task is internally cached.</value>
