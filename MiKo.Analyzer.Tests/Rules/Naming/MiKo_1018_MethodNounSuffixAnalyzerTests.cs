@@ -40,6 +40,6 @@ public class TestMe
         private static IEnumerable<string> ValidMethodNames() => new[] { "DoSomething", "Compare", "Manipulate", "Adopt", "FindBison" };
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> InvalidMethodNames() => new[] { "DoComparison", "ApplyComparison", "ExecuteManipulation", "RunAdoption" };
+        private static IEnumerable<string> InvalidMethodNames() => new[] { "DoComparison", "ApplyComparison", "ExecuteManipulation", "RunAdoption", "Installation" };
     }
 }
