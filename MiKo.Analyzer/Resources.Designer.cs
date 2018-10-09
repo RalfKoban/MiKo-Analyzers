@@ -550,6 +550,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods should not be suffixed with a noun form of a verb if the verb would fit perfectly as method name..
+        /// </summary>
+        public static string MiKo_1018_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1018_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1018_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1018_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be suffixed with noun of a verb..
+        /// </summary>
+        public static string MiKo_1018_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1018_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
         /// </summary>
         public static string MiKo_1020_Description {

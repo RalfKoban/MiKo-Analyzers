@@ -39,6 +39,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1015|Methods should not be named 'Init'.|:white_check_mark:|
 |MiKo_1016|Factory methods should be named 'Create'.|:white_check_mark:|
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|:white_check_mark:|
+|MiKo_1018|Methods should not be suffixed with noun of a verb.|:white_check_mark:|
 |MiKo_1020|Type names should be limited in length.|:white_large_square:|
 |MiKo_1021|Method names should be limited in length.|:white_large_square:|
 |MiKo_1022|Parameter names should be limited in length.|:white_large_square:|
