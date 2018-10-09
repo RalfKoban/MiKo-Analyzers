@@ -44,6 +44,7 @@ public class TestMe
         [TestCase("Configuration", ExpectedResult = "Configure")]
         [TestCase("Connection", ExpectedResult = "Connect")]
         [TestCase("Creation", ExpectedResult = "Create")]
+        [TestCase("Documentation", ExpectedResult = "Document")]
         [TestCase("Estimation", ExpectedResult = "Estimate")]
         [TestCase("Information", ExpectedResult = "Inform")]
         [TestCase("Initialisation", ExpectedResult = "Initialise")]
@@ -65,9 +66,35 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1018_MethodNounSuffixAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidMethodNames() => new[] { "DoSomething", "Compare", "Manipulate", "Adopt", "FindBison", "Install", "Act", "UndoInstallation", "RedoInstallation", "ToComparison", "VerifyConnection", "EnsureLocation" };
+        private static IEnumerable<string> ValidMethodNames() => new[]
+                                                                     {
+                                                                         "DoSomething",
+                                                                         "Compare",
+                                                                         "Manipulate",
+                                                                         "Adopt",
+                                                                         "FindBison",
+                                                                         "Install",
+                                                                         "Act",
+                                                                         "UndoInstallation",
+                                                                         "RedoInstallation",
+                                                                         "ToComparison",
+                                                                         "VerifyConnection",
+                                                                         "EnsureLocation",
+                                                                         "GetDocumentation",
+                                                                         "RefreshDocumentation",
+                                                                     };
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> InvalidMethodNames() => new[] { "DoComparison", "ApplyComparison", "ExecuteManipulation", "RunAdoption", "Installation", "DoAction", "Initialization", "Configuration", };
+        private static IEnumerable<string> InvalidMethodNames() => new[]
+                                                                       {
+                                                                           "DoComparison",
+                                                                           "ApplyComparison",
+                                                                           "ExecuteManipulation",
+                                                                           "RunAdoption",
+                                                                           "Installation",
+                                                                           "DoAction",
+                                                                           "Initialization",
+                                                                           "Configuration",
+                                                                       };
     }
 }

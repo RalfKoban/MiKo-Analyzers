@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 new KeyValuePair<string, string>("Caption", "Caption"),
                 new KeyValuePair<string, string>("estination", "estination"),
+                new KeyValuePair<string, string>("mentation", "ment"),
                 new KeyValuePair<string, string>("unction", "unction"),
                 new KeyValuePair<string, string>("ptation", "pt"),
                 new KeyValuePair<string, string>("rmation", "rm"),
@@ -45,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            if (name.StartsWithAny(StringComparison.Ordinal, "Undo", "Redo", "To", "Verify", "Ensure"))
+            if (name.StartsWithAny(StringComparison.Ordinal, "Undo", "Redo", "To", "Verify", "Ensure", "Get", "get_", "Refresh"))
                 return false;
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
