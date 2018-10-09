@@ -14,11 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly KeyValuePair<string, string>[] Endings =
             {
+                new KeyValuePair<string, string>("Caption", "Caption"),
                 new KeyValuePair<string, string>("estination", "estination"),
                 new KeyValuePair<string, string>("unction", "unction"),
                 new KeyValuePair<string, string>("ptation", "pt"),
                 new KeyValuePair<string, string>("rmation", "rm"),
                 new KeyValuePair<string, string>("llation", "ll"),
+                new KeyValuePair<string, string>("stration", "ster"),
                 new KeyValuePair<string, string>("ration", "re"),
                 new KeyValuePair<string, string>("isation", "ise"),
                 new KeyValuePair<string, string>("ization", "ize"),
@@ -40,7 +42,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             betterName = name;
 
-            if (name == null)
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            if (name.StartsWithAny(StringComparison.Ordinal, "Undo", "Redo", "To", "Verify", "Ensure"))
                 return false;
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))

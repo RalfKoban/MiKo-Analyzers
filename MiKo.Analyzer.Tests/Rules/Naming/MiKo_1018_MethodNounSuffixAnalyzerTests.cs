@@ -31,22 +31,29 @@ public class TestMe
     }
 }
 ");
-        [TestCase("Function", ExpectedResult = "Function", Description = "There is no verb available")]
+
+        [TestCase(null, ExpectedResult = null, Description = "There is no verb available")]
+        [TestCase("", ExpectedResult = "", Description = "There is no verb available")]
+        [TestCase(" ", ExpectedResult = " ", Description = "There is no verb available")]
+        [TestCase("Caption", ExpectedResult = "Caption", Description = "There is no verb available")]
         [TestCase("Destination", ExpectedResult = "Destination", Description = "There is no verb available")]
-        [TestCase("Comparison", ExpectedResult = "Compare")]
-        [TestCase("Creation", ExpectedResult = "Create")]
-        [TestCase("Manipulation", ExpectedResult = "Manipulate")]
-        [TestCase("Installation", ExpectedResult = "Install")]
-        [TestCase("Uninstallation", ExpectedResult = "Uninstall")]
-        [TestCase("Configuration", ExpectedResult = "Configure")]
-        [TestCase("Initialization", ExpectedResult = "Initialize")]
-        [TestCase("Initialisation", ExpectedResult = "Initialise")]
-        [TestCase("Information", ExpectedResult = "Inform")]
-        [TestCase("Adoption", ExpectedResult = "Adopt")]
+        [TestCase("Function", ExpectedResult = "Function", Description = "There is no verb available")]
         [TestCase("Adaptation", ExpectedResult = "Adapt")]
-        [TestCase("Stabilization", ExpectedResult = "Stabilize")]
-        [TestCase("Location", ExpectedResult = "Locate")]
+        [TestCase("Adoption", ExpectedResult = "Adopt")]
+        [TestCase("Comparison", ExpectedResult = "Compare")]
+        [TestCase("Configuration", ExpectedResult = "Configure")]
+        [TestCase("Connection", ExpectedResult = "Connect")]
+        [TestCase("Creation", ExpectedResult = "Create")]
         [TestCase("Estimation", ExpectedResult = "Estimate")]
+        [TestCase("Information", ExpectedResult = "Inform")]
+        [TestCase("Initialisation", ExpectedResult = "Initialise")]
+        [TestCase("Initialization", ExpectedResult = "Initialize")]
+        [TestCase("Installation", ExpectedResult = "Install")]
+        [TestCase("Location", ExpectedResult = "Locate")]
+        [TestCase("Manipulation", ExpectedResult = "Manipulate")]
+        [TestCase("Registration", ExpectedResult = "Register")]
+        [TestCase("Stabilization", ExpectedResult = "Stabilize")]
+        [TestCase("Uninstallation", ExpectedResult = "Uninstall")]
         public string A_proper_name_is_found(string name)
         {
             MiKo_1018_MethodNounSuffixAnalyzer.TryFindBetterName(name, out var result);
@@ -58,7 +65,7 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1018_MethodNounSuffixAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidMethodNames() => new[] { "DoSomething", "Compare", "Manipulate", "Adopt", "FindBison", "Install", "Act" };
+        private static IEnumerable<string> ValidMethodNames() => new[] { "DoSomething", "Compare", "Manipulate", "Adopt", "FindBison", "Install", "Act", "UndoInstallation", "RedoInstallation", "ToComparison", "VerifyConnection", "EnsureLocation" };
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> InvalidMethodNames() => new[] { "DoComparison", "ApplyComparison", "ExecuteManipulation", "RunAdoption", "Installation", "DoAction", "Initialization", "Configuration", };
