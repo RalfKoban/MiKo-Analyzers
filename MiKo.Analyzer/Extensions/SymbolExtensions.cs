@@ -34,6 +34,13 @@ namespace Microsoft.CodeAnalysis
             return false;
         }
 
+        internal static bool IsInterfaceImplementation(this IMethodSymbol method)
+        {
+            var methodSymbols = method.ContainingType.AllInterfaces
+                                      .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
+            return methodSymbols.Any(_ => method.ContainingType.FindImplementationForInterfaceMember(_).Equals(method));
+        }
+
         internal static bool IsTestClass(this ITypeSymbol symbol)
         {
             foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))

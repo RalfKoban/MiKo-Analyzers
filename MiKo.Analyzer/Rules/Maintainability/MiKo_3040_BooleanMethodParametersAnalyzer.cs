@@ -21,6 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (method.MethodKind == MethodKind.Ordinary)
             {
+                if (method.IsInterfaceImplementation())
+                    return Enumerable.Empty<Diagnostic>();
+
                 switch (method.Parameters.Length)
                 {
                     case 1 when method.Name == nameof(IDisposable.Dispose) && method.Parameters[0].Name == "disposing":
