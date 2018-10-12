@@ -82,6 +82,9 @@ public class TestMe
                                                                          "EnsureLocation",
                                                                          "GetDocumentation",
                                                                          "RefreshDocumentation",
+                                                                         "TraceInformation",
+                                                                         "WriteInformation",
+                                                                         "ReadConfiguration",
                                                                      };
 
         [ExcludeFromCodeCoverage]
