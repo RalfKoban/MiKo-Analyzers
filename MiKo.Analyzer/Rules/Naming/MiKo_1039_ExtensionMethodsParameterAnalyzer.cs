@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1039";
 
         private const string Value = "value";
+        private const string Values = "values";
         private const string Source = "source";
 
         public MiKo_1039_ExtensionMethodsParameterAnalyzer() : base(Id)
@@ -27,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return IsConversionExtension(method)
                    ? AnalyzeName(parameter, Source)
-                   : AnalyzeName(parameter, Value, Source);
+                   : AnalyzeName(parameter, Value, Values, Source);
         }
 
         private static bool IsConversionExtension(IMethodSymbol method) => !method.ReturnsVoid

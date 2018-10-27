@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -66,7 +65,7 @@ public static class TestMeExtensions
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1039_ExtensionMethodsParameterAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CorrectParameterNames() => new[] { "value", "source" };
+        private static IEnumerable<string> CorrectParameterNames() => new[] { "value", "source", "values" };
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongParameterNames() => new[] { "o", "something", "v" };
@@ -75,6 +74,6 @@ public static class TestMeExtensions
         private static IEnumerable<string> CorrectConversionParameterNames() => new[] { "source" };
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongConversionParameterNames() => new[] { "o", "something", "v", "value" };
+        private static IEnumerable<string> WrongConversionParameterNames() => new[] { "o", "something", "v", "value", "values" };
     }
 }
