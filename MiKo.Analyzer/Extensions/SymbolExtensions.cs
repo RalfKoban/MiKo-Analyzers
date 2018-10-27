@@ -28,7 +28,7 @@ namespace Microsoft.CodeAnalysis
                 var methodSymbols = method.ContainingType.AllInterfaces
                                           .Where(_ => _.Name == fullName)
                                           .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
-                return methodSymbols.Any(_ => method.ContainingType.FindImplementationForInterfaceMember(_).Equals(method));
+                return methodSymbols.Any(_ => method.Equals(method.ContainingType.FindImplementationForInterfaceMember(_)));
             }
 
             return false;
@@ -38,7 +38,7 @@ namespace Microsoft.CodeAnalysis
         {
             var methodSymbols = method.ContainingType.AllInterfaces
                                       .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
-            return methodSymbols.Any(_ => method.ContainingType.FindImplementationForInterfaceMember(_).Equals(method));
+            return methodSymbols.Any(_ => method.Equals(method.ContainingType.FindImplementationForInterfaceMember(_)));
         }
 
         internal static bool IsTestClass(this ITypeSymbol symbol)
