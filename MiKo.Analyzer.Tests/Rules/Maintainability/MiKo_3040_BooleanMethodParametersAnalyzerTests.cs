@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -51,6 +52,35 @@ public class TestMe
     protected virtual void Dispose(bool disposing) { }
 }
 ");
+
+        [Test]
+        public void No_issue_is_reported_for_boolean_parameter_on_interface_implementation_method() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+namespace My
+{
+    public abstract class TestMe : System.Collections.Generic.ICollection<bool>
+    {
+            public abstract int Count { get; set; }
+
+            public abstract bool IsReadOnly { get; set; }
+
+            void ICollection<bool>.Add(bool value) { }
+
+            public abstract void Clear();
+
+            public abstract bool Contains(bool item);
+
+            public abstract void CopyTo(bool[] array, int arrayIndex);
+
+            public abstract bool Remove(bool item);
+
+            public abstract IEnumerator<bool> GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+}");
 
         [TestCase("bool b")]
         [TestCase("bool b, int x")]
