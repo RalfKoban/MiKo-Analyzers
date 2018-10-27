@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("class", "SomethingViewModel")]
         [TestCase("interface", "ISomethingViewModels")]
         [TestCase("class", "SomethingViewModels")]
+        [TestCase("class", "SemanticModel")]
         public void No_issue_is_reported_for(string type, string name) => No_issue_is_reported_for(@"
 public " + type + " " + name + @"
 {

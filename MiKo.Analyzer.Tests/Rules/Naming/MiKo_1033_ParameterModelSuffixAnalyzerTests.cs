@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("viewModels")]
         [TestCase("item")]
         [TestCase("modeless")]
+        [TestCase("semanticModel")]
         public void No_issue_is_reported_for_valid_parameter(string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
