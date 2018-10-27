@@ -1352,6 +1352,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Suffixing delegate parameters with their type is repetitive and provides now value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
+        /// </summary>
+        public static string MiKo_1051_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1051_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a better matching name instead.
+        /// </summary>
+        public static string MiKo_1051_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1051_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suffix parameters with delegate types..
+        /// </summary>
+        public static string MiKo_1051_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1051_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
