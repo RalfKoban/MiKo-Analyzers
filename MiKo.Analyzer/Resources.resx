@@ -1320,6 +1320,16 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_3040_Title" xml:space="preserve">
     <value>Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.</value>
   </data>
+  <data name="MiKo_3041_Description" xml:space="preserve">
+    <value>EventArgs should not use delegates such as 'Action' or 'Func' because the callee needs to know exactly how the delegate behaves.
+Failures inside the delegate(s) are really hard to tackle down because an exception gets thrown at a completely unrelated area.</value>
+  </data>
+  <data name="MiKo_3041_MessageFormat" xml:space="preserve">
+    <value>Do not use a delegate</value>
+  </data>
+  <data name="MiKo_3041_Title" xml:space="preserve">
+    <value>EventArgs shall not use delegates.</value>
+  </data>
   <data name="MiKo_3047_Description" xml:space="preserve">
     <value>To ease their finding, value converters should be placed and grouped in a specific namespace called 'Converters'.</value>
   </data>

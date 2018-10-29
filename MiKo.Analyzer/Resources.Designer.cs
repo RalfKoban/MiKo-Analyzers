@@ -3634,6 +3634,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EventArgs should not use delegates such as &apos;Action&apos; or &apos;Func&apos; because the callee needs to know exactly how the delegate behaves.
+        ///Failures inside the delegate(s) are really hard to tackle down because an exception gets thrown at a completely unrelated area..
+        /// </summary>
+        public static string MiKo_3041_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3041_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a delegate.
+        /// </summary>
+        public static string MiKo_3041_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3041_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EventArgs shall not use delegates..
+        /// </summary>
+        public static string MiKo_3041_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3041_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease their finding, value converters should be placed and grouped in a specific namespace called &apos;Converters&apos;..
         /// </summary>
         public static string MiKo_3047_Description {
