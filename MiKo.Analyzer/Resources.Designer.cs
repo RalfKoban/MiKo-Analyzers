@@ -2615,6 +2615,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should not reference method parameters as its only purpose is to give a brief description..
+        /// </summary>
+        public static string MiKo_2045_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2045_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove parameter reference &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2045_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2045_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not reference parameters..
+        /// </summary>
+        public static string MiKo_2045_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2045_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of a public-visible read-only fields should indicate that they are read-only..
         /// </summary>
         public static string MiKo_2046_Description {

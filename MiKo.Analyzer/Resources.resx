@@ -973,6 +973,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2044_Title" xml:space="preserve">
     <value>Documentation references method parameters correctly.</value>
   </data>
+  <data name="MiKo_2045_Description" xml:space="preserve">
+    <value>The &lt;summary&gt; documentation should not reference method parameters as its only purpose is to give a brief description.</value>
+  </data>
+  <data name="MiKo_2045_MessageFormat" xml:space="preserve">
+    <value>Remove parameter reference '{1}'</value>
+  </data>
+  <data name="MiKo_2045_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation should not reference parameters.</value>
+  </data>
   <data name="MiKo_2046_Description" xml:space="preserve">
     <value>The documentation of a public-visible read-only fields should indicate that they are read-only.</value>
   </data>
