@@ -2617,33 +2617,6 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to The documentation of a public-visible read-only fields should indicate that they are read-only..
         /// </summary>
-        public static string MiKo_2045_Description {
-            get {
-                return ResourceManager.GetString("MiKo_2045_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to End &lt;summary&gt; with: &apos;{1}&apos;.
-        /// </summary>
-        public static string MiKo_2045_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_2045_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase..
-        /// </summary>
-        public static string MiKo_2045_Title {
-            get {
-                return ResourceManager.GetString("MiKo_2045_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The documentation of an Attribute should start with a specific phrase that describes its purpose..
-        /// </summary>
         public static string MiKo_2046_Description {
             get {
                 return ResourceManager.GetString("MiKo_2046_Description", resourceCulture);
@@ -2651,7 +2624,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;summary&gt; with {1}.
+        ///   Looks up a localized string similar to End &lt;summary&gt; with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2046_MessageFormat {
             get {
@@ -2660,7 +2633,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a  default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase..
         /// </summary>
         public static string MiKo_2046_Title {
             get {
@@ -2669,7 +2642,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a value converters should start with a specific phrase that describes what they convert..
+        ///   Looks up a localized string similar to The documentation of an Attribute should start with a specific phrase that describes its purpose..
         /// </summary>
         public static string MiKo_2047_Description {
             get {
@@ -2678,7 +2651,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with {1}.
         /// </summary>
         public static string MiKo_2047_MessageFormat {
             get {
@@ -2687,7 +2660,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a  default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a  default starting phrase..
         /// </summary>
         public static string MiKo_2047_Title {
             get {
@@ -2696,7 +2669,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The term &apos;will be&apos; is not explicit enough and it uses the wrong tense. Instead, a term such as &apos;is&apos; gets to the point and uses present tense..
+        ///   Looks up a localized string similar to The documentation of a value converters should start with a specific phrase that describes what they convert..
         /// </summary>
         public static string MiKo_2048_Description {
             get {
@@ -2705,7 +2678,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &apos;is&apos; instead of &apos;will be&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2048_MessageFormat {
             get {
@@ -2714,11 +2687,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be more explicit and not use &apos;will be&apos;..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a  default starting phrase..
         /// </summary>
         public static string MiKo_2048_Title {
             get {
                 return ResourceManager.GetString("MiKo_2048_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The term &apos;will be&apos; is not explicit enough and it uses the wrong tense. Instead, a term such as &apos;is&apos; gets to the point and uses present tense..
+        /// </summary>
+        public static string MiKo_2049_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2049_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;is&apos; instead of &apos;will be&apos;.
+        /// </summary>
+        public static string MiKo_2049_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2049_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should be more explicit and not use &apos;will be&apos;..
+        /// </summary>
+        public static string MiKo_2049_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2049_Title", resourceCulture);
             }
         }
         
