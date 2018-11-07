@@ -2624,7 +2624,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove parameter reference &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain parameter reference: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2045_MessageFormat {
             get {
