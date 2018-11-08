@@ -68,6 +68,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1048|To ease maintenance, the names of classes that are value converters should end with the same suffix.|:white_check_mark:|
 |MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|:white_check_mark:|
 |MiKo_1050|Return values should have descriptive names.|:white_check_mark:|
+|MiKo_1051|Do not suffix parameters with delegate types.|:white_check_mark:|
 |MiKo_1101|Test classes should end with 'Tests'.|:white_check_mark:|
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
@@ -88,7 +89,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|:white_check_mark:|
 |MiKo_2010|Sealed classes should document being sealed.|:white_check_mark:|
 |MiKo_2011|Unsealed classes should not lie about sealing.|:white_check_mark:|
-|MiKo_2012|&lt;summary&gt; documentation should describe their responsibility.|:white_check_mark:|
+|MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|:white_check_mark:|
 |MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|:white_check_mark:|
 |MiKo_2014|Dispose methods should be documented in the same way as they are documented by the .NET Framework.|:white_check_mark:|
 |MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|:white_check_mark:|
@@ -117,10 +118,11 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2042|Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.|:white_check_mark:|
 |MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase.|:white_check_mark:|
 |MiKo_2044|Documentation references method parameters correctly.|:white_check_mark:|
-|MiKo_2045|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
-|MiKo_2046|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|:white_check_mark:|
-|MiKo_2047|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|:white_check_mark:|
-|MiKo_2048|Documentation should be more explicit and not use 'will be'.|:white_check_mark:|
+|MiKo_2045|&lt;summary&gt; documentation should not reference parameters.|:white_check_mark:|
+|MiKo_2046|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
+|MiKo_2047|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|:white_check_mark:|
+|MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|:white_check_mark:|
+|MiKo_2049|Documentation should be more explicit and not use 'will be'.|:white_check_mark:|
 |MiKo_2050|Exceptions should be documented following the .NET Framework.|:white_check_mark:|
 |MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').|:white_check_mark:|
 |MiKo_2052|Throwing of ArgumentNullException should be documented using a default phrase.|:white_check_mark:|
@@ -156,6 +158,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3030|Do not use object.Equals() on value types.|:white_check_mark:|
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|:white_check_mark:|
+|MiKo_3041|EventArgs shall not use delegates.|:white_check_mark:|
 |MiKo_3047|Value converters shall be located in 'Converters' namespace.|:white_check_mark:|
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
