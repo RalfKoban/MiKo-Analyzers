@@ -12,6 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string Identifier = "_";
         private const string IdentifierFallback = "__";
+        private const string IdentifierFallback2 = "___";
 
         public MiKo_1300_SimpleLambdaExpressionIdentifierAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -39,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case null: // we don't have one
                 case Identifier: // correct identifier
                 case IdentifierFallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
+                case IdentifierFallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
                     return null;
 
                 default:

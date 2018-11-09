@@ -19,8 +19,10 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_correctly_named_lambda_identifier() => No_issue_is_reported_for(@"
+        [TestCase("_")]
+        [TestCase("__")]
+        [TestCase("___")]
+        public void No_issue_is_reported_correctly_named_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +32,7 @@ public class TestMe
     public void DoSomething()
     {
         var items = new List<string>();
-        if (items.Where(_ => _ == null)
+        if (items.Where(" + identifier + @" => " + identifier + @" == null)
         {
         }
     }
