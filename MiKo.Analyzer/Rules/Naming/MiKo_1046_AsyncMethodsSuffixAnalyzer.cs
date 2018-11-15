@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,14 +13,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1046";
 
+        private static readonly HashSet<string> TaskFactoryMethods = typeof(TaskFactory).GetMethods().Select(_ => _.Name).ToHashSet();
+
         public MiKo_1046_AsyncMethodsSuffixAnalyzer() : base(Id)
         {
         }
 
         protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsAsyncTaskBased() && !method.IsTestMethod() && !method.IsTestSetupMethod() && !method.IsTestTeardownMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal)
-                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                        : new[] { ReportIssue(symbol, symbol.Name + Constants.AsyncSuffix) };
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        {
+            var methodName = symbol.Name;
+
+            return methodName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal) || TaskFactoryMethods.Contains(methodName)
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(symbol, methodName + Constants.AsyncSuffix) };
+        }
     }
 }

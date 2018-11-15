@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -86,9 +90,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_TaskFactory_method([ValueSource(nameof(TaskFactoryMethods))] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void " + methodName  + @"() { }
+}
+");
+
 
         protected override string GetDiagnosticId() => MiKo_1046_AsyncMethodsSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1046_AsyncMethodsSuffixAnalyzer();
+
+        private static IEnumerable<string> TaskFactoryMethods() => typeof(TaskFactory).GetMethods().Concat(typeof(TaskFactory<int>).GetMethods()).Select(_ => _.Name).ToHashSet();
     }
 }
