@@ -59,6 +59,34 @@ public class TestMe
 }
 ");
 
+        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
+        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
+        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
+        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
+        [TestCase("TestFixture", "Test")]
+        [TestCase("TestFixture", "TestCase")]
+        [TestCase("TestFixture", "TestCaseSource")]
+        [TestCase("TestFixture", "Theory")]
+        [TestCase("TestClassAttribute", "TestMethodAttribute")]
+        [TestCase("TestClass", "TestMethod")]
+        [TestCase(nameof(TestFixtureAttribute), nameof(TearDownAttribute))]
+        [TestCase("TestFixture", "TearDown")]
+        [TestCase("TestClassAttribute", "TestCleanupAttribute")]
+        [TestCase("TestClass", "TestCleanup")]
+        [TestCase(nameof(TestFixtureAttribute), nameof(SetUpAttribute))]
+        [TestCase("TestFixture", "SetUp")]
+        [TestCase("TestClassAttribute", "TestInitializeAttribute")]
+        [TestCase("TestClass", "TestInitialize")]
+        public void No_issue_is_reported_for_test_method(string testClassAttribute, string testAttribute) => No_issue_is_reported_for(@"
+[" + testClassAttribute + @"]
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void DoSomething() { }
+}
+");
+
+
         protected override string GetDiagnosticId() => MiKo_1046_AsyncMethodsSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1046_AsyncMethodsSuffixAnalyzer();

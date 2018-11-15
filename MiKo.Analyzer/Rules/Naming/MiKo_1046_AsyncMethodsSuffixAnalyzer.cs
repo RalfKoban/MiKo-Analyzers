@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsAsyncTaskBased();
+        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsAsyncTaskBased() && !method.IsTestMethod() && !method.IsTestSetupMethod() && !method.IsTestTeardownMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal)
                                                                                         ? Enumerable.Empty<Diagnostic>()
