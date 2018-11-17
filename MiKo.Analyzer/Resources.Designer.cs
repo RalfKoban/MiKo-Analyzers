@@ -3569,6 +3569,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A &apos;CancellationTokenSource&apos; should not be passed around. Instead, the &apos;CancellationToken&apos; should be passed around to propagate notifications that operations should be canceled..
+        /// </summary>
+        public static string MiKo_3022_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3022_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_3022_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3022_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;CancellationTokenSource&apos; as parameter..
+        /// </summary>
+        public static string MiKo_3022_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3022_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
         ///
         ///Instead the equality operator should be used to compare value types..
@@ -3589,7 +3616,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use object.Equals() on value types..
+        ///   Looks up a localized string similar to Do not use &apos;object.Equals()&apos; on value types..
         /// </summary>
         public static string MiKo_3030_Title {
             get {
