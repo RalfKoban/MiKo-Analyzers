@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1050";
 
-        private static readonly string[] WrongNames = { "ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues" };
+        private static readonly string[] WrongNames = CreateWrongNames("ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues");
 
         public MiKo_1050_ReturnValueLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -26,6 +26,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
+
+        private static string[] CreateWrongNames(params string[] values)
+        {
+            var results = new HashSet<string>();
+
+            foreach (var value in values)
+            {
+                results.Add(value);
+                foreach (var i in Enumerable.Range(0, 10))
+                {
+                    results.Add(value + i);
+                    results.Add(value + "_" + i);
+                }
+            }
+
+            return results.ToArray();
+        }
 
         private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers)
         {

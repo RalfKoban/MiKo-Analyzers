@@ -76,7 +76,7 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> NonFitting()
         {
-            var terms = new[] { "ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues" };
+            var terms = new[] { "ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues", "ret1", "ret2", "retVal3", "returnValue4", "retVal_5" };
 
             var nonFitting = new HashSet<string>(terms);
             foreach (var _ in terms)
