@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2020";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
         public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -25,6 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                         ? new[] { ReportIssue(symbol) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
-        private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(Comparison, Constants.Comments.SeeStartingPhrase) && summary.EndsWithAny(Comparison, Constants.Comments.SeeEndingPhrase);
+        private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(Constants.Comments.SeeStartingPhrase) && summary.EndsWithAny(Constants.Comments.SeeEndingPhrase);
     }
 }

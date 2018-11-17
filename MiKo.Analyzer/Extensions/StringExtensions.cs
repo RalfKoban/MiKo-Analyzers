@@ -33,7 +33,11 @@ namespace System
 
         public static bool EqualsAny(this string value, StringComparison comparison, params string[] phrases) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Equals(_, comparison));
 
+        public static bool StartsWithAny(this string value, params string[] prefixes) => StartsWithAny(value, StringComparison.OrdinalIgnoreCase, prefixes);
+
         public static bool StartsWithAny(this string value, StringComparison comparison, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.StartsWith(_, comparison));
+
+        public static bool EndsWithAny(this string value, params string[] suffixes) => EndsWithAny(value, StringComparison.OrdinalIgnoreCase, suffixes);
 
         public static bool EndsWithAny(this string value, StringComparison comparison, params string[] suffixes) => !string.IsNullOrEmpty(value) && suffixes.Any(_ => value.EndsWith(_, comparison));
 
@@ -83,7 +87,7 @@ namespace System
                        : value.Substring(0, index) + "...";
         }
 
-        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.EntityMarkers) && !symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.ViewModelMarkers);
+        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.EntityMarkers) && !symbolName.EndsWithAny(Constants.ViewModelMarkers);
 
         internal static bool HasEntityMarker(this string symbolName)
         {
@@ -95,7 +99,7 @@ namespace System
 
         }
 
-        internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(StringComparison.OrdinalIgnoreCase, Constants.CollectionMarkers);
+        internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.CollectionMarkers);
 
         internal static string WithoutParaTags(this string value) => value.RemoveAll("<para>", "<para />", "<para/>", "</para>");
 

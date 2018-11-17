@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2048";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         private static readonly string StartingPhrases = Constants.Comments.ValueConverterSummaryStartingPhrase;
 
         public MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.NamedType)
@@ -22,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsValueConverter() || symbol.IsMultiValueConverter();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWithAny(Comparison, StartingPhrases))
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWithAny(StringComparison.Ordinal, StartingPhrases))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
                                                                                                                         : new[] { ReportIssue(symbol, StartingPhrases) };
     }

@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2018";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
         public MiKo_2018_ChecksSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -24,12 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            foreach (var summary in summaries)
+            foreach (var summary in summaries.Where(_ => _.StartsWithAny("Check ", "Checks ")))
             {
-                if (summary.StartsWithAny(Comparison, "Check ", "Checks "))
-                {
-                    return new[] { ReportIssue(symbol, summary.Substring(0, summary.IndexOf(" ", Comparison))) };
-                }
+                return new[] { ReportIssue(symbol, summary.Substring(0, summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase))) };
             }
 
             return Enumerable.Empty<Diagnostic>();

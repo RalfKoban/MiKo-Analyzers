@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2047";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         private static readonly string StartingPhrases = Constants.Comments.AttributeSummaryStartingPhrase.OrderBy(_ => _).HumanizedConcatenated();
 
         public MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.NamedType)
@@ -22,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.InheritsFrom<Attribute>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWithAny(Comparison, Constants.Comments.AttributeSummaryStartingPhrase))
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWithAny(StringComparison.Ordinal, Constants.Comments.AttributeSummaryStartingPhrase))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
                                                                                                                         : new[] { ReportIssue(symbol, StartingPhrases) };
     }

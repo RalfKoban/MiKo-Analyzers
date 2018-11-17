@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2019";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         public MiKo_2019_PassiveVerbSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -31,6 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // get rid of async starting phrase
             summary = summary.Replace(Constants.Comments.AsynchrounouslyStartingPhrase, string.Empty).Trim();
+
+            const StringComparison Comparison = StringComparison.Ordinal;
 
             var firstSpace = summary.IndexOf(" ", Comparison);
             var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);

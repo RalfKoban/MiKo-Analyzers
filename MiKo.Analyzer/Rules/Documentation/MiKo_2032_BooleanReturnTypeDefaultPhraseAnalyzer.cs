@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2032";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         public MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer() : base(Id)
         {
         }
@@ -22,6 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var startingPhrases = GetStartingPhrases(returnType);
             var endingPhrases = GetEndingPhrases(returnType);
+
+            const StringComparison Comparison = StringComparison.Ordinal;
 
             return comment.StartsWithAny(Comparison, startingPhrases) && comment.ContainsAny(Comparison, endingPhrases)
                        ? Enumerable.Empty<Diagnostic>()

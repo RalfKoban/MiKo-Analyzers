@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                     ? AnalyzeName(symbol)
                                                                                                     : Enumerable.Empty<Diagnostic>();
 
-        private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithAny(StringComparison.OrdinalIgnoreCase, WrongNames)
+        private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithAny(WrongNames)
                                                                                     ? new[] { ReportIssue(symbol) }
                                                                                     : Enumerable.Empty<Diagnostic>();
     }

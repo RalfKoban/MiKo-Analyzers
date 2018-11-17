@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private readonly bool m_addDotsToProposal;
         private readonly string[] m_exceptionPhrases;
 
-        const StringComparison Comparison = StringComparison.Ordinal;
-
         protected ArgumentExceptionPhraseAnalyzer(string diagnosticId, Type exceptionType, bool addDotsToProposal, params string[] phrases) : base(diagnosticId, exceptionType)
         {
             m_addDotsToProposal = addDotsToProposal;
@@ -43,6 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
             var allParameterIndicatorPhrases = parameterIndicators.Values.ToArray();
+
+            const StringComparison Comparison = StringComparison.Ordinal;
 
             if (exceptionComment.ContainsAny(Comparison, allParameterIndicatorPhrases))
             {
