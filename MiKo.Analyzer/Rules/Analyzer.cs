@@ -61,6 +61,10 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected void AnalyzeNamespace(SymbolAnalysisContext context) => ReportDiagnostics<INamespaceSymbol>(context, AnalyzeNamespace);
+
         protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeType(SymbolAnalysisContext context) => ReportDiagnostics<INamedTypeSymbol>(context, AnalyzeType);
@@ -112,6 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 case SymbolKind.Field: return AnalyzeField;
                 case SymbolKind.Method: return AnalyzeMethod;
                 case SymbolKind.NamedType: return AnalyzeType;
+                case SymbolKind.Namespace: return AnalyzeNamespace;
                 case SymbolKind.Property: return AnalyzeProperty;
                 case SymbolKind.Parameter: return AnalyzeParameter;
 
@@ -123,15 +128,9 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
         private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
 
-        private static readonly string GeneratedCodeMarker = typeof(System.CodeDom.Compiler.GeneratedCodeAttribute).FullName;
-
         private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
         {
             var symbol = context.Symbol;
-
-            // filter generated code
-            // var symbols = new[] { symbol, symbol.ContainingSymbol, symbol.ContainingType };
-            // if (symbols.Any(s => s?.GetAttributes().Any(_ => _.AttributeClass.Name == GeneratedCodeMarker) == true)) return;
 
             var diagnostics = analyzer((T)symbol);
             foreach (var diagnostic in diagnostics)

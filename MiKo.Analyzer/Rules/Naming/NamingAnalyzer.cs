@@ -17,6 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol) => ShallAnalyze(symbol)
+                                                                                                       ? AnalyzeName(symbol)
+                                                                                                       : Enumerable.Empty<Diagnostic>();
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyze(symbol)
                                                                                                   ? AnalyzeName(symbol)
                                                                                                   : Enumerable.Empty<Diagnostic>();
@@ -37,6 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                ? AnalyzeName(symbol)
                                                                                                : Enumerable.Empty<Diagnostic>();
 
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => !symbol.IsGlobalNamespace;
+
         protected virtual bool ShallAnalyze(ITypeSymbol symbol) => true;
 
         protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && !symbol.IsOverride;
@@ -46,6 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual bool ShallAnalyze(IEventSymbol symbol) => !symbol.IsOverride;
 
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => !symbol.IsOverride;
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
 

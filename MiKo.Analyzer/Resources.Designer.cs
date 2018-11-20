@@ -1624,6 +1624,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical name), such as  &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
+        /// </summary>
+        public static string MiKo_1401_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1401_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get rid of language specific name in namespace.
+        /// </summary>
+        public static string MiKo_1401_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1401_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespaces should not contain technical language names..
+        /// </summary>
+        public static string MiKo_1401_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1401_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
