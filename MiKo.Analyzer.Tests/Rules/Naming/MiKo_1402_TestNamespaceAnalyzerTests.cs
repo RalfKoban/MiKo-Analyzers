@@ -25,8 +25,8 @@ namespace Bla
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method_with_correct_namespace(
-            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-            [ValueSource(nameof(Tests))] string testAttribute)
+                                                                            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                            [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 namespace Bla
 {
@@ -41,9 +41,9 @@ namespace Bla
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_method_with_incorrect_namespace(
-            [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
-            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-            [ValueSource(nameof(Tests))] string testAttribute) => An_issue_is_reported_for(@"
+                                                                            [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
+                                                                            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                            [ValueSource(nameof(Tests))] string testAttribute) => An_issue_is_reported_for(@"
 namespace " + namespaceName + @"
 {
   [" + testClassAttribute + @"]

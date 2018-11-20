@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
+﻿
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -19,7 +17,7 @@ public class TestMe
 }
 ");
 
-        [TestCaseSource(nameof(TestClassMarkers))]
+        [TestCaseSource(nameof(TestFixtures))]
         public void No_issue_is_reported_for_test_class_with_correct_suffix(string testClassAttribute) => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMeTests
@@ -28,7 +26,7 @@ public class TestMeTests
 }
 ");
 
-        [TestCaseSource(nameof(TestClassMarkers))]
+        [TestCaseSource(nameof(TestFixtures))]
         public void An_issue_is_reported_for_test_class_with_wrong_suffix(string testClassAttribute) => An_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe
@@ -40,8 +38,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_1101_TestClassesSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1101_TestClassesSuffixAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> TestClassMarkers() => new[] { nameof(TestFixtureAttribute), "TestFixture", "TestClassAttribute", "TestClass" };
     }
 }

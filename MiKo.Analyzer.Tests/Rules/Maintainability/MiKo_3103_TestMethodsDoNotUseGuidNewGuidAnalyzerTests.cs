@@ -37,17 +37,11 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
-        [TestCase("TestFixture", "Test")]
-        [TestCase("TestFixture", "TestCase")]
-        [TestCase("TestFixture", "TestCaseSource")]
-        [TestCase("TestFixture", "Theory")]
-        [TestCase("TestClassAttribute", "TestMethodAttribute")]
-        [TestCase("TestClass", "TestMethod")]
-        public void An_issue_is_reported_for_a_test_method(string testClassAttribute, string testAttribute) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_a_test_method(
+                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                        [ValueSource(nameof(Tests))] string testAttribute)
+            => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + testClassAttribute + @"]
@@ -61,10 +55,8 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute))]
-        [TestCase("TestClassAttribute")]
-        [TestCase("TestClass")]
-        public void An_issue_is_reported_for_a_non_test_method_inside_a_test(string testClassAttribute) => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + testClassAttribute + @"]

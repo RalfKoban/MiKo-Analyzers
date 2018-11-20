@@ -16,17 +16,11 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
-        [TestCase("TestFixture", "Test")]
-        [TestCase("TestFixture", "TestCase")]
-        [TestCase("TestFixture", "TestCaseSource")]
-        [TestCase("TestFixture", "Theory")]
-        [TestCase("TestClassAttribute", "TestMethodAttribute")]
-        [TestCase("TestClass", "TestMethod")]
-        public void No_issue_is_reported_for_test_class_with_tests(string testClassAttribute, string testAttribute) => No_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_class_with_tests(
+                                                                [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+            => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe
 {
@@ -35,17 +29,11 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
-        [TestCase("TestFixture", "Test")]
-        [TestCase("TestFixture", "TestCase")]
-        [TestCase("TestFixture", "TestCaseSource")]
-        [TestCase("TestFixture", "Theory")]
-        [TestCase("TestClassAttribute", "TestMethodAttribute")]
-        [TestCase("TestClass", "TestMethod")]
-        public void No_issue_is_reported_for_partial_test_class_with_tests(string testClassAttribute, string testAttribute) => No_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_partial_test_class_with_tests(
+                                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+            => No_issue_is_reported_for(@"
 public partial class TestMe
 {
     [" + testAttribute + @"]
@@ -59,17 +47,11 @@ public partial class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
-        [TestCase("TestFixture", "Test")]
-        [TestCase("TestFixture", "TestCase")]
-        [TestCase("TestFixture", "TestCaseSource")]
-        [TestCase("TestFixture", "Theory")]
-        [TestCase("TestClassAttribute", "TestMethodAttribute")]
-        [TestCase("TestClass", "TestMethod")]
-        public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(string testClassAttribute, string testAttribute) => No_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(
+                                                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+            => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe3 : TestMe2
 {
@@ -90,11 +72,8 @@ public class TestMe1
 ");
 
 
-        [TestCase(nameof(TestFixtureAttribute))]
-        [TestCase("TestFixture")]
-        [TestCase("TestClassAttribute")]
-        [TestCase("TestClass")]
-        public void An_issue_is_reported_for_test_class_without_tests(string testClassAttribute) => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_test_class_without_tests([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe
 {
@@ -102,11 +81,8 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute))]
-        [TestCase("TestFixture")]
-        [TestCase("TestClassAttribute")]
-        [TestCase("TestClass")]
-        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_without_tests(string testClassAttribute) => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_without_tests([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe3 : TestMe2
 {

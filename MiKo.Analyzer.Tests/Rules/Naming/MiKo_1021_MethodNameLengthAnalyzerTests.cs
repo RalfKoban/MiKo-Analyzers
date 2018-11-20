@@ -26,17 +26,8 @@ public void " + name + @"()
 }
 ");
 
-        [TestCase("Fact")]
-        [TestCase("Fact()")]
-        [TestCase("Test")]
-        [TestCase("Test()")]
-        [TestCase("TestCase")]
-        [TestCase("TestCase()")]
-        [TestCase("Theory")]
-        [TestCase("Theory()")]
-        [TestCase("TestMethod")]
-        [TestCase("TestMethod()")]
-        public void No_issue_is_reported_for_test_method_with_exceeding_length(string name) => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_test_method_with_exceeding_length([ValueSource(nameof(Tests))] string name) => No_issue_is_reported_for(@"
 
 [" + name + @"]
 public void Abcdefghijklmnopqrstuvwxyz()

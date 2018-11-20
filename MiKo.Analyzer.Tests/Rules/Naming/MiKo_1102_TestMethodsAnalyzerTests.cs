@@ -16,17 +16,12 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
-        [TestCase("TestFixture", "Test")]
-        [TestCase("TestFixture", "TestCase")]
-        [TestCase("TestFixture", "TestCaseSource")]
-        [TestCase("TestFixture", "Theory")]
-        [TestCase("TestClassAttribute", "TestMethodAttribute")]
-        [TestCase("TestClass", "TestMethod")]
-        public void No_issue_is_reported_for_test_method_with_correct_name(string testClassAttribute, string testAttribute) => No_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_method_with_correct_name(
+                                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                    [ValueSource(nameof(Tests))] string testAttribute)
+            => No_issue_is_reported_for(@"
+
 [" + testClassAttribute + @"]
 public class TestMe
 {
@@ -35,17 +30,12 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TestCaseSourceAttribute))]
-        [TestCase(nameof(TestFixtureAttribute), nameof(TheoryAttribute))]
-        [TestCase("TestFixture", "Test")]
-        [TestCase("TestFixture", "TestCase")]
-        [TestCase("TestFixture", "TestCaseSource")]
-        [TestCase("TestFixture", "Theory")]
-        [TestCase("TestClassAttribute", "TestMethodAttribute")]
-        [TestCase("TestClass", "TestMethod")]
-        public void An_issue_is_reported_for_test_method_with_wrong_name(string testClassAttribute, string testAttribute) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_test_method_with_wrong_name(
+                                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                    [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+            => An_issue_is_reported_for(@"
+
 [" + testClassAttribute + @"]
 public class TestMe
 {
