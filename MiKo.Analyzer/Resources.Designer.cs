@@ -3849,5 +3849,32 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_3103_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense. Such namespaces should be flattened..
+        /// </summary>
+        public static string MiKo_3401_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3401_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespace hierarchy too deep: {1,4} (max. {2}).
+        /// </summary>
+        public static string MiKo_3401_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3401_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespace hierarchies should not be too deep..
+        /// </summary>
+        public static string MiKo_3401_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3401_Title", resourceCulture);
+            }
+        }
     }
 }
