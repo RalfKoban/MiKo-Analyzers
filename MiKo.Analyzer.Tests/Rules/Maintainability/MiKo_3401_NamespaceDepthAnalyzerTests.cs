@@ -30,7 +30,6 @@ namespace " + ns + @"
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3401_NamespaceDepthAnalyzer();
 
-
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> AllowedNamespaceNames() => new HashSet<string>
                                                                             {
