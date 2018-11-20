@@ -1651,6 +1651,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A test should be located in the same namespace as the class it shall test..
+        /// </summary>
+        public static string MiKo_1402_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1402_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Put test in same namespace as class under test.
+        /// </summary>
+        public static string MiKo_1402_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1402_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test namespaces should not contain &apos;Test&apos;..
+        /// </summary>
+        public static string MiKo_1402_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1402_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
