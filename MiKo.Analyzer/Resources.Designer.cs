@@ -1678,6 +1678,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To avoid redundancy and confused developers, namespaces should ot be named after any parent namespace. Instead, it should be made more clear into which namespace a type belongs by choosing a proper name..
+        /// </summary>
+        public static string MiKo_1403_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1403_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use another name for the namespace.
+        /// </summary>
+        public static string MiKo_1403_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1403_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespaces should be named after their parent namespaces..
+        /// </summary>
+        public static string MiKo_1403_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1403_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {

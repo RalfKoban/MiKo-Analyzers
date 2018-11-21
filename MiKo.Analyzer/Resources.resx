@@ -660,6 +660,15 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
   <data name="MiKo_1402_Title" xml:space="preserve">
     <value>Test namespaces should not contain 'Test'.</value>
   </data>
+  <data name="MiKo_1403_Description" xml:space="preserve">
+    <value>To avoid redundancy and confused developers, namespaces should ot be named after any parent namespace. Instead, it should be made more clear into which namespace a type belongs by choosing a proper name.</value>
+  </data>
+  <data name="MiKo_1403_MessageFormat" xml:space="preserve">
+    <value>Use another name for the namespace</value>
+  </data>
+  <data name="MiKo_1403_Title" xml:space="preserve">
+    <value>Namespaces should be named after their parent namespaces.</value>
+  </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
   </data>
