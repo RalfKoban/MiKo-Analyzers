@@ -1696,7 +1696,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should be named after their parent namespaces..
+        ///   Looks up a localized string similar to Namespaces should be named after any of their parent namespaces..
         /// </summary>
         public static string MiKo_1403_Title {
             get {

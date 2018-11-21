@@ -78,6 +78,9 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1200|Name exceptions in catch blocks consistently.|:white_check_mark:|
 |MiKo_1201|Name exceptions as parameters consistently.|:white_check_mark:|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|:white_check_mark:|
+|MiKo_1401|Namespaces should not contain technical language names.|:white_check_mark:|
+|MiKo_1402|Test namespaces should not contain 'Test'.|:white_check_mark:|
+|MiKo_1403|Namespaces should be named after any of their parent namespaces.|:white_check_mark:|
 
 ### Documentation
 |ID|Title|Enabled by default|
@@ -164,3 +167,4 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|
+|MiKo_3401|Namespace hierarchies should not be too deep.|:white_check_mark:|

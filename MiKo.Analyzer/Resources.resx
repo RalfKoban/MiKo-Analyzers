@@ -667,7 +667,7 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
     <value>Use another name for the namespace</value>
   </data>
   <data name="MiKo_1403_Title" xml:space="preserve">
-    <value>Namespaces should be named after their parent namespaces.</value>
+    <value>Namespaces should be named after any of their parent namespaces.</value>
   </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
