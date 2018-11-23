@@ -164,6 +164,7 @@ public class TestMe
     }
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_incorrectly_named_parameter_in_lambda([ValueSource(nameof(WrongNames))] string name) => No_issue_is_reported_for(@"
 [TestFixture]
@@ -173,6 +174,51 @@ public class TestMe
     {
         return Get(" + name + @" => " + name + @".Data);
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_field_declaration() => No_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    private int i;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_field_declaration([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+   private int " + name + @";
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_multi_field_declaration([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+   private int i, " + name + @";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_property_declaration() => No_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    private int i { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_property_declaration([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+   private int " + name + @" { get; }
 }
 ");
 

@@ -23,12 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
             context.RegisterSyntaxNodeAction(AnalyzeParameter, SyntaxKind.Parameter);
-        }
-
-        private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
-        {
-            var type = context.FindContainingType();
-            return type?.IsTestClass() == true;
+            context.RegisterSyntaxNodeAction(AnalyzePropertyDeclaration, SyntaxKind.PropertyDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeFieldDeclaration, SyntaxKind.FieldDeclaration);
         }
 
         protected override void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
@@ -39,11 +35,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
+        {
+            var type = context.FindContainingType();
+            return type?.IsTestClass() == true;
+        }
+
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
         {
             if (ShallAnalyze(context))
             {
-                AnalyzeIdentifiers(context, ((VariableDeclarationSyntax)context.Node).Variables.Select(_ => _.Identifier).ToArray());
+                AnalyzeIdentifiers(context, (VariableDeclarationSyntax)context.Node);
+            }
+        }
+
+        private void AnalyzePropertyDeclaration(SyntaxNodeAnalysisContext context)
+        {
+            if (ShallAnalyze(context))
+            {
+                AnalyzeIdentifiers(context, ((PropertyDeclarationSyntax)context.Node).Identifier);
+            }
+        }
+
+        private void AnalyzeFieldDeclaration(SyntaxNodeAnalysisContext context)
+        {
+            if (ShallAnalyze(context))
+            {
+                AnalyzeIdentifiers(context, ((FieldDeclarationSyntax)context.Node).Declaration);
             }
         }
 
@@ -51,12 +69,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (ShallAnalyze(context))
             {
-                var parameterSyntax = (ParameterSyntax)context.Node;
-                if (parameterSyntax.GetEnclosing<InvocationExpressionSyntax>() is null) // ignore invocations eg. in lambdas
+                var syntax = (ParameterSyntax)context.Node;
+                if (syntax.GetEnclosing<InvocationExpressionSyntax>() is null) // ignore invocations eg. in lambdas
                 {
-                    AnalyzeIdentifiers(context, parameterSyntax.Identifier);
+                    AnalyzeIdentifiers(context, syntax.Identifier);
                 }
             }
+        }
+
+        private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, VariableDeclarationSyntax syntax)
+        {
+            AnalyzeIdentifiers(context, syntax.Variables.Select(_ => _.Identifier).ToArray());
         }
 
         private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, params SyntaxToken[] identifiers)

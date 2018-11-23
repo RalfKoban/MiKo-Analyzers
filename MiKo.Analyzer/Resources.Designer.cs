@@ -1515,7 +1515,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For maintenance reasons, variables and parameters should be named about what they represent and not what they technically are.
+        ///   Looks up a localized string similar to For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
         ///Hence naming them e.g. &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
         /// </summary>
         public static string MiKo_1106_Description {
@@ -1534,7 +1534,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name variables or parameters &apos;Mock&apos; or &apos;Stub&apos;..
+        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos; or &apos;Stub&apos;..
         /// </summary>
         public static string MiKo_1106_Title {
             get {
