@@ -1633,7 +1633,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get rid of technical name &apos;{1}&apos; in namespace.
+        ///   Looks up a localized string similar to Do not use technical name &apos;{1}&apos; in namespace.
         /// </summary>
         public static string MiKo_1401_MessageFormat {
             get {
@@ -3860,7 +3860,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Refactor test to get rid of condition.
+        ///   Looks up a localized string similar to Refactor test to remove condition.
         /// </summary>
         public static string MiKo_3102_MessageFormat {
             get {

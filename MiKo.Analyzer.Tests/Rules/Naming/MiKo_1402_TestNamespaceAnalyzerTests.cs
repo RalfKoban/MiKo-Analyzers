@@ -56,9 +56,6 @@ namespace " + namespaceName + @"
 }
 ");
 
-        [Test]
-        public void RunMe() => An_issue_is_reported_for_file(@"C:\Users\RKoban\Documents\Meine empfangenen Dateien\AssembliesWhitelist.cs");
-
         protected override string GetDiagnosticId() => MiKo_1402_TestNamespaceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1402_TestNamespaceAnalyzer();
