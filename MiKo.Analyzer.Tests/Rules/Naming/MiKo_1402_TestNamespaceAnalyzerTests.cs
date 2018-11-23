@@ -24,7 +24,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method_with_correct_namespace(
+        public void No_issue_is_reported_for_test_class_with_correct_namespace(
                                                                             [ValueSource(nameof(TestFixtures))] string testClassAttribute,
                                                                             [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
@@ -40,10 +40,11 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_method_with_incorrect_namespace(
+        public void An_issue_is_reported_for_test_class_with_incorrect_namespace(
                                                                             [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
                                                                             [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                            [ValueSource(nameof(Tests))] string testAttribute) => An_issue_is_reported_for(@"
+                                                                            [ValueSource(nameof(Tests))] string testAttribute)
+            => An_issue_is_reported_for(@"
 namespace " + namespaceName + @"
 {
   [" + testClassAttribute + @"]
@@ -54,6 +55,9 @@ namespace " + namespaceName + @"
   }
 }
 ");
+
+        [Test]
+        public void RunMe() => An_issue_is_reported_for_file(@"C:\Users\RKoban\Documents\Meine empfangenen Dateien\AssembliesWhitelist.cs");
 
         protected override string GetDiagnosticId() => MiKo_1402_TestNamespaceAnalyzer.Id;
 

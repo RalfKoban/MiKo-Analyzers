@@ -31,6 +31,8 @@ namespace System
 
         public static bool ContainsAny(this string value, StringComparison comparison, params string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.Contains(_, comparison));
 
+        public static bool EqualsAny(this string value, params string[] phrases) => !string.IsNullOrEmpty(value) && EqualsAny(value, StringComparison.OrdinalIgnoreCase, phrases);
+
         public static bool EqualsAny(this string value, StringComparison comparison, params string[] phrases) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Equals(_, comparison));
 
         public static bool StartsWithAny(this string value, params string[] prefixes) => StartsWithAny(value, StringComparison.OrdinalIgnoreCase, prefixes);

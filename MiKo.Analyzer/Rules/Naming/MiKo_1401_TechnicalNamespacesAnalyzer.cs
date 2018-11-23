@@ -18,17 +18,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol)
         {
-            var symbolName = symbol.Name;
+            var fullNamespaceName = symbol.ToString();
 
-            if (symbolName.StartsWithAny(Constants.TechnicalNamespaceMarkers)
-             || symbolName.EndsWithAny(Constants.TechnicalNamespaceEndMarkers)
-             || symbolName.ContainsAny(Constants.TechnicalNamespaceMiddleMarkers))
+            if (HasMarker(fullNamespaceName))
             {
-                return new[] { ReportIssue(symbol) };
+                var name = Constants.TechnicalNamespaceMarkers.First(_ => fullNamespaceName.Contains(_, StringComparison.OrdinalIgnoreCase));
+                return new[] { ReportIssue(symbol, name) };
             }
 
             return Enumerable.Empty<Diagnostic>();
-
         }
+
+        private static bool HasMarker(string name) => name.EqualsAny(Constants.TechnicalNamespaceMarkers)
+                                                   || name.StartsWithAny(Constants.TechnicalNamespaceStartMarkers)
+                                                   || name.EndsWithAny(Constants.TechnicalNamespaceEndMarkers)
+                                                   || name.ContainsAny(Constants.TechnicalNamespaceMiddleMarkers);
     }
 }

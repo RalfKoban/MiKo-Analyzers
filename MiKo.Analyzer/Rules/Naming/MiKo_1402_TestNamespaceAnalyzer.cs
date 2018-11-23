@@ -22,16 +22,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol)
         {
-            while (true)
-            {
-                if (symbol is null)
-                    return Enumerable.Empty<Diagnostic>();
-
-                if (symbol.Name.Contains("Test", StringComparison.OrdinalIgnoreCase))
-                    return new[] { ReportIssue(symbol) };
-
-                symbol = symbol.ContainingNamespace;
-            }
+            var fullNamespace = symbol.ToString();
+            return fullNamespace.Contains("Test", StringComparison.OrdinalIgnoreCase)
+                       ? new[] { ReportIssue(symbol) }
+                       : Enumerable.Empty<Diagnostic>();
         }
     }
 }

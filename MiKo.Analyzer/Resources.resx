@@ -646,7 +646,7 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
     <value>Namespaces should not contain any language specific (technical name), such as  'Interfaces', 'Exceptions' or 'Enums'.</value>
   </data>
   <data name="MiKo_1401_MessageFormat" xml:space="preserve">
-    <value>Get rid of language specific name in namespace</value>
+    <value>Get rid of technical name '{1}' in namespace</value>
   </data>
   <data name="MiKo_1401_Title" xml:space="preserve">
     <value>Namespaces should not contain technical language names.</value>
@@ -655,7 +655,7 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
     <value>A test should be located in the same namespace as the class it shall test.</value>
   </data>
   <data name="MiKo_1402_MessageFormat" xml:space="preserve">
-    <value>Put test in same namespace as class under test</value>
+    <value>Put test class in same namespace as class under test instead of a separate test namespace</value>
   </data>
   <data name="MiKo_1402_Title" xml:space="preserve">
     <value>Test namespaces should not contain 'Test'.</value>

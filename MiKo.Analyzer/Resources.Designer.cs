@@ -1633,7 +1633,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get rid of language specific name in namespace.
+        ///   Looks up a localized string similar to Get rid of technical name &apos;{1}&apos; in namespace.
         /// </summary>
         public static string MiKo_1401_MessageFormat {
             get {
@@ -1660,7 +1660,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Put test in same namespace as class under test.
+        ///   Looks up a localized string similar to Put test class in same namespace as class under test instead of a separate test namespace.
         /// </summary>
         public static string MiKo_1402_MessageFormat {
             get {
