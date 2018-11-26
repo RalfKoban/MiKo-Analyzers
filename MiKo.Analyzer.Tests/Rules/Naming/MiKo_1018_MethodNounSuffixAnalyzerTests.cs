@@ -87,6 +87,10 @@ public class TestMe
                                                                          "WriteInformation",
                                                                          "ReadConfiguration",
                                                                          "LogException",
+                                                                         "StoreConfiguration",
+                                                                         "RestoreConfiguration",
+                                                                         "LoadConfiguration",
+                                                                         "SaveConfiguration",
                                                                      };
 
         [ExcludeFromCodeCoverage]
