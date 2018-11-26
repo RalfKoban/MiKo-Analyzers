@@ -226,6 +226,7 @@ public class TestMe
                                                            nameof(System.Byte),
                                                            nameof(System.SByte),
                                                            nameof(System.Guid),
+                                                           nameof(System.AttributeTargets),
                                                        }.ToHashSet();
     }
 }

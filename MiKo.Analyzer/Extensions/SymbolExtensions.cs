@@ -382,7 +382,15 @@ namespace Microsoft.CodeAnalysis
         internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
         {
             var typeInfo = semanticModel.GetTypeInfo(syntax);
-            return typeInfo.Type?.TypeKind == TypeKind.Struct;
+            switch (typeInfo.Type?.TypeKind)
+            {
+                case TypeKind.Struct:
+                case TypeKind.Enum:
+                    return true;
+
+                default:
+                    return false;
+            }
         }
 
         internal static bool IsDependencyObject(this ITypeSymbol symbol) => symbol.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
