@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            if (name.StartsWithAny("Undo", "Redo", "To", "Verify", "Ensure", "Get", "get_", "Refresh", "Trace", "Write", "Read", "Load", "Save", "Store", "Restore"))
+            if (name.StartsWithAny("Undo", "Redo", "To", "Verify", "Ensure", "Get", "get_", "Refresh", "Trace", "Write", "Read", "Load", "Save", "Store", "Restore", "Update"))
                 return false;
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))

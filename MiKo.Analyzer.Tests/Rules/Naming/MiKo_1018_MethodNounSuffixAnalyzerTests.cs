@@ -91,6 +91,7 @@ public class TestMe
                                                                          "RestoreConfiguration",
                                                                          "LoadConfiguration",
                                                                          "SaveConfiguration",
+                                                                         "UpdateConfiguration",
                                                                      };
 
         [ExcludeFromCodeCoverage]
