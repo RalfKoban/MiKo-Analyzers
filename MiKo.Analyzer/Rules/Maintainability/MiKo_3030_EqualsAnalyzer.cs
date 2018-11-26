@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeMethod(ExpressionSyntax node, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var isEquals = IsEqualsMethod(semanticModel.GetSymbolInfo(node).Symbol) && IsStruct(semanticModel, arguments);
+            var isEquals = IsObjectEqualsMethod(semanticModel.GetSymbolInfo(node).Symbol) && IsStruct(semanticModel, arguments);
             if (isEquals)
             {
                 var method = node.GetEnclosingMethod(semanticModel);
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private static bool IsEqualsMethod(ISymbol method) => method != null && method.ContainingType.SpecialType == SpecialType.System_Object && method.IsStatic && method.Name == nameof(object.Equals);
+        private static bool IsObjectEqualsMethod(ISymbol method) => method != null && method.IsStatic && method.ContainingType.SpecialType == SpecialType.System_Object && method.Name == nameof(object.Equals);
 
         private static bool IsStruct(SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
