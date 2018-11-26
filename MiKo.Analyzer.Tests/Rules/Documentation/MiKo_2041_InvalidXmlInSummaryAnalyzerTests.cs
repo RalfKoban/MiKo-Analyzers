@@ -160,12 +160,12 @@ public class TestMe : ITestMe
                                   "<typeparam />",
                                   "<typeparamref />",
                                   "<value />",
+                                  "<seealso>Bla</seealso>",
                               };
 
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _.ToUpper()));
             results.AddRange(phrases.Select(_ => _.Replace(" ", string.Empty).ToUpper()));
-            results.AddRange(phrases.Select(_ => _.Replace(" /", string.Empty).ToUpper()));
 
             return new HashSet<string>(results);
         }
