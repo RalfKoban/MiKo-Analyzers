@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             genericArgument = null;
 
-            if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length == index + 1)
+            if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length >= index + 1)
                 genericArgument = namedType.TypeArguments[index];
 
             return genericArgument != null;

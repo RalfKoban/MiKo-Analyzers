@@ -32,17 +32,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<string> GetPhrases(IMethodSymbol symbol)
-        {
-            var startingPhrases = Constants.Comments.FactoryCreateMethodSummaryStartingPhrase;
-            var returnType = symbol.ReturnType.ToString();
+        private IEnumerable<string> GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
 
+        private IEnumerable<string> GetSimplePhrases(IMethodSymbol symbol) => GetPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
+
+        private IEnumerable<string> GetCollectionPhrases(IMethodSymbol symbol)
+        {
             TryGetGenericArgumentCount(symbol.ReturnType, out var count);
+            if (count <= 0) return GetSimplePhrases(symbol);
+
+            // enhance for generic collections
+            var startingPhrases = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhrase;
+
+            return TryGetGenericArgumentType(symbol.ReturnType, out var genericArgument, count - 1)
+                       ? GetPhrases(genericArgument, startingPhrases)
+                       : startingPhrases.Select(_ => string.Format(_, genericArgument.ToString()));
+        }
+
+        private IEnumerable<string> GetPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
+        {
+            var returnType = symbolReturnType.ToString();
+
+            TryGetGenericArgumentCount(symbolReturnType, out var count);
             if (count <= 0) return startingPhrases.Select(_ => string.Format(_, returnType));
 
-            var ts = GetGenericArgumentsAsTs(symbol.ReturnType);
+            var ts = GetGenericArgumentsAsTs(symbolReturnType);
 
             var length = returnType.IndexOf('<'); // just until the first one
+
             var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
             var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
 
