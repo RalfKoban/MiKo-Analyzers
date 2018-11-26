@@ -175,24 +175,29 @@ namespace MiKoSolutions.Analyzers
                     "The default is <see langword=\"false\" />.",
                 };
 
-            internal static readonly string[] InvalidSummaryCrefPhrases =
+            private static readonly string[] InvalidSummaryCrefXmlTags =
                 {
-                    XmlElementStartingTag + XmlTag.Example,
-                    XmlElementStartingTag + XmlTag.Exception,
-                    XmlElementStartingTag + XmlTag.Include,
-                    XmlElementStartingTag + XmlTag.Inheritdoc,
-                    XmlElementStartingTag + XmlTag.Overloads,
-                    XmlElementStartingTag + XmlTag.Param,
-                    XmlElementStartingTag + XmlTag.ParamRef,
-                    XmlElementStartingTag + XmlTag.Permission,
-                    XmlElementStartingTag + XmlTag.Remarks,
-                    XmlElementStartingTag + XmlTag.Returns,
-                    XmlElementStartingTag + XmlTag.SeeAlso,
-                    XmlElementStartingTag + XmlTag.Summary,
-                    XmlElementStartingTag + XmlTag.TypeParam,
-                    XmlElementStartingTag + XmlTag.TypeParamRef,
-                    XmlElementStartingTag + XmlTag.Value,
+                    XmlTag.Example,
+                    XmlTag.Exception,
+                    XmlTag.Include,
+                    XmlTag.Inheritdoc,
+                    XmlTag.Overloads,
+                    XmlTag.Param,
+                    XmlTag.ParamRef,
+                    XmlTag.Permission,
+                    XmlTag.Remarks,
+                    XmlTag.Returns,
+                    XmlTag.SeeAlso,
+                    XmlTag.Summary,
+                    XmlTag.TypeParam,
+                    XmlTag.TypeParamRef,
+                    XmlTag.Value,
                 };
+
+            internal static readonly string[] InvalidSummaryCrefPhrases = Enumerable.Empty<string>()
+                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => XmlElementStartingTag + _ + " "))
+                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => XmlElementStartingTag + _ + "/"))
+                                                                                    .ToArray();
 
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
 
