@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1052_HelperClassNameAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1053_HelperClassNameAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
@@ -26,9 +26,9 @@ public class " + name + @"
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1052_HelperClassNameAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1053_HelperClassNameAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1052_HelperClassNameAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1053_HelperClassNameAnalyzer();
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongNames()

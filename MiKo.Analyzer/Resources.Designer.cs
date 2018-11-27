@@ -1382,27 +1382,27 @@ namespace MiKoSolutions.Analyzers {
         ///   Looks up a localized string similar to Terms such as &apos;helper&apos; or &apos;utility&apos; are too generic and meaningless.
         ///Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad..
         /// </summary>
-        public static string MiKo_1052_Description {
+        public static string MiKo_1053_Description {
             get {
-                return ResourceManager.GetString("MiKo_1052_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1053_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
         /// </summary>
-        public static string MiKo_1052_MessageFormat {
+        public static string MiKo_1053_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1052_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1053_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Types should be named &apos;Helper&apos; or &apos;Utility&apos;..
         /// </summary>
-        public static string MiKo_1052_Title {
+        public static string MiKo_1053_Title {
             get {
-                return ResourceManager.GetString("MiKo_1052_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1053_Title", resourceCulture);
             }
         }
         
