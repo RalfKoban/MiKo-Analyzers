@@ -8,16 +8,16 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1053_HelperClassNameAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1054_HelperClassNameAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1053";
+        public const string Id = "MiKo_1054";
 
         private static readonly string[] WrongNames = { "Helper", "Util" };
 
         // sorted by intent so that the best match is found until a more generic is found
         private static readonly string[] WrongNamesForConcreteLookup = { "Helpers", "Helper", "Utils", "Utility", "Utilities", "Util" };
 
-        public MiKo_1053_HelperClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_1054_HelperClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 

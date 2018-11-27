@@ -568,14 +568,14 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
   <data name="MiKo_1052_Title" xml:space="preserve">
     <value>Do not suffix variables with delegate types.</value>
   </data>
-  <data name="MiKo_1053_Description" xml:space="preserve">
+  <data name="MiKo_1054_Description" xml:space="preserve">
     <value>Terms such as 'helper' or 'utility' are too generic and meaningless.
 Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad.</value>
   </data>
-  <data name="MiKo_1053_MessageFormat" xml:space="preserve">
+  <data name="MiKo_1054_MessageFormat" xml:space="preserve">
     <value>Remove '{1}' from name</value>
   </data>
-  <data name="MiKo_1053_Title" xml:space="preserve">
+  <data name="MiKo_1054_Title" xml:space="preserve">
     <value>Types should be named 'Helper' or 'Utility'.</value>
   </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
