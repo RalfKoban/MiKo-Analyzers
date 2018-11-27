@@ -1379,6 +1379,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Terms such as &apos;helper&apos; or &apos;utility&apos; are too generic and meaningless.
+        ///Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad..
+        /// </summary>
+        public static string MiKo_1052_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1052_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
+        /// </summary>
+        public static string MiKo_1052_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1052_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types should be named &apos;Helper&apos; or &apos;Utility&apos;..
+        /// </summary>
+        public static string MiKo_1052_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1052_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
