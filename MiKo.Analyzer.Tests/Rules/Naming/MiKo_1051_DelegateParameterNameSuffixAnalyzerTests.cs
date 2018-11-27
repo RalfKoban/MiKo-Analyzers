@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("string s")]
         [TestCase("int i")]
         public void No_issue_is_reported_for_non_delegate_parameter(string parameter) => No_issue_is_reported_for(@"
+using System;
+
 public class TestMe
 {
     public void DoSomething(" + parameter + @")
@@ -27,6 +29,8 @@ public class TestMe
                                                                 [ValueSource(nameof(DelegateTypes))] string type,
                                                                 [ValueSource(nameof(CorrectDelegateNames))] string name)
             => No_issue_is_reported_for(@"
+using System;
+
 public class TestMe
 {
     public void DoSomething(" + type + @" " + name + @")
@@ -36,16 +40,16 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_with_non_fitting_name(
-            [ValueSource(nameof(DelegateTypes))] string type,
-            [ValueSource(nameof(CorrectDelegateNames))] string name)
-            => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_with_non_fitting_name(
+                                                                        [ValueSource(nameof(DelegateTypes))] string type,
+                                                                        [ValueSource(nameof(WrongDelegateNames))] string name)
+            => An_issue_is_reported_for(@"
+using System;
+
 public class TestMe
 {
-    public int DoSomething()
+    public void DoSomething(" + type + @" " + name + @")
     {
-        var " + name + @" = 42;
-        return " + name + @"; 
     }
 }
 ");
@@ -68,7 +72,7 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongDelegateNames()
         {
-            var names = new[] { "@delegate", "delegate", "action", "func" };
+            var names = new[] { "@delegate", "action", "func" };
 
             var allNames = new HashSet<string>(names);
             foreach (var _ in names)
@@ -86,6 +90,7 @@ public class TestMe
                                                                              "callback",
                                                                              "map",
                                                                              "filter",
+                                                                             "predicate",
                                                                          };
     }
 }

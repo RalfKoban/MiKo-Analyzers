@@ -19,9 +19,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         // symbol.TypeKind == TypeKind.Delegate
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Delegate
-                                                                                                    ? AnalyzeName(symbol)
-                                                                                                    : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol)
+        {
+            var symbolType = symbol.Type;
+            switch (symbolType.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Class when symbolType.ToString() == typeof(Delegate).FullName:
+                    return AnalyzeName(symbol);
+
+                default:
+                    return Enumerable.Empty<Diagnostic>();
+            }
+        }
 
         private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithAny(WrongNames)
                                                                                     ? new[] { ReportIssue(symbol) }
