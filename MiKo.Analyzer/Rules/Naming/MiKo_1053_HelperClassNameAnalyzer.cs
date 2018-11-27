@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1053_HelperClassNameAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1052";
+        public const string Id = "MiKo_1053";
 
         private static readonly string[] WrongNames = { "Helper", "Util" };
 
