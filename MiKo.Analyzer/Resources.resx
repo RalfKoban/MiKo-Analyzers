@@ -551,13 +551,22 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
     <value>Return values should have descriptive names.</value>
   </data>
   <data name="MiKo_1051_Description" xml:space="preserve">
-    <value>Suffixing delegate parameters with their type is repetitive and provides now value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
+    <value>Suffixing delegate parameters with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
   </data>
   <data name="MiKo_1051_MessageFormat" xml:space="preserve">
     <value>Use a better matching name instead</value>
   </data>
   <data name="MiKo_1051_Title" xml:space="preserve">
     <value>Do not suffix parameters with delegate types.</value>
+  </data>
+  <data name="MiKo_1052_Description" xml:space="preserve">
+    <value>Suffixing delegate variables with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
+  </data>
+  <data name="MiKo_1052_MessageFormat" xml:space="preserve">
+    <value>Use a better matching name instead</value>
+  </data>
+  <data name="MiKo_1052_Title" xml:space="preserve">
+    <value>Do not suffix variables with delegate types.</value>
   </data>
   <data name="MiKo_1053_Description" xml:space="preserve">
     <value>Terms such as 'helper' or 'utility' are too generic and meaningless.

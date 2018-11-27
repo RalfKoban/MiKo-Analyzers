@@ -1352,7 +1352,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing delegate parameters with their type is repetitive and provides now value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
+        ///   Looks up a localized string similar to Suffixing delegate parameters with their type is repetitive and provides no value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
         /// </summary>
         public static string MiKo_1051_Description {
             get {
@@ -1375,6 +1375,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1051_Title {
             get {
                 return ResourceManager.GetString("MiKo_1051_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffixing delegate variables with their type is repetitive and provides no value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
+        /// </summary>
+        public static string MiKo_1052_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1052_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a better matching name instead.
+        /// </summary>
+        public static string MiKo_1052_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1052_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suffix variables with delegate types..
+        /// </summary>
+        public static string MiKo_1052_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1052_Title", resourceCulture);
             }
         }
         
