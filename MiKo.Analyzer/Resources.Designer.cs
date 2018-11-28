@@ -1406,6 +1406,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Suffixing delegate fields with their type is repetitive and provides no value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
+        /// </summary>
+        public static string MiKo_1053_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1053_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a better matching name instead.
+        /// </summary>
+        public static string MiKo_1053_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1053_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suffix fields with delegate types..
+        /// </summary>
+        public static string MiKo_1053_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1053_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terms such as &apos;helper&apos; or &apos;utility&apos; are too generic and meaningless.
         ///Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad..
         /// </summary>
