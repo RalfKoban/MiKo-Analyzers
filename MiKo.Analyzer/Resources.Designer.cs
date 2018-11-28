@@ -1706,7 +1706,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical name), such as  &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
+        ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical) name, such as  &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
         /// </summary>
         public static string MiKo_1401_Description {
             get {
@@ -1783,6 +1783,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1403_Title {
             get {
                 return ResourceManager.GetString("MiKo_1403_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespaces should not contain any unspecific name, such as  &apos;Miscellaneous&apos; or &apos;Utilities&apos;..
+        /// </summary>
+        public static string MiKo_1404_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1404_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in namespace.
+        /// </summary>
+        public static string MiKo_1404_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1404_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespaces should not contain unspecific names..
+        /// </summary>
+        public static string MiKo_1404_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1404_Title", resourceCulture);
             }
         }
         

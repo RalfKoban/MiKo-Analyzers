@@ -671,7 +671,7 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
     <value>Unimportant identifiers in lambda statements should be named '_'.</value>
   </data>
   <data name="MiKo_1401_Description" xml:space="preserve">
-    <value>Namespaces should not contain any language specific (technical name), such as  'Interfaces', 'Exceptions' or 'Enums'.</value>
+    <value>Namespaces should not contain any language specific (technical) name, such as  'Interfaces', 'Exceptions' or 'Enums'.</value>
   </data>
   <data name="MiKo_1401_MessageFormat" xml:space="preserve">
     <value>Do not use technical name '{1}' in namespace</value>
@@ -696,6 +696,15 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
   </data>
   <data name="MiKo_1403_Title" xml:space="preserve">
     <value>Namespaces should be named after any of their parent namespaces.</value>
+  </data>
+  <data name="MiKo_1404_Description" xml:space="preserve">
+    <value>Namespaces should not contain any unspecific name, such as  'Miscellaneous' or 'Utilities'.</value>
+  </data>
+  <data name="MiKo_1404_MessageFormat" xml:space="preserve">
+    <value>Do not use '{1}' in namespace</value>
+  </data>
+  <data name="MiKo_1404_Title" xml:space="preserve">
+    <value>Namespaces should not contain unspecific names.</value>
   </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>

@@ -54,32 +54,26 @@ namespace ABCD.EFG." + ns + @".HIJK
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ForbiddenNamespaceNames() => new HashSet<string>
                                                                             {
+                                                                                "Action",
+                                                                                "Actions",
                                                                                 "Base",
                                                                                 "Class",
                                                                                 "Classes",
-                                                                                "Command",
-                                                                                "Commands",
                                                                                 "Enum",
                                                                                 "Enums",
                                                                                 "Exception",
                                                                                 "Exceptions",
-                                                                                "Helper",
+                                                                                "Impl",
                                                                                 "Implementation",
                                                                                 "Implementations",
                                                                                 "Interface",
                                                                                 "Interfaces",
-                                                                                "Model",
-                                                                                "Models",
                                                                                 "Proxies",
                                                                                 "Proxy",
                                                                                 "ServiceProxies",
                                                                                 "ServiceProxy",
                                                                                 "Struct",
                                                                                 "Structs",
-                                                                                "View",
-                                                                                "Views",
-                                                                                "ViewModel",
-                                                                                "ViewModels",
                                                                             };
     }
 }
