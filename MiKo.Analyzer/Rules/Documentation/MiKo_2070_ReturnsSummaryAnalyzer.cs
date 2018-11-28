@@ -18,9 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithReturns)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => symbol.Name != "ToString" && summaries.Any(StartsWithReturns)
                                                                                                                         ? new[] { ReportIssue(symbol, "Gets") }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
+
         private static bool StartsWithReturns(string summary)
         {
             // get rid of async starting phrase

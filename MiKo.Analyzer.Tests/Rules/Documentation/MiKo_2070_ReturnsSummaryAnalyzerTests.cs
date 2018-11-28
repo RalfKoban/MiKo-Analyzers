@@ -41,7 +41,6 @@ public class TestMe
     }
 }
 ");
-
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method([Values("Return", "Returns", "return", "returns")] string phrase)
             => An_issue_is_reported_for(@"
@@ -76,6 +75,20 @@ public class TestMe
     /// </summary>
     public int DoSomething()
     {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ToString() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Returns a string that represents the current object.
+    /// </summary>
+    public override string ToString()
+    {
+        return ""Bla"";
     }
 }
 ");
