@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers;
+
 // ReSharper disable once CheckNamespace
 namespace Microsoft.CodeAnalysis
 {
@@ -22,13 +24,15 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol method)
         {
-            if (method.ContainingType.Implements<T>())
+            var fullName = typeof(T).FullName;
+
+            var typeSymbol = method.ContainingType;
+            if (typeSymbol.Implements(fullName))
             {
-                var fullName = typeof(T).FullName;
-                var methodSymbols = method.ContainingType.AllInterfaces
+                var methodSymbols = typeSymbol.AllInterfaces
                                           .Where(_ => _.Name == fullName)
                                           .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
-                return methodSymbols.Any(_ => method.Equals(method.ContainingType.FindImplementationForInterfaceMember(_)));
+                return methodSymbols.Any(_ => method.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
             }
 
             return false;
@@ -174,7 +178,12 @@ namespace Microsoft.CodeAnalysis
         {
             while (true)
             {
-                if (baseClasses.Any(_ => _ == symbol.ToString())) return true;
+                var fullName = symbol.ToString();
+
+                foreach (var baseClass in baseClasses)
+                {
+                    if (baseClass == fullName) return true;
+                }
 
                 var baseType = symbol.BaseType;
                 if (baseType == null) return false;
@@ -238,7 +247,24 @@ namespace Microsoft.CodeAnalysis
         {
             switch (symbol.SpecialType)
             {
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
                 case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
                     return false;
 
                 case SpecialType.System_Array:
@@ -290,7 +316,7 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal) && symbol.Name.EndsWith("TaskFactory", StringComparison.Ordinal) == false; // ignore special situation for task factory
 
-        internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && symbol.ToString() == typeof(System.Threading.CancellationToken).FullName;
+        internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && symbol.ToString() == TypeNames.CancellationToken;
 
         internal static bool IsNullable(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Nullable);
 

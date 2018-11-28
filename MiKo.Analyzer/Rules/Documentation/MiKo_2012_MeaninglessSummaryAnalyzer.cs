@@ -24,33 +24,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            var phrases = symbol.Kind == SymbolKind.Field
-                          ? Constants.Comments.MeaninglessFieldStartingPhrase
-                          : Constants.Comments.MeaninglessStartingPhrase;
-
-            var symbolNames = GetSelfSymbolNames(symbol);
-            foreach (var summary in summaries)
+            if (summaries.Any())
             {
-                foreach (var phrase in symbolNames.Where(_ => summary.StartsWith(_, Comparison)))
-                {
-                    return ReportIssueStartingPhrase(symbol, phrase);
-                }
+                var phrases = symbol.Kind == SymbolKind.Field
+                                  ? Constants.Comments.MeaninglessFieldStartingPhrase
+                                  : Constants.Comments.MeaninglessStartingPhrase;
 
-                foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
-                {
-                    return ReportIssueStartingPhrase(symbol, phrase);
-                }
+                var symbolNames = GetSelfSymbolNames(symbol);
 
-                if (summary.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison))
+                foreach (var summary in summaries)
                 {
-                    var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
-                    var phrase = index > 0 ? summary.Substring(0, index + 2) : Constants.Comments.XmlElementStartingTag;
-                    return ReportIssueStartingPhrase(symbol, phrase);
-                }
+                    foreach (var phrase in symbolNames.Where(_ => summary.StartsWith(_, Comparison)))
+                    {
+                        return ReportIssueStartingPhrase(symbol, phrase);
+                    }
 
-                foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
-                {
-                    return ReportIssueContainsPhrase(symbol, phrase);
+                    foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
+                    {
+                        return ReportIssueStartingPhrase(symbol, phrase);
+                    }
+
+                    if (summary.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison))
+                    {
+                        var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
+                        var phrase = index > 0 ? summary.Substring(0, index + 2) : Constants.Comments.XmlElementStartingTag;
+                        return ReportIssueStartingPhrase(symbol, phrase);
+                    }
+
+                    foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
+                    {
+                        return ReportIssueContainsPhrase(symbol, phrase);
+                    }
                 }
             }
 
@@ -80,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
             }
 
-            return names.Select(_ => _ + " ");
+            return names.Select(_ => _ + " ").ToHashSet();
         }
     }
 }

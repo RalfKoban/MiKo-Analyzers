@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                             {
                                                                                 nameof(ArgumentOutOfRangeException),
                                                                                 nameof(InvalidEnumArgumentException),
-                                                                                typeof(ArgumentOutOfRangeException).FullName,
-                                                                                "System.ComponentModel." + nameof(InvalidEnumArgumentException),
+                                                                                TypeNames.ArgumentOutOfRangeException,
+                                                                                TypeNames.InvalidEnumArgumentException,
                                                                             };
 
 

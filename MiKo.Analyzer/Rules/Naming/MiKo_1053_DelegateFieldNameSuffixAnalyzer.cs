@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (symbolType.TypeKind)
             {
                 case TypeKind.Delegate:
-                case TypeKind.Class when symbolType.ToString() == typeof(Delegate).FullName:
+                case TypeKind.Class when symbolType.ToString() == TypeNames.Delegate:
                     return symbol.Name.EndsWithAny(WrongNames)
                                ? new[] { ReportIssue(symbol) }
                                : Enumerable.Empty<Diagnostic>();

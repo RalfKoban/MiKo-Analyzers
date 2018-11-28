@@ -17,8 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                             {
                                                                                 nameof(ArgumentException),
                                                                                 nameof(ArgumentNullException),
-                                                                                typeof(ArgumentException).FullName,
-                                                                                typeof(ArgumentNullException).FullName,
+                                                                                TypeNames.ArgumentException,
+                                                                                TypeNames.ArgumentNullException,
                                                                             };
 
 

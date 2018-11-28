@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                 nameof(InvalidOperationException),
                                                                                 nameof(NotImplementedException),
                                                                                 nameof(NotSupportedException),
-                                                                                typeof(InvalidOperationException).FullName,
-                                                                                typeof(NotImplementedException).FullName,
-                                                                                typeof(NotSupportedException).FullName,
+                                                                                TypeNames.InvalidOperationException,
+                                                                                TypeNames.NotImplementedException,
+                                                                                TypeNames.NotSupportedException,
                                                                             };
 
         public MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer() : base(Id)

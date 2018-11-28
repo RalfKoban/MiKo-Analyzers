@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3022";
 
-        private static readonly string CancellationTokenSource = typeof(System.Threading.CancellationTokenSource).FullName;
-
         public MiKo_3022_CancellationTokenSourceParameterAnalyzer() : base(Id)
         {
         }
@@ -24,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             foreach (var parameter in method.Parameters)
             {
                 var parameterType = parameter.Type;
-                if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == CancellationTokenSource)
+                if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)
                 {
                     return new[] { ReportIssue(parameter, nameof(System.Threading.CancellationToken)) };
                 }

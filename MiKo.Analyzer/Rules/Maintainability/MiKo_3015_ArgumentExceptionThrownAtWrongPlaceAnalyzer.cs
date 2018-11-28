@@ -17,16 +17,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly HashSet<string> Mappings = new HashSet<string>
                                                                {
                                                                    nameof(ArgumentException),
-                                                                   typeof(ArgumentException).FullName,
+                                                                   TypeNames.ArgumentException,
 
                                                                    nameof(ArgumentNullException),
-                                                                   typeof(ArgumentNullException).FullName,
+                                                                   TypeNames.ArgumentNullException,
 
                                                                    nameof(ArgumentOutOfRangeException),
-                                                                   typeof(ArgumentOutOfRangeException).FullName,
+                                                                   TypeNames.ArgumentOutOfRangeException,
 
                                                                    nameof(InvalidEnumArgumentException),
-                                                                   "System.ComponentModel." + nameof(InvalidEnumArgumentException),
+                                                                   TypeNames.InvalidEnumArgumentException,
                                                                };
 
         public MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzer() : base(Id)
