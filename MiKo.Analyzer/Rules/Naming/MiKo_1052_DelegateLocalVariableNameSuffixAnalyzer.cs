@@ -19,7 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-
         protected override void InitializeCore(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);

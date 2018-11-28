@@ -18,7 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        // symbol.TypeKind == TypeKind.Delegate
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol)
         {
             var symbolType = symbol.Type;
