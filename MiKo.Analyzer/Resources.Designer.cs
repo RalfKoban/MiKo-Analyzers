@@ -1452,7 +1452,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types should be named &apos;Helper&apos; or &apos;Utility&apos;..
+        ///   Looks up a localized string similar to Do not name types &apos;Helper&apos; or &apos;Utility&apos;..
         /// </summary>
         public static string MiKo_1054_Title {
             get {
