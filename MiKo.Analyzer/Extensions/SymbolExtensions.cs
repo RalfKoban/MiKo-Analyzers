@@ -314,11 +314,9 @@ namespace Microsoft.CodeAnalysis
             return semanticModel.LookupSymbols(position, name: name).First();
         }
 
-        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode node, SemanticModel semanticModel)
-        {
-            var symbol = semanticModel.GetEnclosingSymbol(node.GetLocation().SourceSpan.Start);
-            return symbol as IMethodSymbol;
-        }
+        internal static ISymbol GetEnclosingSymbol(this SyntaxNode node, SemanticModel semanticModel) => semanticModel.GetEnclosingSymbol(node.GetLocation().SourceSpan.Start);
+
+        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode node, SemanticModel semanticModel) => node.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
 
         internal static T GetEnclosing<T>(this SyntaxNode node) where T : SyntaxNode
         {

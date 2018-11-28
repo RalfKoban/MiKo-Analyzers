@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -12,20 +12,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1402";
 
-        public MiKo_1402_TestNamespaceAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_1402_TestNamespaceAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass();
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNamespaceDeclaration, SyntaxKind.NamespaceDeclaration);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeName(symbol.ContainingNamespace);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol)
+        private void AnalyzeNamespaceDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var fullNamespace = symbol.ToString();
-            return fullNamespace.Contains("Test", StringComparison.OrdinalIgnoreCase)
-                       ? new[] { ReportIssue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+            var qualifiedName = ((NamespaceDeclarationSyntax)context.Node).Name;
+
+            var fullName = qualifiedName.ToString();
+            if (fullName.Contains("Test", StringComparison.OrdinalIgnoreCase))
+            {
+                var diagnostic = ReportIssue(fullName, qualifiedName.GetLocation());
+                context.ReportDiagnostic(diagnostic);
+            }
         }
     }
 }
