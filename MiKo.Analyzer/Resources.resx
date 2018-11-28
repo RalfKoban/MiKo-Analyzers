@@ -1158,6 +1158,16 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2060_Title" xml:space="preserve">
     <value>Factories should be documented in a uniform way.</value>
   </data>
+  <data name="MiKo_2070_Description" xml:space="preserve">
+    <value>If a method comment starts with 'Returns', then it focuses on the return value but not on the purpose (responsibility) of the method.
+Instead, the documentation should describe what the method is intended to do.</value>
+  </data>
+  <data name="MiKo_2070_MessageFormat" xml:space="preserve">
+    <value>Start &lt;summary&gt; with: '{1}'</value>
+  </data>
+  <data name="MiKo_2070_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation should not start with 'Returns'.</value>
+  </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
     <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
   </data>

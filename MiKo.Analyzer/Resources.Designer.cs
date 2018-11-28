@@ -3160,6 +3160,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If a method comment starts with &apos;Returns&apos;, then it focuses on the return value but not on the purpose (responsibility) of the method.
+        ///Instead, the documentation should describe what the method is intended to do..
+        /// </summary>
+        public static string MiKo_2070_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2070_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2070_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2070_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not start with &apos;Returns&apos;..
+        /// </summary>
+        public static string MiKo_2070_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2070_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates..
         /// </summary>
         public static string MiKo_2100_Description {
