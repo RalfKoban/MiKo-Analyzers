@@ -69,12 +69,15 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|:white_check_mark:|
 |MiKo_1050|Return values should have descriptive names.|:white_check_mark:|
 |MiKo_1051|Do not suffix parameters with delegate types.|:white_check_mark:|
+|MiKo_1052|Do not suffix variables with delegate types.|:white_check_mark:|
+|MiKo_1053|Do not suffix fields with delegate types.|:white_check_mark:|
+|MiKo_1054|Do not name types 'Helper' or 'Utility'.|:white_check_mark:|
 |MiKo_1101|Test classes should end with 'Tests'.|:white_check_mark:|
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
 |MiKo_1104|Test cleanup methods should be named 'CleanupTest'.|:white_check_mark:|
 |MiKo_1105|Test methods should not be in Pascal-casing.|:white_check_mark:|
-|MiKo_1106|Do not name variables or parameters 'Mock' or 'Stub'.|:white_check_mark:|
+|MiKo_1106|Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.|:white_check_mark:|
 |MiKo_1200|Name exceptions in catch blocks consistently.|:white_check_mark:|
 |MiKo_1201|Name exceptions as parameters consistently.|:white_check_mark:|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|:white_check_mark:|
@@ -135,6 +138,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2056|Throwing of ObjectDisposedException should be documented using a default ending phrase.|:white_check_mark:|
 |MiKo_2057|Types that are not disposable shall not throw an ObjectDisposedException.|:white_check_mark:|
 |MiKo_2060|Factories should be documented in a uniform way.|:white_check_mark:|
+|MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
 
