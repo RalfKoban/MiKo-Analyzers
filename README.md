@@ -82,8 +82,11 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1201|Name exceptions as parameters consistently.|:white_check_mark:|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|:white_check_mark:|
 |MiKo_1401|Namespaces should not contain technical language names.|:white_check_mark:|
-|MiKo_1402|Test namespaces should not contain 'Test'.|:white_check_mark:|
+|MiKo_1402|Namespaces should not be named after WPF specific design patterns.|:white_check_mark:|
 |MiKo_1403|Namespaces should be named after any of their parent namespaces.|:white_check_mark:|
+|MiKo_1404|Namespaces should not contain unspecific names.|:white_check_mark:|
+|MiKo_1405|Namespaces should not contain 'Lib'.|:white_check_mark:|
+|MiKo_1407|Test namespaces should not contain 'Test'.|:white_check_mark:|
 
 ### Documentation
 |ID|Title|Enabled by default|
