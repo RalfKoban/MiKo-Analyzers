@@ -8,25 +8,21 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1401_TechnicalNamespacesAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1401_TechnicalNamespacesAnalyzer : NamingNamespaceAnalyzer
     {
         public const string Id = "MiKo_1401";
 
-        public MiKo_1401_TechnicalNamespacesAnalyzer() : base(Id, SymbolKind.Namespace)
+        public MiKo_1401_TechnicalNamespacesAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            var fullNamespaceName = symbol.ToString();
+            var markers = Constants.TechnicalNamespaceMarkers;
 
-            if (HasMarker(fullNamespaceName))
-            {
-                var name = Constants.TechnicalNamespaceMarkers.First(_ => fullNamespaceName.Contains(_, StringComparison.OrdinalIgnoreCase));
-                return new[] { ReportIssue(symbol, name) };
-            }
-
-            return Enumerable.Empty<Diagnostic>();
+            return HasMarker(qualifiedName)
+                       ? new[] { ReportIssue(qualifiedName, location, markers.First(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
+                       : Enumerable.Empty<Diagnostic>();
         }
 
         private static bool HasMarker(string name) => name.EqualsAny(Constants.TechnicalNamespaceMarkers)
