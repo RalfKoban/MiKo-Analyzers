@@ -706,6 +706,17 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
   <data name="MiKo_1404_Title" xml:space="preserve">
     <value>Namespaces should not contain unspecific names.</value>
   </data>
+  <data name="MiKo_1405_Description" xml:space="preserve">
+    <value>Namespaces should be named after features, not deployment details.
+Most times, a Lib suffix only signals that the assembly is a DLL (dynamic link library). This information is not needed at all.
+It does not matter if it is a library or an executable, what matters is the functionality it contains/provides.</value>
+  </data>
+  <data name="MiKo_1405_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' from namespace</value>
+  </data>
+  <data name="MiKo_1405_Title" xml:space="preserve">
+    <value>Namespaces should not contain 'Lib'.</value>
+  </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
   </data>

@@ -1814,6 +1814,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Namespaces should be named after features, not deployment details.
+        ///Most times, a Lib suffix only signals that the assembly is a DLL (dynamic link library). This information is not needed at all.
+        ///It does not matter if it is a library or an executable, what matters is the functionality it contains/provides..
+        /// </summary>
+        public static string MiKo_1405_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1405_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from namespace.
+        /// </summary>
+        public static string MiKo_1405_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1405_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespaces should not contain &apos;Lib&apos;..
+        /// </summary>
+        public static string MiKo_1405_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1405_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
