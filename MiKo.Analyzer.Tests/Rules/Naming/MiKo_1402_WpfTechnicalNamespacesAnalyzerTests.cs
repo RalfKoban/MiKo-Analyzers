@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1404_NonsenseNamespacesAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1402_WpfTechnicalNamespacesAnalyzerTests : CodeFixVerifier
     {
         [TestCase("MiKoSolutions")]
         public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(ns + @"
@@ -47,21 +47,22 @@ namespace ABCD.EFG." + ns + @".HIJK
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1404_NonsenseNamespacesAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1402_WpfTechnicalNamespacesAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1404_NonsenseNamespacesAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1402_WpfTechnicalNamespacesAnalyzer();
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> ForbiddenNamespaceNames() => new HashSet<string>
                                                                             {
-                                                                                "Helper",
-                                                                                "Helpers",
-                                                                                "Misc",
-                                                                                "Miscellaneous",
-                                                                                "Util",
-                                                                                "Utils",
-                                                                                "Utility",
-                                                                                "Utilities",
+                                                                                "Command",
+                                                                                "Commands",
+                                                                                "Model",
+                                                                                "Models",
+                                                                                "ViewModel",
+                                                                                "ViewModels",
+                                                                                "View",
+                                                                                "Views",
                                                                             };
     }
+
 }

@@ -1733,7 +1733,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A test should be located in the same namespace as the class it shall test..
+        ///   Looks up a localized string similar to Namespaces should not be named after WPF specific design patterns, such as &apos;Commands&apos;, &apos;Models&apos;, &apos;ViewModels&apos; or &apos;Views&apos;.
+        ///Models are Entities. Commands, ViewModels and Views belong together and are UI specific parts..
         /// </summary>
         public static string MiKo_1402_Description {
             get {
@@ -1742,7 +1743,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;Test&apos; from namespace.
+        ///   Looks up a localized string similar to Do not use WPFdesign pattern name &apos;{1}&apos; in namespace.
         /// </summary>
         public static string MiKo_1402_MessageFormat {
             get {
@@ -1751,7 +1752,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test namespaces should not contain &apos;Test&apos;..
+        ///   Looks up a localized string similar to Namespaces should not be named after WPF specific design patterns..
         /// </summary>
         public static string MiKo_1402_Title {
             get {
@@ -1839,6 +1840,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1405_Title {
             get {
                 return ResourceManager.GetString("MiKo_1405_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A test should be located in the same namespace as the class it shall test..
+        /// </summary>
+        public static string MiKo_1407_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1407_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Test&apos; from namespace.
+        /// </summary>
+        public static string MiKo_1407_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1407_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test namespaces should not contain &apos;Test&apos;..
+        /// </summary>
+        public static string MiKo_1407_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1407_Title", resourceCulture);
             }
         }
         

@@ -13,27 +13,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1405_LibraryNamespacesAnalyzerTests : CodeFixVerifier
     {
         [TestCase("MiKoSolutions")]
-        public void No_issue_is_reported_for_non_nonsense_namespace(string ns) => No_issue_is_reported_for(ns + @"
+        public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(ns + @"
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_nonsense_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_namespace_that_starts_with_nonsense_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_that_starts_with_wrong_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @".ABCD.EFG
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_namespace_that_ends_with_nonsense_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_that_ends_with_wrong_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace ABCD.EFG." + ns + @"
 {
 }
@@ -41,7 +41,7 @@ namespace ABCD.EFG." + ns + @"
 
 
         [Test]
-        public void An_issue_is_reported_for_namespace_that_contains_nonsense_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_that_contains_wrong_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace ABCD.EFG." + ns + @".HIJK
 {
 }

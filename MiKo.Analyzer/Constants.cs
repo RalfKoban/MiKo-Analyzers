@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "!:" };
             internal static readonly string[] SymbolsAndLineBreaks = Symbols.Concat(new[] { Environment.NewLine }).ToArray();
             internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
-
-            internal static readonly string[] TechnicalWPFNamespaces = { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", };
         }
 
         internal static class Comments

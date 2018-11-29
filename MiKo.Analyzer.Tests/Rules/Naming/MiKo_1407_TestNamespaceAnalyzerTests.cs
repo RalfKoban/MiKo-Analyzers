@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1402_TestNamespaceAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1407_TestNamespaceAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"
@@ -56,9 +56,9 @@ namespace " + namespaceName + @"
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1402_TestNamespaceAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1407_TestNamespaceAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1402_TestNamespaceAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1407_TestNamespaceAnalyzer();
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> WrongNamespaceNames() => new[]
