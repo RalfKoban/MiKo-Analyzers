@@ -2006,6 +2006,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;event arg&apos;. Instead, it should contain the reference to the specific class, such as&apos; &lt;see cref=&quot;XyzEventArgs&quot; /&gt;&apos;..
+        /// </summary>
+        public static string MiKo_2005_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2005_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use term &apos;event arg&apos;.
+        /// </summary>
+        public static string MiKo_2005_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2005_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Textual references to EventArgs should be documented properly..
+        /// </summary>
+        public static string MiKo_2005_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
         /// </summary>
         public static string MiKo_2010_Description {
