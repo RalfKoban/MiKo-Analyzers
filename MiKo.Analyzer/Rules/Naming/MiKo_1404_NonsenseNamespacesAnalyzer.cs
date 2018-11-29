@@ -12,16 +12,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1404";
 
+        private static readonly string[] NonsenseNamespaces = { "Helper", "Helpers", "Util", "Utils", "Utility", "Utilities", "Misc", "Miscellaneous" };
+
+
         public MiKo_1404_NonsenseNamespacesAnalyzer() : base(Id)
         {
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            var markers = Constants.NonsenseNamespaceMarkers;
-
-            return qualifiedName.ContainsAny(markers)
-                       ? new[] { ReportIssue(qualifiedName, location, markers.First(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
+            return qualifiedName.ContainsAny(NonsenseNamespaces)
+                       ? new[] { ReportIssue(qualifiedName, location, NonsenseNamespaces.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

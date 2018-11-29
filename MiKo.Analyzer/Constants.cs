@@ -6,19 +6,19 @@ namespace MiKoSolutions.Analyzers
     public static class Constants
     {
         internal const string AsyncSuffix = "Async";
-        internal static readonly string[] EntityMarkers = { "Model", "Models", "model", "models" };
-        internal static readonly string[] ViewModelMarkers = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
-        internal static readonly string[] SpecialModelMarkers = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
-        internal static readonly string[] CollectionMarkers = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
-        internal static readonly string[] SymbolMarkers = { "T:", "P:", "M:", "F:", "!:" };
-        internal static readonly string[] SymbolMarkersAndLineBreaks = SymbolMarkers.Concat(new[] { Environment.NewLine }).ToArray();
-        internal static readonly string[] RequirementMarkers = { "Must", "Need", "Shall", "Should", "Will", "Would" };
-        internal static readonly string[] TechnicalNamespaceMarkers = { "Base", "Class", "Classes", "Enum", "Enums", "Exception", "Exceptions", "Impl", "Implementation", "Implementations", "Interface", "Interfaces", "Proxies", "Proxy", "ServiceProxies", "ServiceProxy", "Struct", "Structs", "Action", "Actions", };
-        internal static readonly string[] TechnicalNamespaceStartMarkers = TechnicalNamespaceMarkers.Select(_ => _ + ".").ToArray();
-        internal static readonly string[] TechnicalNamespaceEndMarkers = TechnicalNamespaceMarkers.Select(_ => "." +_).ToArray();
-        internal static readonly string[] TechnicalNamespaceMiddleMarkers = TechnicalNamespaceMarkers.Select(_ => "." + _ + ".").ToArray();
-        internal static readonly string[] TechnicalWPFNamespaceMarkers = { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", };
-        internal static readonly string[] NonsenseNamespaceMarkers = { "Helper", "Helpers", "Util", "Utils", "Utility", "Utilities", "Misc", "Miscellaneous" };
+
+        internal static class Markers
+        {
+            internal static readonly string[] Entities = { "Model", "Models", "model", "models" };
+            internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
+            internal static readonly string[] SpecialModels = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
+            internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
+            internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "!:" };
+            internal static readonly string[] SymbolsAndLineBreaks = Symbols.Concat(new[] { Environment.NewLine }).ToArray();
+            internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
+
+            internal static readonly string[] TechnicalWPFNamespaces = { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", };
+        }
 
         internal static class Comments
         {

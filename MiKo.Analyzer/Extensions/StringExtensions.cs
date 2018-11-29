@@ -89,19 +89,19 @@ namespace System
                        : value.Substring(0, index) + "...";
         }
 
-        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.EntityMarkers) && !symbolName.EndsWithAny(Constants.ViewModelMarkers);
+        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && !symbolName.EndsWithAny(Constants.Markers.ViewModels);
 
         internal static bool HasEntityMarker(this string symbolName)
         {
-            if (!symbolName.ContainsAny(Constants.EntityMarkers)) return false;
-            if (symbolName.ContainsAny(Constants.ViewModelMarkers)) return false;
-            if (symbolName.ContainsAny(Constants.SpecialModelMarkers)) return false;
+            if (!symbolName.ContainsAny(Constants.Markers.Entities)) return false;
+            if (symbolName.ContainsAny(Constants.Markers.ViewModels)) return false;
+            if (symbolName.ContainsAny(Constants.Markers.SpecialModels)) return false;
 
             return true;
 
         }
 
-        internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.CollectionMarkers);
+        internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
 
         internal static string WithoutParaTags(this string value) => value.RemoveAll("<para>", "<para />", "<para/>", "</para>");
 

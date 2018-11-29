@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (method.Parameters.Length == 0)
                 return Enumerable.Empty<Diagnostic>();
 
-            var comment = commentXml.RemoveAll(Constants.SymbolMarkers);
+            var comment = commentXml.RemoveAll(Constants.Markers.Symbols);
 
             List<Diagnostic> findings = null;
             foreach (var parameter in method.Parameters)

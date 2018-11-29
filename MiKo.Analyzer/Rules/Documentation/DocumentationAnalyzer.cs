@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
-            var commentElements = GetCommentElements(commentXml.RemoveAll(Constants.SymbolMarkers), Constants.XmlTag.Exception);
+            var commentElements = GetCommentElements(commentXml.RemoveAll(Constants.Markers.Symbols), Constants.XmlTag.Exception);
             return commentElements;
         }
 
@@ -178,7 +178,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return value
                    .WithoutParaTags()
-                   .RemoveAll(Constants.SymbolMarkersAndLineBreaks)
+                   .RemoveAll(Constants.Markers.SymbolsAndLineBreaks)
                    .Replace("    ", " ")
                    .Replace("   ", " ")
                    .Replace("  ", " ")

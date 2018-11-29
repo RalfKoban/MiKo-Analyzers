@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<Diagnostic> findings = null;
             foreach (var summary in summaries)
             {
-                var comment = summary.RemoveAll(Constants.SymbolMarkers);
+                var comment = summary.RemoveAll(Constants.Markers.Symbols);
 
                 foreach (var parameter in method.Parameters)
                 {

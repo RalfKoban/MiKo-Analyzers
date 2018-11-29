@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
 
             if (expected.HasCollectionMarker())
-                expected = FindPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.CollectionMarkers);
+                expected = FindPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
 
             return new[] { ReportIssue(symbol, expected) };
 
@@ -80,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {
-            var name = symbolName.RemoveAll(Constants.EntityMarkers);
+            var name = symbolName.RemoveAll(Constants.Markers.Entities);
             switch (name.Length)
             {
                 case 0: return symbolName[0].IsUpperCase() ? "Entity" : "entity";
@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => Constants.CollectionMarkers.Select(suffix => AnalyzeCollectionSuffix(symbol, suffix)).FirstOrDefault(_ => _ != null);
+        protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => Constants.Markers.Collections.Select(suffix => AnalyzeCollectionSuffix(symbol, suffix)).FirstOrDefault(_ => _ != null);
 
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -167,7 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 var proposedName = symbolName.WithoutSuffix(suffix);
                 if (symbolName.IsEntityMarker())
-                    proposedName = proposedName.RemoveAll(Constants.EntityMarkers);
+                    proposedName = proposedName.RemoveAll(Constants.Markers.Entities);
 
                 return GetPluralName(symbolName, proposedName, comparison);
             }
@@ -200,7 +200,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 pluralName = proposedName.WithoutSuffix("ToModel");
 
             if (proposedName.HasEntityMarker())
-                pluralName = proposedName.RemoveAll(Constants.EntityMarkers);
+                pluralName = proposedName.RemoveAll(Constants.Markers.Entities);
 
             var candidate = pluralName.EndsWith("s", comparison) ? pluralName : pluralName + "s";
 
