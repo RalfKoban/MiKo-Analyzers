@@ -39,9 +39,15 @@ namespace ABCD.EFG." + ns + @"
 }
 ");
 
-
         [Test]
         public void An_issue_is_reported_for_namespace_that_contains_wrong_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+namespace ABCD.EFG." + ns + @".HIJK
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_namespace_that_contains_acceptable_sub_namespace([Values(nameof(System.ComponentModel))] string ns) => No_issue_is_reported_for(@"
 namespace ABCD.EFG." + ns + @".HIJK
 {
 }

@@ -694,7 +694,7 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
 Models are Entities. Commands, ViewModels and Views belong together and are UI specific parts.</value>
   </data>
   <data name="MiKo_1402_MessageFormat" xml:space="preserve">
-    <value>Do not use WPFdesign pattern name '{1}' in namespace</value>
+    <value>Do not use WPF design pattern name '{1}' in namespace</value>
   </data>
   <data name="MiKo_1402_Title" xml:space="preserve">
     <value>Namespaces should not be named after WPF specific design patterns.</value>

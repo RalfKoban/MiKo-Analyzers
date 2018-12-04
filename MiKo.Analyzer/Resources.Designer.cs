@@ -1771,7 +1771,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use WPFdesign pattern name &apos;{1}&apos; in namespace.
+        ///   Looks up a localized string similar to Do not use WPF design pattern name &apos;{1}&apos; in namespace.
         /// </summary>
         public static string MiKo_1402_MessageFormat {
             get {
