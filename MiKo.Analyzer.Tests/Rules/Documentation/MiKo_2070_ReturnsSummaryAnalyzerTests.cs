@@ -11,7 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
-
 public class TestMe
 {
     public int SomethingProperty { get; set; }
@@ -24,8 +23,6 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
-using System.Windows.Input;
-
 public class TestMe
 {
     /// <summary>
@@ -42,15 +39,9 @@ public class TestMe
 }
 ");
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method([Values("Return", "Returns", "return", "returns")] string phrase)
-            => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    public int SomethingProperty { get; set; }
-
     /// <summary>
     /// " + phrase + @" something.
     /// </summary>
@@ -61,21 +52,13 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property([Values("Return", "Returns", "return", "returns")] string phrase)
-            => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_property([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
     /// " + phrase + @" something.
     /// </summary>
     public int SomethingProperty { get; set; }
-
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    public int DoSomething()
-    {
-    }
 }
 ");
 
