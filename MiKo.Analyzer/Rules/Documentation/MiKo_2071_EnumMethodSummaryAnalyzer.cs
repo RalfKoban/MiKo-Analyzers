@@ -23,6 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
+        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.ReturnType.IsEnum();
+
+        protected override bool ShallAnalyzeProperty(IPropertySymbol symbol) => (symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type)?.IsEnum() == true;
+
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
                                                                                                                     from phrase in BooleanPhrases
                                                                                                                     where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)

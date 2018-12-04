@@ -40,6 +40,16 @@ public class TestMe
     public StringComparison DoSomething()
     {
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether something is active.
+    /// </summary>
+    public bool IsActive { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether something is contained.
+    /// </summary>
+    public bool Contains() => true;
 }
 ");
         [Test]
