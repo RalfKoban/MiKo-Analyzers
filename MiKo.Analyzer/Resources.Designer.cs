@@ -3327,6 +3327,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enum types are no boolean values. Hence the documentation should not contain any phrase that would handle enums as if they were booleans (such as it would be the case in phrase &apos;indicates whether&apos;)..
+        /// </summary>
+        public static string MiKo_2071_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2071_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use phrase &apos;{1&apos;} in &lt;summary&gt; documentation.
+        /// </summary>
+        public static string MiKo_2071_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2071_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type..
+        /// </summary>
+        public static string MiKo_2071_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2071_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates..
         /// </summary>
         public static string MiKo_2100_Description {

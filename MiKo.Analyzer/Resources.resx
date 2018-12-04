@@ -1217,6 +1217,15 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2070_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not start with 'Returns'.</value>
   </data>
+  <data name="MiKo_2071_Description" xml:space="preserve">
+    <value>Enum types are no boolean values. Hence the documentation should not contain any phrase that would handle enums as if they were booleans (such as it would be the case in phrase 'indicates whether').</value>
+  </data>
+  <data name="MiKo_2071_MessageFormat" xml:space="preserve">
+    <value>Do not use phrase '{1'} in &lt;summary&gt; documentation</value>
+  </data>
+  <data name="MiKo_2071_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.</value>
+  </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
     <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
   </data>
