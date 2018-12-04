@@ -93,6 +93,22 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_GetEnumerator() => No_issue_is_reported_for(@"
+using System.Collections;
+
+public class TestMe : IEnumerable
+{
+    /// <summary>
+    /// Returns an enumerator that iterates through a collection.
+    /// </summary>
+    public IEnumerator GetEnumerator()
+    {
+        return null;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2070_ReturnsSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2070_ReturnsSummaryAnalyzer();

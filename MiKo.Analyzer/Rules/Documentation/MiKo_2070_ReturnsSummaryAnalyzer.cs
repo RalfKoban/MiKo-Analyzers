@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,9 +19,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => symbol.Name != "ToString" && summaries.Any(StartsWithReturns)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => ShallAnalyze(symbol) && summaries.Any(StartsWithReturns)
                                                                                                                         ? new[] { ReportIssue(symbol, "Gets") }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
+
+        private static bool ShallAnalyze(ISymbol symbol)
+        {
+            switch (symbol.Name)
+            {
+                case nameof(ToString):
+                case nameof(IEnumerable.GetEnumerator):
+                    return false;
+
+                default:
+                    return true;
+            }
+        }
 
         private static bool StartsWithReturns(string summary)
         {
