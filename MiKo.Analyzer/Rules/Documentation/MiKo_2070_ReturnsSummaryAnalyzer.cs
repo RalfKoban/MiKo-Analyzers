@@ -19,11 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => ShallAnalyze(symbol) && summaries.Any(StartsWithReturns)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithReturns)
                                                                                                                         ? new[] { ReportIssue(symbol, "Gets") }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
-        private static bool ShallAnalyze(ISymbol symbol)
+        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol)
         {
             switch (symbol.Name)
             {
