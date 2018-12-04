@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            var fullName = qualifiedName.Replace("ComponentModel", string.Empty);
+            var fullName = qualifiedName.RemoveAll("ComponentModel", "ServiceModel");
 
             return fullName.ContainsAny(TechnicalWPFNamespaces)
                        ? new[] { ReportIssue(qualifiedName, location, TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase))) }

@@ -47,7 +47,7 @@ namespace ABCD.EFG." + ns + @".HIJK
 ");
 
         [Test]
-        public void No_issue_is_reported_for_namespace_that_contains_acceptable_sub_namespace([Values(nameof(System.ComponentModel))] string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_namespace_that_contains_acceptable_sub_namespace([Values(nameof(System.ComponentModel), "ServiceModel")] string ns) => No_issue_is_reported_for(@"
 namespace ABCD.EFG." + ns + @".HIJK
 {
 }
