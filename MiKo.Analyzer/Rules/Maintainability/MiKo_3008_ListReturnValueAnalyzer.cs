@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
+    // TODO: Potential NRE in code? --> AD0001 reports that
+
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3008_ListReturnValueAnalyzer : MaintainabilityAnalyzer
     {
