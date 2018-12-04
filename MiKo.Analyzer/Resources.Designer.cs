@@ -577,6 +577,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that are named &apos;Remove&apos; and have no parameters should be named &apos;Clear&apos; instead as they do not remove parameters.
+        ///Methods that are named &apos;Clear&apos; and have parameters should be named &apos;Remove&apos; instead as they do not clear the item..
+        /// </summary>
+        public static string MiKo_1019_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1019_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1019_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1019_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Clear&apos; and &apos;Remove&apos; methods should be named based on their number of parameters..
+        /// </summary>
+        public static string MiKo_1019_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1019_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
         /// </summary>
         public static string MiKo_1020_Description {
