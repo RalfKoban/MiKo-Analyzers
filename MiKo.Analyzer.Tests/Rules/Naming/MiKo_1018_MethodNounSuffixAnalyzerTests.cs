@@ -32,6 +32,20 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_test_method_with_name_(
+                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute,
+                                                                [ValueSource(nameof(InvalidMethodNames))] string name)
+            => No_issue_is_reported_for(@"
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void " + name + @"()
+    {
+    }
+}
+");
+
         [TestCase(null, ExpectedResult = null, Description = "There is no verb available")]
         [TestCase("", ExpectedResult = "", Description = "There is no verb available")]
         [TestCase(" ", ExpectedResult = " ", Description = "There is no verb available")]
