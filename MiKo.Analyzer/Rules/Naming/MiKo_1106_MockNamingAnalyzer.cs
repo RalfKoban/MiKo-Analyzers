@@ -35,10 +35,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
+        {
+            foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny("mock", "stub")))
+            {
+                var symbol = syntaxToken.GetSymbol(semanticModel);
+                var diagnostic = symbol != null
+                                     ? ReportIssue(symbol)
+                                     : ReportIssue(syntaxToken.ValueText, syntaxToken.GetLocation());
+                yield return diagnostic;
+            }
+        }
+
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
         {
             var type = context.FindContainingType();
-            return type?.IsTestClass() == true;
+            if (type is null)
+                return false;
+
+            if (type.IsTestClass())
+                return true;
+
+            var assemblyName = type.ContainingAssembly.Name;
+            if (assemblyName.Contains("Test"))
+                return !assemblyName.Contains("MiKoSolutions.Analyzers");
+
+            return false;
         }
 
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
@@ -88,18 +110,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
-            }
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
-        {
-            foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny("mock", "stub")))
-            {
-                var symbol = syntaxToken.GetSymbol(semanticModel);
-                var diagnostic = symbol != null
-                                     ? ReportIssue(symbol)
-                                     : ReportIssue(syntaxToken.ValueText, syntaxToken.GetLocation());
-                yield return diagnostic;
             }
         }
     }
