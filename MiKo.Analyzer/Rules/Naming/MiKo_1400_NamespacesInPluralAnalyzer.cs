@@ -41,18 +41,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "NDepend",
             };
 
-        private static readonly char[] NamespaceDelimiters = { '.' };
-
         public MiKo_1400_NamespacesInPluralAnalyzer() : base(Id)
         {
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            var lastName = qualifiedName.Split(NamespaceDelimiters, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            var lastName = qualifiedName.Substring(qualifiedName.LastIndexOf('.') + 1);
             return lastName.EndsWithAny(AllowedSuffixes)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(qualifiedName, location, lastName) };
+                       : new[] { ReportIssue(qualifiedName, location) };
         }
     }
 }

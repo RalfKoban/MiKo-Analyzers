@@ -451,7 +451,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use ambiguous term &apos;Check&apos; in &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Do not use ambiguous term &apos;Check&apos;.
         /// </summary>
         public static string MiKo_1014_MessageFormat {
             get {
@@ -1743,7 +1743,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use plural form of &apos;{1}&apos; for namespace.
+        ///   Looks up a localized string similar to Use plural for namespace.
         /// </summary>
         public static string MiKo_1400_MessageFormat {
             get {
