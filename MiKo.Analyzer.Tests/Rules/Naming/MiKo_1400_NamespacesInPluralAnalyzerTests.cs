@@ -12,8 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1400_NamespacesInPluralAnalyzerTests : CodeFixVerifier
     {
-        [TestCase("MiKoSolutions")]
-        public void No_issue_is_reported_for_proper_namespace([ValueSource(nameof(PluralNamespaceNames))]string ns) => No_issue_is_reported_for(ns + @"
+        [Test]
+        public void No_issue_is_reported_for_proper_namespace([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+namespace " + ns + @"
 {
 }
 ");
@@ -32,22 +33,34 @@ namespace " + ns + @"
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> SingularNamespaceNames() => new HashSet<string>
                                                                             {
-                                                                                "Test",
                                                                                 "Converter",
+                                                                                "Test",
                                                                             };
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> PluralNamespaceNames() => new HashSet<string>
+        private static IEnumerable<string> AllowedNamespaceNames() => new HashSet<string>
                                                                             {
+                                                                                "Activities",
+                                                                                "ComponentModel",
+                                                                                "Converters",
+                                                                                "Documentation",
+                                                                                "Extensions",
+                                                                                "Framework",
+                                                                                "Generic",
+                                                                                "IO",
+                                                                                "Infrastructure",
+                                                                                "Lifetime",
+                                                                                "Linq",
+                                                                                "Maintainability",
                                                                                 "MiKoSolutions",
                                                                                 "Naming",
-                                                                                "Activities",
+                                                                                "Resources",
+                                                                                "Runtime",
                                                                                 "Security",
-                                                                                "Maintainablity",
-                                                                                "Documentation",
-                                                                                "Converters",
-                                                                                "Extensions",
+                                                                                "ServiceModel",
                                                                                 "System",
+                                                                                "Threading",
+                                                                                "UserExperience",
                                                                             };
     }
 }

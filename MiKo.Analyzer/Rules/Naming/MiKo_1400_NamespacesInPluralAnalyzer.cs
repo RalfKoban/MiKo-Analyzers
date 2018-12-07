@@ -12,7 +12,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1400";
 
-        private static readonly string[] AllowedSuffixes = { "s", "ing", "Security", "Maintainability", "Documentation", "System" };
+        private static readonly string[] AllowedSuffixes =
+            {
+                "s",
+                "ing",
+                "ComponentModel",
+                "Documentation",
+                "Framework",
+                "Generic",
+                "IO",
+                "Infrastructure",
+                "Lifetime",
+                "Linq",
+                "Maintainability",
+                "Runtime",
+                "Security",
+                "ServiceModel",
+                "System",
+                "Threading",
+                "UserExperience",
+            };
+
         private static readonly char[] NamespaceDelimiters = { '.' };
 
         public MiKo_1400_NamespacesInPluralAnalyzer() : base(Id)
