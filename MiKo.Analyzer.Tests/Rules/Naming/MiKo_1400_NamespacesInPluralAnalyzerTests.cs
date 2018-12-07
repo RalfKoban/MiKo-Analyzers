@@ -13,6 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1400_NamespacesInPluralAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_known_namespace_name([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
+namespace " + ns + @"
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_proper_namespace([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
@@ -42,7 +49,9 @@ namespace " + ns + @"
                                                                             {
                                                                                 "Activities",
                                                                                 "ComponentModel",
+                                                                                "Composition",
                                                                                 "Converters",
+                                                                                "Data",
                                                                                 "Documentation",
                                                                                 "Extensions",
                                                                                 "Framework",
@@ -52,15 +61,25 @@ namespace " + ns + @"
                                                                                 "Lifetime",
                                                                                 "Linq",
                                                                                 "Maintainability",
-                                                                                "MiKoSolutions",
                                                                                 "Naming",
                                                                                 "Resources",
                                                                                 "Runtime",
                                                                                 "Security",
                                                                                 "ServiceModel",
+                                                                                "Serialization",
                                                                                 "System",
                                                                                 "Threading",
                                                                                 "UserExperience",
                                                                             };
+
+        [ExcludeFromCodeCoverage]
+        private static IEnumerable<string> WellKnownCompanyAndFrameworkNames() => new HashSet<string>
+                                                                                  {
+                                                                                      "JetBrains",
+                                                                                      "MiKoSolutions",
+                                                                                      "Microsoft",
+                                                                                      "PostSharp",
+                                                                                      "NDepend",
+                                                                                  };
     }
 }

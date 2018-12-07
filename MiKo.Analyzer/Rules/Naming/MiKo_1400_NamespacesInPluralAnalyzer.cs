@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "s",
                 "ing",
                 "ComponentModel",
+                "Composition",
+                "Data",
                 "Documentation",
                 "Framework",
                 "Generic",
@@ -28,9 +30,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Runtime",
                 "Security",
                 "ServiceModel",
+                "Serialization",
                 "System",
                 "Threading",
                 "UserExperience",
+
+                // known company / framework names
+                "Microsoft",
+                "PostSharp",
+                "NDepend",
             };
 
         private static readonly char[] NamespaceDelimiters = { '.' };
