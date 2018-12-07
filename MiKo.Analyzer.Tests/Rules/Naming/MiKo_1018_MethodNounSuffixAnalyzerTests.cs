@@ -106,6 +106,13 @@ public class TestMe
                                                                          "LoadConfiguration",
                                                                          "SaveConfiguration",
                                                                          "UpdateConfiguration",
+                                                                         "SetDocumentation",
+                                                                         "ResetDocumentation",
+                                                                         "QueryDocumentation",
+                                                                         "ClearDocumentation",
+                                                                         "RemoveDocumentation",
+                                                                         "CreateDocumentation",
+                                                                         "AddDocumentation",
                                                                      };
 
         [ExcludeFromCodeCoverage]

@@ -32,6 +32,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 new KeyValuePair<string, string>("rison", "re"),
             };
 
+        private static readonly string[] StartingPhrases =
+            {
+                "Undo",
+                "Redo",
+                "To",
+                "Verify",
+                "Ensure",
+                "Get",
+                "get_",
+                "Set",
+                "set_",
+                "Refresh",
+                "Reset",
+                "Trace",
+                "Read",
+                "Write",
+                "Load",
+                "Save",
+                "Store",
+                "Restore",
+                "Update",
+                "Add",
+                "Remove",
+                "Clear",
+                "Create",
+                "Query",
+            };
+
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
         {
         }
@@ -49,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (string.IsNullOrWhiteSpace(name))
                 return false;
 
-            if (name.StartsWithAny("Undo", "Redo", "To", "Verify", "Ensure", "Get", "get_", "Refresh", "Trace", "Write", "Read", "Load", "Save", "Store", "Restore", "Update"))
+            if (name.StartsWithAny(StartingPhrases))
                 return false;
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
