@@ -680,6 +680,15 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
   <data name="MiKo_1300_Title" xml:space="preserve">
     <value>Unimportant identifiers in lambda statements should be named '_'.</value>
   </data>
+  <data name="MiKo_1400_Description" xml:space="preserve">
+    <value>Namespaces group functionalities, so their names should be in plural.</value>
+  </data>
+  <data name="MiKo_1400_MessageFormat" xml:space="preserve">
+    <value>Use plural form of '{1}' for namespace</value>
+  </data>
+  <data name="MiKo_1400_Title" xml:space="preserve">
+    <value>Namespace names should be in plural.</value>
+  </data>
   <data name="MiKo_1401_Description" xml:space="preserve">
     <value>Namespaces should not contain any language specific (technical) name, such as  'Interfaces', 'Exceptions' or 'Enums'.</value>
   </data>

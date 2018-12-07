@@ -1734,6 +1734,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Namespaces group functionalities, so their names should be in plural..
+        /// </summary>
+        public static string MiKo_1400_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1400_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use plural form of &apos;{1}&apos; for namespace.
+        /// </summary>
+        public static string MiKo_1400_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1400_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Namespace names should be in plural..
+        /// </summary>
+        public static string MiKo_1400_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1400_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical) name, such as  &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
         /// </summary>
         public static string MiKo_1401_Description {
