@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2018";
 
+        private static readonly string[] Comments = { "Check ", "Checks " };
+
         public MiKo_2018_ChecksSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -22,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            foreach (var summary in summaries.Where(_ => _.StartsWithAny("Check ", "Checks ")))
+            foreach (var summary in summaries.Where(_ => _.StartsWithAny(Comments)))
             {
                 return new[] { ReportIssue(symbol, summary.Substring(0, summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase))) };
             }

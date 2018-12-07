@@ -12,11 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1013";
 
+        private static readonly string[] StartingPhrases = { "Notify", "OnNotify" };
+
         public MiKo_1013_NotifyMethodsAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => method.Name.StartsWithAny(StringComparison.Ordinal, "Notify", "OnNotify")
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => method.Name.StartsWithAny(StringComparison.Ordinal, StartingPhrases)
                                                                                             ? new[] { ReportIssue(method) }
                                                                                             : Enumerable.Empty<Diagnostic>();
     }

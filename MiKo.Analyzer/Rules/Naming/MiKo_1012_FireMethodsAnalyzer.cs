@@ -12,6 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1012";
 
+        private static readonly string[] FirePhrases = { "Fire", "_fire", "Firing", "_firing" };
+        private static readonly string[] FirewallPhrases = { "Firewall", "_firewall" };
+
         public MiKo_1012_FireMethodsAnalyzer() : base(Id)
         {
         }
@@ -19,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
-            var forbidden = methodName.ContainsAny("Fire", "_fire", "Firing", "_firing") && !methodName.ContainsAny("Firewall", "_firewall");
+            var forbidden = methodName.ContainsAny(FirePhrases) && !methodName.ContainsAny(FirewallPhrases);
             return forbidden
                        ? new[] { ReportIssue(method, methodName.Replace("Fire", "Raise").Replace("_fire", "_raise").Replace("Firing", "Raising").Replace("_firing", "_raising")) }
                        : Enumerable.Empty<Diagnostic>();

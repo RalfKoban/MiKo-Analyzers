@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2070";
 
+        private static readonly string[] ReturnPhrases = { "Return", "Returns" };
+
         public MiKo_2070_ReturnsSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -44,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var firstSpace = summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
             var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);
 
-            return firstWord.EqualsAny("Return", "Returns");
+            return firstWord.EqualsAny(ReturnPhrases);
         }
     }
 }

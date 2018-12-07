@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1014";
 
+        private static string[] StartingPhrases = { "CheckIn", "CheckOut" };
+
         public MiKo_1014_CheckMethodsAnalyzer() : base(Id)
         {
         }
@@ -19,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
-            var forbidden = methodName.StartsWith("Check", StringComparison.Ordinal) && !methodName.StartsWithAny(StringComparison.Ordinal, "CheckIn", "CheckOut");
+            var forbidden = methodName.StartsWith("Check", StringComparison.Ordinal) && !methodName.StartsWithAny(StringComparison.Ordinal, StartingPhrases);
             return forbidden
                        ? new[] { ReportIssue(method) }
                        : Enumerable.Empty<Diagnostic>();

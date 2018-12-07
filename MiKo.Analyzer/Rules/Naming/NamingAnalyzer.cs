@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
 
+        private static readonly string[] AllowedListNames = { "blackList", "whiteList", "array", "list", "collection" };
+
         protected NamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method, bool isEnabledByDefault = true) : base(nameof(Naming), diagnosticId, kind, isEnabledByDefault)
         {
         }
@@ -161,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var suffix in suffixes)
             {
-                if (symbolName.EqualsAny(StringComparison.Ordinal, "blackList" ,"whiteList", "array", "list", "collection")) continue;
+                if (symbolName.EqualsAny(StringComparison.Ordinal, AllowedListNames)) continue;
 
                 if (!symbolName.EndsWith(suffix, comparison)) continue;
 

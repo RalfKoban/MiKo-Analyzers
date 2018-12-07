@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1106";
 
+        private static readonly string[] MockNames = { "mock", "stub" };
+
         public MiKo_1106_MockNamingAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -37,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
-            foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny("mock", "stub")))
+            foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny(MockNames)))
             {
                 var symbol = syntaxToken.GetSymbol(semanticModel);
                 var diagnostic = symbol != null
