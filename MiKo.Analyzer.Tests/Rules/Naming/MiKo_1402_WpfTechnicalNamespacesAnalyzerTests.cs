@@ -13,7 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1402_WpfTechnicalNamespacesAnalyzerTests : CodeFixVerifier
     {
         [TestCase("MiKoSolutions")]
-        public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(ns + @"
+        public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(@"
+namespace " + ns + @"
 {
 }
 ");
