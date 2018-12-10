@@ -1926,6 +1926,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease usage, extension method classes should be placed in same namespace as the extended types.
+        ///That allows an easy detection and use via IntelliSense..
+        /// </summary>
+        public static string MiKo_1408_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1408_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place in &apos;{1}&apos; namespace.
+        /// </summary>
+        public static string MiKo_1408_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1408_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension methods should be placed in same namespace as the extended types..
+        /// </summary>
+        public static string MiKo_1408_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1408_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
