@@ -1508,6 +1508,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3041_Title" xml:space="preserve">
     <value>EventArgs shall not use delegates.</value>
   </data>
+  <data name="MiKo_3050_Description" xml:space="preserve">
+    <value>Fields that are the back of a DependencyProperty should be made static and readonly, to allow the .NET framework and other clients to find and access those fields.</value>
+  </data>
+  <data name="MiKo_3050_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
+  </data>
+  <data name="MiKo_3050_MessageFormat" xml:space="preserve">
+    <value>Make it 'static' and 'readonly'</value>
+  </data>
+  <data name="MiKo_3050_Title" xml:space="preserve">
+    <value>DependencyProperty fields should be static readonly.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>

@@ -4182,6 +4182,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fields that are the back of a DependencyProperty should be made static and readonly, to allow the .NET framework and other clients to find and access those fields..
+        /// </summary>
+        public static string MiKo_3050_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3050_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        /// </summary>
+        public static string MiKo_3050_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3050_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make it &apos;static&apos; and &apos;readonly&apos;.
+        /// </summary>
+        public static string MiKo_3050_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3050_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DependencyProperty fields should be static readonly..
+        /// </summary>
+        public static string MiKo_3050_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3050_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
