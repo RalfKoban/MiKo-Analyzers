@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2017";
 
-        private const string DependencyPropertyFieldSuffix = "Property";
-
         public MiKo_2017_DependencyPropertyDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
@@ -25,9 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
             var symbolName = symbol.Name;
-            if (!symbolName.EndsWith(DependencyPropertyFieldSuffix, StringComparison.OrdinalIgnoreCase)) return Enumerable.Empty<Diagnostic>();
+            if (!symbolName.EndsWith(Constants.DependencyPropertyFieldSuffix, StringComparison.OrdinalIgnoreCase)) return Enumerable.Empty<Diagnostic>();
 
-            var propertyName = symbolName.WithoutSuffix(DependencyPropertyFieldSuffix);
+            var propertyName = symbolName.WithoutSuffix(Constants.DependencyPropertyFieldSuffix);
             var containingType = symbol.ContainingType;
             if (containingType.GetMembers().OfType<IPropertySymbol>().All(_ => _.Name != propertyName)) return Enumerable.Empty<Diagnostic>();
 

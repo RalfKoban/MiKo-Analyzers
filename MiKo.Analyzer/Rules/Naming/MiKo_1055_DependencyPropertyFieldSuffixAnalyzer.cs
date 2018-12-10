@@ -12,16 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1055";
 
-        private const string DependencyPropertyFieldSuffix = "Property";
-
         public MiKo_1055_DependencyPropertyFieldSuffixAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyProperty();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => symbol.Name.EndsWith(DependencyPropertyFieldSuffix, StringComparison.Ordinal)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => symbol.Name.EndsWith(Constants.DependencyPropertyFieldSuffix, StringComparison.Ordinal)
                                                                                            ? Enumerable.Empty<Diagnostic>()
-                                                                                           : new[] { ReportIssue(symbol, symbol.Name + DependencyPropertyFieldSuffix) };
+                                                                                           : new[] { ReportIssue(symbol, symbol.Name + Constants.DependencyPropertyFieldSuffix) };
     }
 }

@@ -6,6 +6,7 @@ namespace MiKoSolutions.Analyzers
     public static class Constants
     {
         internal const string AsyncSuffix = "Async";
+        internal const string DependencyPropertyFieldSuffix = "Property";
 
         internal static class Markers
         {
