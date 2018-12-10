@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
@@ -112,6 +113,9 @@ namespace MiKoSolutions.Analyzers.Rules
             }
 
             var markdown = markdownBuilder.ToString();
+
+            File.WriteAllText(@"z:\test.md", markdown);
+
             Assert.That(markdown, Is.Empty);
         }
 
