@@ -62,6 +62,19 @@ namespace Blubber.Bla.Blubb
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_generic_extension() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public static class TestMe
+    {
+        public static void DoSomething<T>(this T value) where T : class
+        {
+        } 
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1408_ExtensionMethodsNamespaceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1408_ExtensionMethodsNamespaceAnalyzer();

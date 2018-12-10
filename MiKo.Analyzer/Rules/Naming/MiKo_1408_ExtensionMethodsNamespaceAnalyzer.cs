@@ -25,7 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var diagnostics = symbol.GetMembers()
                                     .OfType<IMethodSymbol>()
                                     .Where(_ => _.IsExtensionMethod)
-                                    .Select(_ => _.Parameters[0].Type.ContainingNamespace.ToString())
+                                    .Select(_ => _.Parameters[0].Type.ContainingNamespace)
+                                    .Where(_ => _ != null) // generic types do not have a namespace to detect
+                                    .Select(_ => _.ToString())
                                     .Where(_ => _ != qualifiedNamespaceOfExtensionMethod)
                                     .Select(_ => ReportIssue(symbol, _))
                                     .ToList();
