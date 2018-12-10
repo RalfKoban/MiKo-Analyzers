@@ -1520,6 +1520,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3050_Title" xml:space="preserve">
     <value>DependencyProperty fields should be static readonly.</value>
   </data>
+  <data name="MiKo_3051_Description" xml:space="preserve">
+    <value>To avoid typos, fields that are the back of a DependencyProperty should be registered via the 'nameof' operator and 'DependencyProperty.Register()'.</value>
+  </data>
+  <data name="MiKo_3051_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
+  </data>
+  <data name="MiKo_3051_MessageFormat" xml:space="preserve">
+    <value>Use 'nameof' instead</value>
+  </data>
+  <data name="MiKo_3051_Title" xml:space="preserve">
+    <value>DependencyProperty fields should be registered using the 'nameof' operator.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>

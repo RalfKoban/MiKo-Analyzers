@@ -4218,6 +4218,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via the &apos;nameof&apos; operator and &apos;DependencyProperty.Register()&apos;..
+        /// </summary>
+        public static string MiKo_3051_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3051_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        /// </summary>
+        public static string MiKo_3051_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3051_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        /// </summary>
+        public static string MiKo_3051_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3051_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DependencyProperty fields should be registered using the &apos;nameof&apos; operator..
+        /// </summary>
+        public static string MiKo_3051_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3051_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {
