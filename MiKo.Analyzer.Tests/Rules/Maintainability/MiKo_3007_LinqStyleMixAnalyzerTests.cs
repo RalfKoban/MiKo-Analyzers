@@ -117,6 +117,24 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_combination_of_Linq_static_chain_and_query_in_same_field() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+         private static readonly string[] BooleanPhrases = (from term1 in new[] { "" indicating "", "" indicates "", "" indicate "" }
+                                                            from term2 in new[] { ""whether "", ""if "" }
+                                                            select string.Concat(term1, term2))
+                                                           .ToArray();
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_Linq_static_chain_only_generic_methods() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;

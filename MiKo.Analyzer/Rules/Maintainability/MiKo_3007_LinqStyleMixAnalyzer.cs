@@ -29,19 +29,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)
         {
-            var methodSyntax = query.GetEnclosing<MethodDeclarationSyntax>();
-
-            var hasLinqMethods = methodSyntax
-                                         .DescendantNodes()
-                                         .OfType<MemberAccessExpressionSyntax>()
-                                         .SelectMany(_ => semanticModel.LookupSymbols(_.GetLocation().SourceSpan.Start))
-                                         .Select(_ => _.ContainingNamespace?.ToString())
-                                         .Where(_ => _ != null)
-                                         .Any(_ => _.StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
+            var hasLinqMethods = false;
+            if (TryFindSyntaxNode(query, out var syntaxNode, out var identifier))
+            {
+                hasLinqMethods = syntaxNode
+                                     .DescendantNodes()
+                                     .OfType<MemberAccessExpressionSyntax>()
+                                     .SelectMany(_ => semanticModel.LookupSymbols(_.GetLocation().SourceSpan.Start))
+                                     .Select(_ => _.ContainingNamespace?.ToString())
+                                     .Where(_ => _ != null)
+                                     .Any(_ => _.StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
+            }
 
             return hasLinqMethods
-                       ? ReportIssue(methodSyntax.Identifier.ValueText, query.GetLocation())
+                       ? ReportIssue(identifier, query.GetLocation())
                        : null;
+        }
+
+        private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode syntaxNode, out string identifier)
+        {
+            var methodDeclarationSyntax = query.GetEnclosing<MethodDeclarationSyntax>();
+            if (methodDeclarationSyntax != null)
+            {
+                syntaxNode = methodDeclarationSyntax;
+                identifier = methodDeclarationSyntax.Identifier.ValueText;
+            }
+            else
+            {
+                // we do not find the enclosing method, so we might have a field (for which we need a variable), such as in MiKo_2071_EnumMethodSummaryAnalyzer
+                var variableDeclaratorSyntax = query.GetEnclosing<VariableDeclaratorSyntax>();
+                syntaxNode = variableDeclaratorSyntax;
+                identifier = variableDeclaratorSyntax?.Identifier.ValueText;
+            }
+
+            return syntaxNode != null;
         }
     }
 }
