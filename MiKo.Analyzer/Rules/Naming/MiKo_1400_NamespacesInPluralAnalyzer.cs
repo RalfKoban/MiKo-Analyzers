@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 "s",
                 "ing",
+                "ren",
                 "ComponentModel",
                 "Composition",
                 "Data",
