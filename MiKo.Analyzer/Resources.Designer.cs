@@ -1498,6 +1498,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        /// </summary>
+        public static string MiKo_1055_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1055_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
         /// </summary>
         public static string MiKo_1055_MessageFormat {
@@ -1512,6 +1521,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1055_Title {
             get {
                 return ResourceManager.GetString("MiKo_1055_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To indicate that fields are the containers for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1056_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1056_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        /// </summary>
+        public static string MiKo_1056_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1056_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it {1} instead.
+        /// </summary>
+        public static string MiKo_1056_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1056_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependency properties should be prefixed with property names (as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1056_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1056_Title", resourceCulture);
             }
         }
         
