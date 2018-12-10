@@ -19,21 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeProperty(IPropertySymbol symbol)
         {
-            var returnType = GetReturnType(symbol);
+            var returnType = symbol.GetReturnType();
             if (returnType == null) return false;
 
             return returnType.SpecialType == SpecialType.System_Boolean || returnType.IsEnum();
-        }
-
-        private static ITypeSymbol GetReturnType(IPropertySymbol symbol)
-        {
-            if (symbol.GetMethod != null)
-                return symbol.GetMethod.ReturnType;
-
-            if (symbol.SetMethod != null)
-                return symbol.SetMethod.Parameters[0].Type;
-
-            return null;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)

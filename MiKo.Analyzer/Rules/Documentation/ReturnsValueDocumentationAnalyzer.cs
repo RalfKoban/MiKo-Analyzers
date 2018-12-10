@@ -31,10 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, string commentXml)
         {
-            if (symbol.GetMethod != null) return AnalyzeReturnType(symbol, symbol.GetMethod.ReturnType, commentXml);
-            if (symbol.SetMethod != null) return AnalyzeReturnType(symbol, symbol.SetMethod.Parameters[0].Type, commentXml);
-
-            return Enumerable.Empty<Diagnostic>();
+            var returnType = symbol.GetReturnType();
+            return returnType != null
+                       ? AnalyzeReturnType(symbol, returnType, commentXml)
+                       : Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml)

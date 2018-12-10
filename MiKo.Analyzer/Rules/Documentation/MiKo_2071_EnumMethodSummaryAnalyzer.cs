@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.ReturnType.IsEnum();
 
-        protected override bool ShallAnalyzeProperty(IPropertySymbol symbol) => (symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type)?.IsEnum() == true;
+        protected override bool ShallAnalyzeProperty(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() == true;
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
                                                                                                                     from phrase in BooleanPhrases
