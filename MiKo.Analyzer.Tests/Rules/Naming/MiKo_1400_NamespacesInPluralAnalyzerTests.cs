@@ -91,6 +91,7 @@ namespace Abc." + ns + @"
                                                                                 "System",
                                                                                 "Threading",
                                                                                 "UserExperience",
+                                                                                "Children",
                                                                             };
 
         [ExcludeFromCodeCoverage]
