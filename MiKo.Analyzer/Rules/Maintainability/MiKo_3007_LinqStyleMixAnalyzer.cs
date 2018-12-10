@@ -8,8 +8,6 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    // TODO: Potential NRE in code? --> AD0001 reports that
-
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3007_LinqStyleMixAnalyzer : MaintainabilityAnalyzer
     {
@@ -37,7 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                          .DescendantNodes()
                                          .OfType<MemberAccessExpressionSyntax>()
                                          .SelectMany(_ => semanticModel.LookupSymbols(_.GetLocation().SourceSpan.Start))
-                                         .Any(_ => _.ContainingNamespace.ToString().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
+                                         .Select(_ => _.ContainingNamespace?.ToString())
+                                         .Where(_ => _ != null)
+                                         .Any(_ => _.StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
 
             return hasLinqMethods
                        ? ReportIssue(methodSyntax.Identifier.ValueText, query.GetLocation())

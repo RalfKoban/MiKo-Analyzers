@@ -116,6 +116,21 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_Linq_static_chain_only_generic_methods() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> DoSomething<T>() => Enumerable.ToList<T>(new T[0]);
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3007_LinqStyleMixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3007_LinqStyleMixAnalyzer();
