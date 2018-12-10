@@ -424,5 +424,10 @@ namespace Microsoft.CodeAnalysis
         internal static bool IsValueConverter(this ITypeSymbol symbol) => symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
 
         internal static bool IsMultiValueConverter(this ITypeSymbol symbol) => symbol.InheritsFrom("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");
+
+        internal static bool ContainsExtensionMethods(this ITypeSymbol symbol)
+        {
+            return symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
+        }
     }
 }
