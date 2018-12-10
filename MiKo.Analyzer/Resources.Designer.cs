@@ -1743,7 +1743,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use plural for namespace.
+        ///   Looks up a localized string similar to Use plural for namespace, such as &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1400_MessageFormat {
             get {

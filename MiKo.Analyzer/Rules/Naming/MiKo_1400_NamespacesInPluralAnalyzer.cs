@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var lastName = qualifiedName.Substring(qualifiedName.LastIndexOf('.') + 1);
             return lastName.EndsWithAny(AllowedSuffixes)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(qualifiedName, location) };
+                       : new[] { ReportIssue(qualifiedName, location, GetPluralName(lastName, lastName)) };
         }
     }
 }
