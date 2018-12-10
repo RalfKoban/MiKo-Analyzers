@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeField(IFieldSymbol symbol) => symbol.Type.Name == "DependencyProperty" || symbol.Type.Name == "System.Windows.DependencyProperty";
+        protected override bool ShallAnalyzeField(IFieldSymbol symbol) => symbol.Type.IsDependencyProperty();
 
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml)
         {
