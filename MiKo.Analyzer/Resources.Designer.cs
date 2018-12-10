@@ -4218,7 +4218,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via the &apos;nameof&apos; operator and &apos;DependencyProperty.Register()&apos;..
+        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. In addition, the correct properties, property types and owing types shall be provided..
         /// </summary>
         public static string MiKo_3051_Description {
             get {
@@ -4236,7 +4236,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        ///   Looks up a localized string similar to Use &apos;{1}&apos; instead.
         /// </summary>
         public static string MiKo_3051_MessageFormat {
             get {
@@ -4245,7 +4245,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DependencyProperty fields should be registered using the &apos;nameof&apos; operator..
+        ///   Looks up a localized string similar to DependencyProperty fields should be properly registered..
         /// </summary>
         public static string MiKo_3051_Title {
             get {
