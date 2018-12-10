@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_3050_DependencyPropertyStaticReadOnlyFieldAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3050_DependencyPropertyStaticReadOnlyFieldAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3050";
 
