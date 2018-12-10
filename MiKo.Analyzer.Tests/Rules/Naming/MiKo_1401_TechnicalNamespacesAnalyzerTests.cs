@@ -62,6 +62,8 @@ namespace ABCD.EFG." + ns + @".HIJK
                                                                                 "Classes",
                                                                                 "Enum",
                                                                                 "Enums",
+                                                                                "Enumeration",
+                                                                                "Enumerations",
                                                                                 "Exception",
                                                                                 "Exceptions",
                                                                                 "Impl",

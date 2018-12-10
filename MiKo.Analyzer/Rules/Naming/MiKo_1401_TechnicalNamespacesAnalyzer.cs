@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1401";
 
-        private static readonly string[] TechnicalNamespaces = { "Base", "Class", "Classes", "Enum", "Enums", "Exception", "Exceptions", "Impl", "Implementation", "Implementations", "Interface", "Interfaces", "Proxies", "Proxy", "ServiceProxies", "ServiceProxy", "Struct", "Structs", "Action", "Actions", };
+        private static readonly string[] TechnicalNamespaces = { "Base", "Class", "Classes", "Enum", "Enums", "Enumeration", "Enumerations", "Exception", "Exceptions", "Impl", "Implementation", "Implementations", "Interface", "Interfaces", "Proxies", "Proxy", "ServiceProxies", "ServiceProxy", "Struct", "Structs", "Action", "Actions", };
         private static readonly string[] TechnicalNamespacesStart = TechnicalNamespaces.Select(_ => _ + ".").ToArray();
         private static readonly string[] TechnicalNamespacesEnd = TechnicalNamespaces.Select(_ => "." + _).ToArray();
         private static readonly string[] TechnicalNamespacesMiddle = TechnicalNamespaces.Select(_ => "." + _ + ".").ToArray();
@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var markers = TechnicalNamespaces;
 
             return HasMarker(qualifiedName)
-                       ? new[] { ReportIssue(qualifiedName, location, markers.First(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
+                       ? new[] { ReportIssue(qualifiedName, location, markers.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
                        : Enumerable.Empty<Diagnostic>();
         }
 
