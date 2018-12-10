@@ -1489,6 +1489,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To indicate that fields are the containers for specific dependency properties, those fields should be suffixed with &apos;Property&apos; (similar as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1055_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1055_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1055_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1055_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependency properties should be suffixed with &apos;Property&apos; (as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1055_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1055_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {

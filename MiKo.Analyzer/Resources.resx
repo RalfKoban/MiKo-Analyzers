@@ -597,6 +597,15 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
   <data name="MiKo_1054_Title" xml:space="preserve">
     <value>Do not name types 'Helper' or 'Utility'.</value>
   </data>
+  <data name="MiKo_1055_Description" xml:space="preserve">
+    <value>To indicate that fields are the containers for specific dependency properties, those fields should be suffixed with 'Property' (similar as in the .NET Framework).</value>
+  </data>
+  <data name="MiKo_1055_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' instead</value>
+  </data>
+  <data name="MiKo_1055_Title" xml:space="preserve">
+    <value>Dependency properties should be suffixed with 'Property' (as in the .NET Framework).</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>
