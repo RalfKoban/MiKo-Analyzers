@@ -1917,7 +1917,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value converters shall be located in &apos;Converters&apos; namespace..
+        ///   Looks up a localized string similar to Value converters should be placed in &apos;Converters&apos; namespace..
         /// </summary>
         public static string MiKo_1406_Title {
             get {

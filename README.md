@@ -40,6 +40,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1016|Factory methods should be named 'Create'.|:white_check_mark:|
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|:white_check_mark:|
 |MiKo_1018|Methods should not be suffixed with noun of a verb.|:white_check_mark:|
+|MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|:white_check_mark:|
 |MiKo_1020|Type names should be limited in length.|:white_large_square:|
 |MiKo_1021|Method names should be limited in length.|:white_large_square:|
 |MiKo_1022|Parameter names should be limited in length.|:white_large_square:|
@@ -81,12 +82,15 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1200|Name exceptions in catch blocks consistently.|:white_check_mark:|
 |MiKo_1201|Name exceptions as parameters consistently.|:white_check_mark:|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|:white_check_mark:|
+|MiKo_1400|Namespace names should be in plural.|:white_check_mark:|
 |MiKo_1401|Namespaces should not contain technical language names.|:white_check_mark:|
 |MiKo_1402|Namespaces should not be named after WPF specific design patterns.|:white_check_mark:|
 |MiKo_1403|Namespaces should be named after any of their parent namespaces.|:white_check_mark:|
 |MiKo_1404|Namespaces should not contain unspecific names.|:white_check_mark:|
 |MiKo_1405|Namespaces should not contain 'Lib'.|:white_check_mark:|
+|MiKo_1406|Value converters should be placed in 'Converters' namespace.|:white_check_mark:|
 |MiKo_1407|Test namespaces should not contain 'Test'.|:white_check_mark:|
+|MiKo_1408|Extension methods should be placed in same namespace as the extended types.|:white_check_mark:|
 
 ### Documentation
 |ID|Title|Enabled by default|
@@ -96,6 +100,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2002|EventArgs should be documented properly.|:white_check_mark:|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase.|:white_check_mark:|
 |MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|:white_check_mark:|
+|MiKo_2005|Textual references to EventArgs should be documented properly.|:white_check_mark:|
 |MiKo_2010|Sealed classes should document being sealed.|:white_check_mark:|
 |MiKo_2011|Unsealed classes should not lie about sealing.|:white_check_mark:|
 |MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|:white_check_mark:|
@@ -142,6 +147,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2057|Types that are not disposable shall not throw an ObjectDisposedException.|:white_check_mark:|
 |MiKo_2060|Factories should be documented in a uniform way.|:white_check_mark:|
 |MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|:white_check_mark:|
+|MiKo_2071|&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
 
@@ -170,7 +176,6 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|:white_check_mark:|
 |MiKo_3041|EventArgs shall not use delegates.|:white_check_mark:|
-|MiKo_3047|Value converters shall be located in 'Converters' namespace.|:white_check_mark:|
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|

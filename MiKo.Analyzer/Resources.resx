@@ -744,7 +744,7 @@ It does not matter if it is a library or an executable, what matters is the func
     <value>Place in 'Converters' namespace</value>
   </data>
   <data name="MiKo_1406_Title" xml:space="preserve">
-    <value>Value converters shall be located in 'Converters' namespace.</value>
+    <value>Value converters should be placed in 'Converters' namespace.</value>
   </data>
   <data name="MiKo_1407_Description" xml:space="preserve">
     <value>A test should be located in the same namespace as the class it shall test.</value>
