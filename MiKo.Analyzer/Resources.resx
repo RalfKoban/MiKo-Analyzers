@@ -1571,6 +1571,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3051_Title" xml:space="preserve">
     <value>DependencyProperty fields should be properly registered.</value>
   </data>
+  <data name="MiKo_3052_Description" xml:space="preserve">
+    <value>Fields that are the back of a DependencyPropertyKey should be made non-public, 'static readonly' to prevent clients to find and access those fields.</value>
+  </data>
+  <data name="MiKo_3052_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
+  </data>
+  <data name="MiKo_3052_MessageFormat" xml:space="preserve">
+    <value>Make it non-public, 'static' and 'readonly'</value>
+  </data>
+  <data name="MiKo_3052_Title" xml:space="preserve">
+    <value>DependencyPropertyKey fields should be non-public 'static readonly'.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
