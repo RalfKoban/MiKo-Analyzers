@@ -4335,7 +4335,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. In addition, the correct properties, property types and owing types shall be provided..
+        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. In addition, the correct property names, property types and owing types shall be provided..
         /// </summary>
         public static string MiKo_3051_Description {
             get {
@@ -4403,6 +4403,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3052_Title {
             get {
                 return ResourceManager.GetString("MiKo_3052_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. In addition, the correct property names, property types and owing types shall be provided..
+        /// </summary>
+        public static string MiKo_3053_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3053_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
+        /// </summary>
+        public static string MiKo_3053_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3053_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_3053_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3053_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DependencyPropertyKey fields should be properly registered..
+        /// </summary>
+        public static string MiKo_3053_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3053_Title", resourceCulture);
             }
         }
         

@@ -1560,7 +1560,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>DependencyProperty fields should be 'public static readonly'.</value>
   </data>
   <data name="MiKo_3051_Description" xml:space="preserve">
-    <value>To avoid typos, fields that are the back of a DependencyProperty should be registered via 'DependencyProperty.Register()' and the 'nameof' operator. In addition, the correct properties, property types and owing types shall be provided.</value>
+    <value>To avoid typos, fields that are the back of a DependencyProperty should be registered via 'DependencyProperty.Register()' and the 'nameof' operator. In addition, the correct property names, property types and owing types shall be provided.</value>
   </data>
   <data name="MiKo_3051_HelpLinkUri" xml:space="preserve">
     <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
@@ -1582,6 +1582,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   </data>
   <data name="MiKo_3052_Title" xml:space="preserve">
     <value>DependencyPropertyKey fields should be non-public 'static readonly'.</value>
+  </data>
+  <data name="MiKo_3053_Description" xml:space="preserve">
+    <value>To avoid typos, fields that are the back of a DependencyProperty should be registered via 'DependencyProperty.Register()' and the 'nameof' operator. In addition, the correct property names, property types and owing types shall be provided.</value>
+  </data>
+  <data name="MiKo_3053_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
+  </data>
+  <data name="MiKo_3053_MessageFormat" xml:space="preserve">
+    <value>Use '{1}' instead</value>
+  </data>
+  <data name="MiKo_3053_Title" xml:space="preserve">
+    <value>DependencyPropertyKey fields should be properly registered.</value>
   </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
