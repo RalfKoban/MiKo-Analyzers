@@ -3,7 +3,7 @@
 # Semantic Versioning http://semver.org/
 version: 0.0.{build}
 
-image: Visual Studio 2017
+image: Previous Visual Studio 2017
 
 # branches to build
 branches:
