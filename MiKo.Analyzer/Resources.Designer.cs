@@ -2260,7 +2260,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;event arg&apos;. Instead, it should contain the reference to the specific class, such as&apos; &lt;see cref=&quot;XyzEventArgs&quot; /&gt;&apos;..
+        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;event arg&apos;. Instead, it should contain the reference to the specific class, such as &apos;&lt;see cref=&quot;XyzEventArgs&quot; /&gt;&apos;..
         /// </summary>
         public static string MiKo_2005_Description {
             get {

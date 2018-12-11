@@ -859,7 +859,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
   </data>
   <data name="MiKo_2005_Description" xml:space="preserve">
-    <value>XML documentation should not contain the term 'event arg'. Instead, it should contain the reference to the specific class, such as' &lt;see cref="XyzEventArgs" /&gt;'.</value>
+    <value>XML documentation should not contain the term 'event arg'. Instead, it should contain the reference to the specific class, such as '&lt;see cref="XyzEventArgs" /&gt;'.</value>
   </data>
   <data name="MiKo_2005_MessageFormat" xml:space="preserve">
     <value>Do not use term 'event arg'</value>
