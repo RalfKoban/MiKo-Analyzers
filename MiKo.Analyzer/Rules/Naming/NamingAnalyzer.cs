@@ -181,7 +181,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string CreatePluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
+            if (proposedName.EndsWith("ey", comparison)) return proposedName + "s";
             if (proposedName.EndsWith("y", comparison)) return proposedName.WithoutSuffix("y") + "ies";
+            if (proposedName.EndsWith("eys", comparison)) return proposedName;
             if (proposedName.EndsWith("ys", comparison)) return proposedName.WithoutSuffix("ys") + "ies";
             if (proposedName.EndsWith("ss", comparison)) return proposedName + "es";
             if (proposedName.EndsWith("ed", comparison)) return proposedName;
