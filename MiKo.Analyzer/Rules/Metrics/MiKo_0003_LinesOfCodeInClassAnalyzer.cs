@@ -22,16 +22,27 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
-            // ignore test classes
-            if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>();
+            switch (symbol.TypeKind)
+            {
+                case TypeKind.Class:
+                case TypeKind.Struct:
+                {
+                    // ignore test classes
+                    if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>();
 
-            var loc = symbol
-                      .GetMembers().OfType<IMethodSymbol>()
-                      .SelectMany(_ => _.DeclaringSyntaxReferences.Select(__ => __.GetSyntaxAsync().Result).SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect))
-                      .Sum(Counter.CountLinesOfCode);
+                    var loc = symbol
+                              .GetMembers().OfType<IMethodSymbol>()
+                              .SelectMany(_ => _.DeclaringSyntaxReferences.Select(__ => __.GetSyntax()).SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect))
+                              .Sum(Counter.CountLinesOfCode);
 
-            TryCreateDiagnostic(symbol, loc, MaxLinesOfCode, out var diagnostic);
-            return diagnostic != null ? new [] { diagnostic } : Enumerable.Empty<Diagnostic>();
+                    TryCreateDiagnostic(symbol, loc, MaxLinesOfCode, out var diagnostic);
+                    return diagnostic != null ? new[] { diagnostic } : Enumerable.Empty<Diagnostic>();
+                }
+
+                // ignore interfaces
+                case TypeKind.Interface: return Enumerable.Empty<Diagnostic>();
+                default: return Enumerable.Empty<Diagnostic>();
+            }
         }
 
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;

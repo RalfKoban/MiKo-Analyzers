@@ -47,15 +47,18 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsTestClass(this ITypeSymbol symbol)
         {
-            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
+            if (symbol.TypeKind == TypeKind.Class)
             {
-                switch (name)
+                foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
                 {
-                    case "TestFixture":
-                    case "TestFixtureAttribute":
-                    case "TestClass":
-                    case "TestClassAttribute":
-                        return true;
+                    switch (name)
+                    {
+                        case "TestFixture":
+                        case "TestFixtureAttribute":
+                        case "TestClass":
+                        case "TestClassAttribute":
+                            return true;
+                    }
                 }
             }
 
@@ -431,15 +434,6 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool ContainsExtensionMethods(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
-        internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol)
-        {
-            if (symbol.GetMethod != null)
-                return symbol.GetMethod.ReturnType;
-
-            if (symbol.SetMethod != null)
-                return symbol.SetMethod.Parameters[0].Type;
-
-            return null;
-        }
+        internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
     }
 }
