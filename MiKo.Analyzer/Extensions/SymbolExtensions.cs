@@ -423,6 +423,8 @@ namespace Microsoft.CodeAnalysis
 
         internal static bool IsDependencyProperty(this ITypeSymbol symbol) => symbol.Name == "DependencyProperty" || symbol.Name == "System.Windows.DependencyProperty";
 
+        internal static bool IsDependencyPropertyKey(this ITypeSymbol symbol) => symbol.Name == "DependencyPropertyKey" || symbol.Name == "System.Windows.DependencyPropertyKey";
+
         internal static bool IsValueConverter(this ITypeSymbol symbol) => symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
 
         internal static bool IsMultiValueConverter(this ITypeSymbol symbol) => symbol.InheritsFrom("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");

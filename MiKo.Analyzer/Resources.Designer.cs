@@ -1561,6 +1561,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To indicate that fields are the keys for specific dependency properties, those fields should be suffixed with &apos;Key&apos; (similar as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1057_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1057_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
+        /// </summary>
+        public static string MiKo_1057_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1057_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1057_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1057_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependency property keys should be suffixed with &apos;Key&apos; (as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1057_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1057_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To indicate that fields are the keys for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1058_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1058_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
+        /// </summary>
+        public static string MiKo_1058_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1058_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it {1} instead.
+        /// </summary>
+        public static string MiKo_1058_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1058_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependency property keys should be prefixed with property names (as in the .NET Framework)..
+        /// </summary>
+        public static string MiKo_1058_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1058_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {

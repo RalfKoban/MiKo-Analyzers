@@ -38,7 +38,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field([Values("m_field", "m_fieldProperty", "Field", "FieldProperty")] string fieldName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName) => An_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla

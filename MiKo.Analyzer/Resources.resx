@@ -621,6 +621,30 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
   <data name="MiKo_1056_Title" xml:space="preserve">
     <value>Dependency properties should be prefixed with property names (as in the .NET Framework).</value>
   </data>
+  <data name="MiKo_1057_Description" xml:space="preserve">
+    <value>To indicate that fields are the keys for specific dependency properties, those fields should be suffixed with 'Key' (similar as in the .NET Framework).</value>
+  </data>
+  <data name="MiKo_1057_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
+  </data>
+  <data name="MiKo_1057_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' instead</value>
+  </data>
+  <data name="MiKo_1057_Title" xml:space="preserve">
+    <value>Dependency property keys should be suffixed with 'Key' (as in the .NET Framework).</value>
+  </data>
+  <data name="MiKo_1058_Description" xml:space="preserve">
+    <value>To indicate that fields are the keys for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework).</value>
+  </data>
+  <data name="MiKo_1058_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
+  </data>
+  <data name="MiKo_1058_MessageFormat" xml:space="preserve">
+    <value>Name it {1} instead</value>
+  </data>
+  <data name="MiKo_1058_Title" xml:space="preserve">
+    <value>Dependency property keys should be prefixed with property names (as in the .NET Framework).</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>
