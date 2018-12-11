@@ -23,14 +23,28 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_static_readonly_DependencyProperty_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_public_static_readonly_DependencyProperty_field() => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
 {
     public class TestMe
     {
-        private static readonly DependencyProperty m_fieldProperty;
+        public static readonly DependencyProperty m_fieldProperty;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_non_public_static_readonly_DependencyProperty_field([Values("protected", "internal", "protected internal", "private", "")] string visibility)
+            => An_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        " + visibility + @" static readonly DependencyProperty m_fieldProperty;
     }
 }
 ");
@@ -43,7 +57,7 @@ namespace Bla
 {
     public class TestMe
     {
-        private static DependencyProperty m_fieldProperty;
+        public static DependencyProperty m_fieldProperty;
     }
 }
 ");
@@ -56,7 +70,7 @@ namespace Bla
 {
     public class TestMe
     {
-        private readonly DependencyProperty m_fieldProperty;
+        public readonly DependencyProperty m_fieldProperty;
     }
 }
 ");
@@ -69,13 +83,13 @@ namespace Bla
 {
     public class TestMe
     {
-        private DependencyProperty m_fieldProperty;
+        public DependencyProperty m_fieldProperty;
     }
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3050_DependencyPropertyStaticReadOnlyFieldAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3050_DependencyPropertyPublicStaticReadOnlyFieldAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3050_DependencyPropertyStaticReadOnlyFieldAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3050_DependencyPropertyPublicStaticReadOnlyFieldAnalyzer();
     }
 }

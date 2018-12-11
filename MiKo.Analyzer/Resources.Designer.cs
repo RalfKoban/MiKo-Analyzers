@@ -4227,7 +4227,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields that are the back of a DependencyProperty should be made static and readonly, to allow the .NET framework and other clients to find and access those fields..
+        ///   Looks up a localized string similar to Fields that are the back of a DependencyProperty should be made &apos;public static readonly&apos; to allow the .NET framework and other clients to find and access those fields..
         /// </summary>
         public static string MiKo_3050_Description {
             get {
@@ -4245,7 +4245,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make it &apos;static&apos; and &apos;readonly&apos;.
+        ///   Looks up a localized string similar to Make it &apos;public&apos;, &apos;static&apos; and &apos;readonly&apos;.
         /// </summary>
         public static string MiKo_3050_MessageFormat {
             get {
@@ -4254,7 +4254,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DependencyProperty fields should be static readonly..
+        ///   Looks up a localized string similar to DependencyProperty fields should be &apos;public static readonly&apos;..
         /// </summary>
         public static string MiKo_3050_Title {
             get {
