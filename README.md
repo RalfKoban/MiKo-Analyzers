@@ -73,6 +73,10 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1052|Do not suffix variables with delegate types.|:white_check_mark:|
 |MiKo_1053|Do not suffix fields with delegate types.|:white_check_mark:|
 |MiKo_1054|Do not name types 'Helper' or 'Utility'.|:white_check_mark:|
+|MiKo_1055|Dependency properties should be suffixed with 'Property' (as in the .NET Framework).|:white_check_mark:|
+|MiKo_1056|Dependency properties should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
+|MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework).|:white_check_mark:|
+|MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1101|Test classes should end with 'Tests'.|:white_check_mark:|
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
@@ -176,6 +180,9 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|:white_check_mark:|
 |MiKo_3041|EventArgs shall not use delegates.|:white_check_mark:|
+|MiKo_3050|DependencyProperty fields should be 'public static readonly'.|:white_check_mark:|
+|MiKo_3051|DependencyProperty fields should be properly registered.|:white_check_mark:|
+|MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|:white_check_mark:|
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|
