@@ -90,6 +90,21 @@ public class TestMe
     }
 }
 ");
+        [Test]
+        public void An_issue_is_reported_for_a_strangely_formatted_method_that_returns_a_Task_that_is_started_with_Run_method() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething()
+    {
+        return
+               Task
+                .Run(DoSomething);
+    }
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_method_body_method_that_returns_a_Task_that_is_started_with_Run_method() => An_issue_is_reported_for(@"
@@ -103,6 +118,20 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_a_strangely_formatted_method_body_method_that_returns_a_Task_that_is_started_with_Run_method() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething()
+                    =>
+                        Task
+                            .Run(DoSomething);
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_that_returns_a_Task_variable_that_is_started_with_Run_method() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -112,6 +141,23 @@ public class TestMe
     public Task DoSomething()
     {
         var result = Task.Run(DoSomething);
+        return result;
+    }
+}
+");
+
+
+        [Test]
+        public void An_issue_is_reported_for_a_strangely_formatted_method_that_returns_a_Task_variable_that_is_started_with_Run_method() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething()
+    {
+        var result = Task
+                        .Run(DoSomething);
         return result;
     }
 }

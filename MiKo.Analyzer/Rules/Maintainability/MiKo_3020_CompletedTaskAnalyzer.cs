@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return method.DeclaringSyntaxReferences
                              .SelectMany(_ => _.GetSyntax().DescendantNodes())
                              .OfType<MemberAccessExpressionSyntax>()
-                             .Where(_ => _.ToString() == TaskFromResultInvocation)
+                             .Where(_ => _.ToCleanedUpString() == TaskFromResultInvocation)
                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>().GetLocation())
                              .Select(_ => ReportIssue(TaskFromResultInvocation, _))
                              .ToList();

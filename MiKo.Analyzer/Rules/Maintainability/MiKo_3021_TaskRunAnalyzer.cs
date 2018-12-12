@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var methodNode in method.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
             {
-                foreach (var taskRunExpression in methodNode.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToString() == TaskRunInvocation))
+                foreach (var taskRunExpression in methodNode.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == TaskRunInvocation))
                 {
                     var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
                     var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);

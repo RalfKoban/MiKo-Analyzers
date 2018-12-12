@@ -28,12 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var methodName = method.Name;
             var conditions = method.DeclaringSyntaxReferences // get the syntax tree
                                    .SelectMany(_ => _.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>())
-                                   .Where(IsIssue)
+                                   .Where(_ => _.ToCleanedUpString() == GuidNewGuidInvocation)
                                    .Select(_ => ReportIssue(methodName, _.GetLocation()))
                                    .ToList();
             return conditions;
         }
-
-        private static bool IsIssue(MemberAccessExpressionSyntax syntaxNode) => syntaxNode.ToString() == GuidNewGuidInvocation;
     }
 }

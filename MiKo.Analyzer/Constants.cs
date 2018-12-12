@@ -8,6 +8,7 @@ namespace MiKoSolutions.Analyzers
         internal const string AsyncSuffix = "Async";
         internal const string DependencyPropertyFieldSuffix = "Property";
         internal const string DependencyPropertyKeyFieldSuffix = "Key";
+        internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
 
         internal static class Markers
         {

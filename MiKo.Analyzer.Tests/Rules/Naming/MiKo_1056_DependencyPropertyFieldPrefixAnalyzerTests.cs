@@ -53,6 +53,42 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_attached_DependencyProperty_field() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static readonly DependencyProperty OtherNameProperty = DependencyProperty.RegisterAttached(
+                                                                                                    ""Bla"",
+                                                                                                    typeof(int),
+                                                                                                    typeof(TestMe),
+                                                                                                    new PropertyMetadata(default(int)));
+    }
+}
+");
+
+
+        [Test]
+        public void No_issue_is_reported_for_a_strangely_formatted_attached_DependencyProperty_field() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static readonly DependencyProperty OtherNameProperty = DependencyProperty
+                                                                                    .RegisterAttached(
+                                                                                                    ""Bla"",
+                                                                                                    typeof(int),
+                                                                                                    typeof(TestMe),
+                                                                                                    new PropertyMetadata(default(int)));
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName) => An_issue_is_reported_for(@"
 using System.Windows;
 

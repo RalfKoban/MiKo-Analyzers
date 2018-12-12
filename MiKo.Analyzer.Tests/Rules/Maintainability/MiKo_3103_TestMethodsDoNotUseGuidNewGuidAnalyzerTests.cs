@@ -55,6 +55,26 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_a_strangely_formatted_test_method(
+                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                        [ValueSource(nameof(Tests))] string testAttribute)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + testClassAttribute + @"]
+public class TestMe
+{
+    [" + testAttribute + @"]
+   public void DoSomething()
+   {
+       var x = Guid.
+                NewGuid
+                    ();
+   }
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
 using NUnit.Framework;
@@ -65,6 +85,23 @@ public class TestMe
    public void DoSomething()
    {
        var x = Guid.NewGuid();
+   }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_strangely_formatted_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + testClassAttribute + @"]
+public class TestMe
+{
+   public void DoSomething()
+   {
+       var x = Guid
+                .NewGuid
+                        (
+                        );
    }
 }
 ");

@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_that_returns_a_completed_task_from_a_result() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_method_that_returns_a_completed_task_from_a_result() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -63,7 +63,19 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_that_creates_and_returns_a_completed_task_from_a_result() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_strangely_formatted_method_that_returns_a_completed_task_from_a_result() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething() => Task
+                                    .FromResult(42);
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_method_that_creates_and_returns_a_completed_task_from_a_result() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -72,6 +84,22 @@ public class TestMe
     public Task DoSomething()
     {
         var result = Task.FromResult(42);
+        return result;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_strangely_formatted_method_that_creates_and_returns_a_completed_task_from_a_result() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething()
+    {
+        var result = Task
+                        .FromResult(42);
         return result;
     }
 }

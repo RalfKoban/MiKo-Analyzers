@@ -435,9 +435,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
 
-        internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation) => symbol.DeclaringSyntaxReferences
-                                                                                                                                          .Select(_ => _.GetSyntax())
-                                                                                                                                          .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
-                                                                                                                                          .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToString() == invocation));
+        internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
+        {
+            return symbol.DeclaringSyntaxReferences
+                         .Select(_ => _.GetSyntax())
+                         .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
+                         .SelectMany(_ => _.DescendantNodes()
+                                           .OfType<MemberAccessExpressionSyntax>()
+                                           .Where(__ => __.ToCleanedUpString() == invocation));
+        }
+
+        internal static string ToCleanedUpString(this MemberAccessExpressionSyntax s) => s?.ToString().RemoveAll(Constants.WhiteSpaces);
     }
 }
