@@ -4443,6 +4443,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Read-only dependency properties are defined by &apos;DependencyPropertyKey&apos; fields and should not be visible to the public. To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property. That can be done by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field on the specific class..
+        /// </summary>
+        public static string MiKo_3054_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3054_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
+        /// </summary>
+        public static string MiKo_3054_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3054_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expose a DependencyProperty identifier for the read-only dependency property &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3054_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3054_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A read-only DependencyProperty should have an exposed DependencyProperty identifier..
+        /// </summary>
+        public static string MiKo_3054_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3054_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {

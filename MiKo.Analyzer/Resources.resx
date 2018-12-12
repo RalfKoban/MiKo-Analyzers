@@ -1595,6 +1595,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3053_Title" xml:space="preserve">
     <value>DependencyPropertyKey fields should be properly registered.</value>
   </data>
+  <data name="MiKo_3054_Description" xml:space="preserve">
+    <value>Read-only dependency properties are defined by 'DependencyPropertyKey' fields and should not be visible to the public. To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property. That can be done by exposing the value of 'DependencyPropertyKey.DependencyProperty' as a 'public static readonly' field on the specific class.</value>
+  </data>
+  <data name="MiKo_3054_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
+  </data>
+  <data name="MiKo_3054_MessageFormat" xml:space="preserve">
+    <value>Expose a DependencyProperty identifier for the read-only dependency property '{0}'</value>
+  </data>
+  <data name="MiKo_3054_Title" xml:space="preserve">
+    <value>A read-only DependencyProperty should have an exposed DependencyProperty identifier.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
