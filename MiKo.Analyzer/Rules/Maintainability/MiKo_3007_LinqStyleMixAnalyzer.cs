@@ -53,16 +53,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 syntaxNode = methodDeclarationSyntax;
                 identifier = methodDeclarationSyntax.Identifier.ValueText;
-            }
-            else
-            {
-                // we do not find the enclosing method, so we might have a field (for which we need a variable), such as in MiKo_2071_EnumMethodSummaryAnalyzer
-                var variableDeclaratorSyntax = query.GetEnclosing<VariableDeclaratorSyntax>();
-                syntaxNode = variableDeclaratorSyntax;
-                identifier = variableDeclaratorSyntax?.Identifier.ValueText;
+                return true;
             }
 
-            return syntaxNode != null;
+            // we do not find the enclosing method, so we might have a field (for which we need a variable), such as in MiKo_2071_EnumMethodSummaryAnalyzer
+            var variableDeclaratorSyntax = query.GetEnclosing<VariableDeclaratorSyntax>();
+            if (variableDeclaratorSyntax != null)
+            {
+                syntaxNode = variableDeclaratorSyntax;
+                identifier = variableDeclaratorSyntax.Identifier.ValueText;
+                return true;
+            }
+
+            // we might have a constructor here
+            var ctorDeclarationSyntax = query.GetEnclosing<ConstructorDeclarationSyntax>();
+            if (ctorDeclarationSyntax != null)
+            {
+                syntaxNode = ctorDeclarationSyntax;
+                identifier = ctorDeclarationSyntax.Identifier.ValueText;
+                return true;
+            }
+
+            syntaxNode = null;
+            identifier = null;
+            return false;
         }
     }
 }

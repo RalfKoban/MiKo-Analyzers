@@ -38,6 +38,23 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Linq_extension_chain_only_ctors() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private IEnumerable<string> m_field;
+
+        public TestMe() => m_field = new[] { ""a"" }.ToList();
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_Linq_static_chain_only_methods() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -77,6 +94,10 @@ namespace Bla
 {
     public class TestMe
     {
+        private IEnumerable<string> m_field;
+
+        public TestMe() => m_field = new[] { ""a"" }.ToList();
+
         public IEnumerable<string> DoSomething() => new[] { ""a"" }.ToList();
 
         public IEnumerable<string> DoSomethingElse() => from x in new[] { ""a"" } select x;
@@ -97,6 +118,23 @@ namespace Bla
     public class TestMe
     {
         public IEnumerable<string> DoSomething() => (from x in new[] { ""a"" } select x).ToList();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_combination_of_Linq_chain_and_query_in_same_ctor() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private IEnumerable<string> m_field;
+
+        public TestMe() => m_field = (from x in new[] { ""a"" } select x).ToList();
     }
 }
 ");
