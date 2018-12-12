@@ -4335,7 +4335,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. In addition, the correct property names, property types and owing types shall be provided..
+        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator.
+        ///In addition, the correct property names, property types and owing types should be provided..
         /// </summary>
         public static string MiKo_3051_Description {
             get {
@@ -4407,7 +4408,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator. In addition, the correct property names, property types and owing types shall be provided..
+        ///   Looks up a localized string similar to To avoid typos, fields that are the Key of a DependencyProperty should be registered via &apos;DependencyProperty.RegisterReadOnly()&apos; and the &apos;nameof&apos; operator.
+        ///In addition, the correct property names, property types and owing types should be provided..
         /// </summary>
         public static string MiKo_3053_Description {
             get {
@@ -4443,7 +4445,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Read-only dependency properties are defined by &apos;DependencyPropertyKey&apos; fields and should not be visible to the public. To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property. That can be done by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field on the specific class..
+        ///   Looks up a localized string similar to Read-only dependency properties are defined by &apos;DependencyPropertyKey&apos; fields and should not be visible to the public.
+        ///To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property.
+        ///That can be done by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field on the specific class..
         /// </summary>
         public static string MiKo_3054_Description {
             get {
@@ -4506,7 +4510,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests should test a very specific scenario. Therefore there is no need to have a condition, because in that situation a test tests more than one scenario. So having a condition inside a test is a huge code smell..
+        ///   Looks up a localized string similar to Tests should test a very specific scenario. Therefore there is no need to have a condition, because in that situation a test tests more than one scenario.
+        ///So having a condition inside a test is a huge code smell..
         /// </summary>
         public static string MiKo_3102_Description {
             get {
@@ -4533,7 +4538,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tests should be specific to make them reproducible and easy to maintain. A GUID that is generated is not reproducible at all and cannot be easily found in case a test fails. Therefore, a hard-coded GUID should be used instead..
+        ///   Looks up a localized string similar to Tests should be specific to make them reproducible and easy to maintain. A GUID that is generated is not reproducible at all and cannot be easily found in case a test fails.
+        ///Therefore, a hard-coded GUID should be used instead..
         /// </summary>
         public static string MiKo_3103_Description {
             get {
@@ -4560,7 +4566,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense. Such namespaces should be flattened..
+        ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
+        ///Such namespaces should be flattened..
         /// </summary>
         public static string MiKo_3401_Description {
             get {
