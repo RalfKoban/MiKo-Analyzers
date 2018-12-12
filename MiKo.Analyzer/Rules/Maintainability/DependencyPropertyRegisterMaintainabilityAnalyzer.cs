@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol)
         {
-            var arguments = GetRegisterArguments(symbol);
+            var arguments = GetInvocationArguments(symbol);
             if (arguments.Count < 3)
                 return Enumerable.Empty<Diagnostic>();
 
@@ -99,12 +99,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private SeparatedSyntaxList<ArgumentSyntax> GetRegisterArguments(ISymbol symbol) => symbol.DeclaringSyntaxReferences
-                                                                                                         .Select(_ => _.GetSyntax())
-                                                                                                         .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
-                                                                                                         .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToString() == m_invocation))
-                                                                                                         .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                                         .Select(_ => _.ArgumentList.Arguments)
-                                                                                                         .FirstOrDefault(_ => _.Count > 0);
+        private SeparatedSyntaxList<ArgumentSyntax> GetInvocationArguments(ISymbol symbol) => symbol.DeclaringSyntaxReferences
+                                                                                                    .Select(_ => _.GetSyntax())
+                                                                                                    .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
+                                                                                                    .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToString() == m_invocation))
+                                                                                                    .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                                    .Select(_ => _.ArgumentList.Arguments)
+                                                                                                    .FirstOrDefault(_ => _.Count > 0);
     }
 }
