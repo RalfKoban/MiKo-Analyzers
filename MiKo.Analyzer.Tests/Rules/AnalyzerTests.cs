@@ -44,6 +44,11 @@ namespace MiKoSolutions.Analyzers.Rules
         [TestCaseSource(nameof(CreateAllAnalyzers))]
         public static void Messages_should_not_end_with_dot(Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.EndWith("."));
 
+        [Test, Combinatorial, Ignore("Just to check from time to time whether the texts are acceptable or need to be rephrased.")]
+        public static void Messages_should_not_contain_([ValueSource(nameof(CreateAllAnalyzers))] Analyzer analyzer,
+                                                        [Values("shall", "should")] string word)
+            => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.Contain(word));
+
         [TestCaseSource(nameof(CreateAllAnalyzers))]
         public static void Analyzers_start_with_their_Id(Analyzer analyzer) => Assert.That(analyzer.GetType().Name, Is.Not.Null.And.StartsWith(analyzer.DiagnosticId + "_"));
 

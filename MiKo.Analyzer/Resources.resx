@@ -268,7 +268,7 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
     <value>The method belongs to a factory and therefore its name should be started with 'Create'.</value>
   </data>
   <data name="MiKo_1016_MessageFormat" xml:space="preserve">
-    <value>Name should start with 'Create'</value>
+    <value>Start name with 'Create'</value>
   </data>
   <data name="MiKo_1016_Title" xml:space="preserve">
     <value>Factory methods should be named 'Create'.</value>
@@ -440,7 +440,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>To ease maintenance, the names of classes that contain extension methods should end with the same suffix.</value>
   </data>
   <data name="MiKo_1038_MessageFormat" xml:space="preserve">
-    <value>Name should end with '{1}'</value>
+    <value>End name with '{1}'</value>
   </data>
   <data name="MiKo_1038_Title" xml:space="preserve">
     <value>Classes that contain extension methods should end with same suffix.</value>
@@ -536,7 +536,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Classes that are value converters should end with a specific suffix.</value>
   </data>
   <data name="MiKo_1048_MessageFormat" xml:space="preserve">
-    <value>Name should end with '{1}'</value>
+    <value>End name with '{1}'</value>
   </data>
   <data name="MiKo_1048_Title" xml:space="preserve">
     <value>To ease maintenance, the names of classes that are value converters should end with the same suffix.</value>

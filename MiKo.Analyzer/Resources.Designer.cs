@@ -505,7 +505,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name should start with &apos;Create&apos;.
+        ///   Looks up a localized string similar to Start name with &apos;Create&apos;.
         /// </summary>
         public static string MiKo_1016_MessageFormat {
             get {
@@ -1019,7 +1019,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name should end with &apos;{1}&apos;.
+        ///   Looks up a localized string similar to End name with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1038_MessageFormat {
             get {
@@ -1307,7 +1307,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name should end with &apos;{1}&apos;.
+        ///   Looks up a localized string similar to End name with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1048_MessageFormat {
             get {
