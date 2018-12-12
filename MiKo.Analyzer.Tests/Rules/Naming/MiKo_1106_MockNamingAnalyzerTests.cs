@@ -155,11 +155,33 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_parameter_in_ctor() => No_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public void TestMe()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_parameter([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
 {
     public void DoSomething(int " + name + @")
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_parameter_in_ctor([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public TestMe(int " + name + @")
     {
     }
 }

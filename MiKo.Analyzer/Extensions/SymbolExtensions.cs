@@ -5,14 +5,13 @@ using System.Composition;
 using System.Linq;
 using System.Windows.Input;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using MiKoSolutions.Analyzers;
-
 // ReSharper disable once CheckNamespace
-namespace Microsoft.CodeAnalysis
+namespace MiKoSolutions.Analyzers
 {
     internal static class SymbolExtensions
     {
@@ -330,8 +329,8 @@ namespace Microsoft.CodeAnalysis
 
             if (token.Parent is ParameterSyntax node)
             {
-                var method = node.GetEnclosing<MethodDeclarationSyntax>();
-                var methodName = method.Identifier.ValueText;
+                // we might have a ctor here and no nethod
+                var methodName = node.GetEnclosing<MethodDeclarationSyntax>()?.Identifier.ValueText ?? node.GetEnclosing<ConstructorDeclarationSyntax>()?.Identifier.ValueText;
                 var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
                 return parameterSymbol;
