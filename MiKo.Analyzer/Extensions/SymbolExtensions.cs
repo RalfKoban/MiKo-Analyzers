@@ -434,5 +434,10 @@ namespace MiKoSolutions.Analyzers
         internal static bool ContainsExtensionMethods(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
+
+        internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation) => symbol.DeclaringSyntaxReferences
+                                                                                                                                          .Select(_ => _.GetSyntax())
+                                                                                                                                          .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
+                                                                                                                                          .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToString() == invocation));
     }
 }

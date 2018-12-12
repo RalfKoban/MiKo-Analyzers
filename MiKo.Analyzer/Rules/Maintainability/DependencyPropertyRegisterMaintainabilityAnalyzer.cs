@@ -99,12 +99,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private SeparatedSyntaxList<ArgumentSyntax> GetInvocationArguments(ISymbol symbol) => symbol.DeclaringSyntaxReferences
-                                                                                                    .Select(_ => _.GetSyntax())
-                                                                                                    .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
-                                                                                                    .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToString() == m_invocation))
-                                                                                                    .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                                    .Select(_ => _.ArgumentList.Arguments)
-                                                                                                    .FirstOrDefault(_ => _.Count > 0);
+        private SeparatedSyntaxList<ArgumentSyntax> GetInvocationArguments(IFieldSymbol symbol) => symbol.GetAssignmentsVia(m_invocation)
+                                                                                                         .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                                         .Select(_ => _.ArgumentList.Arguments)
+                                                                                                         .FirstOrDefault(_ => _.Count > 0);
     }
 }

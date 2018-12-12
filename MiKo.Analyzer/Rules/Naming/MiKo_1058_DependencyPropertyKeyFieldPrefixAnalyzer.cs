@@ -16,7 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyPropertyKey();
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyPropertyKey()
+                                                                 && !symbol.GetAssignmentsVia(Constants.Invocations.DependencyProperty.RegisterAttachedReadOnly).Any();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
         {

@@ -377,5 +377,16 @@ namespace MiKoSolutions.Analyzers
             internal const string TypeParamRef = "typeparamref";
             internal const string Value = "value";
         }
+
+        internal static class Invocations
+        {
+            internal static class DependencyProperty
+            {
+                internal const string Register = "DependencyProperty.Register";
+                internal const string RegisterAttached = "DependencyProperty.RegisterAttached";
+                internal const string RegisterReadOnly = "DependencyProperty.RegisterReadOnly";
+                internal const string RegisterAttachedReadOnly = "DependencyProperty.RegisterAttachedReadOnly";
+            }
+        }
     }
 }

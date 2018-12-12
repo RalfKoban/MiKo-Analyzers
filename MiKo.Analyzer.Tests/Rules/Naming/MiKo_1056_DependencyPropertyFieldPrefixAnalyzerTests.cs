@@ -38,6 +38,21 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_DependencyProperty_field_for_DependencyPropertyKey() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static readonly DependencyProperty OtherNameProperty = MyFieldKey.DependencyProperty;
+
+        private DependencyPropertyKey MyFieldKey;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName) => An_issue_is_reported_for(@"
 using System.Windows;
 

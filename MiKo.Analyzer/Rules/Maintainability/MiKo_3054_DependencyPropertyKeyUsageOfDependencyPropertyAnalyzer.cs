@@ -2,7 +2,6 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -27,15 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var owingType = symbol.FindContainingType();
 
             var dependencyProperties = owingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyProperty());
-            return dependencyProperties.Any(_ => GetsAssigned(_, invocation))
+            return dependencyProperties.Any(_ => _.GetAssignmentsVia(invocation).Any())
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(symbol) };
         }
-
-        private static bool GetsAssigned(ISymbol symbol, string invocation) => symbol.DeclaringSyntaxReferences
-                                                                                     .Select(_ => _.GetSyntax())
-                                                                                     .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
-                                                                                     .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToString() == invocation))
-                                                                                     .Any();
     }
 }

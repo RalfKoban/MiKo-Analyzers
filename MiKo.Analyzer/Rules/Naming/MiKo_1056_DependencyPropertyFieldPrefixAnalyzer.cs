@@ -16,7 +16,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyProperty();
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (!symbol.Type.IsDependencyProperty())
+                return false;
+
+            // ignore attached properties
+            var attachedProperties = symbol.GetAssignmentsVia(Constants.Invocations.DependencyProperty.RegisterAttached).Any();
+            if (attachedProperties)
+                return false;
+
+            // ignore  "Key.DependencyProperty" assignments
+            var keys = symbol.ContainingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + ".DependencyProperty").ToHashSet();
+
+            foreach (var key in keys)
+            {
+                if (symbol.GetAssignmentsVia(key).Any())
+                    return false;
+            }
+
+            return true;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
         {
