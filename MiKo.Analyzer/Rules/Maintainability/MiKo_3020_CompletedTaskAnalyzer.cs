@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3020";
 
-        private const string TaskFromResultInvocation = nameof(Task) + "." + nameof(Task.FromResult);
+        private const string Invocation = nameof(Task) + "." + nameof(Task.FromResult);
 
         public MiKo_3020_CompletedTaskAnalyzer() : base(Id)
         {
@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return method.DeclaringSyntaxReferences
                              .SelectMany(_ => _.GetSyntax().DescendantNodes())
                              .OfType<MemberAccessExpressionSyntax>()
-                             .Where(_ => _.ToCleanedUpString() == TaskFromResultInvocation)
+                             .Where(_ => _.ToCleanedUpString() == Invocation)
                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>().GetLocation())
-                             .Select(_ => ReportIssue(TaskFromResultInvocation, _))
+                             .Select(_ => ReportIssue(Invocation, _))
                              .ToList();
             }
 

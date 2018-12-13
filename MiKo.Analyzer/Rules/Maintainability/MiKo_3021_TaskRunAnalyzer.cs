@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3021";
 
-        private const string TaskRunInvocation = nameof(Task) + "." + nameof(Task.Run);
+        private const string Invocation = nameof(Task) + "." + nameof(Task.Run);
 
         public MiKo_3021_TaskRunAnalyzer() : base(Id)
         {
@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var methodNode in method.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
             {
-                foreach (var taskRunExpression in methodNode.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == TaskRunInvocation))
+                foreach (var taskRunExpression in methodNode.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
                 {
                     var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
                     var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
@@ -66,6 +66,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic ReportIssue(CSharpSyntaxNode expression, string methodName) => ReportIssue(TaskRunInvocation, expression.GetLocation(), methodName);
+        private Diagnostic ReportIssue(CSharpSyntaxNode expression, string methodName) => ReportIssue(Invocation, expression.GetLocation(), methodName);
     }
 }

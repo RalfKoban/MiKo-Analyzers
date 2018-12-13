@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3103";
 
-        private const string GuidNewGuidInvocation = nameof(Guid) + "." + nameof(Guid.NewGuid);
+        private const string Invocation = nameof(Guid) + "." + nameof(Guid.NewGuid);
 
         public MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer() : base(Id, SymbolKind.Method)
         {
@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var methodName = method.Name;
             var conditions = method.DeclaringSyntaxReferences // get the syntax tree
                                    .SelectMany(_ => _.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>())
-                                   .Where(_ => _.ToCleanedUpString() == GuidNewGuidInvocation)
+                                   .Where(_ => _.ToCleanedUpString() == Invocation)
                                    .Select(_ => ReportIssue(methodName, _.GetLocation()))
                                    .ToList();
             return conditions;
