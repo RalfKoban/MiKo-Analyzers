@@ -89,7 +89,25 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+            => An_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int MyProperty { get; set; }
+
+        private DependencyProperty " + fieldName + @";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_DependencyProperty_field_if_class_has_no_properties(
+                                                                                           [Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+            => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
