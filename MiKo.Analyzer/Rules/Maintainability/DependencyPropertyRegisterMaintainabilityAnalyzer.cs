@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -59,7 +60,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 else
                 {
                     var returnType = property.GetReturnType()?.ToString();
-                    if (returnType != syntax.Type.ToString())
+                    var syntaxType = syntax.Type.ToString();
+
+                    // it might be that the syntax type is the same but the return type is fully qualified
+                    // so check again for only the name part
+                    if (returnType != syntaxType && returnType.GetNameOnlyPart() != syntaxType)
                     {
                         ReportIssue(symbol, propertyType, returnType, ref diagnostics);
                     }
