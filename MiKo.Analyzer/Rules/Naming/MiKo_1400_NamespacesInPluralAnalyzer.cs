@@ -48,10 +48,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            var lastName = qualifiedName.Substring(qualifiedName.LastIndexOf('.') + 1);
-            return lastName.EndsWithAny(AllowedSuffixes)
+            var name = qualifiedName.GetNameOnlyPart();
+
+            return name.EndsWithAny(AllowedSuffixes)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(qualifiedName, location, GetPluralName(lastName, lastName)) };
+                       : new[] { ReportIssue(qualifiedName, location, GetPluralName(name, name)) };
         }
     }
 }
