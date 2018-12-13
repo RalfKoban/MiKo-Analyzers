@@ -4483,6 +4483,39 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
+        ///1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
+        ///2. You cannot do anything here except to confirm the situation.
+        ///3. There is no failure handling available.
+        ///4. Calling code is not informed about the code and cannot handle the situation properly.
+        ///
+        ///So instead of using Debug.Assert() or Trace.Assert() throw an exception, such as an InvalidOperationExceptio [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_3060_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3060_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_3060_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3060_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debug.Assert or Trace.Assert shall not be used..
+        /// </summary>
+        public static string MiKo_3060_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3060_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {

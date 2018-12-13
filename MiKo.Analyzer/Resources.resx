@@ -1611,6 +1611,21 @@ That can be done by exposing the value of 'DependencyPropertyKey.DependencyPrope
   <data name="MiKo_3054_Title" xml:space="preserve">
     <value>A read-only DependencyProperty should have an exposed DependencyProperty identifier.</value>
   </data>
+  <data name="MiKo_3060_Description" xml:space="preserve">
+    <value>If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
+1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
+2. You cannot do anything here except to confirm the situation.
+3. There is no failure handling available.
+4. Calling code is not informed about the code and cannot handle the situation properly.
+
+So instead of using Debug.Assert() or Trace.Assert() throw an exception, such as an InvalidOperationException.</value>
+  </data>
+  <data name="MiKo_3060_MessageFormat" xml:space="preserve">
+    <value>Do not use '{1}'</value>
+  </data>
+  <data name="MiKo_3060_Title" xml:space="preserve">
+    <value>Debug.Assert or Trace.Assert shall not be used.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
