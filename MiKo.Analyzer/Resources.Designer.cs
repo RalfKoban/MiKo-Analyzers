@@ -4235,6 +4235,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
+        ///
+        ///As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy..
+        /// </summary>
+        public static string MiKo_3032_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3032_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not implement &apos;ICloneable.Clone()&apos;.
+        /// </summary>
+        public static string MiKo_3032_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3032_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ICloneable.Clone() should not be implemented..
+        /// </summary>
+        public static string MiKo_3032_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3032_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {

@@ -1525,6 +1525,17 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_3031_Title" xml:space="preserve">
     <value>Do not concatenate strings with += operator.</value>
   </data>
+  <data name="MiKo_3032_Description" xml:space="preserve">
+    <value>The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
+
+As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy.</value>
+  </data>
+  <data name="MiKo_3032_MessageFormat" xml:space="preserve">
+    <value>Do not implement 'ICloneable.Clone()'</value>
+  </data>
+  <data name="MiKo_3032_Title" xml:space="preserve">
+    <value>ICloneable.Clone() should not be implemented.</value>
+  </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
   </data>
