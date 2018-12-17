@@ -32,6 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var call = methodCall.ToCleanedUpString();
                 switch (call)
                 {
+                    case "System.Diagnostics." + DebugInvocation:
+                    case "System.Diagnostics." + TraceInvocation:
                     case DebugInvocation:
                     case TraceInvocation:
                         if (diagnostics is null) diagnostics = new List<Diagnostic>();

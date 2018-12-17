@@ -1618,7 +1618,9 @@ That can be done by exposing the value of 'DependencyPropertyKey.DependencyPrope
 3. There is no failure handling available.
 4. Calling code is not informed about the code and cannot handle the situation properly.
 
-So instead of using Debug.Assert() or Trace.Assert() throw an exception, such as an InvalidOperationException.</value>
+So instead of using Debug.Assert() or Trace.Assert() throw an exception, such as an InvalidOperationException.
+
+Especially never use Debug.Assert() or Trace.Assert() in (unit) test code. That's why the test code is there. Let the test fail in a case were Debug.Assert() or Trace.Assert() would apply.</value>
   </data>
   <data name="MiKo_3060_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}'</value>
