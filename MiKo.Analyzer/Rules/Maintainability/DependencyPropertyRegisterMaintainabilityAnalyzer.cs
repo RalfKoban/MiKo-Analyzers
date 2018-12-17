@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol)
         {
-            var arguments = GetInvocationArguments(symbol);
+            var arguments = symbol.GetInvocationArgumentsFrom(m_invocation);
             if (arguments.Count < 3)
                 return Enumerable.Empty<Diagnostic>();
 
@@ -103,10 +103,5 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default: return string.Empty;
             }
         }
-
-        private SeparatedSyntaxList<ArgumentSyntax> GetInvocationArguments(IFieldSymbol symbol) => symbol.GetAssignmentsVia(m_invocation)
-                                                                                                         .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                                         .Select(_ => _.ArgumentList.Arguments)
-                                                                                                         .FirstOrDefault(_ => _.Count > 0);
     }
 }

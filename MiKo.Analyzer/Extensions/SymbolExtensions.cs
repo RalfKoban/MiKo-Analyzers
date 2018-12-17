@@ -445,6 +445,11 @@ namespace MiKoSolutions.Analyzers
                                            .Where(__ => __.ToCleanedUpString() == invocation));
         }
 
-        internal static string ToCleanedUpString(this MemberAccessExpressionSyntax s) => s?.ToString().RemoveAll(Constants.WhiteSpaces);
+        internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol symbol, string invocation) => symbol.GetAssignmentsVia(invocation)
+                                                                                                                                         .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                                                                         .Select(_ => _.ArgumentList.Arguments)
+                                                                                                                                         .FirstOrDefault(_ => _.Count > 0);
+
+        internal static string ToCleanedUpString(this ExpressionSyntax s) => s?.ToString().RemoveAll(Constants.WhiteSpaces);
     }
 }
