@@ -23,7 +23,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_DependencyProperty_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_unassigned_correctly_named_DependencyProperty_field() => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -32,7 +32,37 @@ namespace Bla
     {
         public int MyField { get; set; }
 
-        private DependencyProperty MyFieldProperty;
+        private static readonly DependencyProperty MyFieldProperty;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_DependencyProperty_field_with_nameof() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        private static readonly DependencyProperty MyFieldProperty = DependencyProperty.Register(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_DependencyProperty_field_with_string() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        private static readonly DependencyProperty MyFieldProperty = DependencyProperty.Register(""MyField"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
     }
 }
 ");
@@ -115,6 +145,38 @@ namespace Bla
     public class TestMe
     {
         private DependencyProperty " + fieldName + @";
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field_with_nameof() => An_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        public int MyField2 { get; set; }
+
+        private static readonly DependencyProperty MyFieldProperty = DependencyProperty.Register(nameof(MyField2), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_DependencyProperty_field_with_string() => An_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        public int MyField2 { get; set; }
+
+        private static readonly DependencyProperty MyFieldProperty = DependencyProperty.Register(""MyField2"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
     }
 }
 ");
