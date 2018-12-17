@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -11,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer : NamingAnalyzer
     {
         public const string Id = "MiKo_1058";
+
+        private const string Suffix = Constants.DependencyPropertyKeyFieldSuffix;
 
         public MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer() : base(Id, SymbolKind.Field)
         {
@@ -24,11 +27,41 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // find properties
             var propertyNames = symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Select(_ => _.Name).ToHashSet();
 
-            var symbolName = symbol.Name.WithoutSuffix(Constants.DependencyPropertyKeyFieldSuffix);
+            // there might be none available; in such case don't report anything
+            if (!propertyNames.Any())
+                return Enumerable.Empty<Diagnostic>();
 
-            return propertyNames.Contains(symbolName)
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, propertyNames.Select(_ => _ + Constants.DependencyPropertyKeyFieldSuffix).HumanizedConcatenated()) };
+            var symbolName = symbol.Name.WithoutSuffix(Suffix);
+
+            if (!propertyNames.Contains(symbolName))
+                return new[] { ReportIssue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
+
+            // analyze correct name (must match string literal or nameof)
+            var registeredName = GetRegisteredName(symbol);
+            if (registeredName is null)
+                return Enumerable.Empty<Diagnostic>();
+
+            return registeredName != symbolName
+                       ? new[] { ReportIssue(symbol, registeredName + Suffix) }
+                       : Enumerable.Empty<Diagnostic>();
+        }
+
+        private static string GetRegisteredName(IFieldSymbol symbol)
+        {
+            // public static System.Windows.DependencyPropertyKey RegisterReadOnly(string name, Type propertyType, Type ownerType, System.Windows.PropertyMetadata typeMetadata);
+            var arguments = symbol.GetInvocationArgumentsFrom(Constants.Invocations.DependencyProperty.RegisterReadOnly);
+            if (arguments.Count > 0)
+            {
+                switch (arguments[0].Expression)
+                {
+                    case LiteralExpressionSyntax s:
+                        return s.Token.ValueText;
+                    case InvocationExpressionSyntax s:
+                        return s.ArgumentList.Arguments.FirstOrDefault()?.ToString();
+                }
+            }
+
+            return null;
         }
     }
 }

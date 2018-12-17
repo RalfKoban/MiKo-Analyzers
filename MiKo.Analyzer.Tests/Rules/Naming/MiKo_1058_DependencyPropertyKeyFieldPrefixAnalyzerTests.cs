@@ -23,7 +23,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_DependencyPropertyKey_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_unassigned_DependencyPropertyKey_field() => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -37,6 +37,71 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_DependencyPropertyKey_field_with_nameof() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        private static readonly DependencyPropertyKey MyFieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_DependencyPropertyKey_field_with_string() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        private static readonly DependencyPropertyKey MyFieldKey = DependencyProperty.RegisterReadOnly(""MyField"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_attached_DependencyProperty_field() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static readonly DependencyPropertyKey OtherNameKey = DependencyProperty.RegisterAttachedReadOnly(
+                                                                                                    ""Bla"",
+                                                                                                    typeof(int),
+                                                                                                    typeof(TestMe),
+                                                                                                    new PropertyMetadata(default(int)));
+    }
+}
+");
+
+
+        [Test]
+        public void No_issue_is_reported_for_a_strangely_formatted_attached_DependencyProperty_field() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static readonly DependencyPropertyKey OtherNameKey = DependencyProperty
+                                                                                    .RegisterAttachedReadOnly(
+                                                                                                    ""Bla"",
+                                                                                                    typeof(int),
+                                                                                                    typeof(TestMe),
+                                                                                                    new PropertyMetadata(default(int)));
+    }
+}
+");
         [Test]
         public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field() => An_issue_is_reported_for(@"
 using System.Windows;
@@ -53,7 +118,24 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+            => An_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int MyProperty { get; set; }
+
+        private DependencyPropertyKey " + fieldName + @";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_if_class_has_no_properties([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+            => No_issue_is_reported_for(@"
 using System.Windows;
 
 namespace Bla
@@ -61,6 +143,38 @@ namespace Bla
     public class TestMe
     {
         private DependencyPropertyKey " + fieldName + @";
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_with_nameof() => An_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        public int MyField2 { get; set; }
+
+        private static readonly DependencyPropertyKey MyFieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField2), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_with_string() => An_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+        public int MyField2 { get; set; }
+
+        private static readonly DependencyPropertyKey MyFieldKey = DependencyProperty.RegisterReadOnly(""MyField2"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
     }
 }
 ");
