@@ -184,6 +184,8 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3051|DependencyProperty fields should be properly registered.|:white_check_mark:|
 |MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|:white_check_mark:|
 |MiKo_3053|DependencyPropertyKey fields should be properly registered.|:white_check_mark:|
+|MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|:white_check_mark:|
+|MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|:white_check_mark:|
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|
