@@ -16,9 +16,6 @@ init:
 
 environment:
     NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/3.8/NUnit.Console-3.8.0.zip
-    
-    # workaround for endless build in VS 2017 (needs to be removed at end of 2018)
-    APPVEYOR_BUILD_WORKER_CLOUD: GCE 
 
 install:
   - choco install gitversion.portable -pre -y
