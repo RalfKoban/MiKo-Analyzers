@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return Enumerable.Empty<Diagnostic>();
 
                 propertyNames.Clear();
-                propertyNames.Add(registeredName + Suffix);
+                propertyNames.Add(registeredName);
             }
 
             return new[] { ReportIssue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
