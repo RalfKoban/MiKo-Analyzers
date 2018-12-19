@@ -269,6 +269,21 @@ namespace MiKoSolutions.Analyzers
                 case SpecialType.System_DateTime:
                     return false;
 
+                default:
+                    if (IsEnumerable(symbol.SpecialType))
+                        return true;
+
+                    if (symbol is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
+                        return true;
+
+                    return symbol.Implements<IEnumerable>();
+            }
+        }
+
+        internal static bool IsEnumerable(this SpecialType specialType)
+        {
+            switch (specialType)
+            {
                 case SpecialType.System_Array:
                 case SpecialType.System_Collections_IEnumerable:
                 case SpecialType.System_Collections_Generic_IEnumerable_T:
@@ -279,7 +294,7 @@ namespace MiKoSolutions.Analyzers
                     return true;
 
                 default:
-                    return symbol.Implements<IEnumerable>();
+                    return false;
             }
         }
 

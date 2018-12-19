@@ -4152,6 +4152,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If a method returns Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;, then it is likely that the enumerable is not evaluated until it is accessed in a foreach or Linq call.
+        ///That accessor likely is another thread (e.g. the main thread) which contradicts the whole idea of returning a dedicated task..
+        /// </summary>
+        public static string MiKo_3022_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3022_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not return &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_3022_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3022_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;..
+        /// </summary>
+        public static string MiKo_3022_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3022_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A &apos;CancellationTokenSource&apos; should not be passed around. Instead, the &apos;CancellationToken&apos; should be passed around to propagate notifications that operations should be canceled..
         /// </summary>
         public static string MiKo_3023_Description {

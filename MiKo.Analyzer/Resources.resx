@@ -1496,6 +1496,16 @@ That is they should return a Boolean and have the last parameter as out-paramete
   <data name="MiKo_3021_Title" xml:space="preserve">
     <value>Do not use 'Task.Run' in the implementation.</value>
   </data>
+  <data name="MiKo_3022_Description" xml:space="preserve">
+    <value>If a method returns Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;, then it is likely that the enumerable is not evaluated until it is accessed in a foreach or Linq call.
+That accessor likely is another thread (e.g. the main thread) which contradicts the whole idea of returning a dedicated task.</value>
+  </data>
+  <data name="MiKo_3022_MessageFormat" xml:space="preserve">
+    <value>Do not return '{1}'</value>
+  </data>
+  <data name="MiKo_3022_Title" xml:space="preserve">
+    <value>Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;.</value>
+  </data>
   <data name="MiKo_3023_Description" xml:space="preserve">
     <value>A 'CancellationTokenSource' should not be passed around. Instead, the 'CancellationToken' should be passed around to propagate notifications that operations should be canceled.</value>
   </data>
