@@ -15,6 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string Suffix = Constants.DependencyPropertyFieldSuffix;
 
+        // public static System.Windows.DependencyProperty Register(string name, Type propertyType, Type ownerType, System.Windows.PropertyMetadata typeMetadata);
+        private const string Invocation = Constants.Invocations.DependencyProperty.Register;
+
         public MiKo_1056_DependencyPropertyFieldPrefixAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
@@ -52,23 +55,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var symbolName = symbol.Name.WithoutSuffix(Suffix);
 
-            if (!propertyNames.Contains(symbolName))
-                return new[] { ReportIssue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
-
             // analyze correct name (must match string literal or nameof)
             var registeredName = GetRegisteredName(symbol);
             if (registeredName is null)
-                return Enumerable.Empty<Diagnostic>();
+            {
+                if (propertyNames.Contains(symbolName))
+                    return Enumerable.Empty<Diagnostic>();
+            }
+            else
+            {
+                if (registeredName == symbolName)
+                    return Enumerable.Empty<Diagnostic>();
 
-            return registeredName != symbolName
-                       ? new[] { ReportIssue(symbol, registeredName + Suffix) }
-                       : Enumerable.Empty<Diagnostic>();
+                propertyNames.Clear();
+                propertyNames.Add(registeredName + Suffix);
+            }
+
+            return new[] { ReportIssue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
         }
 
         private static string GetRegisteredName(IFieldSymbol symbol)
         {
-            // public static System.Windows.DependencyProperty Register(string name, Type propertyType, Type ownerType, System.Windows.PropertyMetadata typeMetadata);
-            var arguments = symbol.GetInvocationArgumentsFrom(Constants.Invocations.DependencyProperty.Register);
+            var arguments = symbol.GetInvocationArgumentsFrom(Invocation);
             if (arguments.Count > 0)
             {
                 switch (arguments[0].Expression)
