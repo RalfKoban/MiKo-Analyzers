@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3022_CancellationTokenSourceParameterAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3023_CancellationTokenSourceParameterAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3022";
+        public const string Id = "MiKo_3023";
 
-        public MiKo_3022_CancellationTokenSourceParameterAnalyzer() : base(Id)
+        public MiKo_3023_CancellationTokenSourceParameterAnalyzer() : base(Id)
         {
         }
 

@@ -4154,27 +4154,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to A &apos;CancellationTokenSource&apos; should not be passed around. Instead, the &apos;CancellationToken&apos; should be passed around to propagate notifications that operations should be canceled..
         /// </summary>
-        public static string MiKo_3022_Description {
+        public static string MiKo_3023_Description {
             get {
-                return ResourceManager.GetString("MiKo_3022_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_3023_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Use a &apos;{1}&apos; instead.
         /// </summary>
-        public static string MiKo_3022_MessageFormat {
+        public static string MiKo_3023_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_3022_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_3023_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Do not use &apos;CancellationTokenSource&apos; as parameter..
         /// </summary>
-        public static string MiKo_3022_Title {
+        public static string MiKo_3023_Title {
             get {
-                return ResourceManager.GetString("MiKo_3022_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_3023_Title", resourceCulture);
             }
         }
         
