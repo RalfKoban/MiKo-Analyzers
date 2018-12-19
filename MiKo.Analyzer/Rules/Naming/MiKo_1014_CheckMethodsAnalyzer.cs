@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1014";
 
-        private static string[] StartingPhrases = { "CheckIn", "CheckOut" };
+        private static readonly string[] StartingPhrases = { "CheckIn", "CheckOut" };
 
         public MiKo_1014_CheckMethodsAnalyzer() : base(Id)
         {
