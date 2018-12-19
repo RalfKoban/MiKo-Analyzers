@@ -17,29 +17,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary;
+
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
-            if (method.MethodKind == MethodKind.Ordinary)
+            if (method.IsInterfaceImplementation())
+                return Enumerable.Empty<Diagnostic>();
+
+            switch (method.Parameters.Length)
             {
-                if (method.IsInterfaceImplementation())
+                case 1 when method.Name == nameof(IDisposable.Dispose) && method.Parameters[0].Name == "disposing":
+                case 2 when method.HasDependencyObjectParameter():
                     return Enumerable.Empty<Diagnostic>();
-
-                switch (method.Parameters.Length)
-                {
-                    case 1 when method.Name == nameof(IDisposable.Dispose) && method.Parameters[0].Name == "disposing":
-                    case 2 when method.HasDependencyObjectParameter():
-                        return Enumerable.Empty<Diagnostic>();
-                }
-
-                return method.Parameters
-                             .Where(_ => _.Type.SpecialType == SpecialType.System_Boolean)
-                             .SelectMany(_ => _.DeclaringSyntaxReferences)
-                             .Select(_ => _.GetSyntax())
-                             .OfType<ParameterSyntax>()
-                             .Select(_ => ReportIssue(_.Identifier.ValueText, _.Type.GetLocation()));
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return method.Parameters
+                         .Where(_ => _.Type.SpecialType == SpecialType.System_Boolean)
+                         .SelectMany(_ => _.DeclaringSyntaxReferences)
+                         .Select(_ => _.GetSyntax())
+                         .OfType<ParameterSyntax>()
+                         .Select(_ => ReportIssue(_.Identifier.ValueText, _.Type.GetLocation()))
+                         .ToList();
         }
     }
 }

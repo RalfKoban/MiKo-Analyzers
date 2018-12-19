@@ -19,23 +19,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
-        {
-            var returnType = method.ReturnType;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask() && (symbol.ReturnType as INamedTypeSymbol)?.TypeArguments.Length == 0; // allow only plain tasks
 
-            if (returnType.IsTask() && (returnType as INamedTypeSymbol)?.TypeArguments.Length == 0)
-            {
-                // we have a plain task
-                return method.DeclaringSyntaxReferences
-                             .SelectMany(_ => _.GetSyntax().DescendantNodes())
-                             .OfType<MemberAccessExpressionSyntax>()
-                             .Where(_ => _.ToCleanedUpString() == Invocation)
-                             .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>().GetLocation())
-                             .Select(_ => ReportIssue(Invocation, _))
-                             .ToList();
-            }
-
-            return Enumerable.Empty<Diagnostic>();
-        }
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method) => method.DeclaringSyntaxReferences
+                                                                                          .SelectMany(_ => _.GetSyntax().DescendantNodes())
+                                                                                          .OfType<MemberAccessExpressionSyntax>()
+                                                                                          .Where(_ => _.ToCleanedUpString() == Invocation)
+                                                                                          .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>().GetLocation())
+                                                                                          .Select(_ => ReportIssue(Invocation, _))
+                                                                                          .ToList();
     }
 }

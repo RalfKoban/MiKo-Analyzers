@@ -15,10 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
-            if (method.IsOverride) return Enumerable.Empty<Diagnostic>();
-
             foreach (var parameter in method.Parameters)
             {
                 var parameterType = parameter.Type;

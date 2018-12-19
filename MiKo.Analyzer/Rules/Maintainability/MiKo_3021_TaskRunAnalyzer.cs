@@ -20,16 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
-        {
-            var returnType = method.ReturnType;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask();
 
-            return returnType.IsTask()
-                       ? AnalyzeTask(method)
-                       : Enumerable.Empty<Diagnostic>();
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeTask(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
             var methodName = method.Name;
 

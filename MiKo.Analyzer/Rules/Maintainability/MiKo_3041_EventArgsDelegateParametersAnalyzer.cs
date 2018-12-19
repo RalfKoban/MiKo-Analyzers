@@ -15,11 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => method.ContainingType.IsEventArgs()
-                                                                                              ? AnalyzeEventArgsMethod(method)
-                                                                                              : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ContainingType.IsEventArgs();
 
-        private IEnumerable<Diagnostic> AnalyzeEventArgsMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
             switch (method.MethodKind)
             {

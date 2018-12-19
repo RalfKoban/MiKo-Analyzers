@@ -21,7 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
+
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
             var methodCalls = method.DeclaringSyntaxReferences // get the syntax tree
                                     .SelectMany(_ => _.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>());

@@ -19,11 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => method.IsTestMethod() || method.ContainingType.IsTestClass()
-                                                                                              ? AnalyzeTestMethod(method)
-                                                                                              : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
 
-        private IEnumerable<Diagnostic> AnalyzeTestMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
             var methodName = method.Name;
             var conditions = method.DeclaringSyntaxReferences // get the syntax tree
