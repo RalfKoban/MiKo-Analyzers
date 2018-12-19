@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>(); // ignore tests
 
             List<Diagnostic> results = null;
-            foreach (var finding in symbol.GetMembers().OfType<IMethodSymbol>().Select(Analyze).Where(_ => _ != null))
+            foreach (var finding in symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null))
             {
                 if (results == null) results = new List<Diagnostic>();
                 results.Add(finding);
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return results ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private Diagnostic Analyze(IMethodSymbol method)
+        private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
         {
             if (method.IsOverride) return null;
             if (!method.Name.StartsWith("Try", StringComparison.Ordinal)) return null;
