@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (symbol.IsWriteOnly) return Constants.Comments.CommandPropertySetterOnlySummaryStartingPhrase;
             if (symbol.IsReadOnly) return Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhrase;
+
             return Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhrase;
         }
     }
