@@ -645,6 +645,15 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
   <data name="MiKo_1058_Title" xml:space="preserve">
     <value>Dependency property keys should be prefixed with property names (as in the .NET Framework).</value>
   </data>
+  <data name="MiKo_1060_Description" xml:space="preserve">
+    <value>Suffixing methods with number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name.</value>
+  </data>
+  <data name="MiKo_1060_MessageFormat" xml:space="preserve">
+    <value>Do not suffix '{0}' with a number</value>
+  </data>
+  <data name="MiKo_1060_Title" xml:space="preserve">
+    <value>Methods should not be suffixed with a number.</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>

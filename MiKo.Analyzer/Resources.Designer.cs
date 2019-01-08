@@ -1633,6 +1633,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Suffixing methods with number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name..
+        /// </summary>
+        public static string MiKo_1060_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1060_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suffix &apos;{0}&apos; with a number.
+        /// </summary>
+        public static string MiKo_1060_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1060_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be suffixed with a number..
+        /// </summary>
+        public static string MiKo_1060_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1060_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {

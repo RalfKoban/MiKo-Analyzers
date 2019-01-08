@@ -77,6 +77,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1056|Dependency properties should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
+|MiKo_1060|Methods should not be suffixed with a number.|:white_check_mark:|
 |MiKo_1101|Test classes should end with 'Tests'.|:white_check_mark:|
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
