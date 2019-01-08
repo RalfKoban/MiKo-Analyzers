@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 ## Project status
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/RalfKoban/MiKo-Analyzers.svg?columns=all)](https://waffle.io/RalfKoban/MiKo-Analyzers) 
 
-[![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
 The following tables list all the rules that are currently provided by the analyzer.
@@ -175,9 +175,11 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3015|Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states.|:white_check_mark:|
 |MiKo_3020|Use 'Task.CompletedTask' instead of 'Task.FromResult'.|:white_check_mark:|
 |MiKo_3021|Do not use 'Task.Run' in the implementation.|:white_check_mark:|
+|MiKo_3022|Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;.|:white_check_mark:|
 |MiKo_3023|Do not use 'CancellationTokenSource' as parameter.|:white_check_mark:|
 |MiKo_3030|Do not use 'object.Equals()' on value types.|:white_check_mark:|
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
+|MiKo_3032|ICloneable.Clone() should not be implemented.|:white_check_mark:|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|:white_check_mark:|
 |MiKo_3041|EventArgs shall not use delegates.|:white_check_mark:|
 |MiKo_3050|DependencyProperty fields should be 'public static readonly'.|:white_check_mark:|
