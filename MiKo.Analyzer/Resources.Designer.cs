@@ -4710,6 +4710,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods..
+        /// </summary>
+        public static string MiKo_3105_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3105_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place test cleanup methods before all test methods.
+        /// </summary>
+        public static string MiKo_3105_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3105_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test cleanup methods should be ordered before test methods..
+        /// </summary>
+        public static string MiKo_3105_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3105_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
