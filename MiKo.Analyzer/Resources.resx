@@ -1691,7 +1691,7 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first.</value>
   </data>
   <data name="MiKo_3104_MessageFormat" xml:space="preserve">
-    <value>Order '{0}' first</value>
+    <value>Place test initialization method before all other methods</value>
   </data>
   <data name="MiKo_3104_Title" xml:space="preserve">
     <value>Test initialization methods should be ordered first.</value>

@@ -4692,7 +4692,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Order &apos;{0}&apos; first.
+        ///   Looks up a localized string similar to Place test initialization method before all other methods.
         /// </summary>
         public static string MiKo_3104_MessageFormat {
             get {
