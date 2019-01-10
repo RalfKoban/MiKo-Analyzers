@@ -15,34 +15,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsTestClass() || HasTeardownMethod(symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => GetTeardownMethod(symbol) != null
                                                                                                ? AnalyzeTestType(symbol)
                                                                                                : Enumerable.Empty<Diagnostic>();
 
-        private static bool HasTeardownMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
-                                                                                .OfType<IMethodSymbol>()
-                                                                                .Where(_ => _.MethodKind == MethodKind.Ordinary)
-                                                                                .Any(_ => _.IsTestTeardownMethod());
+        private static IMethodSymbol GetTeardownMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
+                                                                                         .OfType<IMethodSymbol>()
+                                                                                         .Where(_ => _.MethodKind == MethodKind.Ordinary)
+                                                                                         .FirstOrDefault(_ => _.IsTestTeardownMethod());
+
+        private static IEnumerable<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol symbol, string path) => symbol.GetMembers()
+                                                                                                                             .OfType<IMethodSymbol>()
+                                                                                                                             .Where(_ => _.MethodKind == MethodKind.Ordinary)
+                                                                                                                             .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
+                                                                                                                             .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition);
 
         private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol)
         {
-            var methods = symbol.GetMembers()
-                                .OfType<IMethodSymbol>()
-                                .Where(_ => _.MethodKind == MethodKind.Ordinary)
-                                .OrderBy(_ => _.Locations.First().GetLineSpan().StartLinePosition)
-                                .ToList();
+            var teardownMethod = GetTeardownMethod(symbol);
+            var path = teardownMethod.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
 
+            var methods = GetMethodsOrderedByLocation(symbol, path).ToList();
             var index = methods.Any(_ => _.IsTestSetupMethod()) ? 1 : 0;
 
-            foreach (var method in methods)
-            {
-                if (method.IsTestTeardownMethod() && !method.Equals(methods[index]))
-                {
-                    return new[] { ReportIssue(method) };
-                }
-            }
-
-            return Enumerable.Empty<Diagnostic>();
+            return teardownMethod.Equals(methods[index])
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(teardownMethod) };
         }
     }
 }

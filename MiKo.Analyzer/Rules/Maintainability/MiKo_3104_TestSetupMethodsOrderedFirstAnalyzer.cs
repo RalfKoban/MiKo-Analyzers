@@ -15,32 +15,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsTestClass() || HasSetupMethod(symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => GetSetupMethod(symbol) != null
                                                                                                ? AnalyzeTestType(symbol)
                                                                                                : Enumerable.Empty<Diagnostic>();
 
-        private static bool HasSetupMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
-                                                                             .OfType<IMethodSymbol>()
-                                                                             .Where(_ => _.MethodKind == MethodKind.Ordinary)
-                                                                             .Any(_ => _.IsTestSetupMethod());
+        private static IMethodSymbol GetSetupMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
+                                                                                      .OfType<IMethodSymbol>()
+                                                                                      .Where(_ => _.MethodKind == MethodKind.Ordinary)
+                                                                                      .FirstOrDefault(_ => _.IsTestSetupMethod());
+
+        private static IEnumerable<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol symbol, string path) => symbol.GetMembers()
+                                                                                                                             .OfType<IMethodSymbol>()
+                                                                                                                             .Where(_ => _.MethodKind == MethodKind.Ordinary)
+                                                                                                                             .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
+                                                                                                                             .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition);
 
         private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol)
         {
-            var methods = symbol.GetMembers()
-                                .OfType<IMethodSymbol>()
-                                .Where(_ => _.MethodKind == MethodKind.Ordinary)
-                                .OrderBy(_ => _.Locations.First().GetLineSpan().StartLinePosition)
-                                .ToList();
+            var setupMethod = GetSetupMethod(symbol);
+            var path = setupMethod.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
 
-            foreach (var method in methods)
-            {
-                if (method.IsTestSetupMethod() && !method.Equals(methods[0]))
-                {
-                    return new[] { ReportIssue(method) };
-                }
-            }
+            var firstMethod = GetMethodsOrderedByLocation(symbol, path).First();
 
-            return Enumerable.Empty<Diagnostic>();
+            return setupMethod.Equals(firstMethod)
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(setupMethod) };
         }
     }
 }
