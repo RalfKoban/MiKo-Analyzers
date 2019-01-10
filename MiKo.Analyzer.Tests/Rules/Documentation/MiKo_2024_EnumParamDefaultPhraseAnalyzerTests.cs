@@ -17,9 +17,8 @@ public class TestMe
 }
 ");
 
-        [TestCase("System.Boolean")]
-        [TestCase("Boolean")]
         [TestCase("bool")]
+        [TestCase("System.Boolean")]
         [TestCase(nameof(System.Boolean))]
         [TestCase(nameof(System.Object))]
         public void No_issue_is_reported_for_method_with_(string type) => No_issue_is_reported_for(@"

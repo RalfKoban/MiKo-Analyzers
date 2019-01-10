@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3003_EventSignatureAnalyzerTests : CodeFixVerifier
     {
         [TestCase(nameof(EventHandler))]
-        [TestCase(nameof(EventHandler<EventArgs>))]
+        [TestCase("EventHandler<EventArgs>")]
         [TestCase(nameof(NotifyCollectionChangedEventHandler))]
         [TestCase(nameof(PropertyChangedEventHandler))]
         [TestCase(nameof(PropertyChangingEventHandler))]
@@ -28,7 +28,7 @@ public class TestMe
 ");
 
         [TestCase(nameof(EventHandler))]
-        [TestCase(nameof(EventHandler<EventArgs>))]
+        [TestCase("EventHandler<EventArgs>")]
         [TestCase(nameof(NotifyCollectionChangedEventHandler))]
         [TestCase(nameof(PropertyChangedEventHandler))]
         [TestCase(nameof(PropertyChangingEventHandler))]
