@@ -47,6 +47,21 @@ public partial class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_partial_test_class_without_tests([ValueSource(nameof(TestFixtures))] string testClassAttribute)
+            => No_issue_is_reported_for(@"
+public partial class TestMe
+{
+    public void DoSomething() { }
+}
+
+[" + testClassAttribute + @"]
+public partial class TestMe
+{
+    private void DoSomethingElse() { }
+}
+");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(
                                                                                         [ValueSource(nameof(TestFixtures))] string testClassAttribute,

@@ -466,5 +466,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                          .FirstOrDefault(_ => _.Count > 0);
 
         internal static string ToCleanedUpString(this ExpressionSyntax s) => s?.ToString().RemoveAll(Constants.WhiteSpaces);
+
+        internal static bool IsPartial(this INamedTypeSymbol symbol) => symbol.Locations.Length > 1;
     }
 }

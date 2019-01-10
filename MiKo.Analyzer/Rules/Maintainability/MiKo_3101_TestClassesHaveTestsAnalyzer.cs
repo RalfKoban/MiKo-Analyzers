@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsTestClass() && GetTestMethods(symbol).None()
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsTestClass() && GetTestMethods(symbol).None() && !symbol.IsPartial()
                                                                                                ? new[] { ReportIssue(symbol) }
                                                                                                : Enumerable.Empty<Diagnostic>();
 
