@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -20,9 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (returnType.IsEnumerable())
             {
-                return returnType.Kind == SymbolKind.ArrayType
-                           ? Constants.Comments.ArrayReturnTypeStartingPhrase
-                           : Constants.Comments.EnumerableReturnTypeStartingPhrase;
+                var initialPhrases = returnType.Kind == SymbolKind.ArrayType
+                                  ? Constants.Comments.ArrayReturnTypeStartingPhrase
+                                  : Constants.Comments.EnumerableReturnTypeStartingPhrase;
+
+                return GetStartingPhrases(returnType, initialPhrases).ToArray();
             }
 
             if (TryGetGenericArgumentType(returnType, out var argument))

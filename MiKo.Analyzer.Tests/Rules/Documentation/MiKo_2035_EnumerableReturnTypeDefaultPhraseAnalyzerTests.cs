@@ -93,6 +93,25 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_List_method([Values("returns", "value")] string xmlTag,[Values("A", "An")] string startingWord) => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// " + startingWord + @" <see cref=""List{T}"" /> that contains something.
+    /// </" + xmlTag + @">
+    public List<int> DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_Task_method(
                                                                                     [Values("returns", "value")] string xmlTag,
                                                                                     [Values("", " ")] string space,

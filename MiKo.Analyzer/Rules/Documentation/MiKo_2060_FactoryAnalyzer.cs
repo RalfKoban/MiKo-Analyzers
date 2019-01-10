@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<string> GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
 
-        private IEnumerable<string> GetSimplePhrases(IMethodSymbol symbol) => GetPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
+        private IEnumerable<string> GetSimplePhrases(IMethodSymbol symbol) => GetStartingPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
 
         private IEnumerable<string> GetCollectionPhrases(IMethodSymbol symbol)
         {
@@ -45,27 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var startingPhrases = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhrase;
 
             return TryGetGenericArgumentType(symbol.ReturnType, out var genericArgument, count - 1)
-                       ? GetPhrases(genericArgument, startingPhrases)
+                       ? GetStartingPhrases(genericArgument, startingPhrases)
                        : startingPhrases.Select(_ => string.Format(_, genericArgument.ToString()));
-        }
-
-        private IEnumerable<string> GetPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
-        {
-            var returnType = symbolReturnType.ToString();
-
-            TryGetGenericArgumentCount(symbolReturnType, out var count);
-            if (count <= 0) return startingPhrases.Select(_ => string.Format(_, returnType));
-
-            var ts = GetGenericArgumentsAsTs(symbolReturnType);
-
-            var length = returnType.IndexOf('<'); // just until the first one
-
-            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
-            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
-
-            return Enumerable.Empty<string>()
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
         }
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)

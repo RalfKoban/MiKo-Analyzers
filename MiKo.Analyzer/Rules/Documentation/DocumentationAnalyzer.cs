@@ -132,6 +132,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return string.Empty;
         }
 
+        protected IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
+        {
+            var returnType = symbolReturnType.ToString();
+
+            TryGetGenericArgumentCount(symbolReturnType, out var count);
+            if (count <= 0) return startingPhrases.Select(_ => string.Format(_, returnType));
+
+            var ts = GetGenericArgumentsAsTs(symbolReturnType);
+
+            var length = returnType.IndexOf('<'); // just until the first one
+
+            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
+            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
+
+            return Enumerable.Empty<string>()
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
+        }
+
         private static XElement GetCommentElement(string commentXml)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)

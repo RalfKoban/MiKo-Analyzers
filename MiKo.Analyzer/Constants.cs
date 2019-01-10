@@ -130,7 +130,14 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "the enumerated constant that is the ").ToArray();
 
-            internal static readonly string[] EnumerableReturnTypeStartingPhrase = { "A collection of ", };
+            internal static readonly string[] EnumerableReturnTypeStartingPhrase =
+                {
+                    "A collection of ",
+                    "A <see cref=\"{0}\"/> that contains ",
+                    "A <see cref=\"{0}\" /> that contains ",
+                    "An <see cref=\"{0}\"/> that contains ",
+                    "An <see cref=\"{0}\" /> that contains ",
+                };
 
             internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a collection of ").ToArray();
 
@@ -233,13 +240,13 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =
                 {
                     "Creates a new instance of the <see cref=\"{0}\"/> type with ",
-                    "Creates a new instance of the <see cref=\"{0}\" /> type with",
+                    "Creates a new instance of the <see cref=\"{0}\" /> type with ",
                 };
 
             internal static readonly string[] FactoryCreateCollectionMethodSummaryStartingPhrase =
                 {
                     "Creates a collection of new instances of the <see cref=\"{0}\"/> type with ",
-                    "Creates a collection of new instances of the <see cref=\"{0}\" /> type with",
+                    "Creates a collection of new instances of the <see cref=\"{0}\" /> type with ",
                 };
 
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
