@@ -4401,7 +4401,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make it &apos;public&apos;, &apos;static&apos; and &apos;readonly&apos;.
+        ///   Looks up a localized string similar to Make it &apos;public static readonly&apos;.
         /// </summary>
         public static string MiKo_3050_MessageFormat {
             get {
@@ -4474,7 +4474,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make it non-public, &apos;static&apos; and &apos;readonly&apos;.
+        ///   Looks up a localized string similar to Make it non-public &apos;static readonly&apos;.
         /// </summary>
         public static string MiKo_3052_MessageFormat {
             get {
