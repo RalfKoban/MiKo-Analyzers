@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
             var summaries = GetSummaries(commentXml);
+
             return summaries.Any()
                        ? AnalyzeSummary(symbol, summaries)
                        : Enumerable.Empty<Diagnostic>();
