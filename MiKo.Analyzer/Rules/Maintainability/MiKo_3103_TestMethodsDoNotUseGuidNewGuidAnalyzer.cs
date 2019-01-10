@@ -9,13 +9,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer : TestsMaintainabilityAnalyzer
+    public sealed class MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3103";
 
         private const string Invocation = nameof(Guid) + "." + nameof(Guid.NewGuid);
 
-        public MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer() : base(Id)
         {
         }
 

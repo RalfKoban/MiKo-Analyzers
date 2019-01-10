@@ -106,6 +106,27 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_a_non_test_class_with_setup_method_as_not_first_method(
+                                                                            [ValueSource(nameof(TestSetUps))] string testSetupAttribute,
+                                                                            [ValueSource(nameof(TestsExceptSetUps))] string testAttribute)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void DoSomething()
+    {
+    }
+
+    [" + testSetupAttribute + @"]
+    public void PrepareTest()
+    {
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3104_TestSetupMethodsOrderedFirstAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3104_TestSetupMethodsOrderedFirstAnalyzer();

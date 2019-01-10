@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3102_TestMethodsHaveNoConditionsAnalyzer : TestsMaintainabilityAnalyzer
+    public sealed class MiKo_3102_TestMethodsHaveNoConditionsAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3102";
 
-        public MiKo_3102_TestMethodsHaveNoConditionsAnalyzer() : base(Id, SymbolKind.Method)
+        public MiKo_3102_TestMethodsHaveNoConditionsAnalyzer() : base(Id)
         {
         }
 
