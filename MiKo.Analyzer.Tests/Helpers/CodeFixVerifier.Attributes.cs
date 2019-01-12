@@ -7,7 +7,7 @@ namespace TestHelper
 {
     partial class CodeFixVerifier
     {
-        public static readonly IEnumerable<string> TestFixtures = new HashSet<string>
+        public static readonly IEnumerable<string> TestFixtures = new[]
                                                                       {
                                                                           nameof(TestFixtureAttribute),
                                                                           "TestFixture",
@@ -17,9 +17,9 @@ namespace TestHelper
                                                                           "TestClassAttribute()",
                                                                           "TestClass",
                                                                           "TestClass()",
-                                                                      };
+                                                                      }.OrderBy(_ => _).Distinct().ToList();
 
-        public static readonly IEnumerable<string> TestSetUps = new HashSet<string>
+        public static readonly IEnumerable<string> TestSetUps = new[]
                                                                     {
                                                                         nameof(SetUpAttribute),
                                                                         "SetUp",
@@ -29,9 +29,9 @@ namespace TestHelper
                                                                         "TestInitialize()",
                                                                         "TestInitializeAttribute",
                                                                         "TestInitializeAttribute()",
-                                                                    };
+                                                                    }.OrderBy(_ => _).Distinct().ToList();
 
-        public static readonly IEnumerable<string> TestTearDowns = new HashSet<string>
+        public static readonly IEnumerable<string> TestTearDowns = new[]
                                                                        {
                                                                            "TearDown",
                                                                            "TearDown()",
@@ -41,9 +41,9 @@ namespace TestHelper
                                                                            "TestCleanup()",
                                                                            "TestCleanupAttribute",
                                                                            "TestCleanupAttribute()",
-                                                                       };
+                                                                       }.OrderBy(_ => _).Distinct().ToList();
 
-        public static readonly IEnumerable<string> TestsExceptSetUpTearDowns = new HashSet<string>
+        public static readonly IEnumerable<string> TestsExceptSetUpTearDowns = new[]
                                                                                    {
                                                                                        nameof(TestAttribute),
                                                                                        nameof(TestCaseAttribute),
@@ -68,10 +68,10 @@ namespace TestHelper
                                                                                        "TestMethod()",
                                                                                        "TestMethodAttribute",
                                                                                        "TestMethodAttribute()",
-                                                                                   };
+                                                                                   }.OrderBy(_ => _).Distinct().ToList();
 
-        public static readonly IEnumerable<string> Tests = TestsExceptSetUpTearDowns.Concat(TestSetUps).Concat(TestTearDowns).ToHashSet();
-        public static readonly IEnumerable<string> TestsExceptSetUps = Tests.Except(TestSetUps).ToHashSet();
-        public static readonly IEnumerable<string> TestsExceptTearDowns = Tests.Except(TestTearDowns).ToHashSet();
+        public static readonly IEnumerable<string> Tests = TestsExceptSetUpTearDowns.Concat(TestSetUps).Concat(TestTearDowns).OrderBy(_ => _).Distinct().ToList();
+        public static readonly IEnumerable<string> TestsExceptSetUps = Tests.Except(TestSetUps).OrderBy(_ => _).Distinct().ToList();
+        public static readonly IEnumerable<string> TestsExceptTearDowns = Tests.Except(TestTearDowns).OrderBy(_ => _).Distinct().ToList();
     }
 }

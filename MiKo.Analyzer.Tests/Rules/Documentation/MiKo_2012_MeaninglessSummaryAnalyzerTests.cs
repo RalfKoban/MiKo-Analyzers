@@ -264,7 +264,12 @@ public class TestMe : ITestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> MeaninglessPhrases()
         {
-            var types = new[] { "Base", "Class", "Interface", "Method", "Field", "Property", "Event", "Constructor", "Ctor", "Delegate", "Factory", "Creator", "Builder", "Entity", "Model", "ViewModel", "Command", "Action", "Func", "Converter" };
+            var types = new[]
+                            {
+                                "Base", "Class", "Interface", "Method", "Field", "Property", "Event",
+                                "Constructor", "Ctor", "Delegate", "Factory", "Creator", "Builder",
+                                "Entity", "Model", "ViewModel", "Command", "Action", "Func", "Converter",
+                            };
 
             var phrases = MeaninglessTextPhrases();
 
@@ -300,7 +305,7 @@ public class TestMe : ITestMe
             results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");
 
-            return new HashSet<string>(results);
+            return results.OrderBy(_ => _).Distinct().ToList();
         }
     }
 }

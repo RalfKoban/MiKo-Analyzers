@@ -53,7 +53,7 @@ public class TestMe
 }
 ");
 
-        [Test]
+        [Test, Combinatorial]
         public void An_issue_is_reported_for_incorrectly_documented_method_throwing_an_(
                                                                                     [ValueSource(nameof(ExceptionTypes))] string exceptionType,
                                                                                     [ValueSource(nameof(ForbiddenExceptionStartingPhrases))] string startingPhrase) => An_issue_is_reported_for(@"

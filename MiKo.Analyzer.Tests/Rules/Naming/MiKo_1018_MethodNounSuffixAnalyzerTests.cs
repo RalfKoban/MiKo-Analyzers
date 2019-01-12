@@ -32,7 +32,7 @@ public class TestMe
 }
 ");
 
-        [Test]
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method_with_name_(
                                                                 [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute,
                                                                 [ValueSource(nameof(InvalidMethodNames))] string name)

@@ -121,7 +121,7 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
+        [Test]
         public void An_issue_is_reported_for_commented_Enum_property_with_missing_default_value([Values("returns", "value")] string xmlTag) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -144,7 +144,7 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
+        [Test]
         public void No_issue_is_reported_for_commented_Enum_property_with_default_value([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -167,7 +167,7 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
+        [Test]
         public void No_issue_is_reported_for_commented_Enum_property_with_default_value_and_line_break([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;

@@ -39,7 +39,7 @@ public class TestMe
 }
 ");
 
-        [Test]
+        [Test, Combinatorial]
         public void An_issue_is_reported_for_parameter_with_non_fitting_name(
                                                                         [ValueSource(nameof(DelegateTypes))] string type,
                                                                         [ValueSource(nameof(WrongDelegateNames))] string name)
