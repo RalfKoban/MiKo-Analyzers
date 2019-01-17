@@ -169,6 +169,20 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_method_with_var_inherited_EventArgs_variable_with_incorrect_name_and_Parameter_named_e() => An_issue_is_reported_for(@"
+using System;
+
+public class MyEventArgs : EventArgs { }
+
+public class TestMe
+{
+    public void DoSomething(MyEventArgs e)
+    {
+        var eventArgs = new MyEventArgs();
+    }
+}
+");
         protected override string GetDiagnosticId() => MiKo_1005_EventArgsLocalVariableAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1005_EventArgsLocalVariableAnalyzer();

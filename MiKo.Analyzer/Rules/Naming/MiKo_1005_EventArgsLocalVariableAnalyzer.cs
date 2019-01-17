@@ -26,6 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
+            const string E = "e";
+            const string Args = "args";
+
             List<Diagnostic> results = null;
 
             foreach (var identifier in identifiers)
@@ -33,15 +36,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var name = identifier.ValueText;
                 switch (name)
                 {
-                    case "e":
-                    case "args":
+                    case E:
+                    case Args:
                         break;
 
                     default:
                         var symbol = identifier.GetSymbol(semanticModel);
 
+                        // there might be methods that have a parameter named 'e', thus we have to use 'args' instead
+                        var method = identifier.Parent.GetEnclosingMethod(semanticModel);
+                        var proposedName = method.Parameters.Any(_ => _.Name == E) ? Args : E;
+
                         if (results == null) results = new List<Diagnostic>();
-                        results.Add(ReportIssue(symbol, "e"));
+                        results.Add(ReportIssue(symbol, proposedName));
+
                         break;
                 }
             }
