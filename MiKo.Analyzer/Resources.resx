@@ -1357,7 +1357,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_3003_MessageFormat" xml:space="preserve">
-    <value>'{0}' should use 'EventHandler' or 'EventHandler&lt;T&gt;'</value>
+    <value>Use 'EventHandler' or 'EventHandler&lt;T&gt;'</value>
   </data>
   <data name="MiKo_3003_Title" xml:space="preserve">
     <value>Events should follow .NET Framework Guidelines for events.</value>
