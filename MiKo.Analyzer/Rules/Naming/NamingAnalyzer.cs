@@ -119,6 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var semanticModel = context.SemanticModel;
             var type = semanticModel.GetTypeInfo(node.Declaration.Type).Type;
+
             if (!ShallAnalyze(type)) return;
 
             var diagnostics = AnalyzeIdentifiers(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
@@ -131,9 +132,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
         {
             var node = (DeclarationPatternSyntax)context.Node;
-            var semanticModel = context.SemanticModel;
 
-            if (!ShallAnalyze(semanticModel.GetTypeInfo(node.Type).Type)) return;
+            var semanticModel = context.SemanticModel;
+            var type = semanticModel.GetTypeInfo(node.Type).Type;
+
+            if (!ShallAnalyze(type)) return;
 
             var diagnostics = Analyze(semanticModel, node.Designation);
             foreach (var diagnostic in diagnostics)
