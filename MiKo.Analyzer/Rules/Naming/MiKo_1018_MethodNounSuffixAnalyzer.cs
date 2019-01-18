@@ -58,6 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Clear",
                 "Create",
                 "Query",
+                "Analyze",
             };
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)

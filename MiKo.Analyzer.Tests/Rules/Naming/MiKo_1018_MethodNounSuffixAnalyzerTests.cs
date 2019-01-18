@@ -113,6 +113,7 @@ public class TestMe
                                                                          "RemoveDocumentation",
                                                                          "CreateDocumentation",
                                                                          "AddDocumentation",
+                                                                         "AnalyzeDeclaration",
                                                                      };
 
         [ExcludeFromCodeCoverage]
