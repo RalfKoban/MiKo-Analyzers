@@ -333,6 +333,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Events shall use &apos;EventHandler&lt;T&gt;&apos; where &apos;T&apos; is a class inherited from &apos;System.EventArgs&apos; that is named after the event.
+        ///Example: A &apos;Loaded&apos; event should use an &apos;EventHandler&lt;LoadedEventArgs&gt;&apos;..
+        /// </summary>
+        public static string MiKo_1006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;EventHandler&lt;{1}&gt;&apos; instead.
+        /// </summary>
+        public static string MiKo_1006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events shall use &apos;EventHandler&lt;T&gt;&apos; with properly named &apos;EventArgs&apos; as &apos;T&apos;..
+        /// </summary>
+        public static string MiKo_1006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
         public static string MiKo_1010_Description {
