@@ -1705,6 +1705,15 @@ Therefore, a hard-coded GUID should be used instead.</value>
   <data name="MiKo_3105_Title" xml:space="preserve">
     <value>Test cleanup methods should be ordered before test methods.</value>
   </data>
+  <data name="MiKo_3106_Description" xml:space="preserve">
+    <value>NUnit's [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute.</value>
+  </data>
+  <data name="MiKo_3106_MessageFormat" xml:space="preserve">
+    <value>Wrong usage of [Combinatorial]</value>
+  </data>
+  <data name="MiKo_3106_Title" xml:space="preserve">
+    <value>Use NUnit's [Combinatorial] NUnit's attribute properly.</value>
+  </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
 Such namespaces should be flattened.</value>

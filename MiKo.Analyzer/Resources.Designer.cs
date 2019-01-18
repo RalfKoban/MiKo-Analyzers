@@ -4737,6 +4737,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NUnit&apos;s [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute..
+        /// </summary>
+        public static string MiKo_3106_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3106_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong usage of [Combinatorial].
+        /// </summary>
+        public static string MiKo_3106_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3106_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] NUnit&apos;s attribute properly..
+        /// </summary>
+        public static string MiKo_3106_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3106_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
