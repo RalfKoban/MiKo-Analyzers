@@ -822,7 +822,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is a base type by putting &apos;Base&apos; in its name does not make sense. Every interface or class that is not sealed can act as a base class..
+        ///   Looks up a localized string similar to Indicating that a type is a base type by putting &apos;Abstract&apos; or &apos;Base&apos; in its name does not make sense. Every interface or class that is not sealed can act as a base class..
         /// </summary>
         public static string MiKo_1030_Description {
             get {
@@ -840,7 +840,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types should not have a &apos;Base&apos; marker to indicate that they are base types..
+        ///   Looks up a localized string similar to Types should not have an &apos;Abstract&apos; or &apos;Base&apos; marker to indicate that they are base types..
         /// </summary>
         public static string MiKo_1030_Title {
             get {

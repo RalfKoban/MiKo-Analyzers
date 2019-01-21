@@ -21,6 +21,12 @@ public " + type + " " + name + @"
         [TestCase("class", "SomethingBase")]
         [TestCase("interface", "IBaseSomething")]
         [TestCase("class", "BaseSomething")]
+        [TestCase("interface", "ISomethingAbstract")]
+        [TestCase("class", "SomethingAbstract")]
+        [TestCase("interface", "IAbstractSomething")]
+        [TestCase("class", "AbstractSomething")]
+        [TestCase("interface", "IAbstractSomethingBase")]
+        [TestCase("class", "AbstractSomethingBase")]
         public void An_issue_is_reported_for(string type, string name) => An_issue_is_reported_for(@"
 public " + type + " " + name + @"
 {

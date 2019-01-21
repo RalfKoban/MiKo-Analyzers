@@ -12,6 +12,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Markers
         {
+            internal static readonly string[] BaseClasses = { "Abstract", "Base" };
             internal static readonly string[] Entities = { "Model", "Models", "model", "models" };
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
             internal static readonly string[] SpecialModels = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
