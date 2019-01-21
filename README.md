@@ -31,6 +31,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1003|Name of event handler does not follow the .NET Framework Best Practices.|:white_check_mark:|
 |MiKo_1004|Events should not contain term 'Event' in their names.|:white_check_mark:|
 |MiKo_1005|'System.EventArgs' variables should be named properly.|:white_check_mark:|
+|MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|:white_check_mark:|
 |MiKo_1010|Methods should not contain 'Do' in their names.|:white_check_mark:|
 |MiKo_1011|Methods should not contain 'CanExecute' or 'Execute' in their names.|:white_check_mark:|
 |MiKo_1012|Methods should not be named 'Fire'.|:white_check_mark:|
@@ -153,6 +154,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2060|Factories should be documented in a uniform way.|:white_check_mark:|
 |MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|:white_check_mark:|
 |MiKo_2071|&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.|:white_check_mark:|
+|MiKo_2072|&lt;summary&gt; documentation should not start with 'Try'.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
 
@@ -192,4 +194,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|
+|MiKo_3104|Test initialization methods should be ordered first.|:white_check_mark:|
+|MiKo_3105|Test cleanup methods should be ordered before test methods.|:white_check_mark:|
+|MiKo_3106|Use NUnit's [Combinatorial] NUnit's attribute properly.|:white_check_mark:|
 |MiKo_3401|Namespace hierarchies should not be too deep.|:white_check_mark:|
