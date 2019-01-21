@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static bool StartsWithPhrase(string summary)
         {
             // get rid of async starting phrase
-            summary = summary.Replace(Constants.Comments.AsynchrounouslyStartingPhrase, string.Empty).Trim();
+            summary = summary.Remove(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
 
             var firstSpace = summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
             var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);

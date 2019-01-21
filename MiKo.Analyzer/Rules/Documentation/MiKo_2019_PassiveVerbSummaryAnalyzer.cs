@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static bool HasPassiveVerb(string summary)
         {
             // get rid of async starting phrase
-            summary = summary.Replace(Constants.Comments.AsynchrounouslyStartingPhrase, string.Empty).Trim();
+            summary = summary.Remove(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
