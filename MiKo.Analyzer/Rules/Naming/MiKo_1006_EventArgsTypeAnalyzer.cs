@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -36,17 +38,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var type = semanticModel.GetTypeInfo(declarationType).Type as INamedTypeSymbol;
 
-            if (type is null) return null;
+            switch (type?.Name)
+            {
+                case null:
+                case nameof(NotifyCollectionChangedEventHandler):
+                case nameof(PropertyChangingEventHandler):
+                case nameof(PropertyChangedEventHandler):
+                    return null; // ignore event handlers that we cannot change anymore
 
-            var eventArgsType = type.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
-            var expectedName = declaration.Variables.Select(_ => _.Identifier.ValueText).FirstOrDefault() + nameof(EventArgs);
+                default:
+                    var eventArgsType = type.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
+                    var expectedName = declaration.Variables.Select(_ => _.Identifier.ValueText).FirstOrDefault() + nameof(EventArgs);
 
-            // we either nave no correct event handler or too few/less type arguments
-            return IsProperlyNamed(eventArgsType, expectedName)
-                       ? ReportIssue(type.Name, declarationType.GetLocation(), expectedName)
-                       : null;
+                    // we either nave no correct event handler or too few/less type arguments
+                    return IsProperlyNamed(eventArgsType, expectedName)
+                               ? null
+                               : ReportIssue(type.Name, declarationType.GetLocation(), expectedName);
+            }
         }
 
-        private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type == null || !type.IsEventArgs() || type.Name != expectedName;
+        private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type?.IsEventArgs() == true && type.Name == expectedName;
     }
 }

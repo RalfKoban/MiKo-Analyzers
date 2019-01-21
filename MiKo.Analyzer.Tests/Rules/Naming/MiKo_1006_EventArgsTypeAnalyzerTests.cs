@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -27,6 +30,22 @@ public class MyEventArgs : EventArgs { }
 public class TestMe
 {
     public event EventHandler<MyEventArgs> My;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_predefined_eventHandler([Values(
+                                                                         nameof(NotifyCollectionChangedEventHandler),
+                                                                         nameof(PropertyChangedEventHandler),
+                                                                         nameof(PropertyChangingEventHandler))]
+                                                                     string eventHandler) => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+using System.Collections.Specialized;
+
+public class TestMe
+{
+    public event " + eventHandler + @" MyEvent;
 }
 ");
 
