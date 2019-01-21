@@ -2162,7 +2162,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place class in &apos;{1}&apos; namespace.
+        ///   Looks up a localized string similar to Place class in namespace &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1408_MessageFormat {
             get {
