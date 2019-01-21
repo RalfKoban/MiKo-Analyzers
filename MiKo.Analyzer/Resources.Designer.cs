@@ -270,7 +270,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of event handler does not follow the .NET Framework Best Practices..
+        ///   Looks up a localized string similar to Event handling method name does not follow the .NET Framework Best Practices..
         /// </summary>
         public static string MiKo_1003_Title {
             get {

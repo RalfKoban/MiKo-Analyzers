@@ -28,7 +28,7 @@ The following tables list all the rules that are currently provided by the analy
 |:-|:----|:----------------:|
 |MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|:white_check_mark:|
 |MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers.|:white_check_mark:|
-|MiKo_1003|Name of event handler does not follow the .NET Framework Best Practices.|:white_check_mark:|
+|MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|:white_check_mark:|
 |MiKo_1004|Events should not contain term 'Event' in their names.|:white_check_mark:|
 |MiKo_1005|'System.EventArgs' variables should be named properly.|:white_check_mark:|
 |MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|:white_check_mark:|

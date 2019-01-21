@@ -189,7 +189,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1003_Title" xml:space="preserve">
-    <value>Name of event handler does not follow the .NET Framework Best Practices.</value>
+    <value>Event handling method name does not follow the .NET Framework Best Practices.</value>
   </data>
   <data name="MiKo_1004_Description" xml:space="preserve">
     <value>'Event' as suffix in event names is noise and should be avoided.</value>
