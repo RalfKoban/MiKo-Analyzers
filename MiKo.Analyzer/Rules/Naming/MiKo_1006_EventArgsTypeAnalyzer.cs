@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -38,7 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var type = semanticModel.GetTypeInfo(declarationType).Type as INamedTypeSymbol;
 
-            switch (type?.Name)
+            var typeName = type?.Name;
+            switch (typeName)
             {
                 case null:
                 case nameof(NotifyCollectionChangedEventHandler):
@@ -47,13 +49,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return null; // ignore event handlers that we cannot change anymore
 
                 default:
-                    var eventArgsType = type.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
-                    var expectedName = declaration.Variables.Select(_ => _.Identifier.ValueText).FirstOrDefault() + nameof(EventArgs);
+                    var eventName = declaration.Variables.Select(_ => _.Identifier.ValueText).FirstOrDefault();
+
+                    if (eventName == nameof(ICommand.CanExecuteChanged) && typeName == nameof(EventHandler))
+                        return null; // ignore event that we cannot change anymore
 
                     // we either nave no correct event handler or too few/less type arguments
+                    var eventArgsType = type.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
+                    var expectedName = eventName + nameof(EventArgs);
+
                     return IsProperlyNamed(eventArgsType, expectedName)
                                ? null
-                               : ReportIssue(type.Name, declarationType.GetLocation(), expectedName);
+                               : ReportIssue(typeName, declarationType.GetLocation(), expectedName);
             }
         }
 

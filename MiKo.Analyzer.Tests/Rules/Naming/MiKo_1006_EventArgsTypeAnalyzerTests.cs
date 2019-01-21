@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_predefined_eventHandler([Values(
+        public void No_issue_is_reported_for_predefined_EventHandler([Values(
                                                                          nameof(NotifyCollectionChangedEventHandler),
                                                                          nameof(PropertyChangedEventHandler),
                                                                          nameof(PropertyChangingEventHandler))]
@@ -46,6 +46,18 @@ using System.Collections.Specialized;
 public class TestMe
 {
     public event " + eventHandler + @" MyEvent;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_predefined_CanExecuteChanged_EventHandler() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+using System.Collections.Specialized;
+
+public class TestMe
+{
+    public event EventHandler CanExecuteChanged;
 }
 ");
 
