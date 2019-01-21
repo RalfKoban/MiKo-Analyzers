@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2070";
 
-        private static readonly string[] ReturnPhrases = { "Return", "Returns" };
+        private static readonly string[] Phrases = { "Return", "Returns" };
 
         public MiKo_2070_ReturnsSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithReturns)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
                                                                                                                         ? new[] { ReportIssue(symbol, "Gets") }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool StartsWithReturns(string summary)
+        private static bool StartsWithPhrase(string summary)
         {
             // get rid of async starting phrase
             summary = summary.Replace(Constants.Comments.AsynchrounouslyStartingPhrase, string.Empty).Trim();
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var firstSpace = summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
             var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);
 
-            return firstWord.EqualsAny(ReturnPhrases);
+            return firstWord.EqualsAny(Phrases);
         }
     }
 }
