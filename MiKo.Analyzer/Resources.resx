@@ -1321,6 +1321,15 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2071_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.</value>
   </data>
+  <data name="MiKo_2072_Description" xml:space="preserve">
+    <value>'Try' methods attempt to acchieve something. So their &lt;summary&gt; documentation should start with the phrase 'Attempts to'.</value>
+  </data>
+  <data name="MiKo_2072_MessageFormat" xml:space="preserve">
+    <value>Start &lt;summary&gt; with: '{1}'</value>
+  </data>
+  <data name="MiKo_2072_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation should not start with 'Try'.</value>
+  </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
     <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
   </data>

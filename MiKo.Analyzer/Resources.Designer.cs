@@ -3635,6 +3635,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;Try&apos; methods attempt to acchieve something. So their &lt;summary&gt; documentation should start with the phrase &apos;Attempts to&apos;..
+        /// </summary>
+        public static string MiKo_2072_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2072_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2072_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2072_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not start with &apos;Try&apos;..
+        /// </summary>
+        public static string MiKo_2072_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2072_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates..
         /// </summary>
         public static string MiKo_2100_Description {
