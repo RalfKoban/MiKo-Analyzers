@@ -243,7 +243,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event handlers should start with &apos;On&apos; to indicate that they handle events..
+        ///   Looks up a localized string similar to Event handlers should start with &apos;On&apos;, followed by the name of the event, to indicate that they handle events..
         /// </summary>
         public static string MiKo_1003_Description {
             get {

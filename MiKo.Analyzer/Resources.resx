@@ -180,7 +180,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
   </data>
   <data name="MiKo_1003_Description" xml:space="preserve">
-    <value>Event handlers should start with 'On' to indicate that they handle events.</value>
+    <value>Event handlers should start with 'On', followed by the name of the event, to indicate that they handle events.</value>
   </data>
   <data name="MiKo_1003_HelpLinkUri" xml:space="preserve">
     <value>https://docs.microsoft.com/en-us/dotnet/csharp/event-pattern</value>
