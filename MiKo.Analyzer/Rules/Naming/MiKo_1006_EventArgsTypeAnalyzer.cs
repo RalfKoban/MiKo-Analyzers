@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -40,30 +38,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var type = semanticModel.GetTypeInfo(declarationType).Type as INamedTypeSymbol;
 
             var typeName = type?.Name;
-            switch (typeName)
-            {
-                case null:
-                case nameof(NotifyCollectionChangedEventHandler):
-                case nameof(PropertyChangingEventHandler):
-                case nameof(PropertyChangedEventHandler):
-                    return null; // ignore event handlers that we cannot change anymore
+            if (typeName == null)
+                return null; // ignore unknown type
 
-                default:
-                    var eventName = declaration.Variables.Select(_ => _.Identifier.ValueText).FirstOrDefault();
+            var identifier = declaration.Variables.Select(_ => _.Identifier).FirstOrDefault();
 
-                    if (eventName == nameof(ICommand.CanExecuteChanged) && typeName == nameof(EventHandler))
-                        return null; // ignore event that we cannot change anymore
+            var eventName = identifier.ValueText;
+            if (eventName == nameof(ICommand.CanExecuteChanged) && typeName == nameof(EventHandler))
+                return null; // ignore event that we cannot change anymore
 
-                    // we either nave no correct event handler or too few/less type arguments
-                    var eventArgsType = type.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
-                    var expectedName = eventName + nameof(EventArgs);
+            // we either nave no correct event handler or too few/less type arguments, so try to guess the EventArgs
+            var eventArgsType = type.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
+            var expectedName = eventName + nameof(EventArgs);
 
-                    return IsProperlyNamed(eventArgsType, expectedName)
-                               ? null
-                               : ReportIssue(typeName, declarationType.GetLocation(), expectedName);
-            }
+            if (IsProperlyNamed(eventArgsType, expectedName))
+                return null;
+
+            if (IsInherited(identifier, semanticModel))
+                return null; // ignore inherited events that we cannot change anymore
+
+            return ReportIssue(typeName, declarationType.GetLocation(), expectedName);
         }
 
         private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type?.IsEventArgs() == true && type.Name == expectedName;
+
+        private static bool IsInherited(SyntaxToken syntax, SemanticModel semanticModel)
+        {
+            var symbol = syntax.GetSymbol(semanticModel);
+            var eventSymbol = symbol as IEventSymbol;
+            return eventSymbol.IsInterfaceImplementation();
+        }
     }
 }

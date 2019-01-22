@@ -1,6 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.ComponentModel;
-
+﻿
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -30,22 +28,6 @@ public class MyEventArgs : EventArgs { }
 public class TestMe
 {
     public event EventHandler<MyEventArgs> My;
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_predefined_EventHandler([Values(
-                                                                         nameof(NotifyCollectionChangedEventHandler),
-                                                                         nameof(PropertyChangedEventHandler),
-                                                                         nameof(PropertyChangingEventHandler))]
-                                                                     string eventHandler) => No_issue_is_reported_for(@"
-using System;
-using System.ComponentModel;
-using System.Collections.Specialized;
-
-public class TestMe
-{
-    public event " + eventHandler + @" MyEvent;
 }
 ");
 
@@ -82,6 +64,20 @@ public class MyEventArgs : EventArgs { }
 public class TestMe
 {
     public event EventHandler My;
+}
+");
+
+        [Test, Ignore("Currently cannot be tested")]
+        public void No_issue_is_reported_for_interface_implementation() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public abstract class TestMe : System.ComponentModel.INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
 }
 ");
 

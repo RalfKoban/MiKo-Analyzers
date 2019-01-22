@@ -44,6 +44,13 @@ namespace MiKoSolutions.Analyzers
             return methodSymbols.Any(_ => method.Equals(method.ContainingType.FindImplementationForInterfaceMember(_)));
         }
 
+        internal static bool IsInterfaceImplementation(this IEventSymbol @event)
+        {
+            var eventSymbols = @event.ContainingType.AllInterfaces
+                                     .SelectMany(_ => _.GetMembers().OfType<IEventSymbol>());
+            return eventSymbols.Any(_ => @event.Equals(@event.ContainingType.FindImplementationForInterfaceMember(_)));
+        }
+
         internal static bool IsTestClass(this ITypeSymbol symbol)
         {
             if (symbol.TypeKind == TypeKind.Class)
@@ -461,9 +468,9 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol symbol, string invocation) => symbol.GetAssignmentsVia(invocation)
-                                                                                                                                         .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                                                                         .Select(_ => _.ArgumentList.Arguments)
-                                                                                                                                         .FirstOrDefault(_ => _.Count > 0);
+                                                                                                                                             .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                                                                             .Select(_ => _.ArgumentList.Arguments)
+                                                                                                                                             .FirstOrDefault(_ => _.Count > 0);
 
         internal static string ToCleanedUpString(this ExpressionSyntax s) => s?.ToString().RemoveAll(Constants.WhiteSpaces);
 
