@@ -4338,11 +4338,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use the [ref] keyword on reference parameters.
+        ///   Looks up a localized string similar to Do not use the [ref] keyword on reference parameters..
         /// </summary>
         public static string MiKo_3024_Title {
             get {
                 return ResourceManager.GetString("MiKo_3024_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need to have another value, use a local variable instead..
+        /// </summary>
+        public static string MiKo_3025_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3025_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not re-assign &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3025_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3025_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not re-assign method parameters..
+        /// </summary>
+        public static string MiKo_3025_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3025_Title", resourceCulture);
             }
         }
         

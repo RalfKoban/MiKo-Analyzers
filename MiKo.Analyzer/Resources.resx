@@ -1563,7 +1563,16 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Do not use 'ref'</value>
   </data>
   <data name="MiKo_3024_Title" xml:space="preserve">
-    <value>Do not use the [ref] keyword on reference parameters</value>
+    <value>Do not use the [ref] keyword on reference parameters.</value>
+  </data>
+  <data name="MiKo_3025_Description" xml:space="preserve">
+    <value>Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need to have another value, use a local variable instead.</value>
+  </data>
+  <data name="MiKo_3025_MessageFormat" xml:space="preserve">
+    <value>Do not re-assign '{0}'</value>
+  </data>
+  <data name="MiKo_3025_Title" xml:space="preserve">
+    <value>Do not re-assign method parameters.</value>
   </data>
   <data name="MiKo_3030_Description" xml:space="preserve">
     <value>For performance reasons, it makes no sense to use 'object.Equals()' on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
