@@ -181,6 +181,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3021|Do not use 'Task.Run' in the implementation.|:white_check_mark:|
 |MiKo_3022|Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;.|:white_check_mark:|
 |MiKo_3023|Do not use 'CancellationTokenSource' as parameter.|:white_check_mark:|
+|MiKo_3024|Do not use the [ref] keyword on reference parameters|:white_check_mark:|
 |MiKo_3030|Do not use 'object.Equals()' on value types.|:white_check_mark:|
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3032|ICloneable.Clone() should not be implemented.|:white_check_mark:|
