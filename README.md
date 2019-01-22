@@ -49,7 +49,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1024|Property names should be limited in length.|:white_large_square:|
 |MiKo_1025|Event names should be limited in length.|:white_large_square:|
 |MiKo_1026|Variable names should be limited in length.|:white_large_square:|
-|MiKo_1030|Types should not have a 'Base' marker to indicate that they are base types.|:white_check_mark:|
+|MiKo_1030|Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types.|:white_check_mark:|
 |MiKo_1031|Entity types should not use a 'Model' suffix.|:white_check_mark:|
 |MiKo_1032|Methods dealing with entities should not use a 'Model' marker.|:white_check_mark:|
 |MiKo_1033|Parameters representing entities should not use a 'Model' suffix.|:white_check_mark:|
@@ -79,6 +79,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1060|Methods should not be suffixed with a number.|:white_check_mark:|
+|MiKo_1061|The name of 'Try' method's [out] parameter should be 'result'.|:white_check_mark:|
 |MiKo_1101|Test classes should end with 'Tests'.|:white_check_mark:|
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
