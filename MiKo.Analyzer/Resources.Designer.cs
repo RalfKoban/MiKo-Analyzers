@@ -4317,6 +4317,36 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [ref] allows to change the storage location of the variable it is declared on. This allows to re-assign values to an already existing variable and therefore altering it.
+        ///In case of reference types the altered variable is an altered object reference, thus all callees that access the altered variable later on get the changed one (very similar to an out parameter).
+        ///
+        ///In most cases this is not wanted. The object reference shall be the same, only the object shall be altered..
+        /// </summary>
+        public static string MiKo_3024_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3024_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;ref&apos;.
+        /// </summary>
+        public static string MiKo_3024_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3024_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use the [ref] keyword on reference parameters.
+        /// </summary>
+        public static string MiKo_3024_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3024_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
         ///
         ///Instead the equality operator should be used to compare value types..
