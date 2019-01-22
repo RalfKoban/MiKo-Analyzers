@@ -32,6 +32,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (count < 2)
                         yield return ReportIssue(method);
                 }
+                else if (IsSequential(method))
+                {
+                    // ignore
+                }
                 else
                 {
                     if (count > 1)
@@ -48,6 +52,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case "Combinatorial":
                     case "CombinatorialAttribute":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsSequential(IMethodSymbol method)
+        {
+            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            {
+                switch (name)
+                {
+                    case "Sequential":
+                    case "SequentialAttribute":
                         return true;
                 }
             }
