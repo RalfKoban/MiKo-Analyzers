@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string StartingPhrase = "Provides data for the <see cref=\"";
         private const string EndingPhrase = "/> event.";
+
         private const StringComparison Comparison = StringComparison.Ordinal;
 
         public MiKo_2002_EventArgsSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
@@ -26,6 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                         .Select(_ => _.RemoveAll(Constants.Comments.SealedClassPhrase).Trim())
                                                                                                                         .Any(_ => _.StartsWith(StartingPhrase, Comparison) && _.EndsWith(EndingPhrase, Comparison))
                                                                                                                             ? Enumerable.Empty<Diagnostic>()
-                                                                                                                            : new[] { ReportIssue(symbol, StartingPhrase, EndingPhrase) };
+                                                                                                                            : new[] { ReportIssue(symbol, StartingPhrase, "\"" + EndingPhrase) };
     }
 }
