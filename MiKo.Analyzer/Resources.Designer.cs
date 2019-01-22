@@ -1688,6 +1688,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If a &apos;Try&apos; method has an [out] parameter, that [out] parameter shall be named &apos;result&apos; because it is the actual result of the method.
+        ///The method&apos;s return value only exists to indicate a success or failure of the operation..
+        /// </summary>
+        public static string MiKo_1061_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1061_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1061_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1061_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of &apos;Try&apos; method&apos;s [out] parameter should be &apos;result&apos;..
+        /// </summary>
+        public static string MiKo_1061_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1061_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
@@ -3847,7 +3875,7 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, methods that are named &apos;Try&apos; should follow the Trier-Doer-Pattern.
         ///
-        ///That is they should return a Boolean and have the last parameter as out-parameter for the result. In the success case the method should return true and provide valid out data; in all other cases the method should return false..
+        ///That is they should return a Boolean and have the last parameter as [out] parameter for the result. In the success case the method should return &apos;true&apos; and provide valid out data; in all other cases the method should return &apos;false&apos;..
         /// </summary>
         public static string MiKo_3005_Description {
             get {
