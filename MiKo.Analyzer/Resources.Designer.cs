@@ -4347,7 +4347,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need to have another value, use a local variable instead..
+        ///   Looks up a localized string similar to Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need them to have another value, use a local variable instead..
         /// </summary>
         public static string MiKo_3025_Description {
             get {

@@ -1566,7 +1566,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Do not use the [ref] keyword on reference parameters.</value>
   </data>
   <data name="MiKo_3025_Description" xml:space="preserve">
-    <value>Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need to have another value, use a local variable instead.</value>
+    <value>Method parameters should be considered as read-only. They should not be re-assigned to other values. If you need them to have another value, use a local variable instead.</value>
   </data>
   <data name="MiKo_3025_MessageFormat" xml:space="preserve">
     <value>Do not re-assign '{0}'</value>
