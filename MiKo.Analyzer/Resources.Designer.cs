@@ -3690,6 +3690,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;Contain&apos; methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase &apos;Determines &apos;..
+        /// </summary>
+        public static string MiKo_2073_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2073_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2073_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2073_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of &apos;Contains&apos; methods should start with &apos;Determines &apos;..
+        /// </summary>
+        public static string MiKo_2073_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2073_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates..
         /// </summary>
         public static string MiKo_2100_Description {
