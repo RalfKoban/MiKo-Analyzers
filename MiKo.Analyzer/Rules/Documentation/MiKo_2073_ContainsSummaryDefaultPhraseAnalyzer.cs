@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2073_ContainsSummaryAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2073_ContainsSummaryDefaultPhraseAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2073";
 
         private static readonly string Phrase = "Determines";
 
-        public MiKo_2073_ContainsSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2073_ContainsSummaryDefaultPhraseAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
