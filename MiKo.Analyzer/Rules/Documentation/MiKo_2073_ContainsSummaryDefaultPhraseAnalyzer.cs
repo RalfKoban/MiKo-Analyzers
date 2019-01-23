@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2073";
 
-        private static readonly string Phrase = "Determines";
+        private const string Phrase = "Determines";
 
         public MiKo_2073_ContainsSummaryDefaultPhraseAnalyzer() : base(Id, (SymbolKind)(-1))
         {
