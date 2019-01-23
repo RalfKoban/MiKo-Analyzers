@@ -1349,6 +1349,15 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2073_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines '.</value>
   </data>
+  <data name="MiKo_2074_Description" xml:space="preserve">
+    <value>'Contain' methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase ' to seek.'.</value>
+  </data>
+  <data name="MiKo_2074_MessageFormat" xml:space="preserve">
+    <value>&lt;param name="{1}"&gt; documentation should end with: {2}</value>
+  </data>
+  <data name="MiKo_2074_Title" xml:space="preserve">
+    <value>Documentation of parameter of 'Contains' method should have a default ending phrase.</value>
+  </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
     <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
   </data>

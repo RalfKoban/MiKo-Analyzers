@@ -3717,6 +3717,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;Contain&apos; methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase &apos; to seek.&apos;..
+        /// </summary>
+        public static string MiKo_2074_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2074_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should end with: {2}.
+        /// </summary>
+        public static string MiKo_2074_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2074_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of parameter of &apos;Contains&apos; method should have a default ending phrase..
+        /// </summary>
+        public static string MiKo_2074_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2074_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates..
         /// </summary>
         public static string MiKo_2100_Description {
