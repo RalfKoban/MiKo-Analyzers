@@ -58,6 +58,31 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Determines something.
+    /// </summary>
+    public bool " + methodName + @"()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_documented_async_method_([Values("Contains", "ContainsKey")] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously determines something.
+    /// </summary>
+    public bool " + methodName + @"()
+    {
+    }
+}
+");
         protected override string GetDiagnosticId() => MiKo_2073_ContainsSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2073_ContainsSummaryDefaultPhraseAnalyzer();
