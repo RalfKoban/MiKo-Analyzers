@@ -31,13 +31,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private Diagnostic AnalyzeSimpleAssignmentExpression(AssignmentExpressionSyntax node, SemanticModel semanticModel)
         {
             var method = node.GetEnclosingMethod(semanticModel);
-            if (method.Parameters.Length > 0)
+            if (method?.Parameters.Length > 0)
             {
-                var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).Select(_ => _.Name).ToHashSet();
+                    var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).Select(_ => _.Name).ToHashSet();
 
-                var name = node.Left.ToCleanedUpString();
-                if (names.Contains(name))
-                    return ReportIssue(name, node.Left.GetLocation());
+                    var name = node.Left.ToCleanedUpString();
+                    if (names.Contains(name))
+                        return ReportIssue(name, node.Left.GetLocation());
             }
 
             return null;
