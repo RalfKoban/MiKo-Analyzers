@@ -1547,7 +1547,7 @@ That is they should return a Boolean and have the last parameter as [out] parame
     <value>https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html</value>
   </data>
   <data name="MiKo_3021_MessageFormat" xml:space="preserve">
-    <value>Do not use '{0}'; instead, use '{0}' to call method '{1}'</value>
+    <value>Use '{0}' to invoke method '{1}', but not inside</value>
   </data>
   <data name="MiKo_3021_Title" xml:space="preserve">
     <value>Do not use 'Task.Run' in the implementation.</value>
