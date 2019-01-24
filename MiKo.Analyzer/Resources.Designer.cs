@@ -3453,7 +3453,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{2}&apos; as &apos;{1}&apos; is a value type parameter.
+        ///   Looks up a localized string similar to Remove &apos;{2}&apos; from &lt;exception cref=&quot;ArgumentNullException&quot;/&gt; as &apos;{1}&apos; is a value type.
         /// </summary>
         public static string MiKo_2053_MessageFormat {
             get {
@@ -3726,7 +3726,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should end with: {2}.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should end with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2074_MessageFormat {
             get {

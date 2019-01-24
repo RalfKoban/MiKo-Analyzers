@@ -1260,7 +1260,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
   </data>
   <data name="MiKo_2053_MessageFormat" xml:space="preserve">
-    <value>Remove '{2}' as '{1}' is a value type parameter</value>
+    <value>Remove '{2}' from &lt;exception cref="ArgumentNullException"/&gt; as '{1}' is a value type</value>
   </data>
   <data name="MiKo_2053_Title" xml:space="preserve">
     <value>Throwing of ArgumentNullException should be documented only for reference type parameters.</value>
@@ -1353,7 +1353,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>'Contain' methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase ' to seek.'.</value>
   </data>
   <data name="MiKo_2074_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; documentation should end with: {2}</value>
+    <value>&lt;param name="{1}"&gt; documentation should end with: '{2}'</value>
   </data>
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>Documentation of parameter of 'Contains' method should have a default ending phrase.</value>
