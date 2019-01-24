@@ -28,16 +28,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case SpecialType.System_Collections_IEnumerable:
                     case SpecialType.System_Collections_Generic_IEnumerable_T:
-                        return new[] { ReportIssue(method, method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)) };
+                    {
+                        return ReportIssue(method);
+                    }
                 }
 
                 if (typeArgument.TypeKind == TypeKind.Interface && typeArgument.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T)
                 {
-                    return new[] { ReportIssue(method, method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)) };
+                    return ReportIssue(method);
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
+
+        private IEnumerable<Diagnostic> ReportIssue(IMethodSymbol method) => new[] { ReportIssue(method, method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)) };
     }
 }
