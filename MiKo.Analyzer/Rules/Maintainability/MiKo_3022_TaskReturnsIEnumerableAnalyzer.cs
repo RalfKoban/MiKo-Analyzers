@@ -28,12 +28,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case SpecialType.System_Collections_IEnumerable:
                     case SpecialType.System_Collections_Generic_IEnumerable_T:
-                        return new[] { ReportIssue(method, method.ReturnType.ToDisplayString()) };
+                        return new[] { ReportIssue(method, method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)) };
                 }
 
                 if (typeArgument.TypeKind == TypeKind.Interface && typeArgument.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T)
                 {
-                    return new[] { ReportIssue(method, method.ReturnType.ToDisplayString()) };
+                    return new[] { ReportIssue(method, method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)) };
                 }
             }
 
