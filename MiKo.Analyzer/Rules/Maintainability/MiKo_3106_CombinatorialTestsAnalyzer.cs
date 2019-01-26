@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3106";
 
+        private static readonly string[] ValueSourceAttributeNames = { "ValueSource", "ValueSourceAttribute", "Values", "ValuesAttribute" };
+
         public MiKo_3106_CombinatorialTestsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -78,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             return method.Parameters
                          .SelectMany(_ => _.GetAttributes().Select(__ => __.AttributeClass.Name))
-                         .Count(_ => _.EqualsAny("ValueSource", "ValueSourceAttribute", "Values", "ValuesAttribute"));
+                         .Count(_ => _.EqualsAny(ValueSourceAttributeNames));
         }
     }
 }

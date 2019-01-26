@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2019";
 
+        private static readonly string[] TwoCharacterEndingsWithS = { "as", "hs", "is", "os", "ss", "us", "xs", "zs" };
+
         public MiKo_2019_PassiveVerbSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -35,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var firstSpace = summary.IndexOf(" ", Comparison);
             var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);
 
-            return firstWord.EndsWith("s", Comparison) && !firstWord.EndsWithAny(Comparison, "as", "hs", "is", "os", "ss", "us", "xs", "zs");
+            return firstWord.EndsWith("s", Comparison) && !firstWord.EndsWithAny(Comparison, TwoCharacterEndingsWithS);
         }
     }
 }
