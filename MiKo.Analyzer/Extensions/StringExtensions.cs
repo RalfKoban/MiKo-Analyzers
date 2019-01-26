@@ -109,7 +109,7 @@ namespace System
 
         internal static string Remove(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        internal static string RemoveAll(this string value, params string[] values) => values.Aggregate(value, (current, s) => current.Remove(s));
+        internal static string RemoveAll(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Remove(s));
 
         internal static string WithoutSuffix(this string value, string suffix)
         {

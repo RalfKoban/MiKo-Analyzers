@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1402";
 
         private static readonly string[] TechnicalWPFNamespaces = { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", };
+        private static readonly string[] ModelNamespaces = { "ComponentModel", "ServiceModel" };
 
         public MiKo_1402_WpfTechnicalNamespacesAnalyzer() : base(Id)
         {
@@ -20,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            var fullName = qualifiedName.RemoveAll("ComponentModel", "ServiceModel");
+            var fullName = qualifiedName.RemoveAll(ModelNamespaces);
 
             return fullName.ContainsAny(TechnicalWPFNamespaces)
                        ? new[] { ReportIssue(qualifiedName, location, TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase))) }

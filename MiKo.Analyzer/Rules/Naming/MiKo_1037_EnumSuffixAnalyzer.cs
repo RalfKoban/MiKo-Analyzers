@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1037";
 
-        private readonly string[] WrongNames = { "Enum", "Enums" };
+        private readonly string[] WrongNames = { "Enums", "Enum" }; // order is importand because of remove order
 
         public MiKo_1037_EnumSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var betterName = symbolName
                                    .Replace("TypeEnums", "Kinds")
                                    .Replace("TypeEnum", "Kind")
-                                   .RemoveAll("Enums", "Enum");
+                                   .RemoveAll(WrongNames);
 
             if (betterName.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 

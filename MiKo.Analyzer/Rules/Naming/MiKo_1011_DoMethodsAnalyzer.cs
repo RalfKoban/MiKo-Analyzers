@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return found
-                   ? new[] { ReportIssue(method, UnescapeValidPhrases(escapedMethod.RemoveAll(DoPhrase))) }
+                   ? new[] { ReportIssue(method, UnescapeValidPhrases(escapedMethod.Remove(DoPhrase))) }
                    : Enumerable.Empty<Diagnostic>();
         }
 

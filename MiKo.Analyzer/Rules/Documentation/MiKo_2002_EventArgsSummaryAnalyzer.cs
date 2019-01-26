@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsEventArgs();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries
-                                                                                                                        .Select(_ => _.RemoveAll(Constants.Comments.SealedClassPhrase).Trim())
+                                                                                                                        .Select(_ => _.Remove(Constants.Comments.SealedClassPhrase).Trim())
                                                                                                                         .Any(_ => _.StartsWith(StartingPhrase, Comparison) && _.EndsWith(EndingPhrase, Comparison))
                                                                                                                             ? Enumerable.Empty<Diagnostic>()
                                                                                                                             : new[] { ReportIssue(symbol, StartingPhrase, "\"" + EndingPhrase) };
