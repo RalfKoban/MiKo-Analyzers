@@ -19,6 +19,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 " guid;",
                 " guid.",
                 " guid:",
+
+                " Guid ",
+                " Guid,",
+                " Guid;",
+                " Guid.",
+                " Guid:",
             };
 
         public MiKo_2201_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer() : base(Id, (SymbolKind)(-1))
@@ -27,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Event, SymbolKind.Field, SymbolKind.Method, SymbolKind.NamedType, SymbolKind.Property, SymbolKind.TypeParameter);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(Guids, StringComparison.OrdinalIgnoreCase)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(Guids, StringComparison.Ordinal)
                                                                                                             ? new[] { ReportIssue(symbol) }
                                                                                                             : Enumerable.Empty<Diagnostic>();
     }
