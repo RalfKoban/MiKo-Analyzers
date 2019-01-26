@@ -3798,6 +3798,60 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;guid&apos;. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term &apos;unique identifier&apos; instead..
+        /// </summary>
+        public static string MiKo_2201_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2201_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;unique identifier&apos; instead of &apos;guid&apos; in documentation.
+        /// </summary>
+        public static string MiKo_2201_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2201_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;guid&apos;. Instead, it should use the term &apos;unique identifier&apos;..
+        /// </summary>
+        public static string MiKo_2201_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2201_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;id&apos;. Instead, it should clearly document that this is an identifier. Hence, it should use the term &apos;identifier&apos; instead..
+        /// </summary>
+        public static string MiKo_2202_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2202_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;identifier&apos; instead of &apos;id&apos; in documentation.
+        /// </summary>
+        public static string MiKo_2202_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2202_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;id&apos;. Instead, it should use the term &apos;identifier&apos;..
+        /// </summary>
+        public static string MiKo_2202_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2202_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, use the pre-defined .NET Framework delegate types such as &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
         /// </summary>
         public static string MiKo_3001_Description {

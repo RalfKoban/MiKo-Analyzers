@@ -1376,6 +1376,24 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2200_Title" xml:space="preserve">
     <value>Use a capitalized letter to start the comment.</value>
   </data>
+  <data name="MiKo_2201_Description" xml:space="preserve">
+    <value>The XML documentation should not use the abbreviation 'guid'. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term 'unique identifier' instead.</value>
+  </data>
+  <data name="MiKo_2201_MessageFormat" xml:space="preserve">
+    <value>Use 'unique identifier' instead of 'guid' in documentation</value>
+  </data>
+  <data name="MiKo_2201_Title" xml:space="preserve">
+    <value>XML documentation should not contain the term 'guid'. Instead, it should use the term 'unique identifier'.</value>
+  </data>
+  <data name="MiKo_2202_Description" xml:space="preserve">
+    <value>The XML documentation should not use the abbreviation 'id'. Instead, it should clearly document that this is an identifier. Hence, it should use the term 'identifier' instead.</value>
+  </data>
+  <data name="MiKo_2202_MessageFormat" xml:space="preserve">
+    <value>Use 'identifier' instead of 'id' in documentation</value>
+  </data>
+  <data name="MiKo_2202_Title" xml:space="preserve">
+    <value>XML documentation should not contain the term 'id'. Instead, it should use the term 'identifier'.</value>
+  </data>
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To ease maintenance, use the pre-defined .NET Framework delegate types such as 'Action', 'Func' or 'Expression' instead of custom delegates.</value>
   </data>
