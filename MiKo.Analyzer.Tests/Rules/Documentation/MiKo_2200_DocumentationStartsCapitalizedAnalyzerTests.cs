@@ -48,6 +48,11 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
+public sealed class TestMe { }
+");
+
         protected override string GetDiagnosticId() => MiKo_2200_DocumentationStartsCapitalizedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2200_DocumentationStartsCapitalizedAnalyzer();
