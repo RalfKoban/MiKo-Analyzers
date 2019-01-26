@@ -226,7 +226,7 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1010_Title" xml:space="preserve">
-    <value>Methods should not contain 'Do' in their names.</value>
+    <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
   </data>
   <data name="MiKo_1011_Description" xml:space="preserve">
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'Do' in their names.</value>
@@ -235,7 +235,7 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1011_Title" xml:space="preserve">
-    <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
+    <value>Methods should not contain 'Do' in their names.</value>
   </data>
   <data name="MiKo_1012_Description" xml:space="preserve">
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>

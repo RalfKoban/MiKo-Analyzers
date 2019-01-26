@@ -370,7 +370,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
         /// </summary>
         public static string MiKo_1010_MessageFormat {
             get {
@@ -379,7 +379,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not contain &apos;Do&apos; in their names..
+        ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
         public static string MiKo_1010_Title {
             get {
@@ -406,7 +406,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
+        ///   Looks up a localized string similar to Methods should not contain &apos;Do&apos; in their names..
         /// </summary>
         public static string MiKo_1011_Title {
             get {

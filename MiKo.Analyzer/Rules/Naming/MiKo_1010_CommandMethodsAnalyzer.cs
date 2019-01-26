@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (forbidden)
             {
                 if (diagnostics == null) diagnostics = new List<Diagnostic>();
-                diagnostics.Add(ReportIssue(method, method.Name.Remove(nameof(ICommand.Execute))));
+                diagnostics.Add(ReportIssue(method, method.Name.Remove(forbiddenName)));
             }
 
             return forbidden;
