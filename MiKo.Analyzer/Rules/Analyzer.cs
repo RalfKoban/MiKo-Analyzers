@@ -46,6 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
+            // TODO: RKN remove this if that's not possible
+            context.EnableConcurrentExecution();
+
             InitializeCore(context);
         }
 
