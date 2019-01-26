@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Event, SymbolKind.Field, SymbolKind.Method, SymbolKind.NamedType, SymbolKind.Property);
+        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Event, SymbolKind.Field, SymbolKind.Method, SymbolKind.NamedType, SymbolKind.Property, SymbolKind.TypeParameter);
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.StartsWith("<!--", StringComparison.OrdinalIgnoreCase)
                                                                                                             ? new[] { ReportIssue(symbol) }

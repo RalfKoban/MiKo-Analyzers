@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(StringComparison.Ordinal, phrase)
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
                                                                                                                                        ? Enumerable.Empty<Diagnostic>()
                                                                                                                                        : new[] { ReportIssue(symbol, symbol.Name, xmlTag, phrase[0]) };
 

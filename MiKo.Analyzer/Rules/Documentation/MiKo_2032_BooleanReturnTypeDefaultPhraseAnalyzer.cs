@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            return comment.StartsWithAny(Comparison, startingPhrases) && comment.ContainsAny(Comparison, endingPhrases)
+            return comment.StartsWithAny(startingPhrases, Comparison) && comment.ContainsAny(endingPhrases, Comparison)
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(owningSymbol, owningSymbol.Name, xmlTag, startingPhrases[0], endingPhrases[0]) };
         }

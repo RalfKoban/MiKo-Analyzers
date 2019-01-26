@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                           .ToArray();
             }
 
-            return comment.EndsWithAny(StringComparison.Ordinal, endingPhrases)
+            return comment.EndsWithAny(endingPhrases, StringComparison.Ordinal)
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(owningSymbol, owningSymbol.Name, xmlTag, proposedEndingPhrase) };
         }

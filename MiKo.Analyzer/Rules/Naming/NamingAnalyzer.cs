@@ -166,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var suffix in suffixes)
             {
-                if (symbolName.EqualsAny(StringComparison.Ordinal, AllowedListNames)) continue;
+                if (symbolName.EqualsAny(AllowedListNames, StringComparison.Ordinal)) continue;
 
                 if (!symbolName.EndsWith(suffix, comparison)) continue;
 

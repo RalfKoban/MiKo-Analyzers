@@ -27,21 +27,21 @@ namespace System
 
         public static bool Contains(this string value, string finding, StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
 
-        public static bool ContainsAny(this string value, string[] prefixes) => ContainsAny(value, StringComparison.OrdinalIgnoreCase, prefixes);
+        public static bool ContainsAny(this string value, string[] prefixes) => ContainsAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, StringComparison comparison, string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.Contains(_, comparison));
+        public static bool ContainsAny(this string value, string[] prefixes, StringComparison comparison) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.Contains(_, comparison));
 
-        public static bool EqualsAny(this string value, string[] phrases) => !string.IsNullOrEmpty(value) && EqualsAny(value, StringComparison.OrdinalIgnoreCase, phrases);
+        public static bool EqualsAny(this string value, string[] phrases) => !string.IsNullOrEmpty(value) && EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EqualsAny(this string value, StringComparison comparison, string[] phrases) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Equals(_, comparison));
+        public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Equals(_, comparison));
 
-        public static bool StartsWithAny(this string value, string[] prefixes) => StartsWithAny(value, StringComparison.OrdinalIgnoreCase, prefixes);
+        public static bool StartsWithAny(this string value, string[] prefixes) => StartsWithAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool StartsWithAny(this string value, StringComparison comparison, string[] prefixes) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.StartsWith(_, comparison));
+        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.StartsWith(_, comparison));
 
-        public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, StringComparison.OrdinalIgnoreCase, suffixes);
+        public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, StringComparison comparison, string[] suffixes) => !string.IsNullOrEmpty(value) && suffixes.Any(_ => value.EndsWith(_, comparison));
+        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => !string.IsNullOrEmpty(value) && suffixes.Any(_ => value.EndsWith(_, comparison));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);

@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.InheritsFrom<Attribute>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWithAny(StringComparison.Ordinal, Constants.Comments.AttributeSummaryStartingPhrase))
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWithAny(Constants.Comments.AttributeSummaryStartingPhrase, StringComparison.Ordinal))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
                                                                                                                         : new[] { ReportIssue(symbol, StartingPhrases) };
     }

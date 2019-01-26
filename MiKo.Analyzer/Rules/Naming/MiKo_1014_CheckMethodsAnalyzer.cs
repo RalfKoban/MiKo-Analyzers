@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
-            var forbidden = methodName.StartsWith("Check", StringComparison.Ordinal) && !methodName.StartsWithAny(StringComparison.Ordinal, StartingPhrases);
+            var forbidden = methodName.StartsWith("Check", StringComparison.Ordinal) && !methodName.StartsWithAny(StartingPhrases, StringComparison.Ordinal);
             return forbidden
                        ? new[] { ReportIssue(method) }
                        : Enumerable.Empty<Diagnostic>();

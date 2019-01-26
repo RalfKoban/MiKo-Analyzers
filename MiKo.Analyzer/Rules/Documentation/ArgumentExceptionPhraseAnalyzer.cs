@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            if (exceptionComment.ContainsAny(Comparison, allParameterIndicatorPhrases))
+            if (exceptionComment.ContainsAny(allParameterIndicatorPhrases, Comparison))
             {
                 foreach (var parameter in parameters)
                 {
@@ -54,8 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     results.AddRange(parts
                                      .Where(_ => _.Contains(parameterIndicatorPhrase))
                                      .Select(_ => _.Trim())
-                                     .Where(_ => !_.StartsWithAny(Comparison, phrases))
-                                     .Where(_ => !_.StartsWithAny(Comparison, allParameterIndicatorPhrases))
+                                     .Where(_ => !_.StartsWithAny(phrases, Comparison))
+                                     .Where(_ => !_.StartsWithAny(allParameterIndicatorPhrases, Comparison))
                                      .Select(_ => ReportExceptionIssue(owningSymbol, proposal)));
                 }
             }

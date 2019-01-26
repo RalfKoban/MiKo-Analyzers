@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            return comment.StartsWithAny(Comparison, startingPhrase) && comment.ContainsAny(Comparison, endingPhrase)
+            return comment.StartsWithAny(startingPhrase, Comparison) && comment.ContainsAny(endingPhrase, Comparison)
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(parameter, parameter.Name, startingPhrase[0], endingPhrase[0]) };
         }

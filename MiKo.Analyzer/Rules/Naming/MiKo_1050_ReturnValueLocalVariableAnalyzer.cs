@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = identifier.ValueText;
 
-                if (name.EqualsAny(StringComparison.OrdinalIgnoreCase, WrongNames))
+                if (name.EqualsAny(WrongNames, StringComparison.OrdinalIgnoreCase))
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
 

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var comment = GetParameterComment(parameter, commentXml);
                 if (comment is null) continue;
-                if (comment.EqualsAny(StringComparison.Ordinal, Constants.Comments.UnusedPhrase)) continue;
+                if (comment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal)) continue;
 
                 AnalyzeParameters(parameter, comment, ref results);
             }
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase) => comment.StartsWithAny(StringComparison.Ordinal, phrase)
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
                                                                                                                                 : new[] { ReportIssue(parameter, parameter.Name, phrase.HumanizedConcatenated()) };
     }
