@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            : method.Name;
             }
 
-            return "On" + name.Replace("_", string.Empty);
+            return "On" + name.Remove("_");
         }
 
         private static string FindProperNameInClass(IMethodSymbol method)

@@ -103,13 +103,13 @@ namespace System
 
         internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
 
-        internal static string WithoutParaTags(this string value) => value.RemoveAll("<para>", "<para />", "<para/>", "</para>");
+        internal static string WithoutParaTags(this string value) => value.RemoveAll(Constants.ParaTags);
 
         internal static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
 
         internal static string Remove(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        internal static string RemoveAll(this string value, params string[] values) => values.Aggregate(value, (current, s) => current.Replace(s, string.Empty));
+        internal static string RemoveAll(this string value, params string[] values) => values.Aggregate(value, (current, s) => current.Remove(s));
 
         internal static string WithoutSuffix(this string value, string suffix)
         {

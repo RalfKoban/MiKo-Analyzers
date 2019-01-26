@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 // special case "Does"
                 if (ContainsPhrase(methodName, DoesPhrase))
                 {
-                    escapedMethod = EscapeValidPhrases(methodName.Replace(DoesPhrase, string.Empty));
+                    escapedMethod = EscapeValidPhrases(methodName.Remove(DoesPhrase));
                     found = !method.IsTestMethod(); // ignore tests
                 }
                 else

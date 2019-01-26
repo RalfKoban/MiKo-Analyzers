@@ -9,6 +9,8 @@ namespace MiKoSolutions.Analyzers
         internal const string DependencyPropertyFieldSuffix = "Property";
         internal const string DependencyPropertyKeyFieldSuffix = "Key";
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
+        internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
+
 
         internal static class Markers
         {
