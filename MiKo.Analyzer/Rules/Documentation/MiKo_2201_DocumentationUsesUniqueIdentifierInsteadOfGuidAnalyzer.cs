@@ -12,20 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2201";
 
-        private static readonly string[] Guids =
-            {
-                " guid ",
-                " guid,",
-                " guid;",
-                " guid.",
-                " guid:",
-
-                " Guid ",
-                " Guid,",
-                " Guid;",
-                " Guid.",
-                " Guid:",
-            };
+        private static readonly string[] Guids = new[] { "guid", " Guid" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => " " + _ + delimiter).ToArray();
 
         public MiKo_2201_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer() : base(Id, (SymbolKind)(-1))
         {

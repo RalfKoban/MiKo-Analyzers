@@ -370,7 +370,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1010_MessageFormat {
             get {
@@ -2343,7 +2343,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;event arg&apos;. Instead, it should contain the reference to the specific class, such as &apos;&lt;see cref=&quot;XyzEventArgs&quot; /&gt;&apos;..
+        ///   Looks up a localized string similar to Documentation should not contain the term &apos;event arg&apos;. Instead, it should contain the reference to the specific class, such as &apos;&lt;see cref=&quot;XyzEventArgs&quot; /&gt;&apos;..
         /// </summary>
         public static string MiKo_2005_Description {
             get {
@@ -3816,7 +3816,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;guid&apos;. Instead, it should use the term &apos;unique identifier&apos;..
+        ///   Looks up a localized string similar to Documentation should not contain the term &apos;guid&apos;. Instead, it should use the term &apos;unique identifier&apos;..
         /// </summary>
         public static string MiKo_2201_Title {
             get {
@@ -3843,7 +3843,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should not contain the term &apos;id&apos;. Instead, it should use the term &apos;identifier&apos;..
+        ///   Looks up a localized string similar to Documentation should not contain the term &apos;id&apos;. Instead, it should use the term &apos;identifier&apos;..
         /// </summary>
         public static string MiKo_2202_Title {
             get {
