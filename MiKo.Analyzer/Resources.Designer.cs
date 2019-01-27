@@ -3880,6 +3880,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should use the &lt;note&gt; XML tag to mark important information. It should not use terms such as &apos;Important&apos; or &apos;Attention&apos; directly.
+        ///This is because XML documentation tools are aware of &lt;note&gt; and can format the information in a special way..
+        /// </summary>
+        public static string MiKo_2204_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2204_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;note&gt; for important information in documentation.
+        /// </summary>
+        public static string MiKo_2204_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2204_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &lt;note&gt; for important information..
+        /// </summary>
+        public static string MiKo_2204_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2204_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, use the pre-defined .NET Framework delegate types such as &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
         /// </summary>
         public static string MiKo_3001_Description {
