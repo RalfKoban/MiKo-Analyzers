@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] EnumerationMarkers =
             {
                 " 1. ",
+                " 1: ",
                 " a. ",
                 " A. ",
                 " 1) ",

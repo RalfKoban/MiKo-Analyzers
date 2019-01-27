@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2203";
 
-        private static readonly string[] Delimiters = { ".)", ".", ")" };
+        private static readonly string[] Delimiters = { ".)", ".", ")", ":" };
 
         private static readonly string[] Triggers = Enumerable.Concat(
                                                       new[] { "-", "--", "---" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => delimiter + " " + _ + " "),
