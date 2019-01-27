@@ -3852,6 +3852,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should use the &lt;list&gt; XML tag if things get enumerated. It should not use terms such as 1), 2) etc. directly.
+        ///This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted..
+        /// </summary>
+        public static string MiKo_2203_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2203_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; for enumeration in documentation.
+        /// </summary>
+        public static string MiKo_2203_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2203_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &lt;list&gt; for enumerations..
+        /// </summary>
+        public static string MiKo_2203_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2203_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, use the pre-defined .NET Framework delegate types such as &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
         /// </summary>
         public static string MiKo_3001_Description {
