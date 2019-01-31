@@ -27,24 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (diagnostic != null) context.ReportDiagnostic(diagnostic);
         }
 
-        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)
-        {
-            var hasLinqMethods = false;
-            if (TryFindSyntaxNode(query, out var syntaxNode, out var identifier))
-            {
-                hasLinqMethods = syntaxNode
-                                     .DescendantNodes()
-                                     .OfType<MemberAccessExpressionSyntax>()
-                                     .SelectMany(_ => semanticModel.LookupSymbols(_.GetLocation().SourceSpan.Start))
-                                     .Select(_ => _.ContainingNamespace?.ToString())
-                                     .Where(_ => _ != null)
-                                     .Any(_ => _.StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase));
-            }
-
-            return hasLinqMethods
-                       ? ReportIssue(identifier, query.GetLocation())
-                       : null;
-        }
+        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel) => TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && HasLinqExtensionMethod(syntaxNode, semanticModel)
+                                                                                                                   ? ReportIssue(identifier, query.GetLocation())
+                                                                                                                   : null;
 
         private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode syntaxNode, out string identifier)
         {
@@ -76,6 +61,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             syntaxNode = null;
             identifier = null;
+            return false;
+        }
+
+        private static bool HasLinqExtensionMethod(SyntaxNode syntaxNode, SemanticModel semanticModel)
+        {
+            return syntaxNode.DescendantNodes()
+                             .OfType<InvocationExpressionSyntax>()
+                             .Select(_ => semanticModel.GetSymbolInfo(_))
+                             .Any(IsLinqExtensionMethod);
+        }
+
+        private static bool IsLinqExtensionMethod(SymbolInfo info) => IsLinqExtensionMethod(info.Symbol) || info.CandidateSymbols.Any(IsLinqExtensionMethod);
+
+        private static bool IsLinqExtensionMethod(ISymbol symbol)
+        {
+            if (symbol is IMethodSymbol)
+            {
+                // this is an extension method !
+                if (symbol.ContainingNamespace.ToDisplayString().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
     }
