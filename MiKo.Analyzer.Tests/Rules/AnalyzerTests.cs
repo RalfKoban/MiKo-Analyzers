@@ -17,8 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules
     public static class AnalyzerTests
     {
         private static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Resources));
+        private static readonly List<Analyzer> AllAnalyzers = CreateAllAnalyzers();
 
-        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void Resources_contains_texts(Analyzer analyzer)
         {
             var findings = new[]
@@ -35,21 +36,21 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(findings, Is.Empty);
         }
 
-        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void Titles_should_end_with_dot(Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_Title"), Does.EndWith("."));
 
-        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void Descriptions_should_end_with_dot(Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_Description"), Does.EndWith(".").Or.EndsWith(")"));
 
-        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void Messages_should_not_end_with_dot(Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.EndWith("."));
 
         [Test, Combinatorial, Ignore("Just to check from time to time whether the texts are acceptable or need to be rephrased.")]
-        public static void Messages_should_not_contain_([ValueSource(nameof(CreateAllAnalyzers))] Analyzer analyzer,
+        public static void Messages_should_not_contain_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer,
                                                         [Values("shall", "should")] string word)
             => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.Contain(word));
 
-        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void Analyzers_start_with_their_Id(Analyzer analyzer) => Assert.That(analyzer.GetType().Name, Is.Not.Null.And.StartsWith(analyzer.DiagnosticId + "_"));
 
         [Test]
@@ -58,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var findings = new List<string>();
 
             var ids = new Dictionary<string, string>();
-            foreach (var analyzer in CreateAllAnalyzers())
+            foreach (var analyzer in AllAnalyzers)
             {
                 var name = analyzer.DiagnosticId + ": " + analyzer.GetType().Name;
 
@@ -73,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(findings, Is.Empty);
         }
 
-        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void Analyzer_starts_with_correct_number(Analyzer analyzer)
         {
             var id = GetDiagnosticIdStartingNumber(analyzer);
@@ -81,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(analyzer.DiagnosticId, Is.Not.Null.And.StartsWith("MiKo_" + id));
         }
 
-        [TestCaseSource(nameof(CreateAllAnalyzers))]
+        [TestCaseSource(nameof(AllAnalyzers))]
         public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute(Analyzer analyzer)
         {
             Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
@@ -97,8 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|" + Environment.NewLine;
 
-            var analyzers = CreateAllAnalyzers();
-            foreach (var descriptor in analyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
+            foreach (var descriptor in AllAnalyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {
                 if (category != descriptor.Category)
                 {
@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static IEnumerable<Analyzer> CreateAllAnalyzers()
+        private static List<Analyzer> CreateAllAnalyzers()
         {
             var analyzerBaseType = typeof(Analyzer);
 
