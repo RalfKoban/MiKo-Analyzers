@@ -1670,7 +1670,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix &apos;{0}&apos; with a number.
+        ///   Looks up a localized string similar to Do not use a number as suffix.
         /// </summary>
         public static string MiKo_1060_MessageFormat {
             get {
