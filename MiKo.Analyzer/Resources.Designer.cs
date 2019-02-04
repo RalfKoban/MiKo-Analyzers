@@ -1716,6 +1716,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detection methods such as &apos;Is&apos;, &apos;Has&apos; or &apos;Contains&apos; should consist only of a few words, such as &apos;IsOnline&apos; or &apos;ContainsKey&apos;.
+        ///If they consist of more than those few words, these methods (or properties) are probably placed at the wrong place and violate the SRP..
+        /// </summary>
+        public static string MiKo_1062_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1062_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid name with more than {1} words.
+        /// </summary>
+        public static string MiKo_1062_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1062_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Is/Has/Contains&apos; methods or properties shall consist of only a few words..
+        /// </summary>
+        public static string MiKo_1062_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1062_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
