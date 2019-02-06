@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestClass(this ITypeSymbol symbol)
         {
-            if (symbol.TypeKind == TypeKind.Class)
+            if (symbol?.TypeKind == TypeKind.Class)
             {
                 foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
                 {

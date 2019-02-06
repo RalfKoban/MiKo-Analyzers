@@ -18,7 +18,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeField(IFieldSymbol symbol) => symbol.IsReadOnly && (symbol.DeclaredAccessibility == Accessibility.Public || symbol.DeclaredAccessibility == Accessibility.Protected);
+        protected override bool ShallAnalyzeField(IFieldSymbol symbol)
+        {
+            if (symbol.IsReadOnly)
+            {
+                switch (symbol.DeclaredAccessibility)
+                {
+                    case Accessibility.Public:
+                    case Accessibility.Protected:
+                        return !symbol.ContainingType.IsTestClass();
+                }
+            }
+
+            return false;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.EndsWith(Constants.Comments.FieldIsReadOnly, Comparison))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()

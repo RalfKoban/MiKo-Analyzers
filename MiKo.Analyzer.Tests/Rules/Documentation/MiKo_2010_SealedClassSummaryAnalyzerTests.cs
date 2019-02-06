@@ -67,6 +67,17 @@ public sealed class TestMe
 ");
 
         [Test]
+        public void Missing_documentation_is_not_reported_for_TestClass([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+/// <summary>
+/// Some documentation
+/// </summary>
+[" + testFixture + @"]
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
         public void Wrong_placed_documentation_is_reported() => An_issue_is_reported_for(@"
 /// <summary>
 /// This class cannot be inherited.

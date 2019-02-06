@@ -58,6 +58,23 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_incorrectly_commented_readonly_TestClass_field_with_visibility(
+                                                                                                        [Values("protected", "public")] string visibility,
+                                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture)
+            => No_issue_is_reported_for(@"
+using System;
+
+[ " + testFixture + @"]
+public class TestMe
+{
+    /// <summary>
+    /// Bla bla bla.
+    /// </summary>
+    " + visibility + @" readonly string m_field;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2046_ReadOnlyFieldAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2046_ReadOnlyFieldAnalyzer();

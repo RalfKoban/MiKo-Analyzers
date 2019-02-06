@@ -57,11 +57,34 @@ public class TestMe
 ");
 
         [Test]
-        public void Wrong_placed_documentation_is_reported() => An_issue_is_reported_for(@"
+        public void Wrong_start_placed_documentation_is_reported() => An_issue_is_reported_for(@"
 /// <summary>
 /// This class cannot be inherited.
 /// Something.
 /// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void Wrong_end_placed_documentation_is_reported() => An_issue_is_reported_for(@"
+/// <summary>
+/// Something.
+/// This class cannot be inherited.
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void Wrong_documentation_is_not_reported_for_TestClass([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+/// <summary>
+/// Some documentation
+/// This class cannot be inherited.
+/// </summary>
+[" + testFixture + @"]
 public class TestMe
 {
 }
@@ -77,6 +100,7 @@ public class TestMe
 {
 }
 ");
+
 
         protected override string GetDiagnosticId() => MiKo_2011_UnsealedClassSummaryAnalyzer.Id;
 
