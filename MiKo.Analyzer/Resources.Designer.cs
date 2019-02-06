@@ -4932,6 +4932,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the class they test.
+        ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and makes the discoverability of the tests much easier..
+        /// </summary>
+        public static string MiKo_3100_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3100_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place test class and type under test in same namespace.
+        /// </summary>
+        public static string MiKo_3100_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3100_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test classes and types under test belong in same namespace..
+        /// </summary>
+        public static string MiKo_3100_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3100_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should contain unit tests..
         /// </summary>
         public static string MiKo_3101_Description {

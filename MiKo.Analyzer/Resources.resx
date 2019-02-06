@@ -1774,6 +1774,16 @@ Especially never use Debug.Assert() or Trace.Assert() in (unit) test code. That'
   <data name="MiKo_3060_Title" xml:space="preserve">
     <value>Debug.Assert or Trace.Assert shall not be used.</value>
   </data>
+  <data name="MiKo_3100_Description" xml:space="preserve">
+    <value>To ease maintenance, test classes should be in the exact same namespace as the class they test.
+This allows easy usage without any arbitrary using directives. It also mimics the project structure and makes the discoverability of the tests much easier.</value>
+  </data>
+  <data name="MiKo_3100_MessageFormat" xml:space="preserve">
+    <value>Place test class and type under test in same namespace</value>
+  </data>
+  <data name="MiKo_3100_Title" xml:space="preserve">
+    <value>Test classes and types under test belong in same namespace.</value>
+  </data>
   <data name="MiKo_3101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
