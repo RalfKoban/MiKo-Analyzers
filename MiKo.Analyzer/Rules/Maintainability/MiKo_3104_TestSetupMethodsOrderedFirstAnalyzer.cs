@@ -15,9 +15,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => GetSetupMethod(symbol) != null
-                                                                                               ? AnalyzeTestType(symbol)
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        {
+            var method = GetSetupMethod(symbol);
+
+            return method != null
+                   ? AnalyzeTestType(symbol, method)
+                   : Enumerable.Empty<Diagnostic>();
+        }
 
         private static IMethodSymbol GetSetupMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
                                                                                       .OfType<IMethodSymbol>()
@@ -30,9 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                              .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
                                                                                                                              .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition);
 
-        private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol)
+        private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol, IMethodSymbol setupMethod)
         {
-            var setupMethod = GetSetupMethod(symbol);
             var path = setupMethod.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
 
             var firstMethod = GetMethodsOrderedByLocation(symbol, path).First();

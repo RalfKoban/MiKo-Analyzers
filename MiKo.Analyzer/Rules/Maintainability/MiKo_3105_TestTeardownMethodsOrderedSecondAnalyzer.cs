@@ -15,9 +15,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => GetTeardownMethod(symbol) != null
-                                                                                               ? AnalyzeTestType(symbol)
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        {
+            var method = GetTeardownMethod(symbol);
+
+            return method != null
+                   ? AnalyzeTestType(symbol, method)
+                   : Enumerable.Empty<Diagnostic>();
+        }
 
         private static IMethodSymbol GetTeardownMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
                                                                                          .OfType<IMethodSymbol>()
@@ -30,9 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                              .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
                                                                                                                              .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition);
 
-        private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol)
+        private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol, IMethodSymbol teardownMethod)
         {
-            var teardownMethod = GetTeardownMethod(symbol);
             var path = teardownMethod.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
 
             var methods = GetMethodsOrderedByLocation(symbol, path).ToList();
