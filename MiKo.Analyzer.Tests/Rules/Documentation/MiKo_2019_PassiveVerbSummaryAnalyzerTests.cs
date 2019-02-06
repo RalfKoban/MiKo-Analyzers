@@ -109,7 +109,7 @@ using Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_starting_verb_in_passive_form([Values(nameof(PassiveVerbs))] string passiveVerb) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_starting_verb_in_passive_form([ValueSource(nameof(PassiveVerbs))] string passiveVerb) => No_issue_is_reported_for(@"
 using System;
 
 using Bla
