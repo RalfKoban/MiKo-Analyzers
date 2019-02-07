@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && !method.IsSpecialAccessor();
+        protected override bool ShallAnalyze(IMethodSymbol method) => !method.IsSpecialAccessor() && base.ShallAnalyze(method);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeEntityMarkers(symbol);
     }

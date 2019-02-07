@@ -37,18 +37,11 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsInterfaceImplementation(this IMethodSymbol method)
+        internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol symbol) where TSymbol : ISymbol
         {
-            var methodSymbols = method.ContainingType.AllInterfaces
-                                      .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
-            return methodSymbols.Any(_ => method.Equals(method.ContainingType.FindImplementationForInterfaceMember(_)));
-        }
-
-        internal static bool IsInterfaceImplementation(this IEventSymbol @event)
-        {
-            var eventSymbols = @event.ContainingType.AllInterfaces
-                                     .SelectMany(_ => _.GetMembers().OfType<IEventSymbol>());
-            return eventSymbols.Any(_ => @event.Equals(@event.ContainingType.FindImplementationForInterfaceMember(_)));
+            var symbols = symbol.ContainingType.AllInterfaces
+                                .SelectMany(_ => _.GetMembers().OfType<TSymbol>());
+            return symbols.Any(_ => symbol.Equals(symbol.ContainingType.FindImplementationForInterfaceMember(_)));
         }
 
         internal static bool IsTestClass(this ITypeSymbol symbol)

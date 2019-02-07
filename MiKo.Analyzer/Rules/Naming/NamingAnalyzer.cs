@@ -47,11 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected virtual bool ShallAnalyze(ITypeSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && !symbol.IsOverride;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && !symbol.IsOverride && !symbol.IsInterfaceImplementation();
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => !symbol.IsOverride;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => !symbol.IsOverride && !symbol.IsInterfaceImplementation();
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => !symbol.IsOverride;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => !symbol.IsOverride && !symbol.IsInterfaceImplementation();
 
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => !symbol.IsOverride;
 
