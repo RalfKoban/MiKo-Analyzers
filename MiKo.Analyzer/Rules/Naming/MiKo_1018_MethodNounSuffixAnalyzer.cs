@@ -57,6 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Remove",
                 "Clear",
                 "Create",
+                "Delete",
                 "Query",
                 "Analyze",
             };

@@ -112,6 +112,7 @@ public class TestMe
                                                                          "ClearDocumentation",
                                                                          "RemoveDocumentation",
                                                                          "CreateDocumentation",
+                                                                         "DeleteDocumentation",
                                                                          "AddDocumentation",
                                                                          "AnalyzeDeclaration",
                                                                      };
