@@ -115,6 +115,12 @@ public class TestMe
                                                                          "DeleteDocumentation",
                                                                          "AddDocumentation",
                                                                          "AnalyzeDeclaration",
+                                                                         "StartSimulation",
+                                                                         "StopSimulation",
+                                                                         "RestartSimulation",
+                                                                         "TryConnection",
+                                                                         "TranslateDocumentation",
+                                                                         "FindDocumentation",
                                                                      };
 
         [ExcludeFromCodeCoverage]

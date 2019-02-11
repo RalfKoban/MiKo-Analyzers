@@ -60,6 +60,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Delete",
                 "Query",
                 "Analyze",
+                "Start",
+                "Stop",
+                "Restart",
+                "Try",
+                "Translate",
+                "Find",
             };
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
