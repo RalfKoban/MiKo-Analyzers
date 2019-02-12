@@ -51,6 +51,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "s_Sut",
             };
 
+        private static readonly string[] VariableNames =
+            {
+                "objectUnderTest",
+                "subjectUnderTest",
+                "sut",
+            };
+
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"
 namespace BlaBla
@@ -73,7 +80,10 @@ namespace BlaBla
 ");
 
         [Test]
-        public void No_issue_is_reported_if_test_class_and_class_under_test_are_in_same_namespace([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_if_test_class_and_class_under_test_are_in_same_namespace(
+                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName)
+            => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
@@ -83,15 +93,58 @@ namespace BlaBla.BlaBlubb
     [" + testFixture + @"]
     public class TestMeTests
     {
-        private TestMe ObjectUnderTest { get; set; }
+        private TestMe " + propertyName + @" { get; set; }
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_same_namespace(
+                                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                        [ValueSource(nameof(FieldNames))] string fieldName)
+            => No_issue_is_reported_for(@"
+namespace BlaBla.BlaBlubb
+{
+    public class TestMe
+    {
+    }
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        private TestMe " + fieldName + @";
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_localVariable_if_test_class_and_class_under_test_are_in_same_namespace(
+                                                                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string test,
+                                                                                                                [ValueSource(nameof(VariableNames))] string variableName)
+            => No_issue_is_reported_for(@"
+namespace BlaBla.BlaBlubb
+{
+    public class TestMe
+    {
+    }
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            var " + variableName + @" = new TestMe();
+        }
     }
 }
 ");
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_different_namespaces(
-                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                        [ValueSource(nameof(PropertyNames))] string propertyName)
+                                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName)
             => An_issue_is_reported_for(@"
 namespace BlaBla
 {
@@ -114,8 +167,8 @@ namespace BlaBla.BlaBlubb
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_different_namespaces(
-                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                        [ValueSource(nameof(FieldNames))] string fieldName)
+                                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                            [ValueSource(nameof(FieldNames))] string fieldName)
             => An_issue_is_reported_for(@"
 namespace BlaBla
 {
@@ -132,6 +185,35 @@ namespace BlaBla.BlaBlubb
     public class TestMeTests
     {
         private TestMe " + fieldName + @";
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_local_variable_if_test_class_and_class_under_test_are_in_different_namespaces(
+                                                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string test,
+                                                                                                                        [ValueSource(nameof(VariableNames))] string variableName)
+            => An_issue_is_reported_for(@"
+namespace BlaBla
+{
+    public class TestMe
+    {
+    }
+}
+
+namespace BlaBla.BlaBlubb
+{
+    using BlaBla;
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            var " + variableName + @" = new TestMe();
+        }
     }
 }
 ");
