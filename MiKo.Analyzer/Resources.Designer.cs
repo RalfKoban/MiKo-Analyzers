@@ -3745,7 +3745,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a public-visible read-only fields should indicate that they are read-only..
+        ///   Looks up a localized string similar to The documentation of fields should start with a default phrase..
+        /// </summary>
+        public static string MiKo_2080_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2080_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2080_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2080_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of fields should have a default starting phrase..
+        /// </summary>
+        public static string MiKo_2080_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2080_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The documentation of a public-visible read-only field should indicate that it is read-only..
         /// </summary>
         public static string MiKo_2081_Description {
             get {

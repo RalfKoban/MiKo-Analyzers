@@ -1359,8 +1359,17 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>Documentation of parameter of 'Contains' method should have a default ending phrase.</value>
   </data>
+  <data name="MiKo_2080_Description" xml:space="preserve">
+    <value>The documentation of fields should start with a default phrase.</value>
+  </data>
+  <data name="MiKo_2080_MessageFormat" xml:space="preserve">
+    <value>Start &lt;summary&gt; with: '{1}'</value>
+  </data>
+  <data name="MiKo_2080_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation of fields should have a default starting phrase.</value>
+  </data>
   <data name="MiKo_2081_Description" xml:space="preserve">
-    <value>The documentation of a public-visible read-only fields should indicate that they are read-only.</value>
+    <value>The documentation of a public-visible read-only field should indicate that it is read-only.</value>
   </data>
   <data name="MiKo_2081_MessageFormat" xml:space="preserve">
     <value>End &lt;summary&gt; with: '{1}'</value>
