@@ -32,8 +32,8 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1004|Events should not contain term 'Event' in their names.|:white_check_mark:|
 |MiKo_1005|'System.EventArgs' variables should be named properly.|:white_check_mark:|
 |MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|:white_check_mark:|
-|MiKo_1010|Methods should not contain 'Do' in their names.|:white_check_mark:|
-|MiKo_1011|Methods should not contain 'CanExecute' or 'Execute' in their names.|:white_check_mark:|
+|MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names.|:white_check_mark:|
+|MiKo_1011|Methods should not contain 'Do' in their names.|:white_check_mark:|
 |MiKo_1012|Methods should not be named 'Fire'.|:white_check_mark:|
 |MiKo_1013|Methods should not be named 'Notify' or 'OnNotify'.|:white_check_mark:|
 |MiKo_1014|Methods should not be named 'Check'.|:white_check_mark:|
@@ -80,6 +80,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1060|Methods should not be suffixed with a number.|:white_check_mark:|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be 'result'.|:white_check_mark:|
+|MiKo_1062|'Is/Has/Contains' methods or properties shall consist of only a few words.|:white_check_mark:|
 |MiKo_1101|Test classes should end with 'Tests'.|:white_check_mark:|
 |MiKo_1102|Test methods should not contain 'Test'.|:white_check_mark:|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|:white_check_mark:|
@@ -161,8 +162,10 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
-|MiKo_2201|XML documentation should not contain the term 'guid'. Instead, it should use the term 'unique identifier'.|:white_check_mark:|
-|MiKo_2202|XML documentation should not contain the term 'id'. Instead, it should use the term 'identifier'.|:white_check_mark:|
+|MiKo_2201|Documentation should not use the term 'unique identifier' instead of 'guid'.|:white_check_mark:|
+|MiKo_2202|Documentation should not use the term 'identifier' instead of 'id'.|:white_check_mark:|
+|MiKo_2203|Documentation should use &lt;list&gt; for enumerations.|:white_check_mark:|
+|MiKo_2204|Documentation should use &lt;note&gt; for important information.|:white_check_mark:|
 
 ### Maintainability
 |ID|Title|Enabled by default|
@@ -199,6 +202,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3053|DependencyPropertyKey fields should be properly registered.|:white_check_mark:|
 |MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|:white_check_mark:|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|:white_check_mark:|
+|MiKo_3100|Test classes and types under test belong in same namespace.|:white_check_mark:|
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|

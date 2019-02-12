@@ -3871,7 +3871,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not contain the term &apos;guid&apos;. Instead, it should use the term &apos;unique identifier&apos;..
+        ///   Looks up a localized string similar to Documentation should use the term &apos;unique identifier&apos; instead of &apos;guid&apos;..
         /// </summary>
         public static string MiKo_2201_Title {
             get {
@@ -3898,7 +3898,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not contain the term &apos;id&apos;. Instead, it should use the term &apos;identifier&apos;..
+        ///   Looks up a localized string similar to Documentation should use the term &apos;identifier&apos; instead of &apos;id&apos;..
         /// </summary>
         public static string MiKo_2202_Title {
             get {

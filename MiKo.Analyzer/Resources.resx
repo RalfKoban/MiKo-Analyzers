@@ -1402,7 +1402,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Use 'unique identifier' instead of 'guid' in documentation</value>
   </data>
   <data name="MiKo_2201_Title" xml:space="preserve">
-    <value>Documentation should not contain the term 'guid'. Instead, it should use the term 'unique identifier'.</value>
+    <value>Documentation should use the term 'unique identifier' instead of 'guid'.</value>
   </data>
   <data name="MiKo_2202_Description" xml:space="preserve">
     <value>The XML documentation should not use the abbreviation 'id'. Instead, it should clearly document that this is an identifier. Hence, it should use the term 'identifier' instead.</value>
@@ -1411,7 +1411,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Use 'identifier' instead of 'id' in documentation</value>
   </data>
   <data name="MiKo_2202_Title" xml:space="preserve">
-    <value>Documentation should not contain the term 'id'. Instead, it should use the term 'identifier'.</value>
+    <value>Documentation should use the term 'identifier' instead of 'id'.</value>
   </data>
   <data name="MiKo_2203_Description" xml:space="preserve">
     <value>The XML documentation should use the &lt;list&gt; XML tag if things get enumerated. It should not use terms such as 1), 2) etc. directly.
