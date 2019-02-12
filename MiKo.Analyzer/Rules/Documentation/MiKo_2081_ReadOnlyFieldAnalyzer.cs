@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2046_ReadOnlyFieldAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2081_ReadOnlyFieldAnalyzer : SummaryDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2046";
+        public const string Id = "MiKo_2081";
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
-        public MiKo_2046_ReadOnlyFieldAnalyzer() : base(Id, SymbolKind.Field)
+        public MiKo_2081_ReadOnlyFieldAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
 

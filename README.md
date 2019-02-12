@@ -140,7 +140,6 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase.|:white_check_mark:|
 |MiKo_2044|Documentation references method parameters correctly.|:white_check_mark:|
 |MiKo_2045|&lt;summary&gt; documentation should not reference parameters.|:white_check_mark:|
-|MiKo_2046|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
 |MiKo_2047|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|:white_check_mark:|
 |MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|:white_check_mark:|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'.|:white_check_mark:|
@@ -158,6 +157,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2072|&lt;summary&gt; documentation should not start with 'Try'.|:white_check_mark:|
 |MiKo_2073|&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines '.|:white_check_mark:|
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase.|:white_check_mark:|
+|MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
 |MiKo_2201|XML documentation should not contain the term 'guid'. Instead, it should use the term 'unique identifier'.|:white_check_mark:|

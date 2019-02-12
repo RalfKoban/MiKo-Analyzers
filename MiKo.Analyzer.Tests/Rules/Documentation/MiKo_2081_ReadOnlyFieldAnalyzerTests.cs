@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2046_ReadOnlyFieldAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2081_ReadOnlyFieldAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_uncommented_readonly_field_with_visibility([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
@@ -75,8 +75,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2046_ReadOnlyFieldAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2081_ReadOnlyFieldAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2046_ReadOnlyFieldAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2081_ReadOnlyFieldAnalyzer();
     }
 }

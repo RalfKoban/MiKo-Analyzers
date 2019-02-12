@@ -3281,33 +3281,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation of a public-visible read-only fields should indicate that they are read-only..
-        /// </summary>
-        public static string MiKo_2046_Description {
-            get {
-                return ResourceManager.GetString("MiKo_2046_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to End &lt;summary&gt; with: &apos;{1}&apos;.
-        /// </summary>
-        public static string MiKo_2046_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_2046_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase..
-        /// </summary>
-        public static string MiKo_2046_Title {
-            get {
-                return ResourceManager.GetString("MiKo_2046_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The documentation of an Attribute should start with a specific phrase that describes its purpose..
         /// </summary>
         public static string MiKo_2047_Description {
@@ -3768,6 +3741,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2074_Title {
             get {
                 return ResourceManager.GetString("MiKo_2074_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The documentation of a public-visible read-only fields should indicate that they are read-only..
+        /// </summary>
+        public static string MiKo_2081_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2081_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2081_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2081_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase..
+        /// </summary>
+        public static string MiKo_2081_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2081_Title", resourceCulture);
             }
         }
         
