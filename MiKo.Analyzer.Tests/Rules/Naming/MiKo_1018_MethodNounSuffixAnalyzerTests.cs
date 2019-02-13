@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +11,62 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1018_MethodNounSuffixAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> ValidMethodNames = new[]
+                                                                           {
+                                                                               "DoSomething",
+                                                                               "Compare",
+                                                                               "Manipulate",
+                                                                               "Adopt",
+                                                                               "FindBison",
+                                                                               "Install",
+                                                                               "Act",
+                                                                               "UndoInstallation",
+                                                                               "RedoInstallation",
+                                                                               "ToComparison",
+                                                                               "VerifyConnection",
+                                                                               "EnsureLocation",
+                                                                               "GetDocumentation",
+                                                                               "RefreshDocumentation",
+                                                                               "TraceInformation",
+                                                                               "WriteInformation",
+                                                                               "ReadConfiguration",
+                                                                               "LogException",
+                                                                               "StoreConfiguration",
+                                                                               "RestoreConfiguration",
+                                                                               "LoadConfiguration",
+                                                                               "SaveConfiguration",
+                                                                               "UpdateConfiguration",
+                                                                               "SetDocumentation",
+                                                                               "ResetDocumentation",
+                                                                               "QueryDocumentation",
+                                                                               "ClearDocumentation",
+                                                                               "RemoveDocumentation",
+                                                                               "CreateDocumentation",
+                                                                               "DeleteDocumentation",
+                                                                               "AddDocumentation",
+                                                                               "AnalyzeDeclaration",
+                                                                               "StartSimulation",
+                                                                               "StopSimulation",
+                                                                               "RestartSimulation",
+                                                                               "TryConnection",
+                                                                               "TranslateDocumentation",
+                                                                               "FindDocumentation",
+                                                                               "PushAnnotation",
+                                                                               "PopAnnotation",
+                                                                           };
+
+        private static readonly IEnumerable<string> InvalidMethodNames = new[]
+                                                                             {
+                                                                                 "DoComparison",
+                                                                                 "ApplyComparison",
+                                                                                 "ExecuteManipulation",
+                                                                                 "RunAdoption",
+                                                                                 "Installation",
+                                                                                 "DoAction",
+                                                                                 "Initialization",
+                                                                                 "Configuration",
+                                                                             };
+
         [Test]
         public void No_issue_is_reported_for_method_with_name_([ValueSource(nameof(ValidMethodNames))] string name) => No_issue_is_reported_for(@"
 public class TestMe
@@ -79,61 +134,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_1018_MethodNounSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1018_MethodNounSuffixAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidMethodNames() => new[]
-                                                                     {
-                                                                         "DoSomething",
-                                                                         "Compare",
-                                                                         "Manipulate",
-                                                                         "Adopt",
-                                                                         "FindBison",
-                                                                         "Install",
-                                                                         "Act",
-                                                                         "UndoInstallation",
-                                                                         "RedoInstallation",
-                                                                         "ToComparison",
-                                                                         "VerifyConnection",
-                                                                         "EnsureLocation",
-                                                                         "GetDocumentation",
-                                                                         "RefreshDocumentation",
-                                                                         "TraceInformation",
-                                                                         "WriteInformation",
-                                                                         "ReadConfiguration",
-                                                                         "LogException",
-                                                                         "StoreConfiguration",
-                                                                         "RestoreConfiguration",
-                                                                         "LoadConfiguration",
-                                                                         "SaveConfiguration",
-                                                                         "UpdateConfiguration",
-                                                                         "SetDocumentation",
-                                                                         "ResetDocumentation",
-                                                                         "QueryDocumentation",
-                                                                         "ClearDocumentation",
-                                                                         "RemoveDocumentation",
-                                                                         "CreateDocumentation",
-                                                                         "DeleteDocumentation",
-                                                                         "AddDocumentation",
-                                                                         "AnalyzeDeclaration",
-                                                                         "StartSimulation",
-                                                                         "StopSimulation",
-                                                                         "RestartSimulation",
-                                                                         "TryConnection",
-                                                                         "TranslateDocumentation",
-                                                                         "FindDocumentation",
-                                                                     };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> InvalidMethodNames() => new[]
-                                                                       {
-                                                                           "DoComparison",
-                                                                           "ApplyComparison",
-                                                                           "ExecuteManipulation",
-                                                                           "RunAdoption",
-                                                                           "Installation",
-                                                                           "DoAction",
-                                                                           "Initialization",
-                                                                           "Configuration",
-                                                                       };
     }
 }

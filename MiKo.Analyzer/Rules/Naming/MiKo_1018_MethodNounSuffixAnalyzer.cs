@@ -66,6 +66,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Try",
                 "Translate",
                 "Find",
+                "Push",
+                "Pop",
             };
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
