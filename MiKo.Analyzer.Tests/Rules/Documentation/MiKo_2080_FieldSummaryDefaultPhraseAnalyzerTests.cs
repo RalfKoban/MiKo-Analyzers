@@ -33,6 +33,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_commented_enumerable_field() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Contains the data for the field.
+    /// </summary>
+    private List<string> m_field;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_commented_const_field() => No_issue_is_reported_for(@"
 using System;
 
@@ -46,15 +60,29 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_field([Values("Bla bla.", "Contains something.")] string comment) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
-    /// Bla bla bla.
+    /// " + comment + @"
     /// </summary>
     private string m_field;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_enumerable_field([Values("Bla bla", "The field")] string comment) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + comment + @"
+    /// </summary>
+    private List<string> m_field;
 }
 ");
 

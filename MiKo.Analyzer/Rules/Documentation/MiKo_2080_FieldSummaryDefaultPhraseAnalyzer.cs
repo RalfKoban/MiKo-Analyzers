@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2080";
 
         private const string StartingDefaultPhrase = "The ";
+        private const string StartingEnumerableDefaultPhrase = "Contains ";
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
@@ -20,8 +21,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(StartingDefaultPhrase, Comparison))
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { ReportIssue(symbol, StartingDefaultPhrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        {
+            var phrase = GetMatchingPhrase(symbol);
+
+            return summaries.Any(_ => _.StartsWith(phrase, Comparison))
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { ReportIssue(symbol, phrase) };
+        }
+
+        private static string GetMatchingPhrase(ISymbol symbol) => ((IFieldSymbol)symbol).Type.IsEnumerable()
+                                                                       ? StartingEnumerableDefaultPhrase
+                                                                       : StartingDefaultPhrase;
     }
 }
