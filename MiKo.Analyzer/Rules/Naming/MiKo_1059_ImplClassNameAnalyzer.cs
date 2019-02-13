@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1059";
 
-        private static readonly string[] WrongNames = { "Implementation", "Impl" };
+        private static readonly string[] WrongNames = { "Impl", "Implementation", };
 
         public MiKo_1059_ImplClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -21,10 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
             var symbolName = symbol.Name;
-            if (symbolName.ContainsAny(WrongNames))
+            foreach (var wrongName in WrongNames)
             {
-                var wrongName = WrongNames.First(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase));
-                return new[] { ReportIssue(symbol, wrongName) };
+                if (symbolName.EndsWith(wrongName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return new[] { ReportIssue(symbol, wrongName) };
+                }
             }
 
             return Enumerable.Empty<Diagnostic>();
