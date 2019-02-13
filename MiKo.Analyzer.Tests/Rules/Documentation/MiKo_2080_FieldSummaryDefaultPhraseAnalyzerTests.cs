@@ -33,14 +33,14 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_enumerable_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_enumerable_field([Values("Contains the", "The")] string comment) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
 public class TestMe
 {
     /// <summary>
-    /// Contains the data for the field.
+    /// " + comment + @" data for the field.
     /// </summary>
     private List<string> m_field;
 }
@@ -73,6 +73,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_enum_member() => No_issue_is_reported_for(@"
+using System;
+
+public enum TestMe
+{
+    /// <summary>
+    /// Bla bla.
+    /// </summary>
+    Field = 0,
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_commented_field([Values("Bla bla.", "Contains something.", "Indicates whether something.")] string comment) => An_issue_is_reported_for(@"
 using System;
 
@@ -86,7 +99,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_enumerable_field([Values("Bla bla", "The field", "Indicates whether something.")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_enumerable_field([Values("Bla bla", "Indicates whether something.")] string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 

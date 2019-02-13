@@ -22,25 +22,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected override bool ShallAnalyzeField(IFieldSymbol symbol) => !symbol.ContainingType.IsEnum();
+
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
-        {
-            var phrase = GetMatchingPhrase(symbol);
-
-            return summaries.Any(_ => _.StartsWith(phrase, Comparison))
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, phrase) };
-        }
-
-        private static string GetMatchingPhrase(ISymbol symbol)
         {
             var type = ((IFieldSymbol)symbol).Type;
 
-            if (type.SpecialType == SpecialType.System_Boolean)
-                return StartingBooleanDefaultPhrase;
+            var phrase = type.SpecialType == SpecialType.System_Boolean
+                             ? StartingBooleanDefaultPhrase
+                             : StartingDefaultPhrase;
 
-            return type.IsEnumerable()
-                       ? StartingEnumerableDefaultPhrase
-                       : StartingDefaultPhrase;
+            if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
+                return Enumerable.Empty<Diagnostic>();
+
+            // alternative check
+            if (type.IsEnumerable())
+            {
+                phrase = StartingEnumerableDefaultPhrase;
+
+                if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
+                    return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { ReportIssue(symbol, phrase) };
         }
     }
 }
