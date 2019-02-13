@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string StartingDefaultPhrase = "The ";
         private const string StartingEnumerableDefaultPhrase = "Contains ";
+        private const string StartingBooleanDefaultPhrase = "Indicates whether ";
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
@@ -30,8 +31,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : new[] { ReportIssue(symbol, phrase) };
         }
 
-        private static string GetMatchingPhrase(ISymbol symbol) => ((IFieldSymbol)symbol).Type.IsEnumerable()
-                                                                       ? StartingEnumerableDefaultPhrase
-                                                                       : StartingDefaultPhrase;
+        private static string GetMatchingPhrase(ISymbol symbol)
+        {
+            var type = ((IFieldSymbol)symbol).Type;
+
+            if (type.SpecialType == SpecialType.System_Boolean)
+                return StartingBooleanDefaultPhrase;
+
+            return type.IsEnumerable()
+                       ? StartingEnumerableDefaultPhrase
+                       : StartingDefaultPhrase;
+        }
     }
 }
