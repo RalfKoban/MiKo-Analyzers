@@ -655,6 +655,16 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
   <data name="MiKo_1058_Title" xml:space="preserve">
     <value>Dependency property keys should be prefixed with property names (as in the .NET Framework).</value>
   </data>
+  <data name="MiKo_1059_Description" xml:space="preserve">
+    <value>Terms such as 'Impl' or 'Implementation' are meaningless and provide no benefit.
+Types that are named so should be better named directly after the interface they implement, but without any 'Impl' marker.</value>
+  </data>
+  <data name="MiKo_1059_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' from name</value>
+  </data>
+  <data name="MiKo_1059_Title" xml:space="preserve">
+    <value>Do not name types 'Impl' or 'Implementation'.</value>
+  </data>
   <data name="MiKo_1060_Description" xml:space="preserve">
     <value>Suffixing methods with number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name.</value>
   </data>

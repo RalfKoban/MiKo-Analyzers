@@ -1661,6 +1661,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Terms such as &apos;Impl&apos; or &apos;Implementation&apos; are meaningless and provide no benefit.
+        ///Types that are named so should be better named directly after the interface they implement, but without any &apos;Impl&apos; marker..
+        /// </summary>
+        public static string MiKo_1059_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1059_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
+        /// </summary>
+        public static string MiKo_1059_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1059_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name types &apos;Impl&apos; or &apos;Implementation&apos;..
+        /// </summary>
+        public static string MiKo_1059_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1059_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Suffixing methods with number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name..
         /// </summary>
         public static string MiKo_1060_Description {
