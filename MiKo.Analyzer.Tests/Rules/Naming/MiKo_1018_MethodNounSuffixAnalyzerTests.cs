@@ -53,6 +53,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "FindDocumentation",
                                                                                "PushAnnotation",
                                                                                "PopAnnotation",
+                                                                               "SubscribeAction",
+                                                                               "UnsubscribeAction",
+                                                                               "RegisterAction",
+                                                                               "UnregisterAction",
                                                                            };
 
         private static readonly IEnumerable<string> InvalidMethodNames = new[]

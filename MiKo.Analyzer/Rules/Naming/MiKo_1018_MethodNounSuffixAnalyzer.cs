@@ -68,6 +68,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Find",
                 "Push",
                 "Pop",
+                "Subscribe",
+                "Unsubscribe",
+                "Register",
+                "Unregister",
             };
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
