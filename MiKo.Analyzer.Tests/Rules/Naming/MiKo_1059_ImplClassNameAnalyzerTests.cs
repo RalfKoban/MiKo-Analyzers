@@ -49,8 +49,6 @@ public class " + name + @"
                 {
                     allNames.Add(name);
                     allNames.Add("Some" + name);
-                    allNames.Add(name + "Stuff");
-                    allNames.Add("Some" + name + "Stuff");
                 }
             }
 
