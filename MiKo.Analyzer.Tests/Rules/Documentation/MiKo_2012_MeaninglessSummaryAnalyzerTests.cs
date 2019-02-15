@@ -13,6 +13,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> MeaninglessTextPhrases = new[]
+                                                                                 {
+                                                                                     "does implement",
+                                                                                     "implements",
+                                                                                     "that is called ",
+                                                                                     "that is used for ",
+                                                                                     "that is used to ",
+                                                                                     "used for ",
+                                                                                     "used to ",
+                                                                                     "which is called ",
+                                                                                     "which is used for ",
+                                                                                     "which is used to ",
+                                                                                 };
+
+        private static readonly IEnumerable<string> MeaninglessPhrases = CreateMeaninglessPhrases();
+
+        private static readonly IEnumerable<string> MeaninglessFieldPhrases = CreateMeaninglessPhrases().Except(new[] { "A ", "An ", "The " }).ToHashSet();
+
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
 public class TestMe
@@ -224,6 +242,7 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_field_with_meaningless_phrase_in_text([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
@@ -244,25 +263,7 @@ public class TestMe : ITestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> MeaninglessFieldPhrases() => MeaninglessPhrases().Except(new[] { "A ", "An ", "The " });
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> MeaninglessTextPhrases() => new[]
-                                                                           {
-                                                                               "does implement",
-                                                                               "implements",
-                                                                               "that is called ",
-                                                                               "that is used for ",
-                                                                               "that is used to ",
-                                                                               "used for ",
-                                                                               "used to ",
-                                                                               "which is called ",
-                                                                               "which is used for ",
-                                                                               "which is used to ",
-                                                                           };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> MeaninglessPhrases()
+        private static IEnumerable<string> CreateMeaninglessPhrases()
         {
             var types = new[]
                             {
@@ -271,7 +272,7 @@ public class TestMe : ITestMe
                                 "Entity", "Model", "ViewModel", "Command", "Action", "Func", "Converter",
                             };
 
-            var phrases = MeaninglessTextPhrases();
+            var phrases = MeaninglessTextPhrases;
 
             var results = new List<string>
                               {
@@ -284,6 +285,12 @@ public class TestMe : ITestMe
                                   "Implement ",
                                   "Implements ",
                                   "Interaction logic ",
+                                  "Implementation of ",
+                                  "Default-Implementation of ",
+                                  "Default implementation of ",
+                                  "Impl ",
+                                  "Default impl ",
+                                  "Default-Impl ",
                                   "Is for ",
                                   "Is to ",
                                   "Is used for ",
@@ -305,7 +312,7 @@ public class TestMe : ITestMe
             results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");
 
-            return results.OrderBy(_ => _).Distinct().ToList();
+            return results.ToHashSet();
         }
     }
 }
