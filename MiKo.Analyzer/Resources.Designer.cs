@@ -3309,6 +3309,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should not reference type parameters as its only purpose is to give a brief description..
+        /// </summary>
+        public static string MiKo_2046_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2046_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain type parameter reference: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2046_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2046_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not reference type parameters..
+        /// </summary>
+        public static string MiKo_2046_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2046_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of an Attribute should start with a specific phrase that describes its purpose..
         /// </summary>
         public static string MiKo_2047_Description {

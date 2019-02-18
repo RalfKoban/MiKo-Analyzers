@@ -1,0 +1,97 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+
+namespace MiKoSolutions.Analyzers.Rules.Documentation
+{
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public sealed class MiKo_2046_InvalidTypeParameterReferenceInSummaryAnalyzer : SummaryDocumentationAnalyzer
+    {
+        public const string Id = "MiKo_2046";
+
+        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
+
+        public MiKo_2046_InvalidTypeParameterReferenceInSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        {
+        }
+
+        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method);
+
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        {
+            switch (symbol)
+            {
+                case IMethodSymbol method:
+                    return AnalyzeSummary(method, summaries);
+
+                case INamedTypeSymbol type:
+                    return AnalyzeSummary(type, summaries);
+
+                default:
+                    return Enumerable.Empty<Diagnostic>();
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSummary(INamedTypeSymbol type, IEnumerable<string> summaries)
+        {
+            List<Diagnostic> findings = null;
+
+            if (type.IsGenericType)
+            {
+                foreach (var summary in summaries)
+                {
+                    var comment = summary.RemoveAll(Constants.Markers.Symbols);
+
+                    foreach (var parameter in type.TypeParameters)
+                    {
+                        InspectPhrases(parameter, comment, ref findings);
+                    }
+                }
+            }
+
+            return findings ?? Enumerable.Empty<Diagnostic>();
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSummary(IMethodSymbol method, IEnumerable<string> summaries)
+        {
+            List<Diagnostic> findings = null;
+
+            if (method.IsGenericMethod || method.ContainingType.IsGenericType)
+            {
+                foreach (var summary in summaries)
+                {
+                    var comment = summary.RemoveAll(Constants.Markers.Symbols);
+
+                    foreach (var parameter in method.TypeParameters.Concat(method.ContainingType.TypeParameters))
+                    {
+                        InspectPhrases(parameter, comment, ref findings);
+                    }
+                }
+            }
+
+            return findings ?? Enumerable.Empty<Diagnostic>();
+        }
+
+        private static IEnumerable<string> CreatePhrases(string parameterName) => new[]
+                                                                                      {
+                                                                                          string.Intern("<see cref=\"" + parameterName + "\""),
+                                                                                          string.Intern("<seealso cref=\"" + parameterName + "\""),
+                                                                                      };
+
+        private void InspectPhrases(ITypeParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
+        {
+            var phrases = CreatePhrases(parameter.Name);
+
+            foreach (var phrase in phrases
+                                   .Where(_ => commentXml.Contains(_, Comparison))
+                                   .Select(_ => _.StartsWith("<", Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
+            {
+                if (findings == null) findings = new List<Diagnostic>();
+                findings.Add(ReportIssue(parameter, phrase));
+            }
+        }
+    }
+}
