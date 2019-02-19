@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +13,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2040_LangwordAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> CorrectItems = new[]
+                                                                       {
+                                                                           "<see langword=\"true\" />",
+                                                                           "<see langword=\"true\"/>",
+                                                                           "<see langword=\"false\" />",
+                                                                           "<see langword=\"false\"/>",
+                                                                           "<see langword=\"null\" />",
+                                                                           "<see langword=\"null\"/>",
+                                                                           string.Empty,
+                                                                       };
+
+        private static readonly IEnumerable<string> WrongItems = CreateWrongItems();
+
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
 using System;
@@ -167,7 +181,7 @@ public sealed class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2040_LangwordAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongItems()
+        private static IEnumerable<string> CreateWrongItems()
         {
             var tokens = new List<string>();
             foreach (var token in new[] { "true", "false", "null" })
@@ -190,10 +204,7 @@ public sealed class TestMe
                 results.Add(token + ".");
             }
 
-            return results;
+            return results.ToArray();
         }
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CorrectItems() => new[] { "<see langword=\"true\" />", "<see langword=\"false\" />", "<see langword=\"null\" />", string.Empty };
     }
 }
