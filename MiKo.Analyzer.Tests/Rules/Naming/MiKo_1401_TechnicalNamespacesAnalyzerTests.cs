@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +11,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1401_TechnicalNamespacesAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> ForbiddenNamespaceNames = new[]
+                                                                                  {
+                                                                                      "Action",
+                                                                                      "Actions",
+                                                                                      "Base",
+                                                                                      "Class",
+                                                                                      "Classes",
+                                                                                      "Enum",
+                                                                                      "Enums",
+                                                                                      "Enumeration",
+                                                                                      "Enumerations",
+                                                                                      "Exception",
+                                                                                      "Exceptions",
+                                                                                      "Impl",
+                                                                                      "Implementation",
+                                                                                      "Implementations",
+                                                                                      "Interface",
+                                                                                      "Interfaces",
+                                                                                      "Proxies",
+                                                                                      "Proxy",
+                                                                                      "ServiceProxies",
+                                                                                      "ServiceProxy",
+                                                                                      "Struct",
+                                                                                      "Structs",
+                                                                                  };
+
         [TestCase("MiKoSolutions")]
         public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
@@ -51,32 +76,5 @@ namespace ABCD.EFG." + ns + @".HIJK
         protected override string GetDiagnosticId() => MiKo_1401_TechnicalNamespacesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1401_TechnicalNamespacesAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ForbiddenNamespaceNames() => new HashSet<string>
-                                                                            {
-                                                                                "Action",
-                                                                                "Actions",
-                                                                                "Base",
-                                                                                "Class",
-                                                                                "Classes",
-                                                                                "Enum",
-                                                                                "Enums",
-                                                                                "Enumeration",
-                                                                                "Enumerations",
-                                                                                "Exception",
-                                                                                "Exceptions",
-                                                                                "Impl",
-                                                                                "Implementation",
-                                                                                "Implementations",
-                                                                                "Interface",
-                                                                                "Interfaces",
-                                                                                "Proxies",
-                                                                                "Proxy",
-                                                                                "ServiceProxies",
-                                                                                "ServiceProxy",
-                                                                                "Struct",
-                                                                                "Structs",
-                                                                            };
     }
 }
