@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (method is null)
                 return false;
 
-            if (method.IsOverride)
+            if (method.IsOverride || method.IsVirtual)
                 return true;
 
             if (method.IsEventHandler())

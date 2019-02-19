@@ -126,6 +126,21 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_virtual_method() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public virtual void DoSomething(int i)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_interface_method() => No_issue_is_reported_for(@"
 using System;
 
