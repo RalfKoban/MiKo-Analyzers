@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var regionAncestors = regionDirective.AncestorsAndSelf();
             var endregionAncestors = endregionDirective.AncestorsAndSelf();
 
-            return regionAncestors.Except(endregionAncestors).Except(new[] { regionDirective, endregionDirective }).Any();
+            return regionAncestors.Except(endregionAncestors).Except(relatedDirectives).Any();
         }
     }
 }
