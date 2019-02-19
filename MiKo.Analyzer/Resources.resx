@@ -1212,13 +1212,13 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation should not reference parameters.</value>
   </data>
   <data name="MiKo_2046_Description" xml:space="preserve">
-    <value>The &lt;summary&gt; documentation should not reference type parameters as its only purpose is to give a brief description.</value>
+    <value>The XML documentation should reference type parameters properly via '&lt;typeparamref name="..." /&gt;'.</value>
   </data>
   <data name="MiKo_2046_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should not contain type parameter reference: '{1}'</value>
+    <value>Replace invalid type parameter reference '{1}' by '{2}'</value>
   </data>
   <data name="MiKo_2046_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should not reference type parameters.</value>
+    <value>XML documentation should reference type parameters correctly.</value>
   </data>
   <data name="MiKo_2047_Description" xml:space="preserve">
     <value>The documentation of an Attribute should start with a specific phrase that describes its purpose.</value>

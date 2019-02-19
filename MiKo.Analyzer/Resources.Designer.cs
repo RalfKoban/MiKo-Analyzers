@@ -3309,7 +3309,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should not reference type parameters as its only purpose is to give a brief description..
+        ///   Looks up a localized string similar to The XML documentation should reference type parameters properly via &apos;&lt;typeparamref name=&quot;...&quot; /&gt;&apos;..
         /// </summary>
         public static string MiKo_2046_Description {
             get {
@@ -3318,7 +3318,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain type parameter reference: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Replace invalid type parameter reference &apos;{1}&apos; by &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2046_MessageFormat {
             get {
@@ -3327,7 +3327,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not reference type parameters..
+        ///   Looks up a localized string similar to XML documentation should reference type parameters correctly..
         /// </summary>
         public static string MiKo_2046_Title {
             get {

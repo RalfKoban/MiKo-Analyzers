@@ -8,67 +8,64 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2046_InvalidTypeParameterReferenceInSummaryAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer : DocumentationAnalyzer
     {
         public const string Id = "MiKo_2046";
 
         private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
-        public MiKo_2046_InvalidTypeParameterReferenceInSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
+            if (commentXml.IsNullOrWhiteSpace())
+                return Enumerable.Empty<Diagnostic>();
+
             switch (symbol)
             {
                 case IMethodSymbol method:
-                    return AnalyzeSummary(method, summaries);
+                    return AnalyzeComment(method, commentXml);
 
                 case INamedTypeSymbol type:
-                    return AnalyzeSummary(type, summaries);
+                    return AnalyzeComment(type, commentXml);
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSummary(INamedTypeSymbol type, IEnumerable<string> summaries)
+        private IEnumerable<Diagnostic> AnalyzeComment(INamedTypeSymbol type, string commentXml)
         {
             List<Diagnostic> findings = null;
 
             if (type.IsGenericType)
             {
-                foreach (var summary in summaries)
-                {
-                    var comment = summary.RemoveAll(Constants.Markers.Symbols);
+                var comment = commentXml.RemoveAll(Constants.Markers.Symbols);
 
-                    foreach (var parameter in type.TypeParameters)
-                    {
-                        InspectPhrases(parameter, comment, ref findings);
-                    }
+                foreach (var parameter in type.TypeParameters)
+                {
+                    InspectPhrases(parameter, comment, ref findings);
                 }
             }
 
             return findings ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSummary(IMethodSymbol method, IEnumerable<string> summaries)
+        private IEnumerable<Diagnostic> AnalyzeComment(IMethodSymbol method, string commentXml)
         {
             List<Diagnostic> findings = null;
 
             if (method.IsGenericMethod || method.ContainingType.IsGenericType)
             {
-                foreach (var summary in summaries)
-                {
-                    var comment = summary.RemoveAll(Constants.Markers.Symbols);
+                var comment = commentXml.RemoveAll(Constants.Markers.Symbols);
 
-                    foreach (var parameter in method.TypeParameters.Concat(method.ContainingType.TypeParameters))
-                    {
-                        InspectPhrases(parameter, comment, ref findings);
-                    }
+                foreach (var parameter in method.TypeParameters.Concat(method.ContainingType.TypeParameters))
+                {
+                    InspectPhrases(parameter, comment, ref findings);
                 }
             }
 
@@ -78,7 +75,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<string> CreatePhrases(string parameterName) => new[]
                                                                                       {
                                                                                           string.Intern("<see cref=\"" + parameterName + "\""),
+                                                                                          string.Intern("<see name=\"" + parameterName + "\""),
                                                                                           string.Intern("<seealso cref=\"" + parameterName + "\""),
+                                                                                          string.Intern("<seealso name=\"" + parameterName + "\""),
                                                                                       };
 
         private void InspectPhrases(ITypeParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
@@ -87,11 +86,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var phrase in phrases
                                    .Where(_ => commentXml.Contains(_, Comparison))
-                                   .Select(_ => _.StartsWith("<", Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
+                                   .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
             {
                 if (findings == null) findings = new List<Diagnostic>();
-                findings.Add(ReportIssue(parameter, phrase));
+                var replacement = GetReplacement(parameter);
+                findings.Add(ReportIssue(parameter, phrase, replacement));
             }
         }
+
+        private static string GetReplacement(ITypeParameterSymbol parameter) => string.Intern(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.TypeParamRef + " name=\"" + parameter.Name + "\"" + Constants.Comments.XmlElementEndingTag);
     }
 }
