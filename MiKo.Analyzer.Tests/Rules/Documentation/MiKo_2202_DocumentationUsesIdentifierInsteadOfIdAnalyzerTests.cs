@@ -33,11 +33,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 " id;",
                 " id.",
                 " id:",
-                " id ",
-                " id,",
-                " id;",
-                " id.",
-                " id:",
+                " Id ",
+                " Id,",
+                " Id;",
+                " Id.",
+                " Id:",
             };
 
         [Test, Combinatorial]
