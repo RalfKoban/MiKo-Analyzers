@@ -1807,7 +1807,7 @@ Especially never use Debug.Assert() or Trace.Assert() in (unit) test code. That'
 This allows easy usage without any arbitrary using directives. It also mimics the project structure and makes the discoverability of the tests much easier.</value>
   </data>
   <data name="MiKo_3100_MessageFormat" xml:space="preserve">
-    <value>Place test class and type under test in same namespace '{1}'</value>
+    <value>Place test class in namespace '{1}'</value>
   </data>
   <data name="MiKo_3100_Title" xml:space="preserve">
     <value>Test classes and types under test belong in same namespace.</value>
