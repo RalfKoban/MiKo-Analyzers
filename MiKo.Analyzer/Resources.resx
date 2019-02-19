@@ -1452,6 +1452,16 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
   <data name="MiKo_2204_Title" xml:space="preserve">
     <value>Documentation should use &lt;note&gt; for important information.</value>
   </data>
+  <data name="MiKo_3000_Description" xml:space="preserve">
+    <value>If #region shall be used, then any empty #region shall be avoided.
+Such empty regions solely clutter the code without providing any benefit at all.</value>
+  </data>
+  <data name="MiKo_3000_MessageFormat" xml:space="preserve">
+    <value>Remove empty {0}</value>
+  </data>
+  <data name="MiKo_3000_Title" xml:space="preserve">
+    <value>Do not use empty regions.</value>
+  </data>
   <data name="MiKo_3001_Description" xml:space="preserve">
     <value>To ease maintenance, use the pre-defined .NET Framework delegate types such as 'Action', 'Func' or 'Expression' instead of custom delegates.</value>
   </data>

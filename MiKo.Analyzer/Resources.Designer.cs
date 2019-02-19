@@ -4018,6 +4018,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
+        ///Such empty regions solely clutter the code without providing any benefit at all..
+        /// </summary>
+        public static string MiKo_3000_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3000_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty {0}.
+        /// </summary>
+        public static string MiKo_3000_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3000_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use empty regions..
+        /// </summary>
+        public static string MiKo_3000_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3000_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, use the pre-defined .NET Framework delegate types such as &apos;Action&apos;, &apos;Func&apos; or &apos;Expression&apos; instead of custom delegates..
         /// </summary>
         public static string MiKo_3001_Description {
