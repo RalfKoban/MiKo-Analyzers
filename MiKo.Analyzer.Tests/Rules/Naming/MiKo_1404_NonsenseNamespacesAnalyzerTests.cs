@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1404_NonsenseNamespacesAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> ForbiddenNamespaceNames = new[]
+                                                                                  {
+                                                                                      "Helper",
+                                                                                      "Helpers",
+                                                                                      "Misc",
+                                                                                      "Miscellaneous",
+                                                                                      "Util",
+                                                                                      "Utils",
+                                                                                      "Utility",
+                                                                                      "Utilities",
+                                                                                  };
+
         [TestCase("MiKoSolutions")]
         public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
@@ -51,18 +62,5 @@ namespace ABCD.EFG." + ns + @".HIJK
         protected override string GetDiagnosticId() => MiKo_1404_NonsenseNamespacesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1404_NonsenseNamespacesAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ForbiddenNamespaceNames() => new HashSet<string>
-                                                                            {
-                                                                                "Helper",
-                                                                                "Helpers",
-                                                                                "Misc",
-                                                                                "Miscellaneous",
-                                                                                "Util",
-                                                                                "Utils",
-                                                                                "Utility",
-                                                                                "Utilities",
-                                                                            };
     }
 }
