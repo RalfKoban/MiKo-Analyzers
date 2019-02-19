@@ -4648,6 +4648,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unused parameters are not needed and should be removed as they solely clutter the code base without providing any benefit at all..
+        /// </summary>
+        public static string MiKo_3026_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3026_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; is not used and can be safely removed.
+        /// </summary>
+        public static string MiKo_3026_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3026_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unused parameters should be removed..
+        /// </summary>
+        public static string MiKo_3026_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3026_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
         ///
         ///Instead the equality operator should be used to compare value types..

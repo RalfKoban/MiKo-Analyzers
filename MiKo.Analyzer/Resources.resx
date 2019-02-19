@@ -1668,6 +1668,15 @@ In most cases this is not wanted. The object reference shall be the same, only t
   <data name="MiKo_3025_Title" xml:space="preserve">
     <value>Do not re-assign method parameters.</value>
   </data>
+  <data name="MiKo_3026_Description" xml:space="preserve">
+    <value>Unused parameters are not needed and should be removed as they solely clutter the code base without providing any benefit at all.</value>
+  </data>
+  <data name="MiKo_3026_MessageFormat" xml:space="preserve">
+    <value>Parameter '{0}' is not used and can be safely removed</value>
+  </data>
+  <data name="MiKo_3026_Title" xml:space="preserve">
+    <value>Unused parameters should be removed.</value>
+  </data>
   <data name="MiKo_3030_Description" xml:space="preserve">
     <value>For performance reasons, it makes no sense to use 'object.Equals()' on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
 
