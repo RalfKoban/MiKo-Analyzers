@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var xml = method.GetDocumentationCommentXml();
             if (xml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
-            if (xml.Contains("<" + Constants.XmlTag.Inheritdoc)) return Enumerable.Empty<Diagnostic>();
+            if (xml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)) return Enumerable.Empty<Diagnostic>();
 
             return VerifyParameterComments(method, xml);
         }

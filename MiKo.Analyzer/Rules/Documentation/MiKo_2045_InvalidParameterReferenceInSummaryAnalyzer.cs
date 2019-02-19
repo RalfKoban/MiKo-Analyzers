@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var phrase in phrases
                                    .Where(_ => commentXml.Contains(_, Comparison))
-                                   .Select(_ => _.StartsWith("<", Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
+                                   .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
             {
                 if (findings == null) findings = new List<Diagnostic>();
                 findings.Add(ReportIssue(parameter, phrase));
