@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1405_LibraryNamespacesAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> ForbiddenNamespaceNames = new[]
+                                                                                  {
+                                                                                      "Lib",
+                                                                                      "Library",
+                                                                                      "Libraries",
+                                                                                  };
+
         [TestCase("MiKoSolutions")]
         public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
@@ -51,13 +57,5 @@ namespace ABCD.EFG." + ns + @".HIJK
         protected override string GetDiagnosticId() => MiKo_1405_LibraryNamespacesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1405_LibraryNamespacesAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ForbiddenNamespaceNames() => new HashSet<string>
-                                                                            {
-                                                                                "Lib",
-                                                                                "Library",
-                                                                                "Libraries",
-                                                                            };
     }
 }
