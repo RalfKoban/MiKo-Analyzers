@@ -96,12 +96,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (typeUnderTest != null)
             {
-                var testNamespace = symbol.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                var typeUnderTestNamespace = typeUnderTest.ContainingNamespace.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                var expectedNamespace = typeUnderTest.ContainingNamespace.ToDisplayString();
+                var unitTestNamespace = symbol.ContainingNamespace.ToDisplayString();
 
-                if (testNamespace != typeUnderTestNamespace)
+                if (expectedNamespace != unitTestNamespace)
                 {
-                    diagnostic = ReportIssue(symbol);
+                    diagnostic = ReportIssue(symbol, expectedNamespace);
                     return true;
                 }
             }

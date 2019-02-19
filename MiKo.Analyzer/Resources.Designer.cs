@@ -5024,7 +5024,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test class and type under test in same namespace.
+        ///   Looks up a localized string similar to Place test class and type under test in same namespace &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_3100_MessageFormat {
             get {
