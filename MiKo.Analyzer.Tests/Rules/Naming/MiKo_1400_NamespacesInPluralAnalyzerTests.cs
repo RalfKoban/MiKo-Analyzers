@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +11,48 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1400_NamespacesInPluralAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> SingularNamespaceNames = new[]
+                                                                                 {
+                                                                                     "Converter",
+                                                                                     "Test",
+                                                                                 };
+
+        private static readonly IEnumerable<string> AllowedNamespaceNames = new[]
+                                                                                {
+                                                                                    "Activities",
+                                                                                    "ComponentModel",
+                                                                                    "Composition",
+                                                                                    "Converters",
+                                                                                    "Data",
+                                                                                    "Documentation",
+                                                                                    "Extensions",
+                                                                                    "Framework",
+                                                                                    "Generic",
+                                                                                    "IO",
+                                                                                    "Infrastructure",
+                                                                                    "Lifetime",
+                                                                                    "Linq",
+                                                                                    "Maintainability",
+                                                                                    "Naming",
+                                                                                    "Resources",
+                                                                                    "Runtime",
+                                                                                    "Security",
+                                                                                    "ServiceModel",
+                                                                                    "Serialization",
+                                                                                    "System",
+                                                                                    "Threading",
+                                                                                    "UserExperience",
+                                                                                    "Children",
+                                                                                };
+
+        private static readonly IEnumerable<string> WellKnownCompanyAndFrameworkNames = new[]
+                                                                                            {
+                                                                                                "JetBrains",
+                                                                                                "MiKoSolutions",
+                                                                                                "Microsoft",
+                                                                                                "PostSharp",
+                                                                                                "NDepend",
+                                                                                            };
         [Test]
         public void No_issue_is_reported_for_known_namespace_name([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
@@ -57,51 +98,5 @@ namespace Abc." + ns + @"
         protected override string GetDiagnosticId() => MiKo_1400_NamespacesInPluralAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1400_NamespacesInPluralAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> SingularNamespaceNames() => new HashSet<string>
-                                                                            {
-                                                                                "Converter",
-                                                                                "Test",
-                                                                            };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> AllowedNamespaceNames() => new HashSet<string>
-                                                                            {
-                                                                                "Activities",
-                                                                                "ComponentModel",
-                                                                                "Composition",
-                                                                                "Converters",
-                                                                                "Data",
-                                                                                "Documentation",
-                                                                                "Extensions",
-                                                                                "Framework",
-                                                                                "Generic",
-                                                                                "IO",
-                                                                                "Infrastructure",
-                                                                                "Lifetime",
-                                                                                "Linq",
-                                                                                "Maintainability",
-                                                                                "Naming",
-                                                                                "Resources",
-                                                                                "Runtime",
-                                                                                "Security",
-                                                                                "ServiceModel",
-                                                                                "Serialization",
-                                                                                "System",
-                                                                                "Threading",
-                                                                                "UserExperience",
-                                                                                "Children",
-                                                                            };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WellKnownCompanyAndFrameworkNames() => new HashSet<string>
-                                                                                  {
-                                                                                      "JetBrains",
-                                                                                      "MiKoSolutions",
-                                                                                      "Microsoft",
-                                                                                      "PostSharp",
-                                                                                      "NDepend",
-                                                                                  };
     }
 }
