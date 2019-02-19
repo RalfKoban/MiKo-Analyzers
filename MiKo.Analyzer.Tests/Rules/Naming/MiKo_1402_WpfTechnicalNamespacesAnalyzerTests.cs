@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1402_WpfTechnicalNamespacesAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> ForbiddenNamespaceNames = new[]
+                                                                                  {
+                                                                                      "Command",
+                                                                                      "Commands",
+                                                                                      "Model",
+                                                                                      "Models",
+                                                                                      "ViewModel",
+                                                                                      "ViewModels",
+                                                                                      "View",
+                                                                                      "Views",
+                                                                                  };
+
         [TestCase("MiKoSolutions")]
         public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
@@ -57,19 +68,6 @@ namespace ABCD.EFG." + ns + @".HIJK
         protected override string GetDiagnosticId() => MiKo_1402_WpfTechnicalNamespacesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1402_WpfTechnicalNamespacesAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ForbiddenNamespaceNames() => new HashSet<string>
-                                                                            {
-                                                                                "Command",
-                                                                                "Commands",
-                                                                                "Model",
-                                                                                "Models",
-                                                                                "ViewModel",
-                                                                                "ViewModels",
-                                                                                "View",
-                                                                                "Views",
-                                                                            };
     }
 
 }
