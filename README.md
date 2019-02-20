@@ -78,6 +78,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_1056|Dependency properties should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework).|:white_check_mark:|
 |MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|:white_check_mark:|
+|MiKo_1059|Do not name types 'Impl' or 'Implementation'.|:white_check_mark:|
 |MiKo_1060|Methods should not be suffixed with a number.|:white_check_mark:|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be 'result'.|:white_check_mark:|
 |MiKo_1062|'Is/Has/Contains' methods or properties shall consist of only a few words.|:white_check_mark:|
@@ -141,6 +142,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase.|:white_check_mark:|
 |MiKo_2044|Documentation references method parameters correctly.|:white_check_mark:|
 |MiKo_2045|&lt;summary&gt; documentation should not reference parameters.|:white_check_mark:|
+|MiKo_2046|XML documentation should reference type parameters correctly.|:white_check_mark:|
 |MiKo_2047|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|:white_check_mark:|
 |MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|:white_check_mark:|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'.|:white_check_mark:|
@@ -162,14 +164,15 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
-|MiKo_2201|Documentation should not use the term 'unique identifier' instead of 'guid'.|:white_check_mark:|
-|MiKo_2202|Documentation should not use the term 'identifier' instead of 'id'.|:white_check_mark:|
+|MiKo_2201|Documentation should use the term 'unique identifier' instead of 'guid'.|:white_check_mark:|
+|MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|:white_check_mark:|
 |MiKo_2203|Documentation should use &lt;list&gt; for enumerations.|:white_check_mark:|
 |MiKo_2204|Documentation should use &lt;note&gt; for important information.|:white_check_mark:|
 
 ### Maintainability
 |ID|Title|Enabled by default|
 |:-|:----|:----------------:|
+|MiKo_3000|Do not use empty regions.|:white_check_mark:|
 |MiKo_3001|Custom delegates should not be used.|:white_check_mark:|
 |MiKo_3002|Classes should not have too many dependencies.|:white_check_mark:|
 |MiKo_3003|Events should follow .NET Framework Guidelines for events.|:white_check_mark:|
@@ -191,6 +194,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3023|Do not use 'CancellationTokenSource' as parameter.|:white_check_mark:|
 |MiKo_3024|Do not use the [ref] keyword on reference parameters.|:white_check_mark:|
 |MiKo_3025|Do not re-assign method parameters.|:white_check_mark:|
+|MiKo_3026|Unused parameters should be removed.|:white_check_mark:|
 |MiKo_3030|Do not use 'object.Equals()' on value types.|:white_check_mark:|
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3032|ICloneable.Clone() should not be implemented.|:white_check_mark:|
