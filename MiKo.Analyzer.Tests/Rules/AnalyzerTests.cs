@@ -47,8 +47,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         [Test, Combinatorial, Ignore("Just to check from time to time whether the texts are acceptable or need to be rephrased.")]
         public static void Messages_should_not_contain_(
-            [ValueSource(nameof(AllAnalyzers))] Analyzer analyzer,
-            [Values("shall", "should")] string word)
+                                                    [ValueSource(nameof(AllAnalyzers))] Analyzer analyzer,
+                                                    [Values("shall", "should")] string word)
             => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.Contain(word));
 
         [TestCaseSource(nameof(AllAnalyzers))]
