@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 // ReSharper disable AssignNullToNotNullAttribute
 namespace MiKoSolutions.Analyzers
@@ -18,6 +19,6 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string NotImplementedException = string.Intern(typeof(NotImplementedException).FullName);
         internal static readonly string NotSupportedException = string.Intern(typeof(NotSupportedException).FullName);
 
-        internal const string InvalidEnumArgumentException = "System.ComponentModel." + nameof(InvalidEnumArgumentException);
+        internal static readonly string InvalidEnumArgumentException = string.Intern(typeof(InvalidEnumArgumentException).FullName);
     }
 }
