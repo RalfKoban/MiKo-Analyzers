@@ -44,16 +44,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindProperNameInClass(IMethodSymbol method)
         {
+            var methodName = method.Name;
+
             foreach (var reference in method.DeclaringSyntaxReferences)
             {
                 var owningClass = reference.GetSyntax().GetEnclosing<ClassDeclarationSyntax>();
+                if (owningClass is null)
+                {
+                    // may happen in case the class is currently in uncompilable state (such as it contains an additional bracket '}')
+                    continue;
+                }
 
                 foreach (var assignment in owningClass.DescendantNodes()
                                                       .OfType<AssignmentExpressionSyntax>()
                                                       .Where(_ => _.Kind() == SyntaxKind.AddAssignmentExpression))
                 {
                     var rightIdentifier = (assignment.Right as IdentifierNameSyntax)?.Identifier.ValueText;
-                    if (rightIdentifier == method.Name)
+                    if (rightIdentifier == methodName)
                     {
                         switch (assignment.Left)
                         {
