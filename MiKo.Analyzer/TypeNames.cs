@@ -20,5 +20,8 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string NotSupportedException = string.Intern(typeof(NotSupportedException).FullName);
 
         internal static readonly string InvalidEnumArgumentException = string.Intern(typeof(InvalidEnumArgumentException).FullName);
+
+        internal static readonly string PropertyChangingEventArgs = string.Intern(typeof(PropertyChangingEventArgs).FullName);
+        internal static readonly string PropertyChangedEventArgs = string.Intern(typeof(PropertyChangedEventArgs).FullName);
     }
 }
