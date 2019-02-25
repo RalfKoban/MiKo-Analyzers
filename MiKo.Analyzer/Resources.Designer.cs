@@ -4788,6 +4788,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property names that are passed into the  &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        /// </summary>
+        public static string MiKo_3033_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3033_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        /// </summary>
+        public static string MiKo_3033_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3033_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property names for created &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; instances shall be provided via &apos;nameof&apos; operator..
+        /// </summary>
+        public static string MiKo_3033_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3033_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {

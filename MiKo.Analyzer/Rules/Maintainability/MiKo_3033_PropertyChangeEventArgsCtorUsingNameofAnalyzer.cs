@@ -43,21 +43,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (argumentExpression is InvocationExpressionSyntax i && i.Expression is IdentifierNameSyntax s && s.Identifier.ValueText == "nameof")
             {
-                // it might happen that the code is currently being written so there might not yet exist a specific property name
-                var a = i.ArgumentList.Arguments.Select(_ => _.Expression).OfType<IdentifierNameSyntax>().FirstOrDefault();
-                var propertyName = a?.Identifier.ValueText;
-                if (propertyName is null)
-                    return false;
-
-                var symbol = node.GetEnclosingSymbol(semanticModel);
-                var containingType = symbol?.ContainingType;
-                if (containingType is null)
-                    return false;
-
-                // verify that nameof uses a property if the type
-                if (containingType.GetMembers().OfType<IPropertySymbol>().Any(_ => _.Name == propertyName))
-                    return false;
+                return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
             }
+
+            return true; // use nameof instead
+        }
+
+        private static bool NameofHasIssue(SyntaxNode node, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
+        {
+            // it might happen that the code is currently being written so there might not yet exist a specific property name
+            var a = arguments.Select(_ => _.Expression).OfType<IdentifierNameSyntax>().FirstOrDefault();
+            var propertyName = a?.Identifier.ValueText;
+            if (propertyName is null)
+                return false;
+
+            var symbol = node.GetEnclosingSymbol(semanticModel);
+            var containingType = symbol?.ContainingType;
+            if (containingType is null)
+                return false;
+
+            // verify that nameof uses a property if the type
+            if (containingType.GetMembers().OfType<IPropertySymbol>().Any(_ => _.Name == propertyName))
+                return false;
 
             return true; // use nameof instead
         }
