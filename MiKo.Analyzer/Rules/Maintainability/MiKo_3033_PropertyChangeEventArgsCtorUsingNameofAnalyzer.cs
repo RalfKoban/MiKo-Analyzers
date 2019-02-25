@@ -34,8 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (arguments.Count != 1)
                 return Enumerable.Empty<Diagnostic>();
 
-            return HasIssue(node, arguments[0].Expression, semanticModel)
-                       ? new[] { ReportIssue(node.Type.ToString(), node.GetLocation()) }
+            var argument = arguments[0];
+            return HasIssue(node, argument.Expression, semanticModel)
+                       ? new[] { ReportIssue(node.Type.ToString(), argument.GetLocation()) }
                        : Enumerable.Empty<Diagnostic>();
         }
 

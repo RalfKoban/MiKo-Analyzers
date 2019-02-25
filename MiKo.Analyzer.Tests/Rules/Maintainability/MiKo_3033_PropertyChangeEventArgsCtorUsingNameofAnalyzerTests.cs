@@ -167,6 +167,21 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_null([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
+
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private " + typeName + @" e = new " + typeName + @"(null);
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer();
