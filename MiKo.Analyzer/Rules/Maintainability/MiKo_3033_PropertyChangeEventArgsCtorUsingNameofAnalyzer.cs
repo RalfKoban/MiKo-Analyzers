@@ -41,9 +41,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(SyntaxNode node, ExpressionSyntax argumentExpression, SemanticModel semanticModel)
         {
-            if (argumentExpression is InvocationExpressionSyntax i && i.Expression is IdentifierNameSyntax s && s.Identifier.ValueText == "nameof")
+            if (argumentExpression is InvocationExpressionSyntax i && i.Expression is IdentifierNameSyntax sa && sa.Identifier.ValueText == "nameof")
             {
                 return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
+            }
+
+            if (argumentExpression is IdentifierNameSyntax s && IdentifierIsParameter(node, s.Identifier.ValueText, semanticModel))
+            {
+                // it's a parameter, so don't report an issue
+                return false;
             }
 
             return true; // use nameof instead
@@ -67,6 +73,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
 
             return true; // use nameof instead
+        }
+
+        private static bool IdentifierIsParameter(SyntaxNode node, string propertyName, SemanticModel semanticModel)
+        {
+            var method = node.GetEnclosingMethod(semanticModel);
+            if (method is null)
+                return false;
+
+            return method.Parameters.Any(_ => _.Name == propertyName);
         }
     }
 }

@@ -152,6 +152,21 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_non_nameof_parameter_invocation_usage([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public " + typeName + @" DoSomething(string paramName) => new " + typeName + @"(paramName);
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer();
