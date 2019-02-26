@@ -1459,7 +1459,7 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
     <value>Remove '{1}' from documentation</value>
   </data>
   <data name="MiKo_2205_Title" xml:space="preserve">
-    <value>Documentation should not use the term 'flag'</value>
+    <value>Documentation should not use the term 'flag'.</value>
   </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.

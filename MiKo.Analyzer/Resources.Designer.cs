@@ -4036,7 +4036,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use the term &apos;flag&apos;.
+        ///   Looks up a localized string similar to Documentation should not use the term &apos;flag&apos;..
         /// </summary>
         public static string MiKo_2205_Title {
             get {

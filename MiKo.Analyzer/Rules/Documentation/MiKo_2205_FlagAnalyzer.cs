@@ -12,15 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2205";
 
-        private static readonly string[] FlagPhrases = CreatePhrases(" flag", " flags").ToArray();
+        private static readonly string[] Phrases = CreatePhrases(" flag", " flags").ToArray();
 
         public MiKo_2205_FlagAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(FlagPhrases)
-                                                                                                            ? new[] { ReportIssue(symbol) }
-                                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => from phrase in Phrases where commentXml.Contains(phrase, StringComparison.OrdinalIgnoreCase) select ReportIssue(symbol, phrase);
 
         private static IEnumerable<string> CreatePhrases(params string[] forbiddenTerms) => from suffix in Constants.Comments.Delimiters from forbiddenTerm in forbiddenTerms select forbiddenTerm + suffix;
     }
