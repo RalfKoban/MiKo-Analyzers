@@ -8,15 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2042_BrParaAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2042_BrParaAnalyzer : OverallDocumentationAnalyzer
     {
         public const string Id = "MiKo_2042";
 
-        public MiKo_2042_BrParaAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2042_BrParaAnalyzer() : base(Id)
         {
         }
-
-        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Event, SymbolKind.Field, SymbolKind.Method, SymbolKind.NamedType, SymbolKind.Property);
 
         protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => AnalyzeComment(symbol); // TODO: RKN refactor to use code from base class
 

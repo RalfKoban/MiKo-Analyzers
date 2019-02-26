@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2200_DocumentationStartsCapitalizedAnalyzer : DocumentationAnalyzer
+    public sealed class MiKo_2200_DocumentationStartsCapitalizedAnalyzer : OverallDocumentationAnalyzer
     {
         public const string Id = "MiKo_2200";
 
@@ -28,11 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 Constants.XmlTag.Value,
             };
 
-        public MiKo_2200_DocumentationStartsCapitalizedAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2200_DocumentationStartsCapitalizedAnalyzer() : base(Id)
         {
         }
-
-        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Event, SymbolKind.Field, SymbolKind.Method, SymbolKind.NamedType, SymbolKind.Property);
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
