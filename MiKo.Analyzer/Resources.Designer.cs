@@ -4018,6 +4018,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The documentation should not use the term &apos;flag&apos; which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary..
+        /// </summary>
+        public static string MiKo_2205_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2205_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from documentation.
+        /// </summary>
+        public static string MiKo_2205_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2205_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not use the term &apos;flag&apos;.
+        /// </summary>
+        public static string MiKo_2205_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2205_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>

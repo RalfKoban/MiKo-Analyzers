@@ -1452,6 +1452,15 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
   <data name="MiKo_2204_Title" xml:space="preserve">
     <value>Documentation should use &lt;note&gt; for important information.</value>
   </data>
+  <data name="MiKo_2205_Description" xml:space="preserve">
+    <value>The documentation should not use the term 'flag' which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary.</value>
+  </data>
+  <data name="MiKo_2205_MessageFormat" xml:space="preserve">
+    <value>Remove '{1}' from documentation</value>
+  </data>
+  <data name="MiKo_2205_Title" xml:space="preserve">
+    <value>Documentation should not use the term 'flag'</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
 Such empty regions solely clutter the code without providing any benefit at all.</value>
