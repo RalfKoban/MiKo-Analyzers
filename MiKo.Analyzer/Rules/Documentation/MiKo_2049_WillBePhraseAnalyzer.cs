@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2049";
 
-        private static readonly string[] WillBePhrases = CreateWillBePhrases(" will be").ToArray();
+        private static readonly string[] WillBePhrases = Constants.Comments.Delimiters.Select(_ => " will be" + _).ToArray();
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {
@@ -21,7 +21,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(WillBePhrases)
                                                                                                             ? new[] { ReportIssue(symbol) }
                                                                                                             : Enumerable.Empty<Diagnostic>();
-
-        private static IEnumerable<string> CreateWillBePhrases(params string[] forbiddenTerms) => from suffix in Constants.Comments.Delimiters from forbiddenTerm in forbiddenTerms select forbiddenTerm + suffix;
     }
 }
