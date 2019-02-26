@@ -27,7 +27,7 @@ public void " + name + @"()
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_exceeding_length([ValueSource(nameof(Tests))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_with_exceeding_length([ValueSource(nameof(TestsExceptSetUpTearDowns))] string name) => No_issue_is_reported_for(@"
 
 [" + name + @"]
 public void Abcdefghijklmnopqrstuvwxyz()
