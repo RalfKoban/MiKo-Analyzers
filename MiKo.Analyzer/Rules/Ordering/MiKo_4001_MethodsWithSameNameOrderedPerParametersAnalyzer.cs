@@ -18,13 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
-            var methods = GetMethodsOrderedByLocation(symbol).ToList();
+            var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
+            var methods = GetMethodsOrderedByLocation(symbol);
+            var methodsAndCtors = ctors.Concat(methods).ToList();
 
-            var results = methods.Any()
-                          ? AnalyzeMethods(methods)
-                          : Enumerable.Empty<Diagnostic>();
-
-            return results;
+            return methodsAndCtors.Any()
+                       ? AnalyzeMethods(methodsAndCtors)
+                       : Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)

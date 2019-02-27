@@ -106,6 +106,36 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_class_with_ctors_in_mixed_order() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    public TestMe(int i, int j)
+    { }
+
+    public TestMe(int i)
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_ctors_in_different_accessibilities_and_mixed_order() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    protected TestMe(int i, int j)
+    { }
+
+    private TestMe(int i)
+    { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer();
