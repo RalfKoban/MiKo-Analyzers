@@ -212,7 +212,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|
-|MiKo_3104|Use NUnit's [Combinatorial] NUnit's attribute properly.|:white_check_mark:|
+|MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|:white_check_mark:|
 |MiKo_3401|Namespace hierarchies should not be too deep.|:white_check_mark:|
 
 ### Ordering

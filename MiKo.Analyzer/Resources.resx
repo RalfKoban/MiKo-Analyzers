@@ -1885,7 +1885,7 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Wrong usage of [Combinatorial]</value>
   </data>
   <data name="MiKo_3104_Title" xml:space="preserve">
-    <value>Use NUnit's [Combinatorial] NUnit's attribute properly.</value>
+    <value>Use NUnit's [Combinatorial] attribute properly.</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.

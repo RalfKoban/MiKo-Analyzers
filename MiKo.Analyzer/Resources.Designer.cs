@@ -5252,7 +5252,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] NUnit&apos;s attribute properly..
+        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] attribute properly..
         /// </summary>
         public static string MiKo_3104_Title {
             get {
