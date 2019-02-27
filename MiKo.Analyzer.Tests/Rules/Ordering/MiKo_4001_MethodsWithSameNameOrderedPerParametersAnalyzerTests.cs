@@ -76,6 +76,21 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_class_with_differently_named_methods_in_mixed_order() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomethingA()
+    { }
+
+    public void DoSomethingB(int i, int j)
+    { }
+
+    public void DoSomethingC(int i)
+    { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer();

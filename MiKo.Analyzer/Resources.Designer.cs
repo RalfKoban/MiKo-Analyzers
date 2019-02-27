@@ -5298,7 +5298,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place &apos;{0}&apos; method before other &apos;{0}&apos; method with more parameters.
+        ///   Looks up a localized string similar to Order methods in following way:
+        ///{0}.
         /// </summary>
         public static string MiKo_4001_MessageFormat {
             get {

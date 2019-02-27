@@ -39,6 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 if (methodsOrderedByParameters.Count <= 1)
                     continue;
 
+                var order = string.Empty;
+
                 // check for locations
                 var lastLine = GetStartingLine(methodsOrderedByParameters[0]);
 
@@ -48,8 +50,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     if (lastLine > nextLine)
                     {
                         if (results == null)
+                        {
                             results = new List<Diagnostic>();
-                        results.Add(ReportIssue(method));
+                            order = string.Join(Environment.NewLine, methodsOrderedByParameters.Select(_ => _.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)));
+                        }
+
+                        results.Add(ReportIssue(method, order));
                     }
 
                     lastLine = nextLine;
