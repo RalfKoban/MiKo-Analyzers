@@ -1897,6 +1897,15 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_3401_Title" xml:space="preserve">
     <value>Namespace hierarchies should not be too deep.</value>
   </data>
+  <data name="MiKo_4001_Description" xml:space="preserve">
+    <value>Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters.</value>
+  </data>
+  <data name="MiKo_4001_MessageFormat" xml:space="preserve">
+    <value>Place '{0}' method before other '{0}' method with more parameters</value>
+  </data>
+  <data name="MiKo_4001_Title" xml:space="preserve">
+    <value>Methods with same name should be ordered based on the number of their parameters.</value>
+  </data>
   <data name="MiKo_4101_Description" xml:space="preserve">
     <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first.</value>
   </data>

@@ -5289,6 +5289,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters..
+        /// </summary>
+        public static string MiKo_4001_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;{0}&apos; method before other &apos;{0}&apos; method with more parameters.
+        /// </summary>
+        public static string MiKo_4001_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods with same name should be ordered based on the number of their parameters..
+        /// </summary>
+        public static string MiKo_4001_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first..
         /// </summary>
         public static string MiKo_4101_Description {
