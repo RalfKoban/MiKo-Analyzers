@@ -29,12 +29,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                                                       .Where(_ => _.MethodKind == MethodKind.Ordinary)
                                                                                       .FirstOrDefault(_ => _.IsTestSetupMethod());
 
-        private static IEnumerable<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol symbol, string path) => symbol.GetMembers()
-                                                                                                                             .OfType<IMethodSymbol>()
-                                                                                                                             .Where(_ => _.MethodKind == MethodKind.Ordinary)
-                                                                                                                             .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
-                                                                                                                             .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition);
-
         private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol, IMethodSymbol setupMethod)
         {
             var path = setupMethod.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
