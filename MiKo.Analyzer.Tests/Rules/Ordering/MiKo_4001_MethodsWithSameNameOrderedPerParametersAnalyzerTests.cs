@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_class_with_identical_named_methods_in_correct_order() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_identically_named_methods_in_correct_order() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -50,7 +50,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_identical_named_methods_in_wrong_order() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_identically_named_methods_in_wrong_order() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(int i)
@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_identical_named_methods_in_wrong_mixed_order() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_identically_named_methods_in_wrong_mixed_order() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -87,6 +87,21 @@ public class TestMe
     { }
 
     public void DoSomethingC(int i)
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_identically_named_methods_in_different_accessibilities_and_mixed_order() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    { }
+
+    protected void DoSomething(int i, int j)
+    { }
+
+    private void DoSomething(int i)
     { }
 }
 ");

@@ -18,7 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
-            // TODO RKN: split for accessibility
             var methods = GetMethodsOrderedByLocation(symbol).ToList();
 
             var results = methods.Any()
@@ -35,7 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             List<Diagnostic> results = null;
             foreach (var methodName in methodNames)
             {
-                var methodsOrderedByParameters = methods.Where(_ => _.Name == methodName).OrderBy(_ => _.Parameters.Length).ToList();
+                // pre-order for accessibility (public first, private last)
+                var methodsOrderedByParameters = methods.Where(_ => _.Name == methodName).OrderByDescending(_ => _.DeclaredAccessibility).ThenBy(_ => _.Parameters.Length).ToList();
                 if (methodsOrderedByParameters.Count <= 1)
                     continue;
 
