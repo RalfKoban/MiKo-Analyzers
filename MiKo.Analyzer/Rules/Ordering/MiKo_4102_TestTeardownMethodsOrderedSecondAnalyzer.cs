@@ -4,14 +4,14 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3105_TestTeardownMethodsOrderedSecondAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_4102_TestTeardownMethodsOrderedSecondAnalyzer : OrderingAnalyzer
     {
-        public const string Id = "MiKo_3105";
+        public const string Id = "MiKo_4102";
 
-        public MiKo_3105_TestTeardownMethodsOrderedSecondAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_4102_TestTeardownMethodsOrderedSecondAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 

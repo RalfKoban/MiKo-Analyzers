@@ -5234,7 +5234,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first..
+        ///   Looks up a localized string similar to NUnit&apos;s [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute..
         /// </summary>
         public static string MiKo_3104_Description {
             get {
@@ -5243,7 +5243,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test initialization method before all other methods.
+        ///   Looks up a localized string similar to Wrong usage of [Combinatorial].
         /// </summary>
         public static string MiKo_3104_MessageFormat {
             get {
@@ -5252,65 +5252,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test initialization methods should be ordered first..
+        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] NUnit&apos;s attribute properly..
         /// </summary>
         public static string MiKo_3104_Title {
             get {
                 return ResourceManager.GetString("MiKo_3104_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods..
-        /// </summary>
-        public static string MiKo_3105_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3105_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Place test cleanup methods before all test methods.
-        /// </summary>
-        public static string MiKo_3105_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3105_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Test cleanup methods should be ordered before test methods..
-        /// </summary>
-        public static string MiKo_3105_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3105_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to NUnit&apos;s [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute..
-        /// </summary>
-        public static string MiKo_3106_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3106_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Wrong usage of [Combinatorial].
-        /// </summary>
-        public static string MiKo_3106_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3106_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] NUnit&apos;s attribute properly..
-        /// </summary>
-        public static string MiKo_3106_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3106_Title", resourceCulture);
             }
         }
         
@@ -5339,6 +5285,60 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3401_Title {
             get {
                 return ResourceManager.GetString("MiKo_3401_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first..
+        /// </summary>
+        public static string MiKo_4101_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4101_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place test initialization method before all other methods.
+        /// </summary>
+        public static string MiKo_4101_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4101_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test initialization methods should be ordered first..
+        /// </summary>
+        public static string MiKo_4101_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4101_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods..
+        /// </summary>
+        public static string MiKo_4102_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4102_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place test cleanup methods before all test methods.
+        /// </summary>
+        public static string MiKo_4102_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4102_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test cleanup methods should be ordered before test methods..
+        /// </summary>
+        public static string MiKo_4102_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4102_Title", resourceCulture);
             }
         }
     }

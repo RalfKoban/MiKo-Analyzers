@@ -168,6 +168,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|:white_check_mark:|
 |MiKo_2203|Documentation should use &lt;list&gt; for enumerations.|:white_check_mark:|
 |MiKo_2204|Documentation should use &lt;note&gt; for important information.|:white_check_mark:|
+|MiKo_2205|Documentation should not use the term 'flag'.|:white_check_mark:|
 
 ### Maintainability
 |ID|Title|Enabled by default|
@@ -211,7 +212,11 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3101|Test classes should contain tests.|:white_check_mark:|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|:white_check_mark:|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|:white_check_mark:|
-|MiKo_3104|Test initialization methods should be ordered first.|:white_check_mark:|
-|MiKo_3105|Test cleanup methods should be ordered before test methods.|:white_check_mark:|
-|MiKo_3106|Use NUnit's [Combinatorial] NUnit's attribute properly.|:white_check_mark:|
+|MiKo_3104|Use NUnit's [Combinatorial] NUnit's attribute properly.|:white_check_mark:|
 |MiKo_3401|Namespace hierarchies should not be too deep.|:white_check_mark:|
+
+### Ordering
+|ID|Title|Enabled by default|
+|:-|:----|:----------------:|
+|MiKo_4101|Test initialization methods should be ordered first.|:white_check_mark:|
+|MiKo_4102|Test cleanup methods should be ordered before test methods.|:white_check_mark:|

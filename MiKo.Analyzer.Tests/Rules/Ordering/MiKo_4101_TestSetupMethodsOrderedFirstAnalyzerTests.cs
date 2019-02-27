@@ -4,10 +4,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [TestFixture]
-    public sealed class MiKo_3104_TestSetupMethodsOrderedFirstAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_4101_TestSetupMethodsOrderedFirstAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
@@ -167,8 +167,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3104_TestSetupMethodsOrderedFirstAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_4101_TestSetupMethodsOrderedFirstAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3104_TestSetupMethodsOrderedFirstAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4101_TestSetupMethodsOrderedFirstAnalyzer();
     }
 }

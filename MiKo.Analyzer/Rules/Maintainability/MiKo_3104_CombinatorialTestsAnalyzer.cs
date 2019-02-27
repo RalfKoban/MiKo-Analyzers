@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3106_CombinatorialTestsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3104_CombinatorialTestsAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3106";
+        public const string Id = "MiKo_3104";
 
         private static readonly string[] ValueSourceAttributeNames = { "ValueSource", "ValueSourceAttribute", "Values", "ValuesAttribute" };
 
-        public MiKo_3106_CombinatorialTestsAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_3104_CombinatorialTestsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 

@@ -1879,30 +1879,12 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Test methods should not use 'Guid.NewGuid()'.</value>
   </data>
   <data name="MiKo_3104_Description" xml:space="preserve">
-    <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first.</value>
-  </data>
-  <data name="MiKo_3104_MessageFormat" xml:space="preserve">
-    <value>Place test initialization method before all other methods</value>
-  </data>
-  <data name="MiKo_3104_Title" xml:space="preserve">
-    <value>Test initialization methods should be ordered first.</value>
-  </data>
-  <data name="MiKo_3105_Description" xml:space="preserve">
-    <value>Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods.</value>
-  </data>
-  <data name="MiKo_3105_MessageFormat" xml:space="preserve">
-    <value>Place test cleanup methods before all test methods</value>
-  </data>
-  <data name="MiKo_3105_Title" xml:space="preserve">
-    <value>Test cleanup methods should be ordered before test methods.</value>
-  </data>
-  <data name="MiKo_3106_Description" xml:space="preserve">
     <value>NUnit's [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute.</value>
   </data>
-  <data name="MiKo_3106_MessageFormat" xml:space="preserve">
+  <data name="MiKo_3104_MessageFormat" xml:space="preserve">
     <value>Wrong usage of [Combinatorial]</value>
   </data>
-  <data name="MiKo_3106_Title" xml:space="preserve">
+  <data name="MiKo_3104_Title" xml:space="preserve">
     <value>Use NUnit's [Combinatorial] NUnit's attribute properly.</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
@@ -1914,5 +1896,23 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_3401_Title" xml:space="preserve">
     <value>Namespace hierarchies should not be too deep.</value>
+  </data>
+  <data name="MiKo_4101_Description" xml:space="preserve">
+    <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first.</value>
+  </data>
+  <data name="MiKo_4101_MessageFormat" xml:space="preserve">
+    <value>Place test initialization method before all other methods</value>
+  </data>
+  <data name="MiKo_4101_Title" xml:space="preserve">
+    <value>Test initialization methods should be ordered first.</value>
+  </data>
+  <data name="MiKo_4102_Description" xml:space="preserve">
+    <value>Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods.</value>
+  </data>
+  <data name="MiKo_4102_MessageFormat" xml:space="preserve">
+    <value>Place test cleanup methods before all test methods</value>
+  </data>
+  <data name="MiKo_4102_Title" xml:space="preserve">
+    <value>Test cleanup methods should be ordered before test methods.</value>
   </data>
 </root>
