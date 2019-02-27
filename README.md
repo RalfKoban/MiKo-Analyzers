@@ -218,5 +218,6 @@ The following tables list all the rules that are currently provided by the analy
 ### Ordering
 |ID|Title|Enabled by default|
 |:-|:----|:----------------:|
+|MiKo_4001|Methods with same name should be ordered based on the number of their parameters.|:white_check_mark:|
 |MiKo_4101|Test initialization methods should be ordered first.|:white_check_mark:|
 |MiKo_4102|Test cleanup methods should be ordered before test methods.|:white_check_mark:|
