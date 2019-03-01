@@ -87,6 +87,42 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_that_has_correctly_documented_unused_parameter([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Does something.</summary>
+        /// <param name=""i"">" + comment + @"</param>
+        public int DoSomething(int i)
+        {
+            var j = 42;
+            return j;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_that_has_correctly_documented_unused_parameter([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Does something.</summary>
+        /// <param name=""i"">" + comment + @"</param>
+        public TestMe(int i)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_that_has_correctly_documented_used_parameter() => No_issue_is_reported_for(@"
 using System;
 
