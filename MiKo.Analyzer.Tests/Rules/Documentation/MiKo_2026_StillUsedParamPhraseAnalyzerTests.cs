@@ -9,6 +9,50 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2026_StillUsedParamPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] UnusedPhrases =
+            {
+                "Unused",
+                "Unused.",
+                "Not used",
+                "Not used.",
+                "Not in use",
+                "Not in use.",
+                "No use",
+                "No use.",
+                "No usage",
+                "No usage.",
+                "Ignore.",
+                "Ignore",
+                "Ignored.",
+                "Ignored",
+                "This parameter is not used.",
+                "This parameter is not used",
+                "This parameter is ignored.",
+                "This parameter is ignored",
+                "The parameter is not used.",
+                "The parameter is not used",
+                "The parameter is ignored.",
+                "The parameter is ignored",
+                "Parameter is not used.",
+                "Parameter is not used",
+                "Parameter is ignored.",
+                "Parameter is ignored",
+
+                "unused",
+                "not used",
+                "not in use",
+                "no use",
+                "no usage",
+                "ignore",
+                "ignored",
+                "this parameter is not used",
+                "this parameter is ignored",
+                "the parameter is not used",
+                "the parameter is ignored",
+                "parameter is not used",
+                "parameter is ignored",
+            };
+
         [Test]
         public void No_issue_is_reported_for_method_that_has_no_parameter() => No_issue_is_reported_for(@"
 using System;
@@ -122,7 +166,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_that_has_used_parameter_documented_as_unused([Values("Unused", "Unused.")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_that_has_used_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -141,7 +185,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_that_has_used_parameter_documented_as_unused([Values("Unused", "Unused.")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ctor_that_has_used_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -161,7 +205,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_yet_unfinished_method_that_has_parameter_documented_as_unused([Values("Unused", "Unused.")] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_yet_unfinished_method_that_has_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -176,7 +220,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_yet_unfinished_ctor_that_has_parameter_documented_as_unused([Values("Unused", "Unused.")] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_yet_unfinished_ctor_that_has_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla

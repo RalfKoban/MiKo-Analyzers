@@ -14,6 +14,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2026";
 
+        private static readonly string[] SentenceEndings = { ".", string.Empty };
+        private static readonly string[] Phrases = new[]
+                                                       {
+                                                           "Unused",
+                                                           "Not used",
+                                                           "Not in use",
+                                                           "No use",
+                                                           "No usage",
+                                                           "Ignore",
+                                                           "Ignored",
+                                                           "This parameter is not used",
+                                                           "This parameter is ignored",
+                                                           "The parameter is not used",
+                                                           "The parameter is ignored",
+                                                           "Parameter is not used",
+                                                           "Parameter is ignored",
+                                                       }
+                                                   .SelectMany(_ => SentenceEndings, (phrase, end) => phrase + end)
+                                                   .ToArray();
+
         public MiKo_2026_StillUsedParamPhraseAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -99,7 +119,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // check comment
                 var commentXml = method.GetDocumentationCommentXml();
                 var comment = GetParameterComment(parameter, commentXml);
-                if (comment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal))
+
+                if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
                 {
                     if (results == null)
                         results = new List<Diagnostic>();
