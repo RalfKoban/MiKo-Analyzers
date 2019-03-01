@@ -2859,6 +2859,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The documentation should not state that a parameter is unused although it is still in use..
+        /// </summary>
+        public static string MiKo_2026_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2026_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of parameter &apos;{0}&apos; lies about it being unused.
+        /// </summary>
+        public static string MiKo_2026_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2026_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used parameters should not be documented to be unused..
+        /// </summary>
+        public static string MiKo_2026_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2026_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {

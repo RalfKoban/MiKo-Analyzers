@@ -7,14 +7,14 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3026_UnusedParameterAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_2026_StillUsedParamPhraseAnalyzer : DocumentationAnalyzer
     {
-        public const string Id = "MiKo_3026";
+        public const string Id = "MiKo_2026";
 
-        public MiKo_3026_UnusedParameterAnalyzer() : base(Id)
+        public MiKo_2026_StillUsedParamPhraseAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -22,21 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeConstructor, SyntaxKind.ConstructorDeclaration);
-        }
-
-        private static bool CanBeIgnored(IMethodSymbol method)
-        {
-            if (method is null)
-                return false;
-
-            if (method.IsOverride || method.IsVirtual)
-                return true;
-
-            if (method.IsEventHandler())
-                return true;
-
-            var ignore = method.IsInterfaceImplementation();
-            return ignore;
         }
 
         private static HashSet<string> GetAllUsedVariables(SyntaxNodeAnalysisContext context, SyntaxNode statementOrExpression)
@@ -68,10 +53,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
 
             var methodSymbol = method.GetEnclosingMethod(context.SemanticModel);
-            if (CanBeIgnored(methodSymbol))
+            if (methodSymbol is null)
                 return;
 
-            var results = Analyze(context, methodBody, parameters);
+            var results = Analyze(context, methodBody, methodSymbol);
             foreach (var diagnostic in results)
             {
                 context.ReportDiagnostic(diagnostic);
@@ -90,30 +75,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (methodBody is null)
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
 
-            var results = Analyze(context, methodBody, parameters);
+            var methodSymbol = method.GetEnclosingMethod(context.SemanticModel);
+            if (methodSymbol is null)
+                return;
+
+            var results = Analyze(context, methodBody, methodSymbol);
             foreach (var diagnostic in results)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
+        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, IMethodSymbol method)
         {
             var used = GetAllUsedVariables(context, methodBody);
 
             List<Diagnostic> results = null;
-            foreach (var parameter in parameters)
+            foreach (var parameter in method.Parameters)
             {
-                var parameterName = parameter.Identifier.ValueText;
-
-                if (used.Contains(parameterName))
+                if (!used.Contains(parameter.Name))
                     continue;
 
-                if (results == null)
-                    results = new List<Diagnostic>();
+                // check comment
+                var commentXml = method.GetDocumentationCommentXml();
+                var comment = GetParameterComment(parameter, commentXml);
+                if (comment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal))
+                {
+                    if (results == null)
+                        results = new List<Diagnostic>();
 
-                var diagnostic = ReportIssue(parameterName, parameter.GetLocation());
-                results.Add(diagnostic);
+                    var diagnostic = ReportIssue(parameter);
+                    results.Add(diagnostic);
+                }
             }
 
             return results ?? Enumerable.Empty<Diagnostic>();
