@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         if (results == null)
                         {
                             results = new List<Diagnostic>();
-                            order = string.Join(Environment.NewLine, methodsOrderedByParameters.Select(_ => _.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)));
+                            order = string.Join(Environment.NewLine, methodsOrderedByParameters.Select(_ => "   " + _.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)));
                         }
 
                         results.Add(ReportIssue(method, order));

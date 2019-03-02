@@ -5326,8 +5326,8 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to Order methods in following way:
-        ///
-        ///{1}.
+        ///{1}
+        ///.
         /// </summary>
         public static string MiKo_4001_MessageFormat {
             get {
