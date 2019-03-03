@@ -136,6 +136,42 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_class_with_identically_named_methods_in_correct_order_and_params_method_at_the_end() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+
+    public void DoSomething(params int[] i)
+    { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_identically_named_methods_in_correct_order_and_params_method_in_the_middle() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    { }
+
+    public void DoSomething(params int[] i)
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer();

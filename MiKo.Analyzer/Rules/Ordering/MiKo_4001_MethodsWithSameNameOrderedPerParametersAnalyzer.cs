@@ -34,8 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             List<Diagnostic> results = null;
             foreach (var methodName in methodNames)
             {
-                // pre-order for accessibility (public first, private last)
-                var methodsOrderedByParameters = methods.Where(_ => _.Name == methodName).OrderByDescending(_ => _.DeclaredAccessibility).ThenBy(_ => _.Parameters.Length).ToList();
+                // pre-order for accessibility (public first, private last), then ensure that params methods are at the end
+                var methodsOrderedByParameters = methods.Where(_ => _.Name == methodName)
+                                                        .OrderByDescending(_ => _.DeclaredAccessibility)
+                                                        .ThenBy(_ => _.Parameters.Any(__ => __.IsParams))
+                                                        .ThenBy(_ => _.Parameters.Length)
+                                                        .ToList();
                 if (methodsOrderedByParameters.Count <= 1)
                     continue;
 
