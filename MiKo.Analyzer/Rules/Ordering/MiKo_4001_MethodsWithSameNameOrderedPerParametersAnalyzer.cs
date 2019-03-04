@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public const string Id = "MiKo_4001";
 
+        private static readonly SymbolDisplayFormat Format = SymbolDisplayFormat.MinimallyQualifiedFormat;
+
         public MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -56,9 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         if (results == null)
                         {
                             results = new List<Diagnostic>();
-                            var className = methods.First().ContainingType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) + ".";
-
-                            order = string.Join(Environment.NewLine, methodsOrderedByParameters.Select(_ => _.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)).Select(_ => "   " + _.Remove(className)));
+                            order = methodsOrderedByParameters.Select(GetMethodSignature).ConcatenatedWith(Environment.NewLine);
                         }
 
                         results.Add(ReportIssue(method, order));
@@ -72,5 +72,31 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         }
 
         private static int GetStartingLine(IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
+
+        private static string GetMethodSignature(IMethodSymbol method)
+        {
+            var parameters = "(" + method.Parameters.Select(GetParameterSignature).ConcatenatedWith(", ") + ")";
+
+            return string.Concat(method.ReturnType.ToDisplayString(Format), " ", method.Name, parameters);
+        }
+
+
+        private static string GetParameterSignature(IParameterSymbol parameter)
+        {
+            var modifier = GetModifier(parameter);
+            return modifier + parameter.Type.ToDisplayString(Format);
+        }
+
+        private static string GetModifier(IParameterSymbol parameter)
+        {
+            if (parameter.IsParams) return "params ";
+
+            switch (parameter.RefKind)
+            {
+                case RefKind.Ref: return "ref ";
+                case RefKind.Out: return "out ";
+                default: return string.Empty;
+            }
+        }
     }
 }
