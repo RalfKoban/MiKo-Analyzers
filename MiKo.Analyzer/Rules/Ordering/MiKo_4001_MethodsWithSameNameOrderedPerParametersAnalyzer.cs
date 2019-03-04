@@ -56,7 +56,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         if (results == null)
                         {
                             results = new List<Diagnostic>();
-                            order = string.Join(Environment.NewLine, methodsOrderedByParameters.Select(_ => "   " + _.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)));
+                            var className = methods.First().ContainingType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) + ".";
+
+                            order = string.Join(Environment.NewLine, methodsOrderedByParameters.Select(_ => _.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)).Select(_ => "   " + _.Remove(className)));
                         }
 
                         results.Add(ReportIssue(method, order));
