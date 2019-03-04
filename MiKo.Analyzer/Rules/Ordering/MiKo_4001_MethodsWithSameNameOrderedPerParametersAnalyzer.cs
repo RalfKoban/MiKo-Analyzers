@@ -25,11 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var methodsAndCtors = ctors.Concat(methods).ToList();
 
             return methodsAndCtors.Any()
-                       ? AnalyzeMethods(methodsAndCtors)
+                       ? AnalyzeMethods(methodsAndCtors, symbol)
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)
+        private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods, ITypeSymbol symbol)
         {
             var methodNames = methods.Select(_ => _.Name).ToHashSet();
 
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 if (methodsOrderedByParameters.Count <= 1)
                     continue;
 
-                var order = string.Empty;
+                var order = methodsOrderedByParameters.Select(_ => "   " + _.ToDisplayString(Format).Remove(symbol.Name + ".")).ConcatenatedWith(Environment.NewLine);
 
                 // check for locations
                 var lastLine = GetStartingLine(methodsOrderedByParameters[0]);
@@ -56,10 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     if (lastLine > nextLine)
                     {
                         if (results == null)
-                        {
                             results = new List<Diagnostic>();
-                            order = methodsOrderedByParameters.Select(GetMethodSignature).ConcatenatedWith(Environment.NewLine);
-                        }
 
                         results.Add(ReportIssue(method, order));
                     }
@@ -72,31 +69,5 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         }
 
         private static int GetStartingLine(IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
-
-        private static string GetMethodSignature(IMethodSymbol method)
-        {
-            var parameters = "(" + method.Parameters.Select(GetParameterSignature).ConcatenatedWith(", ") + ")";
-
-            return string.Concat(method.ReturnType.ToDisplayString(Format), " ", method.Name, parameters);
-        }
-
-
-        private static string GetParameterSignature(IParameterSymbol parameter)
-        {
-            var modifier = GetModifier(parameter);
-            return modifier + parameter.Type.ToDisplayString(Format);
-        }
-
-        private static string GetModifier(IParameterSymbol parameter)
-        {
-            if (parameter.IsParams) return "params ";
-
-            switch (parameter.RefKind)
-            {
-                case RefKind.Ref: return "ref ";
-                case RefKind.Out: return "out ";
-                default: return string.Empty;
-            }
-        }
     }
 }
