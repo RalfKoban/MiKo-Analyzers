@@ -71,9 +71,46 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private static int GetStartingLine(IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
 
-        private static string GetMethodSignature(IMethodSymbol symbol)
+        private static string GetMethodSignature(IMethodSymbol method)
         {
-            return symbol.ToDisplayString(Format).Remove(symbol.ContainingType.Name + ".");
+            var parameters = "(" + method.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";
+            var staticPrefix = method.IsStatic ? "static " : string.Empty;
+            var asyncPrefix = method.IsAsync ? "async " : string.Empty;
+
+            var methodName = GetMethodNameForKind(method);
+
+            return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
+        }
+
+        private static string GetMethodNameForKind(IMethodSymbol method)
+        {
+            switch (method.MethodKind)
+            {
+                case MethodKind.Constructor:
+                case MethodKind.StaticConstructor:
+                    return method.ContainingType.Name;
+
+                default:
+                    return method.ReturnType.ToDisplayString(Format) + " " + method.Name;
+            }
+        }
+
+        private static string GetParameterSignature(IParameterSymbol parameter)
+        {
+            var modifier = GetModifier(parameter);
+            return modifier + parameter.Type.ToDisplayString(Format);
+        }
+
+        private static string GetModifier(IParameterSymbol parameter)
+        {
+            if (parameter.IsParams) return "params ";
+
+            switch (parameter.RefKind)
+            {
+                case RefKind.Ref: return "ref ";
+                case RefKind.Out: return "out ";
+                default: return string.Empty;
+            }
         }
     }
 }
