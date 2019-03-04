@@ -36,16 +36,17 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             List<Diagnostic> results = null;
             foreach (var methodName in methodNames)
             {
-                // pre-order for accessibility (public first, private last), then ensure that params methods are at the end
+                // pre-order for accessibility (public first, private last), then ensure that static methods are first and params methods are at the end
                 var methodsOrderedByParameters = methods.Where(_ => _.Name == methodName)
                                                         .OrderByDescending(_ => _.DeclaredAccessibility)
+                                                        .ThenByDescending(_ => _.IsStatic)
                                                         .ThenBy(_ => _.Parameters.Any(__ => __.IsParams))
                                                         .ThenBy(_ => _.Parameters.Length)
                                                         .ToList();
                 if (methodsOrderedByParameters.Count <= 1)
                     continue;
 
-                var order = methodsOrderedByParameters.Select(_ => "   " + _.ToDisplayString(Format).Remove(symbol.Name + ".")).ConcatenatedWith(Environment.NewLine);
+                var order = methodsOrderedByParameters.Select(_ => "   " + GetMethodSignature(_)).ConcatenatedWith(Environment.NewLine);
 
                 // check for locations
                 var lastLine = GetStartingLine(methodsOrderedByParameters[0]);
@@ -69,5 +70,10 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         }
 
         private static int GetStartingLine(IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
+
+        private static string GetMethodSignature(IMethodSymbol symbol)
+        {
+            return symbol.ToDisplayString(Format).Remove(symbol.ContainingType.Name + ".");
+        }
     }
 }
