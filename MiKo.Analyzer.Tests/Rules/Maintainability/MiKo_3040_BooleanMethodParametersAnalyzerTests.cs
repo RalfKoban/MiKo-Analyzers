@@ -131,6 +131,18 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_boolean_parameter_on_test_method([ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute) => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void Something(bool value) { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3040_BooleanMethodParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3040_BooleanMethodParametersAnalyzer();

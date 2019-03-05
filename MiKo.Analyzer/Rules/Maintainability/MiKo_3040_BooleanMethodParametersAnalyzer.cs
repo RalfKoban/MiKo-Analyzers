@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.MethodKind == MethodKind.Ordinary;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.MethodKind == MethodKind.Ordinary && !symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
