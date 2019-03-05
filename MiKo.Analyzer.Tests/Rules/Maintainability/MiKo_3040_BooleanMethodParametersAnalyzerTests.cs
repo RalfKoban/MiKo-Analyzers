@@ -62,23 +62,57 @@ namespace My
 {
     public abstract class TestMe : System.Collections.Generic.ICollection<bool>
     {
-            public abstract int Count { get; set; }
+        public abstract int Count { get; set; }
 
-            public abstract bool IsReadOnly { get; set; }
+        public abstract bool IsReadOnly { get; set; }
 
-            void ICollection<bool>.Add(bool value) { }
+        void ICollection<bool>.Add(bool value) { }
 
-            public abstract void Clear();
+        public abstract void Clear();
 
-            public abstract bool Contains(bool item);
+        public abstract bool Contains(bool item);
 
-            public abstract void CopyTo(bool[] array, int arrayIndex);
+        public abstract void CopyTo(bool[] array, int arrayIndex);
 
-            public abstract bool Remove(bool item);
+        public abstract bool Remove(bool item);
 
-            public abstract IEnumerator<bool> GetEnumerator();
+        public abstract IEnumerator<bool> GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_boolean_parameter_on_overridden_method() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+namespace My
+{
+    public abstract class TestMe : System.Collections.Generic.ICollection<bool>
+    {
+        public abstract int Count { get; set; }
+
+        public abstract bool IsReadOnly { get; set; }
+
+        void ICollection<bool>.Add(bool value) { }
+
+        public abstract void Clear();
+
+        public abstract bool Contains(bool item);
+
+        public abstract void CopyTo(bool[] array, int arrayIndex);
+
+        public abstract bool Remove(bool item);
+
+        public abstract IEnumerator<bool> GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    public class TestMeConcrete : TestMe
+    {
+        public override bool Remove(bool item) => false;
     }
 }");
 
