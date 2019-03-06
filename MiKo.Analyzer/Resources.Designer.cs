@@ -4869,6 +4869,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A method that raises the PropertyChanging or PropertyChanged events should use the CallerMemberNameAttribute to specify the name of the property automatically..
+        /// </summary>
+        public static string MiKo_3034_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3034_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply [CallerMemberName] attribute to &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3034_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3034_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PropertyChanged event raiser shall use [CallerMemberName] attribute..
+        /// </summary>
+        public static string MiKo_3034_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3034_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {

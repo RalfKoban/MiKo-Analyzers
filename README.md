@@ -126,6 +126,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2023|Documentation of Boolean parameters should have a default starting phrase.|:white_check_mark:|
 |MiKo_2024|Documentation of Enum parameters should have a default starting phrase.|:white_check_mark:|
 |MiKo_2025|Documentation of 'CancellationToken' parameters should have a default starting phrase.|:white_check_mark:|
+|MiKo_2026|Used parameters should not be documented to be unused.|:white_check_mark:|
 |MiKo_2030|Documentation of return value should have a default starting phrase.|:white_check_mark:|
 |MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|:white_check_mark:|
 |MiKo_2032|Documentation of Boolean return value should have a specific phrase.|:white_check_mark:|
@@ -200,6 +201,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3031|Do not concatenate strings with += operator.|:white_check_mark:|
 |MiKo_3032|ICloneable.Clone() should not be implemented.|:white_check_mark:|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|:white_check_mark:|
+|MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|:white_check_mark:|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|:white_check_mark:|
 |MiKo_3041|EventArgs shall not use delegates.|:white_check_mark:|
 |MiKo_3050|DependencyProperty fields should be 'public static readonly'.|:white_check_mark:|
