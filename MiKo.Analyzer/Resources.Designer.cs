@@ -3935,33 +3935,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;guid&apos;. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term &apos;unique identifier&apos; instead..
-        /// </summary>
-        public static string MiKo_2201_Description {
-            get {
-                return ResourceManager.GetString("MiKo_2201_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use &apos;unique identifier&apos; instead of &apos;guid&apos; in documentation.
-        /// </summary>
-        public static string MiKo_2201_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_2201_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the term &apos;unique identifier&apos; instead of &apos;guid&apos;..
-        /// </summary>
-        public static string MiKo_2201_Title {
-            get {
-                return ResourceManager.GetString("MiKo_2201_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;id&apos;. Instead, it should clearly document that this is an identifier. Hence, it should use the term &apos;identifier&apos; instead..
         /// </summary>
         public static string MiKo_2202_Description {
@@ -3989,8 +3962,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should use the &lt;list&gt; XML tag if things get enumerated. It should not use terms such as 1), 2) etc. directly.
-        ///This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted..
+        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;guid&apos;. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term &apos;unique identifier&apos; instead..
         /// </summary>
         public static string MiKo_2203_Description {
             get {
@@ -3999,7 +3971,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &lt;list&gt; for enumeration in documentation.
+        ///   Looks up a localized string similar to Use &apos;unique identifier&apos; instead of &apos;guid&apos; in documentation.
         /// </summary>
         public static string MiKo_2203_MessageFormat {
             get {
@@ -4008,7 +3980,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &lt;list&gt; for enumerations..
+        ///   Looks up a localized string similar to Documentation should use the term &apos;unique identifier&apos; instead of &apos;guid&apos;..
         /// </summary>
         public static string MiKo_2203_Title {
             get {
@@ -4017,8 +3989,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should use the &lt;note&gt; XML tag to mark important information. It should not use terms such as &apos;Important&apos; or &apos;Attention&apos; directly.
-        ///This is because XML documentation tools are aware of &lt;note&gt; and can format the information in a special way..
+        ///   Looks up a localized string similar to The XML documentation should use the &lt;list&gt; XML tag if things get enumerated. It should not use terms such as 1), 2) etc. directly.
+        ///This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted..
         /// </summary>
         public static string MiKo_2204_Description {
             get {
@@ -4027,7 +3999,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &lt;note&gt; for important information in documentation.
+        ///   Looks up a localized string similar to Use &lt;list&gt; for enumeration in documentation.
         /// </summary>
         public static string MiKo_2204_MessageFormat {
             get {
@@ -4036,7 +4008,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &lt;note&gt; for important information..
+        ///   Looks up a localized string similar to Documentation should use &lt;list&gt; for enumerations..
         /// </summary>
         public static string MiKo_2204_Title {
             get {
@@ -4045,7 +4017,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation should not use the term &apos;flag&apos; which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary..
+        ///   Looks up a localized string similar to The XML documentation should use the &lt;note&gt; XML tag to mark important information. It should not use terms such as &apos;Important&apos; or &apos;Attention&apos; directly.
+        ///This is because XML documentation tools are aware of &lt;note&gt; and can format the information in a special way..
         /// </summary>
         public static string MiKo_2205_Description {
             get {
@@ -4054,7 +4027,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from documentation.
+        ///   Looks up a localized string similar to Use &lt;note&gt; for important information in documentation.
         /// </summary>
         public static string MiKo_2205_MessageFormat {
             get {
@@ -4063,11 +4036,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use the term &apos;flag&apos;..
+        ///   Looks up a localized string similar to Documentation should use &lt;note&gt; for important information..
         /// </summary>
         public static string MiKo_2205_Title {
             get {
                 return ResourceManager.GetString("MiKo_2205_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The documentation should not use the term &apos;flag&apos; which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary..
+        /// </summary>
+        public static string MiKo_2206_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2206_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from documentation.
+        /// </summary>
+        public static string MiKo_2206_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2206_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not use the term &apos;flag&apos;..
+        /// </summary>
+        public static string MiKo_2206_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2206_Title", resourceCulture);
             }
         }
         

@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2201_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
             {
@@ -61,8 +61,8 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2201_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2201_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer();
     }
 }

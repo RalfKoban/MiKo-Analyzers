@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2204_DocumentationShallUseNoteAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2205_DocumentationShallUseNoteAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
             {
@@ -71,8 +71,8 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2204_DocumentationShallUseNoteAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2205_DocumentationShallUseNoteAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2204_DocumentationShallUseNoteAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2205_DocumentationShallUseNoteAnalyzer();
     }
 }

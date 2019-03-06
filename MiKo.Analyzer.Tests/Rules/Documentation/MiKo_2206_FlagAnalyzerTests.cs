@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2205_FlagAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2206_FlagAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
@@ -108,9 +108,9 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2205_FlagAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2206_FlagAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2205_FlagAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2206_FlagAnalyzer();
 
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> XmlTags() => new[] { "summary", "remarks", "returns", "example", "value", "exception" };

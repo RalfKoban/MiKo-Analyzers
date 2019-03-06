@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2205_FlagAnalyzer : OverallDocumentationAnalyzer
+    public sealed class MiKo_2206_FlagAnalyzer : OverallDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2205";
+        public const string Id = "MiKo_2206";
 
         private static readonly string[] Phrases = CreatePhrases(" flag", " flags").ToArray();
 
-        public MiKo_2205_FlagAnalyzer() : base(Id)
+        public MiKo_2206_FlagAnalyzer() : base(Id)
         {
         }
 
