@@ -44,11 +44,13 @@ namespace MiKoSolutions.Analyzers
             return symbols.Any(_ => symbol.Equals(symbol.ContainingType.FindImplementationForInterfaceMember(_)));
         }
 
+        internal static IEnumerable<string> GetAttributeNames(this ISymbol symbol) => symbol.GetAttributes().Select(_ => _.AttributeClass.Name);
+
         internal static bool IsTestClass(this ITypeSymbol symbol)
         {
             if (symbol?.TypeKind == TypeKind.Class)
             {
-                foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
+                foreach (var name in symbol.GetAttributeNames())
                 {
                     switch (name)
                     {
@@ -66,7 +68,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestMethod(this IMethodSymbol method)
         {
-            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in method.GetAttributeNames())
             {
                 switch (name)
                 {
@@ -91,7 +93,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestSetupMethod(this IMethodSymbol method)
         {
-            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in method.GetAttributeNames())
             {
                 switch (name)
                 {
@@ -108,7 +110,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestTeardownMethod(this IMethodSymbol method)
         {
-            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in method.GetAttributeNames())
             {
                 switch (name)
                 {
@@ -144,7 +146,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (!symbol.IsConstructor()) return false;
 
-            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in symbol.GetAttributeNames())
             {
                 switch (name)
                 {
@@ -159,7 +161,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsImport(this ISymbol symbol)
         {
-            foreach (var name in symbol.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in symbol.GetAttributeNames())
             {
                 switch (name)
                 {
