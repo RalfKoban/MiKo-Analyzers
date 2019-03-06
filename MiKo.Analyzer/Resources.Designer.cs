@@ -4878,7 +4878,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply [CallerMemberName] attribute to &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Apply [CallerMemberName] attribute.
         /// </summary>
         public static string MiKo_3034_MessageFormat {
             get {

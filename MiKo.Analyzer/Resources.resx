@@ -1749,7 +1749,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>A method that raises the PropertyChanging or PropertyChanged events should use the CallerMemberNameAttribute to specify the name of the property automatically.</value>
   </data>
   <data name="MiKo_3034_MessageFormat" xml:space="preserve">
-    <value>Apply [CallerMemberName] attribute to '{0}'</value>
+    <value>Apply [CallerMemberName] attribute</value>
   </data>
   <data name="MiKo_3034_Title" xml:space="preserve">
     <value>PropertyChanged event raiser shall use [CallerMemberName] attribute.</value>

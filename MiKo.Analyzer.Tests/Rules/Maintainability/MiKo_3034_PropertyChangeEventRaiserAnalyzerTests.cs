@@ -102,6 +102,22 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_field_assignment() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Something { get; set; }
+
+        private PropertyChangedEventArgs e = new PropertyChangedEventArgs(nameof(Something));
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3034_PropertyChangeEventRaiserAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3034_PropertyChangeEventRaiserAnalyzer();
