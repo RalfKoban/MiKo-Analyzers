@@ -124,7 +124,7 @@
     <value>Too many LoC: {1,4} (max. {2})</value>
   </data>
   <data name="MiKo_0001_Title" xml:space="preserve">
-    <value>Method is too long.</value>
+    <value>Method is too big.</value>
   </data>
   <data name="MiKo_0002_Description" xml:space="preserve">
     <value>Methods should be simple to ease maintenance (KISS).
@@ -144,7 +144,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Too many LoC: {1,4} (max. {2})</value>
   </data>
   <data name="MiKo_0003_Title" xml:space="preserve">
-    <value>Type is too long.</value>
+    <value>Type is too big.</value>
   </data>
   <data name="MiKo_0004_Description" xml:space="preserve">
     <value>To follow the SRP, methods should have as few parameters as possible.</value>

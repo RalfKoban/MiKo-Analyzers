@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method is too long..
+        ///   Looks up a localized string similar to Method is too big..
         /// </summary>
         public static string MiKo_0001_Title {
             get {
@@ -135,7 +135,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type is too long..
+        ///   Looks up a localized string similar to Type is too big..
         /// </summary>
         public static string MiKo_0003_Title {
             get {

@@ -18,9 +18,9 @@ The following tables list all the rules that are currently provided by the analy
 ### Metrics
 |ID|Title|Enabled by default|
 |:-|:----|:----------------:|
-|MiKo_0001|Method is too long.|:white_check_mark:|
+|MiKo_0001|Method is too big.|:white_check_mark:|
 |MiKo_0002|Method is too complex.|:white_check_mark:|
-|MiKo_0003|Type is too long.|:white_check_mark:|
+|MiKo_0003|Type is too big.|:white_check_mark:|
 |MiKo_0004|Methods should not have too many parameters.|:white_check_mark:|
 
 ### Naming
@@ -165,11 +165,12 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
-|MiKo_2201|Documentation should use the term 'unique identifier' instead of 'guid'.|:white_check_mark:|
+|MiKo_2201|Use a capitalized letter to start the sentences in the comment.|:white_check_mark:|
 |MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|:white_check_mark:|
-|MiKo_2203|Documentation should use &lt;list&gt; for enumerations.|:white_check_mark:|
-|MiKo_2204|Documentation should use &lt;note&gt; for important information.|:white_check_mark:|
-|MiKo_2205|Documentation should not use the term 'flag'.|:white_check_mark:|
+|MiKo_2203|Documentation should use the term 'unique identifier' instead of 'guid'.|:white_check_mark:|
+|MiKo_2204|Documentation should use &lt;list&gt; for enumerations.|:white_check_mark:|
+|MiKo_2205|Documentation should use &lt;note&gt; for important information.|:white_check_mark:|
+|MiKo_2206|Documentation should not use the term 'flag'.|:white_check_mark:|
 
 ### Maintainability
 |ID|Title|Enabled by default|
