@@ -62,6 +62,9 @@ namespace System
         public static bool IsLetter(this char value) => char.IsLetter(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsLowerCaseLetter(this char value) => value.IsLetter() && value.IsLowerCase();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSentenceEnding(this char value)
         {
             switch (value)

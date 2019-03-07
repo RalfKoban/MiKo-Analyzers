@@ -51,29 +51,57 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var c = comment[i];
 
-                // skip nested XMLs
-                if (c == '<')
+                SkipWhiteSpacesAndNestedXml(comment, last, ref c, ref i);
+
+                if (c.IsSentenceEnding())
                 {
-                    while (c != '>' && i < last)
+                    // get next character after . ? or !
+                    if (i != last)
                         c = comment[++i];
+
+                    SkipWhiteSpacesAndNestedXml(comment, last, ref c, ref i);
+                    SkipAbbreviations(comment, last, ref c, ref i);
+
+                    if (c.IsLowerCaseLetter())
+                        return true;
                 }
-
-                if (!c.IsSentenceEnding())
-                    continue;
-
-                // get next
-                if (i != last)
-                    c = comment[++i];
-
-                // now check
-                while (c.IsWhiteSpace() && i < last)
-                    c = comment[++i];
-
-                if (c.IsLetter() && c.IsLowerCase())
-                    return true;
             }
 
             return false;
+        }
+
+        private static void SkipWhiteSpacesAndNestedXml(string comment, int last, ref char c, ref int i)
+        {
+            SkipWhiteSpaces(comment, last, ref c, ref i);
+            SkipNestedXml(comment, last, ref c, ref i);
+        }
+
+        private static void SkipWhiteSpaces(string comment, int last, ref char c, ref int i)
+        {
+            while (c.IsWhiteSpace() && i < last)
+            {
+                c = comment[++i];
+            }
+        }
+
+        private static void SkipNestedXml(string comment, int last, ref char c, ref int i)
+        {
+            if (c == '<')
+            {
+                while (c != '>' && i < last)
+                    c = comment[++i];
+            }
+        }
+
+        private static void SkipAbbreviations(string comment, int last, ref char c, ref int i)
+        {
+            // for example in string "e.g." -> c is already 'g', as well as i
+            const int Gap = 2;
+            if (c.IsLowerCaseLetter() && i + Gap < last && comment[i + 1] == '.')
+            {
+                i += Gap;
+                c = comment[i];
+            }
         }
     }
 }

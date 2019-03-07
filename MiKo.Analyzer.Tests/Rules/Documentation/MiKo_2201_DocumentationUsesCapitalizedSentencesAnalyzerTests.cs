@@ -70,10 +70,26 @@ public sealed class TestMe { }
 ");
 
         [Test]
+        public void No_issue_is_reported_for_nested_XML_documentation_with_code_example([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+/// <"+ xmlTag + @">
+/// The following example demonstrates its usage.
+/// <code source=""..\MiKo Aspects Samples\MiscSamples.cs"" region=""Required API usage"" lang=""C#"" />
+/// </"+ xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public sealed class TestMe { }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_well_known_abbreviation_in_XML_documentation([ValueSource(nameof(XmlTags))] string xmlTag, [Values("i.e.", "e.g.")] string abbreviation) => No_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// Something " + abbreviation + @" whatever.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
 
         protected override string GetDiagnosticId() => MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer.Id;
 
