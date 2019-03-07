@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
+﻿
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -12,6 +10,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2200_DocumentationStartsCapitalizedAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] XmlTags =
+            {
+                "example",
+                "exception",
+                "note",
+                "overloads",
+                "para",
+                "param",
+                "permission",
+                "remarks",
+                "returns",
+                "summary",
+                "typeparam",
+                "value",
+            };
+
+
+        private static readonly char[] ValidStartingCharacter = "abcdefghijklmnopqrstuvwxyz".ToUpperInvariant().ToCharArray();
+
+        private static readonly char[] InvalidStartingCharacter = "abcdefghijklmnopqrstuvwxyz1234567890-#+*.,;".ToCharArray();
+
         [Test, Combinatorial]
         public void Documentation_starting_with_upper_case_is_not_reported_for([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(ValidStartingCharacter))] char startingChar) => No_issue_is_reported_for(@"
 /// <"+ xmlTag + @">
@@ -56,28 +75,5 @@ public sealed class TestMe { }
         protected override string GetDiagnosticId() => MiKo_2200_DocumentationStartsCapitalizedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2200_DocumentationStartsCapitalizedAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> XmlTags() => new[]
-                                                            {
-                                                                "example",
-                                                                "exception",
-                                                                "note",
-                                                                "overloads",
-                                                                "para",
-                                                                "param",
-                                                                "permission",
-                                                                "remarks",
-                                                                "returns",
-                                                                "summary",
-                                                                "typeparam",
-                                                                "value",
-                                                            };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<char> ValidStartingCharacter() => "abcdefghijklmnopqrstuvwxyz".ToUpperInvariant().ToCharArray();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<char> InvalidStartingCharacter() => "abcdefghijklmnopqrstuvwxyz1234567890-#+*.,;".ToCharArray();
     }
 }
