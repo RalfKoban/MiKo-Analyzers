@@ -53,7 +53,28 @@ namespace System
         public static bool IsUpperCase(this char value) => char.IsUpper(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsLowerCase(this char value) => char.IsLower(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNumber(this char value) => char.IsNumber(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsLetter(this char value) => char.IsLetter(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsSentenceEnding(this char value)
+        {
+            switch (value)
+            {
+                case '.':
+                case '?':
+                case '!':
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T: class => string.Concat(values.Where(_ => _ != null));

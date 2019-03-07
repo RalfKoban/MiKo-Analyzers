@@ -3935,6 +3935,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Documentation sentences should start with a capitalized letter to have a full sentence..
+        /// </summary>
+        public static string MiKo_2201_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2201_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start sentence(s) in &lt;{1}&gt; with capitalized letter.
+        /// </summary>
+        public static string MiKo_2201_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2201_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a capitalized letter to start the sentences in the comment..
+        /// </summary>
+        public static string MiKo_2201_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2201_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;id&apos;. Instead, it should clearly document that this is an identifier. Hence, it should use the term &apos;identifier&apos; instead..
         /// </summary>
         public static string MiKo_2202_Description {

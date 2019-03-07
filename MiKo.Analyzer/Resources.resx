@@ -1423,6 +1423,15 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2200_Title" xml:space="preserve">
     <value>Use a capitalized letter to start the comment.</value>
   </data>
+  <data name="MiKo_2201_Description" xml:space="preserve">
+    <value>Documentation sentences should start with a capitalized letter to have a full sentence.</value>
+  </data>
+  <data name="MiKo_2201_MessageFormat" xml:space="preserve">
+    <value>Start sentence(s) in &lt;{1}&gt; with capitalized letter</value>
+  </data>
+  <data name="MiKo_2201_Title" xml:space="preserve">
+    <value>Use a capitalized letter to start the sentences in the comment.</value>
+  </data>
   <data name="MiKo_2202_Description" xml:space="preserve">
     <value>The XML documentation should not use the abbreviation 'id'. Instead, it should clearly document that this is an identifier. Hence, it should use the term 'identifier' instead.</value>
   </data>
