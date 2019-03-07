@@ -3944,7 +3944,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start sentence(s) in &lt;{1}&gt; with capitalized letter.
+        ///   Looks up a localized string similar to Start sentence(s) with capitalized letter in &lt;{1}&gt;.
         /// </summary>
         public static string MiKo_2201_MessageFormat {
             get {

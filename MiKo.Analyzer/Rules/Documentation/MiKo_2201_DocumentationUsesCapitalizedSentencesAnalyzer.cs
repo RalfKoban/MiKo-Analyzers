@@ -51,6 +51,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var c = comment[i];
 
+                // skip nested XMLs
+                if (c == '<')
+                {
+                    while (c != '>' && i < last)
+                        c = comment[++i];
+                }
+
                 if (!c.IsSentenceEnding())
                     continue;
 
