@@ -1451,17 +1451,20 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Documentation should use the term 'unique identifier' instead of 'guid'.</value>
   </data>
   <data name="MiKo_2204_Description" xml:space="preserve">
-    <value>The XML documentation should use the &lt;list&gt; XML tag if things get enumerated. It should not use terms such as 1), 2) etc. directly.
-This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted.</value>
+    <value>The XML documentation should use the &lt;list&gt; tag if items get enumerated. It should not use terms such as 1.), 2.) etc. directly.
+This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted and hard to read.</value>
+  </data>
+  <data name="MiKo_2204_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list</value>
   </data>
   <data name="MiKo_2204_MessageFormat" xml:space="preserve">
-    <value>Use &lt;list&gt; for enumeration in documentation</value>
+    <value>Use &lt;list&gt; to list items in documentation</value>
   </data>
   <data name="MiKo_2204_Title" xml:space="preserve">
     <value>Documentation should use &lt;list&gt; for enumerations.</value>
   </data>
   <data name="MiKo_2205_Description" xml:space="preserve">
-    <value>The XML documentation should use the &lt;note&gt; XML tag to mark important information. It should not use terms such as 'Important' or 'Attention' directly.
+    <value>The XML documentation should use the &lt;note&gt; tag to mark important information. It should not use terms such as 'Important' or 'Attention' directly.
 This is because XML documentation tools are aware of &lt;note&gt; and can format the information in a special way.</value>
   </data>
   <data name="MiKo_2205_MessageFormat" xml:space="preserve">

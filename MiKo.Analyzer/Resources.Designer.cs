@@ -4016,8 +4016,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should use the &lt;list&gt; XML tag if things get enumerated. It should not use terms such as 1), 2) etc. directly.
-        ///This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted..
+        ///   Looks up a localized string similar to The XML documentation should use the &lt;list&gt; tag if items get enumerated. It should not use terms such as 1.), 2.) etc. directly.
+        ///This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted and hard to read..
         /// </summary>
         public static string MiKo_2204_Description {
             get {
@@ -4026,7 +4026,16 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &lt;list&gt; for enumeration in documentation.
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list.
+        /// </summary>
+        public static string MiKo_2204_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_2204_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; to list items in documentation.
         /// </summary>
         public static string MiKo_2204_MessageFormat {
             get {
@@ -4044,7 +4053,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The XML documentation should use the &lt;note&gt; XML tag to mark important information. It should not use terms such as &apos;Important&apos; or &apos;Attention&apos; directly.
+        ///   Looks up a localized string similar to The XML documentation should use the &lt;note&gt; tag to mark important information. It should not use terms such as &apos;Important&apos; or &apos;Attention&apos; directly.
         ///This is because XML documentation tools are aware of &lt;note&gt; and can format the information in a special way..
         /// </summary>
         public static string MiKo_2205_Description {
