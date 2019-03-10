@@ -58,9 +58,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string GetComment(ISymbol symbol) => Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
 
-        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement) => Cleaned(GetCommentElements(commentXml, xmlElement));
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlTag) => Cleaned(GetCommentElements(commentXml, xmlTag));
 
-        protected static IEnumerable<string> GetComments(string commentXml, string xmlElement, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlElement).Descendants(xmlSubElement));
+        protected static IEnumerable<string> GetComments(string commentXml, string xmlTag, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlTag).Descendants(xmlSubElement));
 
         protected static IEnumerable<string> GetRemarks(ISymbol symbol) => GetRemarks(symbol.GetDocumentationCommentXml());
 
@@ -68,12 +68,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XElement GetCommentElement(ISymbol symbol) => GetCommentElement(symbol.GetDocumentationCommentXml());
 
-        protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlElement)
+        protected static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlTag)
         {
             var element = GetCommentElement(commentXml);
             return element == null
                        ? Enumerable.Empty<XElement>() // invalid character
-                       : element.Descendants(xmlElement);
+                       : element.Descendants(xmlTag);
         }
 
         protected static string GetParameterComment(IParameterSymbol parameter, string commentXml)
