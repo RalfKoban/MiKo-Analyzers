@@ -54,14 +54,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     case "c":
                     case "code":
-                    {
                         return false;
-                    }
 
                     case "para":
                     {
+                        if (e.HasElements)
+                            return e.Descendants().Any(CommentHasIssue);
+
                         // sentence starts lower case
                         comment = e.Value.TrimStart();
+
                         if (comment.Length > 0 && comment[0].IsLowerCaseLetter())
                             return true;
 

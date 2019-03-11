@@ -151,6 +151,19 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_code_in_code_block_para_tag_in_XML_documentation([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// <para>
+/// Some example:
+/// <code>
+/// if (x)
+///   return y; // that is e.g. a .png file
+/// </code>
+/// </para>
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
         protected override string GetDiagnosticId() => MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer();
