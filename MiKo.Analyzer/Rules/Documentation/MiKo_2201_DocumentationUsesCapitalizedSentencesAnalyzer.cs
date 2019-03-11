@@ -50,7 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (node is XElement e)
             {
                 // skip <c> and <code>
-                switch (e.Name.ToString().ToLower())
+                var name = e.Name.ToString().ToLower();
+                switch (name)
                 {
                     case "c":
                     case "code":
@@ -61,10 +62,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (e.HasElements)
                             return e.Descendants().Any(CommentHasIssue);
 
-                        // sentence starts lower case
                         comment = e.Value.TrimStart();
 
-                        if (comment.Length > 0 && comment[0].IsLowerCaseLetter())
+                        // sentence starts lower case
+                        if (name == "para" && comment.Length > 0 && comment[0].IsLowerCaseLetter())
                             return true;
 
                         break;
