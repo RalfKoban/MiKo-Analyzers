@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case "code":
                         return false;
 
-                    case "para":
+                    default:
                     {
                         if (e.HasElements)
                             return e.Descendants().Any(CommentHasIssue);
@@ -67,12 +67,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (comment.Length > 0 && comment[0].IsLowerCaseLetter())
                             return true;
 
-                        break;
-                    }
-
-                    default:
-                    {
-                        comment = e.Value;
                         break;
                     }
                 }

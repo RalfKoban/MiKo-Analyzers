@@ -164,6 +164,29 @@ public sealed class TestMe { }
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
+
+        [Test]
+        public void No_issue_is_reported_for_code_in_code_block_in_list_description_in_XML_documentation() => No_issue_is_reported_for(@"
+/// <summary>
+/// Specifies that the data value is a specific file extension.
+/// This class cannot be inherited.
+/// </summary>
+/// <remarks>
+/// The default extensions - that is when no other extensions have been specified - are:
+/// <list type=""bullet"">
+/// <item><description><c>.gif</c></description></item>
+/// <item><description><c>.jpg</c></description></item>
+/// <item><description><c>.jpeg</c></description></item>
+/// <item><description><c>.png</c></description></item>
+/// </list>
+/// <para />
+/// <note type=""important"">
+/// You need to apply the <see cref=""ValidateArgumentsAttribute""/> aspect to the owning class, as otherwise this marker will not do anything.
+/// </note>
+/// </remarks>
+public sealed class TestMe { }
+");
+
         protected override string GetDiagnosticId() => MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer();
