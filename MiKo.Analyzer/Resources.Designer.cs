@@ -2327,7 +2327,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should follow pattern: &apos;{1} ... {2}&apos;.
         /// </summary>
         public static string MiKo_2002_MessageFormat {
             get {
@@ -2462,7 +2462,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2011_MessageFormat {
             get {
@@ -2490,7 +2490,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not {1} meaningless phrase: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not {1} meaningless phrase: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2012_MessageFormat {
             get {
@@ -2625,7 +2625,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt;documentation should be: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; should be: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2017_MessageFormat {
             get {
@@ -2868,7 +2868,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter &apos;{0}&apos; lies about it being unused.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation lies about it being unused.
         /// </summary>
         public static string MiKo_2026_MessageFormat {
             get {
@@ -2949,7 +2949,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; documentation should follow pattern: &apos;{3} ... {4}&apos;.
+        ///   Looks up a localized string similar to &lt;{2}&gt; should follow pattern: &apos;{3} ... {4}&apos;.
         /// </summary>
         public static string MiKo_2032_MessageFormat {
             get {
@@ -3201,7 +3201,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2041_MessageFormat {
             get {
@@ -3318,7 +3318,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain parameter reference: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain parameter reference: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2045_MessageFormat {
             get {
@@ -3507,7 +3507,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} documentation should be something like:
+        ///   Looks up a localized string similar to {1} should be something like:
         ///
         ///{2}.
         /// </summary>
@@ -3563,7 +3563,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} documentation should be something like:
+        ///   Looks up a localized string similar to {1} should be something like:
         ///{2}.
         /// </summary>
         public static string MiKo_2054_MessageFormat {
@@ -3591,7 +3591,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} documentation should be something like:
+        ///   Looks up a localized string similar to {1} should be something like:
         ///{2}.
         /// </summary>
         public static string MiKo_2055_MessageFormat {
@@ -3619,7 +3619,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {1} documentation should end with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to {1} should end with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2056_MessageFormat {
             get {
@@ -3809,7 +3809,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should end with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; should end with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2074_MessageFormat {
             get {

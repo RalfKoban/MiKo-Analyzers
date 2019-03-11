@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -884,7 +884,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>To ease maintenance, classes that inherit from 'System.EventArgs' should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should follow pattern: '{1} ... {2}'</value>
+    <value>&lt;summary&gt; should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>EventArgs should be documented properly.</value>
@@ -929,7 +929,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Unsealed classes should not report that they are sealed.</value>
   </data>
   <data name="MiKo_2011_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should not contain: '{1}'</value>
+    <value>&lt;summary&gt; should not contain: '{1}'</value>
   </data>
   <data name="MiKo_2011_Title" xml:space="preserve">
     <value>Unsealed classes should not lie about sealing.</value>
@@ -939,7 +939,7 @@ That allows an easy detection and use via IntelliSense.</value>
 It should not start with or contain a meaningless phrase like 'Used to'. Instead it should start with something more descriptive, such as: 'Allows to ', 'Represents ' or 'Provides '.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should not {1} meaningless phrase: '{2}'</value>
+    <value>&lt;summary&gt; should not {1} meaningless phrase: '{2}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should describe its responsibility.</value>
@@ -984,7 +984,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Dependency properties should be documented in the same way as they are documented by the .NET Framework.</value>
   </data>
   <data name="MiKo_2017_MessageFormat" xml:space="preserve">
-    <value>&lt;{2}&gt;documentation should be: '{3}'</value>
+    <value>&lt;{2}&gt; should be: '{3}'</value>
   </data>
   <data name="MiKo_2017_Title" xml:space="preserve">
     <value>Dependency properties should be documented as by the .NET Framework.</value>
@@ -1065,7 +1065,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation should not state that a parameter is unused although it is still in use.</value>
   </data>
   <data name="MiKo_2026_MessageFormat" xml:space="preserve">
-    <value>Documentation of parameter '{0}' lies about it being unused</value>
+    <value>&lt;param name="{0}"&gt; documentation lies about it being unused</value>
   </data>
   <data name="MiKo_2026_Title" xml:space="preserve">
     <value>Used parameters should not be documented to be unused.</value>
@@ -1092,7 +1092,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
-    <value>&lt;{2}&gt; documentation should follow pattern: '{3} ... {4}'</value>
+    <value>&lt;{2}&gt; should follow pattern: '{3} ... {4}'</value>
   </data>
   <data name="MiKo_2032_Title" xml:space="preserve">
     <value>Documentation of Boolean return value should have a specific phrase.</value>
@@ -1176,7 +1176,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
   </data>
   <data name="MiKo_2041_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should not contain: '{1}'</value>
+    <value>&lt;summary&gt; should not contain: '{1}'</value>
   </data>
   <data name="MiKo_2041_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not contain other documentation tags.</value>
@@ -1215,7 +1215,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The &lt;summary&gt; documentation should not reference method parameters as its only purpose is to give a brief description.</value>
   </data>
   <data name="MiKo_2045_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should not contain parameter reference: '{1}'</value>
+    <value>&lt;summary&gt; should not contain parameter reference: '{1}'</value>
   </data>
   <data name="MiKo_2045_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not reference parameters.</value>
@@ -1278,7 +1278,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
   </data>
   <data name="MiKo_2052_MessageFormat" xml:space="preserve">
-    <value>{1} documentation should be something like:
+    <value>{1} should be something like:
 
 {2}</value>
   </data>
@@ -1298,7 +1298,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
-    <value>{1} documentation should be something like:
+    <value>{1} should be something like:
 {2}</value>
   </data>
   <data name="MiKo_2054_Title" xml:space="preserve">
@@ -1308,7 +1308,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
-    <value>{1} documentation should be something like:
+    <value>{1} should be something like:
 {2}</value>
   </data>
   <data name="MiKo_2055_Title" xml:space="preserve">
@@ -1318,7 +1318,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
   </data>
   <data name="MiKo_2056_MessageFormat" xml:space="preserve">
-    <value>{1} documentation should end with: '{2}'</value>
+    <value>{1} should end with: '{2}'</value>
   </data>
   <data name="MiKo_2056_Title" xml:space="preserve">
     <value>Throwing of ObjectDisposedException should be documented using a default ending phrase.</value>
@@ -1382,7 +1382,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>'Contain' methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase ' to seek.'.</value>
   </data>
   <data name="MiKo_2074_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; documentation should end with: '{2}'</value>
+    <value>&lt;param name="{1}"&gt; should end with: '{2}'</value>
   </data>
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>Documentation of parameter of 'Contains' method should have a default ending phrase.</value>
