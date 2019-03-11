@@ -3728,7 +3728,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use phrase &apos;{1}&apos; in &lt;summary&gt; documentation.
+        ///   Looks up a localized string similar to Do not use phrase &apos;{1}&apos; in &lt;summary&gt;.
         /// </summary>
         public static string MiKo_2071_MessageFormat {
             get {
