@@ -831,7 +831,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from name.
         /// </summary>
         public static string MiKo_1030_MessageFormat {
             get {
