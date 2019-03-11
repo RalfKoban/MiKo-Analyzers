@@ -40,9 +40,49 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(UpperCaseLetters))] char startingChar) => No_issue_is_reported_for(@"
+/// <"+ xmlTag + @">
+/// Documentation.
+/// <para>" + startingChar + @" something.</para>
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_with_line_break_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(UpperCaseLetters))] char startingChar) => No_issue_is_reported_for(@"
+/// <"+ xmlTag + @">
+/// Documentation.
+/// <para>
+/// " + startingChar + @" something.
+/// </para>
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test, Combinatorial]
         public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(LowerCaseLetters))] char startingChar) => An_issue_is_reported_for(@"
 /// <"+ xmlTag + @">
 /// Documentation. " + startingChar + @" something.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(LowerCaseLetters))] char startingChar) => An_issue_is_reported_for(@"
+/// <"+ xmlTag + @">
+/// Documentation.
+/// <para>" + startingChar + @" something.</para>
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_with_line_break_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(LowerCaseLetters))] char startingChar) => An_issue_is_reported_for(@"
+/// <"+ xmlTag + @">
+/// Documentation.
+/// <para>
+/// " + startingChar + @" something.
+/// </para>
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
@@ -70,7 +110,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_nested_XML_documentation_with_code_example([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_nested_XML_documentation_with_code_source_to_file([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <"+ xmlTag + @">
 /// The following example demonstrates its usage.
 /// <code source=""..\MiKo Aspects Samples\MiscSamples.cs"" region=""Required API usage"" lang=""C#"" />
@@ -87,6 +127,26 @@ public sealed class TestMe { }
         public void No_issue_is_reported_for_well_known_abbreviation_in_XML_documentation([ValueSource(nameof(XmlTags))] string xmlTag, [Values("i.e.", "e.g.")] string abbreviation) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Something " + abbreviation + @" whatever.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_well_known_file_extension_in_code_block_in_XML_documentation(
+                                                                                                    [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                    [Values(".png", ".jpg", ".html", ".net")] string fileExtension,
+                                                                                                    [Values("c", "code")] string codeBlock)
+            => No_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// Some <"+ codeBlock + ">file" + fileExtension + "</" + codeBlock + @"> extension.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_well_known_file_extension_not_within_code_block_in_XML_documentation([ValueSource(nameof(XmlTags))] string xmlTag, [Values(".png", ".jpg", ".html", ".net")] string fileExtension) => An_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// Some file" + fileExtension + @" extension.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");

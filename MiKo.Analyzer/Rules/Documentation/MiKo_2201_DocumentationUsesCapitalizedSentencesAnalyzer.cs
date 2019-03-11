@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -40,7 +41,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool TagCommentHasIssue(string commentXml, string xmlTag) => GetCommentElements(commentXml, xmlTag).Select(_ => _.Nodes().ConcatenatedWith()).Any(CommentHasIssue);
+        private static bool TagCommentHasIssue(string commentXml, string xmlTag) => GetCommentElements(commentXml, xmlTag).SelectMany(_ => _.Nodes()).Any(CommentHasIssue);
+
+        private static bool CommentHasIssue(XNode node)
+        {
+            string comment;
+
+            if (node is XElement e)
+            {
+                // skip <c> and <code>
+                switch (e.Name.ToString().ToLower())
+                {
+                    case "c":
+                    case "code":
+                    {
+                        return false;
+                    }
+
+                    case "para":
+                    {
+                        // sentence starts lower case
+                        comment = e.Value.TrimStart();
+                        if (comment.Length > 0 && comment[0].IsLowerCaseLetter())
+                            return true;
+
+                        break;
+                    }
+
+                    default:
+                    {
+                        comment = e.Value;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                comment = node.ToString();
+            }
+
+            return CommentHasIssue(comment);
+        }
 
         private static bool CommentHasIssue(string comment)
         {
@@ -51,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var c = comment[i];
 
-                SkipWhiteSpacesAndNestedXml(comment, last, ref c, ref i);
+                SkipWhiteSpaces(comment, last, ref c, ref i);
 
                 if (c.IsSentenceEnding())
                 {
@@ -59,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (i != last)
                         c = comment[++i];
 
-                    SkipWhiteSpacesAndNestedXml(comment, last, ref c, ref i);
+                    SkipWhiteSpaces(comment, last, ref c, ref i);
                     SkipAbbreviations(comment, last, ref c, ref i);
 
                     if (c.IsLowerCaseLetter())
@@ -70,12 +111,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static void SkipWhiteSpacesAndNestedXml(string comment, int last, ref char c, ref int i)
-        {
-            SkipWhiteSpaces(comment, last, ref c, ref i);
-            SkipNestedXml(comment, last, ref c, ref i);
-        }
-
         private static void SkipWhiteSpaces(string comment, int last, ref char c, ref int i)
         {
             while (c.IsWhiteSpace() && i < last)
@@ -84,19 +119,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static void SkipNestedXml(string comment, int last, ref char c, ref int i)
-        {
-            if (c == '<')
-            {
-                while (c != '>' && i < last)
-                    c = comment[++i];
-            }
-        }
-
         private static void SkipAbbreviations(string comment, int last, ref char c, ref int i)
         {
             // for example in string "e.g." -> c is already 'g', as well as i
             const int Gap = 2;
+
             if (c.IsLowerCaseLetter() && i + Gap < last && comment[i + 1] == '.')
             {
                 i += Gap;
