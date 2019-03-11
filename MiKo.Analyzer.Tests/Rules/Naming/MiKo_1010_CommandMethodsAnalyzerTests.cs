@@ -75,6 +75,14 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_event_handling_method_([Values("OnCommandExecuting", "OnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    private int " + methodName + @"() => 42;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1010_CommandMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1010_CommandMethodsAnalyzer();

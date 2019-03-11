@@ -22,6 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                             nameof(ICommand.CanExecuteChanged),
                                                                             "On" + nameof(ICommand.CanExecuteChanged),
                                                                             "Raise" + nameof(ICommand.CanExecuteChanged),
+                                                                            "OnCommandExecuting",
+                                                                            "OnCommandExecuted",
                                                                         };
 
         public MiKo_1010_CommandMethodsAnalyzer() : base(Id)
