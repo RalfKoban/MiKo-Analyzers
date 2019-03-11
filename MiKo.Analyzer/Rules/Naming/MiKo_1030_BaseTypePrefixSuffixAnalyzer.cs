@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,8 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var marker in Constants.Markers.BaseClasses)
             {
-                if (symbol.Name.Contains(marker))
+                if (symbol.Name.Remove("Abstraction").Contains(marker))
+                {
                     yield return ReportIssue(symbol, marker);
+                }
             }
         }
     }
