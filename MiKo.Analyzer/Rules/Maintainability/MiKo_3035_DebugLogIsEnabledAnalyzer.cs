@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression); // SimpleMemberAccessExpression
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
@@ -48,16 +48,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // check for correct type (only ILog methods shall be reported)
                     var type = semanticModel.GetTypeInfo(methodCall.Expression).Type;
 
-                    if (type.Name != "ILog")
+                    if (type.Name != Constants.ILog)
                         return null;
 
-                    var method = methodCall.GetEnclosingMethod(semanticModel);
-
-                    return ReportIssue(method.Name, methodCall.Parent.GetLocation(), methodName, IsDebugEnabled);
+                    var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
+                    return ReportIssue(enclosingMethod.Name, methodCall.Parent.GetLocation(), methodName, IsDebugEnabled);
                 }
-            }
 
-            return null;
+                default:
+                    return null;
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public class MiKo_3035_DebugLogIsEnabledAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Methods = { "Debug", "DebugFormat" };
+
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
 namespace Bla
@@ -32,7 +34,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement([Values("Debug", "DebugFormat")] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -58,7 +60,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_without_block_in_if_statement([Values("Debug", "DebugFormat")] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_without_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -82,7 +84,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_ctor_in_block_in_if_statement([Values("Debug", "DebugFormat")] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_ctor_in_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -108,7 +110,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_ctor_without_block_in_if_statement([Values("Debug", "DebugFormat")] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_ctor_without_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -132,7 +134,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled([Values("Debug", "DebugFormat")] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -155,7 +157,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_method_expression_body_without_IsDebugEnabled([Values("Debug", "DebugFormat")] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_method_expression_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -175,7 +177,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_body_without_IsDebugEnabled([Values("Debug", "DebugFormat")] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_ctor_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -198,7 +200,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_expression_body_without_IsDebugEnabled([Values("Debug", "DebugFormat")] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_ctor_expression_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
