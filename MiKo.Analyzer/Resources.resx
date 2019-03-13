@@ -1766,6 +1766,15 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3034_Title" xml:space="preserve">
     <value>PropertyChanged event raiser shall use [CallerMemberName] attribute.</value>
   </data>
+  <data name="MiKo_3035_Description" xml:space="preserve">
+    <value>For performance reasons, 'IsDebugEnabled' should be invoked before the 'Debug' or 'DebugFormat' methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the 'Debug' log level is not set.</value>
+  </data>
+  <data name="MiKo_3035_MessageFormat" xml:space="preserve">
+    <value>Invoke '{1}' only after invoking '{2}'</value>
+  </data>
+  <data name="MiKo_3035_Title" xml:space="preserve">
+    <value>'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.</value>
+  </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
   </data>

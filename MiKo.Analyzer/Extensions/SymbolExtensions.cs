@@ -487,5 +487,33 @@ namespace MiKoSolutions.Analyzers
         internal static string ToCleanedUpString(this ExpressionSyntax s) => s?.ToString().RemoveAll(Constants.WhiteSpaces);
 
         internal static bool IsPartial(this INamedTypeSymbol symbol) => symbol.Locations.Length > 1;
+
+        internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode node, string methodName)
+        {
+            var ifStatement = GetEnclosingIfStatement(node);
+            var ifExpression = ifStatement?.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
+
+            var inside = ifExpression?.Name.ToString() == methodName;
+            return inside;
+        }
+
+        private static IfStatementSyntax GetEnclosingIfStatement(SyntaxNode node)
+        {
+            // consider brackets:
+            //                    if (true)
+            //                    {
+            //                      xyz();
+            //                    }
+            //
+            //  and no brackets:
+            //                    if (true)
+            //                      xyz();
+            //
+            var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.IfStatement);
+            if (enclosingNode is BlockSyntax)
+                enclosingNode = enclosingNode.Parent;
+
+            return enclosingNode as IfStatementSyntax;
+        }
     }
 }

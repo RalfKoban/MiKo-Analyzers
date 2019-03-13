@@ -4932,6 +4932,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For performance reasons, &apos;IsDebugEnabled&apos; should be invoked before the &apos;Debug&apos; or &apos;DebugFormat&apos; methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the &apos;Debug&apos; log level is not set..
+        /// </summary>
+        public static string MiKo_3035_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3035_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; only after invoking &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_3035_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3035_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Debug&apos; and &apos;DebugFormat&apos; methods should be invoked only after &apos;IsDebugEnabled&apos;..
+        /// </summary>
+        public static string MiKo_3035_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3035_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {
