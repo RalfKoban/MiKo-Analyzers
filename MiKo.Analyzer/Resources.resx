@@ -1775,6 +1775,15 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3035_Title" xml:space="preserve">
     <value>'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.</value>
   </data>
+  <data name="MiKo_3036_Description" xml:space="preserve">
+    <value>For performance reasons, 'xxxFormat' methods (such as 'DebugFormat') should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as 'Debug') should be invoked.</value>
+  </data>
+  <data name="MiKo_3036_MessageFormat" xml:space="preserve">
+    <value>Invoke '{2}' instead of  '{1}' instead</value>
+  </data>
+  <data name="MiKo_3036_Title" xml:space="preserve">
+    <value>'xxxFormat' methods should be invoked with multiple arguments only</value>
+  </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
   </data>

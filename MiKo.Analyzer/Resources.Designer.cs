@@ -4959,6 +4959,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For performance reasons, &apos;xxxFormat&apos; methods (such as &apos;DebugFormat&apos;) should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as &apos;Debug&apos;) should be invoked..
+        /// </summary>
+        public static string MiKo_3036_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3036_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; instead of  &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_3036_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3036_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;xxxFormat&apos; methods should be invoked with multiple arguments only.
+        /// </summary>
+        public static string MiKo_3036_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3036_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {
