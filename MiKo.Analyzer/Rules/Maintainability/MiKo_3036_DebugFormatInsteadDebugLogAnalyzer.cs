@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return null;
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
-                    return ReportIssue(enclosingMethod.Name, methodCall.Parent.GetLocation(), methodName, methodName.Remove(Format));
+                    return ReportIssue(enclosingMethod.Name, methodCall.GetLocation(), methodName, methodName.Remove(Format));
                 }
                 default:
                     return null;

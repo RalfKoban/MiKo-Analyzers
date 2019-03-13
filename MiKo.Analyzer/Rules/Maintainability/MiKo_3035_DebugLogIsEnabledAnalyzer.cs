@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return null;
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
-                    return ReportIssue(enclosingMethod.Name, methodCall.Parent.GetLocation(), methodName, IsDebugEnabled);
+                    return ReportIssue(enclosingMethod.Name, methodCall.GetLocation(), methodName, IsDebugEnabled);
                 }
 
                 default:

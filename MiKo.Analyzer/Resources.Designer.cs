@@ -4941,7 +4941,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; only after invoking &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; before invoking &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_3035_MessageFormat {
             get {
@@ -4968,7 +4968,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; instead of  &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; instead.
         /// </summary>
         public static string MiKo_3036_MessageFormat {
             get {

@@ -1770,7 +1770,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>For performance reasons, 'IsDebugEnabled' should be invoked before the 'Debug' or 'DebugFormat' methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the 'Debug' log level is not set.</value>
   </data>
   <data name="MiKo_3035_MessageFormat" xml:space="preserve">
-    <value>Invoke '{1}' only after invoking '{2}'</value>
+    <value>Invoke '{2}' before invoking '{1}'</value>
   </data>
   <data name="MiKo_3035_Title" xml:space="preserve">
     <value>'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.</value>
@@ -1779,7 +1779,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>For performance reasons, 'xxxFormat' methods (such as 'DebugFormat') should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as 'Debug') should be invoked.</value>
   </data>
   <data name="MiKo_3036_MessageFormat" xml:space="preserve">
-    <value>Invoke '{2}' instead of  '{1}' instead</value>
+    <value>Invoke '{2}' instead</value>
   </data>
   <data name="MiKo_3036_Title" xml:space="preserve">
     <value>'xxxFormat' methods should be invoked with multiple arguments only.</value>
