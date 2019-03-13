@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
+﻿
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -16,40 +15,49 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private const string DebugFormat = "DebugFormat";
         private const string IsDebugEnabled = "IsDebugEnabled";
 
-        public MiKo_3035_DebugLogIsEnabledAnalyzer() : base(Id)
+        public MiKo_3035_DebugLogIsEnabledAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression); // SimpleMemberAccessExpression
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
-            var methodCalls = method.DeclaringSyntaxReferences // get the syntax tree
-                                    .SelectMany(_ => _.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>());
+            var node = (InvocationExpressionSyntax)context.Node;
 
-            List<Diagnostic> diagnostics = null;
-            foreach (var methodCall in methodCalls)
+            var diagnostic = AnalyzeInvocation(node, context.SemanticModel);
+            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+        }
+
+        private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel) => node.Expression is MemberAccessExpressionSyntax methodCall
+                                                                                                              ? Analyze(methodCall, semanticModel)
+                                                                                                              : null;
+
+        private Diagnostic Analyze(MemberAccessExpressionSyntax methodCall, SemanticModel semanticModel)
+        {
+            var methodName = methodCall.Name.ToString();
+            switch (methodName)
             {
-                var methodName = methodCall.Name.ToString();
-                switch (methodName)
+                case Debug:
+                case DebugFormat:
                 {
-                    case Debug:
-                    case DebugFormat:
-                    {
-                        // check if inside IsDebugEnabled call for if or block
-                        if (methodCall.IsInsideIfStatementWithCallTo(IsDebugEnabled))
-                            continue;
+                    // check if inside IsDebugEnabled call for if or block
+                    if (methodCall.IsInsideIfStatementWithCallTo(IsDebugEnabled))
+                        return null;
 
-                        if (diagnostics is null)
-                            diagnostics = new List<Diagnostic>();
+                    // check for correct type (only ILog methods shall be reported)
+                    var type = semanticModel.GetTypeInfo(methodCall.Expression).Type;
 
-                        diagnostics.Add(ReportIssue(method.Name, methodCall.GetLocation(), methodName, IsDebugEnabled));
-                        break;
-                    }
+                    if (type.Name != "ILog")
+                        return null;
+
+                    var method = methodCall.GetEnclosingMethod(semanticModel);
+
+                    return ReportIssue(method, methodCall.GetLocation(), methodName, IsDebugEnabled);
                 }
             }
 
-            return diagnostics ?? Enumerable.Empty<Diagnostic>();
+            return null;
         }
     }
 }
