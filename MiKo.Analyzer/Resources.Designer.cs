@@ -4977,7 +4977,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;xxxFormat&apos; methods should be invoked with multiple arguments only.
+        ///   Looks up a localized string similar to &apos;xxxFormat&apos; methods should be invoked with multiple arguments only..
         /// </summary>
         public static string MiKo_3036_Title {
             get {

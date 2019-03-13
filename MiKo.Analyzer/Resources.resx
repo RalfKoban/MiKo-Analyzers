@@ -1782,7 +1782,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Invoke '{2}' instead of  '{1}' instead</value>
   </data>
   <data name="MiKo_3036_Title" xml:space="preserve">
-    <value>'xxxFormat' methods should be invoked with multiple arguments only</value>
+    <value>'xxxFormat' methods should be invoked with multiple arguments only.</value>
   </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
