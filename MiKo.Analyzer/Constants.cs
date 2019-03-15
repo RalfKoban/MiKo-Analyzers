@@ -48,6 +48,8 @@ namespace MiKoSolutions.Analyzers
                     "Interaction logic", "Implementation of ", "Default-Implementation of ", "Default implementation of ", "Impl ", "Default-Impl ", "Default impl",
                 };
 
+            internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.Concat(new[] { "Contains" }).ToArray();
+
             internal static readonly string[] MeaninglessPhrase = { "does implement", "implements", "that is called", "that is used", "used for", "used to", "which is called", "which is used", };
 
             internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).ToArray();

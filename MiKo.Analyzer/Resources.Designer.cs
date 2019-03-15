@@ -2480,7 +2480,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease development and maintenance, the summary documentation should describe their responsibility.
+        ///   Looks up a localized string similar to To ease development and maintenance, the summary documentation should describe its responsibility.
         ///It should not start with or contain a meaningless phrase like &apos;Used to&apos;. Instead it should start with something more descriptive, such as: &apos;Allows to &apos;, &apos;Represents &apos; or &apos;Provides &apos;..
         /// </summary>
         public static string MiKo_2012_Description {

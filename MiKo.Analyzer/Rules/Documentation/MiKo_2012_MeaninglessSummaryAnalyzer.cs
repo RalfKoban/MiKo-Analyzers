@@ -26,44 +26,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (summaries.Any())
             {
-                var phrases = symbol.Kind == SymbolKind.Field
-                                  ? Constants.Comments.MeaninglessFieldStartingPhrase
-                                  : Constants.Comments.MeaninglessStartingPhrase;
-
                 var symbolNames = GetSelfSymbolNames(symbol);
+                var phrases = GetPhrases(symbol);
 
-                foreach (var summary in summaries)
-                {
-                    foreach (var phrase in symbolNames.Where(_ => summary.StartsWith(_, Comparison)))
-                    {
-                        return ReportIssueStartingPhrase(symbol, phrase);
-                    }
-
-                    foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
-                    {
-                        return ReportIssueStartingPhrase(symbol, phrase);
-                    }
-
-                    if (summary.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison))
-                    {
-                        var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
-                        var phrase = index > 0 ? summary.Substring(0, index + 2) : Constants.Comments.XmlElementStartingTag;
-                        return ReportIssueStartingPhrase(symbol, phrase);
-                    }
-
-                    foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
-                    {
-                        return ReportIssueContainsPhrase(symbol, phrase);
-                    }
-                }
+                return AnalyzeSummaryPhrases(symbol, summaries, symbolNames.Concat(phrases));
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "contain", phrase.HumanizedTakeFirst(30)) };
-
-        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "start with", phrase.HumanizedTakeFirst(30)) };
+        private static IEnumerable<string> GetPhrases(ISymbol symbol)
+        {
+            switch (symbol.Kind)
+            {
+                case SymbolKind.Field: return Constants.Comments.MeaninglessFieldStartingPhrase;
+                case SymbolKind.NamedType: return Constants.Comments.MeaninglessTypeStartingPhrase;
+                default: return Constants.Comments.MeaninglessStartingPhrase;
+            }
+        }
 
         private static IEnumerable<string> GetSelfSymbolNames(ISymbol symbol)
         {
@@ -86,5 +66,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return names.Select(_ => _ + " ").ToHashSet();
         }
+
+        private IEnumerable<Diagnostic> AnalyzeSummaryPhrases(ISymbol symbol, IEnumerable<string> summaries, IEnumerable<string> phrases)
+        {
+            foreach (var summary in summaries)
+            {
+                foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
+                {
+                    return ReportIssueStartingPhrase(symbol, phrase);
+                }
+
+                if (summary.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison))
+                {
+                    var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
+                    var phrase = index > 0 ? summary.Substring(0, index + 2) : Constants.Comments.XmlElementStartingTag;
+                    return ReportIssueStartingPhrase(symbol, phrase);
+                }
+
+                foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
+                {
+                    return ReportIssueContainsPhrase(symbol, phrase);
+                }
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
+
+        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "contain", phrase.HumanizedTakeFirst(30)) };
+
+        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { ReportIssue(symbol, "start with", phrase.HumanizedTakeFirst(30)) };
     }
 }
