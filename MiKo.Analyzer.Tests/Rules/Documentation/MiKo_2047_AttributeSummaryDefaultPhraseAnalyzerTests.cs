@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2047_AttributeSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] ValidPhrases =
+            {
+                "Specifies ",
+                "Indicates ",
+                "Defines ",
+                "Provides ",
+                "Represents ",
+                "Allows ",
+                "Marks",
+            };
+
+        private static readonly string[] InvalidPhrases = { "The ", "Attribute ", };
+
         [Test]
         public void No_issue_is_reported_for_non_attribute_class() => No_issue_is_reported_for(@"
 using System;
@@ -60,23 +70,5 @@ public class TestMe : Attribute
         protected override string GetDiagnosticId() => MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2047_AttributeSummaryDefaultPhraseAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidPhrases() => new []
-                                                                 {
-                                                                     "Specifies ",
-                                                                     "Indicates ",
-                                                                     "Defines ",
-                                                                     "Provides ",
-                                                                     "Represents ",
-                                                                     "Allows ",
-                                                                 };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> InvalidPhrases() => new []
-                                                                 {
-                                                                     "The ",
-                                                                     "Attribute ",
-                                                                 };
     }
 }

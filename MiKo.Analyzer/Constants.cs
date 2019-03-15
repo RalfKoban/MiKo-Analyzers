@@ -354,6 +354,7 @@ namespace MiKoSolutions.Analyzers
                     "Provides ",
                     "Allows ",
                     "Represents ",
+                    "Marks ",
                 };
 
             internal static readonly string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
