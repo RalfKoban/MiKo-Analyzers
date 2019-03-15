@@ -35,7 +35,7 @@ public class TestMe
 }
 ");
 
-        [Test]
+        [Test, Combinatorial]
         public void An_issue_is_reported_for_empty_parameter_on_method_(
                                                                 [Values("Contains", "ContainsKey")] string methodName,
                                                                 [Values(@"<param name=""i"" />", @"<param name=""i""></param>", @"<param name=""i"">     </param>")] string parameter)

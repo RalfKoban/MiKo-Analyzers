@@ -79,7 +79,7 @@ namespace BlaBla
 }
 ");
 
-        [Test]
+        [Test, Combinatorial]
         public void No_issue_is_reported_if_test_class_and_class_under_test_are_in_same_namespace(
                                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                                             [ValueSource(nameof(PropertyNames))] string propertyName)

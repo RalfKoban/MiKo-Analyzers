@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules
     {
         private static readonly ConcurrentDictionary<string, DiagnosticDescriptor> KnownRules = new ConcurrentDictionary<string, DiagnosticDescriptor>();
 
-        protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind, bool isEnabledByDefault = true) : this(category, diagnosticId, isEnabledByDefault) => SymbolKind = symbolKind;
-
         protected Analyzer(string category, string diagnosticId, bool isEnabledByDefault = true)
         {
             DiagnosticId = diagnosticId;
@@ -31,6 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                       LocalizableResource(id, "Description"),
                                                                       LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
+
+        protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind, bool isEnabledByDefault = true) : this(category, diagnosticId, isEnabledByDefault) => SymbolKind = symbolKind;
 
         public string DiagnosticId { get; }
 
