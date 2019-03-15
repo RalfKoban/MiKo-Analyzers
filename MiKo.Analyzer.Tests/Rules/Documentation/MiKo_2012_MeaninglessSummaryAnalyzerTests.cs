@@ -85,9 +85,9 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase_Contains() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_phrase_([Values("Contains", "Contain", "Has")] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
-/// Contains whatever.
+/// " + phrase + @" whatever
 /// </summary>
 public class TestMe
 {
