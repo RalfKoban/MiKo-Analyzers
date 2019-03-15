@@ -72,6 +72,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void A_single_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something with <param name=""i"" />.
+    /// </summary>
+    public void DoSomething(int i) { }
+}
+", 1);
+
         protected override string GetDiagnosticId() => MiKo_2045_InvalidParameterReferenceInSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2045_InvalidParameterReferenceInSummaryAnalyzer();

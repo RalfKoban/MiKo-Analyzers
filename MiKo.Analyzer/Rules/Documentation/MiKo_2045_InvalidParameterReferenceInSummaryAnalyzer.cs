@@ -39,18 +39,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return findings ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private static IEnumerable<string> CreatePhrases(string parameterName) => new[]
-                                                                                      {
-                                                                                          string.Intern("<param name=\"" + parameterName + "\""),
-                                                                                          string.Intern("<paramref name=\"" + parameterName + "\""),
-                                                                                          string.Intern("'" + parameterName + "'"),
-                                                                                          string.Intern("\"" + parameterName + "\""),
-                                                                                      };
+        private static string[] CreateParamPhrases(string parameterName) => new[]
+                                                                                {
+                                                                                    string.Intern("<param name=\"" + parameterName + "\""),
+                                                                                    string.Intern("<paramref name=\"" + parameterName + "\""),
+                                                                                };
+
+        private static string[] CreateNonParamPhrases(string parameterName) => new[]
+                                                                                   {
+                                                                                       string.Intern("'" + parameterName + "'"),
+                                                                                       string.Intern("\"" + parameterName + "\""),
+                                                                                   };
 
         private void InspectPhrases(IParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
         {
-            var phrases = CreatePhrases(parameter.Name);
+            var paramPhrases = CreateParamPhrases(parameter.Name);
+            var nonParamPhrases = CreateNonParamPhrases(parameter.Name);
 
+            InspectPhrases(parameter, commentXml, paramPhrases, ref findings);
+            InspectPhrases(parameter, commentXml.RemoveAll(paramPhrases), nonParamPhrases, ref findings);
+        }
+
+        private void InspectPhrases(IParameterSymbol parameter, string commentXml, string[] phrases, ref List<Diagnostic> findings)
+        {
             foreach (var phrase in phrases
                                    .Where(_ => commentXml.Contains(_, Comparison))
                                    .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))

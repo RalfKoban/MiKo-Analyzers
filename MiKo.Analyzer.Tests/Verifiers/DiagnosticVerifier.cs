@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace TestHelper
 {
@@ -30,12 +31,13 @@ namespace TestHelper
 
         #region Verifier wrappers
 
-        protected void An_issue_is_reported_for(string fileContent)
+        protected void An_issue_is_reported_for(string fileContent, int violations = 0)
         {
             Assert.Multiple(() =>
                                 {
                                     var results = GetDiagnostics(fileContent);
-                                    Assert.That(results.Length, Is.GreaterThan(0));
+
+                                    Assert.That(results.Length, (violations == 0) ? Is.GreaterThan(violations) : (IResolveConstraint)Is.EqualTo(violations));
 
                                     foreach (var result in results)
                                     {
@@ -53,7 +55,7 @@ namespace TestHelper
                                 });
         }
 
-        protected void An_issue_is_reported_for_file(string path) => An_issue_is_reported_for(File.ReadAllText(path));
+        protected void An_issue_is_reported_for_file(string path, int violations = 0) => An_issue_is_reported_for(File.ReadAllText(path), violations);
 
         protected void No_issue_is_reported_for(string fileContent)
         {
