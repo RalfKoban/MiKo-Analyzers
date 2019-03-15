@@ -256,6 +256,8 @@ namespace MiKoSolutions.Analyzers
 
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
 
+            internal const string RecursivelyStartingPhrase = "Recursively ";
+
             internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
 
             internal static readonly string[] ExtensionMethodClassStartingPhrase =

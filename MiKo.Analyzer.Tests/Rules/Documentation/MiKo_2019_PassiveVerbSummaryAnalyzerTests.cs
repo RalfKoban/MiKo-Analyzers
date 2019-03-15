@@ -35,6 +35,7 @@ public class TestMeException : System.Exception
 {
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_correctly_documented_class() => No_issue_is_reported_for(@"
 using System;
@@ -171,6 +172,19 @@ public class TestMe
     /// Get or sets some test data.
     /// </summary>
     public int Age { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_starting_with_term_([Values("Recursively")] string term) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+        /// <summary>
+        /// " + term + @" loops over some test data.
+        /// </summary>
+        public void Loop() { }
 }
 ");
 

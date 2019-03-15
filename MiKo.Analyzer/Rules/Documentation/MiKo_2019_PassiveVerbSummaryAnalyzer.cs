@@ -29,9 +29,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasPassiveVerb(string summary)
         {
-            // get rid of async starting phrase
-            summary = summary.Remove(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
+            var trimmed = summary
+                              .Remove(Constants.Comments.AsynchrounouslyStartingPhrase) // get rid of async starting phrase
+                              .Remove(Constants.Comments.RecursivelyStartingPhrase) // get rid of recursively starting phrase
+                              .Trim();
 
+            return HasPassiveVerbCore(trimmed);
+        }
+
+        private static bool HasPassiveVerbCore(string summary)
+        {
             const StringComparison Comparison = StringComparison.Ordinal;
 
             var firstSpace = summary.IndexOf(" ", Comparison);
