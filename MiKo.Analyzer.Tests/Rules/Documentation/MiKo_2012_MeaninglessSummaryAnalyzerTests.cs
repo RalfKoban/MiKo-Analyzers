@@ -95,6 +95,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_Contains_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Contains documentation.
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
