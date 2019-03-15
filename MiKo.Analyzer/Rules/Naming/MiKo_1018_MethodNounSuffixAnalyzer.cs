@@ -72,6 +72,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Unsubscribe",
                 "Register",
                 "Unregister",
+                "Validate",
+                "CompileTimeValidate",
             };
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
