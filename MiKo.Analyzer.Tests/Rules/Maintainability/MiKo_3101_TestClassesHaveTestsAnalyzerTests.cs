@@ -30,6 +30,22 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_class_with_nested_tests(
+                                                                [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+            => No_issue_is_reported_for(@"
+[" + testClassAttribute + @"]
+public class TestMe
+{
+    public class Nested
+    {
+        [" + testAttribute + @"]
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_partial_test_class_with_tests(
                                                                         [ValueSource(nameof(TestFixtures))] string testClassAttribute,
                                                                         [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)

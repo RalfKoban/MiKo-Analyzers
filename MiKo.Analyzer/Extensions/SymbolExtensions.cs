@@ -315,6 +315,13 @@ namespace MiKoSolutions.Analyzers
             return baseTypes;
         }
 
+        internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol symbol)
+        {
+            var types = new List<ITypeSymbol> { symbol };
+            CollectAllNestedTypes(symbol, types);
+            return types;
+        }
+
         internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
 
         internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(System.Threading.Tasks.Task);
@@ -514,6 +521,16 @@ namespace MiKoSolutions.Analyzers
                 enclosingNode = enclosingNode.Parent;
 
             return enclosingNode as IfStatementSyntax;
+        }
+
+        private static void CollectAllNestedTypes(this ITypeSymbol symbol, ICollection<ITypeSymbol> types)
+        {
+            types.Add(symbol);
+
+            foreach (var nestedType in symbol.GetTypeMembers())
+            {
+                CollectAllNestedTypes(nestedType, types);
+            }
         }
     }
 }
