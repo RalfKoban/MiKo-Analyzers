@@ -4986,6 +4986,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log methods (such as &apos;Debug&apos;, &apos;Info&apos;, &apos;Warn&apos;, ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of the ones that have no Exception parameter. That allows the Log framework to log additional information regarding the exception (such as it&apos;s stack trace)..
+        /// </summary>
+        public static string MiKo_3037_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3037_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; overload that has an exception argument.
+        /// </summary>
+        public static string MiKo_3037_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3037_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correct Log methods should be invoked for exceptions..
+        /// </summary>
+        public static string MiKo_3037_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3037_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {
