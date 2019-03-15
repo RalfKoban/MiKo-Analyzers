@@ -83,6 +83,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_test_method([ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public int Do_execute_something() => 42;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1010_CommandMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1010_CommandMethodsAnalyzer();
