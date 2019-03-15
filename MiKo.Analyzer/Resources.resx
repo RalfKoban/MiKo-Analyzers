@@ -1785,10 +1785,11 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>'xxxFormat' methods should be invoked with multiple arguments only.</value>
   </data>
   <data name="MiKo_3037_Description" xml:space="preserve">
-    <value>Log methods (such as 'Debug', 'Info', 'Warn', ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of the ones that have no Exception parameter. That allows the Log framework to log additional information regarding the exception (such as it's stack trace).</value>
+    <value>Log methods (such as 'Debug', 'Info', 'Warn', ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
+That allows the Log framework to log not only the name of the exception but also additional information (such as it's stack trace).</value>
   </data>
   <data name="MiKo_3037_MessageFormat" xml:space="preserve">
-    <value>Invoke '{1}' overload that has an exception argument</value>
+    <value>Invoke '{1}' overload with exception instead</value>
   </data>
   <data name="MiKo_3037_Title" xml:space="preserve">
     <value>Correct Log methods should be invoked for exceptions.</value>

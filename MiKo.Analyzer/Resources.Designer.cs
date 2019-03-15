@@ -4986,7 +4986,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log methods (such as &apos;Debug&apos;, &apos;Info&apos;, &apos;Warn&apos;, ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of the ones that have no Exception parameter. That allows the Log framework to log additional information regarding the exception (such as it&apos;s stack trace)..
+        ///   Looks up a localized string similar to Log methods (such as &apos;Debug&apos;, &apos;Info&apos;, &apos;Warn&apos;, ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
+        ///That allows the Log framework to log not only the name of the exception but also additional information (such as it&apos;s stack trace)..
         /// </summary>
         public static string MiKo_3037_Description {
             get {
@@ -4995,7 +4996,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; overload that has an exception argument.
+        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; overload with exception instead.
         /// </summary>
         public static string MiKo_3037_MessageFormat {
             get {
