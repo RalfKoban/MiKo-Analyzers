@@ -76,7 +76,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_handling_method_([Values("OnCommandExecuting", "OnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private int " + methodName + @"() => 42;

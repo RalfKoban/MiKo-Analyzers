@@ -22,8 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                             nameof(ICommand.CanExecuteChanged),
                                                                             "On" + nameof(ICommand.CanExecuteChanged),
                                                                             "Raise" + nameof(ICommand.CanExecuteChanged),
-                                                                            "OnCommandExecuting",
-                                                                            "OnCommandExecuted",
                                                                         };
 
         public MiKo_1010_CommandMethodsAnalyzer() : base(Id)
@@ -46,11 +44,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ref List<Diagnostic> diagnostics)
         {
-            var forbidden = method.Name.Contains(forbiddenName) && !ExcludedNames.Contains(method.Name);
+            var methodName = method.Name;
+
+            if (ExcludedNames.Contains(methodName))
+                return false;
+
+            if (methodName.StartsWith("On", StringComparison.OrdinalIgnoreCase) && methodName.EndsWith("CommandExecuted", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            var forbidden = methodName.Contains(forbiddenName);
             if (forbidden)
             {
                 if (diagnostics == null) diagnostics = new List<Diagnostic>();
-                diagnostics.Add(ReportIssue(method, method.Name.Remove(forbiddenName)));
+                diagnostics.Add(ReportIssue(method, methodName.Remove(forbiddenName)));
             }
 
             return forbidden;
