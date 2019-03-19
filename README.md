@@ -8,8 +8,6 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Project status
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/RalfKoban/MiKo-Analyzers.svg?columns=all)](https://waffle.io/RalfKoban/MiKo-Analyzers) 
-
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
