@@ -39,14 +39,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var item in new[] { "true", "false", "null" })
             {
-                results.Add($"({item} ", $"(<see langword=\"{item}\"/> ");
-                results.Add($"({item})", $"(<see langword=\"{item}\"/>)");
-                results.Add($" {item})", $" <see langword=\"{item}\"/>)");
-                results.Add($" {item} ", $" <see langword=\"{item}\"/> ");
-                results.Add($" {item}.", $" <see langword=\"{item}\"/>.");
-                results.Add($" {item},", $" <see langword=\"{item}\"/>,");
-                results.Add($" {item};", $" <see langword=\"{item}\"/>;");
-                results.Add($"<c>{item}</c>", $"<see langword=\"{item}\"/>");
+                var proposal = $"<see langword=\"{item}\"/>";
+
+                results.Add($"({item} ", $"({proposal} ");
+                results.Add($"({item})", $"({proposal})");
+                results.Add($" {item})", $" {proposal})");
+                results.Add($" {item} ", $" {proposal} ");
+                results.Add($" {item}.", $" {proposal}.");
+                results.Add($" {item},", $" {proposal},");
+                results.Add($" {item};", $" {proposal};");
+                results.Add($"<c>{item}</c>", proposal);
+                results.Add($"<see langref=\"{item}\"/>", proposal);
+                results.Add($"<see langref=\"{item}\" />", proposal);
+                results.Add($"<see langref=\"{item}\"></see>", proposal);
+                results.Add($"<see langref=\"{item}\" ></see>", proposal);
+                results.Add($"<seealso langref=\"{item}\"/>", proposal);
+                results.Add($"<seealso langref=\"{item}\" />", proposal);
+                results.Add($"<seealso langref=\"{item}\"></seealso>", proposal);
+                results.Add($"<seealso langref=\"{item}\" ></seealso>", proposal);
             }
 
             return results.ToArray();

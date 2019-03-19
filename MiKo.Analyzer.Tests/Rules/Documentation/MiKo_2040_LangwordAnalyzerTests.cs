@@ -64,12 +64,40 @@ public sealed class TestMe
 ");
 
         [Test]
+        public void Wrong_documentation_is_reported_on_method_returnValue([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A " + finding + @" .
+    /// </returns>
+    public int Malform() => 42;
+}
+");
+
+        [Test]
         public void Wrong_documentation_is_reported_on_property([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
     /// Does something. " + finding + @"
     /// </summary>
+    public int Malform { get; set; }
+}
+");
+
+        [Test]
+        public void Wrong_documentation_is_reported_on_property_value([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// A " + finding + @" .
+    /// </value>
     public int Malform { get; set; }
 }
 ");
@@ -195,6 +223,14 @@ public sealed class TestMe
             foreach (var token in tokens)
             {
                 results.Add("<c>" + token + "</c>");
+                results.Add("<see langref=\"" + token + "\" />");
+                results.Add("<see langref=\"" + token + "\"/>");
+                results.Add("<see langref=\"" + token + "\"></see>");
+                results.Add("<see langref=\"" + token + "\" ></see>");
+                results.Add("<seealso langref=\"" + token + "\" />");
+                results.Add("<seealso langref=\"" + token + "\"/>");
+                results.Add("<seealso langref=\"" + token + "\"></seealso>");
+                results.Add("<seealso langref=\"" + token + "\" ></seealso>");
                 results.Add(" " + token + " ");
                 results.Add("(" + token + " ");
                 results.Add("(" + token + ")");
