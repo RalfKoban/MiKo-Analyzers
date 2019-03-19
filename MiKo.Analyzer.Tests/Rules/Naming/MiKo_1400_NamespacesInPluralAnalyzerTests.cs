@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "Generic",
                                                                                     "IO",
                                                                                     "Infrastructure",
+                                                                                    "Interop",
                                                                                     "Lifetime",
                                                                                     "Linq",
                                                                                     "Maintainability",
