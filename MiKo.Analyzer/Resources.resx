@@ -1227,7 +1227,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Replace invalid type parameter reference '{1}' by '{2}'</value>
   </data>
   <data name="MiKo_2046_Title" xml:space="preserve">
-    <value>XML documentation should reference type parameters correctly.</value>
+    <value>Documentation should reference type parameters correctly.</value>
   </data>
   <data name="MiKo_2047_Description" xml:space="preserve">
     <value>The documentation of an Attribute should start with a specific phrase that describes its purpose.</value>
@@ -1412,7 +1412,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;{1}&gt; should be: '{2}'</value>
   </data>
   <data name="MiKo_2090_Title" xml:space="preserve">
-    <value>XML documentation for equality operator shall have default phrase.</value>
+    <value>Documentation for equality operator shall have default phrase.</value>
   </data>
   <data name="MiKo_2091_Description" xml:space="preserve">
     <value>To ease development and usage, the XML documentation for inequality operators shall have a common default phrase.</value>
@@ -1421,7 +1421,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;{1}&gt; should be: '{2}'</value>
   </data>
   <data name="MiKo_2091_Title" xml:space="preserve">
-    <value>XML documentation for inequality operator shall have default phrase.</value>
+    <value>Documentation for inequality operator shall have default phrase.</value>
   </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
     <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>

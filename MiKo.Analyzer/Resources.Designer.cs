@@ -3354,7 +3354,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation should reference type parameters correctly..
+        ///   Looks up a localized string similar to Documentation should reference type parameters correctly..
         /// </summary>
         public static string MiKo_2046_Title {
             get {
@@ -3899,7 +3899,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation for equality operator shall have default phrase..
+        ///   Looks up a localized string similar to Documentation for equality operator shall have default phrase..
         /// </summary>
         public static string MiKo_2090_Title {
             get {
@@ -3926,7 +3926,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML documentation for inequality operator shall have default phrase..
+        ///   Looks up a localized string similar to Documentation for inequality operator shall have default phrase..
         /// </summary>
         public static string MiKo_2091_Title {
             get {
