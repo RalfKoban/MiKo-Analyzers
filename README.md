@@ -161,6 +161,8 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase.|:white_check_mark:|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase.|:white_check_mark:|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|:white_check_mark:|
+|MiKo_2090|XML documentation for equality operator shall have default phrase.|:white_check_mark:|
+|MiKo_2091|XML documentation for inequality operator shall have default phrase.|:white_check_mark:|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|:white_check_mark:|
 |MiKo_2200|Use a capitalized letter to start the comment.|:white_check_mark:|
 |MiKo_2201|Use a capitalized letter to start the sentences in the comment.|:white_check_mark:|
