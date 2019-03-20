@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 markdownBuilder.AppendFormat(tableFormat,
                                              descriptor.Id,
                                              descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
-                                             descriptor.IsEnabledByDefault ? ":white_check_mark:" : ":white_large_square:");
+                                             descriptor.IsEnabledByDefault ? "&#x2713;" : "\\-");
             }
 
             var markdown = markdownBuilder.ToString();
