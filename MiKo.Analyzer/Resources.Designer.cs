@@ -3881,6 +3881,60 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease development and usage, the XML documentation for equality operators shall have a common default phrase..
+        /// </summary>
+        public static string MiKo_2090_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2090_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{1}&gt; should be: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2090_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2090_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation for equality operator shall have default phrase..
+        /// </summary>
+        public static string MiKo_2090_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2090_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease development and usage, the XML documentation for inequality operators shall have a common default phrase..
+        /// </summary>
+        public static string MiKo_2091_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2091_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{1}&gt; should be: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2091_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2091_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation for inequality operator shall have default phrase..
+        /// </summary>
+        public static string MiKo_2091_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2091_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates..
         /// </summary>
         public static string MiKo_2100_Description {

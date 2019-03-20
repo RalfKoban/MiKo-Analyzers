@@ -35,9 +35,10 @@ namespace TestHelper
         {
             Assert.Multiple(() =>
                                 {
-                                    var results = GetDiagnostics(fileContent);
+                                    var constraint = (violations == 0) ? Is.GreaterThan(violations) : (IResolveConstraint)Is.EqualTo(violations);
 
-                                    Assert.That(results.Length, (violations == 0) ? Is.GreaterThan(violations) : (IResolveConstraint)Is.EqualTo(violations));
+                                    var results = GetDiagnostics(fileContent);
+                                    Assert.That(results.Length, constraint, string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
 
                                     foreach (var result in results)
                                     {
