@@ -46,6 +46,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol symbol) => symbol.GetAttributes().Select(_ => _.AttributeClass.Name);
 
+        internal static bool IsEnhancedByPostSharpAspect(this ISymbol symbol) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom("PostSharp.Aspects.Aspect"));
+
+        internal static bool IsEnhancedByPostSharpAdvice(this ISymbol symbol) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom("PostSharp.Aspects.Advices.Advice"));
+
         internal static bool IsTestClass(this ITypeSymbol symbol)
         {
             if (symbol?.TypeKind == TypeKind.Class)
@@ -386,6 +390,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode node, SemanticModel semanticModel) => node.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
+
+        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNodeAnalysisContext context) => GetEnclosingMethod(context.Node, context.SemanticModel);
 
         internal static T GetEnclosing<T>(this SyntaxNode node) where T : SyntaxNode
         {

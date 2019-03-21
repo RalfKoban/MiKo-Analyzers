@@ -60,22 +60,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = (MethodDeclarationSyntax)context.Node;
 
             var parameters = method.ParameterList.Parameters;
-            if (parameters.Count == 0)
-                return;
-
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
-            if (methodBody is null)
-                return; // unfinished code or code that has no body (such as interface methods or abstract methods)
 
-            var methodSymbol = method.GetEnclosingMethod(context.SemanticModel);
-            if (CanBeIgnored(methodSymbol))
-                return;
-
-            var results = Analyze(context, methodBody, parameters);
-            foreach (var diagnostic in results)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            Analyze(context, methodBody, parameters);
         }
 
         private void AnalyzeConstructor(SyntaxNodeAnalysisContext context)
@@ -83,25 +70,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = (ConstructorDeclarationSyntax)context.Node;
 
             var parameters = method.ParameterList.Parameters;
+            var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
+
+            Analyze(context, methodBody, parameters);
+        }
+
+        private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
+        {
+            if (methodBody is null)
+                return;
+
             if (parameters.Count == 0)
                 return;
 
-            var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
-            if (methodBody is null)
-                return; // unfinished code or code that has no body (such as interface methods or abstract methods)
+            var methodSymbol = context.GetEnclosingMethod();
 
-            var results = Analyze(context, methodBody, parameters);
-            foreach (var diagnostic in results)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
+            if (CanBeIgnored(methodSymbol))
+                return;
 
-        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
-        {
             var used = GetAllUsedVariables(context, methodBody);
 
-            List<Diagnostic> results = null;
             foreach (var parameter in parameters)
             {
                 var parameterName = parameter.Identifier.ValueText;
@@ -109,14 +97,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (used.Contains(parameterName))
                     continue;
 
-                if (results == null)
-                    results = new List<Diagnostic>();
+                // TODO: RKN check if the documentation contains the phrase 'Unused.' -> do not report an issue in such case
+                // TODO: RKN check if the code is enhanced by an PostSharp aspect or advice -> do not report an issue in such case
+                var parameterSymbol = methodSymbol.Parameters.First(_ => _.Name == parameterName);
+                if (parameterSymbol.IsEnhancedByPostSharpAspect() || methodSymbol.IsEnhancedByPostSharpAdvice())
+                    continue;
 
                 var diagnostic = ReportIssue(parameterName, parameter.GetLocation());
-                results.Add(diagnostic);
+                context.ReportDiagnostic(diagnostic);
             }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }
