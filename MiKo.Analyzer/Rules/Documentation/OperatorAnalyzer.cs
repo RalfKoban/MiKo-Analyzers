@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetSummaryPhrases(symbol);
 
-            return summaries.Any(_ => _.EqualsAny(phrases))
+            return summaries.Any(_ => _.Trim().EqualsAny(phrases))
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(symbol, Constants.XmlTag.Summary, phrases[0]) };
         }
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = GetReturnsPhrases(symbol);
             var comments = GetComments(commentXml, Constants.XmlTag.Returns);
 
-            return comments.Any(_ => _.EqualsAny(phrases))
+            return comments.Any(_ => _.Trim().EqualsAny(phrases))
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { ReportIssue(symbol, Constants.XmlTag.Returns, phrases[0]) };
         }
@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = GetParameterComment(parameter, commentXml);
             return comment == phrase
                        ? null
-                       : ReportIssue(parameter, Constants.XmlTag.Param, phrase);
+                       : ReportIssue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
         }
     }
 }

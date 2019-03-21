@@ -25,6 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                              {
                                                                                  $"Determines whether the specified <see cref=\"{symbol.ContainingType.Name}\"/> instances are considered equal.",
                                                                                  $"Determines whether the specified <see cref=\"{symbol.ContainingType.Name}\" /> instances are considered equal.",
+                                                                                 $"Determines whether the specified <see cref=\"{symbol.ContainingType.FullyQualifiedName()}\"/> instances are considered equal.",
+                                                                                 $"Determines whether the specified <see cref=\"{symbol.ContainingType.FullyQualifiedName()}\" /> instances are considered equal.",
                                                                              };
 
         protected override string[] GetReturnsPhrases(ISymbol symbol) => ReturnsPhrases;

@@ -68,6 +68,23 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_inequality_operator_with_full_qualified_name() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Determines whether the specified <see cref=""Bla.TestMe""/> instances are considered not equal.</summary>
+        /// <param name=""left"">The first value to compare.</param>
+        /// <param name=""right"">The second value to compare.</param>
+        /// <returns><see langword=""true""/> if both instances are considered not equal; otherwise, <see langword=""false""/>.</returns>
+        public static bool operator !=(TestMe left, TestMe right) => false;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_inequality_operator_summary() => An_issue_is_reported_for(@"
 using System;
 
