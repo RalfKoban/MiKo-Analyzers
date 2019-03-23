@@ -39,14 +39,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<string> GetCollectionPhrases(IMethodSymbol symbol)
         {
             symbol.ReturnType.TryGetGenericArgumentCount(out var count);
+
             if (count <= 0) return GetSimplePhrases(symbol);
 
             // enhance for generic collections
             var startingPhrases = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhrase;
 
-            return symbol.ReturnType.TryGetGenericArgumentType(out var genericArgument, count - 1)
-                       ? GetStartingPhrases(genericArgument, startingPhrases)
-                       : startingPhrases.Select(_ => string.Format(_, genericArgument.ToString()));
+            return symbol.ReturnType.TryGetGenericArgumentType(out var argumentType, count - 1)
+                       ? GetStartingPhrases(argumentType, startingPhrases)
+                       : startingPhrases.Select(_ => string.Format(_, argumentType.ToString()));
         }
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)
