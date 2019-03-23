@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<Diagnostic> results = null;
             foreach (var parameter in symbol.Parameters.Where(ShallAnalyzeParameter))
             {
-                var comment = parameter.GetParameterComment(commentXml);
+                var comment = parameter.GetComment(commentXml);
                 if (comment is null) continue;
                 if (comment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal)) continue;
 

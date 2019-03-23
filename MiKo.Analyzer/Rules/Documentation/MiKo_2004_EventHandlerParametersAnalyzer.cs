@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private void VerifyParameterComment(ref List<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, int parameterIndex, IEnumerable<string> allExpected)
         {
             var parameter = method.Parameters[parameterIndex];
-            var comment = parameter.GetParameterComment(commentXml);
+            var comment = parameter.GetComment(commentXml);
             var proposal = allExpected.ElementAt(0);
             if (allExpected.All(_ => _ != comment))
             {

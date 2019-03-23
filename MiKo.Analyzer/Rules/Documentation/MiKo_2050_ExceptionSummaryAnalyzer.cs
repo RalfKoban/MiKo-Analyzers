@@ -134,7 +134,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, IReadOnlyList<string> phrase)
         {
-            var comment = symbol.GetParameterComment(commentXml);
+            var comment = symbol.GetComment(commentXml);
             if (phrase.Any(_ => _ == comment)) return Enumerable.Empty<Diagnostic>();
 
             return new[] { ReportIssue(symbol, Constants.XmlTag.Param, phrase[0]) };
