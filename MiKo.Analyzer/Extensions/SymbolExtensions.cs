@@ -46,8 +46,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol symbol) => symbol.GetAttributes().Select(_ => _.AttributeClass.Name);
 
-        internal static bool IsEnhancedByPostSharpAspect(this ISymbol symbol) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom("PostSharp.Aspects.Aspect"));
-
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol symbol) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom("PostSharp.Aspects.Advices.Advice"));
 
         internal static bool IsTestClass(this ITypeSymbol symbol)

@@ -98,9 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
 
                 // TODO: RKN check if the documentation contains the phrase 'Unused.' -> do not report an issue in such case
-                // TODO: RKN check if the code is enhanced by an PostSharp aspect or advice -> do not report an issue in such case
-                var parameterSymbol = methodSymbol.Parameters.First(_ => _.Name == parameterName);
-                if (parameterSymbol.IsEnhancedByPostSharpAspect() || methodSymbol.IsEnhancedByPostSharpAdvice())
+                if (methodSymbol.IsEnhancedByPostSharpAdvice())
                     continue;
 
                 var diagnostic = ReportIssue(parameterName, parameter.GetLocation());

@@ -302,6 +302,35 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_aspect_enhanced_method_with_unused_parameter() => No_issue_is_reported_for(@"
+using System;
+
+namespace PostSharp.Aspects.Advices
+{
+    public class Advice : Attribute
+    {
+    }
+
+    public class OnMethodInvokeAdviceAttribute : Advice
+    {
+    }
+}
+
+namespace Bla
+{
+    using PostSharp.Aspects.Advices;
+
+    public class TestMe
+    {
+        [OnMethodInvokeAdvice]
+        public void DoSomething(int i)
+        {
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3026_UnusedParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3026_UnusedParameterAnalyzer();
