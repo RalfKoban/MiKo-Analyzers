@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var xmlTag in XmlTags)
             {
-                foreach (var _ in GetCommentElements(commentXml, xmlTag)
+                foreach (var _ in CommentExtensions.GetCommentElements(commentXml, xmlTag)
                                      .Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
                                      .Select(_ => _.Remove(Constants.Comments.SpecialOrPhrase))
                                      .Where(_ => _.Length > 0)

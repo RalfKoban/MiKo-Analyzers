@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             List<Diagnostic> results = null;
 
-            foreach (var comment in GetComments(commentXml, xmlTag).Where(_ => _ != null))
+            foreach (var comment in CommentExtensions.GetComments(commentXml, xmlTag).Where(_ => _ != null))
             {
                 var findings = AnalyzeReturnType(owningSymbol, returnType, comment, xmlTag);
                 if (findings.Any())

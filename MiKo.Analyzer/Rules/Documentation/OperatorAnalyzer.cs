@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, string commentXml)
         {
             var phrases = GetReturnsPhrases(symbol);
-            var comments = GetComments(commentXml, Constants.XmlTag.Returns);
+            var comments = CommentExtensions.GetReturns(commentXml);
 
             return comments.Any(_ => _.Trim().EqualsAny(phrases))
                        ? Enumerable.Empty<Diagnostic>()
@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private Diagnostic AnalyzeParameter(string commentXml, IParameterSymbol parameter, string phrase)
         {
-            var comment = GetParameterComment(parameter, commentXml);
+            var comment = parameter.GetParameterComment(commentXml);
             return comment == phrase
                        ? null
                        : ReportIssue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);

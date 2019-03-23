@@ -14,10 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (IsAcceptedType(returnType)) return true;
 
-            if (returnType.IsTask() && TryGetGenericArgumentType(returnType, out var argument))
+            if (returnType.IsTask() && returnType.TryGetGenericArgumentType(out var argumentType))
             {
                 // we have a generic task
-                return IsAcceptedType(argument);
+                return IsAcceptedType(argumentType);
             }
 
             return false;

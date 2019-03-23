@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return GetStartingPhrases(returnType, initialPhrases).ToArray();
             }
 
-            if (TryGetGenericArgumentType(returnType, out var argument))
+            if (returnType.TryGetGenericArgumentType(out var argumentType))
             {
-                return argument.Kind == SymbolKind.ArrayType
+                return argumentType.Kind == SymbolKind.ArrayType
                            ? Constants.Comments.ArrayTaskReturnTypeStartingPhrase
                            : Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
             }

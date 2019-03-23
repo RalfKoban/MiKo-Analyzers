@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool TagCommentHasIssue(string commentXml, string xmlTag) => GetCommentElements(commentXml, xmlTag).SelectMany(_ => _.Nodes()).Any(CommentHasIssue);
+        private static bool TagCommentHasIssue(string commentXml, string xmlTag) => CommentExtensions.GetCommentElements(commentXml, xmlTag).SelectMany(_ => _.Nodes()).Any(CommentHasIssue);
 
         private static bool CommentHasIssue(XNode node)
         {

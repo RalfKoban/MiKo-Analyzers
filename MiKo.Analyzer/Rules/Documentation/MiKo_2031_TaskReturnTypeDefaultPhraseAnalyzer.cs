@@ -19,10 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
-            if (returnType is INamedTypeSymbol namedType && namedType.TypeArguments.Length > 0)
+            if (returnType.TryGetGenericArgumentType(out var argumentType))
             {
                 // we have a generic task
-                return GenericTypeAccepted(namedType.TypeArguments[0])
+                return GenericTypeAccepted(argumentType)
                            ? AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase)
                            : Enumerable.Empty<Diagnostic>();
             }

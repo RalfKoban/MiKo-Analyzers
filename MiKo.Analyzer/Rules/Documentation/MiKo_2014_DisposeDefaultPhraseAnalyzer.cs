@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
-            var summaries = GetSummaries(commentXml);
+            var summaries = CommentExtensions.GetSummaries(commentXml);
             var results = summaries.Any() && summaries.All(_ => _ != SummaryPhrase)
                           ? new List<Diagnostic> { ReportIssue(symbol, symbol.Name, SummaryPhrase) }
                           : null;
@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // check for parameter
             foreach (var parameter in symbol.Parameters)
             {
-                var comment = GetParameterComment(parameter, commentXml);
+                var comment = parameter.GetParameterComment(commentXml);
                 if (comment is null) continue;
                 if (comment == ParameterPhrase) continue;
 

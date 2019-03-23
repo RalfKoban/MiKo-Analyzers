@@ -19,8 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
-            var results = GetExceptionComments(commentXml)
-                          .Where(_ => _ != null)
+            var results = CommentExtensions.GetExceptionComments(commentXml)
                           .Where(_ => _.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase))
                           .Select(_ => ReportIssue(symbol))
                           .ToList();
