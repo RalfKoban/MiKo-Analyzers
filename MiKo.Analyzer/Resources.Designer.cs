@@ -4847,6 +4847,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Marking parameters for future usage leads to a bad design. It is unclear whether the parameter will ever be used. It is also unclear whether the type of the parameter will match future needs. In future, you can always override methods and add new parameters..
+        /// </summary>
+        public static string MiKo_3027_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3027_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
+        /// </summary>
+        public static string MiKo_3027_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3027_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not reserve parameter &apos;{0}&apos; for future usage..
+        /// </summary>
+        public static string MiKo_3027_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3027_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be marked to be reserved for future usage..
+        /// </summary>
+        public static string MiKo_3027_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3027_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
         ///
         ///Instead the equality operator should be used to compare value types..

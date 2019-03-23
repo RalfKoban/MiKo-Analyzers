@@ -1735,6 +1735,18 @@ In most cases this is not wanted. The object reference shall be the same, only t
   <data name="MiKo_3026_Title" xml:space="preserve">
     <value>Unused parameters should be removed.</value>
   </data>
+  <data name="MiKo_3027_Description" xml:space="preserve">
+    <value>Marking parameters for future usage leads to a bad design. It is unclear whether the parameter will ever be used. It is also unclear whether the type of the parameter will match future needs. In future, you can always override methods and add new parameters.</value>
+  </data>
+  <data name="MiKo_3027_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
+  </data>
+  <data name="MiKo_3027_MessageFormat" xml:space="preserve">
+    <value>Do not reserve parameter '{0}' for future usage.</value>
+  </data>
+  <data name="MiKo_3027_Title" xml:space="preserve">
+    <value>Parameters should not be marked to be reserved for future usage.</value>
+  </data>
   <data name="MiKo_3030_Description" xml:space="preserve">
     <value>For performance reasons, it makes no sense to use 'object.Equals()' on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
 
