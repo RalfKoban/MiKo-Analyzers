@@ -4865,7 +4865,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not reserve parameter &apos;{0}&apos; for future usage..
+        ///   Looks up a localized string similar to Do not reserve parameter &apos;{0}&apos; for future usage.
         /// </summary>
         public static string MiKo_3027_MessageFormat {
             get {

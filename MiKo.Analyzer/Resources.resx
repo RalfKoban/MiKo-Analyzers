@@ -1742,7 +1742,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
   </data>
   <data name="MiKo_3027_MessageFormat" xml:space="preserve">
-    <value>Do not reserve parameter '{0}' for future usage.</value>
+    <value>Do not reserve parameter '{0}' for future usage</value>
   </data>
   <data name="MiKo_3027_Title" xml:space="preserve">
     <value>Parameters should not be marked to be reserved for future usage.</value>
