@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private Diagnostic AnalyzeParameter(string commentXml, IParameterSymbol parameter, string phrase)
         {
-            var comment = parameter.GetParameterComment(commentXml);
+            var comment = parameter.GetComment(commentXml);
             return comment == phrase
                        ? null
                        : ReportIssue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
