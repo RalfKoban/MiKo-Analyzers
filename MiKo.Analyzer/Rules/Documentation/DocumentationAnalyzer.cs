@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -55,51 +54,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
 
-        protected static bool TryGetGenericArgumentType(ITypeSymbol symbol, out ITypeSymbol genericArgument, int index = 0)
-        {
-            genericArgument = null;
-
-            if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length >= index + 1)
-                genericArgument = namedType.TypeArguments[index];
-
-            return genericArgument != null;
-        }
-
-        protected static bool TryGetGenericArgumentCount(ITypeSymbol symbol, out int index)
-        {
-            index = 0;
-            if (symbol is INamedTypeSymbol namedType) index = namedType.TypeArguments.Length;
-            return index > 0;
-        }
-
-        protected static string GetGenericArgumentsAsTs(ITypeSymbol symbol)
-        {
-            if (symbol is INamedTypeSymbol namedType)
-            {
-                var count = namedType.TypeArguments.Length;
-                switch (count)
-                {
-                    case 0: return string.Empty;
-                    case 1: return "T";
-                    case 2: return "T1,T2";
-                    case 3: return "T1,T2,T3";
-                    case 4: return "T1,T2,T3,T4";
-                    case 5: return "T1,T2,T3,T4,T5";
-                    default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
-                }
-            }
-
-            return string.Empty;
-        }
-
         protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
         {
             var returnType = symbolReturnType.ToString();
 
-            TryGetGenericArgumentCount(symbolReturnType, out var count);
+            symbolReturnType.TryGetGenericArgumentCount(out var count);
             if (count <= 0) return startingPhrases.Select(_ => string.Format(_, returnType));
 
-            var ts = GetGenericArgumentsAsTs(symbolReturnType);
+            var ts = symbolReturnType.GetGenericArgumentsAsTs();
 
             var length = returnType.IndexOf('<'); // just until the first one
 
