@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
-            var comment = GetComment(symbol);
+            var comment = symbol.GetComment();
 
             return comment.Contains("<br", StringComparison.OrdinalIgnoreCase)
                        ? new [] { ReportIssue(symbol) }

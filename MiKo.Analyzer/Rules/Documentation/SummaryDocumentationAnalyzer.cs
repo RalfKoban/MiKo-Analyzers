@@ -12,17 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected static IEnumerable<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
-
-        protected static IEnumerable<string> GetOverloadSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Overloads, Constants.XmlTag.Summary));
-
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => AnalyzeSummaries(symbol, commentXml);
 
         protected IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
-            var summaries = GetSummaries(commentXml);
+            var summaries = CommentExtensions.GetSummaries(commentXml);
 
             return summaries.Any()
                        ? AnalyzeSummary(symbol, summaries)

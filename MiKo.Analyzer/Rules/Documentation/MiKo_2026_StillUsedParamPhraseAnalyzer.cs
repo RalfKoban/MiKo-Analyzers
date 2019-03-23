@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // check comment
                 var commentXml = method.GetDocumentationCommentXml();
-                var comment = GetParameterComment(parameter, commentXml);
+                var comment = parameter.GetParameterComment(commentXml);
 
                 if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
                 {

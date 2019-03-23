@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
 
-            var comments = GetComments(commentXml, Constants.XmlTag.Example).Where(_ => _ != null).ToArray();
+            var comments = CommentExtensions.GetExamples(commentXml).ToArray();
             return AnalyzeExample(symbol, comments);
         }
 

@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             List<Diagnostic> findings = null;
 
-            var comment = GetComment(symbol);
+            var comment = symbol.GetComment();
 
             foreach (var item in Items.Where(_ => comment.Contains(_.Key, StringComparison.OrdinalIgnoreCase)))
             {
