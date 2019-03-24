@@ -4162,6 +4162,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation shall be descriptive and short as its intent is to give a short overview about a functionality.
+        ///More detailed information should be placed inside a &lt;remarks&gt; section..
+        /// </summary>
+        public static string MiKo_2207_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2207_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too long &lt;summary&gt; documentation.
+        /// </summary>
+        public static string MiKo_2207_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2207_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation shall be short..
+        /// </summary>
+        public static string MiKo_2207_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2207_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>
