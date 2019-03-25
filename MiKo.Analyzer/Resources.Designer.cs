@@ -4172,7 +4172,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too long &lt;summary&gt; documentation.
+        ///   Looks up a localized string similar to &lt;summary&gt; is too long, use &lt;remarks&gt; section for all the details.
         /// </summary>
         public static string MiKo_2207_MessageFormat {
             get {

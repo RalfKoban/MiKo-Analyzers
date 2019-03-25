@@ -1505,7 +1505,7 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
 More detailed information should be placed inside a &lt;remarks&gt; section.</value>
   </data>
   <data name="MiKo_2207_MessageFormat" xml:space="preserve">
-    <value>Too long &lt;summary&gt; documentation</value>
+    <value>&lt;summary&gt; is too long, use &lt;remarks&gt; section for all the details</value>
   </data>
   <data name="MiKo_2207_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation shall be short.</value>
