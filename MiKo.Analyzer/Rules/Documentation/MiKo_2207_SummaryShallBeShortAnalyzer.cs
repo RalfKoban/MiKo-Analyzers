@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var whitespaces = 0;
 
-            foreach (var c in summary.Trim())
+            foreach (var c in summary.Replace(" - ", " ").Replace(" />", "/>").Replace(" cref=", "cref=").Trim())
             {
                 if (c.IsWhiteSpace())
                     whitespaces++;
