@@ -30,7 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var clearedSummary = summary.Replace(" - ", " ")
                                         .Replace(" />", "/>")
+                                        .Replace(" </", "</")
+                                        .Replace("> <", "><")
                                         .Replace(" cref=", "cref=")
+                                        .Replace(" href=", "href=")
+                                        .Replace(" type=", "type=")
                                         .Replace(" langword=", "langword=")
                                         .Trim();
             foreach (var c in clearedSummary)

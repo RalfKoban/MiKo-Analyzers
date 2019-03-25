@@ -104,6 +104,46 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_class_summary_containing_a_href_and_has_exact_limit() => No_issue_is_reported_for(@"
+/// <summary>
+/// A b c d e f g h i j k l m n o p q r t u v w x y z <a href=""null"" /> 1 2 3 4 5 6 7 8 9 0 <a href=""null"" /> A b c d e f g h i j k l m n. 
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_summary_containing_a_href_and_has_exactly_1_word_more_than_limit() => An_issue_is_reported_for(@"
+/// <summary>
+/// A b c d e f g h i j k l m n o p q r t u v w x y z <a href=""null"" /> 1 2 3 4 5 6 7 8 9 0 <a href=""null"" /> A b c d e f g h i j k l m n o. 
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_list() => No_issue_is_reported_for(@"
+/// <summary>
+/// Enhances the <see cref=""NUnit.Framework.Throws""/> class of <a href=""http://www.nunit.org/"">NUnit</a> to get properties for following exceptions:
+/// <list type=""bullet"">
+/// <item><description><see cref=""ArgumentOutOfRangeException""/></description></item>
+/// <item><description><see cref=""DirectoryNotFoundException""/></description></item>
+/// <item><description><see cref=""FaultException""/></description></item>
+/// <item><description><see cref=""FormatException""/></description></item>
+/// <item><description><see cref=""InvalidEnumArgumentException""/></description></item>
+/// <item><description><see cref=""NotSupportedException""/></description></item>
+/// <item><description><see cref=""ObjectDisposedException""/></description></item>
+/// <item><description><see cref=""SampleException""/></description></item>
+/// </list>
+/// </summary>
+public class TestMe
+{
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2207_SummaryShallBeShortAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2207_SummaryShallBeShortAnalyzer();
