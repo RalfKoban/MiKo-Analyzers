@@ -43,12 +43,17 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             {
                 // we have a more than 1 method with same name, so we have do detect the index, sort the index and then see if the indices differ by more than one
                 var indices = new HashSet<int>(methodsWithSameName.Select(_ => orderedMethods.IndexOf(_)));
+                var signatures = string.Empty;
+
                 var startIndex = indices.First();
                 foreach (var index in indices)
                 {
-                    if (index - startIndex > 1)
+                    if (Math.Abs(index - startIndex) > 1)
                     {
-                        var signatures = methodsWithSameName.Select(_ => _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
+                        if (signatures.IsNullOrWhiteSpace())
+                        {
+                            signatures = methodsWithSameName.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
+                        }
 
                         yield return ReportIssue(orderedMethods[index], signatures);
                     }

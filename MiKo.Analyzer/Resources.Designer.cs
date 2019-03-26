@@ -5617,7 +5617,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place method {0} side-by-side with following other methods:
+        ///   Looks up a localized string similar to Place method &apos;{0}&apos; side-by-side with following other methods:
         ///{1}
         ///.
         /// </summary>
