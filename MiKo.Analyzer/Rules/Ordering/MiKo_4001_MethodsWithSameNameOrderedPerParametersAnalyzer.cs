@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 if (methodsOrderedByParameters.Count <= 1)
                     continue;
 
-                var order = methodsOrderedByParameters.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
+                var order = string.Empty;
 
                 // check for locations
                 var lastLine = methodsOrderedByParameters[0].GetStartingLine();
@@ -55,7 +55,10 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     if (lastLine > nextLine)
                     {
                         if (results == null)
+                        {
                             results = new List<Diagnostic>();
+                            order = methodsOrderedByParameters.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
+                        }
 
                         results.Add(ReportIssue(method, order));
                     }
