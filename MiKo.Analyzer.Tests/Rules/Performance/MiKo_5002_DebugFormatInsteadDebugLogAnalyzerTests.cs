@@ -4,10 +4,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [TestFixture]
-    public class MiKo_3036_DebugFormatInsteadDebugLogAnalyzerTests : CodeFixVerifier
+    public class MiKo_5002_DebugFormatInsteadDebugLogAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Methods = { "Debug", "Info", "Error", "Warn", "Fatal" };
 
@@ -188,8 +188,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3036_DebugFormatInsteadDebugLogAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_5002_DebugFormatInsteadDebugLogAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3036_DebugFormatInsteadDebugLogAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5002_DebugFormatInsteadDebugLogAnalyzer();
     }
 }

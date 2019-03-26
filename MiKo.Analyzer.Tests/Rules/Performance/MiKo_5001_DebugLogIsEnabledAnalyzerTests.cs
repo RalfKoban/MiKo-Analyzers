@@ -5,10 +5,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [TestFixture]
-    public class MiKo_3035_DebugLogIsEnabledAnalyzerTests : CodeFixVerifier
+    public class MiKo_5001_DebugLogIsEnabledAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Methods = { "Debug", "DebugFormat" };
 
@@ -257,8 +257,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3035_DebugLogIsEnabledAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3035_DebugLogIsEnabledAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5001_DebugLogIsEnabledAnalyzer();
     }
 }

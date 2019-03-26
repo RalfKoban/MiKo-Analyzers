@@ -1806,34 +1806,6 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3034_Title" xml:space="preserve">
     <value>PropertyChanged event raiser shall use [CallerMemberName] attribute.</value>
   </data>
-  <data name="MiKo_3035_Description" xml:space="preserve">
-    <value>For performance reasons, 'IsDebugEnabled' should be invoked before the 'Debug' or 'DebugFormat' methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the 'Debug' log level is not set.</value>
-  </data>
-  <data name="MiKo_3035_MessageFormat" xml:space="preserve">
-    <value>Invoke '{2}' before invoking '{1}'</value>
-  </data>
-  <data name="MiKo_3035_Title" xml:space="preserve">
-    <value>'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.</value>
-  </data>
-  <data name="MiKo_3036_Description" xml:space="preserve">
-    <value>For performance reasons, 'xxxFormat' methods (such as 'DebugFormat') should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as 'Debug') should be invoked.</value>
-  </data>
-  <data name="MiKo_3036_MessageFormat" xml:space="preserve">
-    <value>Invoke '{2}' instead</value>
-  </data>
-  <data name="MiKo_3036_Title" xml:space="preserve">
-    <value>'xxxFormat' methods should be invoked with multiple arguments only.</value>
-  </data>
-  <data name="MiKo_3037_Description" xml:space="preserve">
-    <value>Log methods (such as 'Debug', 'Info', 'Warn', ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
-That allows the Log framework to log not only the name of the exception but also additional information (such as it's stack trace).</value>
-  </data>
-  <data name="MiKo_3037_MessageFormat" xml:space="preserve">
-    <value>Invoke '{1}' overload with exception instead</value>
-  </data>
-  <data name="MiKo_3037_Title" xml:space="preserve">
-    <value>Correct Log methods should be invoked for exceptions.</value>
-  </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
   </data>
@@ -2034,5 +2006,33 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4102_Title" xml:space="preserve">
     <value>Test cleanup methods should be ordered before test methods.</value>
+  </data>
+  <data name="MiKo_5001_Description" xml:space="preserve">
+    <value>For performance reasons, 'IsDebugEnabled' should be invoked before the 'Debug' or 'DebugFormat' methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the 'Debug' log level is not set.</value>
+  </data>
+  <data name="MiKo_5001_MessageFormat" xml:space="preserve">
+    <value>Invoke '{2}' before invoking '{1}'</value>
+  </data>
+  <data name="MiKo_5001_Title" xml:space="preserve">
+    <value>'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.</value>
+  </data>
+  <data name="MiKo_5002_Description" xml:space="preserve">
+    <value>For performance reasons, 'xxxFormat' methods (such as 'DebugFormat') should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as 'Debug') should be invoked.</value>
+  </data>
+  <data name="MiKo_5002_MessageFormat" xml:space="preserve">
+    <value>Invoke '{2}' instead</value>
+  </data>
+  <data name="MiKo_5002_Title" xml:space="preserve">
+    <value>'xxxFormat' methods should be invoked with multiple arguments only.</value>
+  </data>
+  <data name="MiKo_5003_Description" xml:space="preserve">
+    <value>Log methods (such as 'Debug', 'Info', 'Warn', ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
+That allows the Log framework to log not only the name of the exception but also additional information (such as it's stack trace).</value>
+  </data>
+  <data name="MiKo_5003_MessageFormat" xml:space="preserve">
+    <value>Invoke '{1}' overload with exception instead</value>
+  </data>
+  <data name="MiKo_5003_Title" xml:space="preserve">
+    <value>Correct Log methods should be invoked for exceptions.</value>
   </data>
 </root>

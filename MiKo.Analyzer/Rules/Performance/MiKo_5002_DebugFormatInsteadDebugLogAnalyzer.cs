@@ -5,12 +5,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3036_DebugFormatInsteadDebugLogAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_5002_DebugFormatInsteadDebugLogAnalyzer : PerformanceAnalyzer
     {
-        public const string Id = "MiKo_3036";
+        public const string Id = "MiKo_5002";
 
         private const string Format = nameof(Format);
         private const string Debug = nameof(Debug);
@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private const string Error = nameof(Error);
         private const string Fatal = nameof(Fatal);
 
-        public MiKo_3036_DebugFormatInsteadDebugLogAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_5002_DebugFormatInsteadDebugLogAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
