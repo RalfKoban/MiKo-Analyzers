@@ -5608,6 +5608,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that have the same name should be placed side-by-side so that those methods can be easily found together..
+        /// </summary>
+        public static string MiKo_4002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place method {0} side-by-side with following other methods:
+        ///{1}
+        ///.
+        /// </summary>
+        public static string MiKo_4002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods with same name and accessibility should be placed side-by-side..
+        /// </summary>
+        public static string MiKo_4002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first..
         /// </summary>
         public static string MiKo_4101_Description {
