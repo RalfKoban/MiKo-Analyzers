@@ -4,18 +4,18 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3035_DebugLogIsEnabledAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_5001_DebugLogIsEnabledAnalyzer : PerformanceAnalyzer
     {
-        public const string Id = "MiKo_3035";
+        public const string Id = "MiKo_5001";
 
         private const string Debug = "Debug";
         private const string DebugFormat = "DebugFormat";
         private const string IsDebugEnabled = "IsDebugEnabled";
 
-        public MiKo_3035_DebugLogIsEnabledAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_5001_DebugLogIsEnabledAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 

@@ -134,6 +134,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 case "MiKoSolutions.Analyzers.Rules.Metrics": return 0;
                 case "MiKoSolutions.Analyzers.Rules.Naming": return 1;
                 case "MiKoSolutions.Analyzers.Rules.Ordering": return 4;
+                case "MiKoSolutions.Analyzers.Rules.Performance": return 5;
                 default: return -1;
             }
         }

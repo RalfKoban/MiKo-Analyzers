@@ -5050,88 +5050,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, &apos;IsDebugEnabled&apos; should be invoked before the &apos;Debug&apos; or &apos;DebugFormat&apos; methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the &apos;Debug&apos; log level is not set..
-        /// </summary>
-        public static string MiKo_3035_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3035_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; before invoking &apos;{1}&apos;.
-        /// </summary>
-        public static string MiKo_3035_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3035_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;Debug&apos; and &apos;DebugFormat&apos; methods should be invoked only after &apos;IsDebugEnabled&apos;..
-        /// </summary>
-        public static string MiKo_3035_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3035_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, &apos;xxxFormat&apos; methods (such as &apos;DebugFormat&apos;) should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as &apos;Debug&apos;) should be invoked..
-        /// </summary>
-        public static string MiKo_3036_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3036_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; instead.
-        /// </summary>
-        public static string MiKo_3036_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3036_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;xxxFormat&apos; methods should be invoked with multiple arguments only..
-        /// </summary>
-        public static string MiKo_3036_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3036_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Log methods (such as &apos;Debug&apos;, &apos;Info&apos;, &apos;Warn&apos;, ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
-        ///That allows the Log framework to log not only the name of the exception but also additional information (such as it&apos;s stack trace)..
-        /// </summary>
-        public static string MiKo_3037_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3037_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; overload with exception instead.
-        /// </summary>
-        public static string MiKo_3037_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3037_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Correct Log methods should be invoked for exceptions..
-        /// </summary>
-        public static string MiKo_3037_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3037_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {
@@ -5687,6 +5605,88 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_4102_Title {
             get {
                 return ResourceManager.GetString("MiKo_4102_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For performance reasons, &apos;IsDebugEnabled&apos; should be invoked before the &apos;Debug&apos; or &apos;DebugFormat&apos; methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the &apos;Debug&apos; log level is not set..
+        /// </summary>
+        public static string MiKo_5001_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; before invoking &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_5001_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Debug&apos; and &apos;DebugFormat&apos; methods should be invoked only after &apos;IsDebugEnabled&apos;..
+        /// </summary>
+        public static string MiKo_5001_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For performance reasons, &apos;xxxFormat&apos; methods (such as &apos;DebugFormat&apos;) should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as &apos;Debug&apos;) should be invoked..
+        /// </summary>
+        public static string MiKo_5002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoke &apos;{2}&apos; instead.
+        /// </summary>
+        public static string MiKo_5002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;xxxFormat&apos; methods should be invoked with multiple arguments only..
+        /// </summary>
+        public static string MiKo_5002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log methods (such as &apos;Debug&apos;, &apos;Info&apos;, &apos;Warn&apos;, ...) provide an overload that takes an Exception. In case an Exception shall be logged, those Log methods should be invoked instead of those without Exception parameter.
+        ///That allows the Log framework to log not only the name of the exception but also additional information (such as it&apos;s stack trace)..
+        /// </summary>
+        public static string MiKo_5003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; overload with exception instead.
+        /// </summary>
+        public static string MiKo_5003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correct Log methods should be invoked for exceptions..
+        /// </summary>
+        public static string MiKo_5003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5003_Title", resourceCulture);
             }
         }
     }
