@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public const string Id = "MiKo_4001";
 
-        private static readonly SymbolDisplayFormat Format = SymbolDisplayFormat.MinimallyQualifiedFormat;
-
         public MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -46,14 +44,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 if (methodsOrderedByParameters.Count <= 1)
                     continue;
 
-                var order = methodsOrderedByParameters.Select(_ => "   " + GetMethodSignature(_)).ConcatenatedWith(Environment.NewLine);
+                var order = methodsOrderedByParameters.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
 
                 // check for locations
-                var lastLine = GetStartingLine(methodsOrderedByParameters[0]);
+                var lastLine = methodsOrderedByParameters[0].GetStartingLine();
 
                 foreach (var method in methodsOrderedByParameters)
                 {
-                    var nextLine = GetStartingLine(method);
+                    var nextLine = method.GetStartingLine();
                     if (lastLine > nextLine)
                     {
                         if (results == null)
@@ -67,50 +65,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             }
 
             return results ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        private static int GetStartingLine(IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
-
-        private static string GetMethodSignature(IMethodSymbol method)
-        {
-            var parameters = "(" + method.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";
-            var staticPrefix = method.IsStatic ? "static " : string.Empty;
-            var asyncPrefix = method.IsAsync ? "async " : string.Empty;
-
-            var methodName = GetMethodNameForKind(method);
-
-            return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
-        }
-
-        private static string GetMethodNameForKind(IMethodSymbol method)
-        {
-            switch (method.MethodKind)
-            {
-                case MethodKind.Constructor:
-                case MethodKind.StaticConstructor:
-                    return method.ContainingType.Name;
-
-                default:
-                    return method.ReturnType.ToDisplayString(Format) + " " + method.Name;
-            }
-        }
-
-        private static string GetParameterSignature(IParameterSymbol parameter)
-        {
-            var modifier = GetModifier(parameter);
-            return modifier + parameter.Type.ToDisplayString(Format);
-        }
-
-        private static string GetModifier(IParameterSymbol parameter)
-        {
-            if (parameter.IsParams) return "params ";
-
-            switch (parameter.RefKind)
-            {
-                case RefKind.Ref: return "ref ";
-                case RefKind.Out: return "out ";
-                default: return string.Empty;
-            }
         }
     }
 }

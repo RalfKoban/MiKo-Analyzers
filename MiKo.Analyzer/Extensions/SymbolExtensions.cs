@@ -575,5 +575,49 @@ namespace MiKoSolutions.Analyzers
                 CollectAllNestedTypes(nestedType, types);
             }
         }
+
+        internal static int GetStartingLine(this IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
+
+        internal static string GetMethodSignature(this IMethodSymbol method)
+        {
+            var parameters = "(" + method.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";
+            var staticPrefix = method.IsStatic ? "static " : string.Empty;
+            var asyncPrefix = method.IsAsync ? "async " : string.Empty;
+
+            var methodName = GetMethodNameForKind(method);
+
+            return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
+        }
+
+        private static string GetMethodNameForKind(IMethodSymbol method)
+        {
+            switch (method.MethodKind)
+            {
+                case MethodKind.Constructor:
+                case MethodKind.StaticConstructor:
+                    return method.ContainingType.Name;
+
+                default:
+                    return method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) + " " + method.Name;
+            }
+        }
+
+        private static string GetParameterSignature(IParameterSymbol parameter)
+        {
+            var modifier = GetModifierSignature(parameter);
+            return modifier + parameter.Type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+        }
+
+        private static string GetModifierSignature(IParameterSymbol parameter)
+        {
+            if (parameter.IsParams) return "params ";
+
+            switch (parameter.RefKind)
+            {
+                case RefKind.Ref: return "ref ";
+                case RefKind.Out: return "out ";
+                default: return string.Empty;
+            }
+        }
     }
 }
