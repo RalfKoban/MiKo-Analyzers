@@ -11,44 +11,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected virtual bool ShallAnalyzeType(INamedTypeSymbol symbol) => true;
+
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
                                                                                                ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
                                                                                                : Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
+
+        protected virtual bool ShallAnalyzeMethod(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyzeMethod(symbol)
                                                                                               ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
                                                                                               : Enumerable.Empty<Diagnostic>();
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
+
+        protected virtual bool ShallAnalyzeEvent(IEventSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => ShallAnalyzeEvent(symbol)
                                                                                             ? AnalyzeEvent(symbol, symbol.GetDocumentationCommentXml())
                                                                                             : Enumerable.Empty<Diagnostic>();
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
+
+        protected virtual bool ShallAnalyzeField(IFieldSymbol symbol) => true;
+
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => ShallAnalyzeField(symbol)
                                                                                             ? AnalyzeField(symbol, symbol.GetDocumentationCommentXml())
                                                                                             : Enumerable.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyzeProperty(symbol)
-                                                                                                  ? AnalyzeProperty(symbol, symbol.GetDocumentationCommentXml())
-                                                                                                  : Enumerable.Empty<Diagnostic>();
-
-        protected virtual bool ShallAnalyzeType(INamedTypeSymbol symbol) => true;
-
-        protected virtual bool ShallAnalyzeMethod(IMethodSymbol symbol) => true;
-
-        protected virtual bool ShallAnalyzeEvent(IEventSymbol symbol) => true;
-
-        protected virtual bool ShallAnalyzeField(IFieldSymbol symbol) => true;
+        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
         protected virtual bool ShallAnalyzeProperty(IPropertySymbol symbol) => true;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
+        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyzeProperty(symbol)
+                                                                                                  ? AnalyzeProperty(symbol, symbol.GetDocumentationCommentXml())
+                                                                                                  : Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
