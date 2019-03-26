@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Lifetime",
                 "Linq",
                 "Maintainability",
+                "Performance",
                 "Runtime",
                 "Security",
                 "ServiceModel",

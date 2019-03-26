@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "Linq",
                                                                                     "Maintainability",
                                                                                     "Naming",
+                                                                                    "Performance",
                                                                                     "Resources",
                                                                                     "Runtime",
                                                                                     "Security",
