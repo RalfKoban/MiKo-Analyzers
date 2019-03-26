@@ -598,14 +598,23 @@ namespace MiKoSolutions.Analyzers
                     return method.ContainingType.Name;
 
                 default:
-                    return method.ReturnType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) + " " + method.Name;
+                {
+                    var returnType = MinimalTypeName(method.ReturnType);
+                    var methodName = returnType + " " + method.Name;
+
+                    if (method.IsGenericMethod)
+                        methodName += "<" + method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(",") + ">";
+
+                    return methodName;
+                }
             }
         }
 
         private static string GetParameterSignature(IParameterSymbol parameter)
         {
             var modifier = GetModifierSignature(parameter);
-            return modifier + parameter.Type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+            var parameterType = MinimalTypeName(parameter.Type);
+            return modifier + parameterType;
         }
 
         private static string GetModifierSignature(IParameterSymbol parameter)
@@ -619,5 +628,7 @@ namespace MiKoSolutions.Analyzers
                 default: return string.Empty;
             }
         }
+
+        private static string MinimalTypeName(ITypeSymbol symbol) => symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
     }
 }
