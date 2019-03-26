@@ -2010,7 +2010,7 @@ Such namespaces should be flattened.</value>
     <value>Methods that have the same name should be placed side-by-side so that those methods can be easily found together.</value>
   </data>
   <data name="MiKo_4002_MessageFormat" xml:space="preserve">
-    <value>Place method {0} side-by-side with following other methods:
+    <value>Place method '{0}' side-by-side with following other methods:
 {1}
 </value>
   </data>
