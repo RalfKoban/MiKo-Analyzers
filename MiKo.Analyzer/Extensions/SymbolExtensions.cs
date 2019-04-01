@@ -602,12 +602,12 @@ namespace MiKoSolutions.Analyzers
                 default:
                 {
                     var returnType = method.ReturnType.MinimalTypeName();
-                    var methodName = returnType + " " + method.Name;
 
-                    if (method.IsGenericMethod)
-                        methodName += "<" + method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(",") + ">";
+                    var suffix = method.IsGenericMethod ?
+                                 string.Concat("<", method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(","), ">")
+                                 : string.Empty;
 
-                    return methodName;
+                    return string.Concat(returnType, " ", method.Name, suffix);
                 }
             }
         }
