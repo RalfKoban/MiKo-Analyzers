@@ -538,6 +538,8 @@ namespace MiKoSolutions.Analyzers
             return string.Empty;
         }
 
+        internal static string MinimalTypeName(this ITypeSymbol symbol) => symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+
         internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode node, string methodName)
         {
             var ifStatement = GetEnclosingIfStatement(node);
@@ -599,7 +601,7 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                 {
-                    var returnType = MinimalTypeName(method.ReturnType);
+                    var returnType = method.ReturnType.MinimalTypeName();
                     var methodName = returnType + " " + method.Name;
 
                     if (method.IsGenericMethod)
@@ -613,7 +615,7 @@ namespace MiKoSolutions.Analyzers
         private static string GetParameterSignature(IParameterSymbol parameter)
         {
             var modifier = GetModifierSignature(parameter);
-            var parameterType = MinimalTypeName(parameter.Type);
+            var parameterType = parameter.Type.MinimalTypeName();
             return modifier + parameterType;
         }
 
@@ -628,7 +630,5 @@ namespace MiKoSolutions.Analyzers
                 default: return string.Empty;
             }
         }
-
-        private static string MinimalTypeName(ITypeSymbol symbol) => symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
     }
 }
