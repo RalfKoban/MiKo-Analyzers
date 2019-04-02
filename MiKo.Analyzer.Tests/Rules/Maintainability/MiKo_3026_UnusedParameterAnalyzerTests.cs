@@ -331,6 +331,22 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_serialization_ctor_with_unused_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private TestMe(SerializationInfo info, StreamingContext context)
+        {
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3026_UnusedParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3026_UnusedParameterAnalyzer();

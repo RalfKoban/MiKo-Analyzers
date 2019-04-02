@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -34,6 +35,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (method.IsEventHandler())
                 return true;
+
+            if (method.IsConstructor())
+            {
+                // ignore serialization constructors
+                return method.Parameters.Length == 2 && method.Parameters[0].Type.Name == nameof(SerializationInfo) && method.Parameters[1].Type.Name == nameof(StreamingContext);
+            }
 
             var ignore = method.IsInterfaceImplementation();
             return ignore;
