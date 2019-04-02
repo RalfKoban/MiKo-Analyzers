@@ -125,6 +125,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2024|Documentation of Enum parameters should have a default starting phrase.|&#x2713;|
 |MiKo_2025|Documentation of 'CancellationToken' parameters should have a default starting phrase.|&#x2713;|
 |MiKo_2026|Used parameters should not be documented to be unused.|&#x2713;|
+|MiKo_2027|Serialization constructor parameters shall be documented with a specific phrase.|&#x2713;|
 |MiKo_2030|Documentation of return value should have a default starting phrase.|&#x2713;|
 |MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|&#x2713;|
 |MiKo_2032|Documentation of Boolean return value should have a specific phrase.|&#x2713;|
@@ -171,6 +172,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2204|Documentation should use &lt;list&gt; for enumerations.|&#x2713;|
 |MiKo_2205|Documentation should use &lt;note&gt; for important information.|&#x2713;|
 |MiKo_2206|Documentation should not use the term 'flag'.|&#x2713;|
+|MiKo_2207|&lt;summary&gt; documentation shall be short.|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|
@@ -198,14 +200,12 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3024|Do not use the [ref] keyword on reference parameters.|&#x2713;|
 |MiKo_3025|Do not re-assign method parameters.|&#x2713;|
 |MiKo_3026|Unused parameters should be removed.|&#x2713;|
+|MiKo_3027|Parameters should not be marked to be reserved for future usage.|&#x2713;|
 |MiKo_3030|Do not use 'object.Equals()' on value types.|&#x2713;|
 |MiKo_3031|Do not concatenate strings with += operator.|&#x2713;|
 |MiKo_3032|ICloneable.Clone() should not be implemented.|&#x2713;|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|
-|MiKo_3035|'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.|&#x2713;|
-|MiKo_3036|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|
-|MiKo_3037|Correct Log methods should be invoked for exceptions.|&#x2713;|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|&#x2713;|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|
 |MiKo_3050|DependencyProperty fields should be 'public static readonly'.|&#x2713;|
@@ -225,5 +225,13 @@ The following tables list all the rules that are currently provided by the analy
 |ID|Title|Enabled by default|
 |:-|:----|:----------------:|
 |MiKo_4001|Methods with same name should be ordered based on the number of their parameters.|&#x2713;|
+|MiKo_4002|Methods with same name and accessibility should be placed side-by-side.|&#x2713;|
 |MiKo_4101|Test initialization methods should be ordered first.|&#x2713;|
 |MiKo_4102|Test cleanup methods should be ordered before test methods.|&#x2713;|
+
+### Performance
+|ID|Title|Enabled by default|
+|:-|:----|:----------------:|
+|MiKo_5001|'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.|&#x2713;|
+|MiKo_5002|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|
+|MiKo_5003|Correct Log methods should be invoked for exceptions.|&#x2713;|
