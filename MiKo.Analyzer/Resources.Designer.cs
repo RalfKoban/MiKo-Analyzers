@@ -2886,6 +2886,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain..
+        /// </summary>
+        public static string MiKo_2027_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2027_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should be: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2027_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2027_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serialization constructor parameters shall be documented with a specific phrase..
+        /// </summary>
+        public static string MiKo_2027_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2027_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {

@@ -1070,6 +1070,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2026_Title" xml:space="preserve">
     <value>Used parameters should not be documented to be unused.</value>
   </data>
+  <data name="MiKo_2027_Description" xml:space="preserve">
+    <value>To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain.</value>
+  </data>
+  <data name="MiKo_2027_MessageFormat" xml:space="preserve">
+    <value>&lt;param name="{0}"&gt; documentation should be: '{1}'</value>
+  </data>
+  <data name="MiKo_2027_Title" xml:space="preserve">
+    <value>Serialization constructor parameters shall be documented with a specific phrase.</value>
+  </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
     <value>The documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
   </data>
