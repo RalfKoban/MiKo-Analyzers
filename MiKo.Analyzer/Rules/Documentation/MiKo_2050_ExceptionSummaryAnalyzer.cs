@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -24,8 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (IsParameterlessCtor(symbol)
              || IsMessageCtor(symbol)
              || IsMessageExceptionCtor(symbol)
-             || IsSerializationCtor(symbol))
+             || symbol.IsSerializationConstructor())
+            {
                 return !symbol.GetDocumentationCommentXml().IsNullOrWhiteSpace();
+            }
 
             return false; // unknown ctor
         }
@@ -67,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (IsMessageExceptionCtor(symbol))
                 return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase).ToArray());
 
-            if (IsSerializationCtor(symbol))
+            if (symbol.IsSerializationConstructor())
             {
                 return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray())
                        .Concat(AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
@@ -98,22 +99,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool IsMessageExceptionCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 2 && IsMessageParameter(symbol.Parameters[0]) && IsExceptionParameter(symbol.Parameters[1]);
 
-        private static bool IsSerializationCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 2 && IsSerializationInfoParameter(symbol.Parameters[0]) && IsStreamingContextParameter(symbol.Parameters[1]);
-
         private static bool IsMessageParameter(IParameterSymbol parameter) => parameter.Type.SpecialType == SpecialType.System_String;
 
         private static bool IsExceptionParameter(IParameterSymbol parameter) => parameter.Type.IsException();
-
-        private static bool IsSerializationInfoParameter(IParameterSymbol parameter) => parameter.Type.Name == nameof(SerializationInfo);
-
-        private static bool IsStreamingContextParameter(IParameterSymbol parameter) => parameter.Type.Name == nameof(StreamingContext);
 
         private static string[] GetParameterPhrase(IParameterSymbol symbol)
         {
             if (IsMessageParameter(symbol)) return Constants.Comments.ExceptionCtorMessageParamPhrase;
             if (IsExceptionParameter(symbol)) return Constants.Comments.ExceptionCtorExceptionParamPhrase;
-            if (IsSerializationInfoParameter(symbol)) return Constants.Comments.ExceptionCtorSerializationInfoParamPhrase;
-            if (IsStreamingContextParameter(symbol)) return Constants.Comments.ExceptionCtorStreamingContextParamPhrase;
+            if (symbol.IsSerializationInfoParameter()) return Constants.Comments.CtorSerializationInfoParamPhrase;
+            if (symbol.IsStreamingContextParameter()) return Constants.Comments.CtorStreamingContextParamPhrase;
 
             return null;
         }

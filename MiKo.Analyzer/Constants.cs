@@ -229,8 +229,9 @@ namespace MiKoSolutions.Analyzers
             internal const string ExceptionCtorSerializationParamSummaryContinueingPhrase = " with serialized data";
             internal const string ExceptionCtorSerializationParamRemarksPhrase = "This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.";
 
-            internal static readonly string[] ExceptionCtorSerializationInfoParamPhrase = { "The object that holds the serialized object data." };
-            internal static readonly string[] ExceptionCtorStreamingContextParamPhrase = { "The contextual information about the source or destination." };
+            internal static readonly string[] CtorSerializationInfoParamPhrase = { "The object that holds the serialized object data." };
+            internal static readonly string[] CtorStreamingContextParamPhrase = { "The contextual information about the source or destination." };
+
             internal static readonly string[] ExceptionCtorMessageParamPhrase = { "The error message that explains the reason for the exception." };
 
             internal static readonly string[] ExceptionCtorExceptionParamPhrase =

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
@@ -142,7 +143,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.MethodKind == MethodKind.Constructor;
+        internal static bool IsConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.IsConstructor();
+
+        internal static bool IsConstructor(this IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Constructor;
+
+        internal static bool IsSerializationConstructor(this IMethodSymbol symbol) => symbol.IsConstructor() && symbol.Parameters.Length == 2 && symbol.Parameters[0].IsSerializationInfoParameter() && symbol.Parameters[1].IsStreamingContextParameter();
+
+        internal static bool IsSerializationInfoParameter(this IParameterSymbol parameter) => parameter.Type.Name == nameof(SerializationInfo);
+
+        internal static bool IsStreamingContextParameter(this IParameterSymbol parameter) => parameter.Type.Name == nameof(StreamingContext);
 
         internal static bool IsImportingConstructor(this ISymbol symbol)
         {
