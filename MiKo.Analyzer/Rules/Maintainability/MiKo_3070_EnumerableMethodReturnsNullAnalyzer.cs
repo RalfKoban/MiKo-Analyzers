@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -77,25 +78,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
                         foreach (var localVariable in dataFlow.ReadInside)
                         {
-                            foreach (var statement in block.Statements)
+                            var assignments = GetAssignments(localVariable.Name, block.Statements);
+
+                            foreach (var assignment in assignments)
                             {
-                                if (statement is LocalDeclarationStatementSyntax ldss)
+                                if (assignment.IsNullExpression(semanticModel))
                                 {
-                                    var declaration = ldss.Declaration;
-                                    foreach (var variable in declaration.Variables)
-                                    {
-                                        if (variable.Identifier.ValueText == localVariable.Name)
-                                        {
-                                            if (variable.Initializer.Value.IsNullExpression(semanticModel))
-                                            {
-                                                ReportIssue(context, variable);
-                                            }
-                                        }
-                                    }
+                                    ReportIssue(context, assignment);
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
+
+        private static IEnumerable<ExpressionSyntax> GetAssignments(string variableName, IEnumerable<StatementSyntax> statements)
+        {
+            foreach (var statement in statements)
+            {
+                if (statement is LocalDeclarationStatementSyntax ldss)
+                {
+                    var declaration = ldss.Declaration;
+                    foreach (var variable in declaration.Variables)
+                    {
+                        if (variable.Identifier.ValueText == variableName)
+                        {
+                            yield return variable.Initializer.Value;
+                        }
+                    }
+                }
+
+                if (statement is ExpressionStatementSyntax ess)
+                {
+                    yield return ess.Expression;
                 }
             }
         }

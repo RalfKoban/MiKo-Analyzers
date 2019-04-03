@@ -123,7 +123,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_returning_a_variable_that_is_potentially_null() => An_issue_is_reported_for(@"
+        public void An_issue_reported_for_Enumerable_method_returning_a_variable_that_is_potentially_null_because_of_if_block() => An_issue_is_reported_for(@"
 using System.Collections;
 
 namespace Bla
@@ -145,6 +145,53 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_reported_for_Enumerable_method_returning_a_variable_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
+using System.Collections;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(bool flag)
+        {
+            IEnumerable variable = flag
+                                       ? new List<int>()
+                                       : null;
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_reported_for_Enumerable_method_returning_a_result_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
+using System.Collections;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(bool flag)
+        {
+            return flag
+                   ? new List<int>()
+                   : null;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
+using System.Collections;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(bool flag) => flag ? new List<int>() : null;
+    }
+}");
+
+        [Test]
         public void No_issue_reported_for_Enumerable_method_returning_a_variable_that_is_null_but_then_reassigned() => No_issue_is_reported_for(@"
 using System.Collections;
 
@@ -161,6 +208,7 @@ namespace Bla
         }
     }
 }");
+
         // TODO: RKN what about Linq calls such as FirstOrDefault();
 
         protected override string GetDiagnosticId() => MiKo_3070_EnumerableMethodReturnsNullAnalyzer.Id;
