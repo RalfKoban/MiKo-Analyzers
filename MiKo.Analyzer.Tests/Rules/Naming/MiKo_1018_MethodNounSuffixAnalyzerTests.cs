@@ -68,7 +68,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                  "ExecuteManipulation",
                                                                                  "RunAdoption",
                                                                                  "Installation",
-                                                                                 "DoAction",
                                                                                  "Initialization",
                                                                                  "Configuration",
                                                                              };
@@ -112,7 +111,6 @@ public class TestMe
         [TestCase(" ", ExpectedResult = " ", Description = "There is no verb available")]
         [TestCase("Caption", ExpectedResult = "Caption", Description = "There is no verb available")]
         [TestCase("Destination", ExpectedResult = "Destination", Description = "There is no verb available")]
-        [TestCase("Function", ExpectedResult = "Function", Description = "There is no verb available")]
         [TestCase("Adaptation", ExpectedResult = "Adapt")]
         [TestCase("Adoption", ExpectedResult = "Adopt")]
         [TestCase("Comparison", ExpectedResult = "Compare")]
@@ -131,13 +129,16 @@ public class TestMe
         [TestCase("Registration", ExpectedResult = "Register")]
         [TestCase("Stabilization", ExpectedResult = "Stabilize")]
         [TestCase("Uninstallation", ExpectedResult = "Uninstall")]
-        [TestCase("IsRelevantAction", ExpectedResult = "IsRelevantAction")]
-        [TestCase("IsRelevantFunction", ExpectedResult = "IsRelevantFunction")]
-        [TestCase("IsRelevantFunc", ExpectedResult = "IsRelevantFunc")]
-        [TestCase("DoAction", ExpectedResult = "Do")]
-        [TestCase("DoFunction", ExpectedResult = "Do")]
-        [TestCase("DoFunc", ExpectedResult = "Do")]
+        [TestCase("Action", ExpectedResult = "Action", Description = "There is no verb available")]
+        [TestCase("DoAction", ExpectedResult = "DoAction")]
         [TestCase("HasAction", ExpectedResult = "HasAction")]
+        [TestCase("IsRelevantAction", ExpectedResult = "IsRelevantAction")]
+        [TestCase("Function", ExpectedResult = "Function", Description = "There is no verb available")]
+        [TestCase("DoFunction", ExpectedResult = "DoFunction")]
+        [TestCase("IsRelevantFunction", ExpectedResult = "IsRelevantFunction")]
+        [TestCase("Func", ExpectedResult = "Function")]
+        [TestCase("DoFunc", ExpectedResult = "DoFunction")]
+        [TestCase("IsRelevantFunc", ExpectedResult = "IsRelevantFunc")]
         public string A_proper_name_is_found(string name)
         {
             MiKo_1018_MethodNounSuffixAnalyzer.TryFindBetterName(name, out var result);
