@@ -131,6 +131,9 @@ public class TestMe
         [TestCase("Registration", ExpectedResult = "Register")]
         [TestCase("Stabilization", ExpectedResult = "Stabilize")]
         [TestCase("Uninstallation", ExpectedResult = "Uninstall")]
+        [TestCase("IsRelevantAction", ExpectedResult = "IsRelevant")]
+        [TestCase("IsRelevantFunction", ExpectedResult = "IsRelevant")]
+        [TestCase("IsRelevantFunc", ExpectedResult = "IsRelevant")]
         public string A_proper_name_is_found(string name)
         {
             MiKo_1018_MethodNounSuffixAnalyzer.TryFindBetterName(name, out var result);

@@ -14,8 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly KeyValuePair<string, string>[] Endings =
             {
+                new KeyValuePair<string, string>(nameof(Action), string.Empty),
                 new KeyValuePair<string, string>("Caption", "Caption"),
                 new KeyValuePair<string, string>(nameof(Exception), nameof(Exception)),
+                new KeyValuePair<string, string>("Func", string.Empty),
+                new KeyValuePair<string, string>("Function", string.Empty),
                 new KeyValuePair<string, string>("estination", "estination"),
                 new KeyValuePair<string, string>("mentation", "ment"),
                 new KeyValuePair<string, string>("unction", "unction"),
