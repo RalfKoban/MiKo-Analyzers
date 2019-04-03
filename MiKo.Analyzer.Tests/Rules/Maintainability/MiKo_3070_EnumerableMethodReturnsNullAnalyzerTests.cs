@@ -63,6 +63,22 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_reported_for_Enumerable_method_yield_returning_null() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething()
+        {
+            yield return null;
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_reported_for_Enumerable_method_returning_null() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
@@ -119,7 +135,7 @@ namespace Bla
             IEnumerable variable;
 
             if (flag)
-                variable = new List<int>()
+                variable = new List<int>();
             else
                 variable = null;
 
@@ -128,6 +144,23 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void No_issue_reported_for_Enumerable_method_returning_a_variable_that_is_null_but_then_reassigned() => No_issue_is_reported_for(@"
+using System.Collections;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething()
+        {
+            IEnumerable variable = null;
+            variable = new List<int>();
+
+            return variable;
+        }
+    }
+}");
         // TODO: RKN what about Linq calls such as FirstOrDefault();
 
         protected override string GetDiagnosticId() => MiKo_3070_EnumerableMethodReturnsNullAnalyzer.Id;

@@ -62,24 +62,39 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-//            var assignments = methodBody.DescendantNodes().OfType<EqualsValueClauseSyntax>().ToList();
-
-            var controlFlow = semanticModel.AnalyzeControlFlow(methodBody);
-            var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
-            foreach (var returnStatement in returnStatements)
+            if (methodBody is BlockSyntax block)
             {
-                if (returnStatement.Expression.IsNullExpression(semanticModel))
+                var controlFlow = semanticModel.AnalyzeControlFlow(methodBody);
+                var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
+                foreach (var returnStatement in returnStatements)
                 {
-                    ReportIssue(context, returnStatement);
-                }
-                else
-                {
-                    var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
-                    foreach (var localVariable in dataFlow.ReadInside)
+                    if (returnStatement.Expression.IsNullExpression(semanticModel))
                     {
-
-                        // TODO: RKN get assignments to variable
-
+                        ReportIssue(context, returnStatement);
+                    }
+                    else
+                    {
+                        var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
+                        foreach (var localVariable in dataFlow.ReadInside)
+                        {
+                            foreach (var statement in block.Statements)
+                            {
+                                if (statement is LocalDeclarationStatementSyntax ldss)
+                                {
+                                    var declaration = ldss.Declaration;
+                                    foreach (var variable in declaration.Variables)
+                                    {
+                                        if (variable.Identifier.ValueText == localVariable.Name)
+                                        {
+                                            if (variable.Initializer.Value.IsNullExpression(semanticModel))
+                                            {
+                                                ReportIssue(context, variable);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
