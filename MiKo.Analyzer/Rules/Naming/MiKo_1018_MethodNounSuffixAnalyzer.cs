@@ -77,6 +77,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Unregister",
                 "Validate",
                 "CompileTimeValidate",
+                "Is",
+                "Has",
             };
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
