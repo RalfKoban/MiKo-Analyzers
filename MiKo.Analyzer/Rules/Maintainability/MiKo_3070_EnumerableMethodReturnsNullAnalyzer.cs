@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (methodBody is ObjectCreationExpressionSyntax)
                 return;
 
-            if (methodBody.IsNullExpression(context.SemanticModel))
+            if (HasIssue(methodBody, context))
             {
                 ReportIssue(context, methodBody);
             }
@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var returnStatement in returnStatements)
             {
-                if (returnStatement.Expression.IsNullExpression(semanticModel))
+                if (HasIssue(returnStatement.Expression, context))
                 {
                     ReportIssue(context, returnStatement);
                 }
@@ -105,28 +105,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var descendantNodes = node.DescendantNodes().ToList();
             foreach (var descendant in descendantNodes)
             {
-                if (descendant is VariableDeclaratorSyntax variable)
+                switch (descendant)
                 {
-                    if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
+                    case VariableDeclaratorSyntax variable:
                     {
-                        yield return variable.Initializer.Value;
-                    }
-                }
+                        if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
+                            yield return variable.Initializer.Value;
 
-                if (descendant is AssignmentExpressionSyntax a)
-                {
-                    if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
-                    {
-                        yield return a.Right;
+                        break;
                     }
-                }
-
-                if (descendant is ReturnStatementSyntax r)
-                {
-                    var literalExpressions = r.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
-                    foreach (var literalExpression in literalExpressions)
+                    case AssignmentExpressionSyntax a:
                     {
-                        yield return literalExpression;
+                        if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
+                            yield return a.Right;
+
+                        break;
+                    }
+                    case ReturnStatementSyntax r:
+                    {
+                        var literalExpressions = r.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
+                        foreach (var literalExpression in literalExpressions)
+                            yield return literalExpression;
+
+                        break;
                     }
                 }
             }
@@ -134,15 +135,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeAssignments(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignments)
         {
-            var semanticModel = context.SemanticModel;
-
             var assignmentsWithIssues = new List<ExpressionSyntax>();
 
             var isNull = false;
 
             foreach (var assignment in assignments)
             {
-                isNull = assignment.IsNullExpression(semanticModel) || assignment.AncestorsAndSelf().Any(_ => _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax);
+                isNull = HasIssue(assignment, context) || assignment.AncestorsAndSelf().Any(_ => _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax);
 
                 if (isNull)
                     assignmentsWithIssues.Add(assignment);
@@ -164,5 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             context.ReportDiagnostic(diagnostic);
         }
+
+        private static bool HasIssue(SyntaxNode node, SyntaxNodeAnalysisContext context) => node.IsNullExpression(context.SemanticModel);
     }
 }
