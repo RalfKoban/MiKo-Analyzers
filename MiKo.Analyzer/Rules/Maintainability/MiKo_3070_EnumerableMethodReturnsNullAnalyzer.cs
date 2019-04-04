@@ -142,15 +142,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var assignment in assignments)
             {
-                if (assignment.IsNullExpression(semanticModel))
-                {
-                    isNull = true;
+                isNull = assignment.IsNullExpression(semanticModel) || assignment.AncestorsAndSelf().Any(_ => _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax);
+
+                if (isNull)
                     assignmentsWithIssues.Add(assignment);
-                }
-                else
-                {
-                    isNull = assignment.Ancestors().Any(_ => _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax);
-                }
             }
 
             if (isNull)
