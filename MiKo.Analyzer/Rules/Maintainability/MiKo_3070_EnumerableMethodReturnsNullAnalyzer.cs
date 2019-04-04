@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+
+using SyntaxNode = Microsoft.CodeAnalysis.SyntaxNode;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
@@ -55,63 +59,105 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (methodBody is ObjectCreationExpressionSyntax)
                 return;
 
-            var semanticModel = context.SemanticModel;
-
-            if (methodBody.IsNullExpression(semanticModel))
+            if (methodBody.IsNullExpression(context.SemanticModel))
             {
                 ReportIssue(context, methodBody);
-                return;
             }
-
-            if (methodBody is BlockSyntax block)
+            else if (methodBody is BlockSyntax block)
             {
-                var controlFlow = semanticModel.AnalyzeControlFlow(methodBody);
-                var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
-                foreach (var returnStatement in returnStatements)
-                {
-                    if (returnStatement.Expression.IsNullExpression(semanticModel))
-                    {
-                        ReportIssue(context, returnStatement);
-                    }
-                    else
-                    {
-                        var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
-                        foreach (var localVariable in dataFlow.ReadInside)
-                        {
-                            var assignments = GetAssignments(localVariable.Name, block.Statements);
+                AnalyzeBlock(context, block);
+            }
+            else if (methodBody is ConditionalExpressionSyntax conditional)
+            {
+                AnalyzeAssignments(context, conditional.DescendantNodes().OfType<ExpressionSyntax>());
+            }
+        }
 
-                            foreach (var assignment in assignments)
-                            {
-                                if (assignment.IsNullExpression(semanticModel))
-                                {
-                                    ReportIssue(context, assignment);
-                                }
-                            }
-                        }
+        private void AnalyzeBlock(SyntaxNodeAnalysisContext context, BlockSyntax block)
+        {
+            var semanticModel = context.SemanticModel;
+
+            var controlFlow = semanticModel.AnalyzeControlFlow(block);
+            var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
+
+            foreach (var returnStatement in returnStatements)
+            {
+                if (returnStatement.Expression.IsNullExpression(semanticModel))
+                {
+                    ReportIssue(context, returnStatement);
+                }
+                else
+                {
+                    var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
+                    var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
+
+                    var candidates = GetCandidates(block, localVariableNames).ToList();
+                    if (candidates.Any())
+                    {
+                        AnalyzeAssignments(context, candidates);
                     }
                 }
             }
         }
 
-        private static IEnumerable<ExpressionSyntax> GetAssignments(string variableName, IEnumerable<StatementSyntax> statements)
+        private static IEnumerable<ExpressionSyntax> GetCandidates(SyntaxNode node, IEnumerable<string> names)
         {
-            foreach (var statement in statements)
+            var descendantNodes = node.DescendantNodes().ToList();
+            foreach (var descendant in descendantNodes)
             {
-                if (statement is LocalDeclarationStatementSyntax ldss)
+                if (descendant is VariableDeclaratorSyntax variable)
                 {
-                    var declaration = ldss.Declaration;
-                    foreach (var variable in declaration.Variables)
+                    if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
                     {
-                        if (variable.Identifier.ValueText == variableName)
-                        {
-                            yield return variable.Initializer.Value;
-                        }
+                        yield return variable.Initializer.Value;
                     }
                 }
 
-                if (statement is ExpressionStatementSyntax ess)
+                if (descendant is AssignmentExpressionSyntax a)
                 {
-                    yield return ess.Expression;
+                    if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
+                    {
+                        yield return a.Right;
+                    }
+                }
+
+                if (descendant is ReturnStatementSyntax r)
+                {
+                    var literalExpressions = r.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
+                    foreach (var literalExpression in literalExpressions)
+                    {
+                        yield return literalExpression;
+                    }
+                }
+            }
+        }
+
+        private void AnalyzeAssignments(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignments)
+        {
+            var semanticModel = context.SemanticModel;
+
+            var assignmentsWithIssues = new List<ExpressionSyntax>();
+
+            var isNull = false;
+
+            foreach (var assignment in assignments)
+            {
+                if (assignment.IsNullExpression(semanticModel))
+                {
+                    isNull = true;
+                    assignmentsWithIssues.Add(assignment);
+                }
+                else
+                {
+                    isNull = assignment.Ancestors().Any(_ => _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax);
+                }
+            }
+
+            if (isNull)
+            {
+                foreach (var assignment in assignmentsWithIssues)
+                {
+                    ReportIssue(context, assignment);
                 }
             }
         }
