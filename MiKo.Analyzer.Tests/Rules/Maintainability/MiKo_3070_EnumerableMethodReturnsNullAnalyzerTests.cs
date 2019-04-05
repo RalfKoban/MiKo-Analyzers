@@ -50,6 +50,42 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_reported_for_Enumerable_method_with_null_check() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(object o)
+        {
+            if (o == null)
+                return Enumerable.Empty<int>();
+            return new List<int>();
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_reported_for_Enumerable_method_with_pattern_null_check() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(object o)
+        {
+            if (o is null)
+                return Enumerable.Empty<int>();
+            return new List<int>();
+        }
+    }
+}");
+
+        [Test]
         public void No_issue_reported_for_Enumerable_method_body_returning_a_valid_List() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
@@ -294,6 +330,23 @@ namespace Bla
         }
     }
 }");
+
+        [Test]
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_based_on_Coalescence_operator() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+    {
+        public class TestMe
+        {
+            public IEnumerable DoSomething()
+            {
+                IEnumerable variable = null;
+                return variable ?? Enumerable.Empty<int>();
+            }
+        }
+    }");
 
         // TODO: RKN what about Linq calls such as FirstOrDefault();
 
