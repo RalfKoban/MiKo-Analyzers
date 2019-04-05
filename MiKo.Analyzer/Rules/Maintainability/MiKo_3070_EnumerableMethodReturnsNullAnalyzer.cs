@@ -20,85 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
-        }
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
 
         private static bool CanBeIgnored(SyntaxNodeAnalysisContext context) => CanBeIgnored(context.GetEnclosingMethod());
 
-        private static bool CanBeIgnored(IMethodSymbol method)
-        {
-            switch (method?.ReturnType.SpecialType)
-            {
-                case SpecialType.System_Collections_IEnumerable:
-                case SpecialType.System_Collections_Generic_IEnumerable_T:
-                    return false;
-
-                default:
-                    return true;
-            }
-        }
-
-        private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
-        {
-            var method = (MethodDeclarationSyntax)context.Node;
-            var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
-
-            Analyze(context, methodBody);
-        }
-
-        private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody)
-        {
-            if (methodBody is null)
-                return;
-
-            if (CanBeIgnored(context))
-                return;
-
-            if (methodBody is ObjectCreationExpressionSyntax)
-                return;
-
-            if (HasIssue(methodBody, context))
-            {
-                ReportIssue(context, methodBody);
-            }
-            else if (methodBody is BlockSyntax block)
-            {
-                AnalyzeBlock(context, block);
-            }
-            else if (methodBody is ConditionalExpressionSyntax conditional)
-            {
-                AnalyzeAssignments(context, conditional.DescendantNodes().OfType<ExpressionSyntax>());
-            }
-        }
-
-        private void AnalyzeBlock(SyntaxNodeAnalysisContext context, BlockSyntax block)
-        {
-            var semanticModel = context.SemanticModel;
-
-            var controlFlow = semanticModel.AnalyzeControlFlow(block);
-            var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
-
-            foreach (var returnStatement in returnStatements)
-            {
-                if (HasIssue(returnStatement.Expression, context))
-                {
-                    ReportIssue(context, returnStatement);
-                }
-                else
-                {
-                    var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
-                    var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
-
-                    var candidates = GetCandidates(block, localVariableNames).ToList();
-                    if (candidates.Any())
-                    {
-                        AnalyzeAssignments(context, candidates);
-                    }
-                }
-            }
-        }
+        private static bool CanBeIgnored(IMethodSymbol method) => method?.ReturnType.IsEnumerable() != true;
 
         private static IEnumerable<ExpressionSyntax> GetCandidates(SyntaxNode node, IEnumerable<string> names)
         {
@@ -108,51 +34,172 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (descendant)
                 {
                     case VariableDeclaratorSyntax variable:
-                    {
-                        if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
-                            yield return variable.Initializer.Value;
+                        {
+                            if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
+                                yield return variable.Initializer.Value;
 
-                        break;
-                    }
+                            break;
+                        }
                     case AssignmentExpressionSyntax a:
-                    {
-                        if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
-                            yield return a.Right;
+                        {
+                            if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
+                                yield return a.Right;
 
-                        break;
-                    }
+                            break;
+                        }
                     case ReturnStatementSyntax r:
-                    {
-                        var literalExpressions = r.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
-                        foreach (var literalExpression in literalExpressions)
-                            yield return literalExpression;
+                        {
+                            var literalExpressions = r.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
+                            foreach (var literalExpression in literalExpressions)
+                                yield return literalExpression;
 
-                        break;
-                    }
+                            break;
+                        }
                 }
+            }
+        }
+
+        private static bool HasIssue(SyntaxNode node, SyntaxNodeAnalysisContext context) => node.IsNullExpression(context.SemanticModel);
+
+        private static IEnumerable<ExpressionSyntax> GetIssues(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
+        {
+            var results = new List<ExpressionSyntax>();
+            GetIssues(context, conditional.WhenTrue, results);
+            GetIssues(context, conditional.WhenFalse, results);
+
+            return results;
+        }
+
+        private static void GetIssues(SyntaxNodeAnalysisContext context, ExpressionSyntax expression, List<ExpressionSyntax> results)
+        {
+            if (expression is ConditionalExpressionSyntax nested)
+            {
+                var nestedIssues = GetIssues(context, nested);
+
+                results.AddRange(nestedIssues);
+            }
+            else
+            {
+                if (HasIssue(expression, context))
+                {
+                    results.Add(expression);
+                }
+            }
+        }
+
+        private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
+        {
+            if (CanBeIgnored(context))
+                return;
+
+            var method = (MethodDeclarationSyntax)context.Node;
+
+            if (method.Body != null)
+            {
+                AnalyzeMethodBody(context, method.Body);
+            }
+            else
+            {
+                AnalyzeExpressionBody(context, method.ExpressionBody);
+            }
+        }
+
+        private void AnalyzeMethodBody(SyntaxNodeAnalysisContext context, BlockSyntax block)
+        {
+            var semanticModel = context.SemanticModel;
+
+            var controlFlow = semanticModel.AnalyzeControlFlow(block);
+            var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
+
+            foreach (var returnStatement in returnStatements)
+            {
+                if (GetAndReportIssue(context, returnStatement.Expression))
+                    continue;
+
+                var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
+                var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
+
+                var candidates = GetCandidates(block, localVariableNames).ToList();
+                if (candidates.Any())
+                {
+                    AnalyzeAssignments(context, candidates);
+                }
+            }
+        }
+
+        private void AnalyzeExpressionBody(SyntaxNodeAnalysisContext context, ArrowExpressionClauseSyntax methodBody)
+        {
+            if (methodBody is null)
+                return;
+
+            var expression = methodBody.Expression;
+
+            if (expression is ConditionalExpressionSyntax conditional)
+            {
+                AnalyzeConditional(context, conditional);
+            }
+            else
+            {
+                GetAndReportIssue(context, expression);
             }
         }
 
         private void AnalyzeAssignments(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignments)
         {
-            var assignmentsWithIssues = new List<ExpressionSyntax>();
-
-            var isNull = false;
-
-            foreach (var assignment in assignments)
+            if (assignments.Any(_ => HasIssue(_, context)))
             {
-                isNull = HasIssue(assignment, context) || assignment.AncestorsAndSelf().Any(_ => _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax);
+                var assignmentsWithIssues = new List<ExpressionSyntax>();
 
-                if (isNull)
-                    assignmentsWithIssues.Add(assignment);
+                var hasIssue = false;
+
+                foreach (var assignment in assignments)
+                {
+                    hasIssue = HasIssue(assignment, context);
+
+                    if (hasIssue && assignment.AncestorsAndSelf().Any(_ => _ is VariableDeclarationSyntax || _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax))
+                    {
+                        assignmentsWithIssues.Add(assignment);
+                    }
+                }
+
+                if (hasIssue)
+                {
+                    ReportIssues(context, assignmentsWithIssues);
+                }
+            }
+            else
+            {
+                foreach (var conditional in assignments.OfType<ConditionalExpressionSyntax>())
+                {
+                    AnalyzeConditional(context, conditional);
+                }
+            }
+        }
+
+        private void AnalyzeConditional(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
+        {
+            var issues = GetIssues(context, conditional);
+
+            ReportIssues(context, issues);
+        }
+
+        private bool GetAndReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode methodBody)
+        {
+            var hasIssue = HasIssue(methodBody, context);
+
+            if (hasIssue)
+            {
+                ReportIssue(context, methodBody);
             }
 
-            if (isNull)
+            return hasIssue;
+        }
+
+        private void ReportIssues(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignmentsWithIssues)
+        {
+            foreach (var assignment in assignmentsWithIssues)
             {
-                foreach (var assignment in assignmentsWithIssues)
-                {
-                    ReportIssue(context, assignment);
-                }
+                ReportIssue(context, assignment);
             }
         }
 
@@ -163,7 +210,5 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             context.ReportDiagnostic(diagnostic);
         }
-
-        private static bool HasIssue(SyntaxNode node, SyntaxNodeAnalysisContext context) => node.IsNullExpression(context.SemanticModel);
     }
 }

@@ -79,7 +79,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_returning_null() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_returning_null() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -95,7 +95,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_body_returning_null() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_body_returning_null() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -108,7 +108,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_returning_a_variable_that_is_null() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -125,7 +125,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_returning_a_variable_that_is_potentially_null_because_of_if_block() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_potentially_null_because_of_if_block() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -148,7 +148,30 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_returning_a_variable_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
+        public void No_issue_reported_for_Enumerable_method_returning_a_variable_that_is_not_null_although_it_has_if_block() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(bool flag)
+        {
+            IEnumerable variable;
+
+            if (flag)
+                variable = new List<int>();
+            else
+                variable = new int[0];
+
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -167,7 +190,26 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_returning_a_result_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
+        public void No_issue_reported_for_Enumerable_method_returning_a_variable_that_is_not_null_but_has_ternary_operator() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(bool flag)
+        {
+            IEnumerable variable = flag
+                                       ? new List<int>()
+                                       : new int[0];
+            return variable;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Enumerable_method_returning_a_result_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -185,7 +227,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_ternary_operator() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -198,7 +240,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_quite_complex_ternary_operator() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_quite_complex_ternary_operator() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -230,7 +272,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_reported_for_Enumerable_method_returning_a_result_that_is_potentially_null_because_of_switch_conditions() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_returning_a_result_that_is_potentially_null_because_of_switch_conditions() => An_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
