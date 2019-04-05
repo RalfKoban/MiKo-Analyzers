@@ -58,7 +58,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public IEnumerable DoSomething(object o)
+        public IEnumerable DoSomething(IEnumerable o)
         {
             if (o == null)
                 return Enumerable.Empty<int>();
@@ -76,11 +76,43 @@ namespace Bla
 {
     public class TestMe
     {
-        public IEnumerable DoSomething(object o)
+        public IEnumerable DoSomething(IEnumerable o)
         {
             if (o is null)
                 return Enumerable.Empty<int>();
             return new List<int>();
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_reported_for_Enumerable_method_with_null_check_and_conditional() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(IEnumerable o)
+        {
+            return o == null ? Enumerable.Empty<int>() : new List<int>();
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_reported_for_Enumerable_method_with_pattern_null_check_and_conditional() => No_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable DoSomething(IEnumerable o)
+        {
+            return o is null ? Enumerable.Empty<int>() : new List<int>();
         }
     }
 }");
