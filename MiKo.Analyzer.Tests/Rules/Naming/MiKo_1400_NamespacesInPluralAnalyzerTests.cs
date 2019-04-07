@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "Threading",
                                                                                     "UserExperience",
                                                                                     "Children",
+                                                                                    "MyOwnNumber0815",
                                                                                 };
 
         private static readonly IEnumerable<string> WellKnownCompanyAndFrameworkNames = new[]
