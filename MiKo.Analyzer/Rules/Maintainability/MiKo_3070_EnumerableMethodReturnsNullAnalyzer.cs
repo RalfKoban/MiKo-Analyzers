@@ -20,6 +20,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        private static readonly HashSet<SyntaxKind> ImportantAncestors = new HashSet<SyntaxKind>
+                                                                             {
+                                                                                 SyntaxKind.VariableDeclaration,
+                                                                                 SyntaxKind.Parameter,
+                                                                                 SyntaxKind.IfStatement,
+                                                                                 SyntaxKind.ConditionalExpression,
+                                                                                 SyntaxKind.SwitchStatement,
+                                                                             };
+
+
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
 
         private static bool CanBeIgnored(SyntaxNodeAnalysisContext context) => CanBeIgnored(context.GetEnclosingMethod());
@@ -55,11 +65,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                             break;
                         }
+
+                    case ParameterSyntax p:
+                    {
+                        if (names.Contains(p.Identifier.ValueText))
+                        {
+                            var literalExpressions = p.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
+                            foreach (var literalExpression in literalExpressions)
+                                yield return literalExpression;
+                        }
+
+                        break;
+                    }
                 }
             }
         }
 
-        private static bool HasIssue(SyntaxNode node, SyntaxNodeAnalysisContext context) => node.IsNullExpression(context.SemanticModel);
+        private static bool HasIssue(SyntaxNode node) => node.IsKind(SyntaxKind.NullLiteralExpression);
 
         private static IEnumerable<ExpressionSyntax> GetIssues(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
         {
@@ -80,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else
             {
-                if (HasIssue(expression, context))
+                if (HasIssue(expression))
                 {
                     results.Add(expression);
                 }
@@ -96,19 +118,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (method.Body != null)
             {
-                AnalyzeMethodBody(context, method.Body);
+                AnalyzeMethodBody(context, method);
             }
-            else
+            else if (method.ExpressionBody != null)
             {
-                AnalyzeExpressionBody(context, method.ExpressionBody);
+                AnalyzeExpressionBody(context, method);
             }
         }
 
-        private void AnalyzeMethodBody(SyntaxNodeAnalysisContext context, BlockSyntax block)
+        private void AnalyzeMethodBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
         {
             var semanticModel = context.SemanticModel;
 
-            var controlFlow = semanticModel.AnalyzeControlFlow(block);
+            var controlFlow = semanticModel.AnalyzeControlFlow(method.Body);
             var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
 
             foreach (var returnStatement in returnStatements)
@@ -116,10 +138,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (GetAndReportIssue(context, returnStatement.Expression))
                     continue;
 
-                var dataFlow = semanticModel.AnalyzeDataFlow(returnStatement);
+                var dataFlow = (returnStatement.Expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression))
+                                 ? semanticModel.AnalyzeDataFlow(b.Right)
+                                 : semanticModel.AnalyzeDataFlow(returnStatement);
+
                 var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
 
-                var candidates = GetCandidates(block, localVariableNames).ToList();
+                var candidates = GetCandidates(method, localVariableNames).ToList();
                 if (candidates.Any())
                 {
                     AnalyzeAssignments(context, candidates);
@@ -127,12 +152,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeExpressionBody(SyntaxNodeAnalysisContext context, ArrowExpressionClauseSyntax methodBody)
+        private void AnalyzeExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
         {
-            if (methodBody is null)
-                return;
-
-            var expression = methodBody.Expression;
+            var expression = method.ExpressionBody.Expression;
 
             if (expression is ConditionalExpressionSyntax conditional)
             {
@@ -146,7 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeAssignments(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignments)
         {
-            if (assignments.Any(_ => HasIssue(_, context)))
+            if (assignments.Any(HasIssue))
             {
                 var assignmentsWithIssues = new List<ExpressionSyntax>();
 
@@ -154,9 +176,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var assignment in assignments)
                 {
-                    hasIssue = HasIssue(assignment, context);
+                    hasIssue = HasIssue(assignment);
 
-                    if (hasIssue && assignment.AncestorsAndSelf().Any(_ => _ is VariableDeclarationSyntax || _ is IfStatementSyntax || _ is ConditionalExpressionSyntax || _ is SwitchStatementSyntax))
+                    if (hasIssue && assignment.AncestorsAndSelf().Any(_ => ImportantAncestors.Contains(_.Kind())))
                     {
                         assignmentsWithIssues.Add(assignment);
                     }
@@ -185,7 +207,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private bool GetAndReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode methodBody)
         {
-            var hasIssue = HasIssue(methodBody, context);
+            var hasIssue = HasIssue(methodBody);
 
             if (hasIssue)
             {

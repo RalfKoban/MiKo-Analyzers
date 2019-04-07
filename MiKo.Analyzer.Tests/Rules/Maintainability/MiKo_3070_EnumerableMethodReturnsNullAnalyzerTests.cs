@@ -372,10 +372,44 @@ namespace Bla
     {
         public class TestMe
         {
-            public IEnumerable DoSomething()
+            public IEnumerable<int> DoSomething()
             {
-                IEnumerable variable = null;
+                IEnumerable<int> variable = null;
                 return variable ?? Enumerable.Empty<int>();
+            }
+        }
+    }");
+
+        [Test]
+        public void An_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_and_used_on_right_side_of_Coalescence_operator() => An_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+    {
+        public class TestMe
+        {
+            public IEnumerable<int> DoSomething()
+            {
+                IEnumerable<int> variable1 = null;
+                IEnumerable<int> variable2 = null;
+                return variable1 ?? variable2;
+            }
+        }
+    }");
+
+        [Test]
+        public void An_issue_is_reported_for_Enumerable_method_returning_an_optional_parameter_that_is_null_and_used_on_right_side_of_Coalescence_operator() => An_issue_is_reported_for(@"
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+    {
+        public class TestMe
+        {
+            public IEnumerable<int> DoSomething(IEnumerable<int> p1, IEnumerable<int> p2 = null)
+            {
+                return p1 ?? p2;
             }
         }
     }");
