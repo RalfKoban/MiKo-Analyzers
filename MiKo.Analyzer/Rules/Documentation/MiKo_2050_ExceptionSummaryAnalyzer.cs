@@ -103,14 +103,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool IsExceptionParameter(IParameterSymbol parameter) => parameter.Type.IsException();
 
-        private static string[] GetParameterPhrase(IParameterSymbol symbol)
+        private static string[] GetParameterPhrases(IParameterSymbol symbol)
         {
             if (IsMessageParameter(symbol)) return Constants.Comments.ExceptionCtorMessageParamPhrase;
             if (IsExceptionParameter(symbol)) return Constants.Comments.ExceptionCtorExceptionParamPhrase;
             if (symbol.IsSerializationInfoParameter()) return Constants.Comments.CtorSerializationInfoParamPhrase;
             if (symbol.IsStreamingContextParameter()) return Constants.Comments.CtorStreamingContextParamPhrase;
 
-            return null;
+            return Array.Empty<string>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases) => comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
@@ -121,10 +121,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml)
         {
-            var phrase = GetParameterPhrase(symbol);
-            return phrase != null
-                       ? AnalyzeParameter(symbol, commentXml, phrase)
-                       : Enumerable.Empty<Diagnostic>();
+            var phrases = GetParameterPhrases(symbol);
+            return phrases.Length == 0
+                       ? Enumerable.Empty<Diagnostic>()
+                       : AnalyzeParameter(symbol, commentXml, phrases);
         }
 
         private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, IReadOnlyList<string> phrase)
