@@ -5386,6 +5386,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that return Task are expected to be used for async calls.
+        ///It is unexpected that when calling such methods you get a NullReferenceException thrown, so these methods should never return null..
+        /// </summary>
+        public static string MiKo_3071_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3071_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not return null.
+        /// </summary>
+        public static string MiKo_3071_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3071_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that return Task shall never return null..
+        /// </summary>
+        public static string MiKo_3071_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3071_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the class they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and makes the discoverability of the tests much easier..
         /// </summary>
