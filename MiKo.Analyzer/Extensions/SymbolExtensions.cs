@@ -473,17 +473,6 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsNullExpression(this SyntaxNode syntax, SemanticModel semanticModel)
-        {
-            if (syntax is LiteralExpressionSyntax lit)
-            {
-                var value = semanticModel.GetConstantValue(lit);
-                return value.HasValue && value.Value is null;
-            }
-
-            return false;
-        }
-
         internal static bool IsDependencyObject(this ITypeSymbol symbol) => symbol.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol method) => method.Parameters.Any(_ => _.Type.IsDependencyObject());
