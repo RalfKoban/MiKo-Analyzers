@@ -75,7 +75,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<ExpressionSyntax>();
         }
 
-        private static bool HasIssue(SyntaxNode node) => node.IsKind(SyntaxKind.NullLiteralExpression);
+        private static bool HasIssue(SyntaxNode node)
+        {
+            var isNull = node.IsKind(SyntaxKind.NullLiteralExpression);
+            if (!isNull)
+                return false;
+
+            // check for comparisons
+            var parentSyntaxKind = node.Parent.Kind();
+            switch (parentSyntaxKind)
+            {
+                case SyntaxKind.EqualsExpression:
+                case SyntaxKind.NotEqualsExpression:
+                case SyntaxKind.ConstantPattern:
+                    return false;
+
+                default:
+                    return true;
+            }
+        }
 
         private static IEnumerable<ExpressionSyntax> GetIssues(SyntaxNodeAnalysisContext context, ConditionalExpressionSyntax conditional)
         {
