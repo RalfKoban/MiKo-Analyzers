@@ -10,14 +10,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3070_EnumerableMethodReturnsNullAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_reported_for_void_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_void_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething() {}
 }");
 
         [Test]
-        public void No_issue_reported_for_non_Enumerable_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Enumerable_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public object DoSomething()
@@ -27,14 +27,14 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_reported_for_non_Enumerable_method_body() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Enumerable_method_body() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public object DoSomething() => null;
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_returning_a_valid_List() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_valid_List() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -50,7 +50,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_with_null_check() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_with_null_check() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -68,7 +68,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_with_pattern_null_check() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_with_pattern_null_check() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -86,7 +86,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_with_null_check_and_conditional() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_with_null_check_and_conditional() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -102,7 +102,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_with_notnull_check_and_conditional() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_with_notnull_check_and_conditional() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -118,7 +118,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_with_inverted_null_check_and_conditional() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_with_inverted_null_check_and_conditional() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -134,7 +134,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_with_pattern_null_check_and_conditional() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_with_pattern_null_check_and_conditional() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -150,7 +150,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_body_returning_a_valid_List() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_body_returning_a_valid_List() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -163,7 +163,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_yield_returning_null() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_yield_returning_null() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -248,7 +248,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_returning_a_variable_that_is_not_null_although_it_has_if_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_not_null_although_it_has_if_block() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -290,7 +290,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_returning_a_variable_that_is_not_null_but_has_ternary_operator() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_not_null_but_has_ternary_operator() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -353,7 +353,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_reported_for_Enumerable_method_returning_a_variable_that_is_null_but_then_reassigned() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_but_then_reassigned() => No_issue_is_reported_for(@"
 using System.Collections;
 using System.Collections.Generic;
 
