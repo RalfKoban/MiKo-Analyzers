@@ -39,46 +39,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static IEnumerable<ExpressionSyntax> GetCandidates(SyntaxNode node, IEnumerable<string> names)
         {
             var descendantNodes = node.DescendantNodes().ToList();
-            foreach (var descendant in descendantNodes)
+            return descendantNodes.SelectMany(_ => GetSpecificCandidates(_, names));
+        }
+
+        private static IEnumerable<ExpressionSyntax> GetSpecificCandidates(SyntaxNode descendant, IEnumerable<string> names)
+        {
+            switch (descendant)
             {
-                switch (descendant)
+                case VariableDeclaratorSyntax variable:
                 {
-                    case VariableDeclaratorSyntax variable:
-                        {
-                            if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
-                                yield return variable.Initializer.Value;
+                    if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
+                        return new[] { variable.Initializer.Value };
 
-                            break;
-                        }
-                    case AssignmentExpressionSyntax a:
-                        {
-                            if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
-                                yield return a.Right;
+                    break;
+                }
+                case AssignmentExpressionSyntax a:
+                {
+                    if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
+                        return new[] { a.Right };
 
-                            break;
-                        }
-                    case ReturnStatementSyntax r:
-                        {
-                            var literalExpressions = r.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
-                            foreach (var literalExpression in literalExpressions)
-                                yield return literalExpression;
+                    break;
+                }
+                case ReturnStatementSyntax r:
+                    return r.DescendantNodes().OfType<LiteralExpressionSyntax>();
 
-                            break;
-                        }
+                case ParameterSyntax p:
+                {
+                    if (names.Contains(p.Identifier.ValueText))
+                        return p.DescendantNodes().OfType<LiteralExpressionSyntax>();
 
-                    case ParameterSyntax p:
-                    {
-                        if (names.Contains(p.Identifier.ValueText))
-                        {
-                            var literalExpressions = p.DescendantNodes().OfType<LiteralExpressionSyntax>().ToList();
-                            foreach (var literalExpression in literalExpressions)
-                                yield return literalExpression;
-                        }
-
-                        break;
-                    }
+                    break;
                 }
             }
+
+            return Enumerable.Empty<ExpressionSyntax>();
         }
 
         private static bool HasIssue(SyntaxNode node) => node.IsKind(SyntaxKind.NullLiteralExpression);
@@ -122,47 +116,51 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else if (method.ExpressionBody != null)
             {
-                AnalyzeExpressionBody(context, method);
+                AnalyzeMethodExpressionBody(context, method);
             }
         }
 
         private void AnalyzeMethodBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
         {
-            var semanticModel = context.SemanticModel;
+            var controlFlow = context.SemanticModel.AnalyzeControlFlow(method.Body);
 
-            var controlFlow = semanticModel.AnalyzeControlFlow(method.Body);
-            var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
-
-            foreach (var returnStatement in returnStatements)
+            foreach (var returnStatement in controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>())
             {
-                if (GetAndReportIssue(context, returnStatement.Expression))
-                    continue;
-
-                var dataFlow = (returnStatement.Expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression))
-                                 ? semanticModel.AnalyzeDataFlow(b.Right)
-                                 : semanticModel.AnalyzeDataFlow(returnStatement);
-
-                var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
-
-                var candidates = GetCandidates(method, localVariableNames).ToList();
-                if (candidates.Any())
-                {
-                    AnalyzeAssignments(context, candidates);
-                }
+                AnalyzeExpression(context, method, returnStatement.Expression);
             }
         }
 
-        private void AnalyzeExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
+        private void AnalyzeMethodExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
         {
             var expression = method.ExpressionBody.Expression;
-
             if (expression is ConditionalExpressionSyntax conditional)
             {
                 AnalyzeConditional(context, conditional);
             }
+            else if (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression))
+            {
+                AnalyzeExpression(context, method, b.Right);
+            }
             else
             {
                 GetAndReportIssue(context, expression);
+            }
+        }
+
+        private void AnalyzeExpression(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
+        {
+            if (GetAndReportIssue(context, expression))
+                return;
+
+            var exp = (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression)) ? b.Right : expression;
+            var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
+
+            var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
+
+            var candidates = GetCandidates(method, localVariableNames).ToList();
+            if (candidates.Any())
+            {
+                AnalyzeAssignments(context, candidates);
             }
         }
 
