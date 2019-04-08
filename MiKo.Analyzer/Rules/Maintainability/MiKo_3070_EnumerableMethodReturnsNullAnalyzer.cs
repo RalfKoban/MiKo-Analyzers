@@ -1,4 +1,6 @@
 ﻿
+using System.Xml;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -13,6 +15,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => method.ReturnType.IsEnumerable();
+        protected override bool ShallAnalyze(IMethodSymbol method)
+        {
+            var returnType = method.ReturnType;
+            switch (returnType.SpecialType)
+            {
+                case SpecialType.System_Void:
+                case SpecialType.System_String:
+                    return false;
+
+                default:
+                {
+                    if (returnType.TypeKind == TypeKind.Array)
+                        return returnType is IArrayTypeSymbol r && r.ElementType.SpecialType != SpecialType.System_Byte;
+
+                    if (returnType.IsEnumerable())
+                        return !returnType.InheritsFrom<XmlNode>();
+
+                    return false;
+                }
+            }
+        }
     }
 }

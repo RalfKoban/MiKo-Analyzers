@@ -286,6 +286,9 @@ namespace MiKoSolutions.Analyzers
                     if (IsEnumerable(symbol.SpecialType))
                         return true;
 
+                    if (symbol.TypeKind == TypeKind.Array)
+                        return true;
+
                     if (symbol is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
                         return true;
 

@@ -401,16 +401,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Bla
+{
+    public class TestMe
     {
-        public class TestMe
+        public IEnumerable<int> DoSomething()
         {
-            public IEnumerable<int> DoSomething()
-            {
-                IEnumerable<int> variable = null;
-                return variable ?? Enumerable.Empty<int>();
-            }
+            IEnumerable<int> variable = null;
+            return variable ?? Enumerable.Empty<int>();
         }
-    }");
+    }
+}");
 
         [Test]
         public void An_issue_is_reported_for_Enumerable_method_returning_a_variable_that_is_null_and_used_on_right_side_of_Coalescence_operator() => An_issue_is_reported_for(@"
@@ -418,17 +418,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Bla
+{
+    public class TestMe
     {
-        public class TestMe
+        public IEnumerable<int> DoSomething()
         {
-            public IEnumerable<int> DoSomething()
-            {
-                IEnumerable<int> variable1 = null;
-                IEnumerable<int> variable2 = null;
-                return variable1 ?? variable2;
-            }
+            IEnumerable<int> variable1 = null;
+            IEnumerable<int> variable2 = null;
+            return variable1 ?? variable2;
         }
-    }");
+    }
+}");
 
         [Test]
         public void An_issue_is_reported_for_Enumerable_method_returning_an_optional_parameter_that_is_null_and_used_on_right_side_of_Coalescence_operator() => An_issue_is_reported_for(@"
@@ -436,15 +436,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Bla
+{
+    public class TestMe
     {
-        public class TestMe
+        public IEnumerable<int> DoSomething(IEnumerable<int> p1, IEnumerable<int> p2 = null)
         {
-            public IEnumerable<int> DoSomething(IEnumerable<int> p1, IEnumerable<int> p2 = null)
-            {
-                return p1 ?? p2;
-            }
+            return p1 ?? p2;
         }
-    }");
+    }
+}");
 
         [Test]
         public void An_issue_is_reported_for_Enumerable_method_body_returning_an_optional_parameter_that_is_null_and_used_on_right_side_of_Coalescence_operator() => An_issue_is_reported_for(@"
@@ -452,12 +452,108 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Bla
+{
+    public class TestMe
     {
-        public class TestMe
+        public IEnumerable<int> DoSomething(IEnumerable<int> p1, IEnumerable<int> p2 = null) => p1 ?? p2;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_string_method_returning_null() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public string DoSomething()
         {
-            public IEnumerable<int> DoSomething(IEnumerable<int> p1, IEnumerable<int> p2 = null) => p1 ?? p2;
+            return null;
         }
-    }");
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_string_method_body_returning_null() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public string DoSomething() => null;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_XmlNode_method_returning_null() => No_issue_is_reported_for(@"
+using System.Xml;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public XmlNode DoSomething()
+        {
+            return null;
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_XmlNode_method_body_returning_null() => No_issue_is_reported_for(@"
+using System.Xml;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public XmlNode DoSomething() => null;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Byte_array_method_returning_null() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public byte[] DoSomething()
+        {
+            return null;
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Byte_array_method_body_returning_null() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public byte[] DoSomething() => null;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_In32_array_method_returning_null() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int[] DoSomething()
+        {
+            return null;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_Int32_array_method_body_returning_null() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int[] DoSomething() => null;
+    }
+}");
 
         // TODO: RKN what about Linq calls such as FirstOrDefault();
 
