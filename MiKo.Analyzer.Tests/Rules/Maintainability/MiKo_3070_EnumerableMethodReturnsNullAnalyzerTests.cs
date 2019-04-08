@@ -555,6 +555,44 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_method_that_has_a_null_value_in_returned_array_in_if_block() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public string[] DoSomething(bool flag)
+        {
+            if (flag)
+                return new[] { (string)null };
+            return new string[0];
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_method_that_has_a_null_argument_in_returned_array_in_if_block() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe2
+    {
+        public TestMe2(object o)
+        {}
+    }
+
+    public class TestMe
+    {
+        public TestMe2[] Create(object o)
+        {
+            if (o == null)
+                return new[] { new TestMe2((string)null) };
+            return new TestMe2[0];
+        }
+    }
+}");
+
         // TODO: RKN what about Linq calls such as FirstOrDefault();
 
         protected override string GetDiagnosticId() => MiKo_3070_EnumerableMethodReturnsNullAnalyzer.Id;

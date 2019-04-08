@@ -68,23 +68,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<ExpressionSyntax>();
         }
 
-        private static bool HasIssue(SyntaxNode node)
+        private static bool HasIssue(SyntaxNode node) => node.IsKind(SyntaxKind.NullLiteralExpression) && !ParentWithoutIssue(node.Parent);
+
+        private static bool ParentWithoutIssue(SyntaxNode node)
         {
-            var isNull = node.IsKind(SyntaxKind.NullLiteralExpression);
-            if (!isNull)
-                return false;
-
-            // check for comparisons
-            var parentSyntaxKind = node.Parent.Kind();
-            switch (parentSyntaxKind)
+            while (true)
             {
-                case SyntaxKind.EqualsExpression:
-                case SyntaxKind.NotEqualsExpression:
-                case SyntaxKind.ConstantPattern:
-                    return false;
+                // check for comparisons
+                switch (node?.Kind())
+                {
+                    case null:
+                        return false;
 
-                default:
-                    return true;
+                    case SyntaxKind.EqualsExpression:
+                    case SyntaxKind.NotEqualsExpression:
+                    case SyntaxKind.ConstantPattern:
+                    case SyntaxKind.Argument:
+                        return true;
+
+                    case SyntaxKind.CastExpression:
+                        node = node.Parent;
+                        continue;
+
+                    default:
+                        return false;
+                }
             }
         }
 
@@ -189,7 +197,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     hasIssue = HasIssue(assignment);
 
-                    if (hasIssue && assignment.AncestorsAndSelf().Any(_ => ImportantAncestors.Contains(_.Kind())))
+                    if (hasIssue && assignment.Ancestors().Any(_ => ImportantAncestors.Contains(_.Kind())))
                     {
                         assignmentsWithIssues.Add(assignment);
                     }
