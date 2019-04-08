@@ -146,6 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var allAnalyzers = analyzerBaseType.Assembly.GetExportedTypes()
                                                .Where(_ => !_.IsAbstract && analyzerBaseType.IsAssignableFrom(_))
                                                .Select(_ => (Analyzer)_.GetConstructor(Type.EmptyTypes).Invoke(null))
+                                               .OrderBy(_ => _.DiagnosticId)
                                                .ToList();
             return allAnalyzers;
         }

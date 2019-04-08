@@ -16,6 +16,47 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SymbolExtensions
     {
+        private static readonly HashSet<string> TestMethodAttributeNames = new HashSet<string>
+                                                                               {
+                                                                                   "Test",
+                                                                                   "TestAttribute",
+                                                                                   "TestCase",
+                                                                                   "TestCaseAttribute",
+                                                                                   "TestCaseSource",
+                                                                                   "TestCaseSourceAttribute",
+                                                                                   "Theory",
+                                                                                   "TheoryAttribute",
+                                                                                   "Fact",
+                                                                                   "FactAttribute",
+                                                                                   "TestMethod",
+                                                                                   "TestMethodAttribute",
+                                                                               };
+
+        private static readonly HashSet<string> TestClassAttributeNames = new HashSet<string>
+                                                                              {
+                                                                                  "TestFixture",
+                                                                                  "TestFixtureAttribute",
+                                                                                  "TestClass",
+                                                                                  "TestClassAttribute",
+                                                                              };
+
+        private static readonly HashSet<string> TestSetupAttributeNames = new HashSet<string>
+                                                                              {
+                                                                                  "SetUp",
+                                                                                  "SetUpAttribute",
+                                                                                  "TestInitialize",
+                                                                                  "TestInitializeAttribute",
+                                                                              };
+
+
+        private static readonly HashSet<string> TestTearDownAttributeNames = new HashSet<string>
+                                                                                 {
+                                                                                     "TearDown",
+                                                                                     "TearDownAttribute",
+                                                                                     "TestCleanup",
+                                                                                     "TestCleanupAttribute",
+                                                                                 };
+
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
@@ -49,84 +90,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol symbol) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom("PostSharp.Aspects.Advices.Advice"));
 
-        internal static bool IsTestClass(this ITypeSymbol symbol)
-        {
-            if (symbol?.TypeKind == TypeKind.Class)
-            {
-                foreach (var name in symbol.GetAttributeNames())
-                {
-                    switch (name)
-                    {
-                        case "TestFixture":
-                        case "TestFixtureAttribute":
-                        case "TestClass":
-                        case "TestClassAttribute":
-                            return true;
-                    }
-                }
-            }
+        internal static bool IsTestClass(this ITypeSymbol symbol) => symbol?.TypeKind == TypeKind.Class && symbol.GetAttributeNames().Any(TestClassAttributeNames.Contains);
 
-            return false;
-        }
+        internal static bool IsTestMethod(this IMethodSymbol method) => method.GetAttributeNames().Any(TestMethodAttributeNames.Contains);
 
-        internal static bool IsTestMethod(this IMethodSymbol method)
-        {
-            foreach (var name in method.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "Test":
-                    case "TestAttribute":
-                    case "TestCase":
-                    case "TestCaseAttribute":
-                    case "TestCaseSource":
-                    case "TestCaseSourceAttribute":
-                    case "Theory":
-                    case "TheoryAttribute":
-                    case "Fact":
-                    case "FactAttribute":
-                    case "TestMethod":
-                    case "TestMethodAttribute":
-                        return true;
-                }
-            }
+        internal static bool IsTestSetupMethod(this IMethodSymbol method) => method.GetAttributeNames().Any(TestSetupAttributeNames.Contains);
 
-            return false;
-        }
-
-        internal static bool IsTestSetupMethod(this IMethodSymbol method)
-        {
-            foreach (var name in method.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "SetUp":
-                    case "SetUpAttribute":
-                    case "TestInitialize":
-                    case "TestInitializeAttribute":
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool IsTestTeardownMethod(this IMethodSymbol method)
-        {
-            foreach (var name in method.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "TearDown":
-                    case "TearDownAttribute":
-                    case "TestCleanup":
-                    case "TestCleanupAttribute":
-                        return true;
-                }
-            }
-
-            return false;
-        }
+        internal static bool IsTestTeardownMethod(this IMethodSymbol method) => method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
 
         internal static bool IsSpecialAccessor(this IMethodSymbol method)
         {
