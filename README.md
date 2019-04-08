@@ -214,6 +214,8 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3053|DependencyPropertyKey fields should be properly registered.|&#x2713;|
 |MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|&#x2713;|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|
+|MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|
+|MiKo_3071|Methods that return Task shall never return null.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|
