@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => !method.IsAsync && method.ReturnType.IsTask();
+        protected override bool ShallAnalyze(IMethodSymbol method) => !method.ReturnsVoid && !method.IsAsync && method.ReturnType.IsTask();
     }
 }
