@@ -57,6 +57,22 @@ namespace MiKoSolutions.Analyzers
                                                                                      "TestCleanupAttribute",
                                                                                  };
 
+
+        private static readonly HashSet<string> ImportAttributeNames = new HashSet<string>
+                                                                           {
+                                                                               "Import",
+                                                                               nameof(ImportAttribute),
+                                                                               "ImportMany",
+                                                                               nameof(ImportManyAttribute),
+                                                                           };
+
+
+        private static readonly HashSet<string> ImportingConstructorAttributeNames = new HashSet<string>
+                                                                                         {
+                                                                                             "ImportingConstructor",
+                                                                                             nameof(ImportingConstructorAttribute),
+                                                                                         };
+
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
@@ -123,39 +139,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsStreamingContextParameter(this IParameterSymbol parameter) => parameter.Type.Name == nameof(StreamingContext);
 
-        internal static bool IsImportingConstructor(this ISymbol symbol)
-        {
-            if (!symbol.IsConstructor()) return false;
+        internal static bool IsImportingConstructor(this ISymbol symbol) => symbol.IsConstructor() && symbol.GetAttributeNames().Any(ImportingConstructorAttributeNames.Contains);
 
-            foreach (var name in symbol.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "ImportingConstructor":
-                    case nameof(ImportingConstructorAttribute):
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool IsImport(this ISymbol symbol)
-        {
-            foreach (var name in symbol.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "Import":
-                    case nameof(ImportAttribute):
-                    case "ImportMany":
-                    case nameof(ImportManyAttribute):
-                        return true;
-                }
-            }
-
-            return false;
-        }
+        internal static bool IsImport(this ISymbol symbol) => symbol.GetAttributeNames().Any(ImportAttributeNames.Contains);
 
         internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, typeof(T).FullName);
 
@@ -258,6 +244,9 @@ namespace MiKoSolutions.Analyzers
 
                     if (symbol.TypeKind == TypeKind.Array)
                         return true;
+
+                    if (symbol.IsValueType)
+                        return false;
 
                     if (symbol is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
                         return true;
