@@ -87,6 +87,16 @@ public class TestMeFactory
 ");
 
         [Test]
+        public void No_issue_is_reported_for_private_factory_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMeFactory
+{
+    private int BuildInt() => 42;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_factory_method() => An_issue_is_reported_for(@"
 using System;
 
