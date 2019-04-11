@@ -2164,7 +2164,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from namespace.
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in namespace.
         /// </summary>
         public static string MiKo_1405_MessageFormat {
             get {
@@ -2218,7 +2218,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;Test&apos; from namespace.
+        ///   Looks up a localized string similar to Do not use &apos;Test&apos; in namespace.
         /// </summary>
         public static string MiKo_1407_MessageFormat {
             get {
