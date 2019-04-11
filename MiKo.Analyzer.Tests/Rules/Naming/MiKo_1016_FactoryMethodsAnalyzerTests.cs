@@ -87,7 +87,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_private_factory_method() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_private_factory_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMeFactory
