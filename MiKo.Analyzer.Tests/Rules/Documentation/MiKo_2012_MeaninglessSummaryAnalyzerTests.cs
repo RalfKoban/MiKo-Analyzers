@@ -303,6 +303,8 @@ public class TestMe : ITestMe
                                   "An ",
                                   "Called ",
                                   "Does implement ",
+                                  "Extension class of ",
+                                  "Extension of ",
                                   "Implement ",
                                   "Implements ",
                                   "Interaction logic ",
