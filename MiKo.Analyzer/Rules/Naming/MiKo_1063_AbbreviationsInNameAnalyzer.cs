@@ -15,8 +15,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly Dictionary<string, string> Prefixes = new Dictionary<string, string>
                                                                           {
+                                                                              // TODO: "prop"
+                                                                              { "btn", "button" },
+                                                                              { "cb", "checkBox" },
+                                                                              { "cmd", "command" },
+                                                                              { "lbl", "label" },
+                                                                              { "mgr", "manager" },
+                                                                              { "msg", "message" },
+                                                                              { "tmp", "temp" },
                                                                               { "txt", "text" },
+
+                                                                              { "Btn", "Button" },
+                                                                              { "Cb", "CheckBox" },
+                                                                              { "Cmd", "Command" },
+                                                                              { "Lbl", "Label" },
+                                                                              { "Mgr", "Manager" },
+                                                                              { "Msg", "Message" },
+                                                                              { "Tmp", "temp" },
                                                                               { "Txt", "Text" },
+                                                                          };
+
+        private static readonly Dictionary<string, string> Postfixes = new Dictionary<string, string>(Prefixes)
+                                                                          {
+                                                                              { "VM", "ViewModel" },
+                                                                              { "Vm", "ViewModel" },
+                                                                              { "BL", "BusinessLogic" },
+                                                                              { "Bl", "BusinessLogic" },
+                                                                              // TODO: "prop"
                                                                           };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id, (SymbolKind)(-1))
@@ -54,6 +79,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var prefix in Prefixes)
             {
                 if (symbolName.StartsWith(prefix.Key, StringComparison.Ordinal))
+                {
+                    yield return ReportIssue(symbol, prefix.Key, prefix.Value);
+                }
+            }
+
+            foreach (var prefix in Postfixes)
+            {
+                if (symbolName.EndsWith(prefix.Key, StringComparison.Ordinal))
                 {
                     yield return ReportIssue(symbol, prefix.Key, prefix.Value);
                 }

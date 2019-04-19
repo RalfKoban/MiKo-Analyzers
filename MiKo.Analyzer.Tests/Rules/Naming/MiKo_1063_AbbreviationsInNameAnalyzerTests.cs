@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -9,19 +11,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1063_AbbreviationsInNameAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] BadPrefixes = { "txt" };
+        private static readonly string[] BadPrefixes =
+            {
+                "btn",
+                "cb",
+                "cmd",
+                "lbl",
+                "mgr",
+                "msg",
+                // TODO: RKN "prop",
+                "tmp",
+                "txt",
+            };
 
-        // - `cb` for `checkBox`
-        // - `lbl` for `label` 
-        // - `txt` for `text`
-        // - `Cmd` for `Command`
-        // - `Mgr` for `Manager`
-        // - `BL` or `Bl` for `BusinessLogic` >> should be never used
-        // - `VM` for `ViewModel`
-        // - `tmp` for `temp`
-        // - `Prop` for `Property`
-        // - `PS` or `Ps` for `ProjectStructure` >> should be never used
-        // - `Msg` for `Message`
+        private static readonly string[] BadPostfixes = BadPrefixes.Concat(new[]
+                                                                               {
+                                                                                   "BL",
+                                                                                   "Bl",
+                                                                                   // TODO: RKN "prop",
+                                                                                    "VM",
+                                                                                    "Vm",
+                                                                               })
+                                                                   .ToArray();
 
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"
@@ -142,6 +153,102 @@ namespace Bla
 using System;
 
 namespace " + prefix + @"Namespace
+{
+    public class TestMe
+    { }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_local_variable_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            var variable" + postfix + @" = 42;
+            return variable" + postfix + @";
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_field_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int field" + postfix + @" = 42;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_property_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Property" + postfix + @" { get; set; }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_event_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public event EventHandler My" + postfix + @" { get; set; }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_parameter_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int parameter" + postfix + @") { }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void Method" + postfix + @"() { }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class Class" + postfix + @"
+    { }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_namespace_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla" + postfix + @"
 {
     public class TestMe
     { }
