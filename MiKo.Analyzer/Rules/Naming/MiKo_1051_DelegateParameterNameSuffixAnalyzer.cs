@@ -18,22 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol)
-        {
-            var symbolType = symbol.Type;
-            switch (symbolType.TypeKind)
-            {
-                case TypeKind.Delegate:
-                case TypeKind.Class when symbolType.ToString() == TypeNames.Delegate:
-                    return AnalyzeName(symbol);
+        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Delegate || (symbol.Type.TypeKind == TypeKind.Class && symbol.Type.ToString() == TypeNames.Delegate);
 
-                default:
-                    return Enumerable.Empty<Diagnostic>();
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithAny(WrongNames)
-                                                                                    ? new[] { ReportIssue(symbol) }
-                                                                                    : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithAny(WrongNames)
+                                                                                               ? new[] { ReportIssue(symbol) }
+                                                                                               : Enumerable.Empty<Diagnostic>();
     }
 }

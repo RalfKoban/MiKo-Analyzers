@@ -20,11 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol) => symbol.Type.IsException()
-                                                                                                    ? AnalyzeName(symbol)
-                                                                                                    : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.IsException();
 
-        private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol)
         {
             switch (symbol.Name)
             {
