@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,20 +16,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3011";
 
-        private static readonly ConcurrentDictionary<string, MappingType> Mappings = new ConcurrentDictionary<string, MappingType>(new Dictionary<string, MappingType>
-                                                                                                                                       {
-                                                                                                                                           { nameof(ArgumentException), InspectArgumentException },
-                                                                                                                                           { TypeNames.ArgumentException, InspectArgumentException },
+        private static readonly IReadOnlyDictionary<string, MappingType> Mappings = new Dictionary<string, MappingType>
+                                                                                        {
+                                                                                            { nameof(ArgumentException), InspectArgumentException },
+                                                                                            { TypeNames.ArgumentException, InspectArgumentException },
 
-                                                                                                                                           { nameof(ArgumentNullException), InspectArgumentNullException },
-                                                                                                                                           { TypeNames.ArgumentNullException, InspectArgumentNullException },
+                                                                                            { nameof(ArgumentNullException), InspectArgumentNullException },
+                                                                                            { TypeNames.ArgumentNullException, InspectArgumentNullException },
 
-                                                                                                                                           { nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
-                                                                                                                                           { TypeNames.ArgumentOutOfRangeException, InspectArgumentOutOfRangeException },
+                                                                                            { nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
+                                                                                            { TypeNames.ArgumentOutOfRangeException, InspectArgumentOutOfRangeException },
 
-                                                                                                                                           { nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
-                                                                                                                                           { TypeNames.InvalidEnumArgumentException, InspectInvalidEnumArgumentException },
-                                                                                                                                       });
+                                                                                            { nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
+                                                                                            { TypeNames.InvalidEnumArgumentException, InspectInvalidEnumArgumentException },
+                                                                                        };
 
         public MiKo_3011_ArgumentExceptionsParamNameAnalyzer() : base(Id)
         {
