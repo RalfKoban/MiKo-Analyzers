@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "btn",
                 "cb",
                 "cmd",
+                "ddl",
                 "lbl",
                 "mgr",
                 "mngr",
