@@ -18,21 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "cmd",
                 "lbl",
                 "mgr",
+                "mngr",
                 "msg",
-                // TODO: RKN "prop",
+                "propName",
                 "tmp",
                 "txt",
             };
 
-        private static readonly string[] BadPostfixes = BadPrefixes.Concat(new[]
-                                                                               {
-                                                                                   "BL",
-                                                                                   "Bl",
-                                                                                   // TODO: RKN "prop",
-                                                                                    "VM",
-                                                                                    "Vm",
-                                                                               })
-                                                                   .ToArray();
+        private static readonly string[] BadPostfixes = BadPrefixes
+                                                        .Concat(BadPrefixes.Select(ToNoun))
+                                                        .Concat(new[]
+                                                                    {
+                                                                        "BL",
+                                                                        "Bl",
+                                                                        "Prop",
+                                                                        "PropName",
+                                                                        "PropNames",
+                                                                        "VM",
+                                                                        "Vm",
+                                                                    })
+                                                        .Distinct()
+                                                        .ToArray();
 
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"

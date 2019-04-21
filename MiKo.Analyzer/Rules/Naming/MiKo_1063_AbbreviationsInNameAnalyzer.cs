@@ -13,36 +13,40 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1063";
 
-        private static readonly Dictionary<string, string> Prefixes = new Dictionary<string, string>
-                                                                          {
-                                                                              // TODO: "prop"
-                                                                              { "btn", "button" },
-                                                                              { "cb", "checkBox" },
-                                                                              { "cmd", "command" },
-                                                                              { "lbl", "label" },
-                                                                              { "mgr", "manager" },
-                                                                              { "msg", "message" },
-                                                                              { "tmp", "temp" },
-                                                                              { "txt", "text" },
+        private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>
+                                                                                   {
+                                                                                       { "btn", "button" },
+                                                                                       { "cb", "checkBox" },
+                                                                                       { "cmd", "command" },
+                                                                                       { "lbl", "label" },
+                                                                                       { "mgr", "manager" },
+                                                                                       { "mngr", "manager" },
+                                                                                       { "msg", "message" },
+                                                                                       { "propName", "propertyName" },
+                                                                                       { "tmp", "temp" },
+                                                                                       { "txt", "text" },
 
-                                                                              { "Btn", "Button" },
-                                                                              { "Cb", "CheckBox" },
-                                                                              { "Cmd", "Command" },
-                                                                              { "Lbl", "Label" },
-                                                                              { "Mgr", "Manager" },
-                                                                              { "Msg", "Message" },
-                                                                              { "Tmp", "temp" },
-                                                                              { "Txt", "Text" },
-                                                                          };
+                                                                                       { "Btn", "Button" },
+                                                                                       { "Cb", "CheckBox" },
+                                                                                       { "Cmd", "Command" },
+                                                                                       { "Lbl", "Label" },
+                                                                                       { "Mgr", "Manager" },
+                                                                                       { "Mngr", "Manager" },
+                                                                                       { "Msg", "Message" },
+                                                                                       { "PropName", "propertyName" },
+                                                                                       { "Tmp", "temp" },
+                                                                                       { "Txt", "Text" },
+                                                                                   };
 
-        private static readonly Dictionary<string, string> Postfixes = new Dictionary<string, string>(Prefixes)
-                                                                          {
-                                                                              { "VM", "ViewModel" },
-                                                                              { "Vm", "ViewModel" },
-                                                                              { "BL", "BusinessLogic" },
-                                                                              { "Bl", "BusinessLogic" },
-                                                                              // TODO: "prop"
-                                                                          };
+        private static readonly IReadOnlyDictionary<string, string> Postfixes = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
+                                                                                    {
+                                                                                        { "VM", "ViewModel" },
+                                                                                        { "Vm", "ViewModel" },
+                                                                                        { "BL", "BusinessLogic" },
+                                                                                        { "Bl", "BusinessLogic" },
+                                                                                        { "Prop", "Property" },
+                                                                                        { "PropNames", "PropertyNames" },
+                                                                                    };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -76,21 +80,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            foreach (var prefix in Prefixes)
-            {
-                if (symbolName.StartsWith(prefix.Key, StringComparison.Ordinal))
-                {
-                    yield return ReportIssue(symbol, prefix.Key, prefix.Value);
-                }
-            }
+            var prefixesWithIssues = Prefixes.Where(_ => symbolName.StartsWith(_.Key, StringComparison.Ordinal));
+            var postFixesWithIssues = Postfixes.Where(_ => symbolName.EndsWith(_.Key, StringComparison.Ordinal));
 
-            foreach (var prefix in Postfixes)
-            {
-                if (symbolName.EndsWith(prefix.Key, StringComparison.Ordinal))
-                {
-                    yield return ReportIssue(symbol, prefix.Key, prefix.Value);
-                }
-            }
+            return prefixesWithIssues.Concat(postFixesWithIssues).Select(_ => ReportIssue(symbol, _.Key, _.Value));
         }
     }
 }
