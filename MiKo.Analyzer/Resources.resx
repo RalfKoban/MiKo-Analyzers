@@ -694,6 +694,17 @@ If they consist of more than those few words, these methods (or properties) are 
   <data name="MiKo_1062_Title" xml:space="preserve">
     <value>'Is/Has/Contains' methods or properties shall consist of only a few words.</value>
   </data>
+  <data name="MiKo_1063_Description" xml:space="preserve">
+    <value>Using abbreviations in names is bad practice.
+It makes it hard for every developer that is new to the code base to understand what is meant by the code.
+In addition, they distract the reader's attention as they have to translate the meaning each time.</value>
+  </data>
+  <data name="MiKo_1063_MessageFormat" xml:space="preserve">
+    <value>Replace abbreviation '{1}' by term '{2}'</value>
+  </data>
+  <data name="MiKo_1063_Title" xml:space="preserve">
+    <value>Do not use abbreviations in names.</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>

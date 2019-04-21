@@ -1,10 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace TestHelper
 {
@@ -14,6 +15,18 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
+        protected static string ToNoun(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return value;
+
+            if (char.IsLower(value[0]))
+            {
+                return char.ToUpper(value[0]) + value.Substring(1);
+            }
+
+            return value;
+        }
         /// <summary>
         /// Apply the inputted CodeAction to the inputted document.
         /// Meant to be used to apply codefixes.

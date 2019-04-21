@@ -1772,6 +1772,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Using abbreviations in names is bad practice.
+        ///It makes it hard for every developer that is new to the code base to understand what is meant by the code.
+        ///In addition, they distract the reader&apos;s attention as they have to translate the meaning each time..
+        /// </summary>
+        public static string MiKo_1063_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1063_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace abbreviation &apos;{1}&apos; by term &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_1063_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1063_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use abbreviations in names..
+        /// </summary>
+        public static string MiKo_1063_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1063_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {
