@@ -324,6 +324,9 @@ public class TestMe : ITestMe
                                   "Used for ",
                                   "Used to ",
                                   "Uses ",
+                                  "It ",
+                                  "Its ",
+                                  "It's ",
                               };
 
             results.AddRange(types);
