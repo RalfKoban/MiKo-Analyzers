@@ -13,7 +13,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1063";
 
-        private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>
+        private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>
+                                                                                   {
+                                                                                       { "Btn", "Button" },
+                                                                                       { "Cb", "CheckBox" },
+                                                                                       { "Cmd", "Command" },
+                                                                                       { "Ddl", "DropDownList" },
+                                                                                       { "Lbl", "Label" },
+                                                                                       { "Mgr", "Manager" },
+                                                                                       { "Mngr", "Manager" },
+                                                                                       { "Msg", "Message" },
+                                                                                       { "PropName", "propertyName" },
+                                                                                       { "Tmp", "temp" },
+                                                                                       { "Txt", "Text" },
+                                                                                   };
+
+        private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>((IDictionary<string, string>)MidTerms)
                                                                                    {
                                                                                        { "btn", "button" },
                                                                                        { "cb", "checkBox" },
@@ -26,18 +41,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "propName", "propertyName" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
-
-                                                                                       { "Btn", "Button" },
-                                                                                       { "Cb", "CheckBox" },
-                                                                                       { "Cmd", "Command" },
-                                                                                       { "Ddl", "DropDownList" },
-                                                                                       { "Lbl", "Label" },
-                                                                                       { "Mgr", "Manager" },
-                                                                                       { "Mngr", "Manager" },
-                                                                                       { "Msg", "Message" },
-                                                                                       { "PropName", "propertyName" },
-                                                                                       { "Tmp", "temp" },
-                                                                                       { "Txt", "Text" },
                                                                                    };
 
         private static readonly IReadOnlyDictionary<string, string> Postfixes = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
@@ -84,8 +87,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var prefixesWithIssues = Prefixes.Where(_ => symbolName.StartsWith(_.Key, StringComparison.Ordinal));
             var postFixesWithIssues = Postfixes.Where(_ => symbolName.EndsWith(_.Key, StringComparison.Ordinal));
+            var midTermsWithIssues = MidTerms.Where(_ => symbolName.Contains(_.Key, StringComparison.Ordinal));
 
-            return prefixesWithIssues.Concat(postFixesWithIssues).Select(_ => ReportIssue(symbol, _.Key, _.Value));
+            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => ReportIssue(symbol, _.Key, _.Value));
+        }
+
+        private sealed class KeyComparer : IEqualityComparer<KeyValuePair<string, string>>
+        {
+            internal static readonly KeyComparer Instance = new KeyComparer();
+
+            public bool Equals(KeyValuePair<string, string> x, KeyValuePair<string, string> y) => string.Equals(x.Key, y.Key, StringComparison.Ordinal);
+
+            public int GetHashCode(KeyValuePair<string, string> obj) => obj.Key.GetHashCode();
         }
     }
 }
