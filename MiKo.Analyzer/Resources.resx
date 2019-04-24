@@ -1530,6 +1530,16 @@ More detailed information should be placed inside a &lt;remarks&gt; section.</va
   <data name="MiKo_2207_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation shall be short.</value>
   </data>
+  <data name="MiKo_2208_Description" xml:space="preserve">
+    <value>The documentation should use a more meaningful description than the phrase 'an instance of'.
+By having a more concrete description it makes it easier for a developer to understand the meaning.</value>
+  </data>
+  <data name="MiKo_2208_MessageFormat" xml:space="preserve">
+    <value>Use a better description than '{1}'</value>
+  </data>
+  <data name="MiKo_2208_Title" xml:space="preserve">
+    <value>Documentation should not use 'an instance of'.</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
 Such empty regions solely clutter the code without providing any benefit at all.</value>

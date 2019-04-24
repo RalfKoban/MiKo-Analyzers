@@ -42,6 +42,13 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] EnumParameterStartingPhrase = { "One of the enumeration members that specifies " };
             internal static readonly string[] CancellationTokenParameterPhrase = { "The token to monitor for cancellation requests." };
 
+            internal static readonly string[] InstanceOfPhrase =
+                {
+                    "An instance of ",
+                    "A instance of ",
+                    "The instance of ",
+                };
+
             internal static readonly string[] MeaninglessStartingPhrase =
                 {
                     "A ",
