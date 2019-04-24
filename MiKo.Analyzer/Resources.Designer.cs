@@ -4246,6 +4246,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The documentation should use a more meaningful description than the phrase &apos;an instance of&apos;.
+        ///By having a more concrete description it makes it easier for a developer to understand the meaning..
+        /// </summary>
+        public static string MiKo_2208_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2208_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a better description than &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2208_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2208_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not use the term &apos;an instance of&apos;..
+        /// </summary>
+        public static string MiKo_2208_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2208_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>
