@@ -30,7 +30,7 @@ clone_folder: c:\projects\MiKo.Analyzers
 # fetch repository as zip archive (when next line is uncommented)
 # shallow_clone: true
 
-# skip specific commits
+# skip specific commits (see https://www.appveyor.com/docs/how-to/filtering-commits/)
 skip_commits:
   files:
     - /*.md
