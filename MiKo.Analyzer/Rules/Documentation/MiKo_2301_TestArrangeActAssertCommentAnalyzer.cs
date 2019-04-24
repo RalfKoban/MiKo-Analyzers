@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
+﻿
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -15,8 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsTestMethod();
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSingleLineCommentTrivia, SyntaxKind.SingleLineCommentTrivia);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
+        private void AnalyzeSingleLineCommentTrivia(SyntaxNodeAnalysisContext context)
+        {
+            if (context.ContainingSymbol is IMethodSymbol symbol && symbol.IsTestMethod())
+            {
+                // var node = (CommentTriviaSyntaxNode)context.Node;
+            }
+        }
     }
 }
