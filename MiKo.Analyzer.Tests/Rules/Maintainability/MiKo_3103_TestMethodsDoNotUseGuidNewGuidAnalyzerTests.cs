@@ -37,14 +37,10 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_a_test_method(
-                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                        [ValueSource(nameof(Tests))] string testAttribute)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_a_test_method([ValueSource(nameof(Tests))] string testAttribute) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testClassAttribute + @"]
 public class TestMe
 {
     [" + testAttribute + @"]
@@ -55,14 +51,10 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_a_strangely_formatted_test_method(
-                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                        [ValueSource(nameof(Tests))] string testAttribute)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_a_strangely_formatted_test_method([ValueSource(nameof(Tests))] string testAttribute) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testClassAttribute + @"]
 public class TestMe
 {
     [" + testAttribute + @"]
