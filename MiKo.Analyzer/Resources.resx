@@ -1538,7 +1538,7 @@ By having a more concrete description it makes it easier for a developer to unde
     <value>Use a better description than '{1}'</value>
   </data>
   <data name="MiKo_2208_Title" xml:space="preserve">
-    <value>Documentation should not use 'an instance of'.</value>
+    <value>Documentation should not use the term 'an instance of'.</value>
   </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.

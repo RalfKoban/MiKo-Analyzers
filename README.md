@@ -174,6 +174,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2205|Documentation should use &lt;note&gt; for important information.|&#x2713;|
 |MiKo_2206|Documentation should not use the term 'flag'.|&#x2713;|
 |MiKo_2207|&lt;summary&gt; documentation shall be short.|&#x2713;|
+|MiKo_2208|Documentation should not use the term 'an instance of'.|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|

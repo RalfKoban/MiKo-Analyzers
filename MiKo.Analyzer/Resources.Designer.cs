@@ -4265,7 +4265,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use &apos;an instance of&apos;..
+        ///   Looks up a localized string similar to Documentation should not use the term &apos;an instance of&apos;..
         /// </summary>
         public static string MiKo_2208_Title {
             get {
