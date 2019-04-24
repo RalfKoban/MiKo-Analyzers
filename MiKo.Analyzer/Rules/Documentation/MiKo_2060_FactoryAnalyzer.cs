@@ -16,11 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsFactory()
-                                                                                               ? base.AnalyzeType(symbol).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList()
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsFactory();
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary;
+
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => base.AnalyzeType(symbol, commentXml).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
@@ -32,11 +32,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<string> GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
+        private static IEnumerable<string> GetPhrases(IMethodSymbol symbol) => symbol.ReturnType.IsEnumerable() ? GetCollectionPhrases(symbol) : GetSimplePhrases(symbol);
 
-        private IEnumerable<string> GetSimplePhrases(IMethodSymbol symbol) => GetStartingPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
+        private static IEnumerable<string> GetSimplePhrases(IMethodSymbol symbol) => GetStartingPhrases(symbol.ReturnType, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
 
-        private IEnumerable<string> GetCollectionPhrases(IMethodSymbol symbol)
+        private static IEnumerable<string> GetCollectionPhrases(IMethodSymbol symbol)
         {
             symbol.ReturnType.TryGetGenericArgumentCount(out var count);
 

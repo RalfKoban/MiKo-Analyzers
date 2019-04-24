@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeType(INamedTypeSymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
                                                                                                ? AnalyzeType(symbol, symbol.GetDocumentationCommentXml())
                                                                                                : Enumerable.Empty<Diagnostic>();
 
@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeMethod(IMethodSymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyzeMethod(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyzeMethod(symbol)
                                                                                               ? AnalyzeMethod(symbol, symbol.GetDocumentationCommentXml())
                                                                                               : Enumerable.Empty<Diagnostic>();
 
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeEvent(IEventSymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => ShallAnalyzeEvent(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => ShallAnalyzeEvent(symbol)
                                                                                             ? AnalyzeEvent(symbol, symbol.GetDocumentationCommentXml())
                                                                                             : Enumerable.Empty<Diagnostic>();
 
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeField(IFieldSymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => ShallAnalyzeField(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => ShallAnalyzeField(symbol)
                                                                                             ? AnalyzeField(symbol, symbol.GetDocumentationCommentXml())
                                                                                             : Enumerable.Empty<Diagnostic>();
 
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeProperty(IPropertySymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyzeProperty(symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyzeProperty(symbol)
                                                                                                   ? AnalyzeProperty(symbol, symbol.GetDocumentationCommentXml())
                                                                                                   : Enumerable.Empty<Diagnostic>();
 

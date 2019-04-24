@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsException();
+
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol)
         {
             if (!symbol.IsConstructor()) return false;
@@ -31,12 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false; // unknown ctor
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
-        {
-            if (!symbol.IsException()) return Enumerable.Empty<Diagnostic>();
-
-            return base.AnalyzeType(symbol).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList();
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => base.AnalyzeType(symbol, commentXml).Concat(symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod)).ToList();
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => base.AnalyzeMethod(symbol, commentXml).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
 

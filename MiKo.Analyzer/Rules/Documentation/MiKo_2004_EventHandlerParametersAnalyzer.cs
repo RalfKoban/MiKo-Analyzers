@@ -16,16 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
-        {
-            if (!method.IsEventHandler()) return Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsEventHandler();
 
-            var xml = method.GetDocumentationCommentXml();
-            if (xml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
-            if (xml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)) return Enumerable.Empty<Diagnostic>();
-
-            return VerifyParameterComments(method, xml);
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method, string commentXml) => commentXml.IsNullOrWhiteSpace() || commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
+                                                                                                                 ? Enumerable.Empty<Diagnostic>()
+                                                                                                                 : VerifyParameterComments(method, commentXml);
 
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
         {
