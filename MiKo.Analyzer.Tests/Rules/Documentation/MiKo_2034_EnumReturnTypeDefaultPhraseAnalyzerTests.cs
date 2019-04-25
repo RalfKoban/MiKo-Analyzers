@@ -15,7 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "StringComparison",
                 "System.StringComparison",
-                nameof(System.StringComparison),
             };
 
         private static readonly string[] EnumTaskReturnValues =
