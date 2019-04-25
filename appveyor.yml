@@ -14,7 +14,7 @@ branches:
 init:
 - git config --global core.autocrlf true
 
-environment:
+# environment:
 #    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/v3.10/NUnit.Console-3.10.0.zip
 
 install:
