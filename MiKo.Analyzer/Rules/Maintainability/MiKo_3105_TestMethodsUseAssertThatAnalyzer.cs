@@ -43,17 +43,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
-            if (node.Expression is IdentifierNameSyntax i)
+            if (node.Expression is IdentifierNameSyntax invokedClass)
             {
                 var calledMethod = node.Name;
 
                 if (AllowedAssertionMethods.Contains(calledMethod.Identifier.ValueText))
                     return;
 
-                if (!AssertionTypes.Contains(i.Identifier.ValueText))
+                if (!AssertionTypes.Contains(invokedClass.Identifier.ValueText))
                     return;
 
-                if (context.SemanticModel.GetTypeInfo(i).Type?.ContainingNamespace.FullyQualifiedName() != AssertionNamespace)
+                if (context.SemanticModel.GetTypeInfo(invokedClass).Type?.ContainingNamespace.FullyQualifiedName() != AssertionNamespace)
                     return; // ignore other test frameworks
 
                 var method = context.GetEnclosingMethod();
