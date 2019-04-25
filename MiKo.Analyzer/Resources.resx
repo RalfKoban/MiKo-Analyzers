@@ -2019,6 +2019,9 @@ Therefore, a hard-coded GUID should be used instead.</value>
   <data name="MiKo_3105_Description" xml:space="preserve">
     <value>NUnit's fluent Assert approach is easier to understand. Following that approach, developers will most times not make the common mistake to mix up the 'actual' and 'expected' values.</value>
   </data>
+  <data name="MiKo_3105_HelpLinkUri" xml:space="preserve">
+    <value>https://github.com/nunit/docs/wiki/Constraint-Model</value>
+  </data>
   <data name="MiKo_3105_MessageFormat" xml:space="preserve">
     <value>Use 'Assert.That'</value>
   </data>

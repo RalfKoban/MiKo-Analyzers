@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,6 +12,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3105";
 
+        private static readonly HashSet<string> AssertionTypes = new HashSet<string>
+                                                                     {
+                                                                         "Assert",
+                                                                         "StringAssert",
+                                                                         "CollectionAssert",
+                                                                         "FileAssert",
+                                                                         "DirectoryAssert",
+                                                                     };
+
+        private static readonly HashSet<string> AllowedAssertionMethods = new HashSet<string>
+                                                                              {
+                                                                                  "That",
+                                                                                  "Fail",
+                                                                                  "CatchAsync",
+                                                                                  "Catch",
+                                                                                  "ThrowsAsync",
+                                                                                  "Throws",
+                                                                              };
+
+        private const string AssertionNamespace = "NUnit.Framework";
+
+
         public MiKo_3105_TestMethodsUseAssertThatAnalyzer() : base(Id)
         {
         }
@@ -19,17 +42,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (MemberAccessExpressionSyntax)context.Node;
             var method = context.GetEnclosingMethod();
             if (method == null)
                 return;
 
             if (method.IsTestMethod() || method.ContainingType.IsTestClass())
             {
+                var node = (MemberAccessExpressionSyntax)context.Node;
+
                 if (node.Expression is IdentifierNameSyntax i
-                 && i.Identifier.ValueText == "Assert"
-                 && node.Name.Identifier.ValueText != "That"
-                 && context.SemanticModel.GetTypeInfo(i).Type?.ContainingNamespace.FullyQualifiedName() == "NUnit.Framework")
+                 && AssertionTypes.Contains(i.Identifier.ValueText)
+                 && AllowedAssertionMethods.Contains(node.Name.Identifier.ValueText) == false
+                 && context.SemanticModel.GetTypeInfo(i).Type?.ContainingNamespace.FullyQualifiedName() == AssertionNamespace)
                 {
                     context.ReportDiagnostic(ReportIssue(method.Name, node.Name.GetLocation()));
                 }

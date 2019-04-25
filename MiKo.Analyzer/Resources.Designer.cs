@@ -5645,6 +5645,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/nunit/docs/wiki/Constraint-Model.
+        /// </summary>
+        public static string MiKo_3105_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3105_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &apos;Assert.That&apos;.
         /// </summary>
         public static string MiKo_3105_MessageFormat {
