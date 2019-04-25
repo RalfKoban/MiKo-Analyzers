@@ -2016,6 +2016,15 @@ Therefore, a hard-coded GUID should be used instead.</value>
   <data name="MiKo_3104_Title" xml:space="preserve">
     <value>Use NUnit's [Combinatorial] attribute properly.</value>
   </data>
+  <data name="MiKo_3105_Description" xml:space="preserve">
+    <value>NUnit's fluent Assert approach is easier to understand. Following that approach, developers will most times not make the common mistake to mix up the 'actual' and 'expected' values.</value>
+  </data>
+  <data name="MiKo_3105_MessageFormat" xml:space="preserve">
+    <value>Use 'Assert.That'</value>
+  </data>
+  <data name="MiKo_3105_Title" xml:space="preserve">
+    <value>Test methods should use NUnit's fluent Assert approach.</value>
+  </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
 Such namespaces should be flattened.</value>

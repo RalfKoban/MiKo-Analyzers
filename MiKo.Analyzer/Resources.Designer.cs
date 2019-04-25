@@ -5636,6 +5636,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NUnit&apos;s fluent Assert approach is easier to understand. Following that approach, developers will most times not make the common mistake to mix up the &apos;actual&apos; and &apos;expected&apos; values..
+        /// </summary>
+        public static string MiKo_3105_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3105_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Assert.That&apos;.
+        /// </summary>
+        public static string MiKo_3105_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3105_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should use NUnit&apos;s fluent Assert approach..
+        /// </summary>
+        public static string MiKo_3105_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3105_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
