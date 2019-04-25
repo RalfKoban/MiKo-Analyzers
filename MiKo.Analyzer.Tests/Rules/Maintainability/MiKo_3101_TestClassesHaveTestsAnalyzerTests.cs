@@ -19,7 +19,7 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_tests(
                                                                 [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe
@@ -32,7 +32,7 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_nested_tests(
                                                                 [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe
@@ -48,7 +48,7 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_partial_test_class_with_tests(
                                                                         [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                        [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 public partial class TestMe
 {
@@ -81,7 +81,7 @@ public partial class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(
                                                                                         [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                                        [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe3 : TestMe2

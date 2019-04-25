@@ -29,7 +29,7 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_a_test_class_with_only_a_test_method(
                                                                             [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                            [ValueSource(nameof(TestsExceptSetUps))] string testAttribute)
+                                                                            [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -81,7 +81,7 @@ public class TestMe
         public void No_issue_is_reported_for_a_test_class_with_teardown_method_before_a_test_method(
                                                                                         [ValueSource(nameof(TestFixtures))] string testClassAttribute,
                                                                                         [ValueSource(nameof(TestTearDowns))] string testTeardownAttribute,
-                                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                                        [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -150,7 +150,7 @@ public class TestMe
         public void An_issue_is_reported_for_a_test_class_with_teardown_method_after_a_test_method(
                                                                                         [ValueSource(nameof(TestFixtures))] string testClassAttribute,
                                                                                         [ValueSource(nameof(TestTearDowns))] string testTeardownAttribute,
-                                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                                        [ValueSource(nameof(Tests))] string testAttribute)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -193,7 +193,7 @@ public class TestMe
         [Test, Combinatorial]
         public void An_issue_is_reported_for_a_non_test_class_with_teardown_method_after_a_test_method(
                                                                                                 [ValueSource(nameof(TestTearDowns))] string testTeardownAttribute,
-                                                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                                                [ValueSource(nameof(Tests))] string testAttribute)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 

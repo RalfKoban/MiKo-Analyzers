@@ -112,7 +112,7 @@ public class TestMe1
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_tests_that_have_conditions(
                                                                                     [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                                    [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                                    [ValueSource(nameof(Tests))] string testAttribute)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -131,7 +131,7 @@ public class TestMe
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_that_have_conditions(
                                                                                                                 [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                                                                [ValueSource(nameof(Tests))] string testAttribute)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 

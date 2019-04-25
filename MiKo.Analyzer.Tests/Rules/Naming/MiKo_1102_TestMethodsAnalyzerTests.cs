@@ -33,7 +33,7 @@ public class TestMe
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_method_with_wrong_name(
                                                                     [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                    [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute)
+                                                                    [ValueSource(nameof(Tests))] string testAttribute)
             => An_issue_is_reported_for(@"
 
 [" + testClassAttribute + @"]

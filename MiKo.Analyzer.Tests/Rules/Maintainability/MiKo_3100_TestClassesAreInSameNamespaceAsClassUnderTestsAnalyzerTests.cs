@@ -120,7 +120,7 @@ namespace BlaBla.BlaBlubb
         [Test, Combinatorial]
         public void No_issue_is_reported_for_localVariable_if_test_class_and_class_under_test_are_in_same_namespace(
                                                                                                                 [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                                [ValueSource(nameof(TestsExceptSetUpTearDowns))] string test,
+                                                                                                                [ValueSource(nameof(Tests))] string test,
                                                                                                                 [ValueSource(nameof(VariableNames))] string variableName)
             => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
@@ -192,7 +192,7 @@ namespace BlaBla.BlaBlubb
         [Test, Combinatorial]
         public void An_issue_is_reported_for_local_variable_if_test_class_and_class_under_test_are_in_different_namespaces(
                                                                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string test,
+                                                                                                                        [ValueSource(nameof(Tests))] string test,
                                                                                                                         [ValueSource(nameof(VariableNames))] string variableName)
             => An_issue_is_reported_for(@"
 namespace BlaBla

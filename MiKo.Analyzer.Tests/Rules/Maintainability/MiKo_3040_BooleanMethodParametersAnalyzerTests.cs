@@ -132,7 +132,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_boolean_parameter_on_test_method([ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_parameter_on_test_method([ValueSource(nameof(Tests))] string testAttribute) => No_issue_is_reported_for(@"
 using System;
 using System.Windows;
 

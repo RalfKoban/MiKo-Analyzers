@@ -19,7 +19,20 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method(
                                                     [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                    [ValueSource(nameof(TestsExceptTearDowns))] string testAttribute)
+                                                    [ValueSource(nameof(Tests))] string testAttribute)
+            => No_issue_is_reported_for(@"
+[" + testClassAttribute + @"]
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void DoSomething() { }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_setup_method(
+                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                    [ValueSource(nameof(TestSetUps))] string testAttribute)
             => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe

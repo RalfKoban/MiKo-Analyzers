@@ -29,7 +29,24 @@ public class TestMe
         [Test, Combinatorial]
         public void No_issue_is_reported_for_a_test_class_with_only_a_test_method(
                                                                             [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                            [ValueSource(nameof(TestsExceptSetUps))] string testAttribute)
+                                                                            [ValueSource(nameof(Tests))] string testAttribute)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + testClassAttribute + @"]
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_a_test_class_with_only_a_test_teardown_method(
+                                                                            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                            [ValueSource(nameof(TestTearDowns))] string testAttribute)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -64,7 +81,7 @@ public class TestMe
         public void No_issue_is_reported_for_a_test_class_with_setup_method_as_first_method(
                                                                             [ValueSource(nameof(TestFixtures))] string testClassAttribute,
                                                                             [ValueSource(nameof(TestSetUps))] string testSetupAttribute,
-                                                                            [ValueSource(nameof(TestsExceptSetUps))] string testAttribute)
+                                                                            [ValueSource(nameof(Tests))] string testAttribute)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -87,7 +104,29 @@ public class TestMe
         public void An_issue_is_reported_for_a_test_class_with_setup_method_after_a_test_method(
                                                                             [ValueSource(nameof(TestFixtures))] string testClassAttribute,
                                                                             [ValueSource(nameof(TestSetUps))] string testSetupAttribute,
-                                                                            [ValueSource(nameof(TestsExceptSetUps))] string testAttribute)
+                                                                            [ValueSource(nameof(Tests))] string testAttribute)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + testClassAttribute + @"]
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void DoSomething()
+    {
+    }
+
+    [" + testSetupAttribute + @"]
+    public void PrepareTest()
+    {
+    }
+}
+");
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_a_test_class_with_setup_method_after_a_test_teardown_method(
+                                                                            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
+                                                                            [ValueSource(nameof(TestSetUps))] string testSetupAttribute,
+                                                                            [ValueSource(nameof(TestTearDowns))] string testAttribute)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -131,7 +170,28 @@ public class TestMe
         [Test, Combinatorial]
         public void An_issue_is_reported_for_a_non_test_class_with_setup_method_after_a_test_method(
                                                                             [ValueSource(nameof(TestSetUps))] string testSetupAttribute,
-                                                                            [ValueSource(nameof(TestsExceptSetUps))] string testAttribute)
+                                                                            [ValueSource(nameof(Tests))] string testAttribute)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [" + testAttribute + @"]
+    public void DoSomething()
+    {
+    }
+
+    [" + testSetupAttribute + @"]
+    public void PrepareTest()
+    {
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_a_non_test_class_with_setup_method_after_a_test_teardown_method(
+                                                                            [ValueSource(nameof(TestSetUps))] string testSetupAttribute,
+                                                                            [ValueSource(nameof(TestTearDowns))] string testAttribute)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
