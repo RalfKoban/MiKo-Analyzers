@@ -17,10 +17,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 "ObjectUnderTest",
                 "Sut",
+                "SuT",
                 "SUT",
                 "SubjectUnderTest",
                 "UnitUnderTest",
                 "Uut",
+                "UuT",
                 "UUT",
                 "TestCandidate",
                 "TestObject",
@@ -46,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static readonly string[] FieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => RawFieldNames, (prefix, name) => prefix + name).ToArray();
 
-        private static readonly string[] VariableNames =
+        private static readonly HashSet<string> VariableNames = new HashSet<string>
             {
                 "objectUnderTest",
                 "sut",
@@ -92,8 +94,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (typeUnderTest != null)
             {
-                var expectedNamespace = typeUnderTest.ContainingNamespace.ToDisplayString();
-                var unitTestNamespace = symbol.ContainingNamespace.ToDisplayString();
+                var expectedNamespace = typeUnderTest.ContainingNamespace.FullyQualifiedName();
+                var unitTestNamespace = symbol.ContainingNamespace.FullyQualifiedName();
 
                 if (expectedNamespace != unitTestNamespace)
                 {
@@ -109,24 +111,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
-            var semanticModel = context.SemanticModel;
-
             var variable = node.Declaration;
 
             // inspect tests
-            foreach (var variableName in VariableNames)
+            if (variable.Variables.Any(_ => VariableNames.Contains(_.Identifier.ValueText)))
             {
-                if (variable.Variables.Any(_ => _.Identifier.ValueText == variableName))
+                // find method
+                var semanticModel = context.SemanticModel;
+                var method = node.GetEnclosingMethod(semanticModel);
+                if (method.IsTestMethod())
                 {
-                    // find method
-                    var method = node.GetEnclosingMethod(semanticModel);
-                    if (method.IsTestMethod())
+                    var typeUnderTest = semanticModel.GetTypeInfo(variable.Type).Type;
+
+                    if (TryAnalyzeType(method.ContainingType, typeUnderTest, out var diagnostic))
                     {
-                        var typeUnderTest = semanticModel.GetTypeInfo(variable.Type).Type;
-                        if (TryAnalyzeType(method.ContainingType, typeUnderTest, out var diagnostic))
-                        {
-                            context.ReportDiagnostic(diagnostic);
-                        }
+                        context.ReportDiagnostic(diagnostic);
                     }
                 }
             }
