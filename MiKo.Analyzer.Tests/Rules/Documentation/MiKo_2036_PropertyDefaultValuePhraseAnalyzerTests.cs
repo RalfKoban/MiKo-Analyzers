@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -13,6 +9,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2036_PropertyDefaultValuePhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] BooleanReturnValues =
+            {
+                "bool",
+                "Boolean",
+                "System.Boolean",
+            };
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_commented_method([ValueSource(nameof(BooleanReturnValues))] string returnType, [Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 public class TestMe
@@ -194,8 +197,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2036_PropertyDefaultValuePhraseAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> BooleanReturnValues() => new[] { "bool", "Boolean", "System.Boolean", nameof(System.Boolean), }.ToHashSet();
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -10,6 +7,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture(Explicit = !NamingLengthAnalyzer.EnabledPerDefault)]
     public sealed class MiKo_1026_LocalVariableNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
+        private static readonly string[] Fitting = GetAllWithMaxLengthOf(Constants.MaxNamingLengths.LocalVariables);
+        private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.LocalVariables);
+
         [Test]
         public void No_issue_is_reported_for_variable_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 public class TestMe
@@ -77,11 +77,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_1026_LocalVariableNameLengthAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1026_LocalVariableNameLengthAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> Fitting() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.LocalVariables);
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> NonFitting() => GetAllAboveLengthOf(Constants.MaxNamingLengths.LocalVariables);
     }
 }

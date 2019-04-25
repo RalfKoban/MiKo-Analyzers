@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -14,6 +13,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2051_ExceptionTagDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] ExceptionTypes =
+            {
+                typeof(ArgumentNullException).Name,
+                typeof(InvalidOperationException).Name,
+                typeof(NotSupportedException).Name,
+                typeof(Exception).Name,
+            };
+
+        private static readonly string[] ForbiddenExceptionStartingPhrases = CreateForbiddenExceptionStartingPhrases();
+
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"
 using System;
@@ -76,16 +85,7 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2051_ExceptionTagDefaultPhraseAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ExceptionTypes() => new[]
-                                                                   {
-                                                                       typeof(ArgumentNullException).Name,
-                                                                       typeof(InvalidOperationException).Name,
-                                                                       typeof(NotSupportedException).Name,
-                                                                       typeof(Exception).Name,
-                                                                   };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ForbiddenExceptionStartingPhrases()
+        private static string[] CreateForbiddenExceptionStartingPhrases()
         {
             var phrases = new[]
                               {
@@ -100,7 +100,7 @@ public class TestMe
                                   "Will be thrown ",
                               };
 
-            return phrases.Concat(phrases.Select(_ => _.ToLower())).ToList();
+            return phrases.Concat(phrases.Select(_ => _.ToLower())).Distinct().OrderBy(_ => _).ToArray();
         }
     }
 }

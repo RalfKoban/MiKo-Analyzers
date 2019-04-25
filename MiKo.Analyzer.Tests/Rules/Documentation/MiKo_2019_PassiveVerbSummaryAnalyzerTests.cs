@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2019_PassiveVerbSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] PassiveVerbs =
+            {
+                "Allows",
+                "Breaks",
+                "Contains",
+                "Describes",
+                "Gets",
+                "Occurs",
+                "Performs",
+                "Stops",
+                "Tells",
+            };
+
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 using System;
@@ -191,19 +201,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_2019_PassiveVerbSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2019_PassiveVerbSummaryAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> PassiveVerbs() => new[]
-                                                                 {
-                                                                     "Allows",
-                                                                     "Breaks",
-                                                                     "Contains",
-                                                                     "Describes",
-                                                                     "Gets",
-                                                                     "Occurs",
-                                                                     "Performs",
-                                                                     "Stops",
-                                                                     "Tells",
-                                                                 };
     }
 }

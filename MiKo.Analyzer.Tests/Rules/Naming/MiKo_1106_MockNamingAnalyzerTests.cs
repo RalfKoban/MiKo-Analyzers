@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1106_MockNamingAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] WrongNames =
+            {
+                "somethingMock",
+                "mock",
+                "MockManager",
+                "somethingStub",
+                "stub",
+                "StubManager",
+            };
+
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -247,16 +254,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_1106_MockNamingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1106_MockNamingAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongNames() => new[]
-                                                               {
-                                                                   "somethingMock",
-                                                                   "mock",
-                                                                   "MockManager",
-                                                                   "somethingStub",
-                                                                   "stub",
-                                                                   "StubManager",
-                                                               };
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2037_CommandPropertySummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] ValidPhrases_ReadWrite =
+            {
+                "Gets or sets the <see cref=\"ICommand\" /> that can ",
+                "Gets or sets the <see cref=\"ICommand\"/> that can ",
+            };
+
+        private static readonly string[] ValidPhrases_ReadOnly =
+            {
+                "Gets the <see cref=\"ICommand\" /> that can ",
+                "Gets the <see cref=\"ICommand\"/> that can ",
+            };
+
+        private static readonly string[] ValidPhrases_WriteOnly =
+            {
+                "Sets the <see cref=\"ICommand\" /> that can ",
+                "Sets the <see cref=\"ICommand\"/> that can ",
+            };
+
         [Test]
         public void No_issue_is_reported_for_undocumented_property() => No_issue_is_reported_for(@"
 using System.Windows.Input;
@@ -103,26 +118,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_2037_CommandPropertySummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2037_CommandPropertySummaryAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidPhrases_ReadWrite() => new[]
-                                                                           {
-                                                                               "Gets or sets the <see cref=\"ICommand\" /> that can ",
-                                                                               "Gets or sets the <see cref=\"ICommand\"/> that can ",
-                                                                           };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidPhrases_ReadOnly() => new[]
-                                                                          {
-                                                                              "Gets the <see cref=\"ICommand\" /> that can ",
-                                                                              "Gets the <see cref=\"ICommand\"/> that can ",
-                                                                          };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidPhrases_WriteOnly() => new[]
-                                                                           {
-                                                                               "Sets the <see cref=\"ICommand\" /> that can ",
-                                                                               "Sets the <see cref=\"ICommand\"/> that can ",
-                                                                           };
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +13,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1050_ReturnValueLocalVariableAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Fitting = { "myVariable" };
+        private static readonly string[] NonFitting = CreateNonFitting();
+
         [Test]
         public void No_issue_is_reported_for_variable_with_fitting_name([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 public class TestMe
@@ -71,10 +75,7 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1050_ReturnValueLocalVariableAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> Fitting() => new[] { "myVariable" };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> NonFitting()
+        private static string[] CreateNonFitting()
         {
             var terms = new[] { "ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues", "ret1", "ret2", "retVal3", "returnValue4", "retVal_5" };
 
@@ -85,7 +86,7 @@ public class TestMe
                 nonFitting.Add(_.ToUpperInvariant());
             }
 
-            return nonFitting;
+            return nonFitting.OrderBy(_ => _).ToArray();
         }
     }
 }

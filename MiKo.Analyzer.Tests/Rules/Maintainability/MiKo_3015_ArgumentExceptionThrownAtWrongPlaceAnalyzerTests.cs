@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -13,6 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] ExceptionNames =
+            {
+                nameof(ArgumentException),
+                nameof(ArgumentNullException),
+                nameof(ArgumentOutOfRangeException),
+                "InvalidEnumArgumentException", // don't use nameof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
+                typeof(ArgumentException).FullName,
+                typeof(ArgumentNullException).FullName,
+                typeof(ArgumentOutOfRangeException).FullName,
+                "System.ComponentModel.InvalidEnumArgumentException", // don't use typeof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
+            };
+
         [Test]
         public void No_issue_is_reported_for_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
 using System;
@@ -44,18 +54,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ExceptionNames() => new[]
-                                                                   {
-                                                                       nameof(ArgumentException),
-                                                                       nameof(ArgumentNullException),
-                                                                       nameof(ArgumentOutOfRangeException),
-                                                                       "InvalidEnumArgumentException", // don't use nameof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
-                                                                       typeof(ArgumentException).FullName,
-                                                                       typeof(ArgumentNullException).FullName,
-                                                                       typeof(ArgumentOutOfRangeException).FullName,
-                                                                       "System.ComponentModel.InvalidEnumArgumentException", // don't use typeof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
-                                                                   };
     }
 }

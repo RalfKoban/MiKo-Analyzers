@@ -13,23 +13,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly IEnumerable<string> MeaninglessTextPhrases = new[]
-                                                                                 {
-                                                                                     "does implement",
-                                                                                     "implements",
-                                                                                     "that is called ",
-                                                                                     "that is used for ",
-                                                                                     "that is used to ",
-                                                                                     "used for ",
-                                                                                     "used to ",
-                                                                                     "which is called ",
-                                                                                     "which is used for ",
-                                                                                     "which is used to ",
-                                                                                 };
+        private static readonly string[] MeaninglessTextPhrases =
+            {
+                "does implement",
+                "implements",
+                "that is called ",
+                "that is used for ",
+                "that is used to ",
+                "used for ",
+                "used to ",
+                "which is called ",
+                "which is used for ",
+                "which is used to ",
+            };
 
-        private static readonly IEnumerable<string> MeaninglessPhrases = CreateMeaninglessPhrases();
+        private static readonly string[] MeaninglessPhrases = CreateMeaninglessPhrases();
 
-        private static readonly IEnumerable<string> MeaninglessFieldPhrases = CreateMeaninglessPhrases().Except(new[] { "A ", "An ", "The " }).ToHashSet();
+        private static readonly string[] MeaninglessFieldPhrases = MeaninglessPhrases.Except(new[] { "A ", "An ", "The " }).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
@@ -284,13 +284,30 @@ public class TestMe : ITestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateMeaninglessPhrases()
+        private static string[] CreateMeaninglessPhrases()
         {
             var types = new[]
                             {
-                                "Base", "Class", "Interface", "Method", "Field", "Property", "Event",
-                                "Constructor", "Ctor", "Delegate", "Factory", "Creator", "Builder",
-                                "Entity", "Model", "ViewModel", "Command", "Action", "Func", "Converter",
+                                "Base",
+                                "Class",
+                                "Interface",
+                                "Method",
+                                "Field",
+                                "Property",
+                                "Event",
+                                "Constructor",
+                                "Ctor",
+                                "Delegate",
+                                "Factory",
+                                "Creator",
+                                "Builder",
+                                "Entity",
+                                "Model",
+                                "ViewModel",
+                                "Command",
+                                "Action",
+                                "Func",
+                                "Converter",
                             };
 
             var phrases = MeaninglessTextPhrases;
@@ -338,7 +355,7 @@ public class TestMe : ITestMe
             results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");
 
-            return results.ToHashSet();
+            return results.Distinct().ToArray();
         }
     }
 }

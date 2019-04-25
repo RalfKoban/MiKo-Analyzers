@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2041_InvalidXmlInSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] AmbiguousPhrases = CreateAmbiguousPhrases();
+
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
 public class TestMe
@@ -141,7 +143,7 @@ public class TestMe : ITestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2041_InvalidXmlInSummaryAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> AmbiguousPhrases()
+        private static string[] CreateAmbiguousPhrases()
         {
             var phrases = new[]
                               {
@@ -166,8 +168,9 @@ public class TestMe : ITestMe
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _.ToUpper()));
             results.AddRange(phrases.Select(_ => _.Replace(" ", string.Empty).ToUpper()));
+            results.Sort();
 
-            return new HashSet<string>(results);
+            return results.Distinct().ToArray();
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1039_ExtensionMethodsParameterAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] CorrectParameterNames = { "value", "source", "values" };
+        private static readonly string[] WrongParameterNames = { "o", "something", "v" };
+        private static readonly string[] CorrectConversionParameterNames = { "source" };
+        private static readonly string[] WrongConversionParameterNames = { "o", "something", "v", "value", "values" };
+
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
 public class TestMe
@@ -63,17 +65,5 @@ public static class TestMeExtensions
         protected override string GetDiagnosticId() => MiKo_1039_ExtensionMethodsParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1039_ExtensionMethodsParameterAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CorrectParameterNames() => new[] { "value", "source", "values" };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongParameterNames() => new[] { "o", "something", "v" };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CorrectConversionParameterNames() => new[] { "source" };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongConversionParameterNames() => new[] { "o", "something", "v", "value", "values" };
     }
 }

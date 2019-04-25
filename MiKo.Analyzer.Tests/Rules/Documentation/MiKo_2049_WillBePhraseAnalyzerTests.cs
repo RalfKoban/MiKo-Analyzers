@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2049_WillBePhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
+
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
 using System;
@@ -111,8 +110,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_2049_WillBePhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2049_WillBePhraseAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> XmlTags() => new[] { "summary", "remarks", "returns", "example", "value", "exception" };
     }
 }

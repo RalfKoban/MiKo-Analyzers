@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -10,6 +7,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture(Explicit = !NamingLengthAnalyzer.EnabledPerDefault)]
     public sealed class MiKo_1023_FieldNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
+        private static readonly string[] Fitting = GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Fields);
+        private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.Fields);
+
         [Test]
         public void No_issue_is_reported_for_field_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("private bool " + name + " = 42;");
 
@@ -30,11 +30,5 @@ public enum MyEnum
         protected override string GetDiagnosticId() => MiKo_1023_FieldNameLengthAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1023_FieldNameLengthAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> Fitting() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Fields);
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> NonFitting() => GetAllAboveLengthOf(Constants.MaxNamingLengths.Fields);
     }
 }

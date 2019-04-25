@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -13,6 +11,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] EnumerableOnlyReturnValues =
+            {
+                "IEnumerable",
+                "IEnumerable<int>",
+                "IList<int>",
+                "ICollection<int>",
+                "List<int>",
+                "Dictionary<int, int>",
+            };
+
+        private static readonly string[] EnumerableTaskReturnValues =
+            {
+                "Task<int[]>",
+                "Task<IEnumerable>",
+                "Task<List<int>>",
+            };
+
+        private static readonly string[] EnumerableReturnValues = EnumerableOnlyReturnValues.Concat(EnumerableTaskReturnValues).ToArray();
+
         [Test]
         public void No_issue_is_reported_for_uncommented_method([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
@@ -31,7 +48,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_method_that_returns_a([Values("returns", "value")] string xmlTag,
-                                                                   [Values("void", "int", "string", "Task", "Task<int>", "Task<bool>, Task<string>")] string returnType) => No_issue_is_reported_for(@"
+                                                                   [Values("void", "int", "string", "Task", "Task<int>", "Task<bool>, Task<string>")] string returnType)
+            => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,9 +69,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Array_only_method(
-                                                                                    [Values("returns", "value")] string xmlTag,
-                                                                                    [Values("int", "string")] string returnType,
-                                                                                    [Values("An array of", "The array of")] string startingPhrase) => No_issue_is_reported_for(@"
+                                                                                [Values("returns", "value")] string xmlTag,
+                                                                                [Values("int", "string")] string returnType,
+                                                                                [Values("An array of", "The array of")] string startingPhrase) => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -158,14 +176,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> EnumerableOnlyReturnValues() => new[] { "IEnumerable", "IEnumerable<int>", "IList<int>", "ICollection<int>", "List<int>", "Dictionary<int, int>", }.ToHashSet();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> EnumerableTaskReturnValues() => new[] { "Task<int[]>", "Task<IEnumerable>", "Task<List<int>>", }.ToHashSet();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> EnumerableReturnValues() => EnumerableOnlyReturnValues().Concat(EnumerableTaskReturnValues()).ToHashSet();
     }
 }

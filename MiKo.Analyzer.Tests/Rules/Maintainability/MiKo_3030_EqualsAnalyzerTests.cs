@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -13,6 +9,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3030_EqualsAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] ValueTypes =
+            {
+                "bool",
+                "char",
+                "short",
+                "int",
+                "long",
+                "ushort",
+                "uint",
+                "ulong",
+                "byte",
+                "sbyte",
+                nameof(System.Boolean),
+                nameof(System.Char),
+                nameof(System.Int16),
+                nameof(System.Int32),
+                nameof(System.Int64),
+                nameof(System.UInt16),
+                nameof(System.UInt32),
+                nameof(System.UInt64),
+                nameof(System.Byte),
+                nameof(System.SByte),
+                nameof(System.Guid),
+                nameof(System.AttributeTargets),
+            };
+
         [Test]
         public void No_issue_is_reported_for_non_object_equals_method() => No_issue_is_reported_for(@"
 using System;
@@ -200,33 +222,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_3030_EqualsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_EqualsAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValueTypes() => new[]
-                                                       {
-                                                           "bool",
-                                                           "char",
-                                                           "short",
-                                                           "int",
-                                                           "long",
-                                                           "ushort",
-                                                           "uint",
-                                                           "ulong",
-                                                           "byte",
-                                                           "sbyte",
-                                                           "Guid",
-                                                           nameof(System.Boolean),
-                                                           nameof(System.Char),
-                                                           nameof(System.Int16),
-                                                           nameof(System.Int32),
-                                                           nameof(System.Int64),
-                                                           nameof(System.UInt16),
-                                                           nameof(System.UInt32),
-                                                           nameof(System.UInt64),
-                                                           nameof(System.Byte),
-                                                           nameof(System.SByte),
-                                                           nameof(System.Guid),
-                                                           nameof(System.AttributeTargets),
-                                                       }.ToHashSet();
     }
 }

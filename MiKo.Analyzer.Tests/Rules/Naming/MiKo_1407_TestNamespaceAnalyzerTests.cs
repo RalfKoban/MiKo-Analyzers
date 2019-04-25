@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1407_TestNamespaceAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] WrongNamespaceNames =
+            {
+                "Test",
+                "Tests",
+                "UnitTest",
+                "UnitTests",
+                "IntegrationTest",
+                "IntegrationTests",
+                "Test.Abc",
+                "Tests.Abc",
+                "UnitTest.Abc",
+                "UnitTests.Abc",
+                "IntegrationTest.Abc",
+                "IntegrationTests.Abc",
+                "Abc.Test",
+                "Abc.Tests",
+                "Abc.UnitTest",
+                "Abc.UnitTests",
+                "Abc.IntegrationTest",
+                "Abc.IntegrationTests",
+            };
+
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"
 namespace Bla
@@ -59,28 +78,5 @@ namespace " + namespaceName + @"
         protected override string GetDiagnosticId() => MiKo_1407_TestNamespaceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1407_TestNamespaceAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongNamespaceNames() => new[]
-                                                                        {
-                                                                            "Test",
-                                                                            "Tests",
-                                                                            "UnitTest",
-                                                                            "UnitTests",
-                                                                            "IntegrationTest",
-                                                                            "IntegrationTests",
-                                                                            "Test.Abc",
-                                                                            "Tests.Abc",
-                                                                            "UnitTest.Abc",
-                                                                            "UnitTests.Abc",
-                                                                            "IntegrationTest.Abc",
-                                                                            "IntegrationTests.Abc",
-                                                                            "Abc.Test",
-                                                                            "Abc.Tests",
-                                                                            "Abc.UnitTest",
-                                                                            "Abc.UnitTests",
-                                                                            "Abc.IntegrationTest",
-                                                                            "Abc.IntegrationTests",
-                                                                        };
     }
 }

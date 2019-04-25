@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1054_HelperClassNameAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] WrongNames = CreateWrongNames();
+
         [Test]
         public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -31,7 +34,7 @@ public class " + name + @"
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1054_HelperClassNameAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongNames()
+        private static string[] CreateWrongNames()
         {
             var names = new[]
                             {
@@ -58,7 +61,7 @@ public class " + name + @"
                 }
             }
 
-            return allNames;
+            return allNames.OrderBy(_ => _).ToArray();
         }
     }
 }

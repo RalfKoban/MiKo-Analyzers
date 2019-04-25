@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -10,6 +7,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture(Explicit = !NamingLengthAnalyzer.EnabledPerDefault)]
     public sealed class MiKo_1021_MethodNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
+        private static readonly string[] Fitting = GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Methods);
+        private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.Methods);
+
         [Test]
         public void No_issue_is_reported_for_method_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 
@@ -60,11 +60,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_1021_MethodNameLengthAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1021_MethodNameLengthAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> Fitting() => GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Methods);
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> NonFitting() => GetAllAboveLengthOf(Constants.MaxNamingLengths.Methods);
     }
 }

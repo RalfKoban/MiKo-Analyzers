@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2020_InheritdocSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Phrases = CreatePhrases();
+
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("enum")]
@@ -75,7 +77,7 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2020_InheritdocSummaryAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> Phrases()
+        private static string[] CreatePhrases()
         {
             var phrases = new[]
                               {
@@ -92,7 +94,10 @@ public class TestMe
             results.AddRange(phrases.Select(_ => "seealso " + _));
             results.AddRange(phrases.Select(_ => "seealso " + _ + "."));
             results.AddRange(results.Select(_ => _.ToUpper()).ToList());
-            return results;
+
+            results.Sort();
+
+            return results.Distinct().ToArray();
         }
     }
 }

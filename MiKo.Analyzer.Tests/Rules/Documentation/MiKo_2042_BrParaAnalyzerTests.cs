@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2042_BrParaAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] CorrectItems = { "<para />", "<para/>" };
+
+        private static readonly string[] WrongItems = CreateWrongItems();
+
         [Test]
         public void Wrong_documentation_is_reported_on_class([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 /// <summary>
@@ -151,7 +156,7 @@ public sealed class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2042_BrParaAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongItems()
+        private static string[] CreateWrongItems()
         {
             var tokens = new List<string>();
             foreach (var token in new[] { "<br/>", "<br />" })
@@ -160,10 +165,9 @@ public sealed class TestMe
                 tokens.Add(token.ToUpperInvariant());
             }
 
-            return new HashSet<string>(tokens);
-        }
+            tokens.Sort();
 
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CorrectItems() => new[] { "<para />", "<para/>" };
+            return tokens.Distinct().ToArray();
+        }
     }
 }

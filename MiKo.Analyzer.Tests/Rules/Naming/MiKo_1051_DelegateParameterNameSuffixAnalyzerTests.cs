@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,6 +13,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1051_DelegateParameterNameSuffixAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] DelegateTypes =
+            {
+                "Action",
+                "Action<int>",
+                "Action<int, string>",
+                "Func<bool>",
+                "Func<bool, bool>",
+                "Delegate",
+            };
+
+        private static readonly string[] CorrectDelegateNames =
+            {
+                "callback",
+                "map",
+                "filter",
+                "predicate",
+            };
+
+        private static readonly string[] WrongDelegateNames = CreateWrongDelegateNames();
+
         [TestCase("string s")]
         [TestCase("int i")]
         public void No_issue_is_reported_for_non_delegate_parameter(string parameter) => No_issue_is_reported_for(@"
@@ -59,18 +80,7 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1051_DelegateParameterNameSuffixAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> DelegateTypes() => new[]
-                                                                  {
-                                                                      "Action",
-                                                                      "Action<int>",
-                                                                      "Action<int, string>",
-                                                                      "Func<bool>",
-                                                                      "Func<bool, bool>",
-                                                                      "Delegate",
-                                                                  };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongDelegateNames()
+        private static string[] CreateWrongDelegateNames()
         {
             var names = new[] { "@delegate", "action", "func" };
 
@@ -81,16 +91,7 @@ public class TestMe
                 allNames.Add(_.ToUpperInvariant());
             }
 
-            return allNames;
+            return allNames.OrderBy(_ => _).ToArray();
         }
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CorrectDelegateNames() => new[]
-                                                                         {
-                                                                             "callback",
-                                                                             "map",
-                                                                             "filter",
-                                                                             "predicate",
-                                                                         };
     }
 }

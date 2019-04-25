@@ -240,7 +240,7 @@ public sealed class TestMe
                 results.Add(token + ".");
             }
 
-            return results.ToArray();
+            return results.OrderBy(_ => _).ToArray();
         }
     }
 }

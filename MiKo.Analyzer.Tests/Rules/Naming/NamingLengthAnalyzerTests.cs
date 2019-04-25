@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using TestHelper;
 
@@ -39,8 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Abcdefghijklmnopqrstuvwxyz01234567890äöüß",
             };
 
-        protected static IEnumerable<string> GetAllWithMaxLengthOf(int length) => All.Where(_ => _.Length <= length).ToList();
+        protected static string[] GetAllWithMaxLengthOf(int length) => All.Where(_ => _.Length <= length).ToArray();
 
-        protected static IEnumerable<string> GetAllAboveLengthOf(int length) => All.Where(_ => _.Length > length).ToList();
+        protected static string[] GetAllAboveLengthOf(int length) => All.Where(_ => _.Length > length).ToArray();
     }
 }

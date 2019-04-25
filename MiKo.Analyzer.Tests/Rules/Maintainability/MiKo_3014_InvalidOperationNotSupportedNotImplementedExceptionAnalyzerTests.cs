@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,6 +12,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] MatchingExceptions =
+            {
+                nameof(InvalidOperationException),
+                nameof(NotSupportedException),
+                nameof(NotImplementedException),
+                typeof(InvalidOperationException).FullName,
+                typeof(NotSupportedException).FullName,
+                typeof(NotImplementedException).FullName,
+            };
+
+        private static readonly string[] NonMatchingExceptions =
+            {
+                nameof(Exception),
+                nameof(ArgumentException),
+                nameof(ArgumentNullException),
+                typeof(Exception).FullName,
+                typeof(ArgumentException).FullName,
+                typeof(ArgumentNullException).FullName,
+            };
+
+        private static readonly string[] Exceptions = MatchingExceptions.Concat(NonMatchingExceptions).Distinct().ToArray();
+
         [Test]
         public void No_issue_is_reported_for_thrown_([ValueSource(nameof(Exceptions))] string exceptionName) => No_issue_is_reported_for(@"
 using System;
@@ -56,30 +76,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> Exceptions() => MatchingExceptions().Concat(NonMatchingExceptions());
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> MatchingExceptions() => new[]
-                                                                       {
-                                                                           nameof(InvalidOperationException),
-                                                                           nameof(NotSupportedException),
-                                                                           nameof(NotImplementedException),
-                                                                           typeof(InvalidOperationException).FullName,
-                                                                           typeof(NotSupportedException).FullName,
-                                                                           typeof(NotImplementedException).FullName,
-                                                                       };
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> NonMatchingExceptions() => new[]
-                                                                          {
-                                                                              nameof(Exception),
-                                                                              nameof(ArgumentException),
-                                                                              nameof(ArgumentNullException),
-                                                                              typeof(Exception).FullName,
-                                                                              typeof(ArgumentException).FullName,
-                                                                              typeof(ArgumentNullException).FullName,
-                                                                          };
     }
 }

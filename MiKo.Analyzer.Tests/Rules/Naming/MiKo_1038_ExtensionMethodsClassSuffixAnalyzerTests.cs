@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1038_ExtensionMethodsClassSuffixAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] WrongNames =
+            {
+                "ExtensionsClass",
+                "SomeExtensionMethods",
+                "Something",
+            };
+
         [Test]
         public void No_issue_is_reported_for_struct() => No_issue_is_reported_for(@"
 public struct TestMe
@@ -55,13 +59,5 @@ public static class " + name + @"
         protected override string GetDiagnosticId() => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1038_ExtensionMethodsClassSuffixAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> WrongNames() => new[]
-                                                               {
-                                                                   "ExtensionsClass",
-                                                                   "SomeExtensionMethods",
-                                                                   "Something",
-                                                               };
     }
 }

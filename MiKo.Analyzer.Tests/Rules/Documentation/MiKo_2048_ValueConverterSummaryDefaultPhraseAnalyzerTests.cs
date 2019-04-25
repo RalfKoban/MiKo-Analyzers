@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +9,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] ValidTypes =
+            {
+                "IValueConverter",
+                "IMultiValueConverter",
+                "System.Windows.Data.IValueConverter",
+                "System.Windows.Data.IMultiValueConverter",
+            };
+
         [Test]
         public void No_issue_is_reported_for_non_value_converter_class() => No_issue_is_reported_for(@"
 using System;
@@ -62,14 +67,5 @@ public class TestMe : " + interfaceName + @"
         protected override string GetDiagnosticId() => MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer();
-
-        [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> ValidTypes() => new[]
-                                                               {
-                                                                   "IValueConverter",
-                                                                   "IMultiValueConverter",
-                                                                   "System.Windows.Data.IValueConverter",
-                                                                   "System.Windows.Data.IMultiValueConverter",
-                                                               };
     }
 }
