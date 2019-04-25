@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3105";
 
+        private const string AssertionNamespace = "NUnit.Framework";
+
         private static readonly HashSet<string> AssertionTypes = new HashSet<string>
                                                                      {
                                                                          "Assert",
@@ -31,9 +33,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                   "Throws",
                                                                               };
 
-        private const string AssertionNamespace = "NUnit.Framework";
-
-
         public MiKo_3105_TestMethodsUseAssertThatAnalyzer() : base(Id)
         {
         }
@@ -42,21 +41,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
-            var method = context.GetEnclosingMethod();
-            if (method == null)
-                return;
+            var node = (MemberAccessExpressionSyntax)context.Node;
 
-            if (method.IsTestMethod() || method.ContainingType.IsTestClass())
+            if (node.Expression is IdentifierNameSyntax i)
             {
-                var node = (MemberAccessExpressionSyntax)context.Node;
+                var calledMethod = node.Name;
 
-                if (node.Expression is IdentifierNameSyntax i
-                 && AssertionTypes.Contains(i.Identifier.ValueText)
-                 && AllowedAssertionMethods.Contains(node.Name.Identifier.ValueText) == false
-                 && context.SemanticModel.GetTypeInfo(i).Type?.ContainingNamespace.FullyQualifiedName() == AssertionNamespace)
-                {
-                    context.ReportDiagnostic(ReportIssue(method.Name, node.Name.GetLocation()));
-                }
+                if (AllowedAssertionMethods.Contains(calledMethod.Identifier.ValueText))
+                    return;
+
+                if (!AssertionTypes.Contains(i.Identifier.ValueText))
+                    return;
+
+                if (context.SemanticModel.GetTypeInfo(i).Type?.ContainingNamespace.FullyQualifiedName() != AssertionNamespace)
+                    return; // ignore other test frameworks
+
+                var method = context.GetEnclosingMethod();
+                context.ReportDiagnostic(ReportIssue(method.Name, calledMethod.GetLocation()));
             }
         }
     }
