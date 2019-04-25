@@ -38,13 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                              .Select(_ => AnalyzeSingleLineComment(_, node.Identifier.Text))
                                                                                                              .Where(_ => _ != null);
 
-        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName)
-        {
-            var comment = trivia.ToFullString().Remove("//").TrimStart();
-
-            return CommentHasIssue(comment)
-                       ? ReportIssue(methodName, trivia.GetLocation())
-                       : null;
-        }
+        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName) => CommentHasIssue(trivia.ToFullString().Remove("//").TrimStart())
+                                                                                                   ? ReportIssue(methodName, trivia.GetLocation())
+                                                                                                   : null;
     }
 }
