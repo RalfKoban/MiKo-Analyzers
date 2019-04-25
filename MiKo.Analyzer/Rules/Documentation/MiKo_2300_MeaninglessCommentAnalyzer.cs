@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2300";
 
+        private const string WebsiteMarker = "://";
+
         private static readonly string[] StartingPhrases =
             {
                 "add ",
@@ -61,8 +63,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var spaces = comment.Count(_ => _.IsWhiteSpace());
             if (spaces < 3)
             {
-                // 3 or less words
-                return true;
+                // 3 or less words (ignore website markers)
+                return !comment.Contains(WebsiteMarker);
             }
 
             // TODO: add other stuff

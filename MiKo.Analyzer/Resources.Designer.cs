@@ -4293,7 +4293,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should describe the &apos;Why&apos; and not the &apos;How&apos;.
+        ///   Looks up a localized string similar to Comments should describe the &apos;Why&apos; and not the &apos;How&apos;..
         /// </summary>
         public static string MiKo_2300_Title {
             get {
