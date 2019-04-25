@@ -19,46 +19,42 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "Sut",
                 "SUT",
                 "SubjectUnderTest",
+                "UnitUnderTest",
+                "Uut",
+                "UUT",
+                "TestCandidate",
+                "TestObject",
             };
 
-        private static readonly string[] FieldNames =
+        private static readonly string[] RawFieldNames =
             {
                 "ObjectUnderTest",
-                "_ObjectUnderTest",
-                "m_ObjectUnderTest",
-                "s_ObjectUnderTest",
-
                 "objectUnderTest",
-                "_objectUnderTest",
-                "m_objectUnderTest",
-                "s_objectUnderTest",
-
                 "SubjectUnderTest",
-                "_SubjectUnderTest",
-                "m_SubjectUnderTest",
-                "s_SubjectUnderTest",
-
                 "subjectUnderTest",
-                "_subjectUnderTest",
-                "m_subjectUnderTest",
-                "s_subjectUnderTest",
-
                 "Sut",
-                "_Sut",
-                "m_Sut",
-                "s_Sut",
-
                 "sut",
-                "_sut",
-                "m_sut",
-                "s_sut",
+                "UnitUnderTest",
+                "unitUnderTest",
+                "Uut",
+                "uut",
+                "TestCandidate",
+                "TestObject",
+                "testCandidate",
+                "testObject",
             };
+
+        private static readonly string[] FieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => RawFieldNames, (prefix, name) => prefix + name).ToArray();
 
         private static readonly string[] VariableNames =
             {
                 "objectUnderTest",
                 "sut",
                 "subjectUnderTest",
+                "unitUnderTest",
+                "uut",
+                "testCandidate",
+                "testObject",
             };
 
         public MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzer() : base(Id, SymbolKind.NamedType)

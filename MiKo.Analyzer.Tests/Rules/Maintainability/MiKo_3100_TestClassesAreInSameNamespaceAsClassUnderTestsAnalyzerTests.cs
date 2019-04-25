@@ -14,8 +14,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 "ObjectUnderTest",
                 "SubjectUnderTest",
+                "UnitUnderTest",
                 "Sut",
+                "SuT",
                 "SUT",
+                "UUT",
+                "UuT",
+                "Uut",
+                "TestCandidate",
+                "TestObject",
             };
 
         private static readonly string[] FieldNames =
@@ -40,6 +47,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "m_SubjectUnderTest",
                 "s_SubjectUnderTest",
 
+                "unitUnderTest",
+                "_unitUnderTest",
+                "m_unitUnderTest",
+                "s_unitUnderTest",
+
+                "UnitUnderTest",
+                "_UnitUnderTest",
+                "m_UnitUnderTest",
+                "s_UnitUnderTest",
+
                 "sut",
                 "_sut",
                 "m_sut",
@@ -49,13 +66,39 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "_Sut",
                 "m_Sut",
                 "s_Sut",
+
+                "uut",
+                "_uut",
+                "m_uut",
+                "s_uut",
+
+                "Uut",
+                "_Uut",
+                "m_Uut",
+                "s_Uut",
+
+                "TestCandidate",
+                "testCandidate",
+                "_testCandidate",
+                "m_testCandidate",
+                "s_testCandidate",
+
+                "TestObject",
+                "testObject",
+                "_testObject",
+                "m_testObject",
+                "s_testObject",
             };
 
         private static readonly string[] VariableNames =
             {
                 "objectUnderTest",
                 "subjectUnderTest",
+                "unitUnderTest",
+                "testCandidate",
+                "testObject",
                 "sut",
+                "uut",
             };
 
         [Test]
