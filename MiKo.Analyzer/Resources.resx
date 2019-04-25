@@ -1587,7 +1587,7 @@ Such empty regions solely clutter the code without providing any benefit at all.
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_3003_MessageFormat" xml:space="preserve">
-    <value>Use 'EventHandler' or 'EventHandler&lt;T&gt;'</value>
+    <value>Use 'EventHandler' or 'EventHandler&lt;T&gt;' instead</value>
   </data>
   <data name="MiKo_3003_Title" xml:space="preserve">
     <value>Events should follow .NET Framework Guidelines for events.</value>
@@ -2023,7 +2023,7 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>https://github.com/nunit/docs/wiki/Constraint-Model</value>
   </data>
   <data name="MiKo_3105_MessageFormat" xml:space="preserve">
-    <value>Use 'Assert.That'</value>
+    <value>Use 'Assert.That' instead</value>
   </data>
   <data name="MiKo_3105_Title" xml:space="preserve">
     <value>Test methods should use NUnit's fluent Assert approach.</value>

@@ -4410,7 +4410,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;EventHandler&apos; or &apos;EventHandler&lt;T&gt;&apos;.
+        ///   Looks up a localized string similar to Use &apos;EventHandler&apos; or &apos;EventHandler&lt;T&gt;&apos; instead.
         /// </summary>
         public static string MiKo_3003_MessageFormat {
             get {
@@ -5654,7 +5654,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Assert.That&apos;.
+        ///   Looks up a localized string similar to Use &apos;Assert.That&apos; instead.
         /// </summary>
         public static string MiKo_3105_MessageFormat {
             get {
