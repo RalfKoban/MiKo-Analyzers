@@ -14,6 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "An instance of ",
                 "A instance of ",
                 "The instance of ",
+                "An object of ",
+                "A object of ",
+                "The object of ",
             };
 
         private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };

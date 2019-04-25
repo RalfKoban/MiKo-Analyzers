@@ -47,6 +47,9 @@ namespace MiKoSolutions.Analyzers
                     "An instance of ",
                     "A instance of ",
                     "The instance of ",
+                    "An object of ",
+                    "A object of ",
+                    "The object of ",
                 };
 
             internal static readonly string[] MeaninglessStartingPhrase =
