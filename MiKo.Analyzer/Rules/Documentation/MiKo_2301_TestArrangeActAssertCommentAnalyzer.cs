@@ -21,11 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "act",
                 "assert",
                 "prepare",
+                "preparation",
                 "run",
                 "set-up",
                 "setup",
                 "test",
                 "verify",
+                "verification",
             };
 
         public MiKo_2301_TestArrangeActAssertCommentAnalyzer() : base(Id, (SymbolKind)(-1))
