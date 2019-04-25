@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -38,8 +37,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                              .Select(_ => AnalyzeSingleLineComment(_, node.Identifier.Text))
                                                                                                              .Where(_ => _ != null);
 
-        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName) => CommentHasIssue(trivia.ToFullString().Remove("//").Trim())
-                                                                                                   ? ReportIssue(methodName, trivia.GetLocation())
-                                                                                                   : null;
+        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName)
+        {
+            var comment = trivia.ToFullString()
+                                .Substring(2) // remove leading '//'
+                                .Trim(); // get rid of all whitespaces
+
+            return CommentHasIssue(comment)
+                       ? ReportIssue(methodName, trivia.GetLocation())
+                       : null;
+        }
     }
 }
