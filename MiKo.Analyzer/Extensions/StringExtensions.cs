@@ -27,9 +27,9 @@ namespace System
 
         public static bool Contains(this string value, string finding, StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
 
-        public static bool ContainsAny(this string value, string[] prefixes) => ContainsAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
+        public static bool ContainsAny(this string value, string[] phrases) => ContainsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, string[] prefixes, StringComparison comparison) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.Contains(_, comparison));
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Contains(_, comparison));
 
         public static bool EqualsAny(this string value, string[] phrases) => !string.IsNullOrEmpty(value) && EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
