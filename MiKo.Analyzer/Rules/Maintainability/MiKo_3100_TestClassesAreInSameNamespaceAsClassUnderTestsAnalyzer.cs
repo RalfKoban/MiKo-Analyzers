@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -13,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3100";
 
-        private static readonly string[] PropertyNames =
+        private static readonly HashSet<string> PropertyNames = new HashSet<string>
             {
                 "ObjectUnderTest",
                 "Sut",
@@ -46,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "testObject",
             };
 
-        private static readonly string[] FieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => RawFieldNames, (prefix, name) => prefix + name).ToArray();
+        private static readonly HashSet<string> FieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => RawFieldNames, (prefix, name) => prefix + name).ToHashSet();
 
         private static readonly HashSet<string> VariableNames = new HashSet<string>
             {
@@ -74,16 +75,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol.IsTestClass())
             {
-                foreach (var typeUnderTest in PropertyNames.Select(_ => symbol.GetMembers(_).OfType<IPropertySymbol>().FirstOrDefault()?.GetReturnType()))
+                var members = symbol.GetMembers();
+
+                var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => PropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
+                var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => FieldNames.Contains(_.Name)).Select(_ => _.Type);
+
+                foreach (var typeUnderTest in propertyTypes.Concat(fieldTypes))
                 {
                     if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
                         return new []{ diagnostic };
-                }
-
-                foreach (var typeUnderTest in FieldNames.Select(_ => symbol.GetMembers(_).OfType<IFieldSymbol>().FirstOrDefault()?.Type))
-                {
-                    if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
-                        return new[] { diagnostic };
                 }
             }
 
