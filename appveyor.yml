@@ -15,14 +15,14 @@ init:
 - git config --global core.autocrlf true
 
 environment:
-    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/3.8/NUnit.Console-3.8.0.zip
+    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/v3.10/NUnit.Console-3.10.0.zip
 
 install:
   - choco install gitversion.portable -pre -y
   
 # Install NUnit console runner
-#  - ps: Start-FileDownload $env:NUnitRunnerUri -FileName NUnitInstaller.zip
-#  - cmd: 7z x NUnitInstaller.zip -y
+  - ps: Start-FileDownload $env:NUnitRunnerUri -FileName NUnitInstaller.zip
+  - cmd: 7z x NUnitInstaller.zip -y
   
 # clone directory
 clone_folder: c:\projects\MiKo.Analyzers
@@ -60,7 +60,6 @@ configuration:
 #  - Debug
   - Release
 
-# Currently, .NET Core 2.0 projects are not supported by NUnit 3, so we cannot yet run the tests (and same for Codecov code coverage)
 test_script:
  -  '%USERPROFILE%\.nuget\packages\OpenCover\4.7.922\tools\OpenCover.Console.exe -register:user -target:".\nunit3-console.exe" -targetargs:" "".\MiKo.Analyzer.Tests\bin\netcoreapp2.0\MiKoSolutions.Analyzers.Tests.dll"" --workers=16" -returntargetcode -filter:"+[MiKo*]* -[*Test*]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -output:"c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" '
 
