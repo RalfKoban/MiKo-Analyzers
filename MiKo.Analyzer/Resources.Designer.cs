@@ -4274,6 +4274,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inside AAA-Tests, the comments &apos;// arange&apos;, &apos;// act&apos; and &apos;// assert&apos; are obvious and therefore can be removed..
+        /// </summary>
+        public static string MiKo_2301_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2301_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove obvious comment.
+        /// </summary>
+        public static string MiKo_2301_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2301_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use obvious comments in AAA-Tests..
+        /// </summary>
+        public static string MiKo_2301_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2301_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>

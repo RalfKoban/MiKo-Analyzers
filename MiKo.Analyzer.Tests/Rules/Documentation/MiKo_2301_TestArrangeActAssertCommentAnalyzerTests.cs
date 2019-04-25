@@ -14,9 +14,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "act",
                 "arrange",
                 "assert",
+                "prepare",
+                "run",
+                "set-up",
+                "setup",
+                "test",
+                "verify",
+
                 "Act.",
                 "Arrange.",
                 "Assert.",
+                "Prepare.",
+                "Run.",
+                "Set-up.",
+                "Setup.",
+                "Test.",
+                "Verify.",
             };
 
         [Test]
@@ -61,8 +74,11 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_test_method([ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_incorrectly_commented_test_method(
+                                                                        [ValueSource(nameof(TestsExceptSetUpTearDowns))] string testAttribute,
+                                                                        [ValueSource(nameof(Comments))] string comment,
+                                                                        [Values("", " ")] string gap) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -70,7 +86,7 @@ public class TestMe
     [" + testAttribute + @"
     public void DoSomething()
     {
-        // " + comment + @"
+        //" + gap + comment + @"
     }
 }
 ");
