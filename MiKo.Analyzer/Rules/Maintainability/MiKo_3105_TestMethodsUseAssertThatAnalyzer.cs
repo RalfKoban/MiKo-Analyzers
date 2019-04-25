@@ -45,9 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (node.Expression is IdentifierNameSyntax invokedClass)
             {
-                var calledMethod = node.Name;
-
-                if (AllowedAssertionMethods.Contains(calledMethod.Identifier.ValueText))
+                if (AllowedAssertionMethods.Contains(node.Name.Identifier.ValueText))
                     return;
 
                 if (!AssertionTypes.Contains(invokedClass.Identifier.ValueText))
@@ -57,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return; // ignore other test frameworks
 
                 var method = context.GetEnclosingMethod();
-                context.ReportDiagnostic(ReportIssue(method.Name, calledMethod.GetLocation()));
+                context.ReportDiagnostic(ReportIssue(method.Name, node.GetLocation()));
             }
         }
     }
