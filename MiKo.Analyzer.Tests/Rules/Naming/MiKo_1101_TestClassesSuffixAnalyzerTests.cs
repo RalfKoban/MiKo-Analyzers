@@ -17,8 +17,8 @@ public class TestMe
 }
 ");
 
-        [TestCaseSource(nameof(TestFixtures))]
-        public void No_issue_is_reported_for_test_class_with_correct_suffix(string testClassAttribute) => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_test_class_with_correct_suffix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMeTests
 {
@@ -26,8 +26,8 @@ public class TestMeTests
 }
 ");
 
-        [TestCaseSource(nameof(TestFixtures))]
-        public void An_issue_is_reported_for_test_class_with_wrong_suffix(string testClassAttribute) => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_test_class_with_wrong_suffix([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
 [" + testClassAttribute + @"]
 public class TestMe
 {

@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules
     public static class AnalyzerTests
     {
         private static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Resources));
-        private static readonly List<Analyzer> AllAnalyzers = CreateAllAnalyzers();
+        private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
 
         [Test]
         public static void Resources_contains_texts([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private static List<Analyzer> CreateAllAnalyzers()
+        private static Analyzer[] CreateAllAnalyzers()
         {
             var analyzerBaseType = typeof(Analyzer);
 
@@ -147,7 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                .Where(_ => !_.IsAbstract && analyzerBaseType.IsAssignableFrom(_))
                                                .Select(_ => (Analyzer)_.GetConstructor(Type.EmptyTypes).Invoke(null))
                                                .OrderBy(_ => _.DiagnosticId)
-                                               .ToList();
+                                               .ToArray();
             return allAnalyzers;
         }
     }
