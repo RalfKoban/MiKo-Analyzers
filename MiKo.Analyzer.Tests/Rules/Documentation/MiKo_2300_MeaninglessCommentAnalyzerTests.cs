@@ -92,7 +92,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_small_comment([ValueSource(nameof(Comments))] string comment, [Values("", " ")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_method_with_small_comment([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -104,7 +104,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_long_comment([ValueSource(nameof(Comments))] string comment, [Values("", " ")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_method_with_long_comment([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -128,7 +128,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_incorrectly_commented_method_with_small_comment_but_escaped_Comments([ValueSource(nameof(Comments))] string comment, [Values("", " ")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_commented_method_with_small_comment_but_escaped_Comments([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -164,25 +164,25 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_combined_ignore_text_in_comment([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ignore_text_in_comment([Values("", " ")] string gap, [Values("ignore", "ignore this")] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
     public void DoSomething()
     {
-        //" + gap + @"ignore this
+        //" + gap + comment + @"
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ignore_as_only_text_in_comment([Values("", " ")] string gap) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_nothing_to_do_text_in_comment([Values("", " ")] string gap, [Values("nothing to do", "do nothing", "do nothing here")] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
     public void DoSomething()
     {
-        //" + gap + @"ignore
+        //" + gap + comment + @"
     }
 }
 ");

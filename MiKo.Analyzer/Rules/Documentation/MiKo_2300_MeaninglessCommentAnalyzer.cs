@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2300";
 
-        private const string WebsiteMarker = @"://";
-
         private static readonly string[] MeaninglessPhrases =
             {
                 "add ",
@@ -47,11 +45,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "stop ",
             };
 
-        private static readonly string[] AllowedPhrases =
+        private static readonly string[] AllowedMarkers =
             {
-                "nothing to do",
-                "ignore ",
+                "nothing",
+                "ignore",
                 "0x",
+                "://",
             };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
@@ -81,10 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (spaces < 3)
             {
                 // 3 or less words
-                if (comment.Contains(WebsiteMarker, Comparison))
-                    return false;
-
-                if (comment.ContainsAny(AllowedPhrases, Comparison))
+                if (comment.ContainsAny(AllowedMarkers, Comparison))
                     return false;
 
                 return true;

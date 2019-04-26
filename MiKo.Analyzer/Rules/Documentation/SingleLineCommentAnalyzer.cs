@@ -39,15 +39,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName)
         {
+            if (trivia.IsSpanningMultipleLines())
+                return null; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
+
             var comment = trivia.ToFullString()
                                 .Substring(2) // remove leading '//'
                                 .Trim(); // get rid of all whitespaces
 
             if (CommentHasIssue(comment))
-            {
-                // TODO: RKN find way to see if multi-line comments shall be ignored
                 return ReportIssue(methodName, trivia.GetLocation());
-            }
 
             return null;
         }
