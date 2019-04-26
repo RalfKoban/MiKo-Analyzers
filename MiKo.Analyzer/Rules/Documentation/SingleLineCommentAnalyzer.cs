@@ -43,9 +43,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 .Substring(2) // remove leading '//'
                                 .Trim(); // get rid of all whitespaces
 
-            return CommentHasIssue(comment)
-                       ? ReportIssue(methodName, trivia.GetLocation())
-                       : null;
+            if (CommentHasIssue(comment))
+            {
+                // TODO: RKN find way to see if multi-line comments shall be ignored
+                return ReportIssue(methodName, trivia.GetLocation());
+            }
+
+            return null;
         }
     }
 }

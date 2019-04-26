@@ -20,13 +20,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "convert ",
                 "count ",
                 "create ",
+                "decr.",
                 "decrease ",
+                "decrement ",
                 "determine ",
                 "determines ",
                 "evaluate event arg",
                 "get ",
                 "has ",
+                "incr.",
                 "increase ",
+                "increment ",
                 "initialize ",
                 "invoke" ,
                 "open ",
@@ -119,6 +123,18 @@ public class TestMe
     public void DoSomething()
     {
         //" + gap + @" in addition to something much longer -> there is the arrow
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_incorrectly_commented_method_with_small_comment_but_escaped_Comments([ValueSource(nameof(Comments))] string comment, [Values("", " ")] string gap) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        ////" + gap + comment + @"
     }
 }
 ");

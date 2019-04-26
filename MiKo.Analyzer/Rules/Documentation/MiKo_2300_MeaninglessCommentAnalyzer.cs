@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string WebsiteMarker = @"://";
 
-        private static readonly string[] StartingPhrases =
+        private static readonly string[] MeaninglessPhrases =
             {
                 "add ",
                 "calculate ",
@@ -24,13 +24,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "convert ",
                 "count ",
                 "create ",
+                "decr.",
                 "decrease ",
+                "decrement ",
                 "determine ",
                 "determines ",
                 "evaluate event arg",
                 "get ",
                 "has ",
+                "incr.",
                 "increase ",
+                "increment ",
                 "initialize ",
                 "invoke" ,
                 "open ",
@@ -43,6 +47,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "stop ",
             };
 
+        private static readonly string[] AllowedPhrases =
+            {
+                "nothing to do",
+                "ignore ",
+                "0x",
+            };
+
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
         {
         }
@@ -51,7 +62,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
-            if (comment.StartsWithAny(StartingPhrases, Comparison))
+            if (comment.StartsWith("//", Comparison))
+                return false; // ignore all comments that have the //// marker
+
+            if (comment.StartsWithAny(MeaninglessPhrases, Comparison))
                 return true;
 
             if (comment.StartsWith("is ", Comparison) && comment.EndsWith("?", Comparison))
@@ -63,8 +77,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var spaces = comment.Count(_ => _.IsWhiteSpace());
             if (spaces < 3)
             {
-                // 3 or less words (ignore website markers)
-                return !comment.Contains(WebsiteMarker, Comparison);
+                // 3 or less words
+                if (comment.Contains(WebsiteMarker, Comparison))
+                    return false;
+
+                if (comment.ContainsAny(AllowedPhrases, Comparison))
+                    return false;
+
+                return true;
             }
 
             // TODO: add other stuff
