@@ -52,10 +52,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] AllowedMarkers =
             {
-                "nothing",
-                "ignore",
                 "0x",
                 "://",
+                "checked by",
+                "ignore",
+                "nothing",
+                "special handling",
             };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)

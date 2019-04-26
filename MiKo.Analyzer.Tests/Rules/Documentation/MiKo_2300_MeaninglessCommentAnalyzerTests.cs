@@ -48,6 +48,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "use", // no space at the end to allow combinations of the word
             };
 
+        private static readonly string[] AllowedComments =
+            {
+                "nothing to do",
+                "do nothing",
+                "do nothing here",
+                "ignore",
+                "ignore this",
+                "special handling",
+                "checked by",
+            };
+
         [Test]
         public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"
 
@@ -169,19 +180,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ignore_text_in_comment([Values("", " ")] string gap, [Values("ignore", "ignore this")] string comment) => No_issue_is_reported_for(@"
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        //" + gap + comment + @"
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_nothing_to_do_text_in_comment([Values("", " ")] string gap, [Values("nothing to do", "do nothing", "do nothing here")] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_allowed_text_in_comment([Values("", " ")] string gap, [ValueSource(nameof(AllowedComments))] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
