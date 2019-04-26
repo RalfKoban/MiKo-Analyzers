@@ -30,11 +30,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "evaluate event arg",
                 "get ",
                 "has ",
+                "if ",
                 "incr.",
                 "increase ",
                 "increment ",
                 "initialize ",
                 "invoke" ,
+                "is " ,
                 "open ",
                 "raise ",
                 "remove ",
@@ -59,18 +61,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CommentHasIssue(string comment)
         {
-            const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
-            if (comment.StartsWith("//", Comparison))
+            if (comment.StartsWith("//", StringComparison.OrdinalIgnoreCase))
                 return false; // ignore all comments that have the //// marker
 
             if (comment.IsNullOrWhiteSpace())
                 return false; // ignore all empty comments
 
-            if (comment.StartsWithAny(MeaninglessPhrases, Comparison))
-                return true;
-
-            if (comment.StartsWith("is ", Comparison) && comment.EndsWith("?", Comparison))
+            if (comment.StartsWithAny(MeaninglessPhrases))
                 return true;
 
             if (comment.Contains("->"))
@@ -80,8 +77,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (spaces < 3)
             {
                 // 3 or less words
-                if (comment.ContainsAny(AllowedMarkers, Comparison))
+                if (comment.ContainsAny(AllowedMarkers))
                     return false;
+
+                if (MiKo_2301_TestArrangeActAssertCommentAnalyzer.CommentContainsArrangeActAssert(comment))
+                    return false; // gets already reported by the other analyzer
 
                 return true;
             }

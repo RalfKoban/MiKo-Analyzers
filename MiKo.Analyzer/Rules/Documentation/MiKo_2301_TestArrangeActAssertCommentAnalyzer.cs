@@ -29,8 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        internal static bool CommentContainsArrangeActAssert(string comment) => comment.StartsWithAny(Phrases, StringComparison.OrdinalIgnoreCase);
+
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsTestMethod();
 
-        protected override bool CommentHasIssue(string comment) => comment.StartsWithAny(Phrases, StringComparison.OrdinalIgnoreCase);
+        protected override bool CommentHasIssue(string comment) => CommentContainsArrangeActAssert(comment);
     }
 }

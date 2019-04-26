@@ -1545,16 +1545,16 @@ By having a more concrete description it makes it easier for a developer to unde
 They should not describe how it is achieved because that's what the code is for.</value>
   </data>
   <data name="MiKo_2300_MessageFormat" xml:space="preserve">
-    <value>Remove meaningless comment</value>
+    <value>Remove comment or describe the intent</value>
   </data>
   <data name="MiKo_2300_Title" xml:space="preserve">
-    <value>Comments should describe the 'Why' and not the 'How'.</value>
+    <value>Comments should explain the 'Why' and not the 'How'.</value>
   </data>
   <data name="MiKo_2301_Description" xml:space="preserve">
     <value>Inside AAA-Tests, the comments '// arange', '// act' and '// assert' are obvious and therefore can be removed.</value>
   </data>
   <data name="MiKo_2301_MessageFormat" xml:space="preserve">
-    <value>Remove obvious comment</value>
+    <value>Remove comment as it is obvious what's done here</value>
   </data>
   <data name="MiKo_2301_Title" xml:space="preserve">
     <value>Do not use obvious comments in AAA-Tests.</value>

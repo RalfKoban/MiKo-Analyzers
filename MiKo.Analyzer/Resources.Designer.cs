@@ -4284,7 +4284,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove meaningless comment.
+        ///   Looks up a localized string similar to Remove comment or describe the intent.
         /// </summary>
         public static string MiKo_2300_MessageFormat {
             get {
@@ -4293,7 +4293,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should describe the &apos;Why&apos; and not the &apos;How&apos;..
+        ///   Looks up a localized string similar to Comments should explain the &apos;Why&apos; and not the &apos;How&apos;..
         /// </summary>
         public static string MiKo_2300_Title {
             get {
@@ -4311,7 +4311,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove obvious comment.
+        ///   Looks up a localized string similar to Remove comment as it is obvious what&apos;s done here.
         /// </summary>
         public static string MiKo_2301_MessageFormat {
             get {
