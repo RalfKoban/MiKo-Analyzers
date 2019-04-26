@@ -139,6 +139,18 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_empty_comment([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + @"
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2300_MeaninglessCommentAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2300_MeaninglessCommentAnalyzer();

@@ -65,6 +65,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment.StartsWith("//", Comparison))
                 return false; // ignore all comments that have the //// marker
 
+            if (comment.IsNullOrWhiteSpace())
+                return false; // ignore all empty comments
+
             if (comment.StartsWithAny(MeaninglessPhrases, Comparison))
                 return true;
 
