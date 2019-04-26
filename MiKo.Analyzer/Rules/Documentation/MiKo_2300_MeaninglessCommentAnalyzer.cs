@@ -34,17 +34,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "incr.",
                 "increase ",
                 "increment ",
-                "initialize ",
+                "initialize",
                 "invoke" ,
                 "is " ,
+                "load",
                 "open ",
                 "raise ",
                 "remove ",
                 "retrieve ",
-                "return ",
+                "return",
+                "save",
                 "set ",
                 "start ",
                 "stop ",
+                "use",
             };
 
         private static readonly string[] AllowedMarkers =

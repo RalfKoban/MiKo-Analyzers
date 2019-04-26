@@ -25,24 +25,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "decrement ",
                 "determine ",
                 "determines ",
-                "evaluate event arg",
+                "evaluate event arg", // no space at the end to allow combinations of the word
                 "get ",
                 "has ",
                 "if ",
                 "incr.",
                 "increase ",
                 "increment ",
-                "initialize ",
-                "invoke" ,
+                "initialize", // no space at the end to allow combinations of the word
+                "invoke", // no space at the end to allow combinations of the word
                 "is " ,
+                "load",  // no space at the end to allow combinations of the word
                 "open ",
                 "raise ",
                 "remove ",
                 "retrieve ",
-                "return ",
+                "return", // no space at the end to allow combinations of the word
+                "save",  // no space at the end to allow combinations of the word
                 "set ",
                 "start ",
                 "stop ",
+                "use", // no space at the end to allow combinations of the word
             };
 
         [Test]
