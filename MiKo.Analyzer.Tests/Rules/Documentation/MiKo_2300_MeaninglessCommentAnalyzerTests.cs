@@ -151,6 +151,42 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_hex_number_in_comment([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + @"0xDeadBeef
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_combined_ignore_text_in_comment([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + @"ignore this
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_ignore_as_only_text_in_comment([Values("", " ")] string gap) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + @"ignore
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2300_MeaninglessCommentAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2300_MeaninglessCommentAnalyzer();
