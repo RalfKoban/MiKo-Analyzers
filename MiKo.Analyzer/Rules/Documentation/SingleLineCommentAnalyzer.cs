@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -38,8 +37,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                              .Select(_ => AnalyzeSingleLineComment(_, node.Identifier.Text))
                                                                                                              .Where(_ => _ != null);
 
-        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName) => CommentHasIssue(trivia.ToFullString().Remove("//").TrimStart())
-                                                                                                   ? ReportIssue(methodName, trivia.GetLocation())
-                                                                                                   : null;
+        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName)
+        {
+            if (trivia.IsSpanningMultipleLines())
+                return null; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
+
+            var comment = trivia.ToFullString()
+                                .Substring(2) // remove leading '//'
+                                .Trim(); // get rid of all whitespaces
+
+            if (CommentHasIssue(comment))
+                return ReportIssue(methodName, trivia.GetLocation());
+
+            return null;
+        }
     }
 }

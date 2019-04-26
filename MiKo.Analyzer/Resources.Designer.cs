@@ -4274,6 +4274,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
+        ///They should not describe how it is achieved because that&apos;s what the code is for..
+        /// </summary>
+        public static string MiKo_2300_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2300_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove comment or describe the intent.
+        /// </summary>
+        public static string MiKo_2300_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2300_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should explain the &apos;Why&apos; and not the &apos;How&apos;..
+        /// </summary>
+        public static string MiKo_2300_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2300_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Inside AAA-Tests, the comments &apos;// arange&apos;, &apos;// act&apos; and &apos;// assert&apos; are obvious and therefore can be removed..
         /// </summary>
         public static string MiKo_2301_Description {
@@ -4283,7 +4311,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove obvious comment.
+        ///   Looks up a localized string similar to Remove comment as it is obvious what&apos;s done here.
         /// </summary>
         public static string MiKo_2301_MessageFormat {
             get {
