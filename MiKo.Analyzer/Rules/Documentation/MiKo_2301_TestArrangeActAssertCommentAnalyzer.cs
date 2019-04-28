@@ -33,6 +33,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsTestMethod();
 
-        protected override bool CommentHasIssue(string comment) => CommentContainsArrangeActAssert(comment);
+        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentContainsArrangeActAssert(comment);
     }
 }

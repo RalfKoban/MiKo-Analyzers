@@ -16,15 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
 
-        protected abstract bool CommentHasIssue(string comment);
+        protected abstract bool CommentHasIssue(string comment, SemanticModel semanticModel);
 
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
             var node = (MethodDeclarationSyntax)context.Node;
+            var semanticModel = context.SemanticModel;
 
-            if (ShallAnalyzeMethod(node.GetEnclosingMethod(context.SemanticModel)))
+            if (ShallAnalyzeMethod(node.GetEnclosingMethod(semanticModel)))
             {
-                var issues = AnalyzeSingleLineCommentTrivias(node);
+                var issues = AnalyzeSingleLineCommentTrivias(node, semanticModel);
                 foreach (var issue in issues)
                 {
                     context.ReportDiagnostic(issue);
@@ -32,12 +33,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivias(MethodDeclarationSyntax node) => node.DescendantTrivia()
-                                                                                                             .Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia))
-                                                                                                             .Select(_ => AnalyzeSingleLineComment(_, node.Identifier.Text))
-                                                                                                             .Where(_ => _ != null);
+        private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivias(MethodDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            return node.DescendantTrivia()
+                       .Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia))
+                       .Select(_ => AnalyzeSingleLineComment(_, node.Identifier.Text, semanticModel))
+                       .Where(_ => _ != null);
+        }
 
-        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName)
+        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName, SemanticModel semanticModel)
         {
             if (trivia.IsSpanningMultipleLines())
                 return null; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
@@ -46,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 .Substring(2) // removes the leading '//'
                                 .Trim(); // gets rid of all (leading or trailing) whitespaces to ease comment comparisons
 
-            if (CommentHasIssue(comment))
+            if (CommentHasIssue(comment, semanticModel))
                 return Issue(methodName, trivia.GetLocation());
 
             return null;

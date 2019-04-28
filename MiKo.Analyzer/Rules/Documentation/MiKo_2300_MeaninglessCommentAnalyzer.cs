@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment)
+        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
         {
             if (comment.StartsWith("//", StringComparison.OrdinalIgnoreCase))
                 return false; // ignore all comments that have the //// marker
