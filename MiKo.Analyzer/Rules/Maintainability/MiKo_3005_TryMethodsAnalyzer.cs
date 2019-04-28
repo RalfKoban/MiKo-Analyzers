@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (!method.Name.StartsWith("Try", StringComparison.Ordinal)) return null;
             if (method.ReturnType.SpecialType == SpecialType.System_Boolean && (method.Parameters.Any() && method.Parameters.Last().RefKind == RefKind.Out)) return null;
 
-            return ReportIssue(method);
+            return Issue(method);
         }
     }
 }

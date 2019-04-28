@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (!somethingInside)
             {
-                context.ReportDiagnostic(ReportIssue(regionNode.ToString(), regionNode.GetLocation()));
+                context.ReportDiagnostic(Issue(regionNode.ToString(), regionNode.GetLocation()));
             }
         }
 

@@ -112,7 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases) => comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                : new[] { ReportIssue(symbol, constant, phrases.First()) };
+                                                                                                                                                : new[] { Issue(symbol, constant, phrases.First()) };
 
         private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<string> summaries, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, phrases);
 
@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = symbol.GetComment(commentXml);
             if (phrase.Any(_ => _ == comment)) return Enumerable.Empty<Diagnostic>();
 
-            return new[] { ReportIssue(symbol, Constants.XmlTag.Param, phrase[0]) };
+            return new[] { Issue(symbol, Constants.XmlTag.Param, phrase[0]) };
         }
     }
 }

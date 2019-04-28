@@ -21,6 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.Contains(Phrase))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { ReportIssue(symbol, Constants.XmlTag.Summary, Phrase) };
+                                                                                                                        : new[] { Issue(symbol, Constants.XmlTag.Summary, Phrase) };
     }
 }

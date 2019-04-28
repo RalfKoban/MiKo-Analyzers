@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var postFixesWithIssues = Postfixes.Where(_ => symbolName.EndsWith(_.Key, StringComparison.Ordinal));
             var midTermsWithIssues = MidTerms.Where(_ => symbolName.Contains(_.Key, StringComparison.Ordinal));
 
-            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => ReportIssue(symbol, _.Key, _.Value));
+            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => Issue(symbol, _.Key, _.Value));
         }
 
         private sealed class KeyComparer : IEqualityComparer<KeyValuePair<string, string>>

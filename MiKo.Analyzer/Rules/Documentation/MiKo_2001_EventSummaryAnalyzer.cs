@@ -19,6 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.TrimStart().StartsWith(ExpectedComment, StringComparison.Ordinal))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { ReportIssue(symbol, ExpectedComment) };
+                                                                                                                        : new[] { Issue(symbol, ExpectedComment) };
     }
 }

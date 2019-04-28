@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return dependencies > MaxDependenciesCount ?
-                       new[] { ReportIssue(symbol, dependencies, MaxDependenciesCount) }
+                       new[] { Issue(symbol, dependencies, MaxDependenciesCount) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

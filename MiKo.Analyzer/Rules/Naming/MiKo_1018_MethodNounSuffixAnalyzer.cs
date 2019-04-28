@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && !symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => TryFindBetterName(method.Name, out var betterName)
-                                                                                            ? new[] { ReportIssue(method, betterName) }
+                                                                                            ? new[] { Issue(method, betterName) }
                                                                                             : Enumerable.Empty<Diagnostic>();
 
         public static bool TryFindBetterName(string name, out string betterName)

@@ -27,6 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                         .Select(_ => _.Remove(Constants.Comments.SealedClassPhrase).Trim())
                                                                                                                         .Any(_ => _.StartsWith(StartingPhrase, Comparison) && _.EndsWith(EndingPhrase, Comparison))
                                                                                                                             ? Enumerable.Empty<Diagnostic>()
-                                                                                                                            : new[] { ReportIssue(symbol, StartingPhrase, "\"" + EndingPhrase) };
+                                                                                                                            : new[] { Issue(symbol, StartingPhrase, "\"" + EndingPhrase) };
     }
 }

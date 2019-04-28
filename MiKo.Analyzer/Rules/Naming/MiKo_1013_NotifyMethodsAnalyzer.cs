@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => method.Name.StartsWithAny(StartingPhrases, StringComparison.Ordinal)
-                                                                                            ? new[] { ReportIssue(method) }
+                                                                                            ? new[] { Issue(method) }
                                                                                             : Enumerable.Empty<Diagnostic>();
     }
 }

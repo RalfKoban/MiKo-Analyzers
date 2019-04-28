@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.Last().IsNumber()
-                                                                                            ? new[] { ReportIssue(symbol) }
+                                                                                            ? new[] { Issue(symbol) }
                                                                                             : Enumerable.Empty<Diagnostic>();
     }
 }

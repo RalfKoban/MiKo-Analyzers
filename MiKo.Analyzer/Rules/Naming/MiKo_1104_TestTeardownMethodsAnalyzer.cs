@@ -21,6 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name == Marker
                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                        : new[] { ReportIssue(symbol, Marker) };
+                                                                                        : new[] { Issue(symbol, Marker) };
     }
 }

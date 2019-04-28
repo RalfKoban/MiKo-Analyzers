@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
             return qualifiedName.ContainsAny(LibraryNamespaces)
-                       ? new[] { ReportIssue(qualifiedName, location, LibraryNamespaces.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
+                       ? new[] { Issue(qualifiedName, location, LibraryNamespaces.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
             {
                 if (findings == null) findings = new List<Diagnostic>();
-                findings.Add(ReportIssue(parameter, phrase));
+                findings.Add(Issue(parameter, phrase));
             }
         }
     }

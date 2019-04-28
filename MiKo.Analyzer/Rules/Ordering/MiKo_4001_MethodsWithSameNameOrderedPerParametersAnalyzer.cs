@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         if (results == null)
                             results = new List<Diagnostic>();
 
-                        results.Add(ReportIssue(method, order));
+                        results.Add(Issue(method, order));
                     }
 
                     lastLine = nextLine;

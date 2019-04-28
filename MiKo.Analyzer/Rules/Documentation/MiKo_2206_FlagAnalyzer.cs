@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => from phrase in Phrases where commentXml.Contains(phrase, StringComparison.OrdinalIgnoreCase) select ReportIssue(symbol, phrase);
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => from phrase in Phrases where commentXml.Contains(phrase, StringComparison.OrdinalIgnoreCase) select Issue(symbol, phrase);
 
         private static IEnumerable<string> CreatePhrases(params string[] forbiddenTerms) => from suffix in Constants.Comments.Delimiters from forbiddenTerm in forbiddenTerms select forbiddenTerm + suffix;
     }

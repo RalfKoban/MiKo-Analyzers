@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                             signatures = methodsWithSameName.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
                         }
 
-                        yield return ReportIssue(orderedMethods[index], signatures);
+                        yield return Issue(orderedMethods[index], signatures);
                     }
 
                     startIndex = index;

@@ -35,6 +35,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.EndsWith(Constants.Comments.FieldIsReadOnly, Comparison))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { ReportIssue(symbol, Constants.Comments.FieldIsReadOnly) };
+                                                                                                                        : new[] { Issue(symbol, Constants.Comments.FieldIsReadOnly) };
     }
 }

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return methodName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal) || TaskFactoryMethods.Contains(methodName)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, methodName + Constants.AsyncSuffix) };
+                       : new[] { Issue(symbol, methodName + Constants.AsyncSuffix) };
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .Where(_ => _ != null) // generic types do not have a namespace to detect
                                    .Select(_ => _.ToString())
                                    .Where(_ => _ != qualifiedNamespaceOfExtensionMethod)
-                                   .Select(_ => ReportIssue(symbol, _))
+                                   .Select(_ => Issue(symbol, _))
                                    .FirstOrDefault();
 
             return diagnostic is null

@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case nameof(ICloneable.Clone):
                 case nameof(ICloneable) + "." + nameof(ICloneable.Clone):
                 case nameof(System) + "." + nameof(ICloneable) + "." + nameof(ICloneable.Clone):
-                    return new[] { ReportIssue(method) };
+                    return new[] { Issue(method) };
 
                 default:
                     return Enumerable.Empty<Diagnostic>();

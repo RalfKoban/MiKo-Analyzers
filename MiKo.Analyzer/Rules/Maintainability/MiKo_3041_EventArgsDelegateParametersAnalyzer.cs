@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case MethodKind.Constructor:
                 case MethodKind.Ordinary:
                 case MethodKind.PropertySet:
-                    return method.Parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate).Select(_ => ReportIssue(_)).ToList();
+                    return method.Parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate).Select(_ => Issue(_)).ToList();
 
                 case MethodKind.PropertyGet when method.ReturnType.TypeKind == TypeKind.Delegate:
-                    return new[] { ReportIssue(method.ContainingSymbol) };
+                    return new[] { Issue(method.ContainingSymbol) };
 
 
                 default:

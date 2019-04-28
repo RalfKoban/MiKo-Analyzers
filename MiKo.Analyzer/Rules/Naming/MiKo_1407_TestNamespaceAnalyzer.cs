@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location) => qualifiedName.Contains("Test", StringComparison.OrdinalIgnoreCase)
-                                                                                                                        ? new[] { ReportIssue(qualifiedName, location) }
+                                                                                                                        ? new[] { Issue(qualifiedName, location) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
     }
 }

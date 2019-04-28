@@ -38,6 +38,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => method.Name.StartsWith("Create", StringComparison.Ordinal)
                                                                                                       ? Enumerable.Empty<Diagnostic>()
-                                                                                                      : new[] { ReportIssue(method) };
+                                                                                                      : new[] { Issue(method) };
     }
 }

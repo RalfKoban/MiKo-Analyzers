@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 propertyNames.Add(registeredName);
             }
 
-            return new[] { ReportIssue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
+            return new[] { Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
         }
 
         private static string GetRegisteredName(IFieldSymbol symbol)

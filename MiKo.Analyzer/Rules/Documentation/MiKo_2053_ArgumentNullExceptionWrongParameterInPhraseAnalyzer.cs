@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return parameterIndicators
                    .Where(_ => exceptionComment.Contains(_.Value))
-                   .Select(_ => ReportIssue(owningSymbol, _.Key.Type.Name, _.Value + Constants.Comments.XmlElementEndingTag))
+                   .Select(_ => Issue(owningSymbol, _.Key.Type.Name, _.Value + Constants.Comments.XmlElementEndingTag))
                    .ToList();
         }
     }

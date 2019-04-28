@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                         var parameter = parameters[0];
                         return parameter.Name != expected
-                                   ? new[] { ReportIssue(parameter, expected) }
+                                   ? new[] { Issue(parameter, expected) }
                                    : Enumerable.Empty<Diagnostic>();
                     }
 
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                             var expected = "e" + (++i);
                             if (parameterName != expected)
                             {
-                                diagnostics.Add(ReportIssue(parameter, expected));
+                                diagnostics.Add(Issue(parameter, expected));
                             }
                         }
 

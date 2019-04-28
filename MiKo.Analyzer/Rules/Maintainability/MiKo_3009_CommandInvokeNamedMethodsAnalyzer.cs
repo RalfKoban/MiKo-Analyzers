@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return arguments
                            .Where(_ => _.Expression is LambdaExpressionSyntax)
-                           .Select(_ => ReportIssue(_.ToString(), _.GetLocation()))
+                           .Select(_ => Issue(_.ToString(), _.GetLocation()))
                            .ToList();
         }
     }

@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var markers = TechnicalNamespaces;
 
             return HasMarker(qualifiedName)
-                       ? new[] { ReportIssue(qualifiedName, location, markers.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
+                       ? new[] { Issue(qualifiedName, location, markers.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
                        : Enumerable.Empty<Diagnostic>();
         }
 

@@ -40,6 +40,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeNames(ISymbol symbol, params string[] suffixes) => suffixes.Any(_ => symbol.Name.EndsWith(_, StringComparison.Ordinal))
                                                                                                   ? Enumerable.Empty<Diagnostic>()
-                                                                                                  : new[] { ReportIssue(symbol, Suffix) };
+                                                                                                  : new[] { Issue(symbol, Suffix) };
     }
 }

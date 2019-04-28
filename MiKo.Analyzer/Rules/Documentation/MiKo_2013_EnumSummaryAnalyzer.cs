@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const string Phrase = "Defines values that specify ";
             return summaries.Any(_ => _.TrimStart().StartsWith(Phrase, StringComparison.Ordinal))
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, Phrase) };
+                       : new[] { Issue(symbol, Phrase) };
         }
     }
 }

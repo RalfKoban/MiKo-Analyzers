@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return name.EndsWithAny(AllowedSuffixes)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(qualifiedName, location, GetPluralName(name, name)) };
+                       : new[] { Issue(qualifiedName, location, GetPluralName(name, name)) };
         }
     }
 }

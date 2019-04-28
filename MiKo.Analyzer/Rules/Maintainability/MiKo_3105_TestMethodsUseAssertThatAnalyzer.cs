@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return; // ignore other test frameworks
 
                 var method = context.GetEnclosingMethod();
-                context.ReportDiagnostic(ReportIssue(method.Name, node.GetLocation()));
+                context.ReportDiagnostic(Issue(method.Name, node.GetLocation()));
             }
         }
     }

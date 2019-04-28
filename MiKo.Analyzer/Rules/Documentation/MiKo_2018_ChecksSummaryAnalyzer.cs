@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                         .Select(_ => _.Remove(Constants.Comments.AsynchrounouslyStartingPhrase).Trim())
                                         .Where(_ => _.StartsWithAny(Comments)))
             {
-                return new[] { ReportIssue(symbol, summary.Substring(0, summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase))) };
+                return new[] { Issue(symbol, summary.Substring(0, summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase))) };
             }
 
             return Enumerable.Empty<Diagnostic>();

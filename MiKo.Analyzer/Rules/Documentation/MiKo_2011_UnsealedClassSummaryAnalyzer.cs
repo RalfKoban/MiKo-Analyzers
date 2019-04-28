@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
             return !symbol.IsSealed && summaries.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase))
-                       ? new[] { ReportIssue(symbol, Constants.Comments.SealedClassPhrase) }
+                       ? new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

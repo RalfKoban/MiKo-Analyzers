@@ -44,8 +44,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var symbol = syntaxToken.GetSymbol(semanticModel);
                 var diagnostic = symbol is null
-                                     ? ReportIssue(syntaxToken.ValueText, syntaxToken.GetLocation())
-                                     : ReportIssue(symbol);
+                                     ? Issue(syntaxToken.ValueText, syntaxToken.GetLocation())
+                                     : Issue(symbol);
 
                 if (diagnostics is null)
                     diagnostics = new List<Diagnostic>();

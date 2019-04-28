@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Enumerable.Empty<Diagnostic>();
             }
 
-            return new[] { ReportIssue(symbol, phrase) };
+            return new[] { Issue(symbol, phrase) };
         }
     }
 }

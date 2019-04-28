@@ -27,14 +27,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var phrases = Constants.Comments.CtorSerializationInfoParamPhrase;
 
                 if (!comment.EqualsAny(phrases))
-                    return new[] { ReportIssue(parameter, phrases[0]) };
+                    return new[] { Issue(parameter, phrases[0]) };
             }
             else if (parameter.IsStreamingContextParameter())
             {
                 var phrases = Constants.Comments.CtorStreamingContextParamPhrase;
 
                 if (!comment.EqualsAny(phrases))
-                    return new[] { ReportIssue(parameter, phrases[0]) };
+                    return new[] { Issue(parameter, phrases[0]) };
             }
 
             return Enumerable.Empty<Diagnostic>();

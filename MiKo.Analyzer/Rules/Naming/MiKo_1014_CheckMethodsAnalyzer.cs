@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var methodName = method.Name;
             var forbidden = methodName.StartsWith("Check", StringComparison.Ordinal) && !methodName.StartsWithAny(StartingPhrases, StringComparison.Ordinal);
             return forbidden
-                       ? new[] { ReportIssue(method) }
+                       ? new[] { Issue(method) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (methodName.StartsWith(Clear, StringComparison.OrdinalIgnoreCase))
             {
                 return method.Parameters.Any()
-                       ? new[] { ReportIssue(method, methodName.Replace(Clear, Remove)) }
+                       ? new[] { Issue(method, methodName.Replace(Clear, Remove)) }
                        : Enumerable.Empty<Diagnostic>();
             }
 
@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 return method.Parameters.Any()
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(method, methodName.Replace(Remove, Clear)) };
+                       : new[] { Issue(method, methodName.Replace(Remove, Clear)) };
             }
 
             return Enumerable.Empty<Diagnostic>();

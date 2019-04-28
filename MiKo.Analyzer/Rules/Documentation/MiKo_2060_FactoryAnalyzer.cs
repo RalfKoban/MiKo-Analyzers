@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             return comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, phrases.First()) };
+                       : new[] { Issue(symbol, phrases.First()) };
         }
     }
 }

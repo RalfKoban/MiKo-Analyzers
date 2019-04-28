@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     break;
             }
 
-            return new[] { ReportIssue(symbol, ExceptionIdentifier1, ExceptionIdentifier2) };
+            return new[] { Issue(symbol, ExceptionIdentifier1, ExceptionIdentifier2) };
         }
     }
 }

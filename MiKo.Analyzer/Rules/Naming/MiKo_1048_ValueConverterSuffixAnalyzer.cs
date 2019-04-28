@@ -22,6 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
                                                                                            ? Enumerable.Empty<Diagnostic>()
-                                                                                           : new[] { ReportIssue(symbol, Suffix) };
+                                                                                           : new[] { Issue(symbol, Suffix) };
     }
 }

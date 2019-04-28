@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsValueConverter() || symbol.IsMultiValueConverter();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.ContainingNamespace?.Name != "Converters"
-                                                                                               ? new[] { ReportIssue(symbol) }
+                                                                                               ? new[] { Issue(symbol) }
                                                                                                : Enumerable.Empty<Diagnostic>();
     }
 }

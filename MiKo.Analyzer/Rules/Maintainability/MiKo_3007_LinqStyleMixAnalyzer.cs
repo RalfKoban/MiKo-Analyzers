@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel) => TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && HasLinqExtensionMethod(syntaxNode, semanticModel)
-                                                                                                                   ? ReportIssue(identifier, query.GetLocation())
+                                                                                                                   ? Issue(identifier, query.GetLocation())
                                                                                                                    : null;
 
         private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode syntaxNode, out string identifier)

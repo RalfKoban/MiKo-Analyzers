@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var results = CommentExtensions.GetExceptionComments(commentXml)
                           .Where(_ => _.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase))
-                          .Select(_ => ReportIssue(symbol))
+                          .Select(_ => Issue(symbol))
                           .ToList();
             return results;
         }

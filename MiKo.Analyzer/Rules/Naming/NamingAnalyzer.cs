@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (expected.HasCollectionMarker())
                 expected = FindPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
 
-            return new[] { ReportIssue(symbol, expected) };
+            return new[] { Issue(symbol, expected) };
 
         }
 
@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             var betterName = FindPluralName(symbol.Name, comparison, suffix);
-            return betterName.IsNullOrWhiteSpace() ? null : ReportIssue(symbol, betterName);
+            return betterName.IsNullOrWhiteSpace() ? null : Issue(symbol, betterName);
         }
 
         protected void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)

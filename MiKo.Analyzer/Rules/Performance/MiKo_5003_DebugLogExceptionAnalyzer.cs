@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     if (type.Name == Constants.ILog && IsException(argument, semanticModel))
                     {
                         var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
-                        return ReportIssue(enclosingMethod.Name, methodCallName.GetLocation(), methodName);
+                        return Issue(enclosingMethod.Name, methodCallName.GetLocation(), methodName);
                     }
 
                     break;

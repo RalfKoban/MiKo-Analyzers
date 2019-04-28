@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return null;
 
                 default:
-                    return ReportIssue(identifier.ValueText, identifier.GetLocation(), ExceptionIdentifier);
+                    return Issue(identifier.ValueText, identifier.GetLocation(), ExceptionIdentifier);
             }
         }
     }

@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (allExpected.All(_ => _ != comment))
             {
                 if (diagnostics == null) diagnostics = new List<Diagnostic>();
-                diagnostics.Add(ReportIssue(parameter, parameter.Name, proposal));
+                diagnostics.Add(Issue(parameter, parameter.Name, proposal));
             }
         }
     }

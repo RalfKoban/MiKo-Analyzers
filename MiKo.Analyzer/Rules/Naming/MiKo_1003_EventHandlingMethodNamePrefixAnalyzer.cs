@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return method.Name == expectedName
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(method, expectedName) };
+                       : new[] { Issue(method, expectedName) };
         }
 
         private static string FindProperName(IMethodSymbol method)

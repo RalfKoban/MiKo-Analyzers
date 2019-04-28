@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var suffix = className.EndsWith(TestSuffix, StringComparison.Ordinal) ? "s" : TestsSuffix;
 
-            return new[] { ReportIssue(symbol, className + suffix) };
+            return new[] { Issue(symbol, className + suffix) };
         }
     }
 }

@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
                 if (outParameter != null && outParameter.Name != ParameterName)
-                    return ReportIssue(outParameter, ParameterName);
+                    return Issue(outParameter, ParameterName);
             }
 
             return null;

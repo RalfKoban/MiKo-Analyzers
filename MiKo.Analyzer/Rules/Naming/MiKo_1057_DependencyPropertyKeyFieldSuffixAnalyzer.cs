@@ -20,6 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => symbol.Name.EndsWith(Constants.DependencyPropertyKeyFieldSuffix, StringComparison.Ordinal)
                                                                                            ? Enumerable.Empty<Diagnostic>()
-                                                                                           : new[] { ReportIssue(symbol, symbol.Name + Constants.DependencyPropertyKeyFieldSuffix) };
+                                                                                           : new[] { Issue(symbol, symbol.Name + Constants.DependencyPropertyKeyFieldSuffix) };
     }
 }

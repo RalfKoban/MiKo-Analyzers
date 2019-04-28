@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (commentXml.Contains(phrase, Comparison))
             {
                 if (findings == null) findings = new List<Diagnostic>();
-                findings.Add(ReportIssue(parameter, phrase + Constants.Comments.XmlElementEndingTag));
+                findings.Add(Issue(parameter, phrase + Constants.Comments.XmlElementEndingTag));
             }
         }
     }

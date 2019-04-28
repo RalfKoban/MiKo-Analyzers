@@ -38,6 +38,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names) => names.Any(_ => _ == parameter.Name)
                                                                                                           ? Enumerable.Empty<Diagnostic>()
-                                                                                                          : new[] { ReportIssue(parameter, names.HumanizedConcatenated()) };
+                                                                                                          : new[] { Issue(parameter, names.HumanizedConcatenated()) };
     }
 }

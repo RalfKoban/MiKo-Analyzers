@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     // less than 2 ValueSource
                     if (count < 2)
-                        yield return ReportIssue(method);
+                        yield return Issue(method);
                 }
                 else if (IsSequential(method))
                 {
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 else
                 {
                     if (count > 1)
-                        yield return ReportIssue(method);
+                        yield return Issue(method);
                 }
             }
         }
