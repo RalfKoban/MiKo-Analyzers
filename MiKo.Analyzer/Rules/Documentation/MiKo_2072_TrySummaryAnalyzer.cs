@@ -28,11 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool StartsWithPhrase(string summary)
         {
-            // get rid of async starting phrase
-            summary = summary.Remove(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
-
-            var firstSpace = summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
-            var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);
+            var firstWord = summary.Remove(Constants.Comments.AsynchrounouslyStartingPhrase).Trim() // skip over async starting phrase
+                                   .FirstWord();
 
             return firstWord.EqualsAny(Phrases);
         }

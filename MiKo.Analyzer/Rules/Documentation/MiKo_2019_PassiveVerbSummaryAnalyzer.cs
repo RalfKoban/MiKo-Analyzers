@@ -30,8 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static bool HasPassiveVerb(string summary)
         {
             var trimmed = summary
-                              .Remove(Constants.Comments.AsynchrounouslyStartingPhrase) // get rid of async starting phrase
-                              .Remove(Constants.Comments.RecursivelyStartingPhrase) // get rid of recursively starting phrase
+                              .Remove(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                              .Remove(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
                               .Trim();
 
             return HasPassiveVerbCore(trimmed);
@@ -41,8 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            var firstSpace = summary.IndexOf(" ", Comparison);
-            var firstWord = firstSpace == -1 ? summary : summary.Substring(0, firstSpace);
+            var firstWord = summary.FirstWord();
 
             return firstWord.EndsWith("s", Comparison) && !firstWord.EndsWithAny(TwoCharacterEndingsWithS, Comparison);
         }
