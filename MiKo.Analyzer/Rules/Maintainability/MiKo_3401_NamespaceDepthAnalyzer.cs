@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var depth = GetNamespaceDepth(symbol);
 
             return depth > MaxDepth
-                       ? new[] { ReportIssue(symbol, depth, MaxDepth) }
+                       ? new[] { Issue(symbol, depth, MaxDepth) }
                        : Enumerable.Empty<Diagnostic>();
         }
 

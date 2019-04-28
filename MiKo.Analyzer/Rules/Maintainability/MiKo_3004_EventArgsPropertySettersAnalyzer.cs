@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (symbol.ContainingType?.IsEventArgs() == true)
             {
-                return new[] { ReportIssue(setter) };
+                return new[] { Issue(setter) };
             }
 
             return Enumerable.Empty<Diagnostic>();

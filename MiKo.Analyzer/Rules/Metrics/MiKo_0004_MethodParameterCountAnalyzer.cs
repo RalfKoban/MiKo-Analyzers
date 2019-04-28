@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
             var parameterCount = method.Parameters.Count();
             return parameterCount > MaxParametersCount
-                       ? new[] { ReportIssue(method, parameterCount, MaxParametersCount) }
+                       ? new[] { Issue(method, parameterCount, MaxParametersCount) }
                        : Enumerable.Empty<Diagnostic>();
         }
 

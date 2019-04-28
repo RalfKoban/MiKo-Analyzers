@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var dependencyProperties = owingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyProperty());
             return dependencyProperties.Any(_ => _.GetAssignmentsVia(invocation).Any())
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol) };
+                       : new[] { Issue(symbol) };
         }
     }
 }

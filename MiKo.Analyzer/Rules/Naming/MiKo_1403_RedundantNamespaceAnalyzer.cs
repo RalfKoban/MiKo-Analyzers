@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return qualifiedName.Split('.')
                                 .Where(_ => !knownNamespaces.Add(_))
-                                .Select(_ => ReportIssue(_, location))
+                                .Select(_ => Issue(_, location))
                                 .ToList();
         }
     }

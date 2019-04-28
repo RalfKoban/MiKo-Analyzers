@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comment.StartsWithAny(startingPhrase, Comparison) && comment.ContainsAny(endingPhrase, Comparison)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(parameter, parameter.Name, startingPhrase[0], endingPhrase[0]) };
+                       : new[] { Issue(parameter, parameter.Name, startingPhrase[0], endingPhrase[0]) };
         }
     }
 }

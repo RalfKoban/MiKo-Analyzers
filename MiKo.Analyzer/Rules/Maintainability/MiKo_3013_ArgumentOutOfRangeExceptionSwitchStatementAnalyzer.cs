@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // we are in the 'default:' clause if there is a 'default' switch label in the specific switch section
             var isDefaultClause = switchSection?.DescendantNodes().OfType<DefaultSwitchLabelSyntax>().Any() == true;
             return isDefaultClause
-                       ? new []{ ReportIssue(node.Type.ToString(), node.GetLocation()) }
+                       ? new []{ Issue(node.Type.ToString(), node.GetLocation()) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

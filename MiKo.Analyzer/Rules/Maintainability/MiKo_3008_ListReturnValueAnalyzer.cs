@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SpecialType.System_Array:
                 case SpecialType.System_Collections_Generic_IList_T:
                 case SpecialType.System_Collections_Generic_ICollection_T:
-                    return ReportIssue(method);
+                    return Issue(method);
 
                 case SpecialType.System_Collections_Generic_IReadOnlyList_T:
                 case SpecialType.System_Collections_Generic_IReadOnlyCollection_T:
@@ -63,10 +63,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (returnType.Locations.IsEmpty)
                 {
                     var syntax = (MethodDeclarationSyntax)method.DeclaringSyntaxReferences[0].GetSyntax();
-                    return ReportIssue(returnTypeString, syntax.ReturnType.GetLocation());
+                    return Issue(returnTypeString, syntax.ReturnType.GetLocation());
                 }
 
-                return ReportIssue(returnType);
+                return Issue(returnType);
             }
 
             return null;

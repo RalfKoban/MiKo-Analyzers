@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate
-                                                                                               ? new[] { ReportIssue(symbol) }
+                                                                                               ? new[] { Issue(symbol) }
                                                                                                : Enumerable.Empty<Diagnostic>();
     }
 }

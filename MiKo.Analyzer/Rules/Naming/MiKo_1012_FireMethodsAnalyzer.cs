@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var methodName = method.Name;
             var forbidden = methodName.ContainsAny(FirePhrases) && !methodName.ContainsAny(FirewallPhrases);
             return forbidden
-                       ? new[] { ReportIssue(method, methodName.Replace("Fire", "Raise").Replace("_fire", "_raise").Replace("Firing", "Raising").Replace("_firing", "_raising")) }
+                       ? new[] { Issue(method, methodName.Replace("Fire", "Raise").Replace("_fire", "_raise").Replace("Firing", "Raising").Replace("_firing", "_raising")) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

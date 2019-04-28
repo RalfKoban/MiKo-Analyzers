@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (findings == null) findings = new List<Diagnostic>();
                 var replacement = GetReplacement(parameter);
-                findings.Add(ReportIssue(parameter, phrase, replacement));
+                findings.Add(Issue(parameter, phrase, replacement));
             }
         }
 

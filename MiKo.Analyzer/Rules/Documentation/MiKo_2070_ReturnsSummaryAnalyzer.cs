@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { ReportIssue(symbol, "Gets") }
+                                                                                                                        ? new[] { Issue(symbol, "Gets") }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol)

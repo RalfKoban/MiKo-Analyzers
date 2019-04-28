@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // no attribute on parameter: report issue
-            return new[] { ReportIssue(parameter) };
+            return new[] { Issue(parameter) };
         }
     }
 }

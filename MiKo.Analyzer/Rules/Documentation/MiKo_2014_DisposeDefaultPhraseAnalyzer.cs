@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var summaries = CommentExtensions.GetSummaries(commentXml);
             var results = summaries.Any() && summaries.All(_ => _ != SummaryPhrase)
-                          ? new List<Diagnostic> { ReportIssue(symbol, symbol.Name, SummaryPhrase) }
+                          ? new List<Diagnostic> { Issue(symbol, symbol.Name, SummaryPhrase) }
                           : null;
 
             // check for parameter
@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (comment == ParameterPhrase) continue;
 
                 if (results == null) results = new List<Diagnostic>();
-                results.Add(ReportIssue(parameter, parameter.Name, ParameterPhrase));
+                results.Add(Issue(parameter, parameter.Name, ParameterPhrase));
             }
 
             return results ?? Enumerable.Empty<Diagnostic>();

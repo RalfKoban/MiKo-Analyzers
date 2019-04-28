@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return Enumerable.Empty<Diagnostic>();
 
                 default:
-                    return new[] { ReportIssue(symbol) };
+                    return new[] { Issue(symbol) };
             }
         }
     }

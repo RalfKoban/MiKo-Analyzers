@@ -30,6 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
                                                                                                                     from phrase in BooleanPhrases
                                                                                                                     where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)
-                                                                                                                    select ReportIssue(symbol, phrase.Trim());
+                                                                                                                    select Issue(symbol, phrase.Trim());
     }
 }

@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             return setupMethod.Equals(firstMethod)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(setupMethod) };
+                       : new[] { Issue(setupMethod) };
         }
     }
 }

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = symbol.GetComment();
 
             return comment.Contains("<br", StringComparison.OrdinalIgnoreCase)
-                       ? new [] { ReportIssue(symbol) }
+                       ? new [] { Issue(symbol) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

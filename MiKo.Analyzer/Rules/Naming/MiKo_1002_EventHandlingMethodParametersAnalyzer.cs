@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (diagnostics == null) diagnostics = new List<Diagnostic>();
 
-            diagnostics.Add(ReportIssue(parameter, expected));
+            diagnostics.Add(Issue(parameter, expected));
         }
     }
 }

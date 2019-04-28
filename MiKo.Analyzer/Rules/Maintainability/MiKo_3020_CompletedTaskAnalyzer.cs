@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                           .OfType<MemberAccessExpressionSyntax>()
                                                                                           .Where(_ => _.ToCleanedUpString() == Invocation)
                                                                                           .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>().GetLocation())
-                                                                                          .Select(_ => ReportIssue(Invocation, _))
+                                                                                          .Select(_ => Issue(Invocation, _))
                                                                                           .ToList();
     }
 }

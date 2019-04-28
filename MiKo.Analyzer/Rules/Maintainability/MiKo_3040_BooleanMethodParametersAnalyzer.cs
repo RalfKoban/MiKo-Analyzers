@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                          .SelectMany(_ => _.DeclaringSyntaxReferences)
                          .Select(_ => _.GetSyntax())
                          .OfType<ParameterSyntax>()
-                         .Select(_ => ReportIssue(_.Identifier.ValueText, _.Type.GetLocation()))
+                         .Select(_ => Issue(_.Identifier.ValueText, _.Type.GetLocation()))
                          .ToList();
         }
     }

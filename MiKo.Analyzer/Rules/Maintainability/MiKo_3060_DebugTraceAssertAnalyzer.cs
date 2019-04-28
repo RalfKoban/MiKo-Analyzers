@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case DebugInvocation:
                     case TraceInvocation:
                         if (diagnostics is null) diagnostics = new List<Diagnostic>();
-                        diagnostics.Add(ReportIssue(method.Name, methodCall.GetLocation(), call));
+                        diagnostics.Add(Issue(method.Name, methodCall.GetLocation(), call));
                         break;
                 }
             }

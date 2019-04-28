@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Delegate || (symbol.Type.TypeKind == TypeKind.Class && symbol.Type.ToString() == TypeNames.Delegate);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithAny(WrongNames)
-                                                                                               ? new[] { ReportIssue(symbol) }
+                                                                                               ? new[] { Issue(symbol) }
                                                                                                : Enumerable.Empty<Diagnostic>();
     }
 }

@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return summaries.Any(_ => _.Trim().EqualsAny(phrases))
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, Constants.XmlTag.Summary, phrases[0]) };
+                       : new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
         }
 
         private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, string commentXml)
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comments.Any(_ => _.Trim().EqualsAny(phrases))
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(symbol, Constants.XmlTag.Returns, phrases[0]) };
+                       : new[] { Issue(symbol, Constants.XmlTag.Returns, phrases[0]) };
         }
 
         private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters, string commentXml)
@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = parameter.GetComment(commentXml);
             return comment == phrase
                        ? null
-                       : ReportIssue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
+                       : Issue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeException(symbol, comment);
         }
 
-        protected Diagnostic ReportExceptionIssue(ISymbol owningSymbol, string proposal) => ReportIssue(owningSymbol, ExceptionPhrase, proposal);
+        protected Diagnostic ReportExceptionIssue(ISymbol owningSymbol, string proposal) => Issue(owningSymbol, ExceptionPhrase, proposal);
 
         protected string ExceptionPhrase => string.Format(Constants.Comments.ExceptionPhrase, m_exceptionTypeFullName.GetNameOnlyPart());
 

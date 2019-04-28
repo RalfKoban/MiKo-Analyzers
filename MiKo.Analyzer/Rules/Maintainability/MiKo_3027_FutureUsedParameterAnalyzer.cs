@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (comment.ContainsAny(Constants.Comments.FuturePhrase))
                 {
-                    return new[] { ReportIssue(parameter) };
+                    return new[] { Issue(parameter) };
                 }
             }
 

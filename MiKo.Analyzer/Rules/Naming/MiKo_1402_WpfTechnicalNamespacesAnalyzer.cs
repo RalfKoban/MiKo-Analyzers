@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var fullName = qualifiedName.RemoveAll(ModelNamespaces);
 
             return fullName.ContainsAny(TechnicalWPFNamespaces)
-                       ? new[] { ReportIssue(qualifiedName, location, TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
+                       ? new[] { Issue(qualifiedName, location, TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

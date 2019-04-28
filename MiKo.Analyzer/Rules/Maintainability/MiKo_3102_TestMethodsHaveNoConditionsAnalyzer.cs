@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var conditions = method.DeclaringSyntaxReferences // get the syntax tree
                                    .SelectMany(_ => _.GetSyntax().DescendantNodes())
                                    .Where(IsCondition)
-                                   .Select(_ => ReportIssue(methodName, _.GetLocation()))
+                                   .Select(_ => Issue(methodName, _.GetLocation()))
                                    .ToList();
             return conditions;
         }

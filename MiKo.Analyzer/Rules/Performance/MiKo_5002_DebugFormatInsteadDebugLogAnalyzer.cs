@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         return null;
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
-                    return ReportIssue(enclosingMethod.Name, methodCallName.GetLocation(), methodName, methodName.Remove(Format));
+                    return Issue(enclosingMethod.Name, methodCallName.GetLocation(), methodName, methodName.Remove(Format));
                 }
                 default:
                     return null;

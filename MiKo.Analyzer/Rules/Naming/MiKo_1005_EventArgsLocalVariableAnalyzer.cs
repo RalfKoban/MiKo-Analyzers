@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         var proposedName = method.Parameters.Any(_ => _.Name == E) ? Args : E;
 
                         if (results == null) results = new List<Diagnostic>();
-                        results.Add(ReportIssue(symbol, proposedName));
+                        results.Add(Issue(symbol, proposedName));
 
                         break;
                 }

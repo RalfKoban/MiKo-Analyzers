@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var parameterType = parameter.Type;
                 if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)
                 {
-                    return new[] { ReportIssue(parameter, nameof(System.Threading.CancellationToken)) };
+                    return new[] { Issue(parameter, nameof(System.Threading.CancellationToken)) };
                 }
             }
 

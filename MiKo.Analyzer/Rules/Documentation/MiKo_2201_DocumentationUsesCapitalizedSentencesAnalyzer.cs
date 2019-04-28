@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var xmlTag in XmlTags.Where(_ => TagCommentHasIssue(commentXml, _)))
             {
-                yield return ReportIssue(symbol, xmlTag);
+                yield return Issue(symbol, xmlTag);
             }
         }
 

@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (parameter.Type.IsCancellationToken() && parameter.Name != Name)
                 {
-                    return new[] { ReportIssue(parameter, Name) };
+                    return new[] { Issue(parameter, Name) };
                 }
             }
 

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (parameter.RefKind == RefKind.Ref && parameter.Type.TypeKind != TypeKind.Struct)
                 {
-                    return new[] { ReportIssue(parameter) };
+                    return new[] { Issue(parameter) };
                 }
             }
 

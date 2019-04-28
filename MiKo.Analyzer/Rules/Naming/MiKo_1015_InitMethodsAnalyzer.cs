@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var expectedName = GetExpectedName(methodName, "Initialize");
 
-            return new[] { ReportIssue(method, expectedName) };
+            return new[] { Issue(method, expectedName) };
         }
 
         private static string GetExpectedName(string methodName, string expectedName)

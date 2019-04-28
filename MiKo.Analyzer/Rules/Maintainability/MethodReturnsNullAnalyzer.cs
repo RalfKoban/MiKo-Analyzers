@@ -247,7 +247,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
             var name = node.ToString();
-            var diagnostic = ReportIssue(name, node.GetLocation());
+            var diagnostic = Issue(name, node.GetLocation());
 
             context.ReportDiagnostic(diagnostic);
         }

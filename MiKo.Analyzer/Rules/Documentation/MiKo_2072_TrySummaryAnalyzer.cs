@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { ReportIssue(symbol, "Attempts to") }
+                                                                                                                        ? new[] { Issue(symbol, "Attempts to") }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.Name.StartsWith("Try", StringComparison.OrdinalIgnoreCase);

@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      .Where(_ => _.Length > 0)
                                      .Where(_ => !_[0].IsUpperCase() && _[0] != Constants.Comments.XmlElementStartingTag[0]))
                 {
-                    yield return ReportIssue(symbol, xmlTag);
+                    yield return Issue(symbol, xmlTag);
                 }
             }
         }

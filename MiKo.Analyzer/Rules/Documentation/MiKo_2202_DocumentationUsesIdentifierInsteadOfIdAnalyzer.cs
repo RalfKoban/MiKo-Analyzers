@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(Ids, StringComparison.OrdinalIgnoreCase)
-                                                                                                            ? new[] { ReportIssue(symbol) }
+                                                                                                            ? new[] { Issue(symbol) }
                                                                                                             : Enumerable.Empty<Diagnostic>();
     }
 }

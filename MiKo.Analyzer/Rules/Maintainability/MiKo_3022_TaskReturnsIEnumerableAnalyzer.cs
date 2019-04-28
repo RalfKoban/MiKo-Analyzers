@@ -42,6 +42,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssue(IMethodSymbol method) => new[] { ReportIssue(method, method.ReturnType.MinimalTypeName()) };
+        private IEnumerable<Diagnostic> ReportIssue(IMethodSymbol method) => new[] { Issue(method, method.ReturnType.MinimalTypeName()) };
     }
 }

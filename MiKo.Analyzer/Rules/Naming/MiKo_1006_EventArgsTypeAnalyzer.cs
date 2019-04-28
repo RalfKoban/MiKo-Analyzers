@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (IsInherited(identifier, semanticModel))
                 return null; // ignore inherited events that we cannot change anymore
 
-            return ReportIssue(typeName, declarationType.GetLocation(), expectedName);
+            return Issue(typeName, declarationType.GetLocation(), expectedName);
         }
 
         private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type?.IsEventArgs() == true && type.Name == expectedName;

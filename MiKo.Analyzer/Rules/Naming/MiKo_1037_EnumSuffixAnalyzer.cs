@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 betterName = GetPluralName(symbolName, betterName);
             }
 
-            return new[] { ReportIssue(symbol, betterName) };
+            return new[] { Issue(symbol, betterName) };
 
         }
     }

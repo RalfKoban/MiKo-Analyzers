@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (symbolName.ContainsAny(WrongNames))
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase));
-                return new[] { ReportIssue(symbol, wrongName) };
+                return new[] { Issue(symbol, wrongName) };
             }
 
             return Enumerable.Empty<Diagnostic>();

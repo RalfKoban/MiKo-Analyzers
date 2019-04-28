@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = Constants.Comments.ExtensionMethodClassStartingPhrase;
 
             return summaries.All(_ => !_.StartsWithAny(phrases, StringComparison.Ordinal))
-                       ? new[] { ReportIssue(symbol, Constants.XmlTag.Summary, phrases.First()) }
+                       ? new[] { Issue(symbol, Constants.XmlTag.Summary, phrases.First()) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

@@ -92,17 +92,17 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
-        protected Diagnostic ReportIssue(ISymbol symbol, params object[] messageArgs)
+        protected Diagnostic Issue(ISymbol symbol, params object[] messageArgs)
         {
             var prefix = string.Empty;
 
             if (symbol is IMethodSymbol m && (m.MethodKind == MethodKind.StaticConstructor || m.MethodKind == MethodKind.Constructor))
                 prefix = symbol.ContainingSymbol.Name;
 
-            return ReportIssue(prefix + symbol.Name, symbol.Locations[0], messageArgs);
+            return Issue(prefix + symbol.Name, symbol.Locations[0], messageArgs);
         }
 
-        protected Diagnostic ReportIssue(string name, Location location, params object[] messageArgs)
+        protected Diagnostic Issue(string name, Location location, params object[] messageArgs)
         {
             var args = new object[messageArgs.Length + 1];
             args[0] = name;

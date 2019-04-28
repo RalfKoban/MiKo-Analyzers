@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var symbol = semanticModel.LookupSymbols(location.SourceSpan.Start, name: argumentName).FirstOrDefault();
                 if (symbol != null)
                 {
-                    list.Add(ReportIssue(symbol, argumentName.WithoutSuffix(Suffix)));
+                    list.Add(Issue(symbol, argumentName.WithoutSuffix(Suffix)));
                 }
             }
         }

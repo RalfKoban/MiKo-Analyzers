@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (diagnostics is null)
                 diagnostics = new List<Diagnostic>();
 
-            diagnostics.Add(ReportIssue(symbol.Name, argument.GetLocation(), parameter));
+            diagnostics.Add(Issue(symbol.Name, argument.GetLocation(), parameter));
         }
 
         private static string GetName(ArgumentSyntax nameArgument)

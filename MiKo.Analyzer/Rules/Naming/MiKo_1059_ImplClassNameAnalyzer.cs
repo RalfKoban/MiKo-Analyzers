@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (symbolName.EndsWith(wrongName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return new[] { ReportIssue(symbol, wrongName) };
+                    return new[] { Issue(symbol, wrongName) };
                 }
             }
 

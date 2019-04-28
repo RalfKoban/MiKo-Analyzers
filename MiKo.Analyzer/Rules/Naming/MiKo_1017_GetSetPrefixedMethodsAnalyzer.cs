@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => Prefixes.Any(_ => HasStrangePrefix(method, _))
-                                                                                                  ? new[] { ReportIssue(method, FindBetterName(method.Name)) }
+                                                                                                  ? new[] { Issue(method, FindBetterName(method.Name)) }
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
         private static string FindBetterName(string name)

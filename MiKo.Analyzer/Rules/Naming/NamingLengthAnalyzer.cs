@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        protected Diagnostic ReportIssue(ISymbol symbol, int exceeding) => ReportIssue(symbol, exceeding, m_limit);
+        protected Diagnostic ReportIssue(ISymbol symbol, int exceeding) => Issue(symbol, exceeding, m_limit);
 
         protected int GetExceedingCharacters(string symbolName)
         {

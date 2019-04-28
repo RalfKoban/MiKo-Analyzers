@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (symbol.Name.Remove("Abstraction").Contains(marker))
                 {
-                    yield return ReportIssue(symbol, marker);
+                    yield return Issue(symbol, marker);
                 }
             }
         }

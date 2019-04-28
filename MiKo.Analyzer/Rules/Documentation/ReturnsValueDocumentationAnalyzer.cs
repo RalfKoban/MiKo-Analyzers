@@ -65,10 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
                                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                       : new[] { ReportIssue(symbol, symbol.Name, xmlTag, phrase[0]) };
+                                                                                                                                       : new[] { Issue(symbol, symbol.Name, xmlTag, phrase[0]) };
 
         protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => phrase.Any(_ => _.Equals(comment, StringComparison.Ordinal))
                                                                                                                                ? Enumerable.Empty<Diagnostic>()
-                                                                                                                               : new[] { ReportIssue(symbol, symbol.Name, xmlTag, phrase[0]) };
+                                                                                                                               : new[] { Issue(symbol, symbol.Name, xmlTag, phrase[0]) };
     }
 }

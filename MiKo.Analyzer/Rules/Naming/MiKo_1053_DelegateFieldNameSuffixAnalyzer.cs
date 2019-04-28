@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case TypeKind.Delegate:
                 case TypeKind.Class when symbolType.ToString() == TypeNames.Delegate:
                     return symbol.Name.EndsWithAny(WrongNames)
-                               ? new[] { ReportIssue(symbol) }
+                               ? new[] { Issue(symbol) }
                                : Enumerable.Empty<Diagnostic>();
 
                 default:

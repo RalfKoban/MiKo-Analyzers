@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (expectedNamespace != unitTestNamespace)
                 {
-                    diagnostic = ReportIssue(symbol, expectedNamespace);
+                    diagnostic = Issue(symbol, expectedNamespace);
                     return true;
                 }
             }

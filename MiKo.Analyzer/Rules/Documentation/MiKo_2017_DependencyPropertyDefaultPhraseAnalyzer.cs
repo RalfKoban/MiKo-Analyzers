@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 if (results == null) results = new List<Diagnostic>();
-                results.Add(ReportIssue(symbol, symbol.Name, xmlElement, phrases[0]));
+                results.Add(Issue(symbol, symbol.Name, xmlElement, phrases[0]));
             }
         }
 

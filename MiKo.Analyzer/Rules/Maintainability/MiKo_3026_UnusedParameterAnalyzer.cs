@@ -104,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (methodSymbol.IsEnhancedByPostSharpAdvice())
                     continue;
 
-                var diagnostic = ReportIssue(parameterName, parameter.GetLocation());
+                var diagnostic = Issue(parameterName, parameter.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
         }

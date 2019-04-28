@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             return teardownMethod.Equals(methods[index])
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { ReportIssue(teardownMethod) };
+                       : new[] { Issue(teardownMethod) };
         }
     }
 }

@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var method = node.GetEnclosingMethod(semanticModel);
                 if (method.MethodKind != MethodKind.UserDefinedOperator)
                 {
-                    return ReportIssue(node.ToString(), node.GetLocation());
+                    return Issue(node.ToString(), node.GetLocation());
                 }
             }
 

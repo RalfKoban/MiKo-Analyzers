@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = node.GetEnclosingMethod(semanticModel);
             if (method != null && method.Parameters.Length == 0)
             {
-                return new[] { ReportIssue(node.Type.ToString(), node.GetLocation()) };
+                return new[] { Issue(node.Type.ToString(), node.GetLocation()) };
             }
 
             return Enumerable.Empty<Diagnostic>();
