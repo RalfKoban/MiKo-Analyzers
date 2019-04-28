@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -51,7 +50,7 @@ namespace MiKoSolutions.Analyzers
         {
             var element = GetCommentElement(commentXml);
             return element == null
-                       ? Enumerable.Empty<XElement>() // invalid character
+                       ? Enumerable.Empty<XElement>() // happens in case of an invalid character
                        : element.Descendants(xmlTag);
         }
 
@@ -83,7 +82,7 @@ namespace MiKoSolutions.Analyzers
             }
             catch (System.Xml.XmlException)
             {
-                // invalid character
+                // happens in case of an invalid character
                 return null;
             }
         }

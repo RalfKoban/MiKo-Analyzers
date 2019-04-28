@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arguments.Count)
             {
                 case 2:
-                    // is it the message parameter ctor?
+                    // find out if it's the message parameter ctor
                     if (IsStringParameter(arguments[0], semanticModel))
                         return InspectArgument(arguments[1], method, semanticModel);
 
@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return InspectArgument(arguments[0], method, semanticModel);
 
                 case 2:
-                    // is it the message parameter ctor?
+                    // find out if it's the message parameter ctor
                     if (IsStringParameter(arguments[1], semanticModel))
                         return InspectArgument(arguments[0], method, semanticModel);
 
@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arguments.Count)
             {
                 case 2:
-                    // is it the message parameter ctor?
+                    // find out if it's the message parameter ctor
                     if (IsStringParameter(arguments[1], semanticModel))
                         return InspectArgument(arguments[0], method, semanticModel);
 

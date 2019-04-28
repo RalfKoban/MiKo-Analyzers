@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static void SkipAbbreviations(string comment, int last, ref char c, ref int i)
         {
-            // for example in string "e.g." -> c is already 'g', as well as i
+            // for example in string "e.g.": c is already 'g', as well as i
             const int Gap = 2;
 
             if (c.IsLowerCaseLetter() && i + Gap < last && comment[i + 1] == '.')

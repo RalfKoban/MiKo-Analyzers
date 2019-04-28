@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (used.Contains(parameterName))
                     continue;
 
-                // TODO: RKN check if the documentation contains the phrase 'Unused.' -> do not report an issue in such case
+                // TODO: RKN check if the documentation contains the phrase 'Unused.' and Do not report an issue in such case
                 if (methodSymbol.IsEnhancedByPostSharpAdvice())
                     continue;
 

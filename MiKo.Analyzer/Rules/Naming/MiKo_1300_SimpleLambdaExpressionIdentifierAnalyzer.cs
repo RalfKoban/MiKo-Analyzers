@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (identifier.ValueText)
             {
                 case null: // we don't have one
-                case Identifier: // correct identifier
+                case Identifier: // correct identifier (default one)
                 case IdentifierFallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case IdentifierFallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
                     return null;

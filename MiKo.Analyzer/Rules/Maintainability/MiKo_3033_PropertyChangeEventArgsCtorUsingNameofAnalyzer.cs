@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            return true; // use nameof instead
+            return true; // report to use nameof instead
         }
 
         private static bool NameofHasIssue(SyntaxNode node, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (containingType.GetMembers().OfType<IPropertySymbol>().Any(_ => _.Name == propertyName))
                 return false;
 
-            return true; // use nameof instead
+            return true; // report to use nameof instead
         }
 
         private static bool IdentifierIsParameter(SyntaxNode node, string propertyName, SemanticModel semanticModel)
