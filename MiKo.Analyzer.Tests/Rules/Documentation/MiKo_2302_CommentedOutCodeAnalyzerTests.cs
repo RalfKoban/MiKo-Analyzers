@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ReSharper_comment([Values("", " ", "//", "// ")] string gap, [Values("ReSharper disable ", "ReSharper restore ")] string resharperText) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ReSharper_comment([Values("", " ", "//", "// ")] string gap, [Values("ReSharper disable whatever", "ReSharper restore whatever")] string resharperText) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
