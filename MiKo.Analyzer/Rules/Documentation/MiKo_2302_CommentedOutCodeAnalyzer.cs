@@ -66,6 +66,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "private ",
             };
 
+        private static readonly string[] ReSharperMarkers =
+            {
+                "ReSharper disable ",
+                "ReSharper restore ",
+            };
+
         private readonly HashSet<string> m_knownTypeNames;
         private readonly HashSet<string> m_knownAssemblyNames;
 
@@ -103,13 +109,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment == "else")
                 return true;
 
-            if (comment.StartsWith("ReSharper ", StringComparison.Ordinal))
+            if (comment.ContainsAny(ReSharperMarkers))
                 return false; // ignore // ReSharper comments
 
             if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
                 return true;
 
-            if (comment.ContainsAny(CodeBlockMarkers, StringComparison.OrdinalIgnoreCase))
+            if (comment.ContainsAny(CodeBlockMarkers))
                 return true;
 
             if (comment.ContainsAny(CodeConditionMarkers, StringComparison.Ordinal))
@@ -120,8 +126,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (comment.Contains("://"))
                     return false; // allow indicators such as http:// or ftp://
 
-                if (comment.Contains(" ReSharper ", StringComparison.Ordinal))
-                    return false; // ignore // ReSharper comments
+                if (comment.EndsWith("//", StringComparison.Ordinal))
+                    return false; // ignore all framed comments
 
                 return true;
             }
