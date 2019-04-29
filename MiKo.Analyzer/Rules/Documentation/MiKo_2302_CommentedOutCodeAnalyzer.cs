@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
 
             if (comment.Contains("//")) // comment in comment indicator
-                return !comment.Contains("://"); // http indicator
+                return !comment.Contains("://"); // allow indicators such as http:// or ftp://
 
             if (comment.EndsWith(";", StringComparison.Ordinal) || comment.Contains("="))
             {
