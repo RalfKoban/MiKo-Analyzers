@@ -107,9 +107,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // attempt to find a type because it's likely commented out code if we find some
             var firstWord = comment.FirstWord();
+            if (m_knownTypeNames.Contains(firstWord) && comment.Contains(";"))
+                return true;
 
-            // TODO: RKN move into a place where it is not invoked *each* time (for performance reasons)
-            return m_knownTypeNames.Contains(firstWord);
+            if (comment.Contains("//")) // comment in comment indicator
+                return true;
+
+            return false;
         }
     }
 }

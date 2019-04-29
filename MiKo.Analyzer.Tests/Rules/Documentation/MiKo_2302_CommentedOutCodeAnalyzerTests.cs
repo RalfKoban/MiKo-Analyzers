@@ -21,7 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "internal abstract void DoSomething();",
                 "protected abstract void DoSomething();",
                 "private int _field;",
-                "return null ?? 42;"
+                "return null ?? 42;",
+                "i++;",
             };
 
         [Test]
