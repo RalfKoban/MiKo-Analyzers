@@ -100,6 +100,18 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_ReSharper_comment([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + @"ReSharper
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2302_CommentedOutCodeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2302_CommentedOutCodeAnalyzer();

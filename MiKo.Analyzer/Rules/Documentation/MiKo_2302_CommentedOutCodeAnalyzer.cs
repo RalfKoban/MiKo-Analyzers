@@ -103,6 +103,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment == "else")
                 return true;
 
+            if (comment.StartsWith("ReSharper ", StringComparison.Ordinal))
+                return false; // ignore // ReSharper comments
+
             if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
                 return true;
 
