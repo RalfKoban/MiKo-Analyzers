@@ -18,18 +18,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected abstract bool CommentHasIssue(string comment, SemanticModel semanticModel);
 
+        protected virtual void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
+        {
+            var issues = AnalyzeSingleLineCommentTrivias(node, context.SemanticModel);
+
+            foreach (var issue in issues)
+            {
+                context.ReportDiagnostic(issue);
+            }
+        }
+
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
             var node = (MethodDeclarationSyntax)context.Node;
-            var semanticModel = context.SemanticModel;
 
-            if (ShallAnalyzeMethod(node.GetEnclosingMethod(semanticModel)))
+            if (ShallAnalyzeMethod(node.GetEnclosingMethod(context.SemanticModel)))
             {
-                var issues = AnalyzeSingleLineCommentTrivias(node, semanticModel);
-                foreach (var issue in issues)
-                {
-                    context.ReportDiagnostic(issue);
-                }
+                AnalyzeMethod(context, node);
             }
         }
 

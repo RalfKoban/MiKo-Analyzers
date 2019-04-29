@@ -16,6 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "if (i == 42) ",
                 "switch (expression)",
                 "case 0815:",
+                "DoSomething();",
+                "public abstract void DoSomething();",
+                "internal abstract void DoSomething();",
+                "protected abstract void DoSomething();",
+                "private int _field;",
+                "return null ?? 42;"
             };
 
         [Test]

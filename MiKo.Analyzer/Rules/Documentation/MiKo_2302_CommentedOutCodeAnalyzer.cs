@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -24,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] CodeConditionMarkers =
             {
                 "??",
+                "?.",
                 "if(",
                 "if (",
                 "switch(",
@@ -49,16 +52,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "=>", // lambda
             };
 
+        private static readonly string[] CodeStartMarkers =
+            {
+                "var ",
+                "public ",
+                "internal ",
+                "protected ",
+                "protected ",
+                "private ",
+            };
+
+        private readonly HashSet<string> m_knownTypeNames;
+        private readonly HashSet<string> m_knownAssemblyNames;
+
         public MiKo_2302_CommentedOutCodeAnalyzer() : base(Id)
         {
+            m_knownTypeNames = new HashSet<string>();
+            m_knownAssemblyNames = new HashSet<string>();
+        }
+
+        protected override void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
+        {
+            var compilation = context.SemanticModel.Compilation;
+
+            // to speed up the lookup, add known assemblies and their types only once
+            foreach (var typeName in compilation.References
+                                                .Select(compilation.GetAssemblyOrModuleSymbol)
+                                                .OfType<IAssemblySymbol>()
+                                                .Where(_ => m_knownAssemblyNames.Add(_.FullyQualifiedName()))
+                                                .SelectMany(_ => _.TypeNames))
+            {
+                m_knownTypeNames.Add(typeName);
+            }
+
+            base.AnalyzeMethod(context, node);
         }
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
         {
-            if (comment.ContainsAny(CodeBlockMarkers, StringComparison.OrdinalIgnoreCase))
+            if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
                 return true;
 
-            if (comment.StartsWith("var ", StringComparison.Ordinal))
+            if (comment.ContainsAny(CodeBlockMarkers, StringComparison.OrdinalIgnoreCase))
                 return true;
 
             if (comment.ContainsAny(CodeConditionMarkers, StringComparison.Ordinal))
@@ -74,17 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var firstWord = comment.FirstWord();
 
             // TODO: RKN move into a place where it is not invoked *each* time (for performance reasons)
-            var compilation = semanticModel.Compilation;
-            var typeNames = compilation.References
-                                       .Select(compilation.GetAssemblyOrModuleSymbol)
-                                       .OfType<IAssemblySymbol>()
-                                       .SelectMany(_ => _.TypeNames)
-                                       .ToHashSet();
-
-            if (typeNames.Contains(firstWord))
-                return true;
-
-            return false;
+            return m_knownTypeNames.Contains(firstWord);
         }
     }
 }
