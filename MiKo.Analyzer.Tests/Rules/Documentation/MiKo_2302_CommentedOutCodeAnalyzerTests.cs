@@ -23,6 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "private int _field;",
                 "return null ?? 42;",
                 "i++;",
+                "e.Handled = true;",
+                "else",
             };
 
         [Test]
@@ -56,6 +58,44 @@ public class TestMe
     public void DoSomething()
     {
         //" + gap + comment + @"
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_multiline_commented_out_code_in_method([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //
+        //" + gap + comment + @"
+        //
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_normal_comment_with_else([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + @"else or anything
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_website_link([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + @"See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
     }
 }
 ");

@@ -17,6 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "{",
                 "}",
+            };
+
+        private static readonly string[] ArgumentBlockMarkers =
+            {
                 "(",
                 ")",
                 "[",
@@ -69,6 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             m_knownTypeNames = new HashSet<string>();
             m_knownAssemblyNames = new HashSet<string>();
+
+            IgnoreMultipleLines = false;
         }
 
         protected override void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
@@ -94,6 +100,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
         {
+            if (comment == "else")
+                return true;
+
             if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
                 return true;
 
@@ -103,18 +112,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment.ContainsAny(CodeConditionMarkers, StringComparison.Ordinal))
                 return true;
 
-            if (comment.Contains("case ") && comment.Contains(":"))
-                return true;
-
-            if (comment.ContainsAny(Operators) && comment.Contains(";"))
-                return true;
-
-            // attempt to find a type because it's likely commented out code if we find some
-            var firstWord = comment.FirstWord();
-            if (m_knownTypeNames.Contains(firstWord) && comment.Contains(";"))
-                return true;
-
             if (comment.Contains("//")) // comment in comment indicator
+                return !comment.Contains("://"); // http indicator
+
+            if (comment.EndsWith(";", StringComparison.Ordinal) || comment.Contains("="))
+            {
+                if (comment.Contains("."))
+                    return true;
+
+                if (comment.ContainsAny(Operators))
+                    return true;
+
+                if (comment.ContainsAny(ArgumentBlockMarkers, StringComparison.Ordinal))
+                    return true;
+
+                // attempt to find a type because it's likely commented out code if we find some
+                var firstWord = comment.FirstWord();
+                if (m_knownTypeNames.Contains(firstWord))
+                    return true;
+            }
+
+            if (comment.Contains("case ") && comment.Contains(":"))
                 return true;
 
             return false;
