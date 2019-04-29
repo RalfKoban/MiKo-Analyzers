@@ -73,16 +73,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
         {
-            var compilation = context.SemanticModel.Compilation;
-
-            // to speed up the lookup, add known assemblies and their types only once
-            foreach (var typeName in compilation.References
-                                                .Select(compilation.GetAssemblyOrModuleSymbol)
-                                                .OfType<IAssemblySymbol>()
-                                                .Where(_ => m_knownAssemblyNames.Add(_.FullyQualifiedName()))
-                                                .SelectMany(_ => _.TypeNames))
+            // avoid multi-threading issues during add (contains will not have an issue because the contents are always added, never removed)
+            lock (m_knownAssemblyNames)
             {
-                m_knownTypeNames.Add(typeName);
+                var compilation = context.SemanticModel.Compilation;
+
+                // to speed up the lookup, add known assemblies and their types only once
+                foreach (var typeName in compilation.References
+                                                    .Select(compilation.GetAssemblyOrModuleSymbol)
+                                                    .OfType<IAssemblySymbol>()
+                                                    .Where(_ => m_knownAssemblyNames.Add(_.FullyQualifiedName()))
+                                                    .SelectMany(_ => _.TypeNames))
+                {
+                    m_knownTypeNames.Add(typeName);
+                }
             }
 
             base.AnalyzeMethod(context, node);
