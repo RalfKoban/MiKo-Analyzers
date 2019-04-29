@@ -116,7 +116,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
 
             if (comment.Contains("//")) // comment in comment indicator
-                return !comment.Contains("://"); // allow indicators such as http:// or ftp://
+            {
+                if (comment.Contains("://"))
+                    return false; // allow indicators such as http:// or ftp://
+
+                if (comment.Contains(" ReSharper ", StringComparison.Ordinal))
+                    return false; // ignore // ReSharper comments
+
+                return true;
+            }
 
             if (comment.EndsWith(";", StringComparison.Ordinal) || comment.Contains("="))
             {
