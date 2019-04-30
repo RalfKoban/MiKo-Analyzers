@@ -71,6 +71,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 
+        internal static string FirstWord(this string text)
+        {
+            var firstSpace = text.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
+            var firstWord = firstSpace == -1 ? text : text.Substring(0, firstSpace);
+            return firstWord;
+        }
+
         private static XElement GetCommentElement(string commentXml)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)

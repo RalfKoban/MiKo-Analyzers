@@ -4329,6 +4329,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The longer code is kept that is commented out, the much likelier the code cannot compile anymore.
+        ///As code should be commited in to Source Control Systems, developers can use the SCS&apos;s history and go back to an older version that still contains the code. So there is no need to keep the code commented out..
+        /// </summary>
+        public static string MiKo_2302_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2302_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove commented out code.
+        /// </summary>
+        public static string MiKo_2302_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2302_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not keep code that is commented out..
+        /// </summary>
+        public static string MiKo_2302_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2302_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>
