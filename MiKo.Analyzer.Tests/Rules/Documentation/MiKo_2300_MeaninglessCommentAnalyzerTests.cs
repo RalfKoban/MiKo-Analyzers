@@ -12,39 +12,60 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Comments =
             {
                 "add ",
+                "adds ",
                 "calculate ",
+                "calculates ",
                 "call ",
+                "calls ",
                 "check ",
+                "checks ",
                 "close ",
+                "closes ",
                 "compare ",
+                "compares ",
                 "convert ",
+                "converts ",
                 "count ",
+                "counts ",
                 "create ",
+                "creates ",
                 "decr.",
                 "decrease ",
+                "decreases ",
                 "decrement ",
+                "decrements ",
                 "determine ",
                 "determines ",
                 "evaluate event arg", // no space at the end to allow combinations of the word
                 "get ",
+                "gets ",
                 "has ",
                 "if ",
                 "incr.",
                 "increase ",
+                "increases ",
                 "increment ",
+                "increments ",
                 "initialize", // no space at the end to allow combinations of the word
                 "invoke", // no space at the end to allow combinations of the word
                 "is " ,
                 "load",  // no space at the end to allow combinations of the word
                 "open ",
+                "opens ",
                 "raise ",
+                "raises ",
                 "remove ",
+                "removes ",
                 "retrieve ",
+                "retrieves ",
                 "return", // no space at the end to allow combinations of the word
                 "save",  // no space at the end to allow combinations of the word
                 "set ",
+                "sets ",
                 "start ",
+                "starts ",
                 "stop ",
+                "stops ",
                 "use", // no space at the end to allow combinations of the word
             };
 
@@ -179,7 +200,7 @@ public class TestMe
 }
 ");
 
-        [Test]
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_allowed_text_in_comment([Values("", " ")] string gap, [ValueSource(nameof(AllowedComments))] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
