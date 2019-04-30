@@ -175,7 +175,10 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_2206|Documentation should not use the term 'flag'.|&#x2713;|
 |MiKo_2207|&lt;summary&gt; documentation shall be short.|&#x2713;|
 |MiKo_2208|Documentation should not use the term 'an instance of'.|&#x2713;|
+|MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|
+|MiKo_2302|Do not keep code that is commented out.|&#x2713;|
+|MiKo_2303|Do not end comments with a period.|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|
@@ -224,6 +227,7 @@ The following tables list all the rules that are currently provided by the analy
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|&#x2713;|
 |MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|&#x2713;|
+|MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|
 
 ### Ordering
