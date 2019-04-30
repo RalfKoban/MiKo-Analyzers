@@ -132,6 +132,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
             }
 
+            if (comment.Contains("$\""))
+                return true; // found a string interpolation
+
             if (comment.EndsWith(";", StringComparison.Ordinal) || comment.Contains("="))
             {
                 if (comment.Contains("."))

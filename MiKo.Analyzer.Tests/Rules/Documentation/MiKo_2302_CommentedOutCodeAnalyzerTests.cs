@@ -128,6 +128,23 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_string_interpolation_comment() => An_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // DoSomething($""42"")
+        //    .FirstOrDefault();
+    }
+
+    public string DoSomething(int index) => string.Empty;
+}
+", 2);
+
         protected override string GetDiagnosticId() => MiKo_2302_CommentedOutCodeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2302_CommentedOutCodeAnalyzer();
