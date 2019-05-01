@@ -73,6 +73,43 @@ namespace MiKoSolutions.Analyzers
                                                                                              nameof(ImportingConstructorAttribute),
                                                                                          };
 
+        private static readonly string[] TypeUnderTestRawFieldNames =
+            {
+                "ObjectUnderTest",
+                "objectUnderTest",
+                "SubjectUnderTest",
+                "subjectUnderTest",
+                "Sut",
+                "sut",
+                "UnitUnderTest",
+                "unitUnderTest",
+                "Uut",
+                "uut",
+                "TestCandidate",
+                "TestObject",
+                "testCandidate",
+                "testObject",
+            };
+
+        private static readonly HashSet<string> TypeUnderTestFieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+
+        private static readonly HashSet<string> TypeUnderTestPropertyNames = new HashSet<string>
+                                                                                  {
+                                                                                      "ObjectUnderTest",
+                                                                                      "Sut",
+                                                                                      "SuT",
+                                                                                      "SUT",
+                                                                                      "SubjectUnderTest",
+                                                                                      "UnitUnderTest",
+                                                                                      "Uut",
+                                                                                      "UuT",
+                                                                                      "UUT",
+                                                                                      "TestCandidate",
+                                                                                      "TestObject",
+                                                                                  };
+
+        private static readonly HashSet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
+
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
@@ -326,7 +363,7 @@ namespace MiKoSolutions.Analyzers
 
             if (token.Parent is ParameterSyntax node)
             {
-                // we might have a ctor here and no nethod
+                // we might have a ctor here and no method
                 var methodName = node.GetEnclosing<MethodDeclarationSyntax>()?.Identifier.ValueText ?? node.GetEnclosing<ConstructorDeclarationSyntax>()?.Identifier.ValueText;
                 var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
@@ -338,6 +375,8 @@ namespace MiKoSolutions.Analyzers
 
             return semanticModel.LookupSymbols(position, name: name).First();
         }
+
+        internal static INamedTypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax.Type).Type as INamedTypeSymbol;
 
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode node, SemanticModel semanticModel)
         {
@@ -452,6 +491,18 @@ namespace MiKoSolutions.Analyzers
         internal static string FullyQualifiedName(this ISymbol symbol) => symbol.ToDisplayString();
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
+
+        internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol symbol)
+        {
+            var members = symbol.GetMembers();
+            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => TypeUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
+            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
+            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
+
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes);
+        }
+
+        internal static ITypeSymbol GetTypeUnderTestType(this ITypeSymbol symbol) => symbol.GetTypeUnderTestTypes().FirstOrDefault(_ => _ != null);
 
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {

@@ -33,9 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic AnalyzeVariableDeclaration(VariableDeclarationSyntax declaration, SemanticModel semanticModel)
         {
-            var declarationType = declaration.Type;
-
-            var type = semanticModel.GetTypeInfo(declarationType).Type as INamedTypeSymbol;
+            var type = declaration.GetTypeSymbol(semanticModel);
 
             var typeName = type?.Name;
             if (typeName == null)
@@ -57,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (IsInherited(identifier, semanticModel))
                 return null; // ignore inherited events that we cannot change anymore
 
-            return Issue(typeName, declarationType.GetLocation(), expectedName);
+            return Issue(typeName, declaration.Type.GetLocation(), expectedName);
         }
 
         private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type?.IsEventArgs() == true && type.Name == expectedName;
