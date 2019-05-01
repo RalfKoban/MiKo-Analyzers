@@ -73,6 +73,43 @@ namespace MiKoSolutions.Analyzers
                                                                                              nameof(ImportingConstructorAttribute),
                                                                                          };
 
+        private static readonly string[] ClassUnderTestRawFieldNames =
+            {
+                "ObjectUnderTest",
+                "objectUnderTest",
+                "SubjectUnderTest",
+                "subjectUnderTest",
+                "Sut",
+                "sut",
+                "UnitUnderTest",
+                "unitUnderTest",
+                "Uut",
+                "uut",
+                "TestCandidate",
+                "TestObject",
+                "testCandidate",
+                "testObject",
+            };
+
+        private static readonly HashSet<string> ClassUnderTestFieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => ClassUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+
+        private static readonly HashSet<string> ClassUnderTestPropertyNames = new HashSet<string>
+                                                                                  {
+                                                                                      "ObjectUnderTest",
+                                                                                      "Sut",
+                                                                                      "SuT",
+                                                                                      "SUT",
+                                                                                      "SubjectUnderTest",
+                                                                                      "UnitUnderTest",
+                                                                                      "Uut",
+                                                                                      "UuT",
+                                                                                      "UUT",
+                                                                                      "TestCandidate",
+                                                                                      "TestObject",
+                                                                                  };
+
+        private static readonly HashSet<string> ClassUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => ClassUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
+
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
@@ -452,6 +489,17 @@ namespace MiKoSolutions.Analyzers
         internal static string FullyQualifiedName(this ISymbol symbol) => symbol.ToDisplayString();
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
+
+        internal static IEnumerable<ITypeSymbol> GetClassUnderTestTypes(this ITypeSymbol symbol)
+        {
+            var members = symbol.GetMembers();
+            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => ClassUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
+            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => ClassUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
+            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => ClassUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
+            var typesUnderTest = propertyTypes.Concat(fieldTypes).Concat(methodTypes);
+
+            return typesUnderTest;
+        }
 
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {

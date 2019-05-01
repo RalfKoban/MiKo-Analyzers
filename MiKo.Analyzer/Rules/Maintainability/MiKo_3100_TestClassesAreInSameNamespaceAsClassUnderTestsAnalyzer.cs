@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -14,42 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3100";
 
-        private static readonly HashSet<string> PropertyNames = new HashSet<string>
-            {
-                "ObjectUnderTest",
-                "Sut",
-                "SuT",
-                "SUT",
-                "SubjectUnderTest",
-                "UnitUnderTest",
-                "Uut",
-                "UuT",
-                "UUT",
-                "TestCandidate",
-                "TestObject",
-            };
-
-        private static readonly string[] RawFieldNames =
-            {
-                "ObjectUnderTest",
-                "objectUnderTest",
-                "SubjectUnderTest",
-                "subjectUnderTest",
-                "Sut",
-                "sut",
-                "UnitUnderTest",
-                "unitUnderTest",
-                "Uut",
-                "uut",
-                "TestCandidate",
-                "TestObject",
-                "testCandidate",
-                "testObject",
-            };
-
-        private static readonly HashSet<string> FieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => RawFieldNames, (prefix, name) => prefix + name).ToHashSet();
-
-        private static readonly HashSet<string> VariableNames = new HashSet<string>
+        private static readonly HashSet<string> ClassUnderTestVariableNames = new HashSet<string>
             {
                 "objectUnderTest",
                 "sut",
@@ -59,8 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "testCandidate",
                 "testObject",
             };
-
-        private static readonly HashSet<string> MethodNames = new[] { "Create", "Get" }.SelectMany(_ => PropertyNames, (prefix, name) => prefix + name).ToHashSet();
 
         public MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -77,12 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol.IsTestClass())
             {
-                var members = symbol.GetMembers();
-                var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => MethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
-                var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => PropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
-                var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => FieldNames.Contains(_.Name)).Select(_ => _.Type);
-                var typesUnderTest = propertyTypes.Concat(fieldTypes).Concat(methodTypes);
-
+                var typesUnderTest = symbol.GetClassUnderTestTypes();
                 foreach (var typeUnderTest in typesUnderTest)
                 {
                     if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
@@ -117,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var variable = node.Declaration;
 
             // inspect tests
-            if (variable.Variables.Any(_ => VariableNames.Contains(_.Identifier.ValueText)))
+            if (variable.Variables.Any(_ => ClassUnderTestVariableNames.Contains(_.Identifier.ValueText)))
             {
                 // find method
                 var semanticModel = context.SemanticModel;
