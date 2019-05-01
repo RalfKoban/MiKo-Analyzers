@@ -12,9 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3105";
 
-        private const string AssertionNamespace = "NUnit.Framework";
+        private static readonly HashSet<string> AssertionNamespaces = new HashSet<string>
+                                                                          {
+                                                                              "NUnit.Framework",
+                                                                          };
 
-        private static readonly HashSet<string> AssertionTypes = new HashSet<string>
+    private static readonly HashSet<string> AssertionTypes = new HashSet<string>
                                                                      {
                                                                          "Assert",
                                                                          "StringAssert",
@@ -51,7 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (!AssertionTypes.Contains(invokedClass.Identifier.ValueText))
                     return;
 
-                if (context.SemanticModel.GetTypeInfo(invokedClass).Type?.ContainingNamespace.FullyQualifiedName() != AssertionNamespace)
+                var testFrameworkNamespace = context.SemanticModel.GetTypeInfo(invokedClass).Type?.ContainingNamespace.FullyQualifiedName();
+                if (!AssertionNamespaces.Contains(testFrameworkNamespace))
                     return; // ignore other test frameworks
 
                 var method = context.GetEnclosingMethod();
