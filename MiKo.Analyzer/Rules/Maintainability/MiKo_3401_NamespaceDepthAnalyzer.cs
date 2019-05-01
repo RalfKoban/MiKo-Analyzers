@@ -17,10 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol)
-        {
-            if (symbol.IsGlobalNamespace) return Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(INamespaceSymbol symbol) => !symbol.IsGlobalNamespace;
 
+        protected override IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol)
+        {
             var depth = GetNamespaceDepth(symbol);
 
             return depth > MaxDepth

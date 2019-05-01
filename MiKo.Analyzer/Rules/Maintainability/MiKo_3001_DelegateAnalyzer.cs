@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,8 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate
-                                                                                               ? new[] { Issue(symbol) }
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate;
+
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => new[] { Issue(symbol) };
     }
 }

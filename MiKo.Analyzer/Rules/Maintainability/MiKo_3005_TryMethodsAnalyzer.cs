@@ -16,19 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
-        {
-            if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>(); // ignore tests
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => !symbol.IsTestClass();
 
-            List<Diagnostic> results = null;
-            foreach (var finding in symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null))
-            {
-                if (results == null) results = new List<Diagnostic>();
-                results.Add(finding);
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
-        }
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null);
 
         private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
         {

@@ -11,6 +11,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol type) => ShallAnalyze(type)
+                                                                                                     ? Analyze(type)
+                                                                                                     : Enumerable.Empty<Diagnostic>();
+
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol type) => ShallAnalyze(type)
+                                                                                                     ? Analyze(type)
+                                                                                                     : Enumerable.Empty<Diagnostic>();
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => ShallAnalyze(method)
                                                                                                      ? Analyze(method)
                                                                                                      : Enumerable.Empty<Diagnostic>();
@@ -19,9 +27,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                   ? Analyze(field)
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => true;
+
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
+
         protected virtual bool ShallAnalyze(IMethodSymbol symbol) => !symbol.IsOverride;
 
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => !symbol.IsOverride;
+
+        protected virtual IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol) => Enumerable.Empty<Diagnostic>();
 

@@ -35,16 +35,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsTestClass();
+
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
         {
-            if (symbol.IsTestClass())
+            var typesUnderTest = symbol.GetTypeUnderTestTypes();
+            foreach (var typeUnderTest in typesUnderTest)
             {
-                var typesUnderTest = symbol.GetTypeUnderTestTypes();
-                foreach (var typeUnderTest in typesUnderTest)
-                {
-                    if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
-                        return new []{ diagnostic };
-                }
+                if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
+                    return new[] { diagnostic };
             }
 
             return Enumerable.Empty<Diagnostic>();

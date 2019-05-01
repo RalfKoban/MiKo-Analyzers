@@ -18,11 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => symbol.IsTestClass()
-                                                                                               ? AnalyzeTestType(symbol).ToList()
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsTestClass();
 
-        private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
         {
             foreach (var method in symbol.GetMembers().OfType<IMethodSymbol>())
             {
