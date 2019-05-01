@@ -5272,6 +5272,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;WaitOne&apos; methods are normally invoked to wait for a specific situation to occur. If the wait is forever, deadlocks or livelocks can occur. To avoid that, allow the wait to time out b providing a &apos;TimeSpan&apos; to &apos;WaitOne&apos;..
+        /// </summary>
+        public static string MiKo_3035_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3035_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide a timeout value.
+        /// </summary>
+        public static string MiKo_3035_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3035_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not invoke &apos;WaitOne&apos; methods without timeouts..
+        /// </summary>
+        public static string MiKo_3035_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3035_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {
