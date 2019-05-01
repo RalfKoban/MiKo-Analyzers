@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3100";
 
-        private static readonly HashSet<string> ClassUnderTestVariableNames = new HashSet<string>
+        private static readonly HashSet<string> TypeUnderTestVariableNames = new HashSet<string>
             {
                 "objectUnderTest",
                 "sut",
@@ -50,19 +50,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<Diagnostic>();
         }
 
+        private static bool IsTypeUnderTestVariable(VariableDeclarationSyntax variable) => variable.Variables.Any(_ => TypeUnderTestVariableNames.Contains(_.Identifier.ValueText));
+
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
             var variable = node.Declaration;
 
-            // inspect tests
-            if (variable.Variables.Any(_ => ClassUnderTestVariableNames.Contains(_.Identifier.ValueText)))
+            if (IsTypeUnderTestVariable(variable))
             {
-                // find method
+                // inspect associated test method
                 var method = context.GetEnclosingMethod();
                 if (method.IsTestMethod())
                 {
-                    var typeUnderTest = context.SemanticModel.GetTypeInfo(variable.Type).Type;
+                    var typeUnderTest = variable.GetTypeSymbol(context.SemanticModel);
 
                     if (TryAnalyzeType(method.ContainingType, typeUnderTest, out var diagnostic))
                     {

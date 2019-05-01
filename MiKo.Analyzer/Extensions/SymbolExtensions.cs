@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers
                                                                                              nameof(ImportingConstructorAttribute),
                                                                                          };
 
-        private static readonly string[] ClassUnderTestRawFieldNames =
+        private static readonly string[] TypeUnderTestRawFieldNames =
             {
                 "ObjectUnderTest",
                 "objectUnderTest",
@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers
                 "testObject",
             };
 
-        private static readonly HashSet<string> TypeUnderTestFieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => ClassUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+        private static readonly HashSet<string> TypeUnderTestFieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
 
         private static readonly HashSet<string> TypeUnderTestPropertyNames = new HashSet<string>
                                                                                   {
@@ -375,6 +375,8 @@ namespace MiKoSolutions.Analyzers
 
             return semanticModel.LookupSymbols(position, name: name).First();
         }
+
+        internal static INamedTypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax.Type).Type as INamedTypeSymbol;
 
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode node, SemanticModel semanticModel)
         {

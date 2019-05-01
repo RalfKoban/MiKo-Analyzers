@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (node.IsConst) return;
 
             var semanticModel = context.SemanticModel;
-            var type = semanticModel.GetTypeInfo(node.Declaration.Type).Type;
+            var type = node.Declaration.GetTypeSymbol(semanticModel);
 
             if (!ShallAnalyze(type)) return;
 
