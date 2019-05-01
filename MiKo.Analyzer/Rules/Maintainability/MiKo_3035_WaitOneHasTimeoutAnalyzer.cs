@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var method = context.GetEnclosingMethod();
-            context.ReportDiagnostic(Issue(method, node.GetLocation()));
+            context.ReportDiagnostic(Issue(method.Name, node.GetLocation()));
         }
     }
 }
