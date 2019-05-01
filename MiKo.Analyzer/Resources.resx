@@ -705,6 +705,16 @@ In addition, they distract the reader's attention as they have to translate the 
   <data name="MiKo_1063_Title" xml:space="preserve">
     <value>Do not use abbreviations in names.</value>
   </data>
+  <data name="MiKo_1100_Description" xml:space="preserve">
+    <value>A class that is marked as a unit test class should indicate which class it tests via its name.
+The name should be constructed by having the name of the class under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
+  </data>
+  <data name="MiKo_1100_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1100_Title" xml:space="preserve">
+    <value>Test classes should start with the name of the class under test.</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>

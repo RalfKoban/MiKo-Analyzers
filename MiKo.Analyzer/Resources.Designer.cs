@@ -1801,6 +1801,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate which class it tests via its name.
+        ///The name should be constructed by having the name of the class under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
+        /// </summary>
+        public static string MiKo_1100_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1100_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1100_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1100_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test classes should start with the name of the class under test..
+        /// </summary>
+        public static string MiKo_1100_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1100_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate that by the suffix &apos;Tests&apos; as it normally contains multiple tests..
         /// </summary>
         public static string MiKo_1101_Description {

@@ -501,6 +501,8 @@ namespace MiKoSolutions.Analyzers
             return typesUnderTest;
         }
 
+        internal static ITypeSymbol GetClassUnderTestType(this ITypeSymbol symbol) => symbol.GetClassUnderTestTypes().FirstOrDefault(_ => _ != null);
+
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {
             return symbol.DeclaringSyntaxReferences

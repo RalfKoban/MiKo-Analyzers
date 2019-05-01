@@ -50,6 +50,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<Diagnostic>();
         }
 
+        private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
+        {
+            var node = (LocalDeclarationStatementSyntax)context.Node;
+            var variable = node.Declaration;
+
+            // inspect tests
+            if (variable.Variables.Any(_ => ClassUnderTestVariableNames.Contains(_.Identifier.ValueText)))
+            {
+                // find method
+                var method = context.GetEnclosingMethod();
+                if (method.IsTestMethod())
+                {
+                    var typeUnderTest = context.SemanticModel.GetTypeInfo(variable.Type).Type;
+
+                    if (TryAnalyzeType(method.ContainingType, typeUnderTest, out var diagnostic))
+                    {
+                        context.ReportDiagnostic(diagnostic);
+                    }
+                }
+            }
+        }
+
         private bool TryAnalyzeType(INamedTypeSymbol symbol, ITypeSymbol typeUnderTest, out Diagnostic diagnostic)
         {
             if (typeUnderTest != null)
@@ -66,29 +88,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             diagnostic = null;
             return false;
-        }
-
-        private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
-        {
-            var node = (LocalDeclarationStatementSyntax)context.Node;
-            var variable = node.Declaration;
-
-            // inspect tests
-            if (variable.Variables.Any(_ => ClassUnderTestVariableNames.Contains(_.Identifier.ValueText)))
-            {
-                // find method
-                var semanticModel = context.SemanticModel;
-                var method = node.GetEnclosingMethod(semanticModel);
-                if (method.IsTestMethod())
-                {
-                    var typeUnderTest = semanticModel.GetTypeInfo(variable.Type).Type;
-
-                    if (TryAnalyzeType(method.ContainingType, typeUnderTest, out var diagnostic))
-                    {
-                        context.ReportDiagnostic(diagnostic);
-                    }
-                }
-            }
         }
     }
 }
