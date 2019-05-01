@@ -1906,6 +1906,15 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3041_Title" xml:space="preserve">
     <value>EventArgs shall not use delegates.</value>
   </data>
+  <data name="MiKo_3042_Description" xml:space="preserve">
+    <value>EventArgs are by themselves contracts. Therefore, they should not implement any additional interface.</value>
+  </data>
+  <data name="MiKo_3042_MessageFormat" xml:space="preserve">
+    <value>Do not implement interface</value>
+  </data>
+  <data name="MiKo_3042_Title" xml:space="preserve">
+    <value>EventArgs shall not implement interfaces.</value>
+  </data>
   <data name="MiKo_3050_Description" xml:space="preserve">
     <value>Fields that are the back of a DependencyProperty should be made 'public static readonly' to allow the .NET framework and other clients to find and access those fields.</value>
   </data>

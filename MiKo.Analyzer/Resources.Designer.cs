@@ -5336,6 +5336,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EventArgs are by themselves contracts. Therefore, they should not implement any additional interface..
+        /// </summary>
+        public static string MiKo_3042_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3042_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not implement interface.
+        /// </summary>
+        public static string MiKo_3042_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3042_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EventArgs shall not implement interfaces..
+        /// </summary>
+        public static string MiKo_3042_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3042_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fields that are the back of a DependencyProperty should be made &apos;public static readonly&apos; to allow the .NET framework and other clients to find and access those fields..
         /// </summary>
         public static string MiKo_3050_Description {
