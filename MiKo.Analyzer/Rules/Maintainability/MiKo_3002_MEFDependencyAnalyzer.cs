@@ -17,10 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
-        {
-            if (symbol.IsNamespace) return Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => !symbol.IsNamespace;
 
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
+        {
             var dependencies = 0;
 
             foreach (var member in symbol.GetMembers())
