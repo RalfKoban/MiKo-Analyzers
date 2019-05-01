@@ -60,6 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "testObject",
             };
 
+        private static readonly HashSet<string> MethodNames = new[] { "Create", "Get" }.SelectMany(_ => PropertyNames, (prefix, name) => prefix + name).ToHashSet();
+
         public MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -77,10 +79,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var members = symbol.GetMembers();
 
+                var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => MethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
                 var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => PropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
                 var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => FieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-                foreach (var typeUnderTest in propertyTypes.Concat(fieldTypes))
+                foreach (var typeUnderTest in propertyTypes.Concat(fieldTypes).Concat(methodTypes))
                 {
                     if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
                         return new []{ diagnostic };

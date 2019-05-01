@@ -123,9 +123,9 @@ namespace BlaBla
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_if_test_class_and_class_under_test_are_in_same_namespace(
-                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName)
+        public void No_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_same_namespace(
+                                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                        [ValueSource(nameof(PropertyNames))] string propertyName)
             => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
@@ -137,6 +137,26 @@ namespace BlaBla.BlaBlubb
     public class TestMeTests
     {
         private TestMe " + propertyName + @" { get; set; }
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace(
+                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                            [Values("Get", "Create")] string methodPrefix)
+            => No_issue_is_reported_for(@"
+namespace BlaBla.BlaBlubb
+{
+    public class TestMe
+    {
+    }
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        private TestMe " + methodPrefix + propertyName + @"() => null;
     }
 }
 ");
@@ -180,6 +200,31 @@ namespace BlaBla.BlaBlubb
         {
             var " + variableName + @" = new TestMe();
         }
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces(
+                                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                                            [Values("Get", "Create")] string methodPrefix)
+            => An_issue_is_reported_for(@"
+namespace BlaBla
+{
+    public class TestMe
+    {
+    }
+}
+
+namespace BlaBla.BlaBlubb
+{
+    using BlaBla;
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        private TestMe " + methodPrefix + propertyName + @"() => null;
     }
 }
 ");
