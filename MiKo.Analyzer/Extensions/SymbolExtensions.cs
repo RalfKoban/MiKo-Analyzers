@@ -363,7 +363,7 @@ namespace MiKoSolutions.Analyzers
 
             if (token.Parent is ParameterSyntax node)
             {
-                // we might have a ctor here and no nethod
+                // we might have a ctor here and no method
                 var methodName = node.GetEnclosing<MethodDeclarationSyntax>()?.Identifier.ValueText ?? node.GetEnclosing<ConstructorDeclarationSyntax>()?.Identifier.ValueText;
                 var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
