@@ -67,6 +67,42 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_test_class_of_generic_type_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe<T>
+    {
+    }
+
+    [" + testClassAttribute + @"]
+    public class TestMeTests<T>
+    {
+        private TestMe<T> ObjectUnderTest { get; set; }
+
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_class_of_generic_type_with_wrong_prefix([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe<T>
+    {
+    }
+
+    [" + testClassAttribute + @"]
+    public class WhateverTests<T>
+    {
+        private TestMe<T> ObjectUnderTest { get; set; }
+
+        private void DoSomething() { }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1100_TestClassesPrefixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1100_TestClassesPrefixAnalyzer();
