@@ -71,14 +71,51 @@ namespace Bla
         public void No_issue_is_reported_for_test_class_of_generic_type_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
 namespace Bla
 {
-    public class TestMe<T>
+    public class ATestMe<T>
     {
     }
 
     [" + testClassAttribute + @"]
-    public class TestMeTests<T>
+    public class ATestMeTests<T>
     {
-        private TestMe<T> ObjectUnderTest { get; set; }
+        private ATestMe<T> ObjectUnderTest { get; set; }
+
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class ATestMe
+    {
+    }
+
+    [" + testClassAttribute + @"]
+    public class ATestMeTests<T> where T : ATestMe
+    {
+        private T ObjectUnderTest { get; set; }
+
+        public void DoSomething() { }
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute, [Values("class", "struct")] string constraint)
+            => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class ATestMe
+    {
+    }
+
+    [" + testClassAttribute + @"]
+    public class ATestMeTests<T> where T : " + constraint + @"
+    {
+        private T ObjectUnderTest { get; set; }
 
         public void DoSomething() { }
     }
@@ -99,6 +136,24 @@ namespace Bla
         private TestMe<T> ObjectUnderTest { get; set; }
 
         private void DoSomething() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_wrong_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+    }
+
+    [" + testClassAttribute + @"]
+    public class WhateverTests<T> where T : TestMe
+    {
+        private T ObjectUnderTest { get; set; }
+
+        public void DoSomething() { }
     }
 }
 ");

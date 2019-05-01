@@ -22,16 +22,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
-            var classUnderTest = symbol.GetTypeUnderTestType();
-            if (classUnderTest is null)
+            var typeUnderTest = symbol.GetTypeUnderTestType();
+            if (typeUnderTest is null)
                 return Enumerable.Empty<Diagnostic>();
 
-            var classUnderTestName = classUnderTest.Name;
+            var typeUnderTestName = GetTypeUnderTestName(symbol, typeUnderTest);
+            if (typeUnderTestName is null)
+                return Enumerable.Empty<Diagnostic>(); // ignore generic class or struct constraint
 
             var className = symbol.Name;
-            return className.StartsWith(classUnderTestName, StringComparison.Ordinal)
+            return className.StartsWith(typeUnderTestName, StringComparison.Ordinal)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, classUnderTestName + TestsSuffix) };
+                       : new[] { Issue(symbol, typeUnderTestName + TestsSuffix) };
+        }
+
+        private static string GetTypeUnderTestName(INamedTypeSymbol testClass, ITypeSymbol typeUnderTest)
+        {
+            if (typeUnderTest.TypeKind != TypeKind.TypeParameter)
+                return typeUnderTest.Name;
+
+            var typeParameter = (ITypeParameterSymbol)testClass.TypeArguments[0];
+
+            // for generic class or struct constraints there is no constraint type available
+            var constraint = typeParameter.ConstraintTypes.FirstOrDefault();
+            return constraint?.Name;
         }
     }
 }
