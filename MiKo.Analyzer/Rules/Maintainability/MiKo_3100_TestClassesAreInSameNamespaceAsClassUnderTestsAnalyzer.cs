@@ -78,12 +78,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.IsTestClass())
             {
                 var members = symbol.GetMembers();
-
                 var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => MethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
                 var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => PropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
                 var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => FieldNames.Contains(_.Name)).Select(_ => _.Type);
+                var typesUnderTest = propertyTypes.Concat(fieldTypes).Concat(methodTypes);
 
-                foreach (var typeUnderTest in propertyTypes.Concat(fieldTypes).Concat(methodTypes))
+                foreach (var typeUnderTest in typesUnderTest)
                 {
                     if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
                         return new []{ diagnostic };
