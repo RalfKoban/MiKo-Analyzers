@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
-            var classUnderTest = symbol.GetClassUnderTestType();
+            var classUnderTest = symbol.GetTypeUnderTestType();
             if (classUnderTest is null)
                 return Enumerable.Empty<Diagnostic>();
 

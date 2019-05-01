@@ -1801,8 +1801,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate which class it tests via its name.
-        ///The name should be constructed by having the name of the class under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
+        ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
+        ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
         public static string MiKo_1100_Description {
             get {
@@ -1820,7 +1820,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test classes should start with the name of the class under test..
+        ///   Looks up a localized string similar to Test classes should start with the name of the type under test..
         /// </summary>
         public static string MiKo_1100_Title {
             get {
@@ -5609,8 +5609,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the class they test.
-        ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and makes the discoverability of the tests much easier..
+        ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
+        ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
         public static string MiKo_3100_Description {
             get {

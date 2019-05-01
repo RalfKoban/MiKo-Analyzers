@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] PropertyNames =
             {
@@ -306,8 +306,8 @@ namespace BlaBla.BlaBlubb
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer();
     }
 }

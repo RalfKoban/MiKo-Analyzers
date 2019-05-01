@@ -706,14 +706,14 @@ In addition, they distract the reader's attention as they have to translate the 
     <value>Do not use abbreviations in names.</value>
   </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
-    <value>A class that is marked as a unit test class should indicate which class it tests via its name.
-The name should be constructed by having the name of the class under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
+    <value>A class that is marked as a unit test class should indicate via its name which type it tests.
+The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
   </data>
   <data name="MiKo_1100_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1100_Title" xml:space="preserve">
-    <value>Test classes should start with the name of the class under test.</value>
+    <value>Test classes should start with the name of the type under test.</value>
   </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
@@ -2008,8 +2008,8 @@ It is unexpected that when calling such methods you get a NullReferenceException
     <value>Methods that return Task shall never return null.</value>
   </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
-    <value>To ease maintenance, test classes should be in the exact same namespace as the class they test.
-This allows easy usage without any arbitrary using directives. It also mimics the project structure and makes the discoverability of the tests much easier.</value>
+    <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
+This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>
   </data>
   <data name="MiKo_3100_MessageFormat" xml:space="preserve">
     <value>Place test class in namespace '{1}'</value>

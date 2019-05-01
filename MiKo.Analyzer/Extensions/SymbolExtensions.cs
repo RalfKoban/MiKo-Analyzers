@@ -91,9 +91,9 @@ namespace MiKoSolutions.Analyzers
                 "testObject",
             };
 
-        private static readonly HashSet<string> ClassUnderTestFieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => ClassUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+        private static readonly HashSet<string> TypeUnderTestFieldNames = new[] { "", "_", "m_", "s_" }.SelectMany(_ => ClassUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
 
-        private static readonly HashSet<string> ClassUnderTestPropertyNames = new HashSet<string>
+        private static readonly HashSet<string> TypeUnderTestPropertyNames = new HashSet<string>
                                                                                   {
                                                                                       "ObjectUnderTest",
                                                                                       "Sut",
@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers
                                                                                       "TestObject",
                                                                                   };
 
-        private static readonly HashSet<string> ClassUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => ClassUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
+        private static readonly HashSet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
 
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
@@ -490,18 +490,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
 
-        internal static IEnumerable<ITypeSymbol> GetClassUnderTestTypes(this ITypeSymbol symbol)
+        internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol symbol)
         {
             var members = symbol.GetMembers();
-            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => ClassUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
-            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => ClassUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
-            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => ClassUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
-            var typesUnderTest = propertyTypes.Concat(fieldTypes).Concat(methodTypes);
+            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => TypeUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
+            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
+            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return typesUnderTest;
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes);
         }
 
-        internal static ITypeSymbol GetClassUnderTestType(this ITypeSymbol symbol) => symbol.GetClassUnderTestTypes().FirstOrDefault(_ => _ != null);
+        internal static ITypeSymbol GetTypeUnderTestType(this ITypeSymbol symbol) => symbol.GetTypeUnderTestTypes().FirstOrDefault(_ => _ != null);
 
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {

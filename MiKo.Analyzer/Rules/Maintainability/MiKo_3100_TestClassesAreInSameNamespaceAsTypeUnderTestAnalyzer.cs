@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3100";
 
@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "testObject",
             };
 
-        public MiKo_3100_TestClassesAreInSameNamespaceAsClassUnderTestsAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol.IsTestClass())
             {
-                var typesUnderTest = symbol.GetClassUnderTestTypes();
+                var typesUnderTest = symbol.GetTypeUnderTestTypes();
                 foreach (var typeUnderTest in typesUnderTest)
                 {
                     if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
