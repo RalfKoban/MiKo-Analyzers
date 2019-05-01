@@ -1884,6 +1884,15 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3034_Title" xml:space="preserve">
     <value>PropertyChanged event raiser shall use [CallerMemberName] attribute.</value>
   </data>
+  <data name="MiKo_3035_Description" xml:space="preserve">
+    <value>'WaitOne' methods are normally invoked to wait for a specific situation to occur. If the wait is forever, deadlocks or livelocks can occur. To avoid that, allow the wait to time out b providing a 'TimeSpan' to 'WaitOne'.</value>
+  </data>
+  <data name="MiKo_3035_MessageFormat" xml:space="preserve">
+    <value>Provide a timeout value</value>
+  </data>
+  <data name="MiKo_3035_Title" xml:space="preserve">
+    <value>Do not invoke 'WaitOne' methods without timeouts.</value>
+  </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
   </data>
