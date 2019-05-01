@@ -54,7 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (!AssertionTypes.Contains(invokedClass.Identifier.ValueText))
                     return;
 
-                var testFrameworkNamespace = context.SemanticModel.GetTypeInfo(invokedClass).Type?.ContainingNamespace.FullyQualifiedName();
+                var testFrameworkNamespace = invokedClass.GetTypeSymbol(context.SemanticModel)?.ContainingNamespace.FullyQualifiedName();
+
                 if (!AssertionNamespaces.Contains(testFrameworkNamespace))
                     return; // ignore other test frameworks
 

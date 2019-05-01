@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         return null;
 
                     // check for correct type (only ILog methods shall be reported)
-                    var type = semanticModel.GetTypeInfo(methodCall.Expression).Type;
+                    var type = methodCall.Expression.GetTypeSymbol(semanticModel);
 
                     if (type.Name != Constants.ILog)
                         return null;

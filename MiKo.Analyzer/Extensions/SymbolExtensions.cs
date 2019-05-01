@@ -376,7 +376,9 @@ namespace MiKoSolutions.Analyzers
             return semanticModel.LookupSymbols(position, name: name).First();
         }
 
-        internal static INamedTypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax.Type).Type as INamedTypeSymbol;
+        internal static INamedTypeSymbol GetTypeSymbol(this ExpressionSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax).Type as INamedTypeSymbol;
+
+        internal static INamedTypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => syntax.Type.GetTypeSymbol(semanticModel);
 
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode node, SemanticModel semanticModel)
         {
@@ -454,16 +456,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAsyncTaskBased(this IMethodSymbol method) => method.IsAsync || method.ReturnType.IsTask();
 
-        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel)
-        {
-            var typeInfo = semanticModel.GetTypeInfo(syntax);
-            return typeInfo.Type?.SpecialType == SpecialType.System_String;
-        }
+        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
 
         internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
         {
-            var typeInfo = semanticModel.GetTypeInfo(syntax);
-            switch (typeInfo.Type?.TypeKind)
+            var type = syntax.GetTypeSymbol(semanticModel);
+            switch (type?.TypeKind)
             {
                 case TypeKind.Struct:
                 case TypeKind.Enum:
