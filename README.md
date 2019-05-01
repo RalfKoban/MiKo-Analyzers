@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 209 rules that are currently provided by the analyzer.
+The following tables list all the 210 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -215,6 +215,7 @@ The following tables list all the 209 rules that are currently provided by the a
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|&#x2713;|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|
+|MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|
 |MiKo_3050|DependencyProperty fields should be 'public static readonly'.|&#x2713;|
 |MiKo_3051|DependencyProperty fields should be properly registered.|&#x2713;|
 |MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|&#x2713;|
