@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "add ",
                 "adds ",
+                "build ",
+                "builds ",
                 "calculate ",
                 "calculates ",
                 "call ",
@@ -51,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "initialize", // no space at the end to allow combinations of the word
                 "invoke" , // no space at the end to allow combinations of the word
                 "is " ,
+                "iterate", // no space at the end to allow combinations of the word
                 "load",
                 "open ",
                 "opens ",
