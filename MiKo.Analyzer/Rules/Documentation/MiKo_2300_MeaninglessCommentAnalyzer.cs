@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
         {
             if (comment.StartsWith("//", StringComparison.OrdinalIgnoreCase))
-                return false; // ignore all comments that have the //// marker
+                return false; // ignore all comments that have the "double comment" marker
 
             if (comment.IsNullOrWhiteSpace())
                 return false; // ignore all empty comments
@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return false;
 
                 if (MiKo_2301_TestArrangeActAssertCommentAnalyzer.CommentContainsArrangeActAssert(comment))
-                    return false; // gets already reported by the other analyzer
+                    return false; // already reported by the other analyzer
 
                 return true;
             }
