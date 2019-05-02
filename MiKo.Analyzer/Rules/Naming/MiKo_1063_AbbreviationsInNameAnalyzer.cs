@@ -13,22 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1063";
 
-        private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>
-                                                                                   {
-                                                                                       { "Btn", "Button" },
-                                                                                       { "Cb", "CheckBox" },
-                                                                                       { "Cmd", "Command" },
-                                                                                       { "Ddl", "DropDownList" },
-                                                                                       { "Lbl", "Label" },
-                                                                                       { "Mgr", "Manager" },
-                                                                                       { "Mngr", "Manager" },
-                                                                                       { "Msg", "Message" },
-                                                                                       { "PropName", "propertyName" },
-                                                                                       { "Tmp", "temp" },
-                                                                                       { "Txt", "Text" },
-                                                                                   };
-
-        private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>((IDictionary<string, string>)MidTerms)
+        private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>
                                                                                    {
                                                                                        { "btn", "button" },
                                                                                        { "cb", "checkBox" },
@@ -38,19 +23,39 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "mgr", "manager" },
                                                                                        { "mngr", "manager" },
                                                                                        { "msg", "message" },
-                                                                                       { "propName", "propertyName" },
+                                                                                       { "param", "parameter" },
+                                                                                       { "params", "parameters" },
+                                                                                       { "prop", "property" },
+                                                                                       { "pos", "position" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
                                                                                    };
 
-        private static readonly IReadOnlyDictionary<string, string> Postfixes = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
+        private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
+                                                                                   {
+                                                                                       { "Btn", "Button" },
+                                                                                       { "Cb", "CheckBox" },
+                                                                                       { "Cmd", "Command" },
+                                                                                       { "Ddl", "DropDownList" },
+                                                                                       { "Lbl", "Label" },
+                                                                                       { "Mgr", "Manager" },
+                                                                                       { "Mngr", "Manager" },
+                                                                                       { "Msg", "Message" },
+                                                                                       { "Param", "Parameter" },
+                                                                                       { "Params", "Parameters" },
+                                                                                       { "Prop", "Property" },
+                                                                                       { "Props", "Properties" },
+                                                                                       { "Pos", "Position" },
+                                                                                       { "Tmp", "Temp" },
+                                                                                       { "Txt", "Text" },
+                                                                                   };
+
+        private static readonly IReadOnlyDictionary<string, string> Postfixes = new Dictionary<string, string>((IDictionary<string, string>)MidTerms)
                                                                                     {
                                                                                         { "VM", "ViewModel" },
                                                                                         { "Vm", "ViewModel" },
                                                                                         { "BL", "BusinessLogic" },
                                                                                         { "Bl", "BusinessLogic" },
-                                                                                        { "Prop", "Property" },
-                                                                                        { "PropNames", "PropertyNames" },
                                                                                     };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id, (SymbolKind)(-1))
@@ -85,11 +90,40 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            var prefixesWithIssues = Prefixes.Where(_ => symbolName.StartsWith(_.Key, StringComparison.Ordinal));
-            var postFixesWithIssues = Postfixes.Where(_ => symbolName.EndsWith(_.Key, StringComparison.Ordinal));
-            var midTermsWithIssues = MidTerms.Where(_ => symbolName.Contains(_.Key, StringComparison.Ordinal));
+            var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
+            var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
+            var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
 
             return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => Issue(symbol, _.Key, _.Value));
+        }
+
+        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
+
+        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal);
+
+        private static bool MidTermHasIssue(string key, string symbolName)
+        {
+            var index = 0;
+            var keyLength = key.Length;
+            var symbolNameLength = symbolName.Length;
+
+            while (true)
+            {
+                index = symbolName.IndexOf(key, index);
+
+                if (index <= -1)
+                    break;
+
+                var positionAfterCharacter = index + keyLength;
+                if (positionAfterCharacter < symbolNameLength && symbolName[positionAfterCharacter].IsUpperCase())
+                {
+                    return true;
+                }
+
+                index = positionAfterCharacter;
+            }
+
+            return false;
         }
 
         private sealed class KeyComparer : IEqualityComparer<KeyValuePair<string, string>>

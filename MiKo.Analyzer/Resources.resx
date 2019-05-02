@@ -700,7 +700,7 @@ It makes it hard for every developer that is new to the code base to understand 
 In addition, they distract the reader's attention as they have to translate the meaning each time.</value>
   </data>
   <data name="MiKo_1063_MessageFormat" xml:space="preserve">
-    <value>Replace abbreviation '{1}' by term '{2}'</value>
+    <value>Use '{2}' instead of abbreviation '{1}'</value>
   </data>
   <data name="MiKo_1063_Title" xml:space="preserve">
     <value>Do not use abbreviations in names.</value>
