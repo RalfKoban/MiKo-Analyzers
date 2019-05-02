@@ -4339,7 +4339,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove comment as it is obvious what&apos;s done here.
+        ///   Looks up a localized string similar to Remove obvious AAA comment.
         /// </summary>
         public static string MiKo_2301_MessageFormat {
             get {
@@ -4394,7 +4394,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove period from end of comment.
+        ///   Looks up a localized string similar to Do not end comment with period.
         /// </summary>
         public static string MiKo_2303_MessageFormat {
             get {

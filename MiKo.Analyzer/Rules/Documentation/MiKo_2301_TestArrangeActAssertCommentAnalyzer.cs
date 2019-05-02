@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "arrange",
                 "act",
                 "assert",
+                "execute",
+                "execution",
                 "prepare",
                 "preparation",
                 "run",
