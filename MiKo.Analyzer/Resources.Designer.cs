@@ -1783,7 +1783,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of abbreviation &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Name it &apos;{2}&apos; instead of abbreviation &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1063_MessageFormat {
             get {
@@ -2056,7 +2056,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;_&apos; instead.
+        ///   Looks up a localized string similar to Name it &apos;_&apos; instead.
         /// </summary>
         public static string MiKo_1300_MessageFormat {
             get {
