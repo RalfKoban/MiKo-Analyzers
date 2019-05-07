@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1406_ValueConvertersAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1406_ValueConvertersNamespaceAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValidTypes =
             {
@@ -53,8 +53,8 @@ public namespace Bla.Blubb
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1406_ValueConvertersAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1406_ValueConvertersNamespaceAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1406_ValueConvertersAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1406_ValueConvertersNamespaceAnalyzer();
     }
 }

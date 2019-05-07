@@ -182,6 +182,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, typeof(T).FullName);
 
+        internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClass)
+        {
+            while (true)
+            {
+                var fullName = symbol.ToString();
+                if (baseClass == fullName) return true;
+
+                var baseType = symbol.BaseType;
+                if (baseType == null) return false;
+
+                symbol = baseType;
+            }
+        }
+
         internal static bool InheritsFrom(this ITypeSymbol symbol, params string[] baseClasses)
         {
             while (true)
@@ -209,6 +223,23 @@ namespace MiKoSolutions.Analyzers
             foreach (var implementedInterface in symbol.AllInterfaces)
             {
                 if (implementedInterface.ToString() == interfaceType) return true;
+            }
+
+            return false;
+        }
+
+        internal static bool Implements(this ITypeSymbol symbol, params string[] interfaceTypes)
+        {
+            foreach (var interfaceType in interfaceTypes)
+            {
+                if (symbol.ToString() == interfaceType)
+                    return true;
+
+                foreach (var implementedInterface in symbol.AllInterfaces)
+                {
+                    if (implementedInterface.ToString() == interfaceType)
+                        return true;
+                }
             }
 
             return false;
@@ -480,9 +511,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol symbol) => symbol.Name == "DependencyPropertyKey" || symbol.Name == "System.Windows.DependencyPropertyKey";
 
-        internal static bool IsValueConverter(this ITypeSymbol symbol) => symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
+        internal static bool IsValueConverter(this ITypeSymbol symbol) => symbol.Implements("IValueConverter", "System.Windows.Data.IValueConverter") || symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
 
-        internal static bool IsMultiValueConverter(this ITypeSymbol symbol) => symbol.InheritsFrom("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");
+        internal static bool IsMultiValueConverter(this ITypeSymbol symbol) => symbol.Implements("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter") || symbol.InheritsFrom("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");
 
         internal static bool ContainsExtensionMethods(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
