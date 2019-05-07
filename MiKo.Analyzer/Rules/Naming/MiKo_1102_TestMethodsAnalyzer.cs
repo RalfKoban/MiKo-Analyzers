@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -11,7 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1102";
 
-        private const string Marker = "Test";
+        private const string TestMarker = "Test";
+        private const string TestCaseMarker = "TestCase";
 
         public MiKo_1102_TestMethodsAnalyzer() : base(Id)
         {
@@ -19,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.Contains(Marker)
-                                                                                        ? new[] { Issue(symbol, Marker) }
-                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.Contains(TestMarker)
+                                                                                            ? new[] { Issue(symbol, symbol.Name.Contains(TestCaseMarker, StringComparison.OrdinalIgnoreCase) ? TestCaseMarker : TestMarker) }
+                                                                                            : Enumerable.Empty<Diagnostic>();
     }
 }
