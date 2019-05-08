@@ -187,28 +187,32 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var fullName = symbol.ToString();
-                if (baseClass == fullName) return true;
+                if (baseClass == fullName)
+                    return true;
 
                 var baseType = symbol.BaseType;
-                if (baseType == null) return false;
+                if (baseType == null)
+                    return false;
 
                 symbol = baseType;
             }
         }
 
-        internal static bool InheritsFrom(this ITypeSymbol symbol, params string[] baseClasses)
+        internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClassName, string baseClassFullQualifiedName)
         {
             while (true)
             {
                 var fullName = symbol.ToString();
 
-                foreach (var baseClass in baseClasses)
-                {
-                    if (baseClass == fullName) return true;
-                }
+                if (baseClassName == fullName)
+                    return true;
+
+                if (baseClassFullQualifiedName == fullName)
+                    return true;
 
                 var baseType = symbol.BaseType;
-                if (baseType == null) return false;
+                if (baseType == null)
+                    return false;
 
                 symbol = baseType;
             }
@@ -218,29 +222,25 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool Implements(this ITypeSymbol symbol, string interfaceType)
         {
-            if (symbol.ToString() == interfaceType) return true;
+            if (symbol.ToString() == interfaceType)
+                return true;
 
             foreach (var implementedInterface in symbol.AllInterfaces)
             {
-                if (implementedInterface.ToString() == interfaceType) return true;
+                if (implementedInterface.ToString() == interfaceType)
+                    return true;
             }
 
             return false;
         }
 
-        internal static bool Implements(this ITypeSymbol symbol, params string[] interfaceTypes)
+        internal static bool Implements(this ITypeSymbol symbol, string interfaceTypeName, string interfaceTypeFullQualifiedName)
         {
-            foreach (var interfaceType in interfaceTypes)
-            {
-                if (symbol.ToString() == interfaceType)
-                    return true;
+            if (symbol.Implements(interfaceTypeName))
+                return true;
 
-                foreach (var implementedInterface in symbol.AllInterfaces)
-                {
-                    if (implementedInterface.ToString() == interfaceType)
-                        return true;
-                }
-            }
+            if (symbol.Implements(interfaceTypeFullQualifiedName))
+                return true;
 
             return false;
         }
@@ -465,7 +465,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsCommand(this IErrorTypeSymbol symbol) => symbol.Name == nameof(ICommand);
+        internal static bool IsCommand(this IErrorTypeSymbol symbol)
+        {
+            if (symbol.Name == nameof(ICommand))
+                return true;
+
+            return false;
+        }
 
         internal static bool IsCommand(this ITypeSymbol symbol)
         {
@@ -505,11 +511,25 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyObject(this ITypeSymbol symbol) => symbol.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
-        internal static bool HasDependencyObjectParameter(this IMethodSymbol method) => method.Parameters.Any(_ => _.Type.IsDependencyObject());
-
         internal static bool IsDependencyProperty(this ITypeSymbol symbol) => symbol.Name == "DependencyProperty" || symbol.Name == "System.Windows.DependencyProperty";
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol symbol) => symbol.Name == "DependencyPropertyKey" || symbol.Name == "System.Windows.DependencyPropertyKey";
+
+        internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol symbol)
+        {
+            if (symbol.TypeKind != TypeKind.Struct) return false;
+            if (symbol.SpecialType != SpecialType.None) return false;
+
+            return symbol.InheritsFrom("DependencyPropertyChangedEventArgs", "System.Windows.DependencyPropertyChangedEventArgs");
+        }
+
+        internal static bool IsDependencyObjectEventHandler(this IMethodSymbol method)
+        {
+            var parameters = method.Parameters;
+            return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
+        }
+
+        internal static bool HasDependencyObjectParameter(this IMethodSymbol method) => method.Parameters.Any(_ => _.Type.IsDependencyObject());
 
         internal static bool IsValueConverter(this ITypeSymbol symbol) => symbol.Implements("IValueConverter", "System.Windows.Data.IValueConverter") || symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
 

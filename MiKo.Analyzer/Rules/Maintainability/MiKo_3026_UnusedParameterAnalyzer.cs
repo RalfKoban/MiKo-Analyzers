@@ -32,11 +32,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (method.IsOverride || method.IsVirtual)
                 return true;
 
+            if (method.IsConstructor())
+                return method.IsSerializationConstructor();
+
             if (method.IsEventHandler())
                 return true;
 
-            if (method.IsConstructor())
-                return method.IsSerializationConstructor();
+            if (method.IsDependencyObjectEventHandler())
+                return true;
 
             var ignore = method.IsInterfaceImplementation();
             return ignore;
