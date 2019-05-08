@@ -465,22 +465,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsCommand(this IErrorTypeSymbol symbol)
-        {
-            if (symbol.Name == nameof(ICommand))
-                return true;
-
-            return false;
-        }
-
-        internal static bool IsCommand(this ITypeSymbol symbol)
-        {
-            if (symbol.Implements<ICommand>())
-                return true;
-
-            // TODO: refactor this as we do this for tests
-            return symbol.IncludingAllBaseTypes().Concat(symbol.AllInterfaces).OfType<IErrorTypeSymbol>().Any(IsCommand);
-        }
+        internal static bool IsCommand(this ITypeSymbol symbol) => symbol.Implements<ICommand>();
 
         internal static bool IsCommand(this TypeSyntax syntax, SemanticModel semanticModel)
         {
