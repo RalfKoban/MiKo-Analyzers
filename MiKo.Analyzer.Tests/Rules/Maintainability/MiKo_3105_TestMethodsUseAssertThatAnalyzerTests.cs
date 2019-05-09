@@ -125,6 +125,22 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_a_AssertMultiple() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            Assert.Multiple(() => { });
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3105_TestMethodsUseAssertThatAnalyzer();

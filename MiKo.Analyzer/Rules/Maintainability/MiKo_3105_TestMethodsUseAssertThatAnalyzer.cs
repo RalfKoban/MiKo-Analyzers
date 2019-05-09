@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                   "Catch",
                                                                                   "ThrowsAsync",
                                                                                   "Throws",
+                                                                                  "Multiple",
                                                                               };
 
         public MiKo_3105_TestMethodsUseAssertThatAnalyzer() : base(Id)
