@@ -26,6 +26,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "value",
             };
 
+        private static readonly string[] WellknownFileExtensions =
+            {
+                ".bmp",
+                ".gif",
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".htm",
+                ".html",
+                ".xaml",
+                ".xml",
+                ".cs",
+            };
 
         private static readonly char[] LowerCaseLetters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
 
@@ -134,7 +147,7 @@ public sealed class TestMe { }
         [Test, Combinatorial]
         public void No_issue_is_reported_for_well_known_file_extension_in_code_block_in_XML_documentation(
                                                                                                     [ValueSource(nameof(XmlTags))] string xmlTag,
-                                                                                                    [Values(".png", ".jpg", ".html", ".net")] string fileExtension,
+                                                                                                    [ValueSource(nameof(WellknownFileExtensions))] string fileExtension,
                                                                                                     [Values("c", "code")] string codeBlock)
             => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
@@ -144,7 +157,10 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_well_known_file_extension_not_within_code_block_in_XML_documentation([ValueSource(nameof(XmlTags))] string xmlTag, [Values(".png", ".jpg", ".html", ".net")] string fileExtension) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_file_extension_not_within_code_block_in_XML_documentation(
+                                                                                                            [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                                                            [ValueSource(nameof(WellknownFileExtensions))] string fileExtension)
+            => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Some file" + fileExtension + @" extension.
 /// </" + xmlTag + @">

@@ -29,17 +29,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 Constants.XmlTag.Value,
             };
 
+        private static readonly string[] WellknownFileExtensions =
+            {
+                ".cs",
+                ".xml",
+                ".xaml",
+                ".bmp",
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".htm",
+                ".html",
+                ".gif",
+            };
+
         public MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
-        {
-            foreach (var xmlTag in XmlTags.Where(_ => TagCommentHasIssue(commentXml, _)))
-            {
-                yield return Issue(symbol, xmlTag);
-            }
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => XmlTags.Where(_ => TagCommentHasIssue(commentXml, _)).Select(_ => Issue(symbol, _));
 
         private static bool TagCommentHasIssue(string commentXml, string xmlTag) => CommentExtensions.GetCommentElements(commentXml, xmlTag).SelectMany(_ => _.Nodes()).Any(CommentHasIssue);
 
@@ -93,14 +101,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (c.IsSentenceEnding())
                 {
-                    // get next character after . ? or !
+                    // investigate next character after . ? or !
                     if (i != last)
                         c = comment[++i];
 
                     SkipWhiteSpaces(comment, last, ref c, ref i);
                     SkipAbbreviations(comment, last, ref c, ref i);
 
-                    if (c.IsLowerCaseLetter())
+                    if (c.IsLowerCaseLetter() && !IsWellknownFileExtension(comment, i - 1))
                         return true;
                 }
             }
@@ -121,11 +129,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // for example in string "e.g.": c is already 'g', as well as i
             const int Gap = 2;
 
-            if (c.IsLowerCaseLetter() && i + Gap < last && comment[i + 1] == '.')
+            if (c.IsLowerCaseLetter())
             {
-                i += Gap;
-                c = comment[i];
+                var next = i + Gap;
+                if (next < last && comment[i + 1] == '.')
+                {
+                    i = next;
+                    c = comment[i];
+                }
             }
         }
+
+        private static bool IsWellknownFileExtension(string comment, int startIndex) => comment.Substring(startIndex).StartsWithAny(WellknownFileExtensions);
     }
 }

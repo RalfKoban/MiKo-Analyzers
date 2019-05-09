@@ -1475,7 +1475,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Documentation sentences should start with a capitalized letter to have a full sentence.</value>
   </data>
   <data name="MiKo_2201_MessageFormat" xml:space="preserve">
-    <value>Start sentence(s) with capitalized letter in &lt;{1}&gt;</value>
+    <value>Start the sentence(s) in &lt;{1}&gt; with capitalized letter</value>
   </data>
   <data name="MiKo_2201_Title" xml:space="preserve">
     <value>Use a capitalized letter to start the sentences in the comment.</value>
