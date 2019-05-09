@@ -5106,7 +5106,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; is not used and can be safely removed.
+        ///   Looks up a localized string similar to Parameter is not used and can be safely removed.
         /// </summary>
         public static string MiKo_3026_MessageFormat {
             get {
