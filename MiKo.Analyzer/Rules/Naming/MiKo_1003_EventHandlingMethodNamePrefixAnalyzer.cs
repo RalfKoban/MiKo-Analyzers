@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 foreach (var assignment in owningClass.DescendantNodes()
                                                       .OfType<AssignmentExpressionSyntax>()
-                                                      .Where(_ => _.Kind() == SyntaxKind.AddAssignmentExpression))
+                                                      .Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression)))
                 {
                     var rightIdentifier = (assignment.Right as IdentifierNameSyntax)?.Identifier.ValueText;
                     if (rightIdentifier == methodName)
