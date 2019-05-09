@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("EventArgs args, object s")]
         [TestCase("object s, EventArgs args, object whatever")]
         [TestCase("object whatever, object s, EventArgs args")]
-        public void No_issue_is_reported_for_non_eventhandling_method(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_event_handling_method(string parameters) => No_issue_is_reported_for(@"
 
 using System;
 

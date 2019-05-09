@@ -508,7 +508,7 @@ namespace MiKoSolutions.Analyzers
             return symbol.InheritsFrom("DependencyPropertyChangedEventArgs", "System.Windows.DependencyPropertyChangedEventArgs");
         }
 
-        internal static bool IsDependencyObjectEventHandler(this IMethodSymbol method)
+        internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
             return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();

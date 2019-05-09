@@ -10,13 +10,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1001_EventArgsParameterAnalyzerTests : CodeFixVerifier
     {
         [TestCase("object s, EventArgs args")]
-        public void No_issue_is_reported_for_eventhandling_method(string parameters) => No_issue_is_reported_for(@"
-
-using System;
-
-public class TestMe
+        [TestCase("DependencyObject d, DependencyPropertyChangedEventArgs args")]
+        public void No_issue_is_reported_for_event_handling_method(string parameters) => No_issue_is_reported_for(@"
+namespace System.Windows
 {
-    public void DoSomething(" + parameters + @") { }
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething(" + parameters + @") { }
+    }
 }
 ");
 
@@ -40,32 +51,59 @@ public class TestMe
         [TestCase("EventArgs e, EventArgs a")]
         [TestCase("object s, EventArgs args, object whatever")]
         [TestCase("object whatever, object s, EventArgs args")]
+        [TestCase("DependencyPropertyChangedEventArgs args")]
+        [TestCase("DependencyPropertyChangedEventArgs args, object s")]
+        [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a")]
+        [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever")]
+        [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args")]
         public void An_issue_is_reported_for_matching_method(string parameters) => An_issue_is_reported_for(@"
-
-using System;
-
-public class TestMe
+namespace System.Windows
 {
-    public void DoSomething(" + parameters + @") { }
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething(" + parameters + @") { }
+    }
 }
 ");
 
         [TestCase("EventArgs e")]
         [TestCase("EventArgs e, string a")]
         [TestCase("EventArgs e1, EventArgs e2")]
+        [TestCase("DependencyPropertyChangedEventArgs e")]
+        [TestCase("DependencyPropertyChangedEventArgs e, string a")]
+        [TestCase("DependencyPropertyChangedEventArgs e1, DependencyPropertyChangedEventArgs e2")]
         public void No_issue_is_reported_for_correctly_named_method(string parameters) => No_issue_is_reported_for(@"
-
-using System;
-
-public class TestMe
+namespace System.Windows
 {
-    public void DoSomething(" + parameters + @") { }
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething(" + parameters + @") { }
+    }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_property_setter() => No_issue_is_reported_for(@"
-
 using System;
 
 public class TestMe

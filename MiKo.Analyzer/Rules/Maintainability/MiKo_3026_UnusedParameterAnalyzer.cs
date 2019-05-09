@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (method.IsEventHandler())
                 return true;
 
-            if (method.IsDependencyObjectEventHandler())
+            if (method.IsDependencyPropertyEventHandler())
                 return true;
 
             var ignore = method.IsInterfaceImplementation();

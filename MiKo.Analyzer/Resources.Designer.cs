@@ -361,6 +361,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of DependencyProperty event handlers should be named &apos;d&apos; and &apos;e&apos;..
+        /// </summary>
+        public static string MiKo_1007_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1007_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1007_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1007_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers..
+        /// </summary>
+        public static string MiKo_1007_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1007_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
         public static string MiKo_1010_Description {
