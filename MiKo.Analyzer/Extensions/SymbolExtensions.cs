@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             var parameters = method.Parameters;
-            return parameters.Length == 2 && parameters[0].Type.SpecialType == SpecialType.System_Object && parameters[1].Type.IsEventArgs();
+            return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsEventArgs();
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol method)
@@ -494,6 +494,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsObject(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Object;
+
         internal static bool IsDependencyObject(this ITypeSymbol symbol) => symbol.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
         internal static bool IsDependencyProperty(this ITypeSymbol symbol) => symbol.Name == "DependencyProperty" || symbol.Name == "System.Windows.DependencyProperty";
@@ -515,6 +517,28 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol method) => method.Parameters.Any(_ => _.Type.IsDependencyObject());
+
+        internal static bool IsCoerceValueCallback(this IMethodSymbol method)
+        {
+            if (method.ReturnType.IsObject())
+            {
+                var parameters = method.Parameters;
+                return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsObject();
+            }
+
+            return false;
+        }
+
+        internal static bool IsValidateValueCallback(this IMethodSymbol method)
+        {
+            if (method.ReturnType.SpecialType == SpecialType.System_Boolean)
+            {
+                var parameters = method.Parameters;
+                return parameters.Length == 1 && parameters[0].Type.IsObject();
+            }
+
+            return false;
+        }
 
         internal static bool IsValueConverter(this ITypeSymbol symbol) => symbol.Implements("IValueConverter", "System.Windows.Data.IValueConverter") || symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
 

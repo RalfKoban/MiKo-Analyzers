@@ -129,6 +129,38 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_dependency_object_CoerceValueCallback_method() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public object DoSomething(DependencyObject d, object value)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_dependency_object_ValidateValueCallback_method() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public bool DoSomething(object value)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_overridden_method() => No_issue_is_reported_for(@"
 using System;
 

@@ -41,6 +41,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (method.IsDependencyPropertyEventHandler())
                 return true;
 
+            if (method.IsCoerceValueCallback())
+                return true;
+
+            if (method.IsValidateValueCallback())
+                return true;
+
             var ignore = method.IsInterfaceImplementation();
             return ignore;
         }
