@@ -94,12 +94,12 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method_with_name_(
-                                                                [ValueSource(nameof(Tests))] string testAttribute,
+                                                                [ValueSource(nameof(Tests))] string test,
                                                                 [ValueSource(nameof(InvalidMethodNames))] string name)
             => No_issue_is_reported_for(@"
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void " + name + @"()
     {
     }

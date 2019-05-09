@@ -18,52 +18,52 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method(
-                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                    [ValueSource(nameof(Tests))] string testAttribute)
+                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                    [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething() { }
 }
 ");
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_teardown_method(
-                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                    [ValueSource(nameof(TestTearDowns))] string testAttribute)
+                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                    [ValueSource(nameof(TestTearDowns))] string test)
             => No_issue_is_reported_for(@"
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething() { }
 }
 ");
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_setup_method_with_correct_name(
-                                                                            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                            [ValueSource(nameof(TestSetUps))] string testAttribute)
+                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                            [ValueSource(nameof(TestSetUps))] string test)
             => No_issue_is_reported_for(@"
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void PrepareTest() { }
 }
 ");
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_setup_method_with_wrong_name(
-                                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                    [ValueSource(nameof(TestSetUps))] string testAttribute)
+                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                    [ValueSource(nameof(TestSetUps))] string test)
             => An_issue_is_reported_for(@"
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void Setup() { }
 }
 ");

@@ -132,13 +132,13 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_boolean_parameter_on_test_method([ValueSource(nameof(Tests))] string testAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_parameter_on_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using System;
 using System.Windows;
 
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void Something(bool value) { }
 }
 ");

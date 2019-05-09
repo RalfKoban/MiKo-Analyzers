@@ -20,10 +20,10 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_without_object_under_test([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_without_object_under_test([ValueSource(nameof(TestFixtures))]string testFixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class TestMeTests
     {
         public void DoSomething() { }
@@ -32,14 +32,14 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testFixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
     {
     }
 
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class TestMeTests
     {
         private TestMe ObjectUnderTest { get; set; }
@@ -50,14 +50,14 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_wrong_prefix([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_with_wrong_prefix([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
     {
     }
 
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class WhateverTests
     {
         private TestMe ObjectUnderTest { get; set; }
@@ -68,14 +68,14 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_of_generic_type_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_of_generic_type_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testFixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe<T>
     {
     }
 
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class ATestMeTests<T>
     {
         private ATestMe<T> ObjectUnderTest { get; set; }
@@ -86,14 +86,14 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testFixture) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe
     {
     }
 
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class ATestMeTests<T> where T : ATestMe
     {
         private T ObjectUnderTest { get; set; }
@@ -104,7 +104,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute, [Values("class", "struct")] string constraint)
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testFixture, [Values("class", "struct")] string constraint)
             => No_issue_is_reported_for(@"
 namespace Bla
 {
@@ -112,7 +112,7 @@ namespace Bla
     {
     }
 
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class ATestMeTests<T> where T : " + constraint + @"
     {
         private T ObjectUnderTest { get; set; }
@@ -123,14 +123,14 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_of_generic_type_with_wrong_prefix([ValueSource(nameof(TestFixtures))] string testClassAttribute) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_of_generic_type_with_wrong_prefix([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe<T>
     {
     }
 
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class WhateverTests<T>
     {
         private TestMe<T> ObjectUnderTest { get; set; }
@@ -141,14 +141,14 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_wrong_prefix([ValueSource(nameof(TestFixtures))]string testClassAttribute) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_of_generic_type_and_where_clause_with_wrong_prefix([ValueSource(nameof(TestFixtures))]string testFixture) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
     {
     }
 
-    [" + testClassAttribute + @"]
+    [" + testFixture + @"]
     public class WhateverTests<T> where T : TestMe
     {
         private T ObjectUnderTest { get; set; }

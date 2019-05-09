@@ -66,13 +66,13 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method(
-                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                    [ValueSource(nameof(Tests))] string testAttribute)
+                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                    [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething() { }
 }
 ");

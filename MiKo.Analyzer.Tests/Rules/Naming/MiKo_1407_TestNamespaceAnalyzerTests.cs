@@ -44,15 +44,15 @@ namespace Bla
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_correct_namespace(
-                                                                            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                            [ValueSource(nameof(Tests))] string testAttribute)
+                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                            [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 namespace Bla
 {
-  [" + testClassAttribute + @"]
+  [" + testFixture + @"]
   public class TestMe
   {
-      [" + testAttribute + @"]
+      [" + test + @"]
       public void DoSomething_does_something() { }
   }
 }
@@ -61,15 +61,15 @@ namespace Bla
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_incorrect_namespace(
                                                                             [ValueSource(nameof(WrongNamespaceNames))] string namespaceName,
-                                                                            [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                            [ValueSource(nameof(Tests))] string testAttribute)
+                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                            [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 namespace " + namespaceName + @"
 {
-  [" + testClassAttribute + @"]
+  [" + testFixture + @"]
   public class TestMe
   {
-      [" + testAttribute + @"]
+      [" + test + @"]
       public void DoSomething_does_something() { }
   }
 }

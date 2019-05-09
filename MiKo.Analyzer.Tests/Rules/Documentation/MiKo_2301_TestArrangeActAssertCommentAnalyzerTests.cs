@@ -60,12 +60,12 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_test_method([ValueSource(nameof(Tests))] string testAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
 {
-    [" + testAttribute + @"
+    [" + test + @"
     public void DoSomething()
     {
     }
@@ -73,12 +73,12 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_test_method([ValueSource(nameof(Tests))] string testAttribute) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
 {
-    [" + testAttribute + @"
+    [" + test + @"
     public void DoSomething()
     {
         // some comment
@@ -88,14 +88,14 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_incorrectly_commented_test_method(
-                                                                        [ValueSource(nameof(Tests))] string testAttribute,
+                                                                        [ValueSource(nameof(Tests))] string test,
                                                                         [ValueSource(nameof(Comments))] string comment,
                                                                         [Values("", " ")] string gap) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
 {
-    [" + testAttribute + @"
+    [" + test + @"
     public void DoSomething()
     {
         //" + gap + comment + @"

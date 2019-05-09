@@ -34,15 +34,15 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_tests(
-                                                                [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                [ValueSource(nameof(Tests))] string testAttribute)
+                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething()
     {
         Assert.That(42, Is.EqualTo(42));
@@ -52,21 +52,21 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_partial_test_class_with_tests(
-                                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                        [ValueSource(nameof(Tests))] string testAttribute)
+                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                        [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public partial class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething()
     {
         Assert.That(42, Is.EqualTo(42));
     }
 }
 
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public partial class TestMe
 {
     private void DoSomethingElse() { }
@@ -75,15 +75,15 @@ public partial class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(
-                                                                                        [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                                        [ValueSource(nameof(Tests))] string testAttribute)
+                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                        [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe3 : TestMe2
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething3()
     {
         Assert.That(42, Is.EqualTo(42));
@@ -92,7 +92,7 @@ public class TestMe3 : TestMe2
 
 public class TestMe2 : TestMe1
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething2()
     {
         Assert.That(42, Is.EqualTo(42));
@@ -101,7 +101,7 @@ public class TestMe2 : TestMe1
 
 public class TestMe1
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething1()
     {
         Assert.That(42, Is.EqualTo(42));
@@ -111,15 +111,15 @@ public class TestMe1
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_tests_that_have_conditions(
-                                                                                    [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                                    [ValueSource(nameof(Tests))] string testAttribute)
+                                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                    [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething()
     {
         if (x == 42)
@@ -130,15 +130,15 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_that_have_conditions(
-                                                                                                                [ValueSource(nameof(TestFixtures))] string testClassAttribute,
-                                                                                                                [ValueSource(nameof(Tests))] string testAttribute)
+                                                                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                                                [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testClassAttribute + @"]
+[" + testFixture + @"]
 public class TestMe3 : TestMe2
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething3()
     {
         Assert.That(42, Is.EqualTo(42));
@@ -147,7 +147,7 @@ public class TestMe3 : TestMe2
 
 public class TestMe2 : TestMe1
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething2()
     {
         Assert.That(42, Is.EqualTo(42));
@@ -156,7 +156,7 @@ public class TestMe2 : TestMe1
 
 public class TestMe1
 {
-    [" + testAttribute + @"]
+    [" + test + @"]
     public void DoSomething1()
     {
         if (x == 42)
