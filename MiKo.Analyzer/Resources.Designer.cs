@@ -5445,7 +5445,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Use {1} instead.
         /// </summary>
         public static string MiKo_3051_MessageFormat {
             get {
@@ -5518,7 +5518,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{1}&apos; instead.
+        ///   Looks up a localized string similar to Use {1} instead.
         /// </summary>
         public static string MiKo_3053_MessageFormat {
             get {

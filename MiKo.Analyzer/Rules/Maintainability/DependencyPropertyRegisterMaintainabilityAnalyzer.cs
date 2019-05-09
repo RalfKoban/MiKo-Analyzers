@@ -37,9 +37,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeParameterName(IFieldSymbol symbol, ArgumentSyntax nameArgument, ref List<Diagnostic> diagnostics)
         {
-            if (nameArgument.Expression.Kind() is SyntaxKind.StringLiteralExpression)
+            var expression = nameArgument.Expression;
+
+            if (expression.IsKind(SyntaxKind.StringLiteralExpression))
             {
-                ReportIssue(symbol, nameArgument, "nameof", ref diagnostics);
+                var name = ((LiteralExpressionSyntax)expression).Token.ValueText;
+                ReportIssue(symbol, nameArgument, "'nameof(" + name + ")'", ref diagnostics);
             }
         }
 
@@ -55,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (property is null)
                 {
                     // wrong name
-                    ReportIssue(symbol, nameArgument, "an existing property", ref diagnostics);
+                    ReportIssue(symbol, nameArgument, "the name of an existing property", ref diagnostics);
                 }
                 else
                 {
