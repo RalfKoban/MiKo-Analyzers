@@ -4330,7 +4330,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inside AAA-Tests, the comments &apos;// arange&apos;, &apos;// act&apos; and &apos;// assert&apos; are obvious and therefore can be removed..
+        ///   Looks up a localized string similar to Inside tests that follow the Arrange/Act/Assert style, the comments &apos;// arrange&apos;, &apos;// act&apos; and &apos;// assert&apos; are obvious and provide no benefit. Therefore, they can be removed..
         /// </summary>
         public static string MiKo_2301_Description {
             get {

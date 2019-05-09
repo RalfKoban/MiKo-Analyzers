@@ -1561,7 +1561,7 @@ They should not describe how it is achieved because that's what the code is for.
     <value>Comments should explain the 'Why' and not the 'How'.</value>
   </data>
   <data name="MiKo_2301_Description" xml:space="preserve">
-    <value>Inside AAA-Tests, the comments '// arange', '// act' and '// assert' are obvious and therefore can be removed.</value>
+    <value>Inside tests that follow the Arrange/Act/Assert style, the comments '// arrange', '// act' and '// assert' are obvious and provide no benefit. Therefore, they can be removed.</value>
   </data>
   <data name="MiKo_2301_MessageFormat" xml:space="preserve">
     <value>Remove obvious AAA comment</value>
