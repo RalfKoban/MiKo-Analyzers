@@ -1597,6 +1597,16 @@ As code should be commited in to Source Control Systems, developers can use the 
   <data name="MiKo_2303_Title" xml:space="preserve">
     <value>Do not end comments with a period.</value>
   </data>
+  <data name="MiKo_2304_Description" xml:space="preserve">
+    <value>Comments should explain the code and the reasons behind, they should not question things.
+If it question things, then the reasons behind are still unclear. This makes it (in the long run) hard to maintain because such questions don't get answered (otherwise, the comment would have been gone meanwhile).</value>
+  </data>
+  <data name="MiKo_2304_MessageFormat" xml:space="preserve">
+    <value>Comment should explain, not ask</value>
+  </data>
+  <data name="MiKo_2304_Title" xml:space="preserve">
+    <value>Do not formulate comments as questions.</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
 Such empty regions solely clutter the code without providing any benefit at all.</value>

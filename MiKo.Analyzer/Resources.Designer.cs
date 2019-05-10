@@ -4439,6 +4439,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comments should explain the code and the reasons behind, they should not question things.
+        ///If it question things, then the reasons behind are still unclear. This makes it (in the long run) hard to maintain because such questions don&apos;t get answered (otherwise, the comment would have been gone meanwhile)..
+        /// </summary>
+        public static string MiKo_2304_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2304_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment should explain, not ask.
+        /// </summary>
+        public static string MiKo_2304_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2304_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not formulate comments as questions..
+        /// </summary>
+        public static string MiKo_2304_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2304_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>
