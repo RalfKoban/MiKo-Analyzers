@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using MappingType = System.Func<Microsoft.CodeAnalysis.SeparatedSyntaxList<Microsoft.CodeAnalysis.CSharp.Syntax.ArgumentSyntax>, Microsoft.CodeAnalysis.IMethodSymbol, Microsoft.CodeAnalysis.SemanticModel, MiKoSolutions.Analyzers.Rules.Maintainability.MiKo_3011_ArgumentExceptionsParamNameAnalyzer.InspectationResult>;
+using MappingType = System.Func<Microsoft.CodeAnalysis.CSharp.Syntax.ArgumentListSyntax, Microsoft.CodeAnalysis.IMethodSymbol, Microsoft.CodeAnalysis.SemanticModel, Microsoft.CodeAnalysis.Location>;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
@@ -48,17 +48,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var type = node.Type.ToString();
             var inspector = Mappings[type];
 
-            if (inspector(node.ArgumentList.Arguments, method, semanticModel) == InspectationResult.Report)
+            var location = inspector(node.ArgumentList, method, semanticModel);
+            if (location != Location.None)
             {
-                var issue = Issue(type, node.GetLocation(), method.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
+                var issue = Issue(type, location, method.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
                 return new []{ issue };
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private static InspectationResult InspectArgumentException(SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol method, SemanticModel semanticModel)
+        private static Location InspectArgumentException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
+            var arguments = syntax.Arguments;
             switch (arguments.Count)
             {
                 case 2:
@@ -73,11 +75,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return InspectArgument(arguments[1], method, semanticModel);
             }
 
-            return InspectationResult.Report;
+            return GetLocation(syntax);
         }
 
-        private static InspectationResult InspectArgumentNullException(SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol method, SemanticModel semanticModel)
+        private static Location InspectArgumentNullException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
+            var arguments = syntax.Arguments;
             switch (arguments.Count)
             {
                 case 1:
@@ -92,11 +95,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
             }
 
-            return InspectationResult.Report;
+            return GetLocation(syntax);
         }
 
-        private static InspectationResult InspectArgumentOutOfRangeException(SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol method, SemanticModel semanticModel)
+        private static Location InspectArgumentOutOfRangeException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
+            var arguments = syntax.Arguments;
             switch (arguments.Count)
             {
                 case 2:
@@ -112,27 +116,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return InspectArgument(arguments[0], method, semanticModel);
             }
 
-            return InspectationResult.Report;
+            return GetLocation(syntax);
         }
 
-        private static InspectationResult InspectInvalidEnumArgumentException(SeparatedSyntaxList<ArgumentSyntax> arguments, IMethodSymbol method, SemanticModel semanticModel)
+        private static Location InspectInvalidEnumArgumentException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
+            var arguments = syntax.Arguments;
             switch (arguments.Count)
             {
                 case 3:
                     return InspectArgument(arguments[0], method, semanticModel);
             }
 
-            return InspectationResult.Report;
+            return GetLocation(syntax);
         }
 
-        private static InspectationResult InspectArgument(ArgumentSyntax argument, IMethodSymbol method, SemanticModel semanticModel)
+        private static Location InspectArgument(ArgumentSyntax argument, IMethodSymbol method, SemanticModel semanticModel)
         {
             if (IsStringParameter(argument, semanticModel) && ParameterIsReferenced(argument, method))
-                return InspectationResult.None;
+                return Location.None;
 
             // no string, so no paramName; hence we have to report it anyway
-            return InspectationResult.Report;
+            return argument.GetLocation();
         }
 
         private static bool IsStringParameter(ArgumentSyntax argument, SemanticModel semanticModel) => argument.Expression.IsString(semanticModel);
@@ -143,10 +148,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == string.Concat("\"", _, "\"") || argumentName == string.Concat("nameof(", _, ")"));
         }
 
-        internal enum InspectationResult : ushort
-        {
-            None = 0,
-            Report = 1,
-        }
+        private static Location GetLocation(ArgumentListSyntax syntax) => Location.Create(syntax.SyntaxTree, syntax.Arguments.Span);
     }
 }
