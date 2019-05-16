@@ -103,6 +103,23 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_properly_named_variable_([Values("firmwares")] string variableName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            var " + variableName + @" = 42;
+            return " + variableName + @";
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1063_AbbreviationsInNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1063_AbbreviationsInNameAnalyzer();

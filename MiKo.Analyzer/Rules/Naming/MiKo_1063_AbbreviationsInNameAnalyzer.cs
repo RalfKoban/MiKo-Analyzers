@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
 
-        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal);
+        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && !symbolName.EndsWith("wares", StringComparison.Ordinal);
 
         private static bool MidTermHasIssue(string key, string symbolName)
         {
