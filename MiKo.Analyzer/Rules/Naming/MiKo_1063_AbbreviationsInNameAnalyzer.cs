@@ -119,7 +119,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             while (true)
             {
-                index = symbolName.IndexOf(key, index);
+                index = symbolName.IndexOf(key, index, StringComparison.Ordinal);
 
                 if (index <= -1)
                     break;
