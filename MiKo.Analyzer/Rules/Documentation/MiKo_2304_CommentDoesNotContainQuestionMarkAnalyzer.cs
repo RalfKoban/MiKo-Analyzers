@@ -8,9 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2304";
 
-        public MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer() : base(Id) => IgnoreMultipleLines = false;
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.Contains("?");
     }

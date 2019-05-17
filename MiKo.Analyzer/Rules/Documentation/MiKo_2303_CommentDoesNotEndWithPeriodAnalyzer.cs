@@ -10,9 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2303";
 
-        public MiKo_2303_CommentDoesNotEndWithPeriodAnalyzer() : base(Id)
-        {
-        }
+        public MiKo_2303_CommentDoesNotEndWithPeriodAnalyzer() : base(Id) => IgnoreMultipleLines = false;
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.EndsWith(".", StringComparison.OrdinalIgnoreCase) && !comment.EndsWith("...", StringComparison.OrdinalIgnoreCase);
     }

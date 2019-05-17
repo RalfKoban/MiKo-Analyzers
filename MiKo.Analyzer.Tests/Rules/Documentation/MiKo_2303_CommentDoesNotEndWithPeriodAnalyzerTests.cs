@@ -47,6 +47,32 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_comment_with_period_and_no_starting_space() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //some comment.
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_multi_line_comment_with_period() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment.
+        // another comment.
+        // final comment.
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_comment_with_triple_period() => No_issue_is_reported_for(@"
 
 public class TestMe

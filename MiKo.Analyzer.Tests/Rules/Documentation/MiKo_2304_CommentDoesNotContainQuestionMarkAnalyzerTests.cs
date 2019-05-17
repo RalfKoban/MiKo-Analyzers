@@ -46,6 +46,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_multi_line_comment_with_question_mark([Values("Wtf?","??? That's strange", "Wtf? Does not make sense!")] string comment) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // " + comment + @"
+        // whatever it takes
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer();
