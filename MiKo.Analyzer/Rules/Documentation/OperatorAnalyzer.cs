@@ -17,7 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected abstract string[] GetReturnsPhrases(ISymbol symbol);
 
-        protected sealed override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.UserDefinedOperator && symbol.Name == m_methodName;
+        protected sealed override bool ShallAnalyzeMethod(IMethodSymbol symbol)
+        {
+            switch (symbol.MethodKind)
+            {
+                case MethodKind.UserDefinedOperator:
+                case MethodKind.Conversion: // that's an unary operator, such as an implicit conversion call
+                    return symbol.Name == m_methodName;
+
+                default:
+                    return false;
+            }
+        }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
