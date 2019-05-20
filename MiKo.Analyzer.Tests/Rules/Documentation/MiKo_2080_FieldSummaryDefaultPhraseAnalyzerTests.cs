@@ -125,6 +125,21 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_DependencyProperty_field_summary_with_readonly_comment() => No_issue_is_reported_for(@"
+using System.Windows;
+
+public class TestMe
+{
+    public int MyDependency { get; set; }
+
+    /// <summary>
+    /// Identifies the <see cref=""MyDependency""/> dependency property. This field is read-only.
+    /// </summary>
+    private static readonly DependencyProperty MyDependencyProperty;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2080_FieldSummaryDefaultPhraseAnalyzer();

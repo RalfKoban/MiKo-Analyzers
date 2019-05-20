@@ -22,7 +22,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeField(IFieldSymbol symbol) => !symbol.ContainingType.IsEnum();
+        protected override bool ShallAnalyzeField(IFieldSymbol symbol)
+        {
+            if (symbol.ContainingType.IsEnum())
+                return false;
+
+            if (symbol.Type.IsDependencyProperty())
+                return false; // validated by rule MiKo_2017
+
+            return true;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
