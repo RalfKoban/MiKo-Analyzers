@@ -714,6 +714,15 @@ In addition, they distract the reader's attention as they have to translate the 
   <data name="MiKo_1063_Title" xml:space="preserve">
     <value>Do not use abbreviations in names.</value>
   </data>
+  <data name="MiKo_1064_Description" xml:space="preserve">
+    <value>To ease maintenance, parameter names should be based on the parameter’s meaning rather than the parameter’s type.</value>
+  </data>
+  <data name="MiKo_1064_MessageFormat" xml:space="preserve">
+    <value>Name parameter based on its meaning instead of its type</value>
+  </data>
+  <data name="MiKo_1064_Title" xml:space="preserve">
+    <value>Parameter names reflect their meaning and not their type.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>

@@ -1828,6 +1828,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, parameter names should be based on the parameter’s meaning rather than the parameter’s type..
+        /// </summary>
+        public static string MiKo_1064_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1064_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name parameter based on its meaning instead of its type.
+        /// </summary>
+        public static string MiKo_1064_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1064_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names reflect their meaning and not their type..
+        /// </summary>
+        public static string MiKo_1064_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1064_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

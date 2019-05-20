@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 211 rules that are currently provided by the analyzer.
+The following tables list all the 214 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -30,6 +30,7 @@ The following tables list all the 211 rules that are currently provided by the a
 |MiKo_1004|Events should not contain term 'Event' in their names.|&#x2713;|
 |MiKo_1005|'System.EventArgs' variables should be named properly.|&#x2713;|
 |MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|&#x2713;|
+|MiKo_1007|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names.|&#x2713;|
 |MiKo_1011|Methods should not contain 'Do' in their names.|&#x2713;|
 |MiKo_1012|Methods should not be named 'Fire'.|&#x2713;|
@@ -81,6 +82,7 @@ The following tables list all the 211 rules that are currently provided by the a
 |MiKo_1061|The name of 'Try' method's [out] parameter should be 'result'.|&#x2713;|
 |MiKo_1062|'Is/Has/Contains' methods or properties shall consist of only a few words.|&#x2713;|
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|
+|MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
@@ -180,6 +182,7 @@ The following tables list all the 211 rules that are currently provided by the a
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|
 |MiKo_2303|Do not end comments with a period.|&#x2713;|
+|MiKo_2304|Do not formulate comments as questions.|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|
