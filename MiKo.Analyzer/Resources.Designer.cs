@@ -1855,6 +1855,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameters of operator overloads should have default names if there is no meaning to the parameters.
+        ///For binary operator overloads use the names &apos;left&apos; and &apos;right&apos;, for unary operator overloads use the name &apos;value&apos;..
+        /// </summary>
+        public static string MiKo_1065_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1065_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters.
+        /// </summary>
+        public static string MiKo_1065_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1065_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1065_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1065_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for operator overloads..
+        /// </summary>
+        public static string MiKo_1065_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1065_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

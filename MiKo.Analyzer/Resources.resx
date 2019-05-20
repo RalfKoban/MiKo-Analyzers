@@ -723,6 +723,19 @@ In addition, they distract the reader's attention as they have to translate the 
   <data name="MiKo_1064_Title" xml:space="preserve">
     <value>Parameter names reflect their meaning and not their type.</value>
   </data>
+  <data name="MiKo_1065_Description" xml:space="preserve">
+    <value>Parameters of operator overloads should have default names if there is no meaning to the parameters.
+For binary operator overloads use the names 'left' and 'right', for unary operator overloads use the name 'value'.</value>
+  </data>
+  <data name="MiKo_1065_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters</value>
+  </data>
+  <data name="MiKo_1065_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1065_Title" xml:space="preserve">
+    <value>Parameter names do not follow .NET Framework Guidelines for operator overloads.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>

@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 214 rules that are currently provided by the analyzer.
+The following tables list all the 215 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -83,6 +83,7 @@ The following tables list all the 214 rules that are currently provided by the a
 |MiKo_1062|'Is/Has/Contains' methods or properties shall consist of only a few words.|&#x2713;|
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|
+|MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
