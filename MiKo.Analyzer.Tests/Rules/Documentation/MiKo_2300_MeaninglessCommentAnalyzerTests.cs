@@ -215,6 +215,19 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_ReSharper_formatter_advice_comment([Values("", " ")] string gap, [Values("@formatter:off", "@formatter:on")] string comment) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + comment + @"
+        int i = 0;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2300_MeaninglessCommentAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2300_MeaninglessCommentAnalyzer();

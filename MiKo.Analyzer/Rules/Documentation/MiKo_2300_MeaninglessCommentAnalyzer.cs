@@ -82,6 +82,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "ignore",
                 "nothing",
                 "special handling",
+                "@formatter:off",
+                "@formatter:on",
             };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
