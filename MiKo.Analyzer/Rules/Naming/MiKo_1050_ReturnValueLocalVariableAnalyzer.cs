@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1050";
 
-        private static readonly string[] WrongNames = CreateWrongNames("ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues");
+        private static readonly string[] WrongNames = CreateWrongNames("ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues", "resultList");
 
         public MiKo_1050_ReturnValueLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
         {
