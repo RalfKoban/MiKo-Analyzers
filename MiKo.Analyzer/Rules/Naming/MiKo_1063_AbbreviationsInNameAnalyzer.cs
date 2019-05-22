@@ -68,6 +68,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                         { "Bl", "BusinessLogic" },
                                                                                     };
 
+        private static readonly string[] AllowedPostFixTerms =
+            {
+                "wares",
+                "ires",
+                "ixtures",
+            };
+
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -109,7 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
 
-        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && !symbolName.EndsWith("wares", StringComparison.Ordinal);
+        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && !symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal);
 
         private static bool MidTermHasIssue(string key, string symbolName)
         {

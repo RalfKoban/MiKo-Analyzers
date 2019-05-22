@@ -104,7 +104,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_variable_([Values("firmwares")] string variableName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_variable_([Values("firmwares", "fixtures", "mixtures", "tires")] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
