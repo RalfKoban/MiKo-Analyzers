@@ -1892,6 +1892,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name..
+        /// </summary>
+        public static string MiKo_1066_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1066_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a number as suffix.
+        /// </summary>
+        public static string MiKo_1066_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1066_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with a number..
+        /// </summary>
+        public static string MiKo_1066_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1066_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
