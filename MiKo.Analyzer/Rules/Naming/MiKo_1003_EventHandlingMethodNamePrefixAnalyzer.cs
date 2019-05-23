@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1003";
 
+        private const string Prefix = "On";
+
         public MiKo_1003_EventHandlingMethodNamePrefixAnalyzer() : base(Id)
         {
         }
@@ -22,24 +24,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
-            var expectedName = FindProperName(method);
+            var suffix = FindProperNameSuffix(method);
 
-            return method.Name == expectedName
+            var methodName = method.Name;
+
+            return methodName.StartsWith(Prefix, StringComparison.Ordinal) && methodName.EndsWith(suffix, StringComparison.Ordinal) && !methodName.Contains("_")
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(method, expectedName) };
+                       : new[] { Issue(method, Prefix + suffix) };
         }
 
-        private static string FindProperName(IMethodSymbol method)
+        private static string FindProperNameSuffix(IMethodSymbol method)
         {
             var name = FindProperNameInClass(method);
             if (name is null)
             {
-                name = method.Name.StartsWith("On", StringComparison.Ordinal)
-                           ? method.Name.Substring(2)
+                name = method.Name.StartsWith(Prefix, StringComparison.Ordinal)
+                           ? method.Name.Substring(Prefix.Length)
                            : method.Name;
             }
 
-            return "On" + name.Remove("_");
+            return name.Remove("_");
         }
 
         private static string FindProperNameInClass(IMethodSymbol method)
@@ -51,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var owningClass = reference.GetSyntax().GetEnclosing<ClassDeclarationSyntax>();
                 if (owningClass is null)
                 {
-                    // may happen in case the class is currently in uncompilable state (such as it contains an additional bracket '}')
+                    // may happen in case the class is currently in uncompilable state (such as it contains an additional bracket)
                     continue;
                 }
 

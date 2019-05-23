@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1003_EventHandlingMethodNamePrefixAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_non_eventhandling_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_event_handling_method() => No_issue_is_reported_for(@"
 
 using System;
 
@@ -87,6 +87,50 @@ public class TestMe
     public void Initialize() => TME.MyEvent += Whatever;
 
     public void Whatever(object sender, EventArgs e) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_method_with_other_event_assignment() => No_issue_is_reported_for(@"
+
+using System;
+
+public class TestMeEvent
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public TestMe(TestMeEvent tme) => TME = tme;
+
+    public TestMeEvent TME { get; set; }
+
+    public void Initialize() => TME.MyEvent += OnTMEMyEvent;
+
+    public void OnTMEMyEvent(object sender, EventArgs e) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_method_with_underscore_inside_other_event_assignment() => An_issue_is_reported_for(@"
+
+using System;
+
+public class TestMeEvent
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public TestMe(TestMeEvent tme) => TME = tme;
+
+    public TestMeEvent TME { get; set; }
+
+    public void Initialize() => TME.MyEvent += On_TME_MyEvent;
+
+    public void On_TME_MyEvent(object sender, EventArgs e) { }
 }
 ");
 
