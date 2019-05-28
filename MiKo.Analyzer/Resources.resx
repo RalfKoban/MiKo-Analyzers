@@ -2083,7 +2083,7 @@ Doing so allows to change the implementation of the return value whenever it's n
     <value>Do not return {1}&lt;&gt;</value>
   </data>
   <data name="MiKo_3072_Title" xml:space="preserve">
-    <value>Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'</value>
+    <value>Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.</value>
   </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.

@@ -230,7 +230,7 @@ The following tables list all the 217 rules that are currently provided by the a
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|
 |MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|
 |MiKo_3071|Methods that return Task shall never return null.|&#x2713;|
-|MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|
+|MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|

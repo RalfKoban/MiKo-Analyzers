@@ -5828,7 +5828,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non-private methods should not return &apos;List&lt;&gt;&apos; or &apos;Dictionary&lt;&gt;&apos;.
+        ///   Looks up a localized string similar to Non-private methods should not return &apos;List&lt;&gt;&apos; or &apos;Dictionary&lt;&gt;&apos;..
         /// </summary>
         public static string MiKo_3072_Title {
             get {
