@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 215 rules that are currently provided by the analyzer.
+The following tables list all the 217 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -84,6 +84,7 @@ The following tables list all the 215 rules that are currently provided by the a
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|
+|MiKo_1066|Parameters should not be suffixed with a number.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
@@ -229,6 +230,7 @@ The following tables list all the 215 rules that are currently provided by the a
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|
 |MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|
 |MiKo_3071|Methods that return Task shall never return null.|&#x2713;|
+|MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|

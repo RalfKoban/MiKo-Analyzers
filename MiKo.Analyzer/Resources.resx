@@ -2075,6 +2075,16 @@ It is unexpected that when calling such methods you get a NullReferenceException
   <data name="MiKo_3071_Title" xml:space="preserve">
     <value>Methods that return Task shall never return null.</value>
   </data>
+  <data name="MiKo_3072_Description" xml:space="preserve">
+    <value>Methods that are visible to the public should not return a List&lt;&gt; or Dictionary&lt;&gt;. Instead, they should return the interfaces IList&lt;&gt; or IDictionary&lt;&gt;.
+Doing so allows to change the implementation of the return value whenever it's needed. Otherwise, the method is bound to always and forever return a List&lt;&gt; or Dictionary&lt;&gt;.</value>
+  </data>
+  <data name="MiKo_3072_MessageFormat" xml:space="preserve">
+    <value>Do not return {1}&lt;&gt;</value>
+  </data>
+  <data name="MiKo_3072_Title" xml:space="preserve">
+    <value>Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'</value>
+  </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
 This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>

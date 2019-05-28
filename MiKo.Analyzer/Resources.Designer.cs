@@ -5809,6 +5809,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that are visible to the public should not return a List&lt;&gt; or Dictionary&lt;&gt;. Instead, they should return the interfaces IList&lt;&gt; or IDictionary&lt;&gt;.
+        ///Doing so allows to change the implementation of the return value whenever it&apos;s needed. Otherwise, the method is bound to always and forever return a List&lt;&gt; or Dictionary&lt;&gt;..
+        /// </summary>
+        public static string MiKo_3072_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3072_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not return {1}&lt;&gt;.
+        /// </summary>
+        public static string MiKo_3072_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3072_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-private methods should not return &apos;List&lt;&gt;&apos; or &apos;Dictionary&lt;&gt;&apos;.
+        /// </summary>
+        public static string MiKo_3072_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3072_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
