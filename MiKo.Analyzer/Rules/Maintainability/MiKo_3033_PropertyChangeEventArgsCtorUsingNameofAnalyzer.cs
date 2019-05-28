@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => Mappings.Contains(node.Type.ToString());
 
-        // TODO: Check for 'ObservableHelper.CreateArgs'
+        // TODO: Check for 'ObservableHelper.CreateArgs' and 'ObservableHelper.GetPropertyName'
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
