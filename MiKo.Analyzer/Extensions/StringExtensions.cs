@@ -9,6 +9,8 @@ namespace System
 {
     internal static class StringExtensions
     {
+        private static readonly char[] GenericTypeArgumentSeparator = { ',' };
+
         public static bool StartsWithAnyChar(this string value, string characters)
         {
             if (string.IsNullOrEmpty(value)) return false;
@@ -141,7 +143,26 @@ namespace System
             return length > 0 ? value.Substring(0, length) : string.Empty;
         }
 
-        internal static string GetNameOnlyPart(this string fullName) => fullName.Substring(fullName.LastIndexOf('.') + 1);
+        internal static string GetNameOnlyPart(this string fullName)
+        {
+            var genericIndexStart = fullName.IndexOf('<');
+            var genericIndexEnd = fullName.LastIndexOf('>');
+            if (genericIndexStart > 0 && genericIndexEnd > 0)
+            {
+                var namePart = fullName.Substring(0, genericIndexStart).GetPartAfterLastDot();
+
+                var indexAfterGenericStart = genericIndexStart + 1;
+                var genericArguments = fullName.Substring(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart);
+                var genericNameParts = genericArguments.Split(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.GetPartAfterLastDot());
+                var genericPart = string.Concat(genericNameParts);
+
+                return string.Concat(namePart, "<", genericPart, ">");
+            }
+
+            return fullName.GetPartAfterLastDot();
+        }
+
+        internal static string GetPartAfterLastDot(this string value) => value?.Substring(value.LastIndexOf('.') + 1);
 
         internal static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
     }

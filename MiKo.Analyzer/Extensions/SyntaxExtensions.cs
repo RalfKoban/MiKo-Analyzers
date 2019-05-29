@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxExtensions
     {
-        private static readonly char[] GenericTypeArgumentSeparator = { ',' };
-
         internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
         {
             var position = token.GetLocation().SourceSpan.Start;
@@ -91,26 +89,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetNameOnlyPart(this TypeSyntax syntax)
-        {
-            var fullName = syntax.ToString();
-
-            var genericIndexStart = fullName.IndexOf('<');
-            var genericIndexEnd = fullName.LastIndexOf('>');
-            if (genericIndexStart > 0 && genericIndexEnd > 0)
-            {
-                var namePart = fullName.Substring(0, genericIndexStart).GetNameOnlyPart();
-
-                var indexAfterGenericStart = genericIndexStart + 1;
-                var genericArguments = fullName.Substring(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart);
-                var genericNameParts = genericArguments.Split(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.GetNameOnlyPart());
-                var genericPart = string.Concat(genericNameParts);
-
-                return string.Concat(namePart, "<", genericPart, ">");
-            }
-
-            return fullName.GetNameOnlyPart();
-        }
+        internal static string GetNameOnlyPart(this TypeSyntax syntax) => syntax.ToString().GetNameOnlyPart();
 
         internal static bool IsCommand(this TypeSyntax syntax, SemanticModel semanticModel)
         {

@@ -115,6 +115,7 @@ namespace Bla
 
         [TestCase("ObservableCollection<Control>")]
         [TestCase("ObservableCollection<System.Windows.Controls.Control>")]
+        [TestCase("System.Collections.ObjectModel.ObservableCollection<Control>")]
         [TestCase("System.Collections.ObjectModel.ObservableCollection<System.Windows.Controls.Control>")]
         public void No_issue_is_reported_for_DependencyProperty_field_that_is_registered_with_correct_collection_type(string propertyType) => No_issue_is_reported_for(@"
 
@@ -129,12 +130,12 @@ namespace Bla
     {
         public TestMe()
         {
-            AdditionalItems = new ObservableCollection<Control>();
+            AdditionalItems = new " + propertyType + @"();
         }
 
-        public ObservableCollection<Control> AdditionalItems
+        public " + propertyType + @" AdditionalItems
         {
-            get { return (ObservableCollection<Control>)GetValue(AdditionalItemsProperty); }
+            get { return (" + propertyType + @")GetValue(AdditionalItemsProperty); }
             set { SetValue(AdditionalItemsProperty, value); }
         }
 
