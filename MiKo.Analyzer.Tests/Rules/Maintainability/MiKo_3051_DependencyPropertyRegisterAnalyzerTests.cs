@@ -113,6 +113,36 @@ namespace Bla
 }
 ");
 
+        [TestCase("ObservableCollection<Control>")]
+        [TestCase("ObservableCollection<System.Windows.Controls.Control>")]
+        [TestCase("System.Collections.ObjectModel.ObservableCollection<System.Windows.Controls.Control>")]
+        public void No_issue_is_reported_for_DependencyProperty_field_that_is_registered_with_correct_collection_type(string propertyType) => No_issue_is_reported_for(@"
+
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe()
+        {
+            AdditionalItems = new ObservableCollection<Control>();
+        }
+
+        public ObservableCollection<Control> AdditionalItems
+        {
+            get { return (ObservableCollection<Control>)GetValue(AdditionalItemsProperty); }
+            set { SetValue(AdditionalItemsProperty, value); }
+        }
+
+        public static readonly DependencyProperty AdditionalItemsProperty = DependencyProperty.Register(nameof(AdditionalItems), typeof(" + propertyType + @"), typeof(TestMe), new PropertyMetadata());
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3051_DependencyPropertyRegisterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3051_DependencyPropertyRegisterAnalyzer();
