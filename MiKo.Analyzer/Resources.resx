@@ -1018,7 +1018,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Dispose methods should be documented as by the .NET Framework.</value>
   </data>
   <data name="MiKo_2014_MessageFormat" xml:space="preserve">
-    <value>Documentation should be: '{2}'</value>
+    <value>Documentation should be: '{1}'</value>
   </data>
   <data name="MiKo_2014_Title" xml:space="preserve">
     <value>Dispose methods should be documented in the same way as they are documented by the .NET Framework.</value>
@@ -1045,7 +1045,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Dependency properties should be documented in the same way as they are documented by the .NET Framework.</value>
   </data>
   <data name="MiKo_2017_MessageFormat" xml:space="preserve">
-    <value>&lt;{2}&gt; should be: '{3}'</value>
+    <value>&lt;{1}&gt; should be: '{2}'</value>
   </data>
   <data name="MiKo_2017_Title" xml:space="preserve">
     <value>Dependency properties should be documented as by the .NET Framework.</value>
@@ -1081,7 +1081,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {2}</value>
+    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>Documentation of parameter should have a default starting phrase.</value>
@@ -1090,7 +1090,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>Start documentation with: {2}</value>
+    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>Documentation of [out] parameters should have a default starting phrase.</value>
@@ -1099,7 +1099,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a Boolean as parameter should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; documentation should follow pattern: '{2} ... {3}'</value>
+    <value>&lt;param name="{0}"&gt; documentation should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>Documentation of Boolean parameters should have a default starting phrase.</value>
@@ -1108,7 +1108,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; documentation should start with: {2}</value>
+    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
     <value>Documentation of Enum parameters should have a default starting phrase.</value>
@@ -1117,7 +1117,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; documentation should start with: {2}</value>
+    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2025_Title" xml:space="preserve">
     <value>Documentation of 'CancellationToken' parameters should have a default starting phrase.</value>
@@ -1144,7 +1144,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
   </data>
   <data name="MiKo_2030_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>Start &lt;{1}&gt; with: '{2}'</value>
   </data>
   <data name="MiKo_2030_Title" xml:space="preserve">
     <value>Documentation of return value should have a default starting phrase.</value>
@@ -1153,7 +1153,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a Task as return value should have a default (starting) phrase.</value>
   </data>
   <data name="MiKo_2031_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>Start &lt;{1}&gt; with: '{2}'</value>
   </data>
   <data name="MiKo_2031_Title" xml:space="preserve">
     <value>Documentation of Task return value should have a specific (starting) phrase.</value>
@@ -1162,7 +1162,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
-    <value>&lt;{2}&gt; should follow pattern: '{3} ... {4}'</value>
+    <value>&lt;{0}&gt; should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2032_Title" xml:space="preserve">
     <value>Documentation of Boolean return value should have a specific phrase.</value>
@@ -1171,7 +1171,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a String as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2033_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>Start &lt;{1}&gt; with: '{2}'</value>
   </data>
   <data name="MiKo_2033_Title" xml:space="preserve">
     <value>Documentation of String return value should have a default starting phrase.</value>
@@ -1180,7 +1180,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of an Enum as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2034_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>Start &lt;{1}&gt; with: '{2}'</value>
   </data>
   <data name="MiKo_2034_Title" xml:space="preserve">
     <value>Documentation of Enum return value should have a default starting phrase.</value>
@@ -1189,7 +1189,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a collection as return value should have a specific phrase.</value>
   </data>
   <data name="MiKo_2035_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{2}&gt; with: '{3}'</value>
+    <value>Start &lt;{1}&gt; with: '{2}'</value>
   </data>
   <data name="MiKo_2035_Title" xml:space="preserve">
     <value>Documentation of collection return value should have a default starting phrase.</value>
@@ -1198,7 +1198,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
   </data>
   <data name="MiKo_2036_MessageFormat" xml:space="preserve">
-    <value>End &lt;{2}&gt; with: '{3}'</value>
+    <value>End &lt;{1}&gt; with: '{2}'</value>
   </data>
   <data name="MiKo_2036_Title" xml:space="preserve">
     <value>Documentation of Boolean or Enum property shall describe the default value.</value>
@@ -1452,7 +1452,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>'Contain' methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase ' to seek.'.</value>
   </data>
   <data name="MiKo_2074_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{1}"&gt; should end with: '{2}'</value>
+    <value>&lt;param name="{0}"&gt; should end with: '{1}'</value>
   </data>
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>Documentation of parameter of 'Contains' method should have a default ending phrase.</value>

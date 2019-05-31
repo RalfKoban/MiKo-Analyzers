@@ -92,24 +92,25 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
-        protected Diagnostic Issue(ISymbol symbol, params object[] messageArgs)
-        {
-            var prefix = string.Empty;
+        protected Diagnostic Issue(ISymbol symbol) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol));
 
-            if (symbol is IMethodSymbol m && (m.MethodKind == MethodKind.StaticConstructor || m.MethodKind == MethodKind.Constructor))
-                prefix = symbol.ContainingSymbol.Name;
+        protected Diagnostic Issue<T>(ISymbol symbol, T arg) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
 
-            return Issue(prefix + symbol.Name, symbol.Locations[0], messageArgs);
-        }
+        protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
 
-        protected Diagnostic Issue(string name, Location location, params object[] messageArgs)
-        {
-            var args = new object[messageArgs.Length + 1];
-            args[0] = name;
-            messageArgs.CopyTo(args, 1);
+        protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
-            return Diagnostic.Create(Rule, location, args);
-        }
+        protected Diagnostic Issue(string name, Location location) => ReportIssue(location, name);
+
+        protected Diagnostic Issue<T>(string name, Location location, T arg1) => ReportIssue(location, name, arg1.ToString());
+
+        protected Diagnostic Issue<T1, T2>(string name, Location location, T1 arg1, T2 arg2) => ReportIssue(location, name, arg1.ToString(), arg2.ToString());
+
+        private Diagnostic ReportIssue(Location location, params object[] args) => Diagnostic.Create(Rule, location, args);
+
+        private static string GetSymbolName(ISymbol symbol) => symbol is IMethodSymbol m && (m.MethodKind == MethodKind.StaticConstructor || m.MethodKind == MethodKind.Constructor)
+                                                                   ? symbol.ContainingSymbol.Name + symbol.Name
+                                                                   : symbol.Name;
 
         private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)
         {

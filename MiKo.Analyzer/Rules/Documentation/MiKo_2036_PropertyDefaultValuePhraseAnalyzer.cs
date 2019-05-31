@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comment.EndsWithAny(endingPhrases, StringComparison.Ordinal)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(owningSymbol, owningSymbol.Name, xmlTag, proposedEndingPhrase) };
+                       : new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase) };
         }
     }
 }

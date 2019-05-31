@@ -2719,7 +2719,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Documentation should be: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2014_MessageFormat {
             get {
@@ -2800,7 +2800,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should be: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to &lt;{1}&gt; should be: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2017_MessageFormat {
             get {
@@ -2908,7 +2908,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {2}.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2021_MessageFormat {
             get {
@@ -2935,7 +2935,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start documentation with: {2}.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2022_MessageFormat {
             get {
@@ -2962,7 +2962,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should follow pattern: &apos;{2} ... {3}&apos;.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should follow pattern: &apos;{1} ... {2}&apos;.
         /// </summary>
         public static string MiKo_2023_MessageFormat {
             get {
@@ -2989,7 +2989,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should start with: {2}.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2024_MessageFormat {
             get {
@@ -3016,7 +3016,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; documentation should start with: {2}.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2025_MessageFormat {
             get {
@@ -3097,7 +3097,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2030_MessageFormat {
             get {
@@ -3124,7 +3124,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2031_MessageFormat {
             get {
@@ -3151,7 +3151,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{2}&gt; should follow pattern: &apos;{3} ... {4}&apos;.
+        ///   Looks up a localized string similar to &lt;{0}&gt; should follow pattern: &apos;{1} ... {2}&apos;.
         /// </summary>
         public static string MiKo_2032_MessageFormat {
             get {
@@ -3178,7 +3178,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2033_MessageFormat {
             get {
@@ -3205,7 +3205,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2034_MessageFormat {
             get {
@@ -3232,7 +3232,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2035_MessageFormat {
             get {
@@ -3259,7 +3259,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End &lt;{2}&gt; with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to End &lt;{1}&gt; with: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2036_MessageFormat {
             get {
@@ -4011,7 +4011,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{1}&quot;&gt; should end with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; should end with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2074_MessageFormat {
             get {

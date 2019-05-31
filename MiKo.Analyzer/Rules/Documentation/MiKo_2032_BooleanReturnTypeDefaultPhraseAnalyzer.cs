@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comment.StartsWithAny(startingPhrases, Comparison) && comment.ContainsAny(endingPhrases, Comparison)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(owningSymbol, owningSymbol.Name, xmlTag, startingPhrases[0], endingPhrases[0]) };
+                       : new[] { Issue(owningSymbol, xmlTag, startingPhrases[0], endingPhrases[0]) };
         }
 
         // ReSharper disable once RedundantNameQualifier

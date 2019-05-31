@@ -47,6 +47,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                : new[] { Issue(parameter, parameter.Name, phrase.HumanizedConcatenated()) };
+                                                                                                                                : new[] { Issue(parameter, phrase.HumanizedConcatenated()) };
     }
 }

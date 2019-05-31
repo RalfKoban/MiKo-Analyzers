@@ -93,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, object parameter, ref List<Diagnostic> diagnostics)
+        private void ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter, ref List<Diagnostic> diagnostics)
         {
             if (diagnostics is null)
                 diagnostics = new List<Diagnostic>();

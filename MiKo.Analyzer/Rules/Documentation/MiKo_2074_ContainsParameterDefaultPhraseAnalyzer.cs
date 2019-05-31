@@ -22,6 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => comment.EndsWith(Phrase, StringComparison.Ordinal)
                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                   : new[] { Issue(parameter, parameter.Name, Phrase) };
+                                                                                                                   : new[] { Issue(parameter, Phrase) };
     }
 }
