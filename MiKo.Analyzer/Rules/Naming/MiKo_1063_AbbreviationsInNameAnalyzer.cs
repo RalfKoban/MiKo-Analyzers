@@ -30,6 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "procs", "processes" },
                                                                                        { "prop", "property" },
                                                                                        { "pos", "position" },
+                                                                                       { "pt", "point" },
+                                                                                       { "pts", "points" },
                                                                                        { "res", "result" },
                                                                                        { "std", "standard" },
                                                                                        { "str", "string" },
@@ -55,6 +57,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Prop", "Property" },
                                                                                        { "Props", "Properties" },
                                                                                        { "Pos", "Position" },
+                                                                                       { "Pt", "Point" },
+                                                                                       { "Pts", "Points" },
                                                                                        { "Res", "Result" },
                                                                                        { "Std", "Standard" },
                                                                                        { "Str", "String" },
@@ -113,8 +117,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
             var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
             var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
+            var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
 
-            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => Issue(symbol, _.Key, _.Value));
+            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => Issue(symbol, _.Key, _.Value));
         }
 
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
@@ -145,6 +150,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return false;
         }
+
+        private static bool CompleteTermHasIssue(string key, string symbolName) => string.Equals(symbolName, key, StringComparison.Ordinal);
 
         private sealed class KeyComparer : IEqualityComparer<KeyValuePair<string, string>>
         {

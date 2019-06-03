@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "proc",
                 "procs",
                 "propName",
+                "pt",
+                "pts",
                 "res",
                 "std",
                 "str",
@@ -51,6 +53,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Proc",
                 "Procs",
                 "PropName",
+                "Pt",
+                "Pts",
                 "Res",
                 "Std",
                 "Tmp",
@@ -118,6 +122,23 @@ namespace Bla
         {
             var " + variableName + @" = 42;
             return " + variableName + @";
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_variable_([ValueSource(nameof(BadPrefixes))] string variableName) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            var @" + variableName + @" = 42;
+            return @" + variableName + @";
         }
     }
 }
