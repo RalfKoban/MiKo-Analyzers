@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "procs",
                 "propName",
                 "res",
+                "std",
                 "str",
                 "tmp",
                 "txt",
@@ -51,6 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Procs",
                 "PropName",
                 "Res",
+                "Std",
                 "Tmp",
                 "Txt",
             };
@@ -61,6 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     {
                                                                         "BL",
                                                                         "Bl",
+                                                                        "Err",
                                                                         "Param",
                                                                         "Params",
                                                                         "Proc",

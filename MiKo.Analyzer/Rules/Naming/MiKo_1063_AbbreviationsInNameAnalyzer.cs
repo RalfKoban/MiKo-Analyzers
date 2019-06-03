@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "prop", "property" },
                                                                                        { "pos", "position" },
                                                                                        { "res", "result" },
+                                                                                       { "std", "standard" },
                                                                                        { "str", "string" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
@@ -55,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Props", "Properties" },
                                                                                        { "Pos", "Position" },
                                                                                        { "Res", "Result" },
+                                                                                       { "Std", "Standard" },
                                                                                        { "Str", "String" },
                                                                                        { "Tmp", "Temp" },
                                                                                        { "Txt", "Text" },
@@ -66,6 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                         { "Vm", "ViewModel" },
                                                                                         { "BL", "BusinessLogic" },
                                                                                         { "Bl", "BusinessLogic" },
+                                                                                        { "Err", "Error" },
                                                                                     };
 
         private static readonly string[] AllowedPostFixTerms =
