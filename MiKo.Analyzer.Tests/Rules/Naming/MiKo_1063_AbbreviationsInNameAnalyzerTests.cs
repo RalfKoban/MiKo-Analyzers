@@ -144,6 +144,24 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_foreach_variable_([ValueSource(nameof(BadPrefixes))] string variableName) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(int[] variables)
+        {
+            foreach (var @" + variableName + @" in variables)
+            {
+                return @" + variableName + @";
+            }
+        }
+    }
+}");
+
         protected override string GetDiagnosticId() => MiKo_1063_AbbreviationsInNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1063_AbbreviationsInNameAnalyzer();

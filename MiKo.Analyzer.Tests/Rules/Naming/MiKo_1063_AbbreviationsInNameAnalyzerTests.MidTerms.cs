@@ -21,6 +21,24 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_local_foreach_variable_with_midterm([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(int[] variables)
+        {
+            foreach (var my" + midterm + @"Variable in variables)
+            {
+                return my" + midterm + @"Variable;
+            }
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_field_with_midterm([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
 using System;
 

@@ -21,6 +21,24 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_local_foreach_variable_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(int[] variables)
+        {
+            foreach (var variable" + postfix + @" in variables)
+            {
+                return variable" + postfix + @";
+            }
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_field_with_postfix([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
 using System;
 

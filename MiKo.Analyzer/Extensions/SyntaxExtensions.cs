@@ -15,8 +15,9 @@ namespace MiKoSolutions.Analyzers
         {
             var position = token.GetLocation().SourceSpan.Start;
             var name = token.ValueText;
+            var syntaxNode = token.Parent;
 
-            if (token.Parent is ParameterSyntax node)
+            if (syntaxNode is ParameterSyntax node)
             {
                 // we might have a ctor here and no method
                 var methodName = node.GetEnclosing<MethodDeclarationSyntax>()?.Identifier.ValueText ?? node.GetEnclosing<ConstructorDeclarationSyntax>()?.Identifier.ValueText;
@@ -28,10 +29,18 @@ namespace MiKoSolutions.Analyzers
                 //var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
             }
 
-            return semanticModel.LookupSymbols(position, name: name).First();
+            var symbols = semanticModel.LookupSymbols(position, name: name);
+            if (symbols.Length > 0)
+                return symbols[0];
+
+            // nothing is found, so maybe it is an identifier syntax token within a foreach statement
+            var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
+            return symbol;
         }
 
         internal static INamedTypeSymbol GetTypeSymbol(this ExpressionSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax).Type as INamedTypeSymbol;
+
+        internal static INamedTypeSymbol GetTypeSymbol(this TypeSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax).Type as INamedTypeSymbol;
 
         internal static INamedTypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => syntax.Type.GetTypeSymbol(semanticModel);
 
