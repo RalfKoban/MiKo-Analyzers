@@ -35,6 +35,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_unfinished_parameter_in_code() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething(int ) { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1066_ParametersWithNumberSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1066_ParametersWithNumberSuffixAnalyzer();
