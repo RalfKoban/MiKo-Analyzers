@@ -20,10 +20,19 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_named_after_type_and_some_uppercase_letters() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(TestMe testMe)
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parameter_named_after_type_and_only_lowercase_letters() => No_issue_is_reported_for(@"
+public class Side
+{
+    public void DoSomething(Side side)
     { }
 }
 ");
