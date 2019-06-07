@@ -1590,6 +1590,15 @@ By having a more concrete description it makes it easier for a developer to unde
   <data name="MiKo_2208_Title" xml:space="preserve">
     <value>Documentation should not use the term 'an instance of'.</value>
   </data>
+  <data name="MiKo_2210_Description" xml:space="preserve">
+    <value>The XML documentation should not use the abbreviation 'info'. Instead, it should clearly document that this is an information. Hence, it should use the term 'information' instead.</value>
+  </data>
+  <data name="MiKo_2210_MessageFormat" xml:space="preserve">
+    <value>Use 'information' instead of 'info' in documentation</value>
+  </data>
+  <data name="MiKo_2210_Title" xml:space="preserve">
+    <value>Documentation should use the term 'information' instead of 'info'.</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>

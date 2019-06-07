@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -4416,6 +4416,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2208_Title {
             get {
                 return ResourceManager.GetString("MiKo_2208_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;info&apos;. Instead, it should clearly document that this is an information. Hence, it should use the term &apos;information&apos; instead..
+        /// </summary>
+        public static string MiKo_2210_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2210_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;information&apos; instead of &apos;info&apos; in documentation.
+        /// </summary>
+        public static string MiKo_2210_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2210_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use the term &apos;information&apos; instead of &apos;info&apos;..
+        /// </summary>
+        public static string MiKo_2210_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2210_Title", resourceCulture);
             }
         }
         
