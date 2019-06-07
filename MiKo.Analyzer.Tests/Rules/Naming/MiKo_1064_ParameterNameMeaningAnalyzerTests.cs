@@ -37,6 +37,34 @@ public class Side
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_parameter_named_after_type_and_used_in_ctor() => No_issue_is_reported_for(@"
+public enum Side
+{
+}
+
+public class TestMe
+{
+    public TestMe(Side side) => Side = side;
+
+    public Side Side { get; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_parameter_named_after_interface_type() => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(ITestMe testMe)
+    {
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1064_ParameterNameMeaningAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1064_ParameterNameMeaningAnalyzer();

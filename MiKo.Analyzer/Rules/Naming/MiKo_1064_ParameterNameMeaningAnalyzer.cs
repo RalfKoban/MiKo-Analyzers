@@ -18,15 +18,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol)
         {
-            var type = symbol.Type;
-            if (string.Equals(symbol.Name, type.Name, StringComparison.OrdinalIgnoreCase))
-            {
-                var name = GetNameWithoutInterfacePrefix(type);
+            var symbolName = symbol.Name;
+            var typeName = GetNameWithoutInterfacePrefix(symbol.Type);
 
-                if (name.Length > 1 && name.Substring(1).Any(_ => _.IsUpperCase()))
+            if (!string.Equals(symbolName, typeName, StringComparison.OrdinalIgnoreCase))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            if (symbol.ContainingSymbol is IMethodSymbol method)
+            {
+                // ignore those ctor parameters that get assigned to a property having the same name
+                if (method.MethodKind == MethodKind.Constructor && symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Any(_ => string.Equals(symbolName, _.Name, StringComparison.OrdinalIgnoreCase)))
                 {
-                    return new[] { Issue(symbol) };
+                    return Enumerable.Empty<Diagnostic>();
                 }
+            }
+
+            if (typeName.Length > 1 && typeName.Substring(1).Any(_ => _.IsUpperCase()))
+            {
+                return new[] { Issue(symbol) };
             }
 
             return Enumerable.Empty<Diagnostic>();
