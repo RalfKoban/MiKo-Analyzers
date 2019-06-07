@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2302_CommentedOutCodeAnalyzer : SingleLineCommentAnalyzer
+    public sealed class MiKo_2302_CommentedOutCodeAnalyzer : MultiLineCommentAnalyzer
     {
         public const string Id = "MiKo_2302";
 
@@ -79,8 +79,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             m_knownTypeNames = new HashSet<string>();
             m_knownAssemblyNames = new HashSet<string>();
-
-            IgnoreMultipleLines = false;
         }
 
         protected override void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
