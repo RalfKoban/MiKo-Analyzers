@@ -4585,6 +4585,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences..
+        /// </summary>
+        public static string MiKo_2305_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2305_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;..&apos; from comment.
+        /// </summary>
+        public static string MiKo_2305_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2305_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use double periods in comments..
+        /// </summary>
+        public static string MiKo_2305_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2305_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>

@@ -1647,6 +1647,15 @@ If it question things, then the reasons behind are still unclear. This makes it 
   <data name="MiKo_2304_Title" xml:space="preserve">
     <value>Do not formulate comments as questions.</value>
   </data>
+  <data name="MiKo_2305_Description" xml:space="preserve">
+    <value>In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences.</value>
+  </data>
+  <data name="MiKo_2305_MessageFormat" xml:space="preserve">
+    <value>Remove '..' from comment</value>
+  </data>
+  <data name="MiKo_2305_Title" xml:space="preserve">
+    <value>Do not use double periods in comments.</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
 Such empty regions solely clutter the code without providing any benefit at all.</value>
