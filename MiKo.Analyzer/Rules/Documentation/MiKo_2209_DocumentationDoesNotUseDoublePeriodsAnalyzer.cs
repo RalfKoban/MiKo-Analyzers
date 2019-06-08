@@ -12,11 +12,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2209";
 
+        private static readonly HashSet<char> AllowedChars = new HashSet<char>
+                                                                 {
+                                                                     '.',
+                                                                     '/',
+                                                                     '\\',
+                                                                 };
+
         public MiKo_2209_DocumentationDoesNotUseDoublePeriodsAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.Contains("..", _ => _ != '.', StringComparison.OrdinalIgnoreCase)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.Contains("..", _ => !AllowedChars.Contains(_), StringComparison.OrdinalIgnoreCase)
                                                                                                         ? new[] { Issue(symbol) }
                                                                                                         : Enumerable.Empty<Diagnostic>();
     }

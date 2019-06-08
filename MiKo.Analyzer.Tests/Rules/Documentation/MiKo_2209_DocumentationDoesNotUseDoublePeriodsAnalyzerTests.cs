@@ -84,6 +84,37 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_comment_with_relative_file_path([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+    /// <" + tag + @">
+    /// Some \..\..\path
+    /// </" + tag + @">
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multi_line_comment_with_relative_file_path([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+    /// <" + tag + @">
+    /// Some \..\..\path
+    /// Some /../../other/path
+    /// </" + tag + @">
+    public void DoSomething()
+    {
+        
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_comment_with_double_period([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 
 public class TestMe
