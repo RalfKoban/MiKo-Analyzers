@@ -4420,6 +4420,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML documentation is intended for other developers. It shall contain all the information that is important for them in a way that they can easily read and understand. Typos or other kinds of strange comments however are harder to understand. Thus, such things need to be avoided to not confuse the developers..
+        /// </summary>
+        public static string MiKo_2209_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2209_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;..&apos; from documentation.
+        /// </summary>
+        public static string MiKo_2209_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2209_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use double periods in documentation..
+        /// </summary>
+        public static string MiKo_2209_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2209_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;info&apos;. Instead, it should clearly document that this is an information. Hence, it should use the term &apos;information&apos; instead..
         /// </summary>
         public static string MiKo_2210_Description {
@@ -4585,7 +4612,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences..
+        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended for team members. They should contain the important information in a short way, so they should not be complete sentences..
         /// </summary>
         public static string MiKo_2305_Description {
             get {
