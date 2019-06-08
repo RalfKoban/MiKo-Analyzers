@@ -14,34 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentHasIssue(comment);
-
-        private static bool CommentHasIssue(string comment)
-        {
-            const char Period = '.';
-            const string Value = "..";
-
-            var index = 0;
-            var valueLength = Value.Length;
-            var commentLength = comment.Length;
-
-            while (true)
-            {
-                index = comment.IndexOf(Value, index, StringComparison.OrdinalIgnoreCase);
-
-                if (index <= -1)
-                    break;
-
-                var positionAfterCharacter = index + valueLength;
-                if (positionAfterCharacter >= commentLength || comment[positionAfterCharacter] != Period)
-                {
-                    return true;
-                }
-
-                index = positionAfterCharacter;
-            }
-
-            return false;
-        }
+        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.Contains("..", _ => _ != '.', StringComparison.OrdinalIgnoreCase);
     }
 }

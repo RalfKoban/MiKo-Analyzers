@@ -29,6 +29,37 @@ namespace System
 
         public static bool Contains(this string value, string finding, StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
 
+        public static bool Contains(this string value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison)
+        {
+            var index = 0;
+            var valueLength = value.Length;
+            var findingLength = finding.Length;
+
+            while (true)
+            {
+                index = value.IndexOf(finding, index, comparison);
+
+                if (index <= -1)
+                    break;
+
+                var positionAfterCharacter = index + findingLength;
+                if (positionAfterCharacter >= valueLength)
+                {
+                    return true;
+                }
+
+                var nextChar = value[positionAfterCharacter];
+                if (nextCharValidationCallback(nextChar))
+                {
+                    return true;
+                }
+
+                index = positionAfterCharacter;
+            }
+
+            return false;
+        }
+
         public static bool ContainsAny(this string value, string[] phrases) => ContainsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
         public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Contains(_, comparison));
