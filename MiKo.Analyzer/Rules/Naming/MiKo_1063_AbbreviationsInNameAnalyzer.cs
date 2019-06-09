@@ -133,6 +133,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var keyLength = key.Length;
             var symbolNameLength = symbolName.Length;
 
+            var keyStartsUpperCase = key[0].IsUpperCase();
+
             while (true)
             {
                 index = symbolName.IndexOf(key, index, StringComparison.Ordinal);
@@ -140,10 +142,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (index <= -1)
                     break;
 
+                var positionBeforeText = index - 1;
                 var positionAfterCharacter = index + keyLength;
                 if (positionAfterCharacter < symbolNameLength && symbolName[positionAfterCharacter].IsUpperCase())
                 {
-                    return true;
+                    if (keyStartsUpperCase)
+                        return true;
+
+                    if (positionBeforeText >= 0 && symbolName[positionBeforeText].IsUpperCase())
+                        return true;
                 }
 
                 index = positionAfterCharacter;

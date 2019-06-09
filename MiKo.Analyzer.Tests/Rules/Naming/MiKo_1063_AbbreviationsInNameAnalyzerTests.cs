@@ -61,8 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Txt",
             };
 
-        private static readonly string[] BadPostfixes = BadPrefixes
-                                                        .Concat(BadMidTerms)
+        private static readonly string[] BadPostfixes = BadMidTerms
                                                         .Concat(new[]
                                                                     {
                                                                         "BL",
@@ -81,6 +80,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     })
                                                         .Distinct()
                                                         .ToArray();
+
+        private static readonly string[] AllowedTerms =
+            {
+                "acceptName",
+                "firmwares",
+                "fixtures",
+                "mixtures",
+                "tires",
+            };
 
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"
@@ -111,7 +119,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_variable_([Values("firmwares", "fixtures", "mixtures", "tires")] string variableName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_variable_([ValueSource(nameof(AllowedTerms))] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
