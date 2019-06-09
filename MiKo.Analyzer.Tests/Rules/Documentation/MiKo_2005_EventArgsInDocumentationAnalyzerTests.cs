@@ -9,6 +9,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2005_EventArgsInDocumentationAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] IncorrectPhrases =
+            {
+                "This is an event arg comment.",
+                "This is an event args comment.",
+            };
+
         [Test]
         public void No_issue_is_reported_for_non_commented_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -53,53 +59,63 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_class() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_commented_with_event_argument() => No_issue_is_reported_for(@"
 /// <summary>
-/// This is a event arg comment.
+/// This is an event argument comment.
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_class([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+/// <summary>
+/// " + phrase + @"
 /// </summary>
 public class TestMe
 {
 }
 ");
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_event() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_event([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// This is a event arg comment.
+    /// " + phrase + @"
     /// </summary>
     public event EventHandler MyEvent;
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_property() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_property([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// This is a event arg comment.
+    /// " + phrase + @"
     /// </summary>
     public int SomeProperty { get; set; }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_method([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// This is a event arg comment.
+    /// " + phrase + @"
     /// </summary>
     public void DoSomething() { }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_field([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// This is a event arg comment.
+    /// " + phrase + @"
     /// </summary>
     private int SomeField;
 }
