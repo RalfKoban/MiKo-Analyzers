@@ -28,9 +28,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbol.ContainingSymbol is IMethodSymbol method)
             {
-                // ignore those ctor parameters that get assigned to a property having the same name
+                if (!ShallAnalyze(method))
+                {
+                    // ignore overrides/interfaces as the signatures should match the base signature
+                    return Enumerable.Empty<Diagnostic>();
+                }
+
                 if (method.MethodKind == MethodKind.Constructor && symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Any(_ => string.Equals(symbolName, _.Name, StringComparison.OrdinalIgnoreCase)))
                 {
+                    // ignore those ctor parameters that get assigned to a property having the same name
                     return Enumerable.Empty<Diagnostic>();
                 }
             }

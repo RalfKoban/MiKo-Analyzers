@@ -29,6 +29,15 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_overridden_method_with_parameter_named_after_type_and_some_uppercase_letters() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public override void DoSomething(TestMe testMe)
+    { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parameter_named_after_type_and_only_lowercase_letters() => No_issue_is_reported_for(@"
 public class Side
 {
