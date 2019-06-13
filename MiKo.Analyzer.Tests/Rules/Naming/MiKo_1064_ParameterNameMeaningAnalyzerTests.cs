@@ -61,6 +61,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parameter_named_after_type_and_used_in_ctor_with_Compound_word() => No_issue_is_reported_for(@"
+public enum TestMeSide
+{
+}
+
+public class TestMe
+{
+    public TestMe(TestMeSide testMeSide) => TestMeSide = testMeSide;
+
+    public TestMeSide TestMeSide { get; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_parameter_named_after_interface_type() => An_issue_is_reported_for(@"
 public interface ITestMe
 {

@@ -21,32 +21,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var symbolName = symbol.Name;
             var typeName = GetNameWithoutInterfacePrefix(symbol.Type);
 
-            if (!string.Equals(symbolName, typeName, StringComparison.OrdinalIgnoreCase))
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
             if (symbol.ContainingSymbol is IMethodSymbol method)
             {
-                if (!ShallAnalyze(method))
-                {
-                    // ignore overrides/interfaces as the signatures should match the base signature
-                    return Enumerable.Empty<Diagnostic>();
-                }
-
                 if (method.MethodKind == MethodKind.Constructor && symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Any(_ => string.Equals(symbolName, _.Name, StringComparison.OrdinalIgnoreCase)))
                 {
                     // ignore those ctor parameters that get assigned to a property having the same name
                     return Enumerable.Empty<Diagnostic>();
                 }
+
+                if (method.IsOverride || method.IsInterfaceImplementation())
+                {
+                    // ignore overrides/interfaces as the signatures should match the base signature
+                    return Enumerable.Empty<Diagnostic>();
+                }
             }
 
-            if (typeName.Length > 1 && typeName.Substring(1).Any(_ => _.IsUpperCase()))
-            {
-                return new[] { Issue(symbol) };
-            }
-
-            return Enumerable.Empty<Diagnostic>();
+            return string.Equals(symbolName, typeName, StringComparison.OrdinalIgnoreCase) && typeName.Length > 1 && typeName.Substring(1).Any(_ => _.IsUpperCase())
+                       ? new[] { Issue(symbol) }
+                       : Enumerable.Empty<Diagnostic>();
         }
 
         private static string GetNameWithoutInterfacePrefix(ITypeSymbol type)
