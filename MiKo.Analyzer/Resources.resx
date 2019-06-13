@@ -1198,7 +1198,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
   </data>
   <data name="MiKo_2036_MessageFormat" xml:space="preserve">
-    <value>End &lt;{1}&gt; with: '{2}'</value>
+    <value>End &lt;{1}&gt; with: '{2}'    Or with: '{3}'</value>
   </data>
   <data name="MiKo_2036_Title" xml:space="preserve">
     <value>Documentation of Boolean or Enum property shall describe the default value.</value>

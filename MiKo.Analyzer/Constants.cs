@@ -231,7 +231,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] DefaultCrefPhrases =
                 {
-                    "The default is <see cref=\"{0}\"/>.",
+                    DefaultCrefPhrase,
                     "The default is <see cref=\"{0}\" />.",
                 };
 
@@ -244,6 +244,8 @@ namespace MiKoSolutions.Analyzers
                     "The default is <see langword=\"true\" />.",
                     "The default is <see langword=\"false\" />.",
                 };
+
+            internal const string NoDefaultPhrase = "This property has no default value.";
 
             private static readonly string[] InvalidSummaryCrefXmlTags =
                 {

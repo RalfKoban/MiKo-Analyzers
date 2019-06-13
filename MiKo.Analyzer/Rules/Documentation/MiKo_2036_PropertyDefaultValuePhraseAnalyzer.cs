@@ -27,17 +27,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
+            if (comment.EndsWith(Constants.Comments.NoDefaultPhrase, StringComparison.Ordinal))
+                return Enumerable.Empty<Diagnostic>();
+
             string proposedEndingPhrase;
             string[] endingPhrases;
 
             if (returnType.SpecialType == SpecialType.System_Boolean)
             {
                 proposedEndingPhrase = string.Format(Constants.Comments.DefaultLangwordPhrase, "...");
+
                 endingPhrases = Constants.Comments.DefaultBooleanLangwordPhrases;
             }
             else
             {
                 proposedEndingPhrase = string.Format(Constants.Comments.DefaultCrefPhrase, "...");
+
                 endingPhrases = returnType.GetMembers()
                                           .OfType<IFieldSymbol>()
                                           .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => string.Format(phrase, symbol))
@@ -46,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comment.EndsWithAny(endingPhrases, StringComparison.Ordinal)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase) };
+                       : new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase, Constants.Comments.NoDefaultPhrase) };
         }
     }
 }

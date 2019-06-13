@@ -194,6 +194,30 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_commented_Enum_property_with_explicitely_commented_no_default_value([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public enum MyEnum
+{
+    A = 0,
+    B,
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// One of the MyEnum values.
+    /// This property has no default value.
+    /// </" + xmlTag + @">
+    public MyEnum DoSomething { get; set; }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2036_PropertyDefaultValuePhraseAnalyzer();

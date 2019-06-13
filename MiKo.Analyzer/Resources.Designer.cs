@@ -3259,7 +3259,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End &lt;{1}&gt; with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to End &lt;{1}&gt; with: &apos;{2}&apos;    Or with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2036_MessageFormat {
             get {
