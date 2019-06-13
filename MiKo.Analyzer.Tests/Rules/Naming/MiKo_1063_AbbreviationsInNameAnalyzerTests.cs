@@ -83,9 +83,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedTerms =
             {
+                "allowedFeatures",
+                "accept",
                 "acceptName",
+                "except",
                 "firmwares",
                 "fixtures",
+                "measures",
                 "mixtures",
                 "tires",
             };

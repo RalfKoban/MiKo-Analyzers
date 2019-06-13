@@ -77,9 +77,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedPostFixTerms =
             {
-                "wares",
+                "cept",
                 "ires",
                 "ixtures",
+                "ures",
+                "wares",
             };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id, (SymbolKind)(-1))
