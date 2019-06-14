@@ -22,14 +22,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             const string Remove = "Remove";
             const string Clear = "Clear";
-            if (methodName.StartsWith(Clear, StringComparison.OrdinalIgnoreCase))
+            const StringComparison Comparison = StringComparison.Ordinal;
+
+            if (methodName.StartsWith(Clear, Comparison) && !methodName.StartsWith(Clear + "s", Comparison))
             {
                 return method.Parameters.Any()
                        ? new[] { Issue(method, methodName.Replace(Clear, Remove)) }
                        : Enumerable.Empty<Diagnostic>();
             }
 
-            if (methodName.StartsWith(Remove, StringComparison.OrdinalIgnoreCase))
+            if (methodName.StartsWith(Remove, Comparison) && !methodName.StartsWith(Remove + "s", Comparison))
             {
                 return method.Parameters.Any()
                        ? Enumerable.Empty<Diagnostic>()

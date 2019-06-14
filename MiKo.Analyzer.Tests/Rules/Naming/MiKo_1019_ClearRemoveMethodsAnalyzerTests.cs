@@ -60,6 +60,30 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_Clears_method_with_parameters() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void ClearsSomething(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Removes_method_with_no_parameters() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void RemovesSomething()
+    {
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1019_ClearRemoveMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1019_ClearRemoveMethodsAnalyzer();
