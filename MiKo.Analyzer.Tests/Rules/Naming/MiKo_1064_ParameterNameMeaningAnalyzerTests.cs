@@ -88,6 +88,18 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_cancellation_token() => No_issue_is_reported_for(@"
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething(CancellationToken cancellationToken)
+    {
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1064_ParameterNameMeaningAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1064_ParameterNameMeaningAnalyzer();

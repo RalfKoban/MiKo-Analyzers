@@ -12,6 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1064";
 
+        private static readonly HashSet<string> WellknownNames = new HashSet<string>
+                                                                     {
+                                                                         "cancellationToken",
+                                                                     };
+
         public MiKo_1064_ParameterNameMeaningAnalyzer() : base(Id, SymbolKind.Parameter)
         {
         }
@@ -19,6 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol)
         {
             var symbolName = symbol.Name;
+
+            if (WellknownNames.Contains(symbolName))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
             var typeName = GetNameWithoutInterfacePrefix(symbol.Type);
 
             if (symbol.ContainingSymbol is IMethodSymbol method)
