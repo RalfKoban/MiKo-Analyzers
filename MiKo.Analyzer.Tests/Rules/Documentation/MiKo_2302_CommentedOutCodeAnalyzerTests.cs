@@ -25,6 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "i++;",
                 "e.Handled = true;",
                 "else",
+                "return true || false;",
+                "return true && false;",
             };
 
         [Test]

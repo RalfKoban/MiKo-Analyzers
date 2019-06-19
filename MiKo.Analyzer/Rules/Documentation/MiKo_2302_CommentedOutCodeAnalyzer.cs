@@ -54,6 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "*=",
                 "/=",
                 "=>", // lambda
+                "&&",
+                "||",
             };
 
         private static readonly string[] CodeStartMarkers =
