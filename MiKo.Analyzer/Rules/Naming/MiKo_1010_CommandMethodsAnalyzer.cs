@@ -43,6 +43,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
+        private static string GetProposal(string methodName, string forbiddenName)
+        {
+            var enhancedForbiddenName = forbiddenName + "d";
+
+            var phrase = methodName.Contains(enhancedForbiddenName)
+                             ? enhancedForbiddenName
+                             : forbiddenName;
+
+            // TODO RKN: find better name by inspecting method assignment (?)
+            return methodName.Remove(phrase);
+        }
+
         private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ref List<Diagnostic> diagnostics)
         {
             var methodName = method.Name;
@@ -57,7 +69,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (forbidden)
             {
                 if (diagnostics == null) diagnostics = new List<Diagnostic>();
-                diagnostics.Add(Issue(method, methodName.Remove(forbiddenName)));
+
+                var proposal = GetProposal(methodName, forbiddenName);
+                diagnostics.Add(Issue(method, proposal));
             }
 
             return forbidden;
