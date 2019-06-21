@@ -1919,6 +1919,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;Perform&apos; in their names..
+        /// </summary>
+        public static string MiKo_1067_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1067_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Perform&apos; from name.
+        /// </summary>
+        public static string MiKo_1067_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1067_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not contain &apos;Perform&apos; in their names..
+        /// </summary>
+        public static string MiKo_1067_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1067_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

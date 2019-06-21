@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 217 rules that are currently provided by the analyzer.
+The following tables list all the 221 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -85,6 +85,7 @@ The following tables list all the 217 rules that are currently provided by the a
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|
 |MiKo_1066|Parameters should not be suffixed with a number.|&#x2713;|
+|MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
@@ -180,11 +181,14 @@ The following tables list all the 217 rules that are currently provided by the a
 |MiKo_2206|Documentation should not use the term 'flag'.|&#x2713;|
 |MiKo_2207|&lt;summary&gt; documentation shall be short.|&#x2713;|
 |MiKo_2208|Documentation should not use the term 'an instance of'.|&#x2713;|
+|MiKo_2209|Do not use double periods in documentation.|&#x2713;|
+|MiKo_2210|Documentation should use the term 'information' instead of 'info'.|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|
 |MiKo_2303|Do not end comments with a period.|&#x2713;|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|
+|MiKo_2305|Do not use double periods in comments.|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|
