@@ -3178,7 +3178,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;{0}&gt; should follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to &lt;{1}&gt; should follow pattern: &apos;{2} ... {3}&apos;.
         /// </summary>
         public static string MiKo_2032_MessageFormat {
             get {
