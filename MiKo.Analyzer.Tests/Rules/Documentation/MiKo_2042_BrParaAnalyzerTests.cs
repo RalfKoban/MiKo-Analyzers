@@ -159,7 +159,8 @@ public sealed class TestMe
         private static string[] CreateWrongItems()
         {
             var tokens = new List<string>();
-            foreach (var token in new[] { "<br/>", "<br />" })
+
+            foreach (var token in new[] { "<br/>", "<br />", "<p>Whatever.</p>" })
             {
                 tokens.Add(token);
                 tokens.Add(token.ToUpperInvariant());

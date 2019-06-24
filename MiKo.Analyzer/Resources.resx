@@ -1261,13 +1261,13 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation should not contain other documentation tags.</value>
   </data>
   <data name="MiKo_2042_Description" xml:space="preserve">
-    <value>The documentation should use the '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.</value>
+    <value>The documentation should use the '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' or '&lt;p/&gt;' HTML tags.</value>
   </data>
   <data name="MiKo_2042_HelpLinkUri" xml:space="preserve">
     <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para</value>
   </data>
   <data name="MiKo_2042_MessageFormat" xml:space="preserve">
-    <value>Use '&lt;para/&gt;' instead of '&lt;br/&gt;'</value>
+    <value>Use '&lt;para/&gt;' instead of '{1}'</value>
   </data>
   <data name="MiKo_2042_Title" xml:space="preserve">
     <value>Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.</value>

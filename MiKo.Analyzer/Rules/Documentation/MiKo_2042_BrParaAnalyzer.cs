@@ -12,6 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2042";
 
+        private static readonly string[] ParagraphTags =
+            {
+                "<p>",
+                "</p>",
+            };
+
         public MiKo_2042_BrParaAnalyzer() : base(Id)
         {
         }
@@ -20,9 +26,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = symbol.GetComment();
 
-            return comment.Contains("<br", StringComparison.OrdinalIgnoreCase)
-                       ? new [] { Issue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (comment.Contains("<br", StringComparison.OrdinalIgnoreCase))
+                return new[] { Issue(symbol, "<br/>") };
+
+            if (comment.ContainsAny(ParagraphTags, StringComparison.OrdinalIgnoreCase))
+                return new[] { Issue(symbol, "<p>...</p>") };
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

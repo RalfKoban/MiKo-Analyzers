@@ -3448,7 +3448,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The documentation should use the &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; HTML tags..
+        ///   Looks up a localized string similar to The documentation should use the &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; or &apos;&lt;p/&gt;&apos; HTML tags..
         /// </summary>
         public static string MiKo_2042_Description {
             get {
@@ -3466,7 +3466,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;&lt;br/&gt;&apos;.
+        ///   Looks up a localized string similar to Use &apos;&lt;para/&gt;&apos; instead of &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2042_MessageFormat {
             get {
