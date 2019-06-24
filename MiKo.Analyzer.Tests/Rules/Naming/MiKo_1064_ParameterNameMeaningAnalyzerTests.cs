@@ -88,13 +88,18 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_cancellation_token() => No_issue_is_reported_for(@"
+        [TestCase("CancellationToken cancellationToken")]
+        [TestCase("IFormatProvider formatProvider")]
+        [TestCase("SemanticModel semanticModel")]
+        public void No_issue_is_reported_for_known_name_(string parameter) => No_issue_is_reported_for(@"
+using System;
 using System.Threading;
+
+using Microsoft.CodeAnalysis;
 
 public class TestMe
 {
-    public void DoSomething(CancellationToken cancellationToken)
+    public void DoSomething(" + parameter + @")
     {
     }
 }

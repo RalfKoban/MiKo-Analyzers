@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly HashSet<string> WellknownNames = new HashSet<string>
                                                                      {
                                                                          "cancellationToken",
+                                                                         "formatProvider",
+                                                                         "semanticModel",
                                                                      };
 
         public MiKo_1064_ParameterNameMeaningAnalyzer() : base(Id, SymbolKind.Parameter)
