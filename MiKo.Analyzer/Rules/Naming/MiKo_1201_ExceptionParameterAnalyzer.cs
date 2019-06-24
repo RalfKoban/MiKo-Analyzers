@@ -36,6 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return Enumerable.Empty<Diagnostic>();
 
                     break;
+
+                default:
+                    if (symbol.ContainingSymbol.IsConstructor() && symbol.MatchesProperty())
+                        return Enumerable.Empty<Diagnostic>();
+
+                    break;
             }
 
             return new[] { Issue(symbol, ExceptionIdentifier1, ExceptionIdentifier2) };

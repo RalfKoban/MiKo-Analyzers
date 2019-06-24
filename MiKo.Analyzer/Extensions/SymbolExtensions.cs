@@ -522,6 +522,15 @@ namespace MiKoSolutions.Analyzers
 
         internal static string MinimalTypeName(this ITypeSymbol symbol) => symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 
+        /// <summary>
+        /// Determines if a <see cref="IPropertySymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
+        /// </summary>
+        /// <param name="symbol">The symbol to inspect.</param>
+        /// <returns>
+        /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IPropertySymbol"/> that matches the name of <paramref name="symbol"/>; otherwise, <see langword="false"/>.
+        /// </returns>
+        internal static bool MatchesProperty(this IParameterSymbol symbol) => symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Any(_ => string.Equals(symbol.Name, _.Name, StringComparison.OrdinalIgnoreCase));
+
         private static void CollectAllNestedTypes(this ITypeSymbol symbol, ICollection<ITypeSymbol> types)
         {
             types.Add(symbol);

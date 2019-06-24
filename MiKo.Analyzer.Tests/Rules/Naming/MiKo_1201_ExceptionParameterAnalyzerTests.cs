@@ -122,6 +122,20 @@ public sealed class BlaBlaException : Exception
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_constructor_parameter_named_after_Property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe(Exception myException)
+    {
+    }
+
+    public Exception MyException { get; }
+
+}");
+
         protected override string GetDiagnosticId() => MiKo_1201_ExceptionParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1201_ExceptionParameterAnalyzer();
