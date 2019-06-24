@@ -1511,6 +1511,15 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2100_Title" xml:space="preserve">
     <value>&lt;example&gt; documentation should start with descriptive default phrase.</value>
   </data>
+  <data name="MiKo_2101_Description" xml:space="preserve">
+    <value>To ease reading, example documentation should place code samples inside &lt;code&gt; tags so that IntelliSense or any XML documentation tool can format them in a special way.</value>
+  </data>
+  <data name="MiKo_2101_MessageFormat" xml:space="preserve">
+    <value>Place sample code in &lt;example&gt; inside '&lt;code&gt;' tags</value>
+  </data>
+  <data name="MiKo_2101_Title" xml:space="preserve">
+    <value>&lt;example&gt; documentation should show code example in &lt;code&gt; tags.</value>
+  </data>
   <data name="MiKo_2200_Description" xml:space="preserve">
     <value>Documentation should start with a capitalized letter to have a full sentence.</value>
   </data>

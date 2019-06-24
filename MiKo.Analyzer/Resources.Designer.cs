@@ -4191,6 +4191,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease reading, example documentation should place code samples inside &lt;code&gt; tags so that IntelliSense or any XML documentation tool can format them in a special way..
+        /// </summary>
+        public static string MiKo_2101_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2101_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place sample code in &lt;example&gt; inside &apos;&lt;code&gt;&apos; tags.
+        /// </summary>
+        public static string MiKo_2101_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2101_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;example&gt; documentation should show code example in &lt;code&gt; tags..
+        /// </summary>
+        public static string MiKo_2101_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2101_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should start with a capitalized letter to have a full sentence..
         /// </summary>
         public static string MiKo_2200_Description {
