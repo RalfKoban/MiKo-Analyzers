@@ -238,6 +238,8 @@ public sealed class TestMe
                 results.Add(token + ",");
                 results.Add(token + ";");
                 results.Add(token + ".");
+                results.Add("<see langowrd=\"" + token + "\"/>");
+                results.Add("<see langwrod=\"" + token + "\"/>");
             }
 
             return results.OrderBy(_ => _).ToArray();

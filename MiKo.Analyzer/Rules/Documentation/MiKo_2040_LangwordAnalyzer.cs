@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_2040_LangwordAnalyzer : OverallDocumentationAnalyzer
     {
-        private static readonly KeyValuePair<string, string>[] Items  = CreateItems();
+        private static readonly KeyValuePair<string, string>[] Items = CreateItems();
 
         public const string Id = "MiKo_2040";
 
@@ -37,7 +37,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var results = new Dictionary<string, string>();
 
-            foreach (var item in new[] { "true", "false", "null" })
+            var items = new[] { "true", "false", "null" };
+            var attributes = new[] { "langref", "langowrd", "langwrod" };
+
+            foreach (var item in items)
             {
                 var proposal = $"<see langword=\"{item}\"/>";
 
@@ -49,14 +52,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add($" {item},", $" {proposal},");
                 results.Add($" {item};", $" {proposal};");
                 results.Add($"<c>{item}</c>", proposal);
-                results.Add($"<see langref=\"{item}\"/>", proposal);
-                results.Add($"<see langref=\"{item}\" />", proposal);
-                results.Add($"<see langref=\"{item}\"></see>", proposal);
-                results.Add($"<see langref=\"{item}\" ></see>", proposal);
-                results.Add($"<seealso langref=\"{item}\"/>", proposal);
-                results.Add($"<seealso langref=\"{item}\" />", proposal);
-                results.Add($"<seealso langref=\"{item}\"></seealso>", proposal);
-                results.Add($"<seealso langref=\"{item}\" ></seealso>", proposal);
+
+                foreach (var attribute in attributes)
+                {
+                    results.Add($"<see {attribute}=\"{item}\"/>", proposal);
+                    results.Add($"<see {attribute}=\"{item}\" />", proposal);
+                    results.Add($"<see {attribute}=\"{item}\"></see>", proposal);
+                    results.Add($"<see {attribute}=\"{item}\" ></see>", proposal);
+                    results.Add($"<seealso {attribute}=\"{item}\"/>", proposal);
+                    results.Add($"<seealso {attribute}=\"{item}\" />", proposal);
+                    results.Add($"<seealso {attribute}=\"{item}\"></seealso>", proposal);
+                    results.Add($"<seealso {attribute}=\"{item}\" ></seealso>", proposal);
+                }
             }
 
             return results.ToArray();
