@@ -80,6 +80,7 @@ namespace MiKoSolutions.Analyzers
                     "Field",
                     "For ",
                     "Func",
+                    "Helper ",
                     "Impl ",
                     "Implement ",
                     "Implementation of ",
@@ -99,6 +100,7 @@ namespace MiKoSolutions.Analyzers
                     "To ",
                     "Used ",
                     "Uses ",
+                    "Use this ",
                     "ViewModel",
                     "Which ",
                 };
