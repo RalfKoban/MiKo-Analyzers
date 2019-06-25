@@ -151,6 +151,20 @@ public sealed class TestMe
 }
 ");
 
+        [Test]
+        public void Wrong_combined_example_for_documentation_is_reported_on_class() => An_issue_is_reported_for(@"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <example>
+/// <br />
+/// <p></p>
+/// </example>
+public sealed class TestMe
+{
+}
+", 2);
+
         protected override string GetDiagnosticId() => MiKo_2042_BrParaAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2042_BrParaAnalyzer();

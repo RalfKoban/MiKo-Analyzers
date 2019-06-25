@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,12 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = symbol.GetComment();
 
             if (comment.Contains("<br", StringComparison.OrdinalIgnoreCase))
-                return new[] { Issue(symbol, "<br/>") };
+                yield return Issue(symbol, "<br/>");
 
             if (comment.ContainsAny(ParagraphTags, StringComparison.OrdinalIgnoreCase))
-                return new[] { Issue(symbol, "<p>...</p>") };
-
-            return Enumerable.Empty<Diagnostic>();
+                yield return Issue(symbol, "<p>...</p>");
         }
     }
 }
