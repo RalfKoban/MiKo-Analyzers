@@ -37,13 +37,28 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void Titles_should_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_Title"), Does.EndWith("."));
+        public static void Titles_should_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        {
+            var key = analyzer.DiagnosticId + "_Title";
+
+            Assert.That(ResourceManager.GetString(key), Does.EndWith("."), $"'{key}' is incorrect.{Environment.NewLine}");
+        }
 
         [Test]
-        public static void Descriptions_should_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_Description"), Does.EndWith(".").Or.EndsWith(")"));
+        public static void Descriptions_should_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        {
+            var key = analyzer.DiagnosticId + "_Description";
+
+            Assert.That(ResourceManager.GetString(key), Does.EndWith(".").Or.EndsWith(")"), $"'{key}' is incorrect.{Environment.NewLine}");
+        }
 
         [Test]
-        public static void Messages_should_not_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer) => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.EndWith("."));
+        public static void Messages_should_not_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        {
+            var key = analyzer.DiagnosticId + "_MessageFormat";
+
+            Assert.That(ResourceManager.GetString(key), Does.Not.EndWith("."), $"'{key}' is incorrect.{Environment.NewLine}");
+        }
 
         [Test, Combinatorial, Ignore("Just to check from time to time whether the texts are acceptable or need to be rephrased.")]
         public static void Messages_should_not_contain_(
@@ -73,6 +88,29 @@ namespace MiKoSolutions.Analyzers.Rules
             findings.Sort();
 
             Assert.That(findings, Is.Empty);
+        }
+
+        [Test, Ignore("Just to find gaps")]
+        public static void Gaps_in_Analyzer_numbers([Range(1, 5, 1)] int i)
+        {
+            var gaps = new List<string>();
+
+            var diagnosticIds = AllAnalyzers.Select(_ => _.DiagnosticId).ToArray();
+
+            var thousand = i * 1000;
+
+            for (var j = 0; j < thousand; j++)
+            {
+                var number = thousand + j;
+                var prefix = $"MiKo_{number:####}";
+
+                if (diagnosticIds.All(_ => !_.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)))
+                {
+                    gaps.Add(prefix);
+                }
+            }
+
+            Assert.That(gaps, Is.Empty, string.Join(Environment.NewLine, gaps));
         }
 
         [Test]

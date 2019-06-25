@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -6023,6 +6023,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3081_Title {
             get {
                 return ResourceManager.GetString("MiKo_3081_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical comparisons using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; operator..
+        /// </summary>
+        public static string MiKo_3082_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3082_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;==&apos;.
+        /// </summary>
+        public static string MiKo_3082_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3082_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pattern matching is favored over a logical comparison with &apos;true&apos; or &apos;false&apos;..
+        /// </summary>
+        public static string MiKo_3082_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3082_Title", resourceCulture);
             }
         }
         
