@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => !symbol.IsTestClass();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsTestClass() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null);
 

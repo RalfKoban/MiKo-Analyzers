@@ -15,11 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public && !symbol.IsTestClass();
+        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public && symbol.IsTestClass() is false;
 
         protected override  IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            return !symbol.IsSealed && summaries.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase))
+            return symbol.IsSealed is false && summaries.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase))
                        ? new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) }
                        : Enumerable.Empty<Diagnostic>();
         }

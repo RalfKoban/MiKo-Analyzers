@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol)
         {
-            if (!symbol.IsConstructor()) return false;
+            if (symbol.IsConstructor() is false) return false;
 
             if (IsParameterlessCtor(symbol)
              || IsMessageCtor(symbol)
