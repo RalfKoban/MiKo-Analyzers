@@ -91,9 +91,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                             ? new[] { Issue(method, betterName) }
                                                                                             : Enumerable.Empty<Diagnostic>();
 
-        public static bool TryFindBetterName(string name, out string betterName)
+        public static bool TryFindBetterName(string name, out string result)
         {
-            betterName = name;
+            result = name;
 
             if (string.IsNullOrWhiteSpace(name))
                 return false;
@@ -103,8 +103,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
             {
-                betterName = name.Substring(0, name.Length - pair.Key.Length) + pair.Value;
-                return !string.Equals(betterName, name, StringComparison.Ordinal);
+                result = name.Substring(0, name.Length - pair.Key.Length) + pair.Value;
+                return !string.Equals(result, name, StringComparison.Ordinal);
             }
 
             return false;

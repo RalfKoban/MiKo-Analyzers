@@ -31,12 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                    ? Issue(identifier, query.GetLocation())
                                                                                                                    : null;
 
-        private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode syntaxNode, out string identifier)
+        private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode result, out string identifier)
         {
             var methodDeclarationSyntax = query.GetEnclosing<MethodDeclarationSyntax>();
             if (methodDeclarationSyntax != null)
             {
-                syntaxNode = methodDeclarationSyntax;
+                result = methodDeclarationSyntax;
                 identifier = methodDeclarationSyntax.Identifier.ValueText;
                 return true;
             }
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var variableDeclaratorSyntax = query.GetEnclosing<VariableDeclaratorSyntax>();
             if (variableDeclaratorSyntax != null)
             {
-                syntaxNode = variableDeclaratorSyntax;
+                result = variableDeclaratorSyntax;
                 identifier = variableDeclaratorSyntax.Identifier.ValueText;
                 return true;
             }
@@ -54,12 +54,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var ctorDeclarationSyntax = query.GetEnclosing<ConstructorDeclarationSyntax>();
             if (ctorDeclarationSyntax != null)
             {
-                syntaxNode = ctorDeclarationSyntax;
+                result = ctorDeclarationSyntax;
                 identifier = ctorDeclarationSyntax.Identifier.ValueText;
                 return true;
             }
 
-            syntaxNode = null;
+            result = null;
             identifier = null;
             return false;
         }

@@ -62,19 +62,19 @@ namespace System
 
         public static bool ContainsAny(this string value, string[] phrases) => ContainsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Contains(_, comparison));
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Contains(_, comparison));
 
-        public static bool EqualsAny(this string value, string[] phrases) => !string.IsNullOrEmpty(value) && EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool EqualsAny(this string value, string[] phrases) => string.IsNullOrEmpty(value) is false && EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison) => !string.IsNullOrEmpty(value) && phrases.Any(_ => value.Equals(_, comparison));
+        public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Equals(_, comparison));
 
         public static bool StartsWithAny(this string value, string[] prefixes) => StartsWithAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => !string.IsNullOrEmpty(value) && prefixes.Any(_ => value.StartsWith(_, comparison));
+        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
 
         public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => !string.IsNullOrEmpty(value) && suffixes.Any(_ => value.EndsWith(_, comparison));
+        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
@@ -146,16 +146,18 @@ namespace System
                        : value.Substring(0, index) + "...";
         }
 
-        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && !symbolName.EndsWithAny(Constants.Markers.ViewModels);
+        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
 
         internal static bool HasEntityMarker(this string symbolName)
         {
-            if (!symbolName.ContainsAny(Constants.Markers.Entities)) return false;
-            if (symbolName.ContainsAny(Constants.Markers.ViewModels)) return false;
-            if (symbolName.ContainsAny(Constants.Markers.SpecialModels)) return false;
+            var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
+            if (hasMarker)
+            {
+                if (symbolName.ContainsAny(Constants.Markers.ViewModels)) return false;
+                if (symbolName.ContainsAny(Constants.Markers.SpecialModels)) return false;
+            }
 
-            return true;
-
+            return hasMarker;
         }
 
         internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);

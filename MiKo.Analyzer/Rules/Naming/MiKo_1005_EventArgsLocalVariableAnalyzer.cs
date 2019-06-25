@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventArgs() == true;
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventArgs() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {

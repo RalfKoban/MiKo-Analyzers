@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private bool TryAnalyzeType(INamedTypeSymbol symbol, ITypeSymbol typeUnderTest, out Diagnostic diagnostic)
+        private bool TryAnalyzeType(INamedTypeSymbol symbol, ITypeSymbol typeUnderTest, out Diagnostic result)
         {
             if (typeUnderTest != null)
             {
@@ -81,12 +81,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (expectedNamespace != unitTestNamespace)
                 {
-                    diagnostic = Issue(symbol, expectedNamespace);
+                    result = Issue(symbol, expectedNamespace);
                     return true;
                 }
             }
 
-            diagnostic = null;
+            result = null;
             return false;
         }
     }

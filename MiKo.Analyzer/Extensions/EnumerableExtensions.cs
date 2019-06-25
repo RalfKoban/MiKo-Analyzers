@@ -5,7 +5,7 @@ namespace System.Linq
 {
     internal static class EnumerableExtensions
     {
-        public static bool None<T>(this IEnumerable<T> source) => !source.Any();
+        public static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
         public static bool MoreThan<T>(this IEnumerable<T> source, int count)
         {
@@ -26,7 +26,7 @@ namespace System.Linq
                     {
                         for (var i = 0; i <= count; i++)
                         {
-                            if (!enumerator.MoveNext())
+                            if (enumerator.MoveNext() is false)
                                 return false;
                         }
 

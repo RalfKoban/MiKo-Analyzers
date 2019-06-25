@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private bool CanBeIgnored(SyntaxNodeAnalysisContext context) => ShallAnalyze(context.GetEnclosingMethod()) == false;
+        private bool CanBeIgnored(SyntaxNodeAnalysisContext context) => ShallAnalyze(context.GetEnclosingMethod()) is false;
 
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {

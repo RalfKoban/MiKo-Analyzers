@@ -14,10 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected abstract Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol);
 
-        protected bool TryCreateDiagnostic(ISymbol symbol, int metric, int limit, out Diagnostic diagnostic)
+        protected bool TryCreateDiagnostic(ISymbol symbol, int metric, int limit, out Diagnostic result)
         {
-            diagnostic = metric > limit ? Issue(symbol, metric, limit) : null;
-            return diagnostic != null;
+            result = metric > limit ? Issue(symbol, metric, limit) : null;
+            return result != null;
         }
 
         private void AnalyzeCodeBlock(CodeBlockAnalysisContext context)

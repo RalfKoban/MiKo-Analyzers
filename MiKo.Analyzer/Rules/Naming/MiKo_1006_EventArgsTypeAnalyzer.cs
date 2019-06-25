@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var type = declaration.GetTypeSymbol(semanticModel);
 
             var typeName = type?.Name;
-            if (typeName == null)
+            if (typeName is null)
                 return null; // ignore unknown type
 
             var identifier = declaration.Variables.Select(_ => _.Identifier).FirstOrDefault();
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Issue(typeName, declaration.Type.GetLocation(), expectedName);
         }
 
-        private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type?.IsEventArgs() == true && type.Name == expectedName;
+        private static bool IsProperlyNamed(ITypeSymbol type, string expectedName) => type?.IsEventArgs() is true && type.Name == expectedName;
 
         private static bool IsInherited(SyntaxToken syntax, SemanticModel semanticModel)
         {

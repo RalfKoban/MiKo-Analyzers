@@ -388,7 +388,7 @@ namespace MiKoSolutions.Analyzers
             return null;
         }
 
-        internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal) && symbol.Name.EndsWith("TaskFactory", StringComparison.Ordinal) == false; // ignore special situation for task factory
+        internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal) && symbol.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false; // ignore special situation for task factory
 
         internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && symbol.ToString() == TypeNames.CancellationToken;
 
@@ -457,7 +457,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol symbol)
         {
             var members = symbol.GetMembers();
-            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => !_.ReturnsVoid).Where(_ => TypeUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
+            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => _.ReturnsVoid is false).Where(_ => TypeUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
@@ -483,21 +483,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this INamedTypeSymbol symbol) => symbol.Locations.Length > 1;
 
-        internal static bool TryGetGenericArgumentType(this ITypeSymbol symbol, out ITypeSymbol genericArgument, int index = 0)
+        internal static bool TryGetGenericArgumentType(this ITypeSymbol symbol, out ITypeSymbol result, int index = 0)
         {
-            genericArgument = null;
+            result = null;
 
             if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length >= index + 1)
-                genericArgument = namedType.TypeArguments[index];
+                result = namedType.TypeArguments[index];
 
-            return genericArgument != null;
+            return result != null;
         }
 
-        internal static bool TryGetGenericArgumentCount(this ITypeSymbol symbol, out int index)
+        internal static bool TryGetGenericArgumentCount(this ITypeSymbol symbol, out int result)
         {
-            index = 0;
-            if (symbol is INamedTypeSymbol namedType) index = namedType.TypeArguments.Length;
-            return index > 0;
+            result = 0;
+            if (symbol is INamedTypeSymbol namedType) result = namedType.TypeArguments.Length;
+            return result > 0;
         }
 
         internal static string GetGenericArgumentsAsTs(this ITypeSymbol symbol)

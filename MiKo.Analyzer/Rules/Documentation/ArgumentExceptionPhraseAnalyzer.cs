@@ -54,8 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     results.AddRange(parts
                                      .Where(_ => _.Contains(parameterIndicatorPhrase))
                                      .Select(_ => _.Trim())
-                                     .Where(_ => !_.StartsWithAny(phrases, Comparison))
-                                     .Where(_ => !_.StartsWithAny(allParameterIndicatorPhrases, Comparison))
+                                     .Where(_ => _.StartsWithAny(phrases, Comparison) is false)
+                                     .Where(_ => _.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
                                      .Select(_ => ReportExceptionIssue(owningSymbol, proposal)));
                 }
             }
