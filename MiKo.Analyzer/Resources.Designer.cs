@@ -6000,6 +6000,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logical NOT conditions are hard to recognize if they are coded using the &apos;!&apos; character. Code that uses &apos;is false&apos; is much easier to read and understand..
+        /// </summary>
+        public static string MiKo_3081_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3081_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use pattern &apos;is false&apos; instead of &apos; ! &apos;.
+        /// </summary>
+        public static string MiKo_3081_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3081_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pattern matching is favored over a logical NOT condition..
+        /// </summary>
+        public static string MiKo_3081_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3081_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
