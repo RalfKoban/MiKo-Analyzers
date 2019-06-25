@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
 
-                    if (results == null) results = new List<Diagnostic>();
+                    if (results is null) results = new List<Diagnostic>();
                     results.Add(Issue(symbol));
                 }
             }

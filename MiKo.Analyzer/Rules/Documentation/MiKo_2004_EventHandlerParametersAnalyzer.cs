@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var proposal = allExpected.ElementAt(0);
             if (allExpected.All(_ => _ != comment))
             {
-                if (diagnostics == null) diagnostics = new List<Diagnostic>();
+                if (diagnostics is null) diagnostics = new List<Diagnostic>();
                 diagnostics.Add(Issue(parameter, parameter.Name, proposal));
             }
         }

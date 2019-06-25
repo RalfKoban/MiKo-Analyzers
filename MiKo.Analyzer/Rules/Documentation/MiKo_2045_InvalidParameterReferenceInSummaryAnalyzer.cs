@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    .Where(_ => commentXml.Contains(_, Comparison))
                                    .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
             {
-                if (findings == null) findings = new List<Diagnostic>();
+                if (findings is null) findings = new List<Diagnostic>();
                 findings.Add(Issue(parameter, phrase));
             }
         }

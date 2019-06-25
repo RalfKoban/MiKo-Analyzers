@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers
         {
             while (true)
             {
-                if (node == null)
+                if (node is null)
                     return null;
 
                 foreach (var syntaxKind in syntaxKinds)

@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var setter = symbol.SetMethod;
-            if (setter == null)
+            if (setter is null)
             {
                 return Enumerable.Empty<Diagnostic>();
             }

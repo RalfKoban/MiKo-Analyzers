@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var item in Items.Where(_ => comment.Contains(_.Key, StringComparison.OrdinalIgnoreCase)))
             {
-                if (findings == null) findings = new List<Diagnostic>();
+                if (findings is null) findings = new List<Diagnostic>();
                 findings.Add(Issue(symbol, item.Key, item.Value));
             }
 

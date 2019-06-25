@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var forbidden = methodName.Contains(forbiddenName);
             if (forbidden)
             {
-                if (diagnostics == null) diagnostics = new List<Diagnostic>();
+                if (diagnostics is null) diagnostics = new List<Diagnostic>();
 
                 var proposal = GetProposal(methodName, forbiddenName);
                 diagnostics.Add(Issue(method, proposal));

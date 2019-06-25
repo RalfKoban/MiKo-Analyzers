@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         var method = identifier.Parent.GetEnclosingMethod(semanticModel);
                         var proposedName = method.Parameters.Any(_ => _.Name == E) ? Args : E;
 
-                        if (results == null) results = new List<Diagnostic>();
+                        if (results is null) results = new List<Diagnostic>();
                         results.Add(Issue(symbol, proposedName));
 
                         break;

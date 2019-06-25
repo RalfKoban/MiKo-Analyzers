@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             List<Diagnostic> results = null;
             foreach (var finding in symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null))
             {
-                if (results == null) results = new List<Diagnostic>();
+                if (results is null) results = new List<Diagnostic>();
                 results.Add(finding);
             }
 

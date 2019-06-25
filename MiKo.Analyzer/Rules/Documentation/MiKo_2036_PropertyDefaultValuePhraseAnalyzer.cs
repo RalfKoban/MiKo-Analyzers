@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool ShallAnalyzeProperty(IPropertySymbol symbol)
         {
             var returnType = symbol.GetReturnType();
-            if (returnType == null) return false;
+            if (returnType is null) return false;
 
             return returnType.SpecialType == SpecialType.System_Boolean || returnType.IsEnum();
         }

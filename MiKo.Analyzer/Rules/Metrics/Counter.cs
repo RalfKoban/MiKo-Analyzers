@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         break;
 
                     case ObjectCreationExpressionSyntax s:
-                        if (s.Initializer == null) // single line
+                        if (s.Initializer is null) // single line
                             CountLinesOfCode(s.GetLocation(), lines);
                         else
                             CountLinesOfCode(s.Initializer.Expressions, lines);

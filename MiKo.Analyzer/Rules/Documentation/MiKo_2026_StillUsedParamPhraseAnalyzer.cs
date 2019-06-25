@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (results == null)
+                    if (results is null)
                         results = new List<Diagnostic>();
 
                     var diagnostic = Issue(parameter);

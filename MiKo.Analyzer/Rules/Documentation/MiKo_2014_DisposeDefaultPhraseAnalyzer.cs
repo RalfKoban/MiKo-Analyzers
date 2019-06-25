@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (comment is null) continue;
                 if (comment == ParameterPhrase) continue;
 
-                if (results == null) results = new List<Diagnostic>();
+                if (results is null) results = new List<Diagnostic>();
                 results.Add(Issue(parameter, ParameterPhrase));
             }
 

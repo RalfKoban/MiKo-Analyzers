@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var findings = AnalyzeReturnType(owningSymbol, returnType, comment, xmlTag);
                 if (findings.Any())
                 {
-                    if (results == null) results = new List<Diagnostic>();
+                    if (results is null) results = new List<Diagnostic>();
                     results.AddRange(findings);
                 }
             }

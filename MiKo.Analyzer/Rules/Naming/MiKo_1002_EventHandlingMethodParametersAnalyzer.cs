@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (expected == parameter.Name) return;
 
-            if (diagnostics == null) diagnostics = new List<Diagnostic>();
+            if (diagnostics is null) diagnostics = new List<Diagnostic>();
 
             diagnostics.Add(Issue(parameter, expected));
         }

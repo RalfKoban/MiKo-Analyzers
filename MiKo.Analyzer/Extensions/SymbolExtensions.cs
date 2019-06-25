@@ -198,7 +198,7 @@ namespace MiKoSolutions.Analyzers
                     return true;
 
                 var baseType = symbol.BaseType;
-                if (baseType == null)
+                if (baseType is null)
                     return false;
 
                 symbol = baseType;
@@ -218,7 +218,7 @@ namespace MiKoSolutions.Analyzers
                     return true;
 
                 var baseType = symbol.BaseType;
-                if (baseType == null)
+                if (baseType is null)
                     return false;
 
                 symbol = baseType;
@@ -354,7 +354,7 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var baseType = symbol.BaseType;
-                if (baseType == null) break;
+                if (baseType is null) break;
 
                 baseTypes.Add(baseType);
                 symbol = baseType;

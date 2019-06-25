@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrase = xmlTag + "=\"" + parameter.Name + "\"";
             if (commentXml.Contains(phrase, Comparison))
             {
-                if (findings == null) findings = new List<Diagnostic>();
+                if (findings is null) findings = new List<Diagnostic>();
                 findings.Add(Issue(parameter, phrase + Constants.Comments.XmlElementEndingTag));
             }
         }
