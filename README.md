@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 221 rules that are currently provided by the analyzer.
+The following tables list all the 225 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -86,6 +86,7 @@ The following tables list all the 221 rules that are currently provided by the a
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|
 |MiKo_1066|Parameters should not be suffixed with a number.|&#x2713;|
 |MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|
+|MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
@@ -172,6 +173,7 @@ The following tables list all the 221 rules that are currently provided by the a
 |MiKo_2090|Documentation for equality operator shall have default phrase.|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase.|&#x2713;|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|&#x2713;|
+|MiKo_2101|&lt;example&gt; documentation should show code example in &lt;code&gt; tags.|&#x2713;|
 |MiKo_2200|Use a capitalized letter to start the comment.|&#x2713;|
 |MiKo_2201|Use a capitalized letter to start the sentences in the comment.|&#x2713;|
 |MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|&#x2713;|
@@ -235,6 +237,8 @@ The following tables list all the 221 rules that are currently provided by the a
 |MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|
 |MiKo_3071|Methods that return Task shall never return null.|&#x2713;|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.|&#x2713;|
+|MiKo_3081|Pattern matching is favored over a logical NOT condition.|&#x2713;|
+|MiKo_3082|Pattern matching is favored over a logical comparison with 'true' or 'false'.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|
