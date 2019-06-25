@@ -754,6 +754,16 @@ For binary operator overloads use the names 'left' and 'right', for unary operat
   <data name="MiKo_1067_Title" xml:space="preserve">
     <value>Methods should not contain 'Perform' in their names.</value>
   </data>
+  <data name="MiKo_1068_Description" xml:space="preserve">
+    <value>Workflows are a high-level construct and encapsulate functionality that belongs into the business layer.
+Hence, their methods should be named 'CanRun' or 'Run' (similar to commands where they are named 'CanExecute' and 'Execute').</value>
+  </data>
+  <data name="MiKo_1068_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1068_Title" xml:space="preserve">
+    <value>Workflow methods should be named 'CanRun' or 'Run'.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>

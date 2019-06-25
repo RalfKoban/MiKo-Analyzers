@@ -1946,6 +1946,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Workflows are a high-level construct and encapsulate functionality that belongs into the business layer.
+        ///Hence, their methods should be named &apos;CanRun&apos; or &apos;Run&apos; (similar to commands where they are named &apos;CanExecute&apos; and &apos;Execute&apos;)..
+        /// </summary>
+        public static string MiKo_1068_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1068_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1068_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1068_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workflow methods should be named &apos;CanRun&apos; or &apos;Run&apos;..
+        /// </summary>
+        public static string MiKo_1068_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1068_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
