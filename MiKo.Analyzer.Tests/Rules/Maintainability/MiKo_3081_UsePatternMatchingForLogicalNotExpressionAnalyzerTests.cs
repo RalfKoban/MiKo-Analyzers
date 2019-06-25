@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3081_DoNotUseLogicalNotExpressionAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_logical_condition() => No_issue_is_reported_for(@"
@@ -105,8 +105,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3081_DoNotUseLogicalNotExpressionAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3081_DoNotUseLogicalNotExpressionAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer();
     }
 }

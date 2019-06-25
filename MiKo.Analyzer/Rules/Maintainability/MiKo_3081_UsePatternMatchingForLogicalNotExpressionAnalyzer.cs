@@ -5,11 +5,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3081_DoNotUseLogicalNotExpressionAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3081";
 
-        public MiKo_3081_DoNotUseLogicalNotExpressionAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
