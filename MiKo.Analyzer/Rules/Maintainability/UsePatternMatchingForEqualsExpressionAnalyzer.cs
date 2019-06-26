@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (BinaryExpressionSyntax)context.Node;
 
-            if (IsResponsibleNode(node.Left) || IsResponsibleNode(node.Right))
+            if (IsResponsibleNode(node.Right) || IsResponsibleNode(node.Left))
             {
                 var location = node.OperatorToken.GetLocation();
                 var issue = Issue(string.Empty, location);
