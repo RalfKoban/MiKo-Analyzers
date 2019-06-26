@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3082_UsePatternMatchingForEqualsExpressionAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Operators =
             {
@@ -84,8 +84,8 @@ public class TestMe
     }
 }");
 
-        protected override string GetDiagnosticId() => MiKo_3082_UsePatternMatchingForEqualsExpressionAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3082_UsePatternMatchingForEqualsExpressionAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer();
     }
 }
