@@ -1,35 +1,26 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer : UsePatternMatchingForEqualsExpressionAnalyzer
     {
         public const string Id = "MiKo_3082";
 
-        public MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer() : base(Id, (SymbolKind)(-1))
+        private static readonly HashSet<SyntaxKind> BooleanValues = new HashSet<SyntaxKind>
+                                                                        {
+                                                                            SyntaxKind.TrueLiteralExpression,
+                                                                            SyntaxKind.FalseLiteralExpression,
+                                                                        };
+
+        public MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLogicalNotExpression, SyntaxKind.EqualsExpression);
-
-        private void AnalyzeLogicalNotExpression(SyntaxNodeAnalysisContext context)
-        {
-            var node = (BinaryExpressionSyntax)context.Node;
-
-            if (IsBooleanComparison(node.Left) || IsBooleanComparison(node.Right))
-            {
-                var location = node.OperatorToken.GetLocation();
-                var issue = Issue(string.Empty, location);
-                context.ReportDiagnostic(issue);
-            }
-        }
-
-        private static bool IsBooleanComparison(CSharpSyntaxNode syntax) => syntax != null && IsBooleanComparison(syntax.Kind());
-
-        private static bool IsBooleanComparison(SyntaxKind kind) => kind == SyntaxKind.TrueLiteralExpression || kind == SyntaxKind.FalseLiteralExpression;
+        protected override bool IsResponsibleNode(SyntaxKind kind) => BooleanValues.Contains(kind);
     }
 }
