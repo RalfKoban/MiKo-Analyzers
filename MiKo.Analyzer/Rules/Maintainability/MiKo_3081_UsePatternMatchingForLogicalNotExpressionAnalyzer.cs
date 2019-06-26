@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -17,8 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeLogicalNotExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = context.Node;
-            var location = node.GetLocation();
+            var node = (PrefixUnaryExpressionSyntax)context.Node;
+
+            var location = node.OperatorToken.GetLocation();
             var issue = Issue(string.Empty, location);
             context.ReportDiagnostic(issue);
         }
