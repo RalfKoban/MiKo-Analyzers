@@ -10,8 +10,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
     {
-        internal static string GetComment(this ISymbol symbol) => symbol is IParameterSymbol
-                                                                      p ? GetComment(p, (p.ContainingSymbol as IMethodSymbol)?.GetDocumentationCommentXml())
+        internal static string GetComment(this ISymbol symbol) => symbol is IParameterSymbol p
+                                                                      ? GetComment(p, (p.ContainingSymbol as IMethodSymbol)?.GetDocumentationCommentXml())
                                                                       : Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
 
         internal static string GetComment(this IParameterSymbol parameter, string commentXml)
@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlTag)
         {
             var element = GetCommentElement(commentXml);
-            return element == null
+            return element is null
                        ? Enumerable.Empty<XElement>() // happens in case of an invalid character
                        : element.Descendants(xmlTag);
         }
@@ -106,9 +106,11 @@ namespace MiKoSolutions.Analyzers
         {
             foreach (var e in elements)
             {
-                if (e is null) continue;
+                if (e is null)
+                    continue;
 
                 e.Descendants(Constants.XmlTag.Code).ToList().ForEach(_ => _.Remove());
+
                 yield return Cleaned(e.Nodes().ConcatenatedWith());
             }
         }
