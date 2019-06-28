@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => Constants.Comments.InstanceOfPhrase.Where(_ => commentXml.Contains(_, StringComparison.OrdinalIgnoreCase)).Select(_ => Issue(symbol, _));
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => Constants.Comments.InstanceOfPhrase
+                                                                                                                 .Where(_ => commentXml.Contains(_, StringComparison.Ordinal))
+                                                                                                                 .Select(_ => Issue(symbol, _));
     }
 }

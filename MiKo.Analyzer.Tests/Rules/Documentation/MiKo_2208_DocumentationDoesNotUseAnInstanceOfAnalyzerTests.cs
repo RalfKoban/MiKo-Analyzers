@@ -17,6 +17,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "An object of ",
                 "A object of ",
                 "The object of ",
+
+                "handles an instance of something",
+                "handles a instance of something",
+                "handles the instance of something",
+                "handles an object of something",
+                "handles a object of something",
+                "handles the object of something",
             };
 
         private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
@@ -114,6 +121,19 @@ public class TestMe
 {
     /// <" + tag + @">" + phrase + @".</" + tag + @">
     private bool m_field;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_summary_on_factory_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Creates an instance of the <see cref=""TestMe"" /> type.
+    /// </summary>
+    public TestMe DoSomething() { }
 }
 ");
 
