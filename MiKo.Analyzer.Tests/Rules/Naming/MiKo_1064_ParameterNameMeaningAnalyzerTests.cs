@@ -47,7 +47,7 @@ public class Side
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parameter_named_after_type_and_used_in_ctor() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_named_after_property_and_used_in_ctor() => No_issue_is_reported_for(@"
 public enum Side
 {
 }
@@ -61,7 +61,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parameter_named_after_type_and_used_in_ctor_with_Compound_word() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parameter_named_after_property_and_used_in_ctor_with_Compound_word() => No_issue_is_reported_for(@"
 public enum TestMeSide
 {
 }
@@ -71,6 +71,20 @@ public class TestMe
     public TestMe(TestMeSide testMeSide) => TestMeSide = testMeSide;
 
     public TestMeSide TestMeSide { get; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parameter_named_after_field_and_used_in_ctor_with_Compound_word() => No_issue_is_reported_for(@"
+public enum TestMeSide
+{
+}
+
+public class TestMe
+{
+    private readonly TestMeSide m_testMeSide;
+    
+    public TestMe(TestMeSide testMeSide) => m_testMeSide = testMeSide;
 }
 ");
 

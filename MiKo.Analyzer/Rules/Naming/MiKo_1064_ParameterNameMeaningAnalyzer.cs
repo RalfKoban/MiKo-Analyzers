@@ -36,10 +36,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbol.ContainingSymbol is IMethodSymbol method)
             {
-                if (method.MethodKind == MethodKind.Constructor && symbol.MatchesProperty())
+                if (method.MethodKind == MethodKind.Constructor)
                 {
-                    // ignore those ctor parameters that get assigned to a property having the same name
-                    return Enumerable.Empty<Diagnostic>();
+                    if (symbol.MatchesProperty() || symbol.MatchesField())
+                    {
+                        // ignore those ctor parameters that get assigned to a property having the same name
+                        return Enumerable.Empty<Diagnostic>();
+                    }
                 }
 
                 if (method.IsOverride || method.IsInterfaceImplementation())
