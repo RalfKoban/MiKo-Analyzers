@@ -18,6 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeLogicalNotExpression(SyntaxNodeAnalysisContext context)
         {
+            if (context.IsSupported(LanguageVersion.CSharp7))
+            {
+                AnalyzeExpression(context);
+            }
+        }
+
+        private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
+        {
             var node = (PrefixUnaryExpressionSyntax)context.Node;
 
             var location = node.OperatorToken.GetLocation();

@@ -11,13 +11,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLogicalNotExpression, SyntaxKind.EqualsExpression);
+        protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeEqualsExpression, SyntaxKind.EqualsExpression);
 
         protected abstract bool IsResponsibleNode(SyntaxKind kind);
 
         private bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
 
-        private void AnalyzeLogicalNotExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeEqualsExpression(SyntaxNodeAnalysisContext context)
+        {
+            if (context.IsSupported(LanguageVersion.CSharp7))
+            {
+                AnalyzeExpression(context);
+            }
+        }
+
+        private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (BinaryExpressionSyntax)context.Node;
 

@@ -11,6 +11,13 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxExtensions
     {
+        internal static bool IsSupported(this SyntaxNodeAnalysisContext context, LanguageVersion expectedVersion)
+        {
+            var languageVersion = ((CSharpParseOptions)context.Node.SyntaxTree.Options).LanguageVersion;
+
+            return languageVersion >= expectedVersion;
+        }
+
         internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
         {
             var position = token.GetLocation().SourceSpan.Start;
