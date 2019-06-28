@@ -1,40 +1,27 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    public abstract class UsePatternMatchingForEqualsExpressionAnalyzer : MaintainabilityAnalyzer
+    public abstract class UsePatternMatchingForEqualsExpressionAnalyzer : UsePatternMatchingForExpressionAnalyzer
     {
-        protected UsePatternMatchingForEqualsExpressionAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
+        protected UsePatternMatchingForEqualsExpressionAnalyzer(string diagnosticId) : base(diagnosticId, SyntaxKind.EqualsExpression)
         {
         }
 
-        protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeEqualsExpression, SyntaxKind.EqualsExpression);
-
-        protected abstract bool IsResponsibleNode(SyntaxKind kind);
-
-        private bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
-
-        private void AnalyzeEqualsExpression(SyntaxNodeAnalysisContext context)
-        {
-            if (context.IsSupported(LanguageVersion.CSharp7))
-            {
-                AnalyzeExpression(context);
-            }
-        }
-
-        private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
+        protected sealed override void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (BinaryExpressionSyntax)context.Node;
 
             if (IsResponsibleNode(node.Right) || IsResponsibleNode(node.Left))
             {
-                var location = node.OperatorToken.GetLocation();
-                var issue = Issue(string.Empty, location);
-                context.ReportDiagnostic(issue);
+                ReportIssue(context, node.OperatorToken);
             }
         }
+
+        protected abstract bool IsResponsibleNode(SyntaxKind kind);
+
+        private bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
     }
 }
