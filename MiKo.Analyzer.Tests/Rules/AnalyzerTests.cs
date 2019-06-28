@@ -90,6 +90,20 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(findings, Is.Empty);
         }
 
+        [Test]
+        public static void Analyzer_starts_with_correct_number([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        {
+            var id = GetDiagnosticIdStartingNumber(analyzer);
+
+            Assert.That(analyzer.DiagnosticId, Is.Not.Null.And.StartsWith("MiKo_" + id));
+        }
+
+        [Test]
+        public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        {
+            Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
+        }
+
         [Test, Ignore("Just to find gaps")]
         public static void Gaps_in_Analyzer_numbers([Range(1, 5, 1)] int i)
         {
@@ -111,20 +125,6 @@ namespace MiKoSolutions.Analyzers.Rules
             }
 
             Assert.That(gaps, Is.Empty, string.Join(Environment.NewLine, gaps));
-        }
-
-        [Test]
-        public static void Analyzer_starts_with_correct_number([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
-        {
-            var id = GetDiagnosticIdStartingNumber(analyzer);
-
-            Assert.That(analyzer.DiagnosticId, Is.Not.Null.And.StartsWith("MiKo_" + id));
-        }
-
-        [Test]
-        public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
-        {
-            Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
         }
 
         [Test, Explicit("Test shall be run explicitly as it generates some markdown for the README.md file"), Ignore("Disabled")]
