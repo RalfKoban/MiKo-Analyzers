@@ -31,14 +31,16 @@
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>0618;1701;1702;1705</NoWarn>
+    <CodeAnalysisRuleSet>MiKo.Analyzer.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>0618;1701;1702;1705</NoWarn>
+    <CodeAnalysisRuleSet>MiKo.Analyzer.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   
   <ItemGroup>
-    <Content Include="..\stylecop.json" Link="stylecop.json" />
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
    
   <ItemGroup>
