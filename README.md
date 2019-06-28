@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 225 rules that are currently provided by the analyzer.
+The following tables list all the 226 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -239,6 +239,7 @@ The following tables list all the 225 rules that are currently provided by the a
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.|&#x2713;|
 |MiKo_3081|Pattern matching is favored over a logical NOT condition.|&#x2713;|
 |MiKo_3082|Pattern matching is favored over a logical comparison with 'true' or 'false'.|&#x2713;|
+|MiKo_3083|Pattern matching is favored for null checks.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|
