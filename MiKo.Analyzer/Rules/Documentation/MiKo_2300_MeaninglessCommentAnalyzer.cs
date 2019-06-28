@@ -51,8 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "increment ",
                 "increments ",
                 "initialize", // no space at the end to allow combinations of the word
-                "invoke" , // no space at the end to allow combinations of the word
-                "is " ,
+                "invoke", // no space at the end to allow combinations of the word
+                "is ",
                 "iterate", // no space at the end to allow combinations of the word
                 "load",
                 "open ",

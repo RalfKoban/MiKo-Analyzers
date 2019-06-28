@@ -113,7 +113,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T: class => string.Concat(values.Where(_ => _ != null));
+        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T : class => string.Concat(values.Where(_ => _ != null));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
