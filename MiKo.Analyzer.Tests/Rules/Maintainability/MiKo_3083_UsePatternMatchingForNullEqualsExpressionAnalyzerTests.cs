@@ -33,7 +33,7 @@ public class TestMe
     }
 }");
 
-         [Test]
+        [Test]
         public void An_issue_is_reported_for_a_left_sided_comparison_of_null_to_a_([Values("int", "string", "object")] string type) => An_issue_is_reported_for(@"
 using System;
 

@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "increments ",
                 "initialize", // no space at the end to allow combinations of the word
                 "invoke", // no space at the end to allow combinations of the word
-                "is " ,
+                "is ",
                 "iterate", // no space at the end to allow combinations of the word
                 "load",  // no space at the end to allow combinations of the word
                 "open ",
@@ -120,7 +120,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_website_link_in_comment([Values("http://","https://")] string link) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_website_link_in_comment([Values("http://", "https://")] string link) => No_issue_is_reported_for(@"
 
 public class TestMe
 {

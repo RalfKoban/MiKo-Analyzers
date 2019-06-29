@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Metrics
@@ -8,6 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         [Test]
         public void Valid_files_are_not_reported_as_warnings() => No_issue_is_reported_for(@"
+
 namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 {
     public class EmptyType
@@ -60,6 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_long_if_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public void Method()

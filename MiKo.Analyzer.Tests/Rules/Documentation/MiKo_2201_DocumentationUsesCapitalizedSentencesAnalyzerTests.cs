@@ -1,5 +1,4 @@
-﻿
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -46,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(UpperCaseLetters))] char startingChar) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// Documentation. " + startingChar + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
@@ -54,7 +53,7 @@ public sealed class TestMe { }
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(UpperCaseLetters))] char startingChar) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// Documentation.
 /// <para>" + startingChar + @" something.</para>
 /// </" + xmlTag + @">
@@ -63,7 +62,7 @@ public sealed class TestMe { }
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_documentation_starting_with_upper_case_after_dot_in_para_with_line_break_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(UpperCaseLetters))] char startingChar) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// Documentation.
 /// <para>
 /// " + startingChar + @" something.
@@ -74,7 +73,7 @@ public sealed class TestMe { }
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(LowerCaseLetters))] char startingChar) => An_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// Documentation. " + startingChar + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
@@ -82,7 +81,7 @@ public sealed class TestMe { }
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(LowerCaseLetters))] char startingChar) => An_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// Documentation.
 /// <para>" + startingChar + @" something.</para>
 /// </" + xmlTag + @">
@@ -91,7 +90,7 @@ public sealed class TestMe { }
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_documentation_starting_with_lower_case_after_dot_in_para_with_line_break_in([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(LowerCaseLetters))] char startingChar) => An_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// Documentation.
 /// <para>
 /// " + startingChar + @" something.
@@ -102,32 +101,32 @@ public sealed class TestMe { }
 
         [Test]
         public void No_issue_is_reported_for_empty_documentation([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @" />
+/// <" + xmlTag + @" />
 public sealed class TestMe { }
 ");
 
         [Test]
         public void No_issue_is_reported_for_nested_XML_documentation([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// <some />
-/// </"+ xmlTag + @">
+/// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
 
         [Test]
         public void No_issue_is_reported_for_nested_XML_documentation_with_hyperlink([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// <a href=""https://docs.microsoft.com/en-us/dotnet/framework/mef/index"">Managed Extensibility Framework (MEF)</a>.
-/// </"+ xmlTag + @">
+/// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
 
         [Test]
         public void No_issue_is_reported_for_nested_XML_documentation_with_code_source_to_file([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// The following example demonstrates its usage.
 /// <code source=""..\MiKo Aspects Samples\MiscSamples.cs"" region=""Required API usage"" lang=""C#"" />
-/// </"+ xmlTag + @">
+/// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
 
@@ -151,7 +150,7 @@ public sealed class TestMe { }
                                                                                                     [Values("c", "code")] string codeBlock)
             => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
-/// Some <"+ codeBlock + ">file" + fileExtension + "</" + codeBlock + @"> extension.
+/// Some <" + codeBlock + ">file" + fileExtension + "</" + codeBlock + @"> extension.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");

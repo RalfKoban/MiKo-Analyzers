@@ -21,6 +21,7 @@ public class TestMe
     }
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_thrown_ArgumentNullException() => No_issue_is_reported_for(@"
 using System;

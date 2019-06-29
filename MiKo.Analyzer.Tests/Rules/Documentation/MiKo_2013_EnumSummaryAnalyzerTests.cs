@@ -54,7 +54,6 @@ public enum TestMe
 }
 ");
 
-
         [Test]
         public void An_issue_is_reported_for_enum_with_wrong_phrase() => An_issue_is_reported_for(@"
 /// <summary>

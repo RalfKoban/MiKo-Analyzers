@@ -101,7 +101,6 @@ public class TestMe
 }
 ");
 
-
         protected override string GetDiagnosticId() => MiKo_2011_UnsealedClassSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2011_UnsealedClassSummaryAnalyzer();

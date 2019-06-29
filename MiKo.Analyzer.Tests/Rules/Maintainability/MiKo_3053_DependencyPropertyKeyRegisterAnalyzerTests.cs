@@ -113,7 +113,6 @@ namespace Bla
 }
 ");
 
-
         protected override string GetDiagnosticId() => MiKo_3053_DependencyPropertyKeyRegisterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3053_DependencyPropertyKeyRegisterAnalyzer();

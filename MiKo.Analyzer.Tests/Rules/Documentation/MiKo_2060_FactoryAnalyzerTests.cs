@@ -83,6 +83,7 @@ public class TestMeFactory
     public IWhatever Create() => new Whatever();
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_factory_method([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
 using System;

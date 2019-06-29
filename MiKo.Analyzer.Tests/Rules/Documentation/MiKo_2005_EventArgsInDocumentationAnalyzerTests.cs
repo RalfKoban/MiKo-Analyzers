@@ -77,6 +77,7 @@ public class TestMe
 {
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_incorrectly_commented_event([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe

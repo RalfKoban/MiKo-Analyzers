@@ -21,6 +21,7 @@ namespace Bla
     }
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_DependencyProperty_field_for_DependencyPropertyKey_field() => No_issue_is_reported_for(@"
 using System.Windows;

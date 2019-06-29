@@ -50,7 +50,7 @@ public sealed class TestMe { }
         [Test]
         public void An_issue_is_reported_for_dot_enumeration_in_comment([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(@"
 /// <summary>
-/// The reason" + markerBegin +@"
+/// The reason" + markerBegin + @"
 /// - It is something.
 /// - It is something else.
 /// </summary>

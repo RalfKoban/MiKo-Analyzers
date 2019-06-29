@@ -9,7 +9,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1004_EventNameSuffixAnalyzerTests : CodeFixVerifier
     {
-
         [Test]
         public void No_issue_is_reported_for_correctly_named_event() => No_issue_is_reported_for(@"
 using System;
@@ -27,7 +26,7 @@ using System;
 
 public " + type + @" TestMe
 {
-    public event EventHandler "+ eventName + @";
+    public event EventHandler " + eventName + @";
 }
 ");
 

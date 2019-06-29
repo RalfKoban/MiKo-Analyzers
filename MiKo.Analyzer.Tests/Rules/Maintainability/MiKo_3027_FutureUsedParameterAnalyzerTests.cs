@@ -65,7 +65,7 @@ namespace Bla
         /// <summary>
         /// Does something.
         /// </summary>
-        /// <param name=""i"">"+ phrase + @"</param>
+        /// <param name=""i"">" + phrase + @"</param>
         public int DoSomething(" + modifier + @" int i)
         {
             return i;

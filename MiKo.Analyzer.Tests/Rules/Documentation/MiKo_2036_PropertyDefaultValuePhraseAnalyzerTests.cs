@@ -39,8 +39,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a([Values("returns", "value")] string xmlTag,
-                                                                   [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_that_returns_a(
+                                                                [Values("returns", "value")] string xmlTag,
+                                                                [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -77,6 +78,7 @@ public class TestMe
     public " + returnType + @" DoSomething { get; set; }
 }
 ");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Boolean_property_with_default_phrase(
                                                                                         [Values("returns", "value")] string xmlTag,

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 
@@ -15,21 +15,21 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        #region To be implemented by Test classes
-
         /// <summary>
         /// Gets the CSharp analyzer being tested - to be implemented in non-abstract class.
         /// </summary>
+        /// <returns>
+        /// The CSharp analyzer under test.
+        /// </returns>
         protected virtual DiagnosticAnalyzer GetObjectUnderTest() => null;
 
         /// <summary>
         /// Gets the identifier of the CSharp analyzer being tested - to be implemented in non-abstract class.
         /// </summary>
+        /// <returns>
+        /// The identifier of the CSharp analyzer under test.
+        /// </returns>
         protected virtual string GetDiagnosticId() => null;
-
-        #endregion
-
-        #region Verifier wrappers
 
         protected void An_issue_is_reported_for(string fileContent, int violations = 0)
         {
@@ -86,16 +86,16 @@ namespace TestHelper
         /// <summary>
         /// Applies a C# <see cref="DiagnosticAnalyzer"/> on the single inputted string and returns the found results.
         /// </summary>
-        /// <param name="source">A class in the form of a string to run the analyzer on</param>
+        /// <param name="source">A class in the form of a string to run the analyzer on.</param>
+        /// <returns>An array of Diagnostics that surfaced in the source code, sorted by Location.</returns>
         protected Diagnostic[] GetDiagnostics(string source) => GetDiagnostics(new[] { source });
 
         /// <summary>
         /// General method that gets a collection of actual diagnostics found in the source after the analyzer is run,
         /// then verifies each of them.
         /// </summary>
-        /// <param name="sources">An array of strings to create source documents from to run the analyzers on</param>
+        /// <param name="sources">An array of strings to create source documents from to run the analyzers on.</param>
+        /// <returns>An array of Diagnostics that surfaced in the source code, sorted by Location.</returns>
         private Diagnostic[] GetDiagnostics(string[] sources) => GetSortedDiagnostics(sources, LanguageNames.CSharp, GetObjectUnderTest());
-
-        #endregion
     }
 }

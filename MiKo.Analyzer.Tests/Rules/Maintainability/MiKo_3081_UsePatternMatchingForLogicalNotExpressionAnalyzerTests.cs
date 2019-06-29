@@ -25,7 +25,7 @@ public class TestMe
 }
 ");
 
-       [Test]
+        [Test]
         public void No_issue_is_reported_for_logical_AND_condition() => No_issue_is_reported_for(@"
 using System;
 

@@ -15,6 +15,17 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
 
+        public static class MaxNamingLengths
+        {
+            public const int Types = 40;
+            public const int Methods = 25;
+            public const int Events = 25;
+            public const int Properties = 25;
+            public const int Parameters = 20;
+            public const int Fields = Parameters + 2;
+            public const int LocalVariables = 15;
+        }
+
         internal static class Markers
         {
             internal static readonly string[] BaseClasses = { "Abstract", "Base" };
@@ -427,17 +438,6 @@ namespace MiKoSolutions.Analyzers
                     XmlTag.TypeParamRef,
                     XmlTag.Value,
                 };
-        }
-
-        internal static class MaxNamingLengths
-        {
-            public const int Types = 40;
-            public const int Methods = 25;
-            public const int Events = 25;
-            public const int Properties = 25;
-            public const int Parameters = 20;
-            public const int Fields = Parameters + 2;
-            public const int LocalVariables = 15;
         }
 
         internal static class XmlTag

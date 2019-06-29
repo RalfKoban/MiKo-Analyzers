@@ -23,7 +23,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_name([ValueSource(nameof(WrongNames))]  string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_name([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 public class " + name + @"
 {
 }
@@ -43,12 +43,13 @@ public class " + name + @"
                             };
 
             var allNames = new HashSet<string>(names);
-            foreach (var _ in names)
-            {
-                var lower = _.ToLowerInvariant();
-                var upper = _.ToUpperInvariant();
 
-                foreach (var name in new[] { _, lower, upper })
+            foreach (var n in names)
+            {
+                var lower = n.ToLowerInvariant();
+                var upper = n.ToUpperInvariant();
+
+                foreach (var name in new[] { n, lower, upper })
                 {
                     allNames.Add(name);
                     allNames.Add("Some" + name);

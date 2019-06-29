@@ -81,7 +81,7 @@ public class TestMe
         public void No_issue_is_reported_for_TaskFactory_method([ValueSource(nameof(TaskFactoryMethods))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public void " + methodName  + @"() { }
+    public void " + methodName + @"() { }
 }
 ");
 

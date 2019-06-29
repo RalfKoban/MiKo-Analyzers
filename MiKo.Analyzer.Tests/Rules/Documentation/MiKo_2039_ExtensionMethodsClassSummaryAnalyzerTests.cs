@@ -38,7 +38,7 @@ public static class TestMeExtensions
         [Test]
         public void No_issue_is_reported_for_correctly_documented_extension_class([ValueSource(nameof(ValidPhrases))] string phrase) => No_issue_is_reported_for(@"
 /// <summary>
-/// " + phrase +@" something.
+/// " + phrase + @" something.
 /// </summary>
 public static class TestMeExtensions
 {

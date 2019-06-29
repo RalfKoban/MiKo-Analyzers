@@ -9,19 +9,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2037_CommandPropertySummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] ValidPhrases_ReadWrite =
+        private static readonly string[] ValidPhrasesForReadWrite =
             {
                 "Gets or sets the <see cref=\"ICommand\" /> that can ",
                 "Gets or sets the <see cref=\"ICommand\"/> that can ",
             };
 
-        private static readonly string[] ValidPhrases_ReadOnly =
+        private static readonly string[] ValidPhrasesForReadOnly =
             {
                 "Gets the <see cref=\"ICommand\" /> that can ",
                 "Gets the <see cref=\"ICommand\"/> that can ",
             };
 
-        private static readonly string[] ValidPhrases_WriteOnly =
+        private static readonly string[] ValidPhrasesForWriteOnly =
             {
                 "Sets the <see cref=\"ICommand\" /> that can ",
                 "Sets the <see cref=\"ICommand\"/> that can ",
@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_readwrite_property([ValueSource(nameof(ValidPhrases_ReadWrite))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_readwrite_property([ValueSource(nameof(ValidPhrasesForReadWrite))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_readonly_property([ValueSource(nameof(ValidPhrases_ReadOnly))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_readonly_property([ValueSource(nameof(ValidPhrasesForReadOnly))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_writeonly_property([ValueSource(nameof(ValidPhrases_WriteOnly))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_writeonly_property([ValueSource(nameof(ValidPhrasesForWriteOnly))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe

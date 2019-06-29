@@ -44,8 +44,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a([Values("returns", "value")] string xmlTag,
-                                                                   [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
+        public void No_issue_is_reported_for_method_that_returns_a(
+                                                                [Values("returns", "value")] string xmlTag,
+                                                                [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;

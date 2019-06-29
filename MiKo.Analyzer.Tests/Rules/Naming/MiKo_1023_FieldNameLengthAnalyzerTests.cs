@@ -25,7 +25,7 @@ public enum MyEnum
 ");
 
         [Test]
-        public void No_issue_is_reported_for_const_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => No_issue_is_reported_for("public const string " + name  + " = string.Empty;");
+        public void No_issue_is_reported_for_const_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => No_issue_is_reported_for("public const string " + name + " = string.Empty;");
 
         protected override string GetDiagnosticId() => MiKo_1023_FieldNameLengthAnalyzer.Id;
 

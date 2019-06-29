@@ -17,6 +17,7 @@ public class TestMe
 {
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_non_command_interface() => No_issue_is_reported_for(@"
 using System;
@@ -113,6 +114,7 @@ public class TestMe
     private ICommand m_bla;
 }
 ");
+
         [TestCase("_command")]
         [TestCase("m_command")]
         [TestCase("_myCommand")]

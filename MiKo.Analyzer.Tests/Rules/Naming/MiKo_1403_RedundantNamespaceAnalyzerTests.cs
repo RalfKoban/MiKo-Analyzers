@@ -19,6 +19,7 @@ namespace Bla
   }
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_non_redundant_namespace() => No_issue_is_reported_for(@"
 namespace Bla.Blubb
