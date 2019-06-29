@@ -22,7 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
             if (node.Name.Identifier.ValueText != "WaitOne")
+            {
                 return;
+            }
 
             if (node.Parent is InvocationExpressionSyntax i)
             {

@@ -32,11 +32,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var returnType = method.ReturnType;
 
             if (returnType.SpecialType == SpecialType.System_Boolean)
+            {
                 return "CanRun";
+            }
 
             var isTask = returnType.IsTask();
             if (isTask is false)
+            {
                 return "Run";
+            }
 
             return returnType.TryGetGenericArgumentType(out var argumentType) && argumentType.SpecialType == SpecialType.System_Boolean
                        ? "CanRunAsync"

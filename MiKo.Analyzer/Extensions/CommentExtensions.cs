@@ -107,7 +107,9 @@ namespace MiKoSolutions.Analyzers
             foreach (var e in elements)
             {
                 if (e is null)
+                {
                     continue;
+                }
 
                 e.Descendants(Constants.XmlTag.Code).ToList().ForEach(_ => _.Remove());
 
@@ -118,7 +120,9 @@ namespace MiKoSolutions.Analyzers
         private static string Cleaned(string value)
         {
             if (value is null)
+            {
                 return string.Empty;
+            }
 
             return value
                    .WithoutParaTags()

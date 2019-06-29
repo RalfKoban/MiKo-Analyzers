@@ -93,26 +93,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
         {
             if (comment.StartsWith("//", StringComparison.OrdinalIgnoreCase))
+            {
                 return false; // ignore all comments that have the "double comment" marker
+            }
 
             if (comment.IsNullOrWhiteSpace())
+            {
                 return false; // ignore all empty comments
+            }
 
             if (comment.StartsWithAny(MeaninglessPhrases))
+            {
                 return true;
+            }
 
             if (comment.Contains("->"))
+            {
                 return true;
+            }
 
             var spaces = comment.Count(_ => _.IsWhiteSpace());
             if (spaces < 3)
             {
                 // 3 or less words
                 if (comment.ContainsAny(AllowedMarkers))
+                {
                     return false;
+                }
 
                 if (MiKo_2301_TestArrangeActAssertCommentAnalyzer.CommentContainsArrangeActAssert(comment))
+                {
                     return false; // already reported by the other analyzer
+                }
 
                 return true;
             }

@@ -28,7 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             while (startIndex < name.Length)
             {
                 if (name[startIndex].IsUpperCase())
+                {
                     break;
+                }
 
                 startIndex++;
             }

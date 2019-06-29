@@ -49,14 +49,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName, SemanticModel semanticModel)
         {
             if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
+            {
                 return null; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
+            }
 
             var comment = trivia.ToFullString()
                                 .Substring(2) // removes the leading '//'
                                 .Trim(); // gets rid of all (leading or trailing) whitespaces to ease comment comparisons
 
             if (CommentHasIssue(comment, semanticModel))
+            {
                 return Issue(methodName, trivia.GetLocation());
+            }
 
             return null;
         }

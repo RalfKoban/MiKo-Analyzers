@@ -19,18 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeQueryExpression, SyntaxKind.QueryExpression);
 
-        private void AnalyzeQueryExpression(SyntaxNodeAnalysisContext context)
-        {
-            var node = (QueryExpressionSyntax)context.Node;
-
-            var diagnostic = AnalyzeQueryExpression(node, context.SemanticModel);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
-        }
-
-        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel) => TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && HasLinqExtensionMethod(syntaxNode, semanticModel)
-                                                                                                                   ? Issue(identifier, query.GetLocation())
-                                                                                                                   : null;
-
         private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode result, out string identifier)
         {
             var methodDeclarationSyntax = query.GetEnclosing<MethodDeclarationSyntax>();
@@ -87,5 +75,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return false;
         }
+
+        private void AnalyzeQueryExpression(SyntaxNodeAnalysisContext context)
+        {
+            var node = (QueryExpressionSyntax)context.Node;
+
+            var diagnostic = AnalyzeQueryExpression(node, context.SemanticModel);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel) => TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && HasLinqExtensionMethod(syntaxNode, semanticModel)
+                                                                                                                   ? Issue(identifier, query.GetLocation())
+                                                                                                                   : null;
     }
 }

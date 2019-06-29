@@ -10,9 +10,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1105_TestMethodsPascalCasingAnalyzer : NamingAnalyzer
     {
-        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+");
-
         public const string Id = "MiKo_1105";
+
+        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+");
 
         public MiKo_1105_TestMethodsPascalCasingAnalyzer() : base(Id)
         {

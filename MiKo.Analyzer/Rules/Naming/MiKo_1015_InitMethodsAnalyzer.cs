@@ -19,8 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
-            if (!methodName.StartsWith("Init", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
-            if (methodName.StartsWith("Initialize", StringComparison.Ordinal)) return Enumerable.Empty<Diagnostic>();
+            if (!methodName.StartsWith("Init", StringComparison.Ordinal))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            if (methodName.StartsWith("Initialize", StringComparison.Ordinal))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var expectedName = GetExpectedName(methodName, "Initialize");
 
@@ -33,8 +40,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             for (; i < methodName.Length; i++)
             {
                 var character = methodName[i];
-                if (character.IsUpperCase()) break;
-                if (character.IsNumber()) break;
+                if (character.IsUpperCase())
+                {
+                    break;
+                }
+
+                if (character.IsNumber())
+                {
+                    break;
+                }
             }
 
             return i >= methodName.Length ? expectedName : expectedName + methodName.Substring(i);

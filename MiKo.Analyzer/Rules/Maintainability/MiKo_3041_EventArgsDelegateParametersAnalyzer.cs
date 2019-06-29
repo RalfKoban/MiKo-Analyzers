@@ -32,7 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case MethodKind.PropertyGet when method.ReturnType.TypeKind == TypeKind.Delegate:
                     return new[] { Issue(method.ContainingSymbol) };
 
-
                 default:
                     return Enumerable.Empty<Diagnostic>();
             }

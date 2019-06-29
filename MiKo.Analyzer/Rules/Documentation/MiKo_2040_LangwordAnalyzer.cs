@@ -10,9 +10,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_2040_LangwordAnalyzer : OverallDocumentationAnalyzer
     {
-        private static readonly KeyValuePair<string, string>[] Items = CreateItems();
-
         public const string Id = "MiKo_2040";
+
+        private static readonly KeyValuePair<string, string>[] Items = CreateItems();
 
         public MiKo_2040_LangwordAnalyzer() : base(Id)
         {
@@ -26,7 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var item in Items.Where(_ => comment.Contains(_.Key, StringComparison.OrdinalIgnoreCase)))
             {
-                if (findings is null) findings = new List<Diagnostic>();
+                if (findings is null)
+                {
+                    findings = new List<Diagnostic>();
+                }
+
                 findings.Add(Issue(symbol, item.Key, item.Value));
             }
 

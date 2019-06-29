@@ -40,10 +40,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var c in clearedSummary)
             {
                 if (c.IsWhiteSpace())
+                {
                     whitespaces++;
+                }
 
                 if (whitespaces > MaxAllowedWhitespaces)
+                {
                     return true;
+                }
             }
 
             return false;

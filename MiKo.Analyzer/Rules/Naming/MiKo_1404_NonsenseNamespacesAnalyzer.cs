@@ -14,7 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] NonsenseNamespaces = { "Helper", "Helpers", "Util", "Utils", "Utility", "Utilities", "Misc", "Miscellaneous" };
 
-
         public MiKo_1404_NonsenseNamespacesAnalyzer() : base(Id)
         {
         }

@@ -19,7 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (commentXml.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var comments = CommentExtensions.GetExamples(commentXml).ToArray();
             return AnalyzeExample(symbol, comments);

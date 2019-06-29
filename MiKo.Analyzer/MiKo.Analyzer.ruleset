@@ -405,7 +405,7 @@
     <Rule Id="CA1501" Action="None" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA0001" Action="Error" />
+    <Rule Id="SA0001" Action="None" />
     <Rule Id="SA0002" Action="Error" />
     <Rule Id="SA1000" Action="Error" />
     <Rule Id="SA1001" Action="Error" />

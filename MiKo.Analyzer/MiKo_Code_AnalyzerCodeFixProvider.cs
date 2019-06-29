@@ -1,3 +1,5 @@
+﻿#pragma warning disable SA1005 // Single line comments should begin with single space
+
 //using System;
 //using System.Collections.Generic;
 //using System.Collections.Immutable;
@@ -47,7 +49,7 @@
 //            context.RegisterCodeFix(
 //                CodeAction.Create(
 //                    title: title,
-//                    createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c), 
+//                    createChangedSolution: c => MakeUppercaseAsync(context.Document, declaration, c),
 //                    equivalenceKey: title),
 //                diagnostic);
 //        }

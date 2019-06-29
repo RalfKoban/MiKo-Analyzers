@@ -9,11 +9,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ExceptionDocumentationAnalyzer : DocumentationAnalyzer
     {
+        private readonly string m_exceptionTypeFullName;
+
         protected ExceptionDocumentationAnalyzer(string diagnosticId, Type exceptionType) : this(diagnosticId, exceptionType.FullName)
         {
         }
 
         protected ExceptionDocumentationAnalyzer(string diagnosticId, string exceptionTypeFullName) : base(diagnosticId, (SymbolKind)(-1)) => m_exceptionTypeFullName = exceptionTypeFullName;
+
+        protected string ExceptionPhrase => string.Format(Constants.Comments.ExceptionPhrase, m_exceptionTypeFullName.GetNameOnlyPart());
 
         protected sealed override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
@@ -21,18 +25,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (commentXml.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var comment = CommentExtensions.GetExceptionComment(m_exceptionTypeFullName, commentXml);
-            if (comment is null) return Enumerable.Empty<Diagnostic>();
-
-            return AnalyzeException(symbol, comment);
+            return comment is null
+                       ? Enumerable.Empty<Diagnostic>()
+                       : AnalyzeException(symbol, comment);
         }
 
         protected Diagnostic ReportExceptionIssue(ISymbol owningSymbol, string proposal) => Issue(owningSymbol, ExceptionPhrase, proposal);
-
-        protected string ExceptionPhrase => string.Format(Constants.Comments.ExceptionPhrase, m_exceptionTypeFullName.GetNameOnlyPart());
-
-        private readonly string m_exceptionTypeFullName;
     }
 }

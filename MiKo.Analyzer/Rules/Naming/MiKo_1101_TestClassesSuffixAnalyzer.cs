@@ -26,7 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var className = symbol.Name;
 
             if (className.EndsWith(TestsSuffix, StringComparison.Ordinal))
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             var suffix = className.EndsWith(TestSuffix, StringComparison.Ordinal) ? "s" : TestsSuffix;
 

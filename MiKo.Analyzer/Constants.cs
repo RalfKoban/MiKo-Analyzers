@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable SA1203 // Constants should appear before fields
+
+using System;
 using System.Linq;
 
 namespace MiKoSolutions.Analyzers
@@ -8,9 +10,10 @@ namespace MiKoSolutions.Analyzers
         internal const string AsyncSuffix = "Async";
         internal const string DependencyPropertyFieldSuffix = "Property";
         internal const string DependencyPropertyKeyFieldSuffix = "Key";
+        internal const string ILog = "ILog";
+
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
-        internal const string ILog = "ILog";
 
         internal static class Markers
         {
@@ -255,25 +258,6 @@ namespace MiKoSolutions.Analyzers
 
             internal const string NoDefaultPhrase = "This property has no default value.";
 
-            private static readonly string[] InvalidSummaryCrefXmlTags =
-                {
-                    XmlTag.Example,
-                    XmlTag.Exception,
-                    XmlTag.Include,
-                    XmlTag.Inheritdoc,
-                    XmlTag.Overloads,
-                    XmlTag.Param,
-                    XmlTag.ParamRef,
-                    XmlTag.Permission,
-                    XmlTag.Remarks,
-                    XmlTag.Returns,
-                    XmlTag.SeeAlso,
-                    XmlTag.Summary,
-                    XmlTag.TypeParam,
-                    XmlTag.TypeParamRef,
-                    XmlTag.Value,
-                };
-
             internal static readonly string[] InvalidSummaryCrefPhrases = Enumerable.Empty<string>()
                                                                                     .Concat(InvalidSummaryCrefXmlTags.Select(_ => XmlElementStartingTag + _ + " "))
                                                                                     .Concat(InvalidSummaryCrefXmlTags.Select(_ => XmlElementStartingTag + _ + "/"))
@@ -424,9 +408,28 @@ namespace MiKoSolutions.Analyzers
                 };
 
             internal static readonly string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
+
+            private static readonly string[] InvalidSummaryCrefXmlTags =
+                {
+                    XmlTag.Example,
+                    XmlTag.Exception,
+                    XmlTag.Include,
+                    XmlTag.Inheritdoc,
+                    XmlTag.Overloads,
+                    XmlTag.Param,
+                    XmlTag.ParamRef,
+                    XmlTag.Permission,
+                    XmlTag.Remarks,
+                    XmlTag.Returns,
+                    XmlTag.SeeAlso,
+                    XmlTag.Summary,
+                    XmlTag.TypeParam,
+                    XmlTag.TypeParamRef,
+                    XmlTag.Value,
+                };
         }
 
-        public static class MaxNamingLengths
+        internal static class MaxNamingLengths
         {
             public const int Types = 40;
             public const int Methods = 25;

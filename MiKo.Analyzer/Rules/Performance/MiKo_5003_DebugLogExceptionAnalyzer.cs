@@ -1,5 +1,4 @@
-﻿
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,12 +22,26 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
+        private static bool IsException(ArgumentSyntax argument, SemanticModel semanticModel)
+        {
+            var expression = argument.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
+                                 ? m.Expression
+                                 : argument.Expression;
+
+            var argumentType = expression.GetTypeSymbol(semanticModel);
+
+            return argumentType.IsException();
+        }
+
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
             var node = (InvocationExpressionSyntax)context.Node;
 
             var diagnostic = AnalyzeInvocation(node, context.SemanticModel);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
         }
 
         private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel) => node.Expression is MemberAccessExpressionSyntax methodCall && node.ArgumentList.Arguments.Count == 1
@@ -61,17 +74,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             return null;
-        }
-
-        private static bool IsException(ArgumentSyntax argument, SemanticModel semanticModel)
-        {
-            var expression = argument.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
-                                 ? m.Expression
-                                 : argument.Expression;
-
-            var argumentType = expression.GetTypeSymbol(semanticModel);
-
-            return argumentType.IsException();
         }
     }
 }

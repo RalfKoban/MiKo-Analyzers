@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             var lines = new HashSet<int>();
             CountLinesOfCode(nodes, lines);
 
-            // var all = string.Join(Environment.NewLine, lines.OrderBy(_ => _));
+            //// var all = string.Join(Environment.NewLine, lines.OrderBy(_ => _));
 
             return lines.Count;
         }
@@ -78,10 +78,17 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         break;
 
                     case ObjectCreationExpressionSyntax s:
-                        if (s.Initializer is null) // single line
+
+                        var singleLine = s.Initializer is null;
+                        if (singleLine)
+                        {
                             CountLinesOfCode(s.GetLocation(), lines);
+                        }
                         else
+                        {
                             CountLinesOfCode(s.Initializer.Expressions, lines);
+                        }
+
                         break;
 
                     case ReturnStatementSyntax s:

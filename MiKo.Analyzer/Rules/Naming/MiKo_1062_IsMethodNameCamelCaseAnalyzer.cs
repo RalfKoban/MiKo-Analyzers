@@ -24,13 +24,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => AnalyzeCamelCase(symbol, 3);
 
-        private IEnumerable<Diagnostic> AnalyzeCamelCase(ISymbol symbol, int limit) => ViolatesLimit(symbol.Name, limit)
-                                                                                           ? new[] { Issue(symbol, limit) }
-                                                                                           : Enumerable.Empty<Diagnostic>();
-
         private static bool ViolatesLimit(string name, int limit)
         {
             return name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.Count(_ => _.IsUpperCase()) > limit;
         }
+
+        private IEnumerable<Diagnostic> AnalyzeCamelCase(ISymbol symbol, int limit) => ViolatesLimit(symbol.Name, limit)
+                                                                                           ? new[] { Issue(symbol, limit) }
+                                                                                           : Enumerable.Empty<Diagnostic>();
     }
 }

@@ -18,7 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arguments = symbol.GetInvocationArgumentsFrom(m_invocation);
             if (arguments.Count < 3)
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             // public static System.Windows.DependencyProperty Register(string name, Type propertyType, Type ownerType);
             // public static System.Windows.DependencyPropertyKey RegisterReadOnly(string name, Type propertyType, Type ownerType, System.Windows.PropertyMetadata typeMetadata);
@@ -33,6 +35,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             AnalyzeParameterOwningType(symbol, ownerType, ref diagnostics);
 
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
+        }
+
+        private static string GetName(ArgumentSyntax nameArgument)
+        {
+            switch (nameArgument.Expression)
+            {
+                // nameof
+                case InvocationExpressionSyntax i: return i.ArgumentList.Arguments[0].ToString();
+                case LiteralExpressionSyntax l: return l.Token.ValueText;
+                default: return string.Empty;
+            }
         }
 
         private void AnalyzeParameterName(IFieldSymbol symbol, ArgumentSyntax nameArgument, ref List<Diagnostic> diagnostics)
@@ -68,14 +81,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // it might be that the syntax type is the same but the return type is fully qualified
                     // so check again for only the name part
                     if (returnType == syntaxType)
+                    {
                         return;
+                    }
 
                     var returnTypeNameOnlyPart = returnType?.GetNameOnlyPart();
                     var syntaxTypeNameOnlyPart = syntax.Type.GetNameOnlyPart();
-                    if (returnTypeNameOnlyPart == syntaxTypeNameOnlyPart)
-                        return;
 
-                    ReportIssue(symbol, propertyType, returnType, ref diagnostics);
+                    if (returnTypeNameOnlyPart != syntaxTypeNameOnlyPart)
+                    {
+                        ReportIssue(symbol, propertyType, returnType, ref diagnostics);
+                    }
                 }
             }
         }
@@ -96,20 +112,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter, ref List<Diagnostic> diagnostics)
         {
             if (diagnostics is null)
+            {
                 diagnostics = new List<Diagnostic>();
+            }
 
             diagnostics.Add(Issue(symbol.Name, argument.GetLocation(), parameter));
-        }
-
-        private static string GetName(ArgumentSyntax nameArgument)
-        {
-            switch (nameArgument.Expression)
-            {
-                // nameof
-                case InvocationExpressionSyntax i: return i.ArgumentList.Arguments[0].ToString();
-                case LiteralExpressionSyntax l: return l.Token.ValueText;
-                default: return string.Empty;
-            }
         }
     }
 }

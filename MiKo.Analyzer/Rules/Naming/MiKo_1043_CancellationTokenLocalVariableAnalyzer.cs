@@ -32,11 +32,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var identifier in identifiers)
             {
-                if (identifier.ValueText == Name) continue;
+                if (identifier.ValueText == Name)
+                {
+                    continue;
+                }
 
                 var symbol = identifier.GetSymbol(semanticModel);
 
-                if (results is null) results = new List<Diagnostic>();
+                if (results is null)
+                {
+                    results = new List<Diagnostic>();
+                }
+
                 results.Add(Issue(symbol, Name));
             }
 

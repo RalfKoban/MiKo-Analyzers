@@ -16,9 +16,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter)
         {
-            if (parameter.RefKind == RefKind.Out) return false; // MiKo 2022
-            if (parameter.Type.IsEnum()) return false; // MiKo 2023
-            if (parameter.Type.IsCancellationToken()) return false; // MiKo 2024
+            if (parameter.RefKind == RefKind.Out)
+            {
+                return false; // MiKo 2022
+            }
+
+            if (parameter.Type.IsEnum())
+            {
+                return false; // MiKo 2023
+            }
+
+            if (parameter.Type.IsCancellationToken())
+            {
+                return false; // MiKo 2024
+            }
 
             return parameter.Type.SpecialType != SpecialType.System_Boolean;
         }

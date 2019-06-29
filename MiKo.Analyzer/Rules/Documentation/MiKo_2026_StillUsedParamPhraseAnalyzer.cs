@@ -50,7 +50,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // do not use the declared ones as we are interested in parameters, not unused variables
             // var variablesDeclared = dataFlow.VariablesDeclared;
-
             var variablesRead = dataFlow.ReadInside.Union(dataFlow.ReadOutside);
 
             // do not include the ones that are written outside as those are the ones that are not used at all
@@ -66,15 +65,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameters = method.ParameterList.Parameters;
             if (parameters.Count == 0)
+            {
                 return;
+            }
 
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
             if (methodBody is null)
+            {
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
+            }
 
             var methodSymbol = method.GetEnclosingMethod(context.SemanticModel);
             if (methodSymbol is null)
+            {
                 return;
+            }
 
             var results = Analyze(context, methodBody, methodSymbol);
             foreach (var diagnostic in results)
@@ -89,15 +94,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameters = method.ParameterList.Parameters;
             if (parameters.Count == 0)
+            {
                 return;
+            }
 
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
             if (methodBody is null)
+            {
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
+            }
 
             var methodSymbol = method.GetEnclosingMethod(context.SemanticModel);
             if (methodSymbol is null)
+            {
                 return;
+            }
 
             var results = Analyze(context, methodBody, methodSymbol);
             foreach (var diagnostic in results)
@@ -114,7 +125,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var parameter in method.Parameters)
             {
                 if (!used.Contains(parameter.Name))
+                {
                     continue;
+                }
 
                 // check comment
                 var commentXml = method.GetDocumentationCommentXml();
@@ -123,7 +136,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
                 {
                     if (results is null)
+                    {
                         results = new List<Diagnostic>();
+                    }
 
                     var diagnostic = Issue(parameter);
                     results.Add(diagnostic);

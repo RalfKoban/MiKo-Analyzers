@@ -38,6 +38,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private string[] GetEndingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
                                                                         ? Constants.Comments.BooleanReturnTypeEndingPhrase
                                                                         : Constants.Comments.BooleanTaskReturnTypeEndingPhrase;
-
     }
 }

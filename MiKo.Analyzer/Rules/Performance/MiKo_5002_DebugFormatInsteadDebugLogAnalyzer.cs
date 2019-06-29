@@ -30,7 +30,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var node = (InvocationExpressionSyntax)context.Node;
 
             var diagnostic = AnalyzeInvocation(node, context.SemanticModel);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
         }
 
         private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel) => node.Expression is MemberAccessExpressionSyntax methodCall && node.ArgumentList.Arguments.Count == 1
@@ -53,11 +56,14 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     var type = methodCall.Expression.GetTypeSymbol(semanticModel);
 
                     if (type.Name != Constants.ILog)
+                    {
                         return null;
+                    }
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
                     return Issue(enclosingMethod.Name, methodCallName.GetLocation(), methodName, methodName.Remove(Format));
                 }
+
                 default:
                     return null;
             }

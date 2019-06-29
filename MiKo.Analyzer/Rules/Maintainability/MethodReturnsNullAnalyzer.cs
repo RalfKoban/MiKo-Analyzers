@@ -11,10 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MethodReturnsNullAnalyzer : MaintainabilityAnalyzer
     {
-        protected MethodReturnsNullAnalyzer(string diagnosticId) : base(diagnosticId)
-        {
-        }
-
         private static readonly HashSet<SyntaxKind> ImportantAncestors = new HashSet<SyntaxKind>
                                                                              {
                                                                                  SyntaxKind.VariableDeclaration,
@@ -24,6 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                  SyntaxKind.SwitchStatement,
                                                                              };
 
+        protected MethodReturnsNullAnalyzer(string diagnosticId) : base(diagnosticId)
+        {
+        }
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
 
@@ -40,17 +39,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case VariableDeclaratorSyntax variable:
                 {
                     if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
+                    {
                         return new[] { variable.Initializer.Value };
+                    }
 
                     break;
                 }
+
                 case AssignmentExpressionSyntax a:
                 {
                     if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
+                    {
                         return new[] { a.Right };
+                    }
 
                     break;
                 }
+
                 case ReturnStatementSyntax r:
                 {
                     return r.DescendantNodes().OfType<LiteralExpressionSyntax>();
@@ -59,7 +64,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ParameterSyntax p:
                 {
                     if (names.Contains(p.Identifier.ValueText))
+                    {
                         return p.DescendantNodes().OfType<LiteralExpressionSyntax>();
+                    }
 
                     break;
                 }
@@ -127,7 +134,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
             if (CanBeIgnored(context))
+            {
                 return;
+            }
 
             var method = (MethodDeclarationSyntax)context.Node;
 
@@ -154,24 +163,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeMethodExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
         {
             var expression = method.ExpressionBody.Expression;
-            if (expression is ConditionalExpressionSyntax conditional)
+            switch (expression)
             {
-                AnalyzeConditional(context, conditional);
-            }
-            else if (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression))
-            {
-                AnalyzeExpression(context, method, b.Right);
-            }
-            else
-            {
-                GetAndReportIssue(context, expression);
+                case ConditionalExpressionSyntax conditional:
+                    AnalyzeConditional(context, conditional);
+                    break;
+                case BinaryExpressionSyntax b when b.IsKind(SyntaxKind.CoalesceExpression):
+                    AnalyzeExpression(context, method, b.Right);
+                    break;
+                default:
+                    GetAndReportIssue(context, expression);
+                    break;
             }
         }
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
         {
             if (GetAndReportIssue(context, expression))
+            {
                 return;
+            }
 
             var exp = (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression)) ? b.Right : expression;
             var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);

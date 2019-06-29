@@ -23,7 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var method = (IMethodSymbol)symbol;
 
             if (method.Parameters.Length == 0)
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             var comment = commentXml.RemoveAll(Constants.Markers.Symbols);
 
@@ -42,7 +44,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrase = xmlTag + "=\"" + parameter.Name + "\"";
             if (commentXml.Contains(phrase, Comparison))
             {
-                if (findings is null) findings = new List<Diagnostic>();
+                if (findings is null)
+                {
+                    findings = new List<Diagnostic>();
+                }
+
                 findings.Add(Issue(parameter, phrase + Constants.Comments.XmlElementEndingTag));
             }
         }

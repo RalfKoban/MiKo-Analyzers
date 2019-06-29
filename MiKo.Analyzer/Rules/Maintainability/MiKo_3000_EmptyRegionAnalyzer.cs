@@ -21,6 +21,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeRegionDirectiveTrivia, SyntaxKind.RegionDirectiveTrivia);
         }
 
+        private static bool HasSomethingInsideRegion(DirectiveTriviaSyntax regionNode)
+        {
+            // contains #region  and #endregion directive trivia syntaxes
+            var relatedDirectives = regionNode.GetRelatedDirectives();
+            if (relatedDirectives.Count != 2)
+            {
+                return false;
+            }
+
+            var regionDirective = relatedDirectives[0];
+            var endregionDirective = relatedDirectives[1];
+
+            var regionAncestors = regionDirective.AncestorsAndSelf();
+            var endregionAncestors = endregionDirective.AncestorsAndSelf();
+
+            return regionAncestors.Except(endregionAncestors).Except(relatedDirectives).Any();
+        }
+
         private void AnalyzeRegionDirectiveTrivia(SyntaxNodeAnalysisContext context)
         {
             var regionNode = (RegionDirectiveTriviaSyntax)context.Node;
@@ -31,22 +49,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 context.ReportDiagnostic(Issue(regionNode.ToString(), regionNode.GetLocation()));
             }
-        }
-
-        private static bool HasSomethingInsideRegion(DirectiveTriviaSyntax regionNode)
-        {
-            // contains #region  and #endregion directive trivia syntaxes
-            var relatedDirectives = regionNode.GetRelatedDirectives();
-            if (relatedDirectives.Count != 2)
-                return false;
-
-            var regionDirective = relatedDirectives[0];
-            var endregionDirective = relatedDirectives[1];
-
-            var regionAncestors = regionDirective.AncestorsAndSelf();
-            var endregionAncestors = endregionDirective.AncestorsAndSelf();
-
-            return regionAncestors.Except(endregionAncestors).Except(relatedDirectives).Any();
         }
     }
 }

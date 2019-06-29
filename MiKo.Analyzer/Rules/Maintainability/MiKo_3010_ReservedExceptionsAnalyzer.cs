@@ -43,7 +43,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                 typeof(SystemException).FullName,
                                                                             };
 
-
         public MiKo_3010_ReservedExceptionsAnalyzer() : base(Id)
         {
         }

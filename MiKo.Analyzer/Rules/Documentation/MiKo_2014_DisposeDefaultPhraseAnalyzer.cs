@@ -23,7 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (commentXml.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var summaries = CommentExtensions.GetSummaries(commentXml);
             var results = summaries.Any() && summaries.All(_ => _ != SummaryPhrase)
@@ -34,10 +37,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var parameter in symbol.Parameters)
             {
                 var comment = parameter.GetComment(commentXml);
-                if (comment is null) continue;
-                if (comment == ParameterPhrase) continue;
+                if (comment is null)
+                {
+                    continue;
+                }
 
-                if (results is null) results = new List<Diagnostic>();
+                if (comment == ParameterPhrase)
+                {
+                    continue;
+                }
+
+                if (results is null)
+                {
+                    results = new List<Diagnostic>();
+                }
+
                 results.Add(Issue(parameter, ParameterPhrase));
             }
 

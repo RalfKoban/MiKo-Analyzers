@@ -24,15 +24,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            if (summaries.Any())
+            if (summaries.None())
             {
-                var symbolNames = GetSelfSymbolNames(symbol);
-                var phrases = GetPhrases(symbol);
-
-                return AnalyzeSummaryPhrases(symbol, summaries, symbolNames.Concat(phrases));
+                return Enumerable.Empty<Diagnostic>();
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            var symbolNames = GetSelfSymbolNames(symbol);
+            var phrases = GetPhrases(symbol);
+
+            return AnalyzeSummaryPhrases(symbol, summaries, symbolNames.Concat(phrases));
         }
 
         private static IEnumerable<string> GetPhrases(ISymbol symbol)
@@ -52,16 +52,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (symbol)
             {
                 case INamedTypeSymbol s:
-                    {
-                        names.AddRange(s.AllInterfaces.Select(_ => _.Name));
-                        break;
-                    }
+                {
+                    names.AddRange(s.AllInterfaces.Select(_ => _.Name));
+                    break;
+                }
+
                 case ISymbol s:
-                    {
-                        names.Add(s.ContainingType.Name);
-                        names.AddRange(s.ContainingType.AllInterfaces.Select(_ => _.Name));
-                        break;
-                    }
+                {
+                    names.Add(s.ContainingType.Name);
+                    names.AddRange(s.ContainingType.AllInterfaces.Select(_ => _.Name));
+                    break;
+                }
             }
 
             return names.Select(_ => _ + " ").ToHashSet();

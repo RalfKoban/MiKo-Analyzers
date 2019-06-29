@@ -1,5 +1,4 @@
-﻿
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -26,7 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var node = (InvocationExpressionSyntax)context.Node;
 
             var diagnostic = AnalyzeInvocation(node, context.SemanticModel);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
         }
 
         private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel) => node.Expression is MemberAccessExpressionSyntax methodCall
@@ -43,13 +45,17 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     // check if inside IsDebugEnabled call for if or block
                     if (methodCall.IsInsideIfStatementWithCallTo(IsDebugEnabled))
+                    {
                         return null;
+                    }
 
                     // check for correct type (only ILog methods shall be reported)
                     var type = methodCall.Expression.GetTypeSymbol(semanticModel);
 
                     if (type.Name != Constants.ILog)
+                    {
                         return null;
+                    }
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
                     return Issue(enclosingMethod.Name, methodCall.Parent.GetLocation(), methodName, IsDebugEnabled);

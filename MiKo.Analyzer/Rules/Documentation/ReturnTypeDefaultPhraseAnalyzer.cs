@@ -12,7 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType)
         {
-            if (IsAcceptedType(returnType)) return true;
+            if (IsAcceptedType(returnType))
+            {
+                return true;
+            }
 
             if (returnType.IsTask() && returnType.TryGetGenericArgumentType(out var argumentType))
             {

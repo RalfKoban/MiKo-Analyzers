@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -17,7 +18,11 @@ namespace MiKoSolutions.Analyzers
 
         public override void Visit(SyntaxNode node)
         {
-            if (node is T t) m_nodes.Add(t);
+            if (node is T t)
+            {
+                m_nodes.Add(t);
+            }
+
             base.Visit(node);
         }
     }

@@ -14,7 +14,9 @@ namespace MiKoSolutions.Analyzers
                 if (syntaxTrivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
                 {
                     if (count == 1)
+                    {
                         return true;
+                    }
 
                     count++;
                 }

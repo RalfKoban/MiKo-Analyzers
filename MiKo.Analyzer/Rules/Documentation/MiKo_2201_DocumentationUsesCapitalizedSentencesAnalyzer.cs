@@ -68,13 +68,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     default:
                     {
                         if (e.HasElements)
+                        {
                             return e.Descendants().Any(CommentHasIssue);
+                        }
 
                         comment = e.Value.TrimStart();
 
                         // sentence starts lower case
                         if (name == "para" && comment.Length > 0 && comment[0].IsLowerCaseLetter())
+                        {
                             return true;
+                        }
 
                         break;
                     }
@@ -103,13 +107,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     // investigate next character after . ? or !
                     if (i != last)
+                    {
                         c = comment[++i];
+                    }
 
                     SkipWhiteSpaces(comment, last, ref c, ref i);
                     SkipAbbreviations(comment, last, ref c, ref i);
 
                     if (c.IsLowerCaseLetter() && !IsWellknownFileExtension(comment, i - 1))
+                    {
                         return true;
+                    }
                 }
             }
 

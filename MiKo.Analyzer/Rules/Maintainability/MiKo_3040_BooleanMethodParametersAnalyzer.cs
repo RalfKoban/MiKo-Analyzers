@@ -22,7 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
             if (method.IsInterfaceImplementation())
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             switch (method.Parameters.Length)
             {

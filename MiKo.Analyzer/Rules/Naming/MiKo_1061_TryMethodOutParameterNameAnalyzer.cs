@@ -18,12 +18,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
-            if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>(); // ignore tests
+            if (symbol.IsTestClass())
+            {
+                return Enumerable.Empty<Diagnostic>(); // ignore tests
+            }
 
             List<Diagnostic> results = null;
             foreach (var finding in symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null))
             {
-                if (results is null) results = new List<Diagnostic>();
+                if (results is null)
+                {
+                    results = new List<Diagnostic>();
+                }
+
                 results.Add(finding);
             }
 
@@ -38,7 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
                 if (outParameter != null && outParameter.Name != ParameterName)
+                {
                     return Issue(outParameter, ParameterName);
+                }
             }
 
             return null;

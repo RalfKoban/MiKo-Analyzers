@@ -26,7 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // TODO: RKN if (summary.StartsWithAny(Comparison, Constants.Comments.EventHandlerSummaryPhrase)) return Enumerable.Empty<Diagnostic>();
                 if (summary.StartsWith(Constants.Comments.EventHandlerSummaryStartingPhrase, Comparison))
+                {
                     return Enumerable.Empty<Diagnostic>();
+                }
             }
 
             var phrase = Constants.Comments.EventHandlerSummaryStartingPhrase; // TODO: RKN Constants.Comments.EventHandlerSummaryPhrase[0]

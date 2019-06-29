@@ -60,15 +60,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var methodName = method.Name;
 
             if (ExcludedNames.Contains(methodName))
+            {
                 return false;
+            }
 
             if (methodName.StartsWith("On", StringComparison.OrdinalIgnoreCase) && methodName.EndsWith("CommandExecuted", StringComparison.OrdinalIgnoreCase))
+            {
                 return false;
+            }
 
             var forbidden = methodName.Contains(forbiddenName);
             if (forbidden)
             {
-                if (diagnostics is null) diagnostics = new List<Diagnostic>();
+                if (diagnostics is null)
+                {
+                    diagnostics = new List<Diagnostic>();
+                }
 
                 var proposal = GetProposal(methodName, forbiddenName);
                 diagnostics.Add(Issue(method, proposal));

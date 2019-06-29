@@ -23,7 +23,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var diagnostic in method.Parameters.Select(AnalyzeCollectionSuffix).Where(_ => _ != null))
             {
-                if (list is null) list = new List<Diagnostic>();
+                if (list is null)
+                {
+                    list = new List<Diagnostic>();
+                }
+
                 list.Add(diagnostic);
             }
 

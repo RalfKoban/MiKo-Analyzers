@@ -1,5 +1,4 @@
-﻿
-using System.Xml;
+﻿using System.Xml;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,10 +26,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default:
                 {
                     if (returnType.TypeKind == TypeKind.Array)
+                    {
                         return returnType is IArrayTypeSymbol r && r.ElementType.SpecialType != SpecialType.System_Byte;
+                    }
 
                     if (returnType.IsEnumerable())
-                        return !returnType.InheritsFrom<XmlNode>();
+                    {
+                        return returnType.InheritsFrom<XmlNode>() is false;
+                    }
 
                     return false;
                 }

@@ -36,11 +36,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var xmlTag in XmlTags)
             {
-                foreach (var _ in CommentExtensions.GetCommentElements(commentXml, xmlTag)
+                foreach (var unused in CommentExtensions.GetCommentElements(commentXml, xmlTag)
                                      .Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
                                      .Select(_ => _.Remove(Constants.Comments.SpecialOrPhrase))
                                      .Where(_ => _.Length > 0)
-                                     .Where(_ => !_[0].IsUpperCase() && _[0] != Constants.Comments.XmlElementStartingTag[0]))
+                                     .Where(_ => _[0].IsUpperCase() is false && _[0] != Constants.Comments.XmlElementStartingTag[0]))
                 {
                     yield return Issue(symbol, xmlTag);
                 }
