@@ -20,11 +20,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
         {
-            if (exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison)) return Enumerable.Empty<Diagnostic>();
+            if (exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             // alternative check for Closed methods
             if (HasCloseMethod(symbol) && exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             return new[] { ReportExceptionIssue(symbol, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
         }

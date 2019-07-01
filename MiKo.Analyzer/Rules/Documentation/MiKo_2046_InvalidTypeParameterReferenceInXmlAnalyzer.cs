@@ -23,7 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace())
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             switch (symbol)
             {
@@ -37,6 +39,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Enumerable.Empty<Diagnostic>();
             }
         }
+
+        private static IEnumerable<string> CreatePhrases(string parameterName) => new[]
+                                                                                      {
+                                                                                          string.Intern("<see cref=\"" + parameterName + "\""),
+                                                                                          string.Intern("<see name=\"" + parameterName + "\""),
+                                                                                          string.Intern("<seealso cref=\"" + parameterName + "\""),
+                                                                                          string.Intern("<seealso name=\"" + parameterName + "\""),
+                                                                                      };
+
+        private static string GetReplacement(ITypeParameterSymbol parameter) => string.Intern(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.TypeParamRef + " name=\"" + parameter.Name + "\"" + Constants.Comments.XmlElementEndingTag);
 
         private IEnumerable<Diagnostic> AnalyzeComment(INamedTypeSymbol type, string commentXml)
         {
@@ -72,14 +84,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return findings ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private static IEnumerable<string> CreatePhrases(string parameterName) => new[]
-                                                                                      {
-                                                                                          string.Intern("<see cref=\"" + parameterName + "\""),
-                                                                                          string.Intern("<see name=\"" + parameterName + "\""),
-                                                                                          string.Intern("<seealso cref=\"" + parameterName + "\""),
-                                                                                          string.Intern("<seealso name=\"" + parameterName + "\""),
-                                                                                      };
-
         private void InspectPhrases(ITypeParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
         {
             var phrases = CreatePhrases(parameter.Name);
@@ -88,12 +92,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    .Where(_ => commentXml.Contains(_, Comparison))
                                    .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
             {
-                if (findings is null) findings = new List<Diagnostic>();
+                if (findings is null)
+                {
+                    findings = new List<Diagnostic>();
+                }
+
                 var replacement = GetReplacement(parameter);
                 findings.Add(Issue(parameter, phrase, replacement));
             }
         }
-
-        private static string GetReplacement(ITypeParameterSymbol parameter) => string.Intern(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.TypeParamRef + " name=\"" + parameter.Name + "\"" + Constants.Comments.XmlElementEndingTag);
     }
 }

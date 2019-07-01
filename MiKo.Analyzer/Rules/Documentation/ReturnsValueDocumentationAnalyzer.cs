@@ -19,12 +19,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag) => Enumerable.Empty<Diagnostic>();
-
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
             var method = (IMethodSymbol)symbol;
-            if (method.ReturnsVoid) return Enumerable.Empty<Diagnostic>();
+            if (method.ReturnsVoid)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             return AnalyzeReturnType(method, method.ReturnType, commentXml);
         }
@@ -37,11 +38,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : Enumerable.Empty<Diagnostic>();
         }
 
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
+                                                                                                                                       ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                       : new[] { Issue(symbol, xmlTag, phrase[0]) };
+
+        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => phrase.Any(_ => _.Equals(comment, StringComparison.Ordinal))
+                                                                                                                               ? Enumerable.Empty<Diagnostic>()
+                                                                                                                               : new[] { Issue(symbol, xmlTag, phrase[0]) };
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag) => Enumerable.Empty<Diagnostic>();
+
         private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (commentXml.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
-            if (!ShallAnalyzeReturnType(returnType)) return Enumerable.Empty<Diagnostic>();
+            if (!ShallAnalyzeReturnType(returnType))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Returns) ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Value) ?? Enumerable.Empty<Diagnostic>();
         }
@@ -55,20 +72,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var findings = AnalyzeReturnType(owningSymbol, returnType, comment, xmlTag);
                 if (findings.Any())
                 {
-                    if (results is null) results = new List<Diagnostic>();
+                    if (results is null)
+                    {
+                        results = new List<Diagnostic>();
+                    }
+
                     results.AddRange(findings);
                 }
             }
 
             return results;
         }
-
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
-                                                                                                                                       ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                       : new[] { Issue(symbol, xmlTag, phrase[0]) };
-
-        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => phrase.Any(_ => _.Equals(comment, StringComparison.Ordinal))
-                                                                                                                               ? Enumerable.Empty<Diagnostic>()
-                                                                                                                               : new[] { Issue(symbol, xmlTag, phrase[0]) };
     }
 }

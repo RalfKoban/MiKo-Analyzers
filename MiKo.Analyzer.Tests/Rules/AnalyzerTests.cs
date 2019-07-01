@@ -80,9 +80,13 @@ namespace MiKoSolutions.Analyzers.Rules
                 var name = analyzer.DiagnosticId + ": " + analyzer.GetType().Name;
 
                 if (ids.ContainsKey(analyzer.DiagnosticId))
+                {
                     findings.Add(name);
+                }
                 else
+                {
                     ids[analyzer.DiagnosticId] = name;
+                }
             }
 
             findings.Sort();
@@ -150,10 +154,11 @@ namespace MiKoSolutions.Analyzers.Rules
                         .AppendFormat(tableFormat, ":-", ":----", ":----------------:");
                 }
 
-                markdownBuilder.AppendFormat(tableFormat,
-                                             descriptor.Id,
-                                             descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
-                                             descriptor.IsEnabledByDefault ? "&#x2713;" : "\\-");
+                markdownBuilder.AppendFormat(
+                                         tableFormat,
+                                         descriptor.Id,
+                                         descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
+                                         descriptor.IsEnabledByDefault ? "&#x2713;" : "\\-");
             }
 
             var markdown = markdownBuilder.ToString();

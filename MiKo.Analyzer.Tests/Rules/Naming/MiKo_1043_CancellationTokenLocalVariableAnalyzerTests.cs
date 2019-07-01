@@ -47,6 +47,7 @@ public class TestMe
     }
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_method_with_var_CancellationToken_variable_with_correct_name() => No_issue_is_reported_for(@"
 using System;

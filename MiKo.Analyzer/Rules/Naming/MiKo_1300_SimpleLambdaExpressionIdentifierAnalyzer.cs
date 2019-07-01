@@ -27,12 +27,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var node = (SimpleLambdaExpressionSyntax)context.Node;
             var diagnostic = AnalyzeSimpleLambdaExpression(node);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
         }
 
         private Diagnostic AnalyzeSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
         {
-            if (node.Parameter is null) return null;
+            if (node.Parameter is null)
+            {
+                return null;
+            }
 
             var identifier = node.Parameter.Identifier;
             switch (identifier.ValueText)

@@ -18,15 +18,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static readonly IReadOnlyDictionary<string, MappingType> Mappings = new Dictionary<string, MappingType>
                                                                                         {
+                                                                                            // ArgumentException
                                                                                             { nameof(ArgumentException), InspectArgumentException },
                                                                                             { TypeNames.ArgumentException, InspectArgumentException },
 
+                                                                                            // ArgumentNullException
                                                                                             { nameof(ArgumentNullException), InspectArgumentNullException },
                                                                                             { TypeNames.ArgumentNullException, InspectArgumentNullException },
 
+                                                                                            // ArgumentOutOfRangeException
                                                                                             { nameof(ArgumentOutOfRangeException), InspectArgumentOutOfRangeException },
                                                                                             { TypeNames.ArgumentOutOfRangeException, InspectArgumentOutOfRangeException },
 
+                                                                                            // InvalidEnumArgumentException
                                                                                             { nameof(InvalidEnumArgumentException), InspectInvalidEnumArgumentException },
                                                                                             { TypeNames.InvalidEnumArgumentException, InspectInvalidEnumArgumentException },
                                                                                         };
@@ -52,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (location != Location.None)
             {
                 var issue = Issue(type, location, method.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
-                return new []{ issue };
+                return new[] { issue };
             }
 
             return Enumerable.Empty<Diagnostic>();
@@ -66,7 +70,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case 2:
                     // find out if it's the message parameter ctor
                     if (IsStringParameter(arguments[0], semanticModel))
+                    {
                         return InspectArgument(arguments[1], method, semanticModel);
+                    }
 
                     // it is not, so we have to report it anyway
                     break;
@@ -89,7 +95,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case 2:
                     // find out if it's the message parameter ctor
                     if (IsStringParameter(arguments[1], semanticModel))
+                    {
                         return InspectArgument(arguments[0], method, semanticModel);
+                    }
 
                     // it is not, so we have to report it anyway
                     break;
@@ -106,7 +114,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case 2:
                     // find out if it's the message parameter ctor
                     if (IsStringParameter(arguments[1], semanticModel))
+                    {
                         return InspectArgument(arguments[0], method, semanticModel);
+                    }
 
                     // it is not, so we have to report it anyway
                     break;
@@ -134,7 +144,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static Location InspectArgument(ArgumentSyntax argument, IMethodSymbol method, SemanticModel semanticModel)
         {
             if (IsStringParameter(argument, semanticModel) && ParameterIsReferenced(argument, method))
+            {
                 return Location.None;
+            }
 
             // no string, so no paramName; hence we have to report it anyway
             return argument.GetLocation();

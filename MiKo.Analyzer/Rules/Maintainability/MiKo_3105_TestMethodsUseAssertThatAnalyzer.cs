@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                               "NUnit.Framework",
                                                                           };
 
-    private static readonly HashSet<string> AssertionTypes = new HashSet<string>
+        private static readonly HashSet<string> AssertionTypes = new HashSet<string>
                                                                      {
                                                                          "Assert",
                                                                          "StringAssert",
@@ -50,15 +50,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (node.Expression is IdentifierNameSyntax invokedClass)
             {
                 if (AllowedAssertionMethods.Contains(node.Name.Identifier.ValueText))
+                {
                     return;
+                }
 
-                if (!AssertionTypes.Contains(invokedClass.Identifier.ValueText))
+                if (AssertionTypes.Contains(invokedClass.Identifier.ValueText) is false)
+                {
                     return;
+                }
 
                 var testFrameworkNamespace = invokedClass.GetTypeSymbol(context.SemanticModel)?.ContainingNamespace.FullyQualifiedName();
 
-                if (!AssertionNamespaces.Contains(testFrameworkNamespace))
+                if (AssertionNamespaces.Contains(testFrameworkNamespace) is false)
+                {
                     return; // ignore other test frameworks
+                }
 
                 var method = context.GetEnclosingMethod();
                 context.ReportDiagnostic(Issue(method.Name, node.GetLocation()));

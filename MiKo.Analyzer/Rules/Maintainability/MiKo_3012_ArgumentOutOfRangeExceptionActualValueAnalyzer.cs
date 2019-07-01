@@ -22,7 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                 TypeNames.InvalidEnumArgumentException,
                                                                             };
 
-
         public MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer() : base(Id)
         {
         }
@@ -31,6 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => node.ArgumentList.Arguments.Count == 3
                                                                                                                                                   ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                  : new []{ Issue(node.Type.ToString(), node.GetLocation()) };
+                                                                                                                                                  : new[] { Issue(node.Type.ToString(), node.GetLocation()) };
     }
 }

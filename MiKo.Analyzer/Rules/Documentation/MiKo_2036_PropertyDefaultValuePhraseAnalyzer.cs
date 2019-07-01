@@ -15,12 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public MiKo_2036_PropertyDefaultValuePhraseAnalyzer() : base(Id)
         {
         }
+
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Property);
 
         protected override bool ShallAnalyzeProperty(IPropertySymbol symbol)
         {
             var returnType = symbol.GetReturnType();
-            if (returnType is null) return false;
+            if (returnType is null)
+            {
+                return false;
+            }
 
             return returnType.SpecialType == SpecialType.System_Boolean || returnType.IsEnum();
         }
@@ -28,7 +32,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
             if (comment.EndsWith(Constants.Comments.NoDefaultPhrase, StringComparison.Ordinal))
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             string proposedEndingPhrase;
             string[] endingPhrases;

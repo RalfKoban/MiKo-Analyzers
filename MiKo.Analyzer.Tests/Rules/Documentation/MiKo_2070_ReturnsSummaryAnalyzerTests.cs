@@ -38,6 +38,7 @@ public class TestMe
     }
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe

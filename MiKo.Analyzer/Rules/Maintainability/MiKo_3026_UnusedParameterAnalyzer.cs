@@ -27,25 +27,39 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static bool CanBeIgnored(IMethodSymbol method)
         {
             if (method is null)
+            {
                 return false;
+            }
 
             if (method.IsOverride || method.IsVirtual)
+            {
                 return true;
+            }
 
             if (method.IsConstructor())
+            {
                 return method.IsSerializationConstructor();
+            }
 
             if (method.IsEventHandler())
+            {
                 return true;
+            }
 
             if (method.IsDependencyPropertyEventHandler())
+            {
                 return true;
+            }
 
             if (method.IsCoerceValueCallback())
+            {
                 return true;
+            }
 
             if (method.IsValidateValueCallback())
+            {
                 return true;
+            }
 
             var ignore = method.IsInterfaceImplementation();
             return ignore;
@@ -57,7 +71,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // do not use the declared ones as we are interested in parameters, not unused variables
             // var variablesDeclared = dataFlow.VariablesDeclared;
-
             var variablesRead = dataFlow.ReadInside.Union(dataFlow.ReadOutside);
 
             // do not include the ones that are written outside as those are the ones that are not used at all
@@ -90,15 +103,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
         {
             if (methodBody is null)
+            {
                 return;
+            }
 
             if (parameters.Count == 0)
+            {
                 return;
+            }
 
             var methodSymbol = context.GetEnclosingMethod();
 
             if (CanBeIgnored(methodSymbol))
+            {
                 return;
+            }
 
             var used = GetAllUsedVariables(context, methodBody);
 
@@ -107,11 +126,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var parameterName = parameter.Identifier.ValueText;
 
                 if (used.Contains(parameterName))
+                {
                     continue;
+                }
 
                 // TODO: RKN check if the documentation contains the phrase 'Unused.' and Do not report an issue in such case
                 if (methodSymbol.IsEnhancedByPostSharpAdvice())
+                {
                     continue;
+                }
 
                 var diagnostic = Issue(parameterName, parameter.Identifier.GetLocation());
                 context.ReportDiagnostic(diagnostic);

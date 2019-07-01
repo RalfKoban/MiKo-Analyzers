@@ -29,8 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string[] GetStartingPhrase(IPropertySymbol symbol)
         {
-            if (symbol.IsWriteOnly) return Constants.Comments.CommandPropertySetterOnlySummaryStartingPhrase;
-            if (symbol.IsReadOnly) return Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhrase;
+            if (symbol.IsWriteOnly)
+            {
+                return Constants.Comments.CommandPropertySetterOnlySummaryStartingPhrase;
+            }
+
+            if (symbol.IsReadOnly)
+            {
+                return Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhrase;
+            }
 
             return Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhrase;
         }

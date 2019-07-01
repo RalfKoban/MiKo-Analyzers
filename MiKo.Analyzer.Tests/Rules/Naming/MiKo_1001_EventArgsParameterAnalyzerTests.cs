@@ -111,6 +111,7 @@ public class TestMe
     public EventArgs Property { get; set; }
 }
 ");
+
         protected override string GetDiagnosticId() => MiKo_1001_EventArgsParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1001_EventArgsParameterAnalyzer();

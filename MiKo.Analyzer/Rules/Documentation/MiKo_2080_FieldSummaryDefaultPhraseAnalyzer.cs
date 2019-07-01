@@ -25,10 +25,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool ShallAnalyzeField(IFieldSymbol symbol)
         {
             if (symbol.ContainingType.IsEnum())
+            {
                 return false;
+            }
 
             if (symbol.Type.IsDependencyProperty())
+            {
                 return false; // validated by rule MiKo_2017
+            }
 
             return true;
         }
@@ -42,7 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              : StartingDefaultPhrase;
 
             if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             // alternative check
             if (type.IsEnumerable())
@@ -50,7 +56,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 phrase = StartingEnumerableDefaultPhrase;
 
                 if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
+                {
                     return Enumerable.Empty<Diagnostic>();
+                }
             }
 
             return new[] { Issue(symbol, phrase) };

@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                 "PostSharp",
                                                                                                 "NDepend",
                                                                                             };
+
         [Test]
         public void No_issue_is_reported_for_known_namespace_name([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"

@@ -33,15 +33,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arguments = node.ArgumentList.Arguments;
             if (arguments.Count != 1)
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             var method = node.GetEnclosingMethod(semanticModel);
             if (method is null)
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             // no string parameters
             if (method.Parameters.All(_ => _.Type.SpecialType != SpecialType.System_String))
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             if (arguments[0].Expression is IdentifierNameSyntax s)
             {
@@ -63,7 +69,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // v - that one has to have the attribute applied --> if not, report
             var parameter = parameters.FirstOrDefault(_ => _.Name == propertyName);
             if (parameter is null)
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             foreach (var name in parameter.GetAttributeNames())
             {

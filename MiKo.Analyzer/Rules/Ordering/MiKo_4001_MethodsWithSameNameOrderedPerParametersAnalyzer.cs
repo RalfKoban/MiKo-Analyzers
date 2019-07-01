@@ -42,7 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                         .ThenBy(_ => _.Parameters.Length)
                                                         .ToList();
                 if (methodsOrderedByParameters.Count <= 1)
+                {
                     continue;
+                }
 
                 var order = methodsOrderedByParameters.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
 
@@ -55,7 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     if (lastLine > nextLine)
                     {
                         if (results is null)
+                        {
                             results = new List<Diagnostic>();
+                        }
 
                         results.Add(Issue(method, order));
                     }

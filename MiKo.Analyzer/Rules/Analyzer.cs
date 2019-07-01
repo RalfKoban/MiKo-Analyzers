@@ -32,13 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind, bool isEnabledByDefault = true) : this(category, diagnosticId, isEnabledByDefault) => SymbolKind = symbolKind;
 
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+
         public string DiagnosticId { get; }
 
         protected DiagnosticDescriptor Rule { get; }
 
         protected SymbolKind SymbolKind { get; }
-
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
@@ -60,7 +60,9 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 var action = GetAnalyzeMethod(symbolKind);
                 if (action != null)
+                {
                     context.RegisterSymbolAction(action, symbolKind);
+                }
             }
         }
 
@@ -106,11 +108,26 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2>(string name, Location location, T1 arg1, T2 arg2) => ReportIssue(location, name, arg1.ToString(), arg2.ToString());
 
-        private Diagnostic ReportIssue(Location location, params object[] args) => Diagnostic.Create(Rule, location, args);
-
         private static string GetSymbolName(ISymbol symbol) => symbol is IMethodSymbol m && (m.MethodKind == MethodKind.StaticConstructor || m.MethodKind == MethodKind.Constructor)
                                                                    ? symbol.ContainingSymbol.Name + symbol.Name
                                                                    : symbol.Name;
+
+        // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat
+        // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
+        private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
+
+        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
+        {
+            var symbol = context.Symbol;
+
+            var diagnostics = analyzer((T)symbol);
+            foreach (var diagnostic in diagnostics)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
+        private Diagnostic ReportIssue(Location location, params object[] args) => Diagnostic.Create(Rule, location, args);
 
         private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)
         {
@@ -125,21 +142,6 @@ namespace MiKoSolutions.Analyzers.Rules
                 case SymbolKind.Parameter: return AnalyzeParameter;
 
                 default: return null;
-            }
-        }
-
-        // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat
-        // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
-        private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
-
-        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
-        {
-            var symbol = context.Symbol;
-
-            var diagnostics = analyzer((T)symbol);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
             }
         }
     }

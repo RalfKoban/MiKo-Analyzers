@@ -16,7 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (commentXml.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var summaries = CommentExtensions.GetSummaries(commentXml);
 

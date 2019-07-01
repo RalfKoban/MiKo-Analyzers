@@ -32,11 +32,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var identifier in identifiers)
             {
                 var exceeding = GetExceedingCharacters(identifier.ValueText);
-                if (exceeding <= 0) continue;
+                if (exceeding <= 0)
+                {
+                    continue;
+                }
 
                 var symbol = identifier.GetSymbol(semanticModel);
 
-                if (results is null) results = new List<Diagnostic>();
+                if (results is null)
+                {
+                    results = new List<Diagnostic>();
+                }
+
                 results.Add(ReportIssue(symbol, exceeding));
             }
 

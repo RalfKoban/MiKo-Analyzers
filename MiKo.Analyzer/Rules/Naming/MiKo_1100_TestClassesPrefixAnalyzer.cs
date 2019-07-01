@@ -24,11 +24,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var typeUnderTest = symbol.GetTypeUnderTestType();
             if (typeUnderTest is null)
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             var typeUnderTestName = GetTypeUnderTestName(symbol, typeUnderTest);
             if (typeUnderTestName is null)
+            {
                 return Enumerable.Empty<Diagnostic>(); // ignore generic class or struct constraint
+            }
 
             var className = symbol.Name;
             return className.StartsWith(typeUnderTestName, StringComparison.Ordinal)
@@ -39,7 +43,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string GetTypeUnderTestName(INamedTypeSymbol testClass, ITypeSymbol typeUnderTest)
         {
             if (typeUnderTest.TypeKind != TypeKind.TypeParameter)
+            {
                 return typeUnderTest.Name;
+            }
 
             var typeParameter = (ITypeParameterSymbol)testClass.TypeArguments[0];
 

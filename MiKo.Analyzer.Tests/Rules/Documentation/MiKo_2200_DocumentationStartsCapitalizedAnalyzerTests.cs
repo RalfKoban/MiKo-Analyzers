@@ -1,5 +1,4 @@
-﻿
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -26,14 +25,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "value",
             };
 
-
         private static readonly char[] ValidStartingCharacter = "abcdefghijklmnopqrstuvwxyz".ToUpperInvariant().ToCharArray();
 
         private static readonly char[] InvalidStartingCharacter = "abcdefghijklmnopqrstuvwxyz1234567890-#+*.,;".ToCharArray();
 
         [Test, Combinatorial]
         public void Documentation_starting_with_upper_case_is_not_reported_for([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(ValidStartingCharacter))] char startingChar) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// " + startingChar + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
@@ -41,7 +39,7 @@ public sealed class TestMe { }
 
         [Test, Combinatorial]
         public void Documentation_starting_with_lower_case_is_reported_for([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(InvalidStartingCharacter))] char startingChar) => An_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// " + startingChar + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
@@ -49,15 +47,15 @@ public sealed class TestMe { }
 
         [Test]
         public void Empty_documentation_is_not_reported_for([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @" />
+/// <" + xmlTag + @" />
 public sealed class TestMe { }
 ");
 
         [Test]
         public void Nested_XML_documentation_is_not_reported_for([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
-/// <"+ xmlTag + @">
+/// <" + xmlTag + @">
 /// <some />
-/// </"+ xmlTag + @">
+/// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
 

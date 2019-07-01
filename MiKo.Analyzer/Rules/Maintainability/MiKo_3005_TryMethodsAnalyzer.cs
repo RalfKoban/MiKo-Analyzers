@@ -22,9 +22,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
         {
-            if (method.IsOverride) return null;
-            if (!method.Name.StartsWith("Try", StringComparison.Ordinal)) return null;
-            if (method.ReturnType.SpecialType == SpecialType.System_Boolean && (method.Parameters.Any() && method.Parameters.Last().RefKind == RefKind.Out)) return null;
+            if (method.IsOverride)
+            {
+                return null;
+            }
+
+            if (!method.Name.StartsWith("Try", StringComparison.Ordinal))
+            {
+                return null;
+            }
+
+            if (method.ReturnType.SpecialType == SpecialType.System_Boolean && (method.Parameters.Any() && method.Parameters.Last().RefKind == RefKind.Out))
+            {
+                return null;
+            }
 
             return Issue(method);
         }

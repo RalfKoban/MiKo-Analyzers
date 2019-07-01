@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -28,10 +28,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 case TypeKind.Struct:
                 {
                     // ignore test classes
-                    if (symbol.IsTestClass()) return Enumerable.Empty<Diagnostic>();
+                    if (symbol.IsTestClass())
+                    {
+                        return Enumerable.Empty<Diagnostic>();
+                    }
 
                     var loc = symbol
-                              .GetMembers().OfType<IMethodSymbol>()
+                              .GetMembers()
+                              .OfType<IMethodSymbol>()
                               .SelectMany(_ => _.DeclaringSyntaxReferences.Select(__ => __.GetSyntax()).SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect))
                               .Sum(Counter.CountLinesOfCode);
 
@@ -40,8 +44,10 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 }
 
                 // ignore interfaces
-                case TypeKind.Interface: return Enumerable.Empty<Diagnostic>();
-                default: return Enumerable.Empty<Diagnostic>();
+                case TypeKind.Interface:
+                    return Enumerable.Empty<Diagnostic>();
+                default:
+                    return Enumerable.Empty<Diagnostic>();
             }
         }
 

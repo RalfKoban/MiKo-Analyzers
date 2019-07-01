@@ -47,7 +47,6 @@ namespace MiKoSolutions.Analyzers
                                                                                   "TestInitializeAttribute",
                                                                               };
 
-
         private static readonly HashSet<string> TestTearDownAttributeNames = new HashSet<string>
                                                                                  {
                                                                                      "TearDown",
@@ -56,7 +55,6 @@ namespace MiKoSolutions.Analyzers
                                                                                      "TestCleanupAttribute",
                                                                                  };
 
-
         private static readonly HashSet<string> ImportAttributeNames = new HashSet<string>
                                                                            {
                                                                                "Import",
@@ -64,7 +62,6 @@ namespace MiKoSolutions.Analyzers
                                                                                "ImportMany",
                                                                                nameof(ImportManyAttribute),
                                                                            };
-
 
         private static readonly HashSet<string> ImportingConstructorAttributeNames = new HashSet<string>
                                                                                          {
@@ -121,9 +118,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                           globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
                                                                                                           typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                                                                                                           genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
-                                                                                                          miscellaneousOptions:
-                                                                                                          SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers |
-                                                                                                          SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
+                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
 
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
@@ -176,6 +171,7 @@ namespace MiKoSolutions.Analyzers
                 case MethodKind.PropertySet:
                 case MethodKind.ExplicitInterfaceImplementation:
                     return true;
+
                 default:
                     return false;
             }
@@ -203,11 +199,15 @@ namespace MiKoSolutions.Analyzers
             {
                 var fullName = symbol.ToString();
                 if (baseClass == fullName)
+                {
                     return true;
+                }
 
                 var baseType = symbol.BaseType;
                 if (baseType is null)
+                {
                     return false;
+                }
 
                 symbol = baseType;
             }
@@ -220,14 +220,20 @@ namespace MiKoSolutions.Analyzers
                 var fullName = symbol.ToString();
 
                 if (baseClassName == fullName)
+                {
                     return true;
+                }
 
                 if (baseClassFullQualifiedName == fullName)
+                {
                     return true;
+                }
 
                 var baseType = symbol.BaseType;
                 if (baseType is null)
+                {
                     return false;
+                }
 
                 symbol = baseType;
             }
@@ -238,27 +244,22 @@ namespace MiKoSolutions.Analyzers
         internal static bool Implements(this ITypeSymbol symbol, string interfaceType)
         {
             if (symbol.ToString() == interfaceType)
+            {
                 return true;
+            }
 
             foreach (var implementedInterface in symbol.AllInterfaces)
             {
                 if (implementedInterface.ToString() == interfaceType)
+                {
                     return true;
+                }
             }
 
             return false;
         }
 
-        internal static bool Implements(this ITypeSymbol symbol, string interfaceTypeName, string interfaceTypeFullQualifiedName)
-        {
-            if (symbol.Implements(interfaceTypeName))
-                return true;
-
-            if (symbol.Implements(interfaceTypeFullQualifiedName))
-                return true;
-
-            return false;
-        }
+        internal static bool Implements(this ITypeSymbol symbol, string interfaceTypeName, string interfaceTypeFullQualifiedName) => symbol.Implements(interfaceTypeName) || symbol.Implements(interfaceTypeFullQualifiedName);
 
         internal static bool ImplementsPotentialGeneric(this ITypeSymbol symbol, Type interfaceType) => ImplementsPotentialGeneric(symbol, interfaceType.FullName);
 
@@ -270,32 +271,28 @@ namespace MiKoSolutions.Analyzers
                                                   : interfaceType;
 
             if (symbol.ToString().StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+            {
                 return true;
+            }
 
             foreach (var implementedInterface in symbol.AllInterfaces)
             {
                 if (implementedInterface.ToString().StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+                {
                     return true;
+                }
             }
 
             return false;
         }
 
-        internal static bool IsEventArgs(this ITypeSymbol symbol)
-        {
-            if (symbol.TypeKind != TypeKind.Class) return false;
-            if (symbol.SpecialType != SpecialType.None) return false;
+        internal static bool IsEventArgs(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class
+                                                                  && symbol.SpecialType == SpecialType.None
+                                                                  && symbol.InheritsFrom<EventArgs>();
 
-            return symbol.InheritsFrom<EventArgs>();
-        }
-
-        internal static bool IsException(this ITypeSymbol symbol)
-        {
-            if (symbol.TypeKind != TypeKind.Class) return false;
-            if (symbol.SpecialType != SpecialType.None) return false;
-
-            return symbol.InheritsFrom<Exception>();
-        }
+        internal static bool IsException(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class
+                                                                  && symbol.SpecialType == SpecialType.None
+                                                                  && symbol.InheritsFrom<Exception>();
 
         internal static bool IsEnumerable(this ITypeSymbol symbol)
         {
@@ -323,16 +320,24 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                     if (IsEnumerable(symbol.SpecialType))
+                    {
                         return true;
+                    }
 
                     if (symbol.TypeKind == TypeKind.Array)
+                    {
                         return true;
+                    }
 
                     if (symbol.IsValueType)
+                    {
                         return false;
+                    }
 
                     if (symbol is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
+                    {
                         return true;
+                    }
 
                     return symbol.Implements<IEnumerable>();
             }
@@ -362,7 +367,10 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var baseType = symbol.BaseType;
-                if (baseType is null) break;
+                if (baseType is null)
+                {
+                    break;
+                }
 
                 baseTypes.Add(baseType);
                 symbol = baseType;
@@ -388,7 +396,10 @@ namespace MiKoSolutions.Analyzers
         {
             while (symbol != null)
             {
-                if (symbol is INamedTypeSymbol s) return s;
+                if (symbol is INamedTypeSymbol s)
+                {
+                    return s;
+                }
 
                 symbol = symbol.ContainingType;
             }
@@ -414,13 +425,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol symbol) => symbol.Name == "DependencyPropertyKey" || symbol.Name == "System.Windows.DependencyPropertyKey";
 
-        internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol symbol)
-        {
-            if (symbol.TypeKind != TypeKind.Struct) return false;
-            if (symbol.SpecialType != SpecialType.None) return false;
-
-            return symbol.InheritsFrom("DependencyPropertyChangedEventArgs", "System.Windows.DependencyPropertyChangedEventArgs");
-        }
+        internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct
+                                                                                              && symbol.SpecialType == SpecialType.None
+                                                                                              && symbol.InheritsFrom("DependencyPropertyChangedEventArgs", "System.Windows.DependencyPropertyChangedEventArgs");
 
         internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol method)
         {
@@ -496,7 +503,9 @@ namespace MiKoSolutions.Analyzers
             result = null;
 
             if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length >= index + 1)
+            {
                 result = namedType.TypeArguments[index];
+            }
 
             return result != null;
         }
@@ -504,7 +513,11 @@ namespace MiKoSolutions.Analyzers
         internal static bool TryGetGenericArgumentCount(this ITypeSymbol symbol, out int result)
         {
             result = 0;
-            if (symbol is INamedTypeSymbol namedType) result = namedType.TypeArguments.Length;
+            if (symbol is INamedTypeSymbol namedType)
+            {
+                result = namedType.TypeArguments.Length;
+            }
+
             return result > 0;
         }
 
@@ -539,7 +552,6 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool MatchesProperty(this IParameterSymbol symbol) => symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Any(_ => string.Equals(symbol.Name, _.Name, StringComparison.OrdinalIgnoreCase));
 
-
         /// <summary>
         /// Determines if a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
@@ -556,16 +568,6 @@ namespace MiKoSolutions.Analyzers
             return matchesField;
         }
 
-        private static void CollectAllNestedTypes(this ITypeSymbol symbol, ICollection<ITypeSymbol> types)
-        {
-            types.Add(symbol);
-
-            foreach (var nestedType in symbol.GetTypeMembers())
-            {
-                CollectAllNestedTypes(nestedType, types);
-            }
-        }
-
         internal static int GetStartingLine(this IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
 
         internal static string GetMethodSignature(this IMethodSymbol method)
@@ -577,6 +579,16 @@ namespace MiKoSolutions.Analyzers
             var methodName = GetMethodNameForKind(method);
 
             return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
+        }
+
+        private static void CollectAllNestedTypes(this ITypeSymbol symbol, ICollection<ITypeSymbol> types)
+        {
+            types.Add(symbol);
+
+            foreach (var nestedType in symbol.GetTypeMembers())
+            {
+                CollectAllNestedTypes(nestedType, types);
+            }
         }
 
         private static string GetMethodNameForKind(IMethodSymbol method)
@@ -609,7 +621,10 @@ namespace MiKoSolutions.Analyzers
 
         private static string GetModifierSignature(IParameterSymbol parameter)
         {
-            if (parameter.IsParams) return "params ";
+            if (parameter.IsParams)
+            {
+                return "params ";
+            }
 
             switch (parameter.RefKind)
             {

@@ -40,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
             List<Diagnostic> diagnostics = null;
+
             foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny(MockNames)))
             {
                 var symbol = syntaxToken.GetSymbol(semanticModel);
@@ -48,7 +49,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                      : Issue(symbol);
 
                 if (diagnostics is null)
+                {
                     diagnostics = new List<Diagnostic>();
+                }
 
                 diagnostics.Add(diagnostic);
             }
@@ -60,14 +63,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var type = context.FindContainingType();
             if (type is null)
+            {
                 return false;
+            }
 
             if (type.IsTestClass())
+            {
                 return true;
+            }
 
             var assemblyName = type.ContainingAssembly.Name;
             if (assemblyName.Contains("Test"))
+            {
                 return !assemblyName.Contains("MiKoSolutions.Analyzers");
+            }
 
             return false;
         }
@@ -101,7 +110,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (ShallAnalyze(context))
             {
                 var syntax = (ParameterSyntax)context.Node;
-                if (syntax.GetEnclosing<InvocationExpressionSyntax>() is null) // ignore invocations eg. in lambdas
+
+                // ignore invocations eg. in lambdas
+                if (syntax.GetEnclosing<InvocationExpressionSyntax>() is null)
                 {
                     AnalyzeIdentifiers(context, syntax.Identifier);
                 }
@@ -116,6 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, params SyntaxToken[] identifiers)
         {
             var diagnostics = AnalyzeIdentifiers(context.SemanticModel, identifiers);
+
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);

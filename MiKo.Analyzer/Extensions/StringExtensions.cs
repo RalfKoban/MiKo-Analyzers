@@ -13,7 +13,10 @@ namespace System
 
         public static bool StartsWithAnyChar(this string value, string characters)
         {
-            if (string.IsNullOrEmpty(value)) return false;
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
 
             var character = value[0];
 
@@ -21,7 +24,10 @@ namespace System
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < characters.Length; index++)
             {
-                if (character == characters[index]) return true;
+                if (character == characters[index])
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -40,7 +46,9 @@ namespace System
                 index = value.IndexOf(finding, index, comparison);
 
                 if (index <= -1)
+                {
                     break;
+                }
 
                 var positionAfterCharacter = index + findingLength;
                 if (positionAfterCharacter >= valueLength)
@@ -113,7 +121,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T: class => string.Concat(values.Where(_ => _ != null));
+        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T : class => string.Concat(values.Where(_ => _ != null));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
@@ -153,8 +161,15 @@ namespace System
             var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
             if (hasMarker)
             {
-                if (symbolName.ContainsAny(Constants.Markers.ViewModels)) return false;
-                if (symbolName.ContainsAny(Constants.Markers.SpecialModels)) return false;
+                if (symbolName.ContainsAny(Constants.Markers.ViewModels))
+                {
+                    return false;
+                }
+
+                if (symbolName.ContainsAny(Constants.Markers.SpecialModels))
+                {
+                    return false;
+                }
             }
 
             return hasMarker;

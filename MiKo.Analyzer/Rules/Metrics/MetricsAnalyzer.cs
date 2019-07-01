@@ -20,17 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             return result != null;
         }
 
-        private void AnalyzeCodeBlock(CodeBlockAnalysisContext context)
-        {
-            var body = GetBody(context);
-            if (body is null) return;
-
-            var diagnostic = AnalyzeBody(body, context.OwningSymbol);
-            if (diagnostic is null) return;
-
-            context.ReportDiagnostic(diagnostic);
-        }
-
         private static BlockSyntax GetBody(CodeBlockAnalysisContext context)
         {
             switch (context.CodeBlock)
@@ -39,6 +28,21 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 case ConstructorDeclarationSyntax s: return s.Body;
                 case AccessorDeclarationSyntax s: return s.Body;
                 default: return null;
+            }
+        }
+
+        private void AnalyzeCodeBlock(CodeBlockAnalysisContext context)
+        {
+            var body = GetBody(context);
+            if (body is null)
+            {
+                return;
+            }
+
+            var diagnostic = AnalyzeBody(body, context.OwningSymbol);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
             }
         }
     }

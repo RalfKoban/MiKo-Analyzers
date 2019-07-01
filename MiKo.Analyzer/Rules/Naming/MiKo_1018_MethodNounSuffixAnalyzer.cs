@@ -85,21 +85,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && !symbol.IsTestMethod();
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => TryFindBetterName(method.Name, out var betterName)
-                                                                                            ? new[] { Issue(method, betterName) }
-                                                                                            : Enumerable.Empty<Diagnostic>();
-
         public static bool TryFindBetterName(string name, out string result)
         {
             result = name;
 
             if (string.IsNullOrWhiteSpace(name))
+            {
                 return false;
+            }
 
             if (name.StartsWithAny(StartingPhrases))
+            {
                 return false;
+            }
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
             {
@@ -109,5 +107,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return false;
         }
+
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && !symbol.IsTestMethod();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => TryFindBetterName(method.Name, out var betterName)
+                                                                                            ? new[] { Issue(method, betterName) }
+                                                                                            : Enumerable.Empty<Diagnostic>();
     }
 }

@@ -52,6 +52,7 @@ public class TestMe
     public bool Contains() => true;
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
 using System;

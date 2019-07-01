@@ -61,6 +61,7 @@ public class TestMeEventArgs : EventArgs
     public Action DoSomething { get; }
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_EventArgs_property_setter() => An_issue_is_reported_for(@"
 using System;

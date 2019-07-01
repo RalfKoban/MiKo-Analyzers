@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Delimiters = { ".)", ".", ")", ":" };
 
         private static readonly string[] Triggers = Enumerable.Concat(
-                                                      new[] { "-", "--", "---" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => delimiter + " " + _ + " "),
-                                                      new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => " " + _ + delimiter + " ")
-                                                      ).ToArray();
+                                                                  new[] { "-", "--", "---" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => delimiter + " " + _ + " "),
+                                                                  new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => " " + _ + delimiter + " "))
+                                                              .ToArray();
 
         public MiKo_2204_DocumentationShallUseListAnalyzer() : base(Id)
         {

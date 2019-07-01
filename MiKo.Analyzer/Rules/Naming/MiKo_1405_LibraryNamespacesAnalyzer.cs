@@ -14,7 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] LibraryNamespaces = { "Lib", "Library", "Libraries" };
 
-
         public MiKo_1405_LibraryNamespacesAnalyzer() : base(Id)
         {
         }

@@ -47,8 +47,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a([Values("returns", "value")] string xmlTag,
-                                                                   [Values("void", "int", "string", "Task", "Task<int>", "Task<bool>, Task<string>")] string returnType)
+        public void No_issue_is_reported_for_method_that_returns_a(
+                                                                [Values("returns", "value")] string xmlTag,
+                                                                [Values("void", "int", "string", "Task", "Task<int>", "Task<bool>, Task<string>")] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
@@ -71,7 +72,8 @@ public class TestMe
         public void No_issue_is_reported_for_correctly_commented_Array_only_method(
                                                                                 [Values("returns", "value")] string xmlTag,
                                                                                 [Values("int", "string")] string returnType,
-                                                                                [Values("An array of", "The array of")] string startingPhrase) => No_issue_is_reported_for(@"
+                                                                                [Values("An array of", "The array of")] string startingPhrase)
+            => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,7 +113,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_List_method([Values("returns", "value")] string xmlTag,[Values("A", "An")] string startingWord) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_List_method(
+                                                                        [Values("returns", "value")] string xmlTag,
+                                                                        [Values("A", "An")] string startingWord) => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;

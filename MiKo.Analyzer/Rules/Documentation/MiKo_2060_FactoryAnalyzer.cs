@@ -40,7 +40,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             symbol.ReturnType.TryGetGenericArgumentCount(out var count);
 
-            if (count <= 0) return GetSimplePhrases(symbol);
+            if (count <= 0)
+            {
+                return GetSimplePhrases(symbol);
+            }
 
             // enhance for generic collections
             var startingPhrases = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhrase;

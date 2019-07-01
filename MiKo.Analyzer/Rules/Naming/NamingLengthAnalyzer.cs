@@ -16,7 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected IEnumerable<Diagnostic> Analyze(ISymbol symbol)
         {
-            if (symbol.IsOverride) return Enumerable.Empty<Diagnostic>();
+            if (symbol.IsOverride)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var exceeding = GetExceedingCharacters(symbol.Name);
             return exceeding > 0

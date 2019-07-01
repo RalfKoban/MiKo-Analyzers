@@ -25,6 +25,7 @@ namespace Bla
     }
 }
 ");
+
         [Test]
         public void No_issue_is_reported_for_ctor_that_has_no_parameter() => No_issue_is_reported_for(@"
 using System;

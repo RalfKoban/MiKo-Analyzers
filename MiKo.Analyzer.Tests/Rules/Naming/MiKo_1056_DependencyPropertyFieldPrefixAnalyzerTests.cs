@@ -99,7 +99,6 @@ namespace Bla
 }
 ");
 
-
         [Test]
         public void No_issue_is_reported_for_a_strangely_formatted_attached_DependencyProperty_field() => No_issue_is_reported_for(@"
 using System.Windows;

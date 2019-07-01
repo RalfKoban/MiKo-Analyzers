@@ -20,14 +20,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (commentXml.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var symbolName = symbol.Name;
-            if (!symbolName.EndsWith(Constants.DependencyPropertyFieldSuffix, StringComparison.OrdinalIgnoreCase)) return Enumerable.Empty<Diagnostic>();
+            if (symbolName.EndsWith(Constants.DependencyPropertyFieldSuffix, StringComparison.OrdinalIgnoreCase) is false)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             var propertyName = symbolName.WithoutSuffix(Constants.DependencyPropertyFieldSuffix);
             var containingType = symbol.ContainingType;
-            if (containingType.GetMembers().OfType<IPropertySymbol>().All(_ => _.Name != propertyName)) return Enumerable.Empty<Diagnostic>();
+            if (containingType.GetMembers().OfType<IPropertySymbol>().All(_ => _.Name != propertyName))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             List<Diagnostic> results = null;
 
@@ -40,6 +49,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results ?? Enumerable.Empty<Diagnostic>();
         }
 
+        private static List<string> Phrases(string[] phrases, string typeName, string propertyName)
+        {
+            var results = new List<string>(2 * phrases.Length);
+            results.AddRange(phrases.Select(_ => string.Format(_, propertyName))); // output as message to user
+            results.AddRange(phrases.Select(_ => string.Format(_, typeName + "." + propertyName)));
+            return results;
+        }
+
         private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<string> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
         {
             var phrases = phrasesProvider();
@@ -50,17 +67,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return;
                 }
 
-                if (results is null) results = new List<Diagnostic>();
+                if (results is null)
+                {
+                    results = new List<Diagnostic>();
+                }
+
                 results.Add(Issue(symbol, xmlElement, phrases[0]));
             }
-        }
-
-        private static List<string> Phrases(string[] phrases, string typeName, string propertyName)
-        {
-            var results = new List<string>(2 * phrases.Length);
-            results.AddRange(phrases.Select(_ => string.Format(_, propertyName))); // output as message to user
-            results.AddRange(phrases.Select(_ => string.Format(_, typeName + "." + propertyName)));
-            return results;
         }
     }
 }

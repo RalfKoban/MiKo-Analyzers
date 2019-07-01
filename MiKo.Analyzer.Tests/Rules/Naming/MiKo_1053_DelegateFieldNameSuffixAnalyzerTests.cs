@@ -43,6 +43,7 @@ public class TestMe
     private " + name + @";
 }
 ");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correct_field_name(
                                                             [ValueSource(nameof(DelegateTypes))] string type,
@@ -79,10 +80,10 @@ public class TestMe
             var names = new[] { "@delegate", "action", "func" };
 
             var allNames = new HashSet<string>(names);
-            foreach (var _ in names)
+            foreach (var name in names)
             {
-                allNames.Add(_.ToLowerInvariant());
-                allNames.Add(_.ToUpperInvariant());
+                allNames.Add(name.ToLowerInvariant());
+                allNames.Add(name.ToUpperInvariant());
             }
 
             return allNames.OrderBy(_ => _).ToArray();

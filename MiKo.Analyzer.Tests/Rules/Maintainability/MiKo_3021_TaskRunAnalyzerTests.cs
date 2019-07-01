@@ -90,6 +90,7 @@ public class TestMe
     }
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_a_strangely_formatted_method_that_returns_a_Task_that_is_started_with_Run_method() => An_issue_is_reported_for(@"
 using System;
@@ -145,7 +146,6 @@ public class TestMe
     }
 }
 ");
-
 
         [Test]
         public void An_issue_is_reported_for_a_strangely_formatted_method_that_returns_a_Task_variable_that_is_started_with_Run_method() => An_issue_is_reported_for(@"

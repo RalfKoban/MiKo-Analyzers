@@ -23,12 +23,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var node = (CatchClauseSyntax)context.Node;
             var diagnostic = AnalyzeCatchClause(node);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
         }
 
         private Diagnostic AnalyzeCatchClause(CatchClauseSyntax node)
         {
-            if (node.Declaration is null) return null; // we don't have an exception
+            if (node.Declaration is null)
+            {
+                return null; // we don't have an exception
+            }
 
             const string ExceptionIdentifier = "ex";
 

@@ -21,7 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
             if (symbol.IsConstructor())
+            {
                 return false;
+            }
 
             switch (symbol.DeclaredAccessibility)
             {

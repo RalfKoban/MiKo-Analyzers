@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable SA1203 // Constants should appear before fields
+
+using System;
 using System.Linq;
 
 namespace MiKoSolutions.Analyzers
@@ -8,9 +10,21 @@ namespace MiKoSolutions.Analyzers
         internal const string AsyncSuffix = "Async";
         internal const string DependencyPropertyFieldSuffix = "Property";
         internal const string DependencyPropertyKeyFieldSuffix = "Key";
+        internal const string ILog = "ILog";
+
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
-        internal const string ILog = "ILog";
+
+        public static class MaxNamingLengths
+        {
+            public const int Types = 40;
+            public const int Methods = 25;
+            public const int Events = 25;
+            public const int Properties = 25;
+            public const int Parameters = 20;
+            public const int Fields = Parameters + 2;
+            public const int LocalVariables = 15;
+        }
 
         internal static class Markers
         {
@@ -255,7 +269,7 @@ namespace MiKoSolutions.Analyzers
 
             internal const string NoDefaultPhrase = "This property has no default value.";
 
-            private static readonly string[] InvalidSummaryCrefXmlTags =
+            internal static readonly string[] InvalidSummaryCrefXmlTags =
                 {
                     XmlTag.Example,
                     XmlTag.Exception,
@@ -424,17 +438,6 @@ namespace MiKoSolutions.Analyzers
                 };
 
             internal static readonly string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
-        }
-
-        public static class MaxNamingLengths
-        {
-            public const int Types = 40;
-            public const int Methods = 25;
-            public const int Events = 25;
-            public const int Properties = 25;
-            public const int Parameters = 20;
-            public const int Fields = Parameters + 2;
-            public const int LocalVariables = 15;
         }
 
         internal static class XmlTag

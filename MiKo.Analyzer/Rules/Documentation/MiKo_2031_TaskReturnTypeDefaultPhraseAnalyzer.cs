@@ -32,8 +32,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool GenericTypeAccepted(ITypeSymbol returnType)
         {
-            if (returnType.IsEnum()) return false; // checked by MiKo_2034
-            if (returnType.IsEnumerable()) return false; // checked by MiKo_2035
+            if (returnType.IsEnum())
+            {
+                return false; // checked by MiKo_2034
+            }
+
+            if (returnType.IsEnumerable())
+            {
+                return false; // checked by MiKo_2035
+            }
 
             switch (returnType.SpecialType)
             {

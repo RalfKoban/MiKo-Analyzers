@@ -18,20 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IMethodSymbol method)
         {
             if (method.IsOverride)
+            {
                 return false;
+            }
 
             if (method.MethodKind == MethodKind.PropertySet)
+            {
                 return false; // ignore the setter as the name there has to be 'value'
+            }
 
             if (method.IsEventHandler())
+            {
                 return false; // ignore the method as it is handled by MiKo_1002_EventHandlingMethodParametersAnalyzer
+            }
 
             if (method.IsDependencyPropertyEventHandler())
+            {
                 return false; // ignore the method as it is handled by MiKo_1007_DependencyPropertyEventHandlingMethodParametersAnalyzer
+            }
 
             return true;
         }
-
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {

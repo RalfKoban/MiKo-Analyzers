@@ -22,9 +22,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case SpecialType.System_String: // checked by MiKo_2033
                     return false;
                 default:
-                    if (returnType.IsEnum()) return false; // checked by MiKo_2034
-                    if (returnType.IsEnumerable()) return false; // checked by MiKo_2035
-                    if (returnType.IsTask()) return false; // checked by MiKo_2031, MiKo_2032, MiKo_2033
+                    if (returnType.IsEnum())
+                    {
+                        return false; // checked by MiKo_2034
+                    }
+
+                    if (returnType.IsEnumerable())
+                    {
+                        return false; // checked by MiKo_2035
+                    }
+
+                    if (returnType.IsTask())
+                    {
+                        return false; // checked by MiKo_2031, MiKo_2032, MiKo_2033
+                    }
 
                     return true;
             }

@@ -33,12 +33,14 @@ namespace MiKoSolutions.Analyzers
                 return parameterSymbol;
 
                 // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently)
-                //var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
+                // var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
             }
 
             var symbols = semanticModel.LookupSymbols(position, name: name);
             if (symbols.Length > 0)
+            {
                 return symbols[0];
+            }
 
             // nothing is found, so maybe it is an identifier syntax token within a foreach statement
             var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
@@ -93,12 +95,16 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 if (node is null)
+                {
                     return null;
+                }
 
                 foreach (var syntaxKind in syntaxKinds)
                 {
                     if (node.IsKind(syntaxKind))
+                    {
                         return node;
+                    }
                 }
 
                 node = node.Parent;
@@ -154,10 +160,12 @@ namespace MiKoSolutions.Analyzers
             //  and no brackets:
             //                    if (true)
             //                      xyz();
-            //
+            // ...
             var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.IfStatement);
             if (enclosingNode is BlockSyntax)
+            {
                 enclosingNode = enclosingNode.Parent;
+            }
 
             return enclosingNode as IfStatementSyntax;
         }

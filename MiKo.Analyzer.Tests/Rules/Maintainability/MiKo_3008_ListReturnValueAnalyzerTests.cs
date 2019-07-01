@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "List<string>",
                 "IDictionary<string, string>",
                 "Dictionary<string, string>",
-// TODO: RKN    "Queue<string>",
-// TODO: RKN    "Stack<string>",
-// TODO: RKN    "HashSet<string>",
-// TODO: RKN    "ArrayList",
+//// TODO: RKN    "Queue<string>",
+//// TODO: RKN    "Stack<string>",
+//// TODO: RKN    "HashSet<string>",
+//// TODO: RKN    "ArrayList",
             };
 
         [Test]

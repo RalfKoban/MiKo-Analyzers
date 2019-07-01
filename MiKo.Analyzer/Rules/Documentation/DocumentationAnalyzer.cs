@@ -11,6 +11,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
+        {
+            var returnType = symbolReturnType.ToString();
+
+            symbolReturnType.TryGetGenericArgumentCount(out var count);
+            if (count <= 0)
+            {
+                return startingPhrases.Select(_ => string.Format(_, returnType));
+            }
+
+            var ts = symbolReturnType.GetGenericArgumentsAsTs();
+
+            var length = returnType.IndexOf('<'); // just until the first one
+
+            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
+            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
+
+            return Enumerable.Empty<string>()
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
+        }
+
         protected virtual bool ShallAnalyzeType(INamedTypeSymbol symbol) => true;
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyzeType(symbol)
@@ -52,24 +74,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeComment(symbol, commentXml);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => Enumerable.Empty<Diagnostic>();
-
-        protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
-        {
-            var returnType = symbolReturnType.ToString();
-
-            symbolReturnType.TryGetGenericArgumentCount(out var count);
-            if (count <= 0) return startingPhrases.Select(_ => string.Format(_, returnType));
-
-            var ts = symbolReturnType.GetGenericArgumentsAsTs();
-
-            var length = returnType.IndexOf('<'); // just until the first one
-
-            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
-            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
-
-            return Enumerable.Empty<string>()
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
-        }
     }
 }

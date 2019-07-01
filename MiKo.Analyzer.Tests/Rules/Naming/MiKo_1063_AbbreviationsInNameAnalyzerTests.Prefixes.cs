@@ -2,7 +2,7 @@
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    partial class MiKo_1063_AbbreviationsInNameAnalyzerTests
+    public partial class MiKo_1063_AbbreviationsInNameAnalyzerTests
     {
         [Test]
         public void An_issue_is_reported_for_local_variable_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"

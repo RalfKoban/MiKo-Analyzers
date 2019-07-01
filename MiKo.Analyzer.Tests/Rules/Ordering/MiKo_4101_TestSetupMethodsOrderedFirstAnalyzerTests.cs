@@ -122,6 +122,7 @@ public class TestMe
     }
 }
 ");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_a_test_class_with_setup_method_after_a_test_teardown_method(
                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
@@ -144,7 +145,6 @@ public class TestMe
     }
 }
 ");
-
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_a_test_class_with_setup_method_after_a_non_test_method(

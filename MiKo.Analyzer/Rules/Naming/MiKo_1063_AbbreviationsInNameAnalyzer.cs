@@ -115,18 +115,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => AnalyzeName(symbol);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
-        {
-            var symbolName = symbol.Name;
-
-            var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
-            var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
-            var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
-            var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
-
-            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => Issue(symbol, _.Key, _.Value));
-        }
-
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
 
         private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && !symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal);
@@ -144,17 +132,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 index = symbolName.IndexOf(key, index, StringComparison.Ordinal);
 
                 if (index <= -1)
+                {
                     break;
+                }
 
                 var positionBeforeText = index - 1;
                 var positionAfterCharacter = index + keyLength;
                 if (positionAfterCharacter < symbolNameLength && symbolName[positionAfterCharacter].IsUpperCase())
                 {
                     if (keyStartsUpperCase)
+                    {
                         return true;
+                    }
 
                     if (positionBeforeText >= 0 && symbolName[positionBeforeText].IsUpperCase())
+                    {
                         return true;
+                    }
                 }
 
                 index = positionAfterCharacter;
@@ -164,6 +158,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private static bool CompleteTermHasIssue(string key, string symbolName) => string.Equals(symbolName, key, StringComparison.Ordinal);
+
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        {
+            var symbolName = symbol.Name;
+
+            var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
+            var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
+            var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
+            var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
+
+            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => Issue(symbol, _.Key, _.Value));
+        }
 
         private sealed class KeyComparer : IEqualityComparer<KeyValuePair<string, string>>
         {

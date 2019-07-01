@@ -25,12 +25,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
             if (!symbol.Type.IsDependencyProperty())
+            {
                 return false;
+            }
 
             // ignore attached properties
             var attachedProperties = symbol.GetAssignmentsVia(Constants.Invocations.DependencyProperty.RegisterAttached).Any();
             if (attachedProperties)
+            {
                 return false;
+            }
 
             // ignore  "Key.DependencyProperty" assignments
             var keys = symbol.ContainingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + ".DependencyProperty").ToHashSet();
@@ -38,7 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var key in keys)
             {
                 if (symbol.GetAssignmentsVia(key).Any())
+                {
                     return false;
+                }
             }
 
             return true;
@@ -51,7 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // there might be none available; in such case don't report anything
             if (propertyNames.None())
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             var symbolName = symbol.Name.WithoutSuffix(Suffix);
 
@@ -60,12 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (registeredName is null)
             {
                 if (propertyNames.Contains(symbolName))
+                {
                     return Enumerable.Empty<Diagnostic>();
+                }
             }
             else
             {
                 if (registeredName == symbolName)
+                {
                     return Enumerable.Empty<Diagnostic>();
+                }
 
                 propertyNames.Clear();
                 propertyNames.Add(registeredName);

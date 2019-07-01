@@ -26,10 +26,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = symbol.GetComment();
 
             if (comment.Contains("<br", StringComparison.OrdinalIgnoreCase))
+            {
                 yield return Issue(symbol, "<br/>");
+            }
 
             if (comment.ContainsAny(ParagraphTags, StringComparison.OrdinalIgnoreCase))
+            {
                 yield return Issue(symbol, "<p>...</p>");
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    // TODO: Potential NRE in code? --> AD0001 reports that
+    //// TODO: Potential NRE in code? --> AD0001 reports that
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3008_ListReturnValueAnalyzer : MaintainabilityAnalyzer
@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly Type[] ForbiddenTypes =
             {
                 typeof(ICollection<>),
-                typeof(ICollection)
+                typeof(ICollection),
             };
 
         public MiKo_3008_ListReturnValueAnalyzer() : base(Id, SymbolKind.NamedType)
@@ -32,8 +32,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeOrdinaryMethod(IMethodSymbol method)
         {
-            if (method.MethodKind != MethodKind.Ordinary) return null;
-            if (method.ReturnsVoid) return null;
+            if (method.MethodKind != MethodKind.Ordinary)
+            {
+                return null;
+            }
+
+            if (method.ReturnsVoid)
+            {
+                return null;
+            }
 
             var returnType = method.ReturnType;
 
@@ -56,7 +63,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var returnTypeString = returnType.ToString();
             if (returnTypeString == "byte[]")
+            {
                 return null;
+            }
 
             if (ForbiddenTypes.Any(returnType.ImplementsPotentialGeneric))
             {

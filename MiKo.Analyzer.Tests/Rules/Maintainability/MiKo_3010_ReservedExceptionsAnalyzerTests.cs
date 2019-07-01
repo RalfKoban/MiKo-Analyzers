@@ -49,6 +49,7 @@ public class TestMe
     }
 }
 ");
+
         [Test]
         public void An_issue_is_reported_for_forbidden_exception([ValueSource(nameof(ForbiddenExceptions))] string type) => An_issue_is_reported_for(@"
 using System;

@@ -107,53 +107,80 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
         {
             if (comment == "else")
+            {
                 return true;
+            }
 
             if (comment.ContainsAny(ReSharperMarkers))
+            {
                 return false; // ignore // ReSharper comments
+            }
 
             if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
+            {
                 return true;
+            }
 
             if (comment.ContainsAny(CodeBlockMarkers))
+            {
                 return true;
+            }
 
             if (comment.ContainsAny(CodeConditionMarkers, StringComparison.Ordinal))
-                return true;
-
-            if (comment.Contains("//")) // comment in comment indicator
             {
+                return true;
+            }
+
+            if (comment.Contains("//"))
+            {
+                // comment in comment indicator
                 if (comment.Contains("://"))
+                {
                     return false; // allow indicators such as http:// or ftp://
+                }
 
                 if (comment.EndsWith("//", StringComparison.Ordinal))
+                {
                     return false; // ignore all framed comments
+                }
 
                 return true;
             }
 
             if (comment.Contains("$\""))
+            {
                 return true; // found a string interpolation
+            }
 
             if (comment.EndsWith(";", StringComparison.Ordinal) || comment.Contains("="))
             {
                 if (comment.Contains("."))
+                {
                     return true;
+                }
 
                 if (comment.ContainsAny(Operators))
+                {
                     return true;
+                }
 
                 if (comment.ContainsAny(ArgumentBlockMarkers, StringComparison.Ordinal))
+                {
                     return true;
+                }
 
                 // attempt to find a type because it's likely commented out code if we find some
                 var firstWord = comment.FirstWord();
                 if (m_knownTypeNames.Contains(firstWord))
+                {
                     return true;
+                }
             }
 
             if (comment.Contains("case ") && comment.Contains(":"))
+            {
                 return true;
+            }
 
             return false;
         }

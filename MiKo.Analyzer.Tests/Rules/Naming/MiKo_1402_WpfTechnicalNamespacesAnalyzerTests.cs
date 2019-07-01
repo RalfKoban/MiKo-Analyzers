@@ -69,5 +69,4 @@ namespace ABCD.EFG." + ns + @".HIJK
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1402_WpfTechnicalNamespacesAnalyzer();
     }
-
 }

@@ -593,7 +593,7 @@ namespace Bla
     }
 }");
 
-        // TODO: RKN what about Linq calls such as FirstOrDefault();
+        //// TODO: RKN what about Linq calls such as FirstOrDefault();
 
         protected override string GetDiagnosticId() => MiKo_3070_EnumerableMethodReturnsNullAnalyzer.Id;
 

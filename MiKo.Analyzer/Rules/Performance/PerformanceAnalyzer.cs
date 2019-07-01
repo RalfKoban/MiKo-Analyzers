@@ -27,5 +27,4 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected virtual IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol) => Enumerable.Empty<Diagnostic>();
     }
-
 }

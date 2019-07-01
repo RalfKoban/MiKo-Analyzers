@@ -33,13 +33,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case InnerExceptionIdentifier:
                 case InnerExceptionIdentifier2:
                     if (symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException())
+                    {
                         return Enumerable.Empty<Diagnostic>();
+                    }
 
                     break;
 
                 default:
                     if (symbol.ContainingSymbol.IsConstructor() && symbol.MatchesProperty())
+                    {
                         return Enumerable.Empty<Diagnostic>();
+                    }
 
                     break;
             }

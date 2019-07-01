@@ -1,5 +1,4 @@
-﻿
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -17,12 +16,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
+        private static bool IsObjectEqualsMethod(ISymbol method) => method != null && method.IsStatic && method.ContainingType.SpecialType == SpecialType.System_Object && method.Name == nameof(object.Equals);
+
+        private static bool IsStruct(SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            foreach (var argument in arguments)
+            {
+                if (argument.Expression.IsStruct(semanticModel))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
             var node = (InvocationExpressionSyntax)context.Node;
 
             var diagnostic = AnalyzeEqualsInvocation(node, context.SemanticModel);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
         }
 
         private Diagnostic AnalyzeEqualsInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel)
@@ -46,19 +63,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return null;
-        }
-
-        private static bool IsObjectEqualsMethod(ISymbol method) => method != null && method.IsStatic && method.ContainingType.SpecialType == SpecialType.System_Object && method.Name == nameof(object.Equals);
-
-        private static bool IsStruct(SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
-        {
-            foreach (var argument in arguments)
-            {
-                if (argument.Expression.IsStruct(semanticModel))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

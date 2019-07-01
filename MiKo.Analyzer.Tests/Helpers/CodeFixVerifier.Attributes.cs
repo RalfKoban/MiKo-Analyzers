@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace TestHelper
 {
-    partial class CodeFixVerifier
+    public partial class CodeFixVerifier
     {
         public static readonly IEnumerable<string> TestFixtures = new[]
                                                                       {

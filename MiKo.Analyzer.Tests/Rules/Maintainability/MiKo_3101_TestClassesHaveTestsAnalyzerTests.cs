@@ -102,7 +102,6 @@ public class TestMe1
 }
 ");
 
-
         [Test]
         public void An_issue_is_reported_for_test_class_without_tests([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 [" + testFixture + @"]

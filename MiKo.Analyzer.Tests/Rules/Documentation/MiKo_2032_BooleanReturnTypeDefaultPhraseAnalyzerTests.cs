@@ -47,8 +47,9 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a([Values("returns", "value")] string xmlTag,
-                                                                   [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType)
+        public void No_issue_is_reported_for_method_that_returns_a(
+                                                                [Values("returns", "value")] string xmlTag,
+                                                                [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -149,7 +150,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// A task that will complete with a result of " + trueValue + @" if something happens, otherwise with a result of "+ falseValue +@".
+    /// A task that will complete with a result of " + trueValue + @" if something happens, otherwise with a result of " + falseValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }

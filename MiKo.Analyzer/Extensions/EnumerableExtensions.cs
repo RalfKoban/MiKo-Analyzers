@@ -27,7 +27,9 @@ namespace System.Linq
                         for (var i = 0; i <= count; i++)
                         {
                             if (enumerator.MoveNext() is false)
+                            {
                                 return false;
+                            }
                         }
 
                         return true;

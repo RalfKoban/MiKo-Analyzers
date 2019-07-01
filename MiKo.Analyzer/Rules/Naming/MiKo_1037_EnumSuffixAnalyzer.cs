@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1037";
 
-        private readonly string[] WrongNames = { "Enums", "Enum" }; // order is importand because of remove order
+        private static readonly string[] WrongNames = { "Enums", "Enum" }; // order is important because of remove order
 
         public MiKo_1037_EnumSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -29,7 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .Replace("TypeEnum", "Kind")
                                    .RemoveAll(WrongNames);
 
-            if (betterName.IsNullOrWhiteSpace()) return Enumerable.Empty<Diagnostic>();
+            if (betterName.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
 
             // ReSharper disable once RedundantNameQualifier we need the complete name here
             if (symbol.IsEnum()
@@ -40,7 +43,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return new[] { Issue(symbol, betterName) };
-
         }
     }
 }

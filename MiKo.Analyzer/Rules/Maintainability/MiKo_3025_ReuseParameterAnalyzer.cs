@@ -24,20 +24,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (AssignmentExpressionSyntax)context.Node;
 
             var diagnostic = AnalyzeSimpleAssignmentExpression(node, context.SemanticModel);
-            if (diagnostic != null) context.ReportDiagnostic(diagnostic);
+            if (diagnostic != null)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
         }
-
 
         private Diagnostic AnalyzeSimpleAssignmentExpression(AssignmentExpressionSyntax node, SemanticModel semanticModel)
         {
             var method = node.GetEnclosingMethod(semanticModel);
+
             if (method?.Parameters.Length > 0)
             {
-                    var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).Select(_ => _.Name).ToHashSet();
+                var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).Select(_ => _.Name).ToHashSet();
 
-                    var name = node.Left.ToCleanedUpString();
-                    if (names.Contains(name))
-                        return Issue(name, node.Left.GetLocation());
+                var name = node.Left.ToCleanedUpString();
+                if (names.Contains(name))
+                {
+                    return Issue(name, node.Left.GetLocation());
+                }
             }
 
             return null;

@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => AllowedExceptionTypes.Contains(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => node.ArgumentList.Arguments.Count == 0
-                                                                                                                                                  ? new []{ Issue(node.Type.ToString(), node.GetLocation()) }
+                                                                                                                                                  ? new[] { Issue(node.Type.ToString(), node.GetLocation()) }
                                                                                                                                                   : Enumerable.Empty<Diagnostic>();
     }
 }

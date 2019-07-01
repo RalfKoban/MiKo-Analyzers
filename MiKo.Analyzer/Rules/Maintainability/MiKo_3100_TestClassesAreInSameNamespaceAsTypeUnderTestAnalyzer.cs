@@ -43,7 +43,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             foreach (var typeUnderTest in typesUnderTest)
             {
                 if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
+                {
                     return new[] { diagnostic };
+                }
             }
 
             return Enumerable.Empty<Diagnostic>();

@@ -28,13 +28,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => Mappings.Contains(node.Type.ToString());
 
-        // TODO: Check for 'ObservableHelper.CreateArgs' and 'ObservableHelper.GetPropertyName'
+        //// TODO: Check for 'ObservableHelper.CreateArgs' and 'ObservableHelper.GetPropertyName'
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var arguments = node.ArgumentList.Arguments;
             if (arguments.Count != 1)
+            {
                 return Enumerable.Empty<Diagnostic>();
+            }
 
             var argument = arguments[0];
             return HasIssue(node, argument.Expression, semanticModel)
@@ -64,16 +66,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var a = arguments.Select(_ => _.Expression).OfType<IdentifierNameSyntax>().FirstOrDefault();
             var propertyName = a?.Identifier.ValueText;
             if (propertyName is null)
+            {
                 return false;
+            }
 
             var symbol = node.GetEnclosingSymbol(semanticModel);
             var containingType = symbol?.ContainingType;
             if (containingType is null)
+            {
                 return false;
+            }
 
             // verify that nameof uses a property if the type
             if (containingType.GetMembers().OfType<IPropertySymbol>().Any(_ => _.Name == propertyName))
+            {
                 return false;
+            }
 
             return true; // report to use nameof instead
         }
@@ -82,7 +90,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var method = node.GetEnclosingMethod(semanticModel);
             if (method is null)
+            {
                 return false;
+            }
 
             return method.Parameters.Any(_ => _.Name == propertyName);
         }
