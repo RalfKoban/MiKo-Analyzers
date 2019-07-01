@@ -346,6 +346,10 @@ public class TestMe : ITestMe
                                   "It ",
                                   "Its ",
                                   "It's ",
+                                  "Public ",
+                                  "Protected ",
+                                  "Internal ",
+                                  "Private ",
                               };
 
             results.AddRange(types);

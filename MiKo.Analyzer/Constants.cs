@@ -123,6 +123,10 @@ namespace MiKoSolutions.Analyzers
                     "Use this ",
                     "ViewModel",
                     "Which ",
+                    "Public ",
+                    "Protected ",
+                    "Internal ",
+                    "Private ",
                 };
 
             internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.Concat(new[] { "Contains", "Contain", "Has" }).ToArray();
