@@ -39,11 +39,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            var type = ((IFieldSymbol)symbol).Type;
+            var fieldSymbol = (IFieldSymbol)symbol;
+            var type = fieldSymbol.Type;
 
-            var phrase = type.SpecialType == SpecialType.System_Boolean
-                             ? StartingBooleanDefaultPhrase
-                             : StartingDefaultPhrase;
+            var phrase = fieldSymbol.IsConst || type.SpecialType != SpecialType.System_Boolean
+                             ? StartingDefaultPhrase
+                             : StartingBooleanDefaultPhrase;
 
             if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
             {
@@ -51,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // alternative check
-            if (type.IsEnumerable())
+            if (fieldSymbol.IsConst is false && type.IsEnumerable())
             {
                 phrase = StartingEnumerableDefaultPhrase;
 

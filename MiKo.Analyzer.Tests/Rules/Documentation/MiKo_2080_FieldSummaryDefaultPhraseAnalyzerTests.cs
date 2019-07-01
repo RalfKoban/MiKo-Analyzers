@@ -140,6 +140,37 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_constant_boolean_field() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// The Bla bla
+    /// </summary>
+    private const bool m_field;
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_incorrectly_commented_constant_boolean_field(
+                                                                                [Values("Bla bla", "Indicates whether the field", "Contains something.")] string comment,
+                                                                                [Values("bool", "string")] string fieldType)
+            => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + comment + @"
+    /// </summary>
+    private const " + fieldType + @" m_field;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2080_FieldSummaryDefaultPhraseAnalyzer();
