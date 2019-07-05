@@ -6081,6 +6081,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To increase readability, do not place constants on the left side of an operator. Instead, place it on the right side. This makes the code look more natural..
+        /// </summary>
+        public static string MiKo_3084_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3084_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place it on right side of &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_3084_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3084_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not place constants on the left side for comparisons..
+        /// </summary>
+        public static string MiKo_3084_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3084_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
