@@ -83,6 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (expectedNamespace != unitTestNamespace)
                 {
+                    // TODO: try to find assignment to see if a more concrete type is better match
                     result = Issue(symbol, expectedNamespace);
                     return true;
                 }
