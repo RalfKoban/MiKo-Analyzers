@@ -386,6 +386,8 @@ namespace MiKoSolutions.Analyzers
             return types;
         }
 
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol symbol) where TSymbol : ISymbol => symbol.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<TSymbol>());
+
         internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
 
         internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(System.Threading.Tasks.Task);
@@ -471,7 +473,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol symbol)
         {
-            var members = symbol.GetMembers();
+            // TODO: RKN what about base types?
+            var members = symbol.GetMembersIncludingInherited<ISymbol>().ToList();
             var methodTypes = members.OfType<IMethodSymbol>().Where(_ => _.ReturnsVoid is false).Where(_ => TypeUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
@@ -550,7 +553,7 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IPropertySymbol"/> that matches the name of <paramref name="symbol"/>; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool MatchesProperty(this IParameterSymbol symbol) => symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Any(_ => string.Equals(symbol.Name, _.Name, StringComparison.OrdinalIgnoreCase));
+        internal static bool MatchesProperty(this IParameterSymbol symbol) => symbol.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(symbol.Name, _.Name, StringComparison.OrdinalIgnoreCase));
 
         /// <summary>
         /// Determines if a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
@@ -562,7 +565,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool MatchesField(this IParameterSymbol symbol)
         {
             var name = symbol.Name;
-            var matchesField = symbol.ContainingType.GetMembers().OfType<IFieldSymbol>()
+            var matchesField = symbol.ContainingType.GetMembersIncludingInherited<IFieldSymbol>()
                                      .Select(_ => _.Name)
                                      .Any(_ => FieldPrefixes.Select(__ => __ + name).Any(__ => string.Equals(_, __, StringComparison.OrdinalIgnoreCase)));
             return matchesField;

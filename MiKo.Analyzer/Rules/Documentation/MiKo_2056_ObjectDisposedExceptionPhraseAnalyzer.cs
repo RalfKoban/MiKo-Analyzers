@@ -36,8 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasCloseMethod(ISymbol symbol) => symbol
                                                               .FindContainingType()
-                                                              .IncludingAllBaseTypes()
-                                                              .SelectMany(_ => _.GetMembers("Close").OfType<IMethodSymbol>())
-                                                              .Any();
+                                                              .GetMembersIncludingInherited<IMethodSymbol>()
+                                                              .Any(_ => _.Name == "Close");
     }
 }
