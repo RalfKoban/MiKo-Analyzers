@@ -78,7 +78,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // verify that nameof uses a property if the type
-            if (containingType.GetMembers().OfType<IPropertySymbol>().Any(_ => _.Name == propertyName))
+            var propertySymbols = containingType.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<IPropertySymbol>()).ToArray();
+            if (propertySymbols.Any(_ => _.Name == propertyName))
             {
                 return false;
             }

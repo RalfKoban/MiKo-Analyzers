@@ -93,6 +93,26 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correct_usage_of_inherited_property_on_field_assignment([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMeBase
+    {
+        public int Something { get; set; }
+    }
+
+    public class TestMe : TestMeBase
+    {
+        private " + typeName + @" e = new " + typeName + @"(nameof(Something));
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_string_usage([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
 
 using System;
