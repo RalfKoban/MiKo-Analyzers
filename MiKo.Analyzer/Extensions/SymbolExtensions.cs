@@ -590,6 +590,29 @@ namespace MiKoSolutions.Analyzers
             return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
         }
 
+        internal static bool NameMatchesTypeName(this ISymbol symbol, ITypeSymbol type)
+        {
+            var symbolName = symbol.Name;
+
+            if (string.Equals(symbolName, type.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                // ignore all those that have a lower case only
+                return symbolName.Any(_ => _.IsUpperCase());
+            }
+
+            var typeName = type.GetNameWithoutInterfacePrefix();
+            return string.Equals(symbolName, typeName, StringComparison.OrdinalIgnoreCase) && typeName.Length > 1 && typeName.Substring(1).Any(_ => _.IsUpperCase());
+        }
+
+        private static string GetNameWithoutInterfacePrefix(this ITypeSymbol type)
+        {
+            var typeName = type.Name;
+
+            return type.TypeKind == TypeKind.Interface && typeName.StartsWith("I", StringComparison.Ordinal) && typeName.Length > 1
+                       ? typeName.Substring(1)
+                       : typeName;
+        }
+
         private static void CollectAllNestedTypes(this ITypeSymbol symbol, Queue<ITypeSymbol> types)
         {
             types.Enqueue(symbol);

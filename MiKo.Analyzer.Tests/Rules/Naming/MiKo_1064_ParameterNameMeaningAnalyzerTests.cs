@@ -101,6 +101,20 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_parameter_exactly_named_after_interface_type() => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(ITestMe iTestMe)
+    {
+    }
+}
+");
+
         [TestCase("CancellationToken cancellationToken")]
         [TestCase("IFormatProvider formatProvider")]
         [TestCase("SemanticModel semanticModel")]

@@ -764,6 +764,15 @@ Hence, their methods should be named 'CanRun' or 'Run' (similar to commands wher
   <data name="MiKo_1068_Title" xml:space="preserve">
     <value>Workflow methods should be named 'CanRun' or 'Run'.</value>
   </data>
+  <data name="MiKo_1069_Description" xml:space="preserve">
+    <value>To ease maintenance, property names should be based on the property’s meaning rather than its type.</value>
+  </data>
+  <data name="MiKo_1069_MessageFormat" xml:space="preserve">
+    <value>Name property based on its meaning instead of its type</value>
+  </data>
+  <data name="MiKo_1069_Title" xml:space="preserve">
+    <value>Property names reflect their meaning and not their type.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>

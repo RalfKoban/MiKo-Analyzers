@@ -1974,6 +1974,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, property names should be based on the property’s meaning rather than its type..
+        /// </summary>
+        public static string MiKo_1069_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1069_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name property based on its meaning instead of its type.
+        /// </summary>
+        public static string MiKo_1069_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1069_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property names reflect their meaning and not their type..
+        /// </summary>
+        public static string MiKo_1069_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1069_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
