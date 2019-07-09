@@ -126,9 +126,9 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
 
-        public static string HumanizedConcatenated<T>(this IEnumerable<T> values)
+        public static string HumanizedConcatenated(this IEnumerable<string> values)
         {
-            var items = values.SurroundedWith('\'').ToList();
+            var items = values.Select(_ => _.SurroundedWith("\'")).ToList();
 
             const string Separator = ", ";
             const string SeparatorForLast = " or ";
@@ -144,7 +144,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<string> SurroundedWith<T>(this IEnumerable<T> values, char surrounding) => values.Select(_ => string.Concat(surrounding, _, surrounding));
+        public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
 
         internal static string HumanizedTakeFirst(this string value, int max)
         {

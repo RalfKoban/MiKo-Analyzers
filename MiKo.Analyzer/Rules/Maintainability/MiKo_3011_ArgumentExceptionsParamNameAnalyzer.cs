@@ -55,7 +55,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var location = inspector(node.ArgumentList, method, semanticModel);
             if (location != Location.None)
             {
-                var issue = Issue(type, location, method.Parameters.Select(_ => string.Concat("nameof(", _.Name, ")")).HumanizedConcatenated());
+                var parameters = GetParameterNames(node, method);
+                var issue = Issue(type, location, parameters);
                 return new[] { issue };
             }
 
@@ -157,9 +158,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static bool ParameterIsReferenced(ArgumentSyntax argument, IMethodSymbol method)
         {
             var argumentName = argument.ToString();
-            return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == string.Concat("\"", _, "\"") || argumentName == string.Concat("nameof(", _, ")"));
+
+            return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == _.SurroundedWith("\"") || argumentName == AsNameof(_));
         }
 
         private static Location GetLocation(ArgumentListSyntax syntax) => Location.Create(syntax.SyntaxTree, syntax.Arguments.Span);
+
+        private static string GetParameterNames(SyntaxNode node, IMethodSymbol method)
+        {
+            var parameters = method.Parameters.Select(_ => AsNameof(_.Name)).HumanizedConcatenated();
+
+            var ifStatement = node.GetEnclosing<IfStatementSyntax>();
+            if (ifStatement != null)
+            {
+                var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.Identifier.ValueText).ToHashSet();
+                var parameter = method.Parameters.FirstOrDefault(_ => identifiers.Contains(_.Name));
+                if (parameter != null)
+                {
+                    parameters = parameter.Name.SurroundedWith("\'");
+                }
+            }
+
+            return parameters;
+        }
+
+        private static string AsNameof(string value) => string.Concat("nameof(", value, ")");
     }
 }
