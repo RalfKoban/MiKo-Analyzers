@@ -2140,6 +2140,15 @@ Doing so allows to change the implementation of the return value whenever it's n
   <data name="MiKo_3072_Title" xml:space="preserve">
     <value>Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.</value>
   </data>
+  <data name="MiKo_3073_Description" xml:space="preserve">
+    <value>Constructors should run completely. They should not partially initialize the objects.</value>
+  </data>
+  <data name="MiKo_3073_MessageFormat" xml:space="preserve">
+    <value>Do not return inside constructor</value>
+  </data>
+  <data name="MiKo_3073_Title" xml:space="preserve">
+    <value>Do not leave objects partially initialized.</value>
+  </data>
   <data name="MiKo_3081_Description" xml:space="preserve">
     <value>Logical NOT conditions are hard to recognize if they are coded using the '!' character. Code that uses 'is false' is much easier to read and understand.</value>
   </data>

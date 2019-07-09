@@ -6000,6 +6000,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Constructors should run completely. They should not partially initialize the objects..
+        /// </summary>
+        public static string MiKo_3073_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3073_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not return inside constructor.
+        /// </summary>
+        public static string MiKo_3073_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3073_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not leave objects partially initialized..
+        /// </summary>
+        public static string MiKo_3073_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3073_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logical NOT conditions are hard to recognize if they are coded using the &apos;!&apos; character. Code that uses &apos;is false&apos; is much easier to read and understand..
         /// </summary>
         public static string MiKo_3081_Description {
