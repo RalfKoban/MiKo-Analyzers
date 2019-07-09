@@ -37,12 +37,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                            .Select(_ => string.Format(m_exceptionPhrases[0], _.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Environment.NewLine)
                            .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Environment.NewLine);
 
-            var results = new List<Diagnostic>();
-
             var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
             var allParameterIndicatorPhrases = parameterIndicators.Values.ToArray();
 
             const StringComparison Comparison = StringComparison.Ordinal;
+
+            var results = new List<Diagnostic>(1);
 
             if (exceptionComment.ContainsAny(allParameterIndicatorPhrases, Comparison))
             {

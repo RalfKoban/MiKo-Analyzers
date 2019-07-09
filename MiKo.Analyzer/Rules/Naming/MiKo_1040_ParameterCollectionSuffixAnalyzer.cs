@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (list is null)
                 {
-                    list = new List<Diagnostic>();
+                    list = new List<Diagnostic>(1);
                 }
 
                 list.Add(diagnostic);

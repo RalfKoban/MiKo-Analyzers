@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (diagnostics is null)
             {
-                diagnostics = new List<Diagnostic>();
+                diagnostics = new List<Diagnostic>(1);
             }
 
             diagnostics.Add(Issue(parameter, expected));

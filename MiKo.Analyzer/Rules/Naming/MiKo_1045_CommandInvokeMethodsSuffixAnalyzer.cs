@@ -51,13 +51,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var list = new List<Diagnostic>();
+            var results = new List<Diagnostic>();
             foreach (var argument in arguments)
             {
-                AnalyzeSuffix(argument, semanticModel, list);
+                AnalyzeSuffix(argument, semanticModel, results);
             }
 
-            return list;
+            return results;
         }
 
         private void AnalyzeSuffix(ArgumentSyntax argument, SemanticModel semanticModel, ICollection<Diagnostic> list)

@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (diagnostics is null)
                 {
-                    diagnostics = new List<Diagnostic>();
+                    diagnostics = new List<Diagnostic>(1);
                 }
 
                 diagnostics.Add(Issue(parameter, parameter.Name, proposal));

@@ -23,11 +23,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var exceeding = GetExceedingCharacters(symbol.Name);
             return exceeding > 0
-                       ? new[] { ReportIssue(symbol, exceeding) }
+                       ? new[] { Issue(symbol, exceeding) }
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        protected Diagnostic ReportIssue(ISymbol symbol, int exceeding) => Issue(symbol, exceeding, m_limit);
+        protected Diagnostic Issue(ISymbol symbol, int exceeding) => Issue(symbol, exceeding, m_limit);
 
         protected int GetExceedingCharacters(string symbolName)
         {

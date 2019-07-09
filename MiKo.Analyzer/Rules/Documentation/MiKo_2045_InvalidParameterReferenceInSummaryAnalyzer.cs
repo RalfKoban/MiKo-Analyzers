@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (findings is null)
                 {
-                    findings = new List<Diagnostic>();
+                    findings = new List<Diagnostic>(1);
                 }
 
                 findings.Add(Issue(parameter, phrase));

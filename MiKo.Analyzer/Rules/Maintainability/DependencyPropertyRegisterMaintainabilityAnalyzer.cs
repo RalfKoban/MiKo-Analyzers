@@ -96,7 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeParameterOwningType(IFieldSymbol symbol, ArgumentSyntax ownerType, ref List<Diagnostic> diagnostics)
+        private void AnalyzeParameterOwningType(IFieldSymbol symbol, ArgumentSyntax ownerType, ref List<Diagnostic> results)
         {
             if (ownerType.Expression is TypeOfExpressionSyntax syntax)
             {
@@ -104,19 +104,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var containingTypeName = owningType.Name;
                 if (containingTypeName != syntax.Type.ToString())
                 {
-                    ReportIssue(symbol, ownerType, containingTypeName, ref diagnostics);
+                    ReportIssue(symbol, ownerType, containingTypeName, ref results);
                 }
             }
         }
 
-        private void ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter, ref List<Diagnostic> diagnostics)
+        private void ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter, ref List<Diagnostic> results)
         {
-            if (diagnostics is null)
+            if (results is null)
             {
-                diagnostics = new List<Diagnostic>();
+                results = new List<Diagnostic>(1);
             }
 
-            diagnostics.Add(Issue(symbol.Name, argument.GetLocation(), parameter));
+            results.Add(Issue(symbol.Name, argument.GetLocation(), parameter));
         }
     }
 }

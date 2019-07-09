@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return methodName.Remove(phrase);
         }
 
-        private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ref List<Diagnostic> diagnostics)
+        private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ref List<Diagnostic> results)
         {
             var methodName = method.Name;
 
@@ -72,13 +72,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var forbidden = methodName.Contains(forbiddenName);
             if (forbidden)
             {
-                if (diagnostics is null)
+                if (results is null)
                 {
-                    diagnostics = new List<Diagnostic>();
+                    results = new List<Diagnostic>(1);
                 }
 
                 var proposal = GetProposal(methodName, forbiddenName);
-                diagnostics.Add(Issue(method, proposal));
+                results.Add(Issue(method, proposal));
             }
 
             return forbidden;

@@ -39,24 +39,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
-            List<Diagnostic> diagnostics = null;
+            List<Diagnostic> results = null;
 
             foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny(MockNames)))
             {
                 var symbol = syntaxToken.GetSymbol(semanticModel);
-                var diagnostic = symbol is null
-                                     ? Issue(syntaxToken.ValueText, syntaxToken.GetLocation())
-                                     : Issue(symbol);
+                var issue = symbol is null
+                                ? Issue(syntaxToken.ValueText, syntaxToken.GetLocation())
+                                : Issue(symbol);
 
-                if (diagnostics is null)
+                if (results is null)
                 {
-                    diagnostics = new List<Diagnostic>();
+                    results = new List<Diagnostic>(1);
                 }
 
-                diagnostics.Add(diagnostic);
+                results.Add(issue);
             }
 
-            return diagnostics ?? Enumerable.Empty<Diagnostic>();
+            return results ?? Enumerable.Empty<Diagnostic>();
         }
 
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)

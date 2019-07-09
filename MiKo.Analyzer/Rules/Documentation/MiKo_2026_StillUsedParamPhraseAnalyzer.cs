@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (results is null)
                     {
-                        results = new List<Diagnostic>();
+                        results = new List<Diagnostic>(1);
                     }
 
                     var diagnostic = Issue(parameter);

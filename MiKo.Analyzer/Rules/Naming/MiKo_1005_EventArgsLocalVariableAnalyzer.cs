@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                         if (results is null)
                         {
-                            results = new List<Diagnostic>();
+                            results = new List<Diagnostic>(1);
                         }
 
                         results.Add(Issue(symbol, proposedName));

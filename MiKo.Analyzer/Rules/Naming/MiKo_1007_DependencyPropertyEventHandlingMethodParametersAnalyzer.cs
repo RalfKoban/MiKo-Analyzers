@@ -27,19 +27,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private void VerifyParameterName(string expected, IParameterSymbol parameter, ref List<Diagnostic> diagnostics)
+        private void VerifyParameterName(string expected, IParameterSymbol parameter, ref List<Diagnostic> results)
         {
             if (expected == parameter.Name)
             {
                 return;
             }
 
-            if (diagnostics is null)
+            if (results is null)
             {
-                diagnostics = new List<Diagnostic>();
+                results = new List<Diagnostic>(1);
             }
 
-            diagnostics.Add(Issue(parameter, expected));
+            results.Add(Issue(parameter, expected));
         }
     }
 }

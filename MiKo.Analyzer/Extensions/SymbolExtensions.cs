@@ -363,7 +363,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol symbol)
         {
-            var baseTypes = new List<ITypeSymbol> { symbol };
+            var baseTypes = new Queue<ITypeSymbol>(1);
+            baseTypes.Enqueue(symbol);
+
             while (true)
             {
                 var baseType = symbol.BaseType;
@@ -372,8 +374,9 @@ namespace MiKoSolutions.Analyzers
                     break;
                 }
 
-                baseTypes.Add(baseType);
                 symbol = baseType;
+
+                baseTypes.Enqueue(baseType);
             }
 
             return baseTypes;
@@ -381,8 +384,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol symbol)
         {
-            var types = new List<ITypeSymbol> { symbol };
+            var types = new Queue<ITypeSymbol>(1);
+            types.Enqueue(symbol);
+
             CollectAllNestedTypes(symbol, types);
+
             return types;
         }
 
@@ -584,9 +590,9 @@ namespace MiKoSolutions.Analyzers
             return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
         }
 
-        private static void CollectAllNestedTypes(this ITypeSymbol symbol, ICollection<ITypeSymbol> types)
+        private static void CollectAllNestedTypes(this ITypeSymbol symbol, Queue<ITypeSymbol> types)
         {
-            types.Add(symbol);
+            types.Enqueue(symbol);
 
             foreach (var nestedType in symbol.GetTypeMembers())
             {

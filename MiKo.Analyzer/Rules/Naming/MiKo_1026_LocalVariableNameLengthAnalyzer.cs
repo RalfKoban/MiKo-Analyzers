@@ -41,10 +41,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (results is null)
                 {
-                    results = new List<Diagnostic>();
+                    results = new List<Diagnostic>(1);
                 }
 
-                results.Add(ReportIssue(symbol, exceeding));
+                results.Add(Issue(symbol, exceeding));
             }
 
             return results ?? Enumerable.Empty<Diagnostic>();
