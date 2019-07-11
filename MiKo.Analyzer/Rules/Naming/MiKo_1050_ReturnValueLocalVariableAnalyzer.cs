@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1050";
 
-        private static readonly string[] WrongNames = CreateWrongNames("ret", "retVal", "retVals", "returnVal", "returnVals", "returnValue", "returnValues", "resultList");
+        private static readonly string[] WrongNames = CreateWrongNames("ret", "res", "return", "result", "returning", "resulting", "retval");
 
         public MiKo_1050_ReturnValueLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -35,14 +35,41 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var value in values)
             {
                 results.Add(value);
-                foreach (var i in Enumerable.Range(0, 10))
-                {
-                    results.Add(value + i);
-                    results.Add(value + "_" + i);
-                }
+                results.Add(value + "_");
             }
 
             return results.ToArray();
+        }
+
+        private static bool ContainsWrongName(string identifier, IEnumerable<string> wrongNames)
+        {
+            var found = false;
+
+            foreach (var wrongName in wrongNames.Where(_ => identifier.Length >= _.Length))
+            {
+                if (identifier.Length == wrongName.Length)
+                {
+                    if (string.Equals(identifier, wrongName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    var nextCharacter = identifier[wrongName.Length];
+                    if (nextCharacter.IsLowerCaseLetter())
+                    {
+                        continue;
+                    }
+
+                    if (identifier.StartsWith(wrongName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        found = true;
+                    }
+                }
+            }
+
+            return found;
         }
 
         private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers)
@@ -53,7 +80,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = identifier.ValueText;
 
-                if (name.EqualsAny(WrongNames, StringComparison.OrdinalIgnoreCase))
+                var isWrong = ContainsWrongName(name, WrongNames);
+                if (isWrong)
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
 

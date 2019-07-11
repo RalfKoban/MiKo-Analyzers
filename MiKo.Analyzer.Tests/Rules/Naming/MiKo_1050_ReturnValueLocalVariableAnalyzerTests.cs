@@ -79,28 +79,33 @@ public class TestMe
         {
             var terms = new[]
                             {
+                                "resultList",
+                                "resultingList",
                                 "ret",
+                                "retval",
                                 "retVal",
                                 "retVals",
                                 "returnVal",
                                 "returnVals",
                                 "returnValue",
                                 "returnValues",
+                                "res1",
+                                "res2",
                                 "ret1",
                                 "ret2",
                                 "retVal3",
                                 "returnValue4",
                                 "retVal_5",
-                                "resultList"
+                                "retList",
+                                "returningList",
+                                "retValid",
+                                "retGuid",
+                                "returnCommunicationChannel",
+                                "retMock",
+                                "retMockVm",
                             };
 
             var nonFitting = new HashSet<string>(terms);
-            foreach (var term in terms)
-            {
-                nonFitting.Add(term.ToLowerInvariant());
-                nonFitting.Add(term.ToUpperInvariant());
-            }
-
             return nonFitting.OrderBy(_ => _).ToArray();
         }
     }
