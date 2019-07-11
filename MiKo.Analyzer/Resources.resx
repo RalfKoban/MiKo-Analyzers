@@ -2008,9 +2008,9 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Do not invoke 'WaitOne' methods without timeouts.</value>
   </data>
   <data name="MiKo_3036_Description" xml:space="preserve">
-    <value>The .NET struct 'TimeSpan' contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read.
-In addition, the struct provides static factory methods such as 'FromMinutes' or 'FromDays'. Those static factory methods are much easier to read and should be preferred.
-It would be even better to use extension methods such as 'Minutes()' or 'Days()' that would allow a more natural writing, such as '5.Days()'.</value>
+    <value>The 'TimeSpan' .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as 'FromMinutes' or 'FromDays', these should be preferred. They are much easier to read and more explicit.
+
+Please note: It would be even better to use extension methods such as 'Minutes()' or 'Days()' that would allow a more natural usage, such as ' var x = 5.Days(); '.</value>
   </data>
   <data name="MiKo_3036_MessageFormat" xml:space="preserve">
     <value>Use factory or extension method instead</value>

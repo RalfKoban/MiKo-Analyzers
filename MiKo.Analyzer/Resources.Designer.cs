@@ -5635,9 +5635,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The .NET struct &apos;TimeSpan&apos; contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read.
-        ///In addition, the struct provides static factory methods such as &apos;FromMinutes&apos; or &apos;FromDays&apos;. Those static factory methods are much easier to read and should be preferred.
-        ///It would be even better to use extension methods such as &apos;Minutes()&apos; or &apos;Days()&apos; that would allow a more natural writing, such as &apos;5.Days()&apos;..
+        ///   Looks up a localized string similar to The &apos;TimeSpan&apos; .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as &apos;FromMinutes&apos; or &apos;FromDays&apos;, these should be preferred. They are much easier to read and more explicit.
+        ///
+        ///Please note: It would be even better to use extension methods such as &apos;Minutes()&apos; or &apos;Days()&apos; that would allow a more natural usage, such as &apos; var x = 5.Days(); &apos;..
         /// </summary>
         public static string MiKo_3036_Description {
             get {
