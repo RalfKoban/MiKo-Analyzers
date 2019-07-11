@@ -5635,6 +5635,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The .NET struct &apos;TimeSpan&apos; contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read.
+        ///In addition, the struct provides static factory methods such as &apos;FromMinutes&apos; or &apos;FromDays&apos;. Those static factory methods are much easier to read and should be preferred.
+        ///It would be even better to use extension methods such as &apos;Minutes()&apos; or &apos;Days()&apos; that would allow a more natural writing, such as &apos;5.Days()&apos;..
+        /// </summary>
+        public static string MiKo_3036_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3036_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use factory or extension method instead.
+        /// </summary>
+        public static string MiKo_3036_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3036_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer to use TimeSpan factory methods instead of constructors..
+        /// </summary>
+        public static string MiKo_3036_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3036_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum..
         /// </summary>
         public static string MiKo_3040_Description {
@@ -6072,7 +6101,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is favored over a logical NOT condition..
+        ///   Looks up a localized string similar to Pattern matching is preferred over a logical NOT condition..
         /// </summary>
         public static string MiKo_3081_Title {
             get {
@@ -6099,7 +6128,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is favored over a logical comparison with &apos;true&apos; or &apos;false&apos;..
+        ///   Looks up a localized string similar to Pattern matching is preferred over a logical comparison with &apos;true&apos; or &apos;false&apos;..
         /// </summary>
         public static string MiKo_3082_Title {
             get {
@@ -6126,7 +6155,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is favored for null checks..
+        ///   Looks up a localized string similar to Pattern matching is preferred for null checks..
         /// </summary>
         public static string MiKo_3083_Title {
             get {

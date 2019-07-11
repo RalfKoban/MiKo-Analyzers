@@ -2007,6 +2007,17 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3035_Title" xml:space="preserve">
     <value>Do not invoke 'WaitOne' methods without timeouts.</value>
   </data>
+  <data name="MiKo_3036_Description" xml:space="preserve">
+    <value>The .NET struct 'TimeSpan' contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read.
+In addition, the struct provides static factory methods such as 'FromMinutes' or 'FromDays'. Those static factory methods are much easier to read and should be preferred.
+It would be even better to use extension methods such as 'Minutes()' or 'Days()' that would allow a more natural writing, such as '5.Days()'.</value>
+  </data>
+  <data name="MiKo_3036_MessageFormat" xml:space="preserve">
+    <value>Use factory or extension method instead</value>
+  </data>
+  <data name="MiKo_3036_Title" xml:space="preserve">
+    <value>Prefer to use TimeSpan factory methods instead of constructors.</value>
+  </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
   </data>
@@ -2165,7 +2176,7 @@ Doing so allows to change the implementation of the return value whenever it's n
     <value>Use pattern 'is false' instead of ' ! '</value>
   </data>
   <data name="MiKo_3081_Title" xml:space="preserve">
-    <value>Pattern matching is favored over a logical NOT condition.</value>
+    <value>Pattern matching is preferred over a logical NOT condition.</value>
   </data>
   <data name="MiKo_3082_Description" xml:space="preserve">
     <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' operator.</value>
@@ -2174,7 +2185,7 @@ Doing so allows to change the implementation of the return value whenever it's n
     <value>Use 'is' instead of '=='</value>
   </data>
   <data name="MiKo_3082_Title" xml:space="preserve">
-    <value>Pattern matching is favored over a logical comparison with 'true' or 'false'.</value>
+    <value>Pattern matching is preferred over a logical comparison with 'true' or 'false'.</value>
   </data>
   <data name="MiKo_3083_Description" xml:space="preserve">
     <value>Null checks using the 'is' pattern matching is more natural and therefore easier to read and understand than using the '==' operator.</value>
@@ -2183,7 +2194,7 @@ Doing so allows to change the implementation of the return value whenever it's n
     <value>Use 'is' instead of '=='</value>
   </data>
   <data name="MiKo_3083_Title" xml:space="preserve">
-    <value>Pattern matching is favored for null checks.</value>
+    <value>Pattern matching is preferred for null checks.</value>
   </data>
   <data name="MiKo_3084_Description" xml:space="preserve">
     <value>To increase readability, do not place constants on the left side of an operator. Instead, place it on the right side. This makes the code look more natural.</value>
