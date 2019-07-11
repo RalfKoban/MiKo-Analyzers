@@ -40,33 +40,33 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_incorrectly_named_property_without_interface_prefix_I() => An_issue_is_reported_for(@"
 
-public interface ISomeInterface
+public interface ISomeInterfaceExtended
 
 public class TestMe
 {
-    public ISomeInterface SomeInterface { get; set; }
+    public ISomeInterfaceExtended SomeInterfaceExtended { get; set; }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_incorrectly_named_getter_only_property() => An_issue_is_reported_for(@"
 
-public interface ISomeInterface
+public interface ISomeInterfaceExtended
 
 public class TestMe
 {
-    public ISomeInterface SomeInterface { get; }
+    public ISomeInterfaceExtended SomeInterfaceExtended { get; }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_incorrectly_named_setter_only_property() => An_issue_is_reported_for(@"
 
-public interface ISomeInterface
+public interface ISomeInterfaceExtended
 
 public class TestMe
 {
-    public ISomeInterface SomeInterface { set; }
+    public ISomeInterfaceExtended SomeInterfaceExtended { set; }
 }
 ");
 

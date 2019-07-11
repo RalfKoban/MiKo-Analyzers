@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return symbol.NameMatchesTypeName(returnType)
+            return symbol.NameMatchesTypeName(returnType, 2)
                        ? new[] { Issue(symbol) }
                        : Enumerable.Empty<Diagnostic>();
         }
