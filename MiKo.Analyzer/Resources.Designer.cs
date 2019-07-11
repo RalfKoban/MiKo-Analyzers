@@ -5655,7 +5655,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefer to use TimeSpan factory methods instead of constructors..
+        ///   Looks up a localized string similar to Prefer to use &apos;TimeSpan&apos; factory methods instead of constructors..
         /// </summary>
         public static string MiKo_3036_Title {
             get {

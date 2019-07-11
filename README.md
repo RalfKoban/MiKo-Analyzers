@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 227 rules that are currently provided by the analyzer.
+The following tables list all the 230 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -87,6 +87,7 @@ The following tables list all the 227 rules that are currently provided by the a
 |MiKo_1066|Parameters should not be suffixed with a number.|&#x2713;|
 |MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|
+|MiKo_1069|Property names reflect their meaning and not their type.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
@@ -225,6 +226,7 @@ The following tables list all the 227 rules that are currently provided by the a
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|
+|MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors.|&#x2713;|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than two values.|&#x2713;|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|
 |MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|
@@ -237,9 +239,10 @@ The following tables list all the 227 rules that are currently provided by the a
 |MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|
 |MiKo_3071|Methods that return Task shall never return null.|&#x2713;|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.|&#x2713;|
-|MiKo_3081|Pattern matching is favored over a logical NOT condition.|&#x2713;|
-|MiKo_3082|Pattern matching is favored over a logical comparison with 'true' or 'false'.|&#x2713;|
-|MiKo_3083|Pattern matching is favored for null checks.|&#x2713;|
+|MiKo_3073|Do not leave objects partially initialized.|&#x2713;|
+|MiKo_3081|Pattern matching is preferred over a logical NOT condition.|&#x2713;|
+|MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|
+|MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|
 |MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|

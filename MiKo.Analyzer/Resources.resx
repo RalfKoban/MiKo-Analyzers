@@ -2016,7 +2016,7 @@ It would be even better to use extension methods such as 'Minutes()' or 'Days()'
     <value>Use factory or extension method instead</value>
   </data>
   <data name="MiKo_3036_Title" xml:space="preserve">
-    <value>Prefer to use TimeSpan factory methods instead of constructors.</value>
+    <value>Prefer to use 'TimeSpan' factory methods instead of constructors.</value>
   </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
