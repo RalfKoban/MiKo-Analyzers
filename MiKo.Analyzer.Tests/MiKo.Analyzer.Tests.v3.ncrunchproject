@@ -1,5 +1,6 @@
 ﻿<ProjectConfiguration>
   <Settings>
+    <HiddenComponentWarnings />
     <RequiredCapabilities>
       <Value>DotNetCore20</Value>
     </RequiredCapabilities>
