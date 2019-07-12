@@ -13,7 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1050";
 
-        private static readonly string[] WrongNames = CreateWrongNames("ret", "res", "return", "result", "returning", "resulting", "retval");
+        private static readonly HashSet<string> AllowedCompleteNames = new HashSet<string>
+                                                                           {
+                                                                               "result",
+                                                                               "results",
+                                                                           };
+
+        private static readonly string[] WrongNames = CreateWrongNames(AllowedCompleteNames, "ret", "return", "returning", "retval", "res", "resulting");
 
         public MiKo_1050_ReturnValueLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -28,11 +34,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
 
-        private static string[] CreateWrongNames(params string[] values)
+        private static string[] CreateWrongNames(IEnumerable<string> values, params string[] additionalValues)
         {
             var results = new HashSet<string>();
 
-            foreach (var value in values)
+            foreach (var value in values.Concat(additionalValues))
             {
                 results.Add(value);
                 results.Add(value + "_");
@@ -51,6 +57,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     if (string.Equals(identifier, wrongName, StringComparison.OrdinalIgnoreCase))
                     {
+                        if (AllowedCompleteNames.Contains(identifier))
+                        {
+                            continue;
+                        }
+
                         return true;
                     }
                 }

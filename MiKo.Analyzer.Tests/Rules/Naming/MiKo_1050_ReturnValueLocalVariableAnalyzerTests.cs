@@ -13,7 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1050_ReturnValueLocalVariableAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Fitting = { "myVariable" };
+        private static readonly string[] Fitting =
+            {
+                "myVariable",
+                "result",
+                "results",
+            };
+
         private static readonly string[] NonFitting = CreateNonFitting();
 
         [Test]
