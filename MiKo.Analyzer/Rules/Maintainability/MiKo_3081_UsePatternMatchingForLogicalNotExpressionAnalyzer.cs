@@ -17,7 +17,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (PrefixUnaryExpressionSyntax)context.Node;
-            ReportIssue(context, node.OperatorToken);
+
+            var symbol = context.SemanticModel.GetSymbolInfo(node.Operand).Symbol;
+            if (symbol is IFieldSymbol f && f.IsConst)
+            {
+                // ignore constants
+            }
+            else
+            {
+                ReportIssue(context, node.OperatorToken);
+            }
         }
     }
 }

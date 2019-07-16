@@ -105,6 +105,24 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_logical_NOT_condition_on_constant() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public const bool A = true;
+
+    public bool DoSomething()
+    {
+        if (!A)
+            return true;
+        else
+            return false;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer();
