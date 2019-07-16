@@ -80,7 +80,7 @@ using NUnit.Framework;
 
 public class TestMe
 {
-    [" + test + @"
+    [" + test + @"]
     public void DoSomething()
     {
         // some comment
@@ -92,12 +92,31 @@ public class TestMe
         public void An_issue_is_reported_for_incorrectly_commented_test_method(
                                                                         [ValueSource(nameof(Tests))] string test,
                                                                         [ValueSource(nameof(Comments))] string comment,
-                                                                        [Values("", " ")] string gap) => An_issue_is_reported_for(@"
+                                                                        [Values("", " ")] string gap)
+            => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
 {
-    [" + test + @"
+    [" + test + @"]
+    public void DoSomething()
+    {
+        //" + gap + comment + @"
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class(
+                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                        [ValueSource(nameof(Comments))] string comment,
+                                                                                        [Values("", " ")] string gap)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + fixture + @"]
+public class TestMe
+{
     public void DoSomething()
     {
         //" + gap + comment + @"
