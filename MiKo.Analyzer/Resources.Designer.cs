@@ -4666,7 +4666,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences..
+        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences.
+        ///
+        ///This rule contradicts rule MiKo_2306..
         /// </summary>
         public static string MiKo_2303_Description {
             get {
@@ -4744,6 +4746,35 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2305_Title {
             get {
                 return ResourceManager.GetString("MiKo_2305_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should be complete sentences.
+        ///
+        ///This rule contradicts rule MiKo_2303..
+        /// </summary>
+        public static string MiKo_2306_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2306_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do end comment with period.
+        /// </summary>
+        public static string MiKo_2306_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2306_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do end comments with a period..
+        /// </summary>
+        public static string MiKo_2306_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2306_Title", resourceCulture);
             }
         }
         
