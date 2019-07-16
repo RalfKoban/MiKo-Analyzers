@@ -6222,6 +6222,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
+        ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
+        /// </summary>
+        public static string MiKo_3090_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3090_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not throw from finally block.
+        /// </summary>
+        public static string MiKo_3090_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3090_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not throw exceptions in finally blocks..
+        /// </summary>
+        public static string MiKo_3090_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3090_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
