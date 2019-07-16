@@ -12,7 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private readonly int m_limit;
 
-        protected NamingLengthAnalyzer(string diagnosticId, SymbolKind kind, int limit) : base(diagnosticId, kind, EnabledPerDefault) => m_limit = limit;
+        protected NamingLengthAnalyzer(string diagnosticId, SymbolKind kind, int limit) : base(diagnosticId, kind) => m_limit = limit;
+
+        protected override bool IsEnabledByDefault => EnabledPerDefault;
 
         protected IEnumerable<Diagnostic> Analyze(ISymbol symbol)
         {

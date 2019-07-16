@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules
     {
         private static readonly ConcurrentDictionary<string, DiagnosticDescriptor> KnownRules = new ConcurrentDictionary<string, DiagnosticDescriptor>();
 
-        protected Analyzer(string category, string diagnosticId, bool isEnabledByDefault = true)
+        protected Analyzer(string category, string diagnosticId)
         {
             DiagnosticId = diagnosticId;
 
@@ -25,12 +25,12 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                       LocalizableResource(id, "MessageFormat"),
                                                                       category,
                                                                       DiagnosticSeverity.Warning,
-                                                                      isEnabledByDefault,
+                                                                      IsEnabledByDefault,
                                                                       LocalizableResource(id, "Description"),
                                                                       LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
 
-        protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind, bool isEnabledByDefault = true) : this(category, diagnosticId, isEnabledByDefault) => SymbolKind = symbolKind;
+        protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind) : this(category, diagnosticId) => SymbolKind = symbolKind;
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -39,6 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules
         protected DiagnosticDescriptor Rule { get; }
 
         protected SymbolKind SymbolKind { get; }
+
+        protected virtual bool IsEnabledByDefault => true;
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information

@@ -9,6 +9,8 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Rules.Documentation;
+
 using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules
@@ -184,6 +186,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private static Analyzer[] CreateAllAnalyzers()
         {
+            // !! Awful HACK!!
+            // this line is required to allow the MiKo_2306_CommentEndsWithPeriodAnalyzer tests to run successfully
+            MiKo_2306_CommentEndsWithPeriodAnalyzer.EnabledPerDefault = true;
+
             var analyzerBaseType = typeof(Analyzer);
 
             var allAnalyzers = analyzerBaseType.Assembly.GetExportedTypes()

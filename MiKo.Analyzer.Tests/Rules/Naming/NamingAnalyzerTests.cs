@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private sealed class TestableNamingAnalyzer : NamingAnalyzer
         {
-            public TestableNamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method, bool isEnabledByDefault = true) : base(diagnosticId, kind, isEnabledByDefault)
+            public TestableNamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(diagnosticId, kind)
             {
             }
 

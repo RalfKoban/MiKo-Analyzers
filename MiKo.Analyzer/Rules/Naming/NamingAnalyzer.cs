@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedListNames = { "blackList", "whiteList", "array", "list", "collection" };
 
-        protected NamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method, bool isEnabledByDefault = true) : base(nameof(Naming), diagnosticId, kind, isEnabledByDefault)
+        protected NamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, kind)
         {
         }
 
