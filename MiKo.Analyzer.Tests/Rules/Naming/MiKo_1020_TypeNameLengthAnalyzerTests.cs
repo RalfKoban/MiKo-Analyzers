@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [TestFixture(Explicit = !NamingLengthAnalyzer.EnabledPerDefault)]
+    [TestFixture]
     public sealed class MiKo_1020_TypeNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
         private static readonly string[] FittingTypes = { "interface", "class", "enum" };

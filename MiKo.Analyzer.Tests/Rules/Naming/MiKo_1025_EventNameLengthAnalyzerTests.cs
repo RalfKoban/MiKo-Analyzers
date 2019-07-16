@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [TestFixture(Explicit = !NamingLengthAnalyzer.EnabledPerDefault)]
+    [TestFixture]
     public sealed class MiKo_1025_EventNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
         private static readonly string[] Fitting = GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Events);
