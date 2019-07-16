@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 230 rules that are currently provided by the analyzer.
+The following tables list all the 232 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -192,6 +192,7 @@ The following tables list all the 230 rules that are currently provided by the a
 |MiKo_2303|Do not end comments with a period.|&#x2713;|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|
+|MiKo_2306|Do end comments with a period.|\-|
 
 ### Maintainability
 |ID|Title|Enabled by default|
@@ -244,6 +245,7 @@ The following tables list all the 230 rules that are currently provided by the a
 |MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|
 |MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|
 |MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|
+|MiKo_3090|Do not throw exceptions in finally blocks.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|
