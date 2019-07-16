@@ -295,6 +295,7 @@ public class TestMe : ITestMe
                                 "Field",
                                 "Property",
                                 "Event",
+                                "Component",
                                 "Constructor",
                                 "Ctor",
                                 "Delegate",

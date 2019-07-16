@@ -82,6 +82,7 @@ namespace MiKoSolutions.Analyzers
                     "Called ",
                     "Class",
                     "Command",
+                    "Component",
                     "Constructor",
                     "Converter",
                     "Creator",
