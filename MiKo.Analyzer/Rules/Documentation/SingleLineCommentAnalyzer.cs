@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var node = (MethodDeclarationSyntax)context.Node;
 
-            if (ShallAnalyzeMethod(node.GetEnclosingMethod(context.SemanticModel)))
+            if (ShallAnalyzeMethod(context.GetEnclosingMethod()))
             {
                 AnalyzeMethod(context, node);
             }

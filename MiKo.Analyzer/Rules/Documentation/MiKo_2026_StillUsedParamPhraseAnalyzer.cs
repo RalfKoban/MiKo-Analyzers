@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
             }
 
-            var methodSymbol = method.GetEnclosingMethod(context.SemanticModel);
+            var methodSymbol = context.GetEnclosingMethod();
             if (methodSymbol is null)
             {
                 return;
@@ -104,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
             }
 
-            var methodSymbol = method.GetEnclosingMethod(context.SemanticModel);
+            var methodSymbol = context.GetEnclosingMethod();
             if (methodSymbol is null)
             {
                 return;
