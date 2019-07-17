@@ -121,6 +121,21 @@ public class TestMe
 }");
 
         [Test]
+        public void An_issue_is_reported_for_a_left_sided_comparison_of_a_floating_number_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(float a)
+    {
+        if (08.15 " + @operator + @" a)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_a_right_sided_comparison_of_a_number_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
 using System;
 
@@ -129,6 +144,72 @@ public class TestMe
     public bool DoSomething(int a)
     {
         if (a " + @operator + @" 42)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_right_sided_comparison_of_a_floating_number_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(float a)
+    {
+        if (a " + @operator + @" 08.15)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_left_sided_comparison_of_a_const_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private const int VALUE = 42;
+
+    public bool DoSomething(int a)
+    {
+        if (VALUE " + @operator + @" a)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_right_sided_comparison_of_a_const_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private const int VALUE = 42;
+
+    public bool DoSomething(int a)
+    {
+        if (a " + @operator + @" VALUE)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_left_sided_comparison_of_a_non_const_field_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private int _value = 42;
+
+    public bool DoSomething(int a)
+    {
+        if (_value " + @operator + @" a)
             return true;
         else
             return false;

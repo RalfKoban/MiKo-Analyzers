@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -40,15 +41,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsResponsibleNode(SyntaxKind kind) => ExpressionValues.Contains(kind);
 
+        private static bool IsConst(SyntaxNode syntax, SyntaxNodeAnalysisContext context)
+        {
+            if (syntax is IdentifierNameSyntax i)
+            {
+                var t = context.FindContainingType();
+                var isConst = t.GetMembers(i.Identifier.ValueText).OfType<IFieldSymbol>().Any(_ => _.IsConst);
+                return isConst;
+            }
+
+            return false;
+        }
+
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (BinaryExpressionSyntax)context.Node;
 
-            var literal = node.Left;
+            var left = node.Left;
 
-            if (IsResponsibleNode(literal))
+            if (IsResponsibleNode(left) || IsConst(left, context))
             {
-                ReportIssue(context, node.OperatorToken, literal);
+                ReportIssue(context, node.OperatorToken, left);
             }
         }
 

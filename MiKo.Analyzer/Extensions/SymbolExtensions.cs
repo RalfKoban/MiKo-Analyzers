@@ -400,20 +400,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext context) => FindContainingType(context.ContainingSymbol);
 
-        internal static INamedTypeSymbol FindContainingType(this ISymbol symbol)
-        {
-            while (symbol != null)
-            {
-                if (symbol is INamedTypeSymbol s)
-                {
-                    return s;
-                }
-
-                symbol = symbol.ContainingType;
-            }
-
-            return null;
-        }
+        internal static INamedTypeSymbol FindContainingType(this ISymbol symbol) => symbol is INamedTypeSymbol type
+                                                                                        ? type
+                                                                                        : symbol?.ContainingType;
 
         internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal) && symbol.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false; // ignore special situation for task factory
 
