@@ -33,8 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var propertyName = symbolName.WithoutSuffix(Constants.DependencyPropertyFieldSuffix);
             var containingType = symbol.ContainingType;
-            if (containingType.GetMembers().OfType<IPropertySymbol>().All(_ => _.Name != propertyName))
+            if (containingType.GetMembersIncludingInherited<IPropertySymbol>().All(_ => _.Name != propertyName))
             {
+                // it's an unknown dependency property
                 return Enumerable.Empty<Diagnostic>();
             }
 
