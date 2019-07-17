@@ -28,7 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var methodNode in method.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
             {
-                foreach (var taskRunExpression in methodNode.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
+                var descendantNodes = methodNode.DescendantNodes();
+
+                foreach (var taskRunExpression in descendantNodes.OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
                 {
                     var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
                     var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
@@ -44,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             var variable = (VariableDeclaratorSyntax)node;
                             var variableName = variable.Identifier.ValueText;
 
-                            foreach (var unused in methodNode.DescendantNodes()
+                            foreach (var unused in descendantNodes
                                                              .OfType<ReturnStatementSyntax>()
                                                              .Select(_ => _.Expression)
                                                              .OfType<IdentifierNameSyntax>()

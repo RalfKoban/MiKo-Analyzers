@@ -40,12 +40,22 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_that_has_a_ref_parameter_for_a_reference_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_method_that_has_a_ref_parameter_for_a_reference_type() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething(ref object o) => o = new object();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_interfce_method_that_has_a_ref_parameter_for_a_reference_type() => An_issue_is_reported_for(@"
+using System;
+
+public interface TestMe
+{
+    void DoSomething(ref object o);
 }
 ");
 
