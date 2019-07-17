@@ -106,6 +106,36 @@ public class TestMe
 }");
 
         [Test]
+        public void An_issue_is_reported_for_a_left_sided_comparison_of_a_hardcoded_string_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool a)
+    {
+        if (""something""" + @operator + @" a)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_right_sided_comparison_of_a_hardcoded_string_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool a)
+    {
+        if (a " + @operator + @"""something"")
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_a_left_sided_comparison_of_a_number_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using System;
 
@@ -200,16 +230,29 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_left_sided_comparison_of_a_non_const_field_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_left_sided_comparison_of_an_enum_member_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    private int _value = 42;
-
-    public bool DoSomething(int a)
+    public bool DoSomething(GCCollectionMode a)
     {
-        if (_value " + @operator + @" a)
+        if (GCCollectionMode.Default " + @operator + @" a)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_right_sided_comparison_of_an_enum_member_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(GCCollectionMode a)
+    {
+        if (a " + @operator + @" GCCollectionMode.Default)
             return true;
         else
             return false;

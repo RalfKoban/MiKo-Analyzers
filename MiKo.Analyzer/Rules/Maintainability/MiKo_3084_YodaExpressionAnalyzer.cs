@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                             SyntaxKind.FalseLiteralExpression,
                                                                             SyntaxKind.NullLiteralExpression,
                                                                             SyntaxKind.NumericLiteralExpression,
+                                                                            SyntaxKind.StringLiteralExpression,
                                                                         };
 
         private static readonly SyntaxKind[] Expressions =
@@ -43,14 +44,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsConst(SyntaxNode syntax, SyntaxNodeAnalysisContext context)
         {
-            if (syntax is IdentifierNameSyntax i)
+            switch (syntax)
             {
-                var t = context.FindContainingType();
-                var isConst = t.GetMembers(i.Identifier.ValueText).OfType<IFieldSymbol>().Any(_ => _.IsConst);
-                return isConst;
-            }
+                case IdentifierNameSyntax i:
+                {
+                    var type = context.FindContainingType();
+                    var isConst = type.GetMembers(i.Identifier.ValueText).OfType<IFieldSymbol>().Any(_ => _.IsConst);
+                    return isConst;
+                }
 
-            return false;
+                case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                {
+                    var type = m.GetTypeSymbol(context.SemanticModel);
+
+                    // only get the real enum members, no local variables o something
+                    return type?.IsEnum() is true;
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
         }
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
