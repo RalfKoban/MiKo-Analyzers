@@ -10,6 +10,7 @@ namespace MiKoSolutions.Analyzers
         internal const string AsyncSuffix = "Async";
         internal const string DependencyPropertyFieldSuffix = "Property";
         internal const string DependencyPropertyKeyFieldSuffix = "Key";
+        internal const string RoutedEventFieldSuffix = "Event";
         internal const string ILog = "ILog";
 
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
@@ -33,7 +34,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
             internal static readonly string[] SpecialModels = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
             internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
-            internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "!:" };
+            internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "E:", "!:" };
             internal static readonly string[] SymbolsAndLineBreaks = Symbols.Concat(new[] { Environment.NewLine }).ToArray();
             internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
         }

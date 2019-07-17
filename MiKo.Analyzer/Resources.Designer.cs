@@ -2683,6 +2683,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Routed events should be documented in the same way as they are documented by the .NET Framework..
+        /// </summary>
+        public static string MiKo_2006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{1}&gt; should be: &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Routed events should be documented as done by the .NET Framework..
+        /// </summary>
+        public static string MiKo_2006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed..
         /// </summary>
         public static string MiKo_2010_Description {
@@ -2792,7 +2819,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods should be documented as by the .NET Framework..
+        ///   Looks up a localized string similar to Dispose methods should be documented as done by the .NET Framework..
         /// </summary>
         public static string MiKo_2014_Description {
             get {
@@ -2891,7 +2918,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dependency properties should be documented as by the .NET Framework..
+        ///   Looks up a localized string similar to Dependency properties should be documented as done by the .NET Framework..
         /// </summary>
         public static string MiKo_2017_Title {
             get {

@@ -1005,6 +1005,15 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_2005_Title" xml:space="preserve">
     <value>Textual references to EventArgs should be documented properly.</value>
   </data>
+  <data name="MiKo_2006_Description" xml:space="preserve">
+    <value>Routed events should be documented in the same way as they are documented by the .NET Framework.</value>
+  </data>
+  <data name="MiKo_2006_MessageFormat" xml:space="preserve">
+    <value>&lt;{1}&gt; should be: '{2}'</value>
+  </data>
+  <data name="MiKo_2006_Title" xml:space="preserve">
+    <value>Routed events should be documented as done by the .NET Framework.</value>
+  </data>
   <data name="MiKo_2010_Description" xml:space="preserve">
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
@@ -1043,7 +1052,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation of Enums should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2014_Description" xml:space="preserve">
-    <value>Dispose methods should be documented as by the .NET Framework.</value>
+    <value>Dispose methods should be documented as done by the .NET Framework.</value>
   </data>
   <data name="MiKo_2014_MessageFormat" xml:space="preserve">
     <value>Documentation should be: '{1}'</value>
@@ -1076,7 +1085,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;{1}&gt; should be: '{2}'</value>
   </data>
   <data name="MiKo_2017_Title" xml:space="preserve">
-    <value>Dependency properties should be documented as by the .NET Framework.</value>
+    <value>Dependency properties should be documented as done by the .NET Framework.</value>
   </data>
   <data name="MiKo_2018_Description" xml:space="preserve">
     <value>The term 'Check' is ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines' instead.</value>
