@@ -2,6 +2,8 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -17,15 +19,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
-            foreach (var parameter in method.Parameters)
+            foreach (var parameter in method.Parameters.Where(_ => _.RefKind == RefKind.Ref && _.Type.TypeKind != TypeKind.Struct))
             {
-                if (parameter.RefKind == RefKind.Ref && parameter.Type.TypeKind != TypeKind.Struct)
-                {
-                    return new[] { Issue(parameter) };
-                }
-            }
+                var syntax = (ParameterSyntax)parameter.DeclaringSyntaxReferences[0].GetSyntax();
+                var refKeyword = syntax.Modifiers.First(_ => _.IsKind(SyntaxKind.RefKeyword));
 
-            return Enumerable.Empty<Diagnostic>();
+                yield return Issue(parameter.Name, refKeyword.GetLocation());
+            }
         }
     }
 }
