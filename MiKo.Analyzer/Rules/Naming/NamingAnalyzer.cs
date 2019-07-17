@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
 
-        private static readonly string[] AllowedListNames = { "blackList", "whiteList", "array", "list", "collection" };
+        private static readonly string[] AllowedListNames = { "list", "collection", "array", "blackList", "whiteList", "playList" };
 
         protected NamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, kind)
         {
@@ -21,25 +21,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected static string FindPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
+            if (symbolName.EqualsAny(AllowedListNames, comparison))
+            {
+                return null;
+            }
+
             foreach (var suffix in suffixes)
             {
-                if (symbolName.EqualsAny(AllowedListNames, StringComparison.Ordinal))
+                if (symbolName.EndsWith(suffix, comparison))
                 {
-                    continue;
-                }
+                    var proposedName = symbolName.WithoutSuffix(suffix);
 
-                if (!symbolName.EndsWith(suffix, comparison))
-                {
-                    continue;
-                }
+                    if (symbolName.IsEntityMarker())
+                    {
+                        proposedName = proposedName.RemoveAll(Constants.Markers.Entities);
+                    }
 
-                var proposedName = symbolName.WithoutSuffix(suffix);
-                if (symbolName.IsEntityMarker())
-                {
-                    proposedName = proposedName.RemoveAll(Constants.Markers.Entities);
+                    return GetPluralName(symbolName, proposedName, comparison);
                 }
-
-                return GetPluralName(symbolName, proposedName, comparison);
             }
 
             return null;

@@ -11,7 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         [TestCase("string bla")]
         [TestCase("int[] array")]
+        [TestCase("IList<string> list")]
         [TestCase("ICollection<int> collection")]
+        [TestCase("ICollection<string> playlist")]
+        [TestCase("ICollection<string> blacklist")]
+        [TestCase("ICollection<string> whitelist")]
         public void No_issue_is_reported_for_correctly_named_parameter(string parameter) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
