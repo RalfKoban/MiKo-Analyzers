@@ -192,6 +192,8 @@ namespace MiKoSolutions.Analyzers.Rules
             NamingLengthAnalyzer.EnabledPerDefault = true;
             MiKo_2306_CommentEndsWithPeriodAnalyzer.EnabledPerDefault = true;
 
+            //// TODO: RKN Fix Markdown for those that are enabled
+
             var analyzerBaseType = typeof(Analyzer);
 
             var allAnalyzers = analyzerBaseType.Assembly.GetExportedTypes()
