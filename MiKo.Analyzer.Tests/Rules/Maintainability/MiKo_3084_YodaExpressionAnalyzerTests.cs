@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -9,16 +11,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3084_YodaExpressionAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Operators =
+        private static readonly string[] EqualityOperators =
             {
                 "==",
                 "!=",
             };
 
+        private static readonly string[] ComparingOperators =
+            {
+                "<=",
+                ">=",
+                "<",
+                ">",
+            };
+
+        private static readonly string[] Operators = EqualityOperators.Concat(ComparingOperators).ToArray();
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_comparisons_of_2_variables_of_type_(
-                                                                        [Values("int", "string", "object")] string type,
-                                                                        [ValueSource(nameof(Operators))] string @operator)
+                                                                            [Values("int", "string", "object")] string type,
+                                                                            [ValueSource(nameof(EqualityOperators))] string @operator)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -87,6 +99,36 @@ public class TestMe
     public bool DoSomething(bool a)
     {
         if (a == " + value + @")
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_left_sided_comparison_of_a_number_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(int a)
+    {
+        if (42 " + @operator + @" a)
+            return true;
+        else
+            return false;
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_right_sided_comparison_of_a_number_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(int a)
+    {
+        if (a " + @operator + @" 42)
             return true;
         else
             return false;

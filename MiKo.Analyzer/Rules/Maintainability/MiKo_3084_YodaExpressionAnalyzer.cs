@@ -17,25 +17,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                             SyntaxKind.TrueLiteralExpression,
                                                                             SyntaxKind.FalseLiteralExpression,
                                                                             SyntaxKind.NullLiteralExpression,
+                                                                            SyntaxKind.NumericLiteralExpression,
                                                                         };
+
+        private static readonly SyntaxKind[] Expressions =
+            {
+                SyntaxKind.EqualsExpression,
+                SyntaxKind.NotEqualsExpression,
+                SyntaxKind.LessThanExpression,
+                SyntaxKind.LessThanOrEqualExpression,
+                SyntaxKind.GreaterThanExpression,
+                SyntaxKind.GreaterThanOrEqualExpression,
+            };
 
         public MiKo_3084_YodaExpressionAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionLanguageAware, SyntaxKind.EqualsExpression, SyntaxKind.NotEqualsExpression);
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpression, Expressions);
 
         private static bool IsResponsibleNode(CSharpSyntaxNode syntax) => syntax != null && IsResponsibleNode(syntax.Kind());
 
         private static bool IsResponsibleNode(SyntaxKind kind) => ExpressionValues.Contains(kind);
-
-        private void AnalyzeExpressionLanguageAware(SyntaxNodeAnalysisContext context)
-        {
-            if (context.IsSupported(LanguageVersion.CSharp7))
-            {
-                AnalyzeExpression(context);
-            }
-        }
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
