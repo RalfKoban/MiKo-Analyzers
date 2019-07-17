@@ -6277,6 +6277,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Events should be raised inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
+        ///Those finally blocks are intended for cleaning stuff up..
+        /// </summary>
+        public static string MiKo_3091_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3091_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not raise &apos;{1}&apos; from finally block.
+        /// </summary>
+        public static string MiKo_3091_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3091_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not raise events in finally blocks..
+        /// </summary>
+        public static string MiKo_3091_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3091_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
