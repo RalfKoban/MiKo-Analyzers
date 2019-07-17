@@ -2819,7 +2819,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods should be documented as done by the .NET Framework..
+        ///   Looks up a localized string similar to Dispose methods should be documented in the same way as they are documented by the .NET Framework..
         /// </summary>
         public static string MiKo_2014_Description {
             get {
@@ -2837,7 +2837,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods should be documented in the same way as they are documented by the .NET Framework..
+        ///   Looks up a localized string similar to Dispose methods should be documented as done by the .NET Framework..
         /// </summary>
         public static string MiKo_2014_Title {
             get {

@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 232 rules that are currently provided by the analyzer.
+The following tables list all the 233 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -117,14 +117,15 @@ The following tables list all the 232 rules that are currently provided by the a
 |MiKo_2003|Documentation of event handlers should have a default starting phrase.|&#x2713;|
 |MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly.|&#x2713;|
+|MiKo_2006|Routed events should be documented as done by the .NET Framework.|&#x2713;|
 |MiKo_2010|Sealed classes should document being sealed.|&#x2713;|
 |MiKo_2011|Unsealed classes should not lie about sealing.|&#x2713;|
 |MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|&#x2713;|
 |MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|
-|MiKo_2014|Dispose methods should be documented in the same way as they are documented by the .NET Framework.|&#x2713;|
+|MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|
 |MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|&#x2713;|
 |MiKo_2016|Documentation for asynchronous methods should start with specific phrase.|&#x2713;|
-|MiKo_2017|Dependency properties should be documented as by the .NET Framework.|&#x2713;|
+|MiKo_2017|Dependency properties should be documented as done by the .NET Framework.|&#x2713;|
 |MiKo_2018|Documentation should not use the ambiguous term 'Check'.|&#x2713;|
 |MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ").|&#x2713;|
 |MiKo_2020|Inherited documentation should be used with &lt;inheritdoc /&gt; marker.|&#x2713;|
