@@ -228,6 +228,18 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_separator_comment([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + comment + @"
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2300_MeaninglessCommentAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2300_MeaninglessCommentAnalyzer();
