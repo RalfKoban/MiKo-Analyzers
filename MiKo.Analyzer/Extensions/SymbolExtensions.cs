@@ -427,6 +427,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsObject(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Object;
 
+        internal static bool IsRoutedEvent(this ITypeSymbol symbol) => symbol.Name == "RoutedEvent" || symbol.Name == "System.Windows.RoutedEvent";
+
         internal static bool IsDependencyObject(this ITypeSymbol symbol) => symbol.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
         internal static bool IsDependencyProperty(this ITypeSymbol symbol) => symbol.Name == "DependencyProperty" || symbol.Name == "System.Windows.DependencyProperty";

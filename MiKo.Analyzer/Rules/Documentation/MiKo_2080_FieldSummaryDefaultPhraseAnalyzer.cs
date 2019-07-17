@@ -34,6 +34,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // validated by rule MiKo_2017
             }
 
+            if (symbol.Type.IsRoutedEvent())
+            {
+                return false; // validated by rule MiKo_2006
+            }
+
             return true;
         }
 

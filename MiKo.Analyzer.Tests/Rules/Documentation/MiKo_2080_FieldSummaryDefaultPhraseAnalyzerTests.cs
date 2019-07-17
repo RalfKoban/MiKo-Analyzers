@@ -141,6 +141,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_commented_RoutedEvent_field_summary_with_readonly_comment() => No_issue_is_reported_for(@"
+using System.Windows;
+
+public class TestMe
+{
+    /// <summary>
+    /// Identifies the <see cref=""TouchUp""/> routed event.
+    /// </summary>
+    public static readonly System.Windows.RoutedEvent TouchUpEvent;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_commented_constant_boolean_field() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
