@@ -12,8 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2002";
 
-        private const string StartingPhrase = "Provides data for the <see cref=\"";
-        private const string EndingPhrase = "/> event.";
+        private const string StartingPhrase = "Provides data for ";
+        private const string EndingPhraseMultiple = " events.";
+
+        private const string StartingPhraseConcrete = StartingPhrase + "the <see cref=\"";
+        private const string EndingPhraseConcrete = "/> event.";
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
@@ -23,10 +26,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsEventArgs();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries
-                                                                                                                        .Select(_ => _.Remove(Constants.Comments.SealedClassPhrase).Trim())
-                                                                                                                        .Any(_ => _.StartsWith(StartingPhrase, Comparison) && _.EndsWith(EndingPhrase, Comparison))
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => HasEventSummary(summaries)
                                                                                                                             ? Enumerable.Empty<Diagnostic>()
-                                                                                                                            : new[] { Issue(symbol, StartingPhrase, "\"" + EndingPhrase) };
+                                                                                                                            : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
+
+        private static bool HasEventSummary(IEnumerable<string> summaries)
+        {
+            foreach (var summary in summaries.Select(_ => _.Remove(Constants.Comments.SealedClassPhrase).Trim()))
+            {
+                if (summary.StartsWith(StartingPhrase, Comparison))
+                {
+                    var phrase = summary.StartsWith(StartingPhraseConcrete, Comparison)
+                                     ? EndingPhraseConcrete
+                                     : EndingPhraseMultiple;
+
+                    return summary.EndsWith(phrase, Comparison);
+                }
+            }
+
+            return false;
+        }
     }
 }

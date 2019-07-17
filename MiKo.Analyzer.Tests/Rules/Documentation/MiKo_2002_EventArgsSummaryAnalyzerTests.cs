@@ -55,6 +55,18 @@ public sealed class MyEventArgs : EventArgs
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_multi_EventArgs() => No_issue_is_reported_for(@"
+using System;
+
+/// <summary>
+/// Provides data for some events.
+/// </summary>
+public class MyEventArgs : EventArgs
+{
+}
+");
+
         [TestCase("Does something.")]
         [TestCase("Provides some stuff for the event.")]
         [TestCase("Provides data for the event.")]
