@@ -1,12 +1,14 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
-    [TestFixture]
+    [TestFixture, Isolated]
     public sealed class MiKo_4102_TestTeardownMethodsOrderedSecondAnalyzerTests : CodeFixVerifier
     {
         [Test]

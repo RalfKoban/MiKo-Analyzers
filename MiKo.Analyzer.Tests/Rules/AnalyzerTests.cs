@@ -12,11 +12,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using MiKoSolutions.Analyzers.Rules.Documentation;
 using MiKoSolutions.Analyzers.Rules.Naming;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules
 {
-    [TestFixture]
+    [TestFixture, Atomic, Isolated]
     public static class AnalyzerTests
     {
         private static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Resources));
