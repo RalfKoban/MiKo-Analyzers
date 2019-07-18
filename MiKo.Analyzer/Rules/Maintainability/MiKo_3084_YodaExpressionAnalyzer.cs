@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var type = m.GetTypeSymbol(context.SemanticModel);
 
-                    // only get the real enum members, no local variables o something
+                    // only get the real enum members, no local variables or something
                     return type?.IsEnum() is true;
                 }
 
