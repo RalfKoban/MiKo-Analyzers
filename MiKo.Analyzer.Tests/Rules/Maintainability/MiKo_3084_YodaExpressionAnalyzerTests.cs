@@ -259,6 +259,27 @@ public class TestMe
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_a_left_sided_comparison_of_an_property_named_after_an_enum_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using System;
+
+public class Helper
+{
+    public GCCollectionMode GCCollectionMode { get; set; }
+}
+
+public class TestMe
+{
+    public bool DoSomething(GCCollectionMode a)
+    {
+        var helper = new Helper();
+        if (helper.GCCollectionMode " + @operator + @" a)
+            return true;
+        else
+            return false;
+    }
+}");
+
         protected override string GetDiagnosticId() => MiKo_3084_YodaExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3084_YodaExpressionAnalyzer();
