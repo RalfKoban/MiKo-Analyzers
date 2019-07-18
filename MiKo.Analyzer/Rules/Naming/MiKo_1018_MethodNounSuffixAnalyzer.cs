@@ -79,6 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "CompileTimeValidate",
                 "Is",
                 "Has",
+                "Cancel",
             };
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)

@@ -59,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "UnregisterAction",
                                                                                "ValidateCollection",
                                                                                "CompileTimeValidateCollection",
+                                                                               "CancelOperation",
                                                                            };
 
         private static readonly IEnumerable<string> InvalidMethodNames = new[]
