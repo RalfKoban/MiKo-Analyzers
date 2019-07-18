@@ -2307,6 +2307,19 @@ Therefore, a hard-coded GUID should be used instead.</value>
   <data name="MiKo_3105_Title" xml:space="preserve">
     <value>Test methods should use NUnit's fluent Assert approach.</value>
   </data>
+  <data name="MiKo_3106_Description" xml:space="preserve">
+    <value>If assertions such as Assert.That(...) contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; or the Equals() method, then those methods test for booleans.
+In case the test fails, the failure (e.g. 'true' expected but 'false' received) is hard to understand and needs to be carefully inspected.
+In worst case the test needs to be debugged to see what went wrong. If the test itself is a shaky one, this is even more annoying.
+
+In contrast, the failure would be much easier to understand if the test would immediately state what was expected (e.g. '5' was expected but '12' was received).</value>
+  </data>
+  <data name="MiKo_3106_MessageFormat" xml:space="preserve">
+    <value>Do not use '{1}' in assertion</value>
+  </data>
+  <data name="MiKo_3106_Title" xml:space="preserve">
+    <value>Do not use equality or comparison operators in assertions.</value>
+  </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
 Such namespaces should be flattened.</value>

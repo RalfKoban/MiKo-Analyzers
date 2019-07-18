@@ -6479,6 +6479,37 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If assertions such as Assert.That(...) contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; or the Equals() method, then those methods test for booleans.
+        ///In case the test fails, the failure (e.g. &apos;true&apos; expected but &apos;false&apos; received) is hard to understand and needs to be carefully inspected.
+        ///In worst case the test needs to be debugged to see what went wrong. If the test itself is a shaky one, this is even more annoying.
+        ///
+        ///In contrast, the failure would be much easier to understand if the test would immediately [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_3106_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3106_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in assertion.
+        /// </summary>
+        public static string MiKo_3106_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3106_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use equality or comparison operators in assertions..
+        /// </summary>
+        public static string MiKo_3106_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3106_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
