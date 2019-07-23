@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NCrunch.Framework;
 
@@ -19,6 +21,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "<=",
                 ">",
                 ">=",
+            };
+
+        private static readonly string[] Methods =
+            {
+                "All",
+                "Any",
+                "Contains",
+                "Equals",
             };
 
         [Test]
@@ -88,7 +98,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_a_test_method([ValueSource(nameof(Tests))] string test, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_test_method([ValueSource(nameof(Tests))] string test, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -105,7 +115,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -122,7 +132,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_non_test_class([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_non_test_class([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -138,7 +148,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_Assert_Multiple([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_an_operator_in_an_Assert_Multiple([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -152,6 +162,22 @@ namespace Bla
                                     var y = 0815;
                                     var result = x " + @operator + @" y;
                                   });
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_boolean_operation_in_a_non_test_class([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            Assert.IsTrue(42." + method + @"(0815));
         }
     }
 }

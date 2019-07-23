@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -34,19 +35,44 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
+        private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.Name.Identifier.ValueText)
+                                                                                    && node.Expression is IdentifierNameSyntax invokedType
+                                                                                    && AssertionTypes.Contains(invokedType.Identifier.ValueText);
+
+        private static bool IsBinaryMethod(string methodName)
+        {
+            switch (methodName)
+            {
+                case nameof(Equals):
+                case nameof(Enumerable.Contains):
+                case nameof(Enumerable.Any):
+                case nameof(Enumerable.All):
+                {
+                    return true;
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+        }
+
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
-            if (AssertionMethods.Contains(node.Name.Identifier.ValueText) && node.Expression is IdentifierNameSyntax invokedClass && AssertionTypes.Contains(invokedClass.Identifier.ValueText))
+            if (IsAssertionMethod(node) && node.Parent is InvocationExpressionSyntax methodCall)
             {
-                if (node.Parent is InvocationExpressionSyntax methodCall && methodCall.ArgumentList.Arguments.Count > 0)
+                var arguments = methodCall.ArgumentList.Arguments;
+                if (arguments.Count > 0)
                 {
                     var methodName = context.GetEnclosingMethod()?.Name;
 
-                    foreach (var descendant in methodCall.ArgumentList.DescendantNodes())
+                    foreach (var argument in arguments)
                     {
-                        switch (descendant.Kind())
+                        var expression = argument.Expression;
+                        switch (expression.Kind())
                         {
                             case SyntaxKind.EqualsExpression:
                             case SyntaxKind.NotEqualsExpression:
@@ -55,21 +81,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             case SyntaxKind.GreaterThanExpression:
                             case SyntaxKind.GreaterThanOrEqualExpression:
                             {
-                                var expression = (BinaryExpressionSyntax)descendant;
-                                var issue = Issue(methodName, expression.GetLocation(), expression.OperatorToken.ValueText);
-                                context.ReportDiagnostic(issue);
+                                var be = (BinaryExpressionSyntax)expression;
+                                ReportIssue(context, methodName, expression, be.OperatorToken.ValueText);
                                 break;
                             }
 
-                            default:
+                            case SyntaxKind.InvocationExpression:
                             {
-                                // TODO: check for .Equals or LINQ methods
+                                if (((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae)
+                                {
+                                    var invokedMethodName = mae.Name.Identifier.ValueText;
+                                    if (IsBinaryMethod(invokedMethodName))
+                                    {
+                                        ReportIssue(context, methodName, expression, invokedMethodName);
+                                    }
+                                }
+
                                 break;
                             }
                         }
                     }
                 }
             }
+        }
+
+        private void ReportIssue(SyntaxNodeAnalysisContext context, string methodName, ExpressionSyntax expression, string invokedMethodName)
+        {
+            var issue = Issue(methodName, expression.GetLocation(), invokedMethodName);
+            context.ReportDiagnostic(issue);
         }
     }
 }
