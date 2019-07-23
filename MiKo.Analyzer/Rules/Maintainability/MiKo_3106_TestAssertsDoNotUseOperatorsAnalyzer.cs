@@ -36,8 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.Name.Identifier.ValueText)
-                                                                                    && node.Expression is IdentifierNameSyntax invokedType
-                                                                                    && AssertionTypes.Contains(invokedType.Identifier.ValueText);
+                                                                                 && node.Expression is IdentifierNameSyntax invokedType
+                                                                                 && AssertionTypes.Contains(invokedType.Identifier.ValueText);
 
         private static bool IsBinaryMethod(string methodName)
         {
@@ -58,6 +58,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+        private static bool HasIssue(ExpressionSyntax expression, out string invokedName)
+        {
+            switch (expression.Kind())
+            {
+                case SyntaxKind.EqualsExpression:
+                case SyntaxKind.NotEqualsExpression:
+                case SyntaxKind.LessThanExpression:
+                case SyntaxKind.LessThanOrEqualExpression:
+                case SyntaxKind.GreaterThanExpression:
+                case SyntaxKind.GreaterThanOrEqualExpression:
+                {
+                    var be = (BinaryExpressionSyntax)expression;
+                    invokedName = be.OperatorToken.ValueText;
+                    return true;
+                }
+
+                case SyntaxKind.InvocationExpression:
+                {
+                    if (((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae)
+                    {
+                        var invokedMethodName = mae.Name.Identifier.ValueText;
+
+                        if (IsBinaryMethod(invokedMethodName))
+                        {
+                            invokedName = invokedMethodName;
+                            return true;
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+            invokedName = null;
+            return false;
+        }
+
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
@@ -72,33 +109,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     foreach (var argument in arguments)
                     {
                         var expression = argument.Expression;
-                        switch (expression.Kind())
+
+                        if (HasIssue(expression, out var invokedName))
                         {
-                            case SyntaxKind.EqualsExpression:
-                            case SyntaxKind.NotEqualsExpression:
-                            case SyntaxKind.LessThanExpression:
-                            case SyntaxKind.LessThanOrEqualExpression:
-                            case SyntaxKind.GreaterThanExpression:
-                            case SyntaxKind.GreaterThanOrEqualExpression:
-                            {
-                                var be = (BinaryExpressionSyntax)expression;
-                                ReportIssue(context, methodName, expression, be.OperatorToken.ValueText);
-                                break;
-                            }
-
-                            case SyntaxKind.InvocationExpression:
-                            {
-                                if (((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae)
-                                {
-                                    var invokedMethodName = mae.Name.Identifier.ValueText;
-                                    if (IsBinaryMethod(invokedMethodName))
-                                    {
-                                        ReportIssue(context, methodName, expression, invokedMethodName);
-                                    }
-                                }
-
-                                break;
-                            }
+                            ReportIssue(context, methodName, expression, invokedName);
                         }
                     }
                 }
