@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NCrunch.Framework;
 
@@ -114,7 +112,7 @@ namespace Bla
 }
 ");
 
-        [Test]
+        [Test, Combinatorial]
         public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 

@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool HasIssue(ExpressionSyntax expression, out string invokedName)
+        private static bool HasIssue(ExpressionSyntax expression, out SyntaxToken token)
         {
             switch (expression.Kind())
             {
@@ -70,28 +70,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.GreaterThanOrEqualExpression:
                 {
                     var be = (BinaryExpressionSyntax)expression;
-                    invokedName = be.OperatorToken.ValueText;
+                    token = be.OperatorToken;
                     return true;
                 }
 
-                case SyntaxKind.InvocationExpression:
+                case SyntaxKind.InvocationExpression when ((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae:
                 {
-                    if (((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae)
-                    {
-                        var invokedMethodName = mae.Name.Identifier.ValueText;
-
-                        if (IsBinaryMethod(invokedMethodName))
-                        {
-                            invokedName = invokedMethodName;
-                            return true;
-                        }
-                    }
-
-                    break;
+                    token = mae.Name.Identifier;
+                    return IsBinaryMethod(token.ValueText);
                 }
             }
 
-            invokedName = null;
+            token = default;
             return false;
         }
 
@@ -101,27 +91,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (IsAssertionMethod(node) && node.Parent is InvocationExpressionSyntax methodCall)
             {
-                var arguments = methodCall.ArgumentList.Arguments;
-                if (arguments.Count > 0)
+                foreach (var argument in methodCall.ArgumentList.Arguments)
                 {
-                    var methodName = context.GetEnclosingMethod()?.Name;
-
-                    foreach (var argument in arguments)
+                    if (HasIssue(argument.Expression, out var token))
                     {
-                        var expression = argument.Expression;
-
-                        if (HasIssue(expression, out var invokedName))
-                        {
-                            ReportIssue(context, methodName, expression, invokedName);
-                        }
+                        ReportIssue(context, token);
                     }
                 }
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, string methodName, ExpressionSyntax expression, string invokedMethodName)
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token)
         {
-            var issue = Issue(methodName, expression.GetLocation(), invokedMethodName);
+            var methodName = context.GetEnclosingMethod()?.Name;
+            var issue = Issue(methodName, token.GetLocation(), token.ValueText);
             context.ReportDiagnostic(issue);
         }
     }
