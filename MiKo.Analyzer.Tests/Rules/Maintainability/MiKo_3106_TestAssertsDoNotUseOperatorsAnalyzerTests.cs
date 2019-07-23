@@ -137,6 +137,26 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_a_Assert_Multiple([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            Assert.Multiple(() => {
+                                    var x = 4711;
+                                    var y = 0815;
+                                    var result = x " + @operator + @" y;
+                                  });
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer();

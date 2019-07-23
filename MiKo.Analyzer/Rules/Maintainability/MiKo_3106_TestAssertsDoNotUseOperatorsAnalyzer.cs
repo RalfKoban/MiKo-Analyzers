@@ -21,6 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                          "DirectoryAssert",
                                                                      };
 
+        private static readonly HashSet<string> AssertionMethods = new HashSet<string>
+                                                                       {
+                                                                           "That",
+                                                                           "IsTrue",
+                                                                           "IsFalse",
+                                                                       };
+
         public MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer() : base(Id)
         {
         }
@@ -31,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
-            if (node.Expression is IdentifierNameSyntax invokedClass && AssertionTypes.Contains(invokedClass.Identifier.ValueText))
+            if (AssertionMethods.Contains(node.Name.Identifier.ValueText) && node.Expression is IdentifierNameSyntax invokedClass && AssertionTypes.Contains(invokedClass.Identifier.ValueText))
             {
                 if (node.Parent is InvocationExpressionSyntax methodCall && methodCall.ArgumentList.Arguments.Count > 0)
                 {
