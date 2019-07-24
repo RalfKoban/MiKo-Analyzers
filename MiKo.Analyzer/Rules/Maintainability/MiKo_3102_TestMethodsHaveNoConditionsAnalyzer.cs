@@ -12,6 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3102";
 
+        private static readonly HashSet<SyntaxKind> ConditionTokens = new HashSet<SyntaxKind>
+                                                                          {
+                                                                              SyntaxKind.SwitchKeyword,
+                                                                              SyntaxKind.IfKeyword,
+                                                                              SyntaxKind.QuestionToken, // that is a "SyntaxKind.ConditionalExpression" or a "SyntaxKind.ConditionalAccessExpression"
+                                                                              SyntaxKind.QuestionQuestionToken, // that is a "SyntaxKind.CoalesceExpression"
+                                                                          };
+
         public MiKo_3102_TestMethodsHaveNoConditionsAnalyzer() : base(Id)
         {
         }
@@ -21,29 +29,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
             var methodName = method.Name;
+
             var conditions = method.DeclaringSyntaxReferences // get the syntax tree
-                                   .SelectMany(_ => _.GetSyntax().DescendantNodes())
-                                   .Where(IsCondition)
+                                   .SelectMany(_ => _.GetSyntax().DescendantTokens())
+                                   .Where(_ => ConditionTokens.Contains(_.Kind()))
                                    .Select(_ => Issue(methodName, _.GetLocation()))
                                    .ToList();
             return conditions;
-        }
-
-        private static bool IsCondition(SyntaxNode syntaxNode)
-        {
-            switch (syntaxNode.Kind())
-            {
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.SwitchKeyword:
-                case SyntaxKind.IfStatement:
-                case SyntaxKind.ConditionalExpression:
-                case SyntaxKind.CoalesceExpression:
-                case SyntaxKind.ConditionalAccessExpression:
-                    return true;
-
-                default:
-                    return false;
-            }
         }
     }
 }
