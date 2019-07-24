@@ -5556,6 +5556,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property names that are passed into the  &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This eases refactorings..
+        /// </summary>
+        public static string MiKo_3032_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3032_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        /// </summary>
+        public static string MiKo_3032_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3032_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property names for created &apos;PropertyChangedEventArgs&apos; instances shall be provided via &apos;nameof&apos; operator instead of Cinch..
+        /// </summary>
+        public static string MiKo_3032_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3032_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Property names that are passed into the  &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
         /// </summary>
         public static string MiKo_3033_Description {
