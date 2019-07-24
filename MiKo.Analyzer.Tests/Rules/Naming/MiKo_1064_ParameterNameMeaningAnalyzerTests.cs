@@ -118,6 +118,7 @@ public class TestMe
         [TestCase("CancellationToken cancellationToken")]
         [TestCase("IFormatProvider formatProvider")]
         [TestCase("SemanticModel semanticModel")]
+        [TestCase("ICommand command")]
         public void No_issue_is_reported_for_known_name_(string parameter) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
