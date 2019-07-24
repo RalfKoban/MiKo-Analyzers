@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1062";
 
-        private static readonly string[] Prefixes = { "Is", "Has", "Contains" };
+        private static readonly string[] Prefixes = { "Is", "Are", "Has", "Contains" };
 
         public MiKo_1062_IsMethodNameCamelCaseAnalyzer() : base(Id, (SymbolKind)(-1))
         {

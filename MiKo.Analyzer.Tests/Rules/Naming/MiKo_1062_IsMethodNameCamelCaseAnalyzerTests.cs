@@ -31,6 +31,7 @@ public class TestMe
 ");
 
         [TestCase("IsSomethingThatNotFits")]
+        [TestCase("AreSomethingThatNotFits")]
         [TestCase("HasSomethingThatNotFits")]
         [TestCase("ContainsSomethingNotFittingAnymore")]
         public void An_issue_is_reported_for_correctly_named_method(string methodName) => An_issue_is_reported_for(@"
@@ -62,6 +63,7 @@ public class TestMe
 ");
 
         [TestCase("IsSomethingNotFitting")]
+        [TestCase("AreSomethingNotFitting")]
         [TestCase("HasSomethingNotFitting")]
         [TestCase("ContainsSomethingNotFitting")]
         public void An_issue_is_reported_for_correctly_named_property(string propertyName) => An_issue_is_reported_for(@"
