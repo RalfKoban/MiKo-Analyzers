@@ -13,6 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3106";
 
+        private static readonly HashSet<string> AssertionNamespaces = new HashSet<string>
+                                                                          {
+                                                                              "NUnit.Framework",
+                                                                              "NUnit.Framework.Constraints",
+                                                                          };
+
         private static readonly HashSet<string> AssertionTypes = new HashSet<string>
                                                                      {
                                                                          "Assert",
@@ -93,9 +99,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 foreach (var argument in methodCall.ArgumentList.Arguments)
                 {
-                    if (HasIssue(argument.Expression, out var token))
+                    var expression = argument.Expression;
+
+                    if (HasIssue(expression, out var token))
                     {
-                        ReportIssue(context, token);
+                        var type = expression.GetTypeSymbol(context.SemanticModel);
+                        var namespaceName = type?.ContainingNamespace.FullyQualifiedName();
+
+                        if (AssertionNamespaces.Contains(namespaceName) is false)
+                        {
+                            ReportIssue(context, token);
+                        }
                     }
                 }
             }

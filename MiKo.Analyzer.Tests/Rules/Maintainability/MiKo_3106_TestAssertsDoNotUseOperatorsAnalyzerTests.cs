@@ -181,6 +181,26 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_NUnit_Contains_operation_in_a_test_class() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            var objectUnderTest = new[] { ""test"", ""test2"", ""test3"", };
+
+            Assert.That(objectUnderTest, Does.Contain(""test"").And.Contains(""test2"").And.Contains(""test3""));
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer();
