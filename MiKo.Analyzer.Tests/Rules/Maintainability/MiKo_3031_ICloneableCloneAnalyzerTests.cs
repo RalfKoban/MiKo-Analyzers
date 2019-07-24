@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3032_ICloneableCloneAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3031_ICloneableCloneAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_Clone_method_on_class() => No_issue_is_reported_for(@"
@@ -73,8 +73,8 @@ public class TestMe : ICloneable
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3032_ICloneableCloneAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3031_ICloneableCloneAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3032_ICloneableCloneAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3031_ICloneableCloneAnalyzer();
     }
 }

@@ -222,7 +222,7 @@ The following tables list all the 235 rules that are currently provided by the a
 |MiKo_3025|Do not re-assign method parameters.|&#x2713;|
 |MiKo_3026|Unused parameters should be removed.|&#x2713;|
 |MiKo_3027|Parameters should not be marked to be reserved for future usage.|&#x2713;|
-|MiKo_3032|ICloneable.Clone() should not be implemented.|&#x2713;|
+|MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|

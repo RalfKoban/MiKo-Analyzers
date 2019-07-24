@@ -5531,27 +5531,27 @@ namespace MiKoSolutions.Analyzers {
         ///
         ///As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy..
         /// </summary>
-        public static string MiKo_3032_Description {
+        public static string MiKo_3031_Description {
             get {
-                return ResourceManager.GetString("MiKo_3032_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_3031_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Do not implement &apos;ICloneable.Clone()&apos;.
         /// </summary>
-        public static string MiKo_3032_MessageFormat {
+        public static string MiKo_3031_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_3032_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_3031_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ICloneable.Clone() should not be implemented..
         /// </summary>
-        public static string MiKo_3032_Title {
+        public static string MiKo_3031_Title {
             get {
-                return ResourceManager.GetString("MiKo_3032_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_3031_Title", resourceCulture);
             }
         }
         

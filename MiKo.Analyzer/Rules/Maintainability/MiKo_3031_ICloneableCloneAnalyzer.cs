@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3032_ICloneableCloneAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3031_ICloneableCloneAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3032";
+        public const string Id = "MiKo_3031";
 
-        public MiKo_3032_ICloneableCloneAnalyzer() : base(Id)
+        public MiKo_3031_ICloneableCloneAnalyzer() : base(Id)
         {
         }
 
