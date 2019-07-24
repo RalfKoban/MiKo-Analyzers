@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol is IMethodSymbol)
             {
                 // this is an extension method !
-                if (symbol.ContainingNamespace.ToDisplayString().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                if (symbol.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
