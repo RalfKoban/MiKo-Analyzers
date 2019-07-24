@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 235 rules that are currently provided by the analyzer.
+The following tables list all the 236 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -223,6 +223,7 @@ The following tables list all the 235 rules that are currently provided by the a
 |MiKo_3026|Unused parameters should be removed.|&#x2713;|
 |MiKo_3027|Parameters should not be marked to be reserved for future usage.|&#x2713;|
 |MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|
+|MiKo_3032|Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.|&#x2713;|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|
