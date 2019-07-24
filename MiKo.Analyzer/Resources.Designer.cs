@@ -5527,62 +5527,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
-        ///
-        ///Instead the equality operator should be used to compare value types..
-        /// </summary>
-        public static string MiKo_3030_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3030_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals&apos;.
-        /// </summary>
-        public static string MiKo_3030_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3030_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;object.Equals()&apos; on value types..
-        /// </summary>
-        public static string MiKo_3030_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3030_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For performance reasons (and to avoid large pressure on the garbage collector) strings should be concatenated with &apos;string.Concat()&apos;, &apos;string.Join()&apos; or by using a &apos;StringBuilder&apos;..
-        /// </summary>
-        public static string MiKo_3031_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3031_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use &apos;string.Concat()&apos; or &apos;string.Join()&apos; instead.
-        /// </summary>
-        public static string MiKo_3031_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3031_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do not concatenate strings with += operator..
-        /// </summary>
-        public static string MiKo_3031_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3031_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
         ///
         ///As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy..
@@ -6728,6 +6672,62 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_5003_Title {
             get {
                 return ResourceManager.GetString("MiKo_5003_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For performance reasons, it makes no sense to use &apos;object.Equals()&apos; on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.
+        ///
+        ///Instead the equality operator should be used to compare value types..
+        /// </summary>
+        public static string MiKo_5010_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5010_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals&apos;.
+        /// </summary>
+        public static string MiKo_5010_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5010_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;object.Equals()&apos; on value types..
+        /// </summary>
+        public static string MiKo_5010_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5010_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For performance reasons (and to avoid large pressure on the garbage collector) strings should be concatenated with &apos;string.Concat()&apos;, &apos;string.Join()&apos; or by using a &apos;StringBuilder&apos;..
+        /// </summary>
+        public static string MiKo_5011_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5011_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;string.Concat()&apos; or &apos;string.Join()&apos; instead.
+        /// </summary>
+        public static string MiKo_5011_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5011_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not concatenate strings with += operator..
+        /// </summary>
+        public static string MiKo_5011_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5011_Title", resourceCulture);
             }
         }
     }

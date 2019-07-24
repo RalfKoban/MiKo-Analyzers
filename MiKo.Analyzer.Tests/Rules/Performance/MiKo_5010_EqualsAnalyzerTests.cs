@@ -4,10 +4,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [TestFixture]
-    public sealed class MiKo_3030_EqualsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_5010_EqualsAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValueTypes =
             {
@@ -220,8 +220,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3030_EqualsAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_5010_EqualsAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_EqualsAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5010_EqualsAnalyzer();
     }
 }

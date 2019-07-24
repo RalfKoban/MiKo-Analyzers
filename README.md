@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 233 rules that are currently provided by the analyzer.
+The following tables list all the 235 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -80,7 +80,7 @@ The following tables list all the 233 rules that are currently provided by the a
 |MiKo_1059|Do not name types 'Impl' or 'Implementation'.|&#x2713;|
 |MiKo_1060|Methods should not be suffixed with a number.|&#x2713;|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be 'result'.|&#x2713;|
-|MiKo_1062|'Is/Has/Contains' methods or properties shall consist of only a few words.|&#x2713;|
+|MiKo_1062|'Is/Has/Contains' methods, properties or fields shall consist of only a few words.|&#x2713;|
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|
@@ -222,8 +222,6 @@ The following tables list all the 233 rules that are currently provided by the a
 |MiKo_3025|Do not re-assign method parameters.|&#x2713;|
 |MiKo_3026|Unused parameters should be removed.|&#x2713;|
 |MiKo_3027|Parameters should not be marked to be reserved for future usage.|&#x2713;|
-|MiKo_3030|Do not use 'object.Equals()' on value types.|&#x2713;|
-|MiKo_3031|Do not concatenate strings with += operator.|&#x2713;|
 |MiKo_3032|ICloneable.Clone() should not be implemented.|&#x2713;|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|
@@ -247,12 +245,14 @@ The following tables list all the 233 rules that are currently provided by the a
 |MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|
 |MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|
 |MiKo_3090|Do not throw exceptions in finally blocks.|&#x2713;|
+|MiKo_3091|Do not raise events in finally blocks.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|&#x2713;|
 |MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|&#x2713;|
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|
+|MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|
 
 ### Ordering
@@ -269,3 +269,5 @@ The following tables list all the 233 rules that are currently provided by the a
 |MiKo_5001|'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.|&#x2713;|
 |MiKo_5002|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|
 |MiKo_5003|Correct Log methods should be invoked for exceptions.|&#x2713;|
+|MiKo_5010|Do not use 'object.Equals()' on value types.|&#x2713;|
+|MiKo_5011|Do not concatenate strings with += operator.|&#x2713;|

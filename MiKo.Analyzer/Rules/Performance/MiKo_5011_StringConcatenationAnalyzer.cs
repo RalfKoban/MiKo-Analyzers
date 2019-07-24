@@ -3,14 +3,14 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3031_StringConcatenationAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_5011_StringConcatenationAnalyzer : PerformanceAnalyzer
     {
-        public const string Id = "MiKo_3031";
+        public const string Id = "MiKo_5011";
 
-        public MiKo_3031_StringConcatenationAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_5011_StringConcatenationAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 

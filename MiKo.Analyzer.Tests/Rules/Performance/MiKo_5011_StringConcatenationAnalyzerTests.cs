@@ -4,10 +4,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [TestFixture]
-    public sealed class MiKo_3031_StringConcatenationAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_5011_StringConcatenationAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
@@ -68,8 +68,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3031_StringConcatenationAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_5011_StringConcatenationAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3031_StringConcatenationAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5011_StringConcatenationAnalyzer();
     }
 }

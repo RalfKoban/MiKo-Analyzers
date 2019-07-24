@@ -3,14 +3,14 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3030_EqualsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_5010_EqualsAnalyzer : PerformanceAnalyzer
     {
-        public const string Id = "MiKo_3030";
+        public const string Id = "MiKo_5010";
 
-        public MiKo_3030_EqualsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_5010_EqualsAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
