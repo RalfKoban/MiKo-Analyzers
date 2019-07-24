@@ -1771,8 +1771,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Detection methods such as &apos;Is&apos;, &apos;Has&apos; or &apos;Contains&apos; should consist only of a few words, such as &apos;IsOnline&apos; or &apos;ContainsKey&apos;.
-        ///If they consist of more than those few words, these methods (or properties) are probably placed at the wrong place and violate the SRP..
+        ///   Looks up a localized string similar to Detection methods (properties or fields) such as &apos;Is&apos;, &apos;Has&apos; or &apos;Contains&apos; should consist only of a few words, such as &apos;IsOnline&apos; or &apos;ContainsKey&apos;.
+        ///If they consist of more than those few words, these methods (properties or fields) are probably placed at the wrong place and violate the SRP..
         /// </summary>
         public static string MiKo_1062_Description {
             get {
@@ -1790,7 +1790,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Is/Has/Contains&apos; methods or properties shall consist of only a few words..
+        ///   Looks up a localized string similar to &apos;Is/Has/Contains&apos; methods, properties or fields shall consist of only a few words..
         /// </summary>
         public static string MiKo_1062_Title {
             get {

@@ -37,6 +37,13 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "E:", "!:" };
             internal static readonly string[] SymbolsAndLineBreaks = Symbols.Concat(new[] { Environment.NewLine }).ToArray();
             internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
+            internal static readonly string[] FieldPrefixes =
+                {
+                    string.Empty,
+                    "_",
+                    "m_",
+                    "s_",
+                };
         }
 
         internal static class Comments

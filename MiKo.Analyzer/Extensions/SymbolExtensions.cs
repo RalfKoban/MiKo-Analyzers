@@ -87,15 +87,7 @@ namespace MiKoSolutions.Analyzers
                 "testObject",
             };
 
-        private static readonly string[] FieldPrefixes =
-            {
-                string.Empty,
-                "_",
-                "m_",
-                "s_",
-            };
-
-        private static readonly HashSet<string> TypeUnderTestFieldNames = FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+        private static readonly HashSet<string> TypeUnderTestFieldNames = Constants.Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
 
         private static readonly HashSet<string> TypeUnderTestPropertyNames = new HashSet<string>
                                                                                   {
@@ -564,7 +556,7 @@ namespace MiKoSolutions.Analyzers
             var name = symbol.Name;
             var matchesField = symbol.ContainingType.GetMembersIncludingInherited<IFieldSymbol>()
                                      .Select(_ => _.Name)
-                                     .Any(_ => FieldPrefixes.Select(__ => __ + name).Any(__ => string.Equals(_, __, StringComparison.OrdinalIgnoreCase)));
+                                     .Any(_ => Constants.Markers.FieldPrefixes.Select(__ => __ + name).Any(__ => string.Equals(_, __, StringComparison.OrdinalIgnoreCase)));
             return matchesField;
         }
 
