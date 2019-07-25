@@ -2141,6 +2141,18 @@ Especially never use Debug.Assert() or Trace.Assert() in (unit) test code. That'
   <data name="MiKo_3060_Title" xml:space="preserve">
     <value>Debug.Assert or Trace.Assert shall not be used.</value>
   </data>
+  <data name="MiKo_3061_Description" xml:space="preserve">
+    <value>Often, loggers are requested via a type. Unfortunately, that most likely results in the situation that the logs contain no useful categories. Even worse, developers try to control the log output via the different severities (Debug, Info, ...).
+As a result, the logs contain a lot of garbage. So, while analyzing log files it is unclear which log statement belongs into which category.
+
+Therefore, the logger should be requested via a string that acts as category.</value>
+  </data>
+  <data name="MiKo_3061_MessageFormat" xml:space="preserve">
+    <value>Use a string as category instead</value>
+  </data>
+  <data name="MiKo_3061_Title" xml:space="preserve">
+    <value>Loggers shall use a proper log category.</value>
+  </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
     <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
 It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null.</value>

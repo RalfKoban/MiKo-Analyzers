@@ -6001,6 +6001,36 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Often, loggers are requested via a type. Unfortunately, that most likely results in the situation that the logs contain no useful categories. Even worse, developers try to control the log output via the different severities (Debug, Info, ...).
+        ///As a result, the logs contain a lot of garbage. So, while analyzing log files it is unclear which log statement belongs into which category.
+        ///
+        ///Therefore, the logger should be requested via a string that acts as category..
+        /// </summary>
+        public static string MiKo_3061_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3061_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a string as category instead.
+        /// </summary>
+        public static string MiKo_3061_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3061_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loggers shall use a proper log category..
+        /// </summary>
+        public static string MiKo_3061_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3061_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
         ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
         /// </summary>
