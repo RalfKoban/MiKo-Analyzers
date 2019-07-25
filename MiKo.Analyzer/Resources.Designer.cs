@@ -5565,7 +5565,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        ///   Looks up a localized string similar to Use &apos;{1}&apos; instead.
         /// </summary>
         public static string MiKo_3032_MessageFormat {
             get {

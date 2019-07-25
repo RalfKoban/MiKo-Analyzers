@@ -1986,7 +1986,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Property names that are passed into the  'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This eases refactorings.</value>
   </data>
   <data name="MiKo_3032_MessageFormat" xml:space="preserve">
-    <value>Use 'nameof' instead</value>
+    <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3032_Title" xml:space="preserve">
     <value>Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.</value>

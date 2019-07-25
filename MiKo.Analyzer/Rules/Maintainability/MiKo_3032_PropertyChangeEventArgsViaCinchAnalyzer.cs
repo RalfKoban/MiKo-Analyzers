@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,21 +19,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
+        private static string GetPropertyName(SyntaxNode node)
+        {
+            var lambda = node.DescendantNodes().OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault();
+            var property = lambda?.Body as MemberAccessExpressionSyntax;
+            var propertyName = property?.Name.Identifier.ValueText ?? string.Empty;
+            return propertyName;
+        }
+
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
             if (node.Expression is IdentifierNameSyntax i && i.Identifier.ValueText.EndsWith("ObservableHelper", StringComparison.Ordinal))
             {
-                var methodName = node.Name.Identifier.ValueText;
-
-                if (methodName == "CreateArgs" || methodName == "GetPropertyName")
+                switch (node.Name.Identifier.ValueText)
                 {
-                    var symbol = node.Parent.GetEnclosingSymbol(context.SemanticModel);
-                    var issue = Issue(symbol?.Name, node.Parent.GetLocation());
-                    context.ReportDiagnostic(issue);
+                    case "CreateArgs":
+                        ReportIssue(context, node.Parent, "new PropertyChangedEventArgs(nameof({0}))");
+                        break;
+
+                    case "GetPropertyName":
+                        ReportIssue(context, node.Parent, "nameof({0})");
+                        break;
                 }
             }
+        }
+
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node, string proposalFormat)
+        {
+            var propertyName = GetPropertyName(node);
+            var symbol = node.GetEnclosingSymbol(context.SemanticModel);
+
+            var issue = Issue(symbol?.Name, node.GetLocation(), string.Format(proposalFormat, propertyName));
+            context.ReportDiagnostic(issue);
         }
     }
 }
