@@ -2001,6 +2001,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Local variables for collections (that is any which is an &apos;IEnumerable&apos;) should have names in plural form. Their names should describe the contents of the collection; and not the collection itself..
+        /// </summary>
+        public static string MiKo_1070_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1070_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1070_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1070_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local collection variables shall use plural name..
+        /// </summary>
+        public static string MiKo_1070_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1070_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

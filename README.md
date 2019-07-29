@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 237 rules that are currently provided by the analyzer.
+The following tables list all the 238 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -88,6 +88,7 @@ The following tables list all the 237 rules that are currently provided by the a
 |MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|
 |MiKo_1069|Property names reflect their meaning and not their type.|&#x2713;|
+|MiKo_1070|Local collection variables shall use plural name.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
