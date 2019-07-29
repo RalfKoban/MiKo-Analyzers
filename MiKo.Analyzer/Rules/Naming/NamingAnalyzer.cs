@@ -19,6 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected static string GetPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(symbolName, symbolName, comparison);
+
+        protected static string GetPluralName(string symbolName, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => PluralNames.GetOrAdd(symbolName, _ => CreatePluralName(proposedName, comparison));
+
         protected static string GetPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
             if (symbolName.EqualsAny(AllowedListNames, comparison))
@@ -43,8 +47,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return null;
         }
-
-        protected static string GetPluralName(string symbolName, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => PluralNames.GetOrAdd(symbolName, _ => CreatePluralName(proposedName, comparison));
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol) => ShallAnalyze(symbol)
                                                                                                        ? AnalyzeName(symbol)
