@@ -40,13 +40,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (identifier.ValueText)
             {
                 case null: // we don't have one
-                case Constants.LambdaIdentifiers.Identifier: // correct identifier (default one)
+                case Constants.LambdaIdentifiers.Default: // correct identifier (default one)
                 case Constants.LambdaIdentifiers.Fallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
                     return null;
 
                 default:
-                    return Issue(identifier.ValueText, identifier.GetLocation(), Constants.LambdaIdentifiers.Identifier);
+                    return Issue(identifier.ValueText, identifier.GetLocation(), Constants.LambdaIdentifiers.Default);
             }
         }
     }
