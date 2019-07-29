@@ -10,10 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1300";
 
-        private const string Identifier = "_";
-        private const string IdentifierFallback = "__";
-        private const string IdentifierFallback2 = "___";
-
         public MiKo_1300_SimpleLambdaExpressionIdentifierAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -44,13 +40,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (identifier.ValueText)
             {
                 case null: // we don't have one
-                case Identifier: // correct identifier (default one)
-                case IdentifierFallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
-                case IdentifierFallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Identifier: // correct identifier (default one)
+                case Constants.LambdaIdentifiers.Fallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
                     return null;
 
                 default:
-                    return Issue(identifier.ValueText, identifier.GetLocation(), Identifier);
+                    return Issue(identifier.ValueText, identifier.GetLocation(), Constants.LambdaIdentifiers.Identifier);
             }
         }
     }

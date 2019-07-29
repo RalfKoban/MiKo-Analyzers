@@ -498,5 +498,12 @@ namespace MiKoSolutions.Analyzers
                 internal const string RegisterAttachedReadOnly = "DependencyProperty.RegisterAttachedReadOnly";
             }
         }
+
+        internal static class LambdaIdentifiers
+        {
+            internal const string Identifier = "_";
+            internal const string Fallback = "__";
+            internal const string Fallback2 = "___";
+        }
     }
 }
