@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "command",
                                                                          "cancellationToken",
                                                                          "formatProvider",
+                                                                         "progress",
+                                                                         "project",
                                                                          "semanticModel",
                                                                      };
 
