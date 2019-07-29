@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic AnalyzeVariableDeclaration(VariableDeclarationSyntax declaration, SemanticModel semanticModel)
         {
-            var type = declaration.GetTypeSymbol(semanticModel);
+            var type = declaration.GetTypeSymbol(semanticModel) as INamedTypeSymbol;
 
             var typeName = type?.Name;
             if (typeName is null)

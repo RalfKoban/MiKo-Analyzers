@@ -47,11 +47,19 @@ namespace MiKoSolutions.Analyzers
             return symbol;
         }
 
-        internal static INamedTypeSymbol GetTypeSymbol(this ExpressionSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax).Type as INamedTypeSymbol;
+        internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax syntax, SemanticModel semanticModel)
+        {
+            var typeInfo = semanticModel.GetTypeInfo(syntax);
+            return typeInfo.Type;
+        }
 
-        internal static INamedTypeSymbol GetTypeSymbol(this TypeSyntax syntax, SemanticModel semanticModel) => semanticModel.GetTypeInfo(syntax).Type as INamedTypeSymbol;
+        internal static ITypeSymbol GetTypeSymbol(this TypeSyntax syntax, SemanticModel semanticModel)
+        {
+            var typeInfo = semanticModel.GetTypeInfo(syntax);
+            return typeInfo.Type;
+        }
 
-        internal static INamedTypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => syntax.Type.GetTypeSymbol(semanticModel);
+        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => syntax.Type.GetTypeSymbol(semanticModel);
 
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode node, SemanticModel semanticModel)
         {

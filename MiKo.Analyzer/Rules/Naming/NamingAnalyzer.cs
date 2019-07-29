@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected static string FindPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
+        protected static string GetPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
             if (symbolName.EqualsAny(AllowedListNames, comparison))
             {
@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (expected.HasCollectionMarker())
             {
-                expected = FindPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+                expected = GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
             }
 
             return new[] { Issue(symbol, expected) };
@@ -123,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            var betterName = FindPluralName(symbol.Name, comparison, suffix);
+            var betterName = GetPluralName(symbol.Name, comparison, suffix);
             return betterName.IsNullOrWhiteSpace() ? null : Issue(symbol, betterName);
         }
 
@@ -138,7 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var semanticModel = context.SemanticModel;
             var type = node.Declaration.GetTypeSymbol(semanticModel);
 
-            if (!ShallAnalyze(type))
+            if (ShallAnalyze(type) is false)
             {
                 return;
             }
@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var semanticModel = context.SemanticModel;
             var type = node.Type.GetTypeSymbol(semanticModel);
 
-            if (!ShallAnalyze(type))
+            if (ShallAnalyze(type) is false)
             {
                 return;
             }
