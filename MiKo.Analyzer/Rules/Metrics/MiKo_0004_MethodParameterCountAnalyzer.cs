@@ -22,15 +22,18 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
         {
-            if (method.IsExtern)
+            var parameterCount = method.Parameters.Count();
+            if (parameterCount <= MaxParametersCount)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var parameterCount = method.Parameters.Count();
-            return parameterCount > MaxParametersCount
-                       ? new[] { Issue(method, parameterCount, MaxParametersCount) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (method.IsExtern || method.IsInterfaceImplementation())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { Issue(method, parameterCount, MaxParametersCount) };
         }
 
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;
