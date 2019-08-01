@@ -37,6 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false; // ignore the method as it is handled by MiKo_1007_DependencyPropertyEventHandlingMethodParametersAnalyzer
             }
 
+            if (method.IsInterfaceImplementation())
+            {
+                return false; // keep names as in interface
+            }
+
             return true;
         }
 
