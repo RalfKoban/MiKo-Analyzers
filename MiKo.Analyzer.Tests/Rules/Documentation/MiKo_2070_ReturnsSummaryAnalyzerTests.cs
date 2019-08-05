@@ -36,6 +36,20 @@ public class TestMe
     public int DoSomething()
     {
     }
+
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    public int DoSomethingElse()
+    {
+    }
+
+    /// <summary>
+    /// Determines something.
+    /// </summary>
+    public bool DoSomethingDifferent()
+    {
+    }
 }
 ");
 

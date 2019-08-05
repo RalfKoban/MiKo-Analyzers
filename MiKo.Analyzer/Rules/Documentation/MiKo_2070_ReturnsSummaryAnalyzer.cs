@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { Issue(symbol, "Gets") }
+                                                                                                                        ? new[] { Issue(symbol, GetProposal(symbol)) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol)
@@ -44,6 +44,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    .FirstWord();
 
             return firstWord.EqualsAny(Phrases);
+        }
+
+        private static string GetProposal(ISymbol symbol)
+        {
+            switch (symbol)
+            {
+                case IPropertySymbol p when p.GetReturnType()?.SpecialType == SpecialType.System_Boolean:
+                case IMethodSymbol m when m.ReturnType.SpecialType == SpecialType.System_Boolean:
+                {
+                    return "Determines";
+                }
+
+                default:
+                {
+                    return "Gets";
+                }
+            }
         }
     }
 }
