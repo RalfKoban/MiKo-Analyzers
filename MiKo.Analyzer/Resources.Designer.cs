@@ -363,27 +363,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of DependencyProperty event handlers should be named &apos;d&apos; and &apos;e&apos;..
         /// </summary>
-        public static string MiKo_1007_Description {
+        public static string MiKo_1008_Description {
             get {
-                return ResourceManager.GetString("MiKo_1007_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_1008_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
-        public static string MiKo_1007_MessageFormat {
+        public static string MiKo_1008_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_1007_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_1008_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers..
         /// </summary>
-        public static string MiKo_1007_Title {
+        public static string MiKo_1008_Title {
             get {
-                return ResourceManager.GetString("MiKo_1007_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_1008_Title", resourceCulture);
             }
         }
         

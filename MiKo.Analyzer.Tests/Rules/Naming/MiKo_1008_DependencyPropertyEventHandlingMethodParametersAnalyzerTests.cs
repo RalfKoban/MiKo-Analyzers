@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1007_DependencyPropertyEventHandlingMethodParametersAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1008_DependencyPropertyEventHandlingMethodParametersAnalyzerTests : CodeFixVerifier
     {
         [TestCase("")]
         [TestCase("DependencyPropertyChangedEventArgs args")]
@@ -139,8 +139,8 @@ namespace Bla
     }
 }");
 
-        protected override string GetDiagnosticId() => MiKo_1007_DependencyPropertyEventHandlingMethodParametersAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1008_DependencyPropertyEventHandlingMethodParametersAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1007_DependencyPropertyEventHandlingMethodParametersAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1008_DependencyPropertyEventHandlingMethodParametersAnalyzer();
     }
 }
