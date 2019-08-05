@@ -19,19 +19,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
-            List<Diagnostic> list = null;
+            List<Diagnostic> issues = null;
 
             foreach (var diagnostic in method.Parameters.Select(AnalyzeCollectionSuffix).Where(_ => _ != null))
             {
-                if (list is null)
+                if (issues is null)
                 {
-                    list = new List<Diagnostic>(1);
+                    issues = new List<Diagnostic>(1);
                 }
 
-                list.Add(diagnostic);
+                issues.Add(diagnostic);
             }
 
-            return list ?? Enumerable.Empty<Diagnostic>();
+            return issues ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }
