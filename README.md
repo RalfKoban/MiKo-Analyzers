@@ -9,6 +9,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 ## Project status
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)]()
 
 ## Available Rules
 The following tables list all the 239 rules that are currently provided by the analyzer.
