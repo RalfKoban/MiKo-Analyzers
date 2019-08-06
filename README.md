@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)]()
 
 ## Available Rules
-The following tables list all the 238 rules that are currently provided by the analyzer.
+The following tables list all the 239 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -30,6 +30,7 @@ The following tables list all the 238 rules that are currently provided by the a
 |MiKo_1004|Events should not contain term 'Event' in their names.|&#x2713;|
 |MiKo_1005|'System.EventArgs' variables should be named properly.|&#x2713;|
 |MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|&#x2713;|
+|MiKo_1007|Events and 'EventArgs' types shall be located in the same namespace.|&#x2713;|
 |MiKo_1008|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names.|&#x2713;|
 |MiKo_1011|Methods should not contain 'Do' in their names.|&#x2713;|

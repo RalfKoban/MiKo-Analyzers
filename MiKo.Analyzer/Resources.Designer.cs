@@ -361,6 +361,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Events and the event arguments they use belong together logically. Hence, both should be located in the same namespace..
+        /// </summary>
+        public static string MiKo_1007_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1007_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used &apos;{1}&apos; should be in namespace &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_1007_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1007_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events and &apos;EventArgs&apos; types shall be located in the same namespace..
+        /// </summary>
+        public static string MiKo_1007_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1007_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of DependencyProperty event handlers should be named &apos;d&apos; and &apos;e&apos;..
         /// </summary>
         public static string MiKo_1008_Description {

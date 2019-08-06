@@ -219,6 +219,15 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
   <data name="MiKo_1006_Title" xml:space="preserve">
     <value>Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.</value>
   </data>
+  <data name="MiKo_1007_Description" xml:space="preserve">
+    <value>Events and the event arguments they use belong together logically. Hence, both should be located in the same namespace.</value>
+  </data>
+  <data name="MiKo_1007_MessageFormat" xml:space="preserve">
+    <value>Used '{1}' should be in namespace '{2}'</value>
+  </data>
+  <data name="MiKo_1007_Title" xml:space="preserve">
+    <value>Events and 'EventArgs' types shall be located in the same namespace.</value>
+  </data>
   <data name="MiKo_1008_Description" xml:space="preserve">
     <value>To follow the .NET Framework Guidelines, parameters of DependencyProperty event handlers should be named 'd' and 'e'.</value>
   </data>
