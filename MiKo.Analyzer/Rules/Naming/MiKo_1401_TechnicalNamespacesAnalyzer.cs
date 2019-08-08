@@ -12,7 +12,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1401";
 
-        private static readonly string[] TechnicalNamespaces = { "Base", "Class", "Classes", "Enum", "Enums", "Enumeration", "Enumerations", "Exception", "Exceptions", "Impl", "Implementation", "Implementations", "Interface", "Interfaces", "Proxies", "Proxy", "ServiceProxies", "ServiceProxy", "Struct", "Structs", "Action", "Actions", };
+        private static readonly string[] TechnicalNamespaces =
+            {
+                "Base", "Class", "Classes",
+                "Enum", "Enums", "Enumeration", "Enumerations",
+                "Exception", "Exceptions",
+                "Imp", "Impl", "Implementation", "Implementations",
+                "Interface", "Interfaces",
+                "Proxies", "Proxy", "ServiceProxies", "ServiceProxy",
+                "Struct", "Structs", "Action", "Actions",
+            };
+
         private static readonly string[] TechnicalNamespacesStart = TechnicalNamespaces.Select(_ => _ + ".").ToArray();
         private static readonly string[] TechnicalNamespacesEnd = TechnicalNamespaces.Select(_ => "." + _).ToArray();
         private static readonly string[] TechnicalNamespacesMiddle = TechnicalNamespaces.Select(_ => "." + _ + ".").ToArray();

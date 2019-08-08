@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                       "Enumerations",
                                                                                       "Exception",
                                                                                       "Exceptions",
+                                                                                      "Imp",
                                                                                       "Impl",
                                                                                       "Implementation",
                                                                                       "Implementations",
