@@ -21,7 +21,6 @@ public class TestMe
 
         [TestCase("default(T);")]
         [TestCase("default")]
-        [TestCase("else")]
         public void Valid_term_is_not_reported(string term) => No_issue_is_reported_for(@"
 public class TestMe
 {
