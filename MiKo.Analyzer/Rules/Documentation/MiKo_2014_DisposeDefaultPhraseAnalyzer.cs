@@ -37,14 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var parameter in symbol.Parameters)
             {
                 var comment = parameter.GetComment(commentXml);
-                if (comment is null)
+                switch (comment)
                 {
-                    continue;
-                }
-
-                if (comment == ParameterPhrase)
-                {
-                    continue;
+                    case null:
+                    case ParameterPhrase:
+                        continue;
                 }
 
                 if (results is null)

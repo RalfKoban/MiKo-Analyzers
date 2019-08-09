@@ -46,18 +46,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(SyntaxNode node, ExpressionSyntax argumentExpression, SemanticModel semanticModel)
         {
-            if (argumentExpression is InvocationExpressionSyntax i && i.Expression is IdentifierNameSyntax sa && sa.Identifier.ValueText == "nameof")
+            switch (argumentExpression)
             {
-                return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
-            }
+                case InvocationExpressionSyntax i when i.Expression is IdentifierNameSyntax sa && sa.Identifier.ValueText == "nameof":
+                    return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
 
-            if (argumentExpression is IdentifierNameSyntax s && IdentifierIsParameter(node, s.Identifier.ValueText, semanticModel))
-            {
-                // it's a parameter, so don't report an issue
-                return false;
-            }
+                case IdentifierNameSyntax s when IdentifierIsParameter(node, s.Identifier.ValueText, semanticModel):
+                    return false; // it's a parameter, so don't report an issue
 
-            return true; // report to use nameof instead
+                default:
+                    return true; // report to use nameof instead
+            }
         }
 
         private static bool NameofHasIssue(SyntaxNode node, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
