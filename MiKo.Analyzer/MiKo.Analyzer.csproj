@@ -45,7 +45,7 @@
    
   <ItemGroup>
     <PackageReference Include="Codecov" Version="1.7.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.10.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.2.1" PrivateAssets="all" />
     <PackageReference Include="OpenCover" Version="4.7.922" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
