@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -29,7 +30,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = identifier.ValueText;
 
-                var pluralName = GetPluralName(name);
+                // skip all short names
+                if (name.Length == 1
+                    || name == Constants.LambdaIdentifiers.Fallback
+                    || name == Constants.LambdaIdentifiers.Fallback2
+                    || name == "result")
+                {
+                    continue;
+                }
+
+                // TODO: Check for numbers at the end (get rid of them)
+                var pluralName = name.EndsWithAny(Constants.Markers.Collections)
+                                     ? GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections)
+                                     : GetPluralName(name);
+
+                if (pluralName is null)
+                {
+                    continue;
+                }
+
                 if (pluralName != name)
                 {
                     yield return Issue(name, identifier.GetLocation(), pluralName);

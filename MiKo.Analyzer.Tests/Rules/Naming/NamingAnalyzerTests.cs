@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
             }
 
-            public static string GetPluralName(string singularName) => NamingAnalyzer.GetPluralName(singularName, singularName);
+            public static string GetPluralName(string singularName) => NamingAnalyzer.GetPluralName(singularName);
         }
     }
 }

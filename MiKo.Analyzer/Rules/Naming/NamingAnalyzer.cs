@@ -19,13 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected static bool IsAllowedListName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);
+
         protected static string GetPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(symbolName, symbolName, comparison);
 
         protected static string GetPluralName(string symbolName, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => PluralNames.GetOrAdd(symbolName, _ => CreatePluralName(proposedName, comparison));
 
         protected static string GetPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
-            if (symbolName.EqualsAny(AllowedListNames, comparison))
+            if (IsAllowedListName(symbolName, comparison))
             {
                 return null;
             }

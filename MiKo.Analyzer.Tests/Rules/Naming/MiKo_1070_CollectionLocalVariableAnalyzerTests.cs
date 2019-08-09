@@ -9,6 +9,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1070_CollectionLocalVariableAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] CorrectNames =
+            {
+                "items",
+                "result",
+                "results",
+                "source",
+                "array",
+                "list",
+                "collection",
+            };
+
+        private static readonly string[] WrongNames =
+            {
+                "item",
+                "enumerable",
+                "target",
+            };
+
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
 using System;
@@ -35,7 +53,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_Collection_variable_with_correct_name() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_Collection_variable_with_correct_name([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -43,7 +61,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        int[] items = new int[0];
+        int[] " + name + @" = new int[0];
     }
 }
 ");
@@ -63,7 +81,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -71,13 +89,13 @@ public class TestMe
 {
     public void DoSomething()
     {
-        int[] item = new int[0];
+        int[] " + name + @" = new int[0];
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_var_Collection_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_var_Collection_variable_with_incorrect_name([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -85,7 +103,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        var item = new int[0];
+        var " + name + @" = new int[0];
     }
 }
 ");
