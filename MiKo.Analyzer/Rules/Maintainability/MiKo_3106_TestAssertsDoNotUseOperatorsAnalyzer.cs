@@ -80,6 +80,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return true;
                 }
 
+                case SyntaxKind.LogicalNotExpression:
+                {
+                    var pue = (PrefixUnaryExpressionSyntax)expression;
+                    token = pue.OperatorToken;
+                    return true;
+                }
+
                 case SyntaxKind.InvocationExpression when ((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae:
                 {
                     token = mae.Name.Identifier;

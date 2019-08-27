@@ -146,6 +146,22 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_a_Logical_Not_operator_in_a_non_test_class() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            Assert.IsTrue(!condition);
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_an_operator_in_an_Assert_Multiple([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
