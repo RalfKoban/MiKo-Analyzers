@@ -114,12 +114,52 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
-            var parameters = method.Parameters;
-            return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsEventArgs();
+            switch (method.MethodKind)
+            {
+                case MethodKind.Constructor:
+                case MethodKind.StaticConstructor:
+                case MethodKind.EventAdd:
+                case MethodKind.EventRemove:
+                case MethodKind.PropertyGet:
+                case MethodKind.PropertySet:
+                case MethodKind.BuiltinOperator:
+                case MethodKind.UserDefinedOperator:
+                {
+                    return false;
+                }
+
+                default:
+                {
+                    var parameters = method.Parameters;
+
+                    return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsEventArgs();
+                }
+            }
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol method)
         {
+            if (method.IsStatic)
+            {
+                return false;
+            }
+
+            switch (method.MethodKind)
+            {
+                case MethodKind.Constructor:
+                case MethodKind.StaticConstructor:
+                case MethodKind.EventAdd:
+                case MethodKind.EventRemove:
+                case MethodKind.PropertyGet:
+                case MethodKind.PropertySet:
+
+                case MethodKind.BuiltinOperator:
+                case MethodKind.UserDefinedOperator:
+                {
+                    return false;
+                }
+            }
+
             var fullName = typeof(T).FullName;
 
             var typeSymbol = method.ContainingType;
@@ -136,6 +176,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol symbol) where TSymbol : ISymbol
         {
+            if (symbol.IsStatic)
+            {
+                return false;
+            }
+
             var symbols = symbol.ContainingType.AllInterfaces
                                 .SelectMany(_ => _.GetMembers().OfType<TSymbol>());
             return symbols.Any(_ => symbol.Equals(symbol.ContainingType.FindImplementationForInterfaceMember(_)));
