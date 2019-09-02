@@ -160,14 +160,16 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            var fullName = typeof(T).FullName;
+            var interfaceTypeName = typeof(T).FullName;
 
             var typeSymbol = method.ContainingType;
-            if (typeSymbol.Implements(fullName))
+            if (typeSymbol.Implements(interfaceTypeName))
             {
+                var methodName = method.Name;
+
                 var methodSymbols = typeSymbol.AllInterfaces
-                                          .Where(_ => _.Name == fullName)
-                                          .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>());
+                                              .Where(_ => _.Name == interfaceTypeName)
+                                              .SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
                 return methodSymbols.Any(_ => method.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
             }
 
@@ -181,9 +183,46 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            var symbols = symbol.ContainingType.AllInterfaces
-                                .SelectMany(_ => _.GetMembers().OfType<TSymbol>());
-            return symbols.Any(_ => symbol.Equals(symbol.ContainingType.FindImplementationForInterfaceMember(_)));
+            switch (symbol)
+            {
+                case IMethodSymbol method:
+                {
+                    return method.IsInterfaceImplementation();
+                }
+
+                case IPropertySymbol p when p.ExplicitInterfaceImplementations.Any():
+                case IEventSymbol e when e.ExplicitInterfaceImplementations.Any():
+                {
+                    return true;
+                }
+
+                default:
+                {
+                    var typeSymbol = symbol.ContainingType;
+
+                    var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>());
+                    return symbols.Any(_ => symbol.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
+                }
+            }
+        }
+
+        internal static bool IsInterfaceImplementation(this IMethodSymbol symbol)
+        {
+            if (symbol.IsStatic)
+            {
+                return false;
+            }
+
+            if (symbol.ExplicitInterfaceImplementations.Any())
+            {
+                return true;
+            }
+
+            var typeSymbol = symbol.ContainingType;
+            var methodName = symbol.Name;
+
+            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
+            return symbols.Any(_ => symbol.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
         }
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol symbol) => symbol.GetAttributes().Select(_ => _.AttributeClass.Name);
