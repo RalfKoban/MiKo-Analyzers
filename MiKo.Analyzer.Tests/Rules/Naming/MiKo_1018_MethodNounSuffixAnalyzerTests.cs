@@ -60,6 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "ValidateCollection",
                                                                                "CompileTimeValidateCollection",
                                                                                "CancelOperation",
+                                                                               "CanRemoveConnection",
+                                                                               "HasConnection",
                                                                            };
 
         private static readonly IEnumerable<string> InvalidMethodNames = new[]

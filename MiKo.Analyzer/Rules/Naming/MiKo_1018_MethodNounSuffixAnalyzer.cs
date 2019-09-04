@@ -78,6 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Validate",
                 "CompileTimeValidate",
                 "Is",
+                "Can",
                 "Has",
                 "Cancel",
             };
@@ -95,21 +96,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (name.StartsWithAny(StartingPhrases))
+            foreach (var phrase in StartingPhrases.Where(_ => name.StartsWith(_, StringComparison.Ordinal)))
             {
-                return false;
+                var remainingName = name.Substring(phrase.Length);
+
+                if (remainingName.Length == 0 || remainingName[0].IsUpperCase())
+                {
+                    return false;
+                }
             }
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
             {
                 result = name.Substring(0, name.Length - pair.Key.Length) + pair.Value;
-                return !string.Equals(result, name, StringComparison.Ordinal);
+
+                return string.Equals(result, name, StringComparison.Ordinal) is false;
             }
 
             return false;
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && !symbol.IsTestMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => TryFindBetterName(method.Name, out var betterName)
                                                                                             ? new[] { Issue(method, betterName) }
