@@ -88,12 +88,14 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_test_method(
-                                                                        [ValueSource(nameof(Tests))] string test,
-                                                                        [ValueSource(nameof(Comments))] string comment,
-                                                                        [Values("", " ")] string gap)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_test_method([Values("", " ")] string gap) => Assert.Multiple(() =>
+                                                                                                                                    {
+                                                                                                                                        foreach (var test in Tests)
+                                                                                                                                        {
+                                                                                                                                            foreach (var comment in Comments)
+                                                                                                                                            {
+                                                                                                                                                An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -105,13 +107,18 @@ public class TestMe
     }
 }
 ");
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    });
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class(
-                                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
-                                                                                        [ValueSource(nameof(Comments))] string comment,
-                                                                                        [Values("", " ")] string gap)
-            => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class([Values("", " ")] string gap) => Assert.Multiple(() =>
+                                                                                                                                                      {
+                                                                                                                                                          foreach (var fixture in TestFixtures)
+                                                                                                                                                          {
+                                                                                                                                                              foreach (var comment in Comments)
+                                                                                                                                                              {
+                                                                                                                                                                  An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -123,6 +130,9 @@ public class TestMe
     }
 }
 ");
+                                                                                                                                                              }
+                                                                                                                                                          }
+                                                                                                                                                      });
 
         protected override string GetDiagnosticId() => MiKo_2301_TestArrangeActAssertCommentAnalyzer.Id;
 

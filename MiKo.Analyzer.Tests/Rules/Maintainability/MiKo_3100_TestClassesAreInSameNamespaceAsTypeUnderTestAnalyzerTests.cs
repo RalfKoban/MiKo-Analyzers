@@ -121,11 +121,14 @@ namespace BlaBla
 }
 ");
 
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_same_namespace(
-                                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                        [ValueSource(nameof(PropertyNames))] string propertyName)
-            => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
+                                                                                                                                        {
+                                                                                                                                            foreach (var testFixture in TestFixtures)
+                                                                                                                                            {
+                                                                                                                                                foreach (var propertyName in PropertyNames)
+                                                                                                                                                {
+                                                                                                                                                    No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
@@ -139,13 +142,19 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        });
 
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace(
-                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName,
-                                                                                            [Values("Get", "Create")] string methodPrefix)
-            => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace([Values("Get", "Create")] string methodPrefix)
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var propertyName in PropertyNames)
+                                           {
+                                               No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
@@ -159,12 +168,18 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                           }
+                                       }
+                                   });
 
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_same_namespace(
-                                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                        [ValueSource(nameof(FieldNames))] string fieldName)
-            => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
+                                                                                                                                     {
+                                                                                                                                         foreach (var testFixture in TestFixtures)
+                                                                                                                                         {
+                                                                                                                                             foreach (var fieldName in FieldNames)
+                                                                                                                                             {
+                                                                                                                                                 No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
@@ -178,13 +193,20 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                                                                                                                             }
+                                                                                                                                         }
+                                                                                                                                     });
 
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_localVariable_if_test_class_and_class_under_test_are_in_same_namespace(
-                                                                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                                [ValueSource(nameof(Tests))] string test,
-                                                                                                                [ValueSource(nameof(VariableNames))] string variableName)
-            => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_localVariable_if_test_class_and_class_under_test_are_in_same_namespace() => Assert.Multiple(() =>
+                                                                                                                                             {
+                                                                                                                                                 foreach (var testFixture in TestFixtures)
+                                                                                                                                                 {
+                                                                                                                                                     foreach (var test in Tests)
+                                                                                                                                                     {
+                                                                                                                                                         foreach (var variableName in VariableNames)
+                                                                                                                                                         {
+                                                                                                                                                             No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public class TestMe
@@ -202,13 +224,20 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                                                                                                                                         }
+                                                                                                                                                     }
+                                                                                                                                                 }
+                                                                                                                                             });
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces(
-                                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName,
-                                                                                                            [Values("Get", "Create")] string methodPrefix)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces([Values("Get", "Create")] string methodPrefix)
+            => Assert.Multiple(() =>
+                                    {
+                                        foreach (var testFixture in TestFixtures)
+                                        {
+                                            foreach (var propertyName in PropertyNames)
+                                            {
+                                                An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -227,12 +256,18 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                            }
+                                        }
+                                    });
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_different_namespaces(
-                                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                            [ValueSource(nameof(PropertyNames))] string propertyName)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_property_if_test_class_and_class_under_test_are_in_different_namespaces() => Assert.Multiple(() =>
+                                                                                                                                              {
+                                                                                                                                                  foreach (var testFixture in TestFixtures)
+                                                                                                                                                  {
+                                                                                                                                                      foreach (var propertyName in PropertyNames)
+                                                                                                                                                      {
+                                                                                                                                                          An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -251,12 +286,18 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                                                                                                                                      }
+                                                                                                                                                  }
+                                                                                                                                              });
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_different_namespaces(
-                                                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                            [ValueSource(nameof(FieldNames))] string fieldName)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_field_if_test_class_and_class_under_test_are_in_different_namespaces() => Assert.Multiple(() =>
+                                                                                                                                           {
+                                                                                                                                               foreach (var testFixture in TestFixtures)
+                                                                                                                                               {
+                                                                                                                                                   foreach (var fieldName in FieldNames)
+                                                                                                                                                   {
+                                                                                                                                                       An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -275,13 +316,20 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                                                                                                                                   }
+                                                                                                                                               }
+                                                                                                                                           });
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_local_variable_if_test_class_and_class_under_test_are_in_different_namespaces(
-                                                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                                        [ValueSource(nameof(Tests))] string test,
-                                                                                                                        [ValueSource(nameof(VariableNames))] string variableName)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_local_variable_if_test_class_and_class_under_test_are_in_different_namespaces() => Assert.Multiple(() =>
+                                                                                                                                                    {
+                                                                                                                                                        foreach (var testFixture in TestFixtures)
+                                                                                                                                                        {
+                                                                                                                                                            foreach (var test in Tests)
+                                                                                                                                                            {
+                                                                                                                                                                foreach (var variableName in VariableNames)
+                                                                                                                                                                {
+                                                                                                                                                                    An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public class TestMe
@@ -304,6 +352,10 @@ namespace BlaBla.BlaBlubb
     }
 }
 ");
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    });
 
         protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.Id;
 
