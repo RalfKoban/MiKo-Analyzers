@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "CancelOperation",
                                                                                "CanRemoveConnection",
                                                                                "HasConnection",
+                                                                               "PrepareConnection",
                                                                            };
 
         private static readonly IEnumerable<string> InvalidMethodNames = new[]

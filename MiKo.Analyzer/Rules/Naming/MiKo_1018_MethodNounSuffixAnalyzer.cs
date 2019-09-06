@@ -35,53 +35,56 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 new KeyValuePair<string, string>("rison", "re"),
             };
 
-        private static readonly string[] StartingPhrases =
-            {
-                "Undo",
-                "Redo",
-                "To",
-                "Verify",
-                "Ensure",
-                "Get",
-                "get_",
-                "Set",
-                "set_",
-                "Refresh",
-                "Reset",
-                "Trace",
-                "Read",
-                "Write",
-                "Load",
-                "Save",
-                "Store",
-                "Restore",
-                "Update",
-                "Add",
-                "Remove",
-                "Clear",
-                "Create",
-                "Delete",
-                "Query",
-                "Analyze",
-                "Start",
-                "Stop",
-                "Restart",
-                "Try",
-                "Translate",
-                "Find",
-                "Push",
-                "Pop",
-                "Subscribe",
-                "Unsubscribe",
-                "Register",
-                "Unregister",
-                "Validate",
-                "CompileTimeValidate",
-                "Is",
-                "Can",
-                "Has",
-                "Cancel",
-            };
+        private static readonly string[] StartingPhrases = new[]
+                                                               {
+                                                                   "Undo",
+                                                                   "Redo",
+                                                                   "To",
+                                                                   "Verify",
+                                                                   "Ensure",
+                                                                   "Get",
+                                                                   "get_",
+                                                                   "Set",
+                                                                   "set_",
+                                                                   "Refresh",
+                                                                   "Reset",
+                                                                   "Trace",
+                                                                   "Read",
+                                                                   "Write",
+                                                                   "Load",
+                                                                   "Save",
+                                                                   "Store",
+                                                                   "Restore",
+                                                                   "Update",
+                                                                   "Add",
+                                                                   "Remove",
+                                                                   "Clear",
+                                                                   "Create",
+                                                                   "Delete",
+                                                                   "Query",
+                                                                   "Analyze",
+                                                                   "Start",
+                                                                   "Stop",
+                                                                   "Restart",
+                                                                   "Try",
+                                                                   "Translate",
+                                                                   "Find",
+                                                                   "Push",
+                                                                   "Pop",
+                                                                   "Subscribe",
+                                                                   "Unsubscribe",
+                                                                   "Register",
+                                                                   "Unregister",
+                                                                   "Validate",
+                                                                   "CompileTimeValidate",
+                                                                   "Is",
+                                                                   "Can",
+                                                                   "Has",
+                                                                   "Cancel",
+                                                                   "Prepare",
+                                                               }.OrderBy(_ => _.Length)
+                                                                .ThenBy(_ => _)
+                                                                .ToArray();
 
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
         {
@@ -96,14 +99,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            foreach (var phrase in StartingPhrases.Where(_ => name.StartsWith(_, StringComparison.Ordinal)))
+            if (HasAcceptableStartingPhrase(name))
             {
-                var remainingName = name.Substring(phrase.Length);
-
-                if (remainingName.Length == 0 || remainingName[0].IsUpperCase())
-                {
-                    return false;
-                }
+                return false;
             }
 
             foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
@@ -121,5 +119,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => TryFindBetterName(method.Name, out var betterName)
                                                                                             ? new[] { Issue(method, betterName) }
                                                                                             : Enumerable.Empty<Diagnostic>();
+
+        private static bool HasAcceptableStartingPhrase(string name)
+        {
+            foreach (var phrase in StartingPhrases.Where(_ => name.StartsWith(_, StringComparison.Ordinal)))
+            {
+                var remainingName = name.Substring(phrase.Length);
+
+                if (remainingName.Length == 0 || remainingName[0].IsUpperCase())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
