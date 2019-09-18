@@ -163,7 +163,14 @@ namespace MiKoSolutions.Analyzers
 
                     // maybe a nested one, so check parent
                     node = ifStatement.Parent;
+                    continue;
+                }
 
+                // maybe an else block
+                var elseStatement = GetEnclosingElseStatement(node);
+                if (elseStatement != null)
+                {
+                    node = elseStatement.Parent;
                     continue;
                 }
 
@@ -190,6 +197,17 @@ namespace MiKoSolutions.Analyzers
             }
 
             return enclosingNode as IfStatementSyntax;
+        }
+
+        private static ElseClauseSyntax GetEnclosingElseStatement(SyntaxNode node)
+        {
+            var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.ElseClause);
+            if (enclosingNode is BlockSyntax)
+            {
+                enclosingNode = enclosingNode.Parent;
+            }
+
+            return enclosingNode as ElseClauseSyntax;
         }
     }
 }

@@ -88,6 +88,38 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_call_in_method_in_else_block_in_deeply_nested_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void " + method + @"();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool flag)
+        {
+            if (Log.IsDebugEnabled)
+            {
+                if (flag)
+                {
+                }
+                else
+                {
+                    Log." + method + @"();
+                }
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_call_in_method_without_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
