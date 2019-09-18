@@ -12,13 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2049";
 
-        private static readonly string[] WillBePhrases = Constants.Comments.Delimiters.Select(_ => " will be" + _).ToArray();
+        private static readonly string[] Phrases = Constants.Comments.Delimiters.SelectMany(_ => new[] { " will be", " will also be", " will as well be" }, (delimiter, phrase) => phrase + delimiter).ToArray();
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(WillBePhrases)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(Phrases)
                                                                                                             ? new[] { Issue(symbol) }
                                                                                                             : Enumerable.Empty<Diagnostic>();
     }

@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
 
+        private static readonly string[] Phrases = { "It will be.", "It will also be.", "It will as well be." };
+
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
 using System;
@@ -53,56 +55,56 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_class([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_correctly_documented_summary_on_class([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
-/// <" + tag + @">It will be.</" + tag + @">
+/// <" + tag + @">" + phrase + "</" + tag + @">
 public class TestMe
 {
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_method([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_correctly_documented_summary_on_method([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    /// <" + tag + @">It will be.</" + tag + @">
+    /// <" + tag + @">" + phrase + "</" + tag + @">
     public void DoSomething() { }
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_property([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_correctly_documented_summary_on_property([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    /// <" + tag + @">It will be.</" + tag + @">
+    /// <" + tag + @">" + phrase + "</" + tag + @">
     public int Age { get; set; }
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_event([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_correctly_documented_summary_on_event([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    /// <" + tag + @">It will be.</" + tag + @">
+    /// <" + tag + @">" + phrase + "</" + tag + @">
     public event EventHandler<T> MyEvent;
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_field([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_correctly_documented_summary_on_field([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    /// <" + tag + @">It will be.</" + tag + @">
+    /// <" + tag + @">" + phrase + "</" + tag + @">
     private bool m_field;
 }
 ");
