@@ -150,11 +150,25 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode node, string methodName)
         {
-            var ifStatement = GetEnclosingIfStatement(node);
-            var ifExpression = ifStatement?.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
+            while (true)
+            {
+                var ifStatement = GetEnclosingIfStatement(node);
+                if (ifStatement != null)
+                {
+                    var ifExpression = ifStatement.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
+                    if (ifExpression?.Name.ToString() == methodName)
+                    {
+                        return true;
+                    }
 
-            var inside = ifExpression?.Name.ToString() == methodName;
-            return inside;
+                    // maybe a nested one, so check parent
+                    node = ifStatement.Parent;
+
+                    continue;
+                }
+
+                return false;
+            }
         }
 
         private static IfStatementSyntax GetEnclosingIfStatement(SyntaxNode node)
