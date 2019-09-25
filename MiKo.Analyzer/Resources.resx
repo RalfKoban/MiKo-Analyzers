@@ -480,7 +480,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Name it {1}</value>
   </data>
   <data name="MiKo_1039_Title" xml:space="preserve">
-    <value>Extension methods 'this' parameter should have default name.</value>
+    <value>The 'this' parameter of extension methods should have a default name.</value>
   </data>
   <data name="MiKo_1040_Description" xml:space="preserve">
     <value>Suffixes on parameter names (such as 'List') are noise and should be avoided.</value>

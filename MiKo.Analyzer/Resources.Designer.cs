@@ -1137,7 +1137,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extension methods &apos;this&apos; parameter should have default name..
+        ///   Looks up a localized string similar to The &apos;this&apos; parameter of extension methods should have a default name..
         /// </summary>
         public static string MiKo_1039_Title {
             get {

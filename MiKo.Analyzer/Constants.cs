@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers
         internal static class Comments
         {
             internal static readonly string[] Delimiters = { " ", ".", ",", ";", ":", "!", "?" };
-            internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", };
+            internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", "This parameter is not used.", "This parameter is not used" };
             internal static readonly string[] FuturePhrase = { "Reserved for future usage.", "Reserved for future usage", "Reserved.", "Reserved", "future", };
 
             internal static readonly string[] EventSourcePhrase = new[] { "The source of the event.", "The source of the event" }.Concat(UnusedPhrase).Distinct().ToArray();
