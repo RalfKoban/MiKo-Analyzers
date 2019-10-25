@@ -2339,6 +2339,15 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3106_Title" xml:space="preserve">
     <value>Do not use equality or comparison operators in assertions.</value>
   </data>
+  <data name="MiKo_3107_Description" xml:space="preserve">
+    <value>It is troublesome to have code that attemps to use Moq mocks but actually does not use them properly. So condition matchers should be used on mocks to setup or verify conditions. Such matchers should not be used on constructors or methods of non-mocks as they don't make sense there.</value>
+  </data>
+  <data name="MiKo_3107_MessageFormat" xml:space="preserve">
+    <value>Use a mock instead</value>
+  </data>
+  <data name="MiKo_3107_Title" xml:space="preserve">
+    <value>Moq Mock condition matchers should be used on mocks only.</value>
+  </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
 Such namespaces should be flattened.</value>

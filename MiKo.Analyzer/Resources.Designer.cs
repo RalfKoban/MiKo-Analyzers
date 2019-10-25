@@ -6565,6 +6565,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is troublesome to have code that attemps to use Moq mocks but actually does not use them properly. So condition matchers should be used on mocks to setup or verify conditions. Such matchers should not be used on constructors or methods of non-mocks as they don&apos;t make sense there..
+        /// </summary>
+        public static string MiKo_3107_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3107_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a mock instead.
+        /// </summary>
+        public static string MiKo_3107_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3107_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moq Mock condition matchers should be used on mocks only..
+        /// </summary>
+        public static string MiKo_3107_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3107_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
