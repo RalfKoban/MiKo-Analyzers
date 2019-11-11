@@ -10,6 +10,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public class MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_correct_object_creation_on_field() => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe(string text) { }
+
+        public void DoSomething(string text) { }
+    }
+
+    public class TestMeTests
+    {
+        private ObjectUnderTest = new TestMe(string.Empty);
+
+        public void PrepareTest()
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correct_object_creation() => No_issue_is_reported_for(@"
 using System;
 
