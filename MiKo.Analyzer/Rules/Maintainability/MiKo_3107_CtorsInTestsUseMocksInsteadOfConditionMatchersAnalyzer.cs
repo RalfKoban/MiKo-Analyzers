@@ -18,19 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            var method = node.GetEnclosingMethod(semanticModel);
-            if (method != null)
+            var argumentList = node.ArgumentList;
+            if (argumentList is null)
             {
-                foreach (var argument in node.ArgumentList.Arguments)
+                yield break;
+            }
+
+            var method = node.GetEnclosingMethod(semanticModel);
+            if (method is null)
+            {
+                yield break;
+            }
+
+            foreach (var argument in argumentList.Arguments)
+            {
+                if (argument.Expression is InvocationExpressionSyntax ies)
                 {
-                    if (argument.Expression is InvocationExpressionSyntax ies)
+                    if (ies.Expression is MemberAccessExpressionSyntax mae && mae.IsKind(SyntaxKind.SimpleMemberAccessExpression))
                     {
-                        if (ies.Expression is MemberAccessExpressionSyntax mae && mae.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+                        if (IsConditionMatcher(mae))
                         {
-                            if (IsConditionMatcher(mae))
-                            {
-                                yield return Issue(method.Name, argument.GetLocation());
-                            }
+                            yield return Issue(method.Name, argument.GetLocation());
                         }
                     }
                 }

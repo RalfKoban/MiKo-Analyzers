@@ -152,6 +152,35 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_body_with_correct_object_creation() => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe() { }
+
+        public void DoSomething(string text) { }
+
+        public int Value { get; set; }
+    }
+
+    public class TestMeTests
+    {
+        private ObjectUnderTest { get; set; }
+
+        public void PrepareTest() => ObjectUnderTest = new TestMe
+                                                           {
+                                                               Value = 42;
+                                                           }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer();
