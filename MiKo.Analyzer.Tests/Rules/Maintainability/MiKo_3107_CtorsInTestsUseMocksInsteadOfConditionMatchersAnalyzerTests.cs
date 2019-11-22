@@ -210,6 +210,60 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_field_with_correct_object_initialization() => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe() { }
+
+        public void DoSomething(string text) { }
+
+        public int Value { get; set; }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest = new TestMe
+                                             {
+                                                 Value = 42,
+                                             };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_ith_correct_object_initialization() => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe() { }
+
+        public void DoSomething(string text) { }
+
+        public int Value { get; set; }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; } = new TestMe
+                                                      {
+                                                          Value = 42,
+                                                      };
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer();

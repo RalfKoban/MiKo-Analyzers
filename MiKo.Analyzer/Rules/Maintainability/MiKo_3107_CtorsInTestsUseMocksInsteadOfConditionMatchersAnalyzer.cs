@@ -21,7 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             base.InitializeCore(context);
 
-            context.RegisterSyntaxNodeAction(AnalyzeObjectInitializerExpression, SyntaxKind.ObjectInitializerExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeInitializerExpression, SyntaxKind.ObjectInitializerExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeInitializerExpression, SyntaxKind.ArrayInitializerExpression);
             context.RegisterSyntaxNodeAction(AnalyzeNormalInvocationExpression, SyntaxKind.InvocationExpression);
         }
 
@@ -84,26 +85,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AnalyzeArguments(method, argumentList);
         }
 
-        private void AnalyzeObjectInitializerExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeInitializerExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (InitializerExpressionSyntax)context.Node;
 
-            var diagnostics = AnalyzeObjectInitializerExpression(node, context.SemanticModel);
+            var diagnostics = AnalyzeInitializerExpression(node, context.SemanticModel);
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeObjectInitializerExpression(InitializerExpressionSyntax node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzeInitializerExpression(InitializerExpressionSyntax node, SemanticModel semanticModel)
         {
-            // TODO RKN:
-            // SimpleAssignmentExpression, ObjectInitializerExpression
-            var method = node.GetEnclosingMethod(semanticModel);
+            var symbol = node.GetEnclosingSymbol(semanticModel);
 
             var diagnostics = node.Expressions.OfType<AssignmentExpressionSyntax>()
                                                          .Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
-                                                         .SelectMany(_ => AnalyzeExpression(_.Right, method.Name, _.GetLocation()));
+                                                         .SelectMany(_ => AnalyzeExpression(_.Right, symbol.Name, _.GetLocation()));
             return diagnostics;
         }
 
