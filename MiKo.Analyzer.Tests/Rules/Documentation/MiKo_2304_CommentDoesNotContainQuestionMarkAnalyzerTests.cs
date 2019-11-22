@@ -59,6 +59,30 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_comment_with_question_mark_in_HTML_link() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // http://machine:8080/tfs/Xyz/Abc/_workitems?id=12345
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_comment_with_question_mark_in_HTML_link_but_additional_question_marks() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // if not http://machine:8080/tfs/Xyz/Abc/_workitems?id=12345, then what shall we do?
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer();

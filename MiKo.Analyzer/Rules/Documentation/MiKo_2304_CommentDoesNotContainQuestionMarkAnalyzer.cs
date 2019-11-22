@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -12,6 +15,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.Contains("?");
+        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
+        {
+            if (comment.Contains("?") is false)
+            {
+                return false;
+            }
+
+            // allow indicators such as http:// or ftp://
+            var questionMarkWithoutHyperlink = comment.Split(Constants.WhiteSpaces, StringSplitOptions.RemoveEmptyEntries)
+                                                      .Any(_ => _.Contains("?") is false || _.Contains("://") is false);
+            return questionMarkWithoutHyperlink;
+        }
     }
 }
