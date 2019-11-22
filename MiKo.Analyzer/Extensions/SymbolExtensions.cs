@@ -267,13 +267,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsImport(this ISymbol symbol) => symbol.GetAttributeNames().Any(ImportAttributeNames.Contains);
 
-        internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, typeof(T).FullName);
+        internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, string.Intern(typeof(T).FullName));
 
         internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClass)
         {
             while (true)
             {
-                var fullName = symbol.ToString();
+                var fullName = string.Intern(symbol.ToString());
+
                 if (baseClass == fullName)
                 {
                     return true;
@@ -293,7 +294,7 @@ namespace MiKoSolutions.Analyzers
         {
             while (true)
             {
-                var fullName = symbol.ToString();
+                var fullName = string.Intern(symbol.ToString());
 
                 if (baseClassName == fullName)
                 {
@@ -315,18 +316,22 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool Implements<T>(this ITypeSymbol symbol) => Implements(symbol, typeof(T).FullName);
+        internal static bool Implements<T>(this ITypeSymbol symbol) => Implements(symbol, string.Intern(typeof(T).FullName));
 
         internal static bool Implements(this ITypeSymbol symbol, string interfaceType)
         {
-            if (symbol.ToString() == interfaceType)
+            var fullName = string.Intern(symbol.ToString());
+
+            if (fullName == interfaceType)
             {
                 return true;
             }
 
             foreach (var implementedInterface in symbol.AllInterfaces)
             {
-                if (implementedInterface.ToString() == interfaceType)
+                var fullInterfaceName = string.Intern(implementedInterface.ToString());
+
+                if (fullInterfaceName == interfaceType)
                 {
                     return true;
                 }
@@ -346,14 +351,18 @@ namespace MiKoSolutions.Analyzers
                                                   ? interfaceType.Substring(0, index)
                                                   : interfaceType;
 
-            if (symbol.ToString().StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+            var fullName = string.Intern(symbol.ToString());
+
+            if (fullName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
             foreach (var implementedInterface in symbol.AllInterfaces)
             {
-                if (implementedInterface.ToString().StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+                var fullInterfaceName = string.Intern(implementedInterface.ToString());
+
+                if (fullInterfaceName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -482,7 +491,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal) && symbol.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false; // ignore special situation for task factory
 
-        internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && symbol.ToString() == TypeNames.CancellationToken;
+        internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && string.Intern(symbol.ToString()) == TypeNames.CancellationToken;
 
         internal static bool IsNullable(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Nullable);
 
