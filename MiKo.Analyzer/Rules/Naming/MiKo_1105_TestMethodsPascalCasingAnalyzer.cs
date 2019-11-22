@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -12,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1105";
 
-        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+");
+        private const string PascalCasingRegex = "[a-z]+[A-Z]+";
 
         public MiKo_1105_TestMethodsPascalCasingAnalyzer() : base(Id)
         {
@@ -20,8 +21,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => PascalCasingRegex.IsMatch(symbol.Name) && !symbol.Name.Contains("_")
-                                                                                            ? new[] { Issue(symbol) }
-                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        {
+            var symbolName = symbol.Name;
+
+            if (Regex.IsMatch(symbolName, PascalCasingRegex) is false)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            if (symbolName.Contains("_"))
+            {
+                var underlinesNr = symbolName.Count(_ => _ is '_');
+                var upperCasesNr = symbolName.Count(_ => _.IsUpperCase());
+                var diff = underlinesNr - upperCasesNr;
+                if (diff >= 0)
+                {
+                    return Enumerable.Empty<Diagnostic>();
+                }
+            }
+
+            return new[] { Issue(symbol) };
+        }
     }
 }
