@@ -26,7 +26,7 @@ namespace Bla
 
     public class TestMeTests
     {
-        private ObjectUnderTest = new TestMe(string.Empty);
+        private TestMe ObjectUnderTest = new TestMe(string.Empty);
 
         public void PrepareTest()
         {
@@ -52,7 +52,7 @@ namespace Bla
 
     public class TestMeTests
     {
-        private ObjectUnderTest { get; set; }
+        private TestMe ObjectUnderTest { get; set; }
 
         public void PrepareTest()
         {
@@ -84,7 +84,7 @@ namespace Bla
 
     public class TestMeTests
     {
-        private ObjectUnderTest { get; set; }
+        private TestMe ObjectUnderTest { get; set; }
 
         public void PrepareTest()
         {
@@ -113,7 +113,7 @@ namespace Bla
 
     public class TestMeTests
     {
-        private ObjectUnderTest { get; set; }
+        private TestMe ObjectUnderTest { get; set; }
 
         public void PrepareTest()
         {
@@ -142,7 +142,7 @@ namespace Bla
 
     public class TestMeTests
     {
-        private ObjectUnderTest { get; set; }
+        private TestMe ObjectUnderTest { get; set; }
 
         public void PrepareTest()
         {
@@ -171,12 +171,41 @@ namespace Bla
 
     public class TestMeTests
     {
-        private ObjectUnderTest { get; set; }
+        private TestMe ObjectUnderTest { get; set; }
 
         public void PrepareTest() => ObjectUnderTest = new TestMe
                                                            {
-                                                               Value = 42;
-                                                           }
+                                                               Value = 42,
+                                                           };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_body_with_wrong_object_creation() => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe() { }
+
+        public void DoSomething(string text) { }
+
+        public int Value { get; set; }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest() => ObjectUnderTest = new TestMe
+                                                           {
+                                                               Value = It.IsAny<int>(),
+                                                           };
     }
 }
 ");
