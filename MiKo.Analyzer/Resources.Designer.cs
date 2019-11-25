@@ -4664,6 +4664,37 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unfortunately, tools such as Sandcastle cannot handle &lt;remarks&gt; sections on enum members. The resulting output (CHM, HTML, ...) does not contain any Remarks section.
+        ///
+        ///As developers may use the HTML/CHM version only when working with 3rd party frameworks, the information of the &lt;remarks&gt; section is typically not available to them.
+        ///
+        ///Hence, to provide them with all the information they need, the information should be placed inside the &lt;summary&gt; section..
+        /// </summary>
+        public static string MiKo_2211_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2211_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;summary&gt; instead of &lt;remarks&gt;.
+        /// </summary>
+        public static string MiKo_2211_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2211_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum members should not have &lt;remarks&gt; sections..
+        /// </summary>
+        public static string MiKo_2211_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2211_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
