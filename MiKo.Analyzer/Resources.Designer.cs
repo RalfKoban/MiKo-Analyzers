@@ -6709,6 +6709,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ctors, finalizers and Dispose methods are all directly related to the lifetime of an object. Therefore, they belong together and should be placed side by side..
+        /// </summary>
+        public static string MiKo_4003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;{0}&apos; directly after all ctors and finalizers.
+        /// </summary>
+        public static string MiKo_4003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dispose methods should be placed directly after constructors and finalizers..
+        /// </summary>
+        public static string MiKo_4003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4003_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first..
         /// </summary>
         public static string MiKo_4101_Description {

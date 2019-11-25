@@ -2393,6 +2393,15 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4002_Title" xml:space="preserve">
     <value>Methods with same name and accessibility should be placed side-by-side.</value>
   </data>
+  <data name="MiKo_4003_Description" xml:space="preserve">
+    <value>Ctors, finalizers and Dispose methods are all directly related to the lifetime of an object. Therefore, they belong together and should be placed side by side.</value>
+  </data>
+  <data name="MiKo_4003_MessageFormat" xml:space="preserve">
+    <value>Place '{0}' directly after all ctors and finalizers</value>
+  </data>
+  <data name="MiKo_4003_Title" xml:space="preserve">
+    <value>Dispose methods should be placed directly after constructors and finalizers.</value>
+  </data>
   <data name="MiKo_4101_Description" xml:space="preserve">
     <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first.</value>
   </data>
