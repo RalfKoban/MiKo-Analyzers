@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public sealed class MiKo_2027_SerializationConstructorParameterAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_method_that_has_no_parameter() => No_issue_is_reported_for(@"
@@ -121,8 +121,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_2027_SerializationConstructorParameterAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2027_SerializationConstructorParameterAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer();
     }
 }

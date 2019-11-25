@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2027_SerializationConstructorParameterAnalyzer : ParamDocumentationAnalyzer
+    public sealed class MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer : ParamDocumentationAnalyzer
     {
         public const string Id = "MiKo_2027";
 
-        public MiKo_2027_SerializationConstructorParameterAnalyzer() : base(Id)
+        public MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
