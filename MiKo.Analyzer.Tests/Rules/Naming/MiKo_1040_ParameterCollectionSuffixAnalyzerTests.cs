@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("ICollection<string> playlist")]
         [TestCase("ICollection<string> blacklist")]
         [TestCase("ICollection<string> whitelist")]
+        [TestCase("IDictionary<string,string> dictionary")]
         public void No_issue_is_reported_for_correctly_named_parameter(string parameter) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ public class TestMe
         [TestCase("string blaObservableCollection")]
         [TestCase("string blaArray")]
         [TestCase("string blaHashSet")]
+        [TestCase("string blaDictionary")]
         public void An_issue_is_reported_for_incorrectly_named_parameter(string parameter) => An_issue_is_reported_for(@"
 
 public class TestMe

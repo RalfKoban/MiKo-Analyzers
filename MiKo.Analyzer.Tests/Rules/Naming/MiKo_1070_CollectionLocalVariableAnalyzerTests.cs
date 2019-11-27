@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "array",
                 "list",
                 "collection",
+                "dictionary",
             };
 
         private static readonly string[] WrongNames =
@@ -25,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "item",
                 "enumerable",
                 "target",
+                "myDictionary",
             };
 
         [Test]

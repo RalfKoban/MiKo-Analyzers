@@ -13,7 +13,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
 
-        private static readonly string[] AllowedListNames = { "list", "collection", "array", "blackList", "whiteList", "playList" };
+        private static readonly string[] AllowedListNames =
+            {
+                "array",
+                "collection",
+                "dictionary",
+                "list",
+                "blackList",
+                "whiteList",
+                "playList",
+            };
 
         protected NamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, kind)
         {
@@ -78,19 +87,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                        ? AnalyzeName(symbol)
                                                                                                        : Enumerable.Empty<Diagnostic>();
 
-        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => !symbol.IsGlobalNamespace;
+        protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.IsGlobalNamespace is false;
 
         protected virtual bool ShallAnalyze(ITypeSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && !symbol.IsOverride && !symbol.IsInterfaceImplementation();
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => !symbol.IsOverride && !symbol.IsInterfaceImplementation();
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => !symbol.IsOverride && !symbol.IsInterfaceImplementation();
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => !symbol.IsOverride;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
 
-        protected virtual bool ShallAnalyze(IParameterSymbol symbol) => !symbol.IsOverride;
+        protected virtual bool ShallAnalyze(IParameterSymbol symbol) => symbol.IsOverride is false;
 
         protected virtual IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
