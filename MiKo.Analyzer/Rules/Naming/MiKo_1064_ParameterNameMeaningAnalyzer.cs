@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "progress",
                                                                          "project",
                                                                          "semanticModel",
+                                                                         "symbol",
                                                                      };
 
         public MiKo_1064_ParameterNameMeaningAnalyzer() : base(Id, SymbolKind.Parameter)

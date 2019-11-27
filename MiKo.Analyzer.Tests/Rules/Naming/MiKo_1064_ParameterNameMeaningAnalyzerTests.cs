@@ -121,6 +121,7 @@ public class TestMe
         [TestCase("ICommand command")]
         [TestCase("IProject project")]
         [TestCase("IProgress progress")]
+        [TestCase("ISymbol symbol")]
         public void No_issue_is_reported_for_known_name_(string parameter) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
