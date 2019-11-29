@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -31,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var name = identifier.ValueText;
 
                 // skip all short names
-                if (name.Length == 1
+                if (name.Length <= 1
                     || name == Constants.LambdaIdentifiers.Fallback
                     || name == Constants.LambdaIdentifiers.Fallback2
                     || name == "result")
@@ -39,7 +40,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                // TODO: Check for numbers at the end (get rid of them)
+                if (name.Last().IsNumber())
+                {
+                    // TODO RKN: Check for numbers at the end (get rid of them)
+                    continue;
+                }
+
+                // TODO RKN: Check for numbers at the end (get rid of them)
                 var pluralName = name.EndsWithAny(Constants.Markers.Collections)
                                      ? GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections)
                                      : GetPluralName(name);
