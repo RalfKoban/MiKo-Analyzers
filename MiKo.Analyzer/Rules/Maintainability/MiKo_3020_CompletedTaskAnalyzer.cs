@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -25,7 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                           .SelectMany(_ => _.GetSyntax().DescendantNodes())
                                                                                           .OfType<MemberAccessExpressionSyntax>()
                                                                                           .Where(_ => _.ToCleanedUpString() == Invocation)
-                                                                                          .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>().GetLocation())
+                                                                                          .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                          .Where(_ => _.Parent.IsKind(SyntaxKind.Argument) is false)
+                                                                                          .Select(_ => _.GetLocation())
                                                                                           .Select(_ => Issue(Invocation, _))
                                                                                           .ToList();
     }

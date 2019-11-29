@@ -105,6 +105,32 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_setup_method_for_a_mock() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        Task<int> DoSomeStuffAsync();
+    }
+
+    public class TestMe
+    {
+        public Task DoSomething()
+        {
+            var mock = new Mock<ITestMe>();
+            mock.Setup(_ => _.DoSomeStuffAsync()).Returns(Task.FromResult(42));
+            
+            return Task.CompletedTask;
+        }
+    }
+}");
+
         protected override string GetDiagnosticId() => MiKo_3020_CompletedTaskAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3020_CompletedTaskAnalyzer();
