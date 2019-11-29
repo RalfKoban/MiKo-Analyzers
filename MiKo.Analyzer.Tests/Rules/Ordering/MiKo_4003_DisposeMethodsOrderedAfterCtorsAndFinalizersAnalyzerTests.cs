@@ -180,7 +180,7 @@ public class TestMe
 }
 ");
 
-        //// TODO: partial parts
+        //// TODO RKN: partial parts
 
         protected override string GetDiagnosticId() => MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.Id;
 
