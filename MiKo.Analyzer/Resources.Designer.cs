@@ -5612,6 +5612,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If a collection shall be cleared, then &apos;Clear()&apos; should be invoked. Assigning &apos;null&apos; to a parameter will not do anything here because the parameter is only a copy (reference) of the original parameter..
+        /// </summary>
+        public static string MiKo_3028_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3028_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assign null (is cleanup wanted here?).
+        /// </summary>
+        public static string MiKo_3028_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3028_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not assign null to lambda parameters..
+        /// </summary>
+        public static string MiKo_3028_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3028_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
         ///
         ///As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy..
