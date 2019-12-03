@@ -62,6 +62,42 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_TryGet_method_with_out_parameter_named_result() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void TryGetMyOwnValue(out int result) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_TryGet_method_with_correctly_named_out_parameter() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void TryGetMyOwnValue(out int myOwnValue) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_TryGet_method_with_incorrectly_named_out_parameter() => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void TryGetMyOwnValue(out int i) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_TryGet_method_with_out_parameter_named_value() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void TryGet(out int value) { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1061_TryMethodOutParameterNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1061_TryMethodOutParameterNameAnalyzer();

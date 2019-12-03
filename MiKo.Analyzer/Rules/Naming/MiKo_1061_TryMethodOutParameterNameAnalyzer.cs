@@ -37,17 +37,36 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return results ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
+        private static string GetPreferredParameterName(string methodName)
         {
-            if (method.Name.StartsWith("Try", StringComparison.Ordinal))
+            if (methodName.StartsWith("TryGet", StringComparison.Ordinal))
             {
-                const string ParameterName = "result";
-
-                var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
-                if (outParameter != null && outParameter.Name != ParameterName)
+                var parameterName = methodName.Substring(6);
+                if (parameterName.Length == 0)
                 {
-                    return Issue(outParameter, ParameterName);
+                    return "value";
                 }
+
+                var characters = parameterName.ToCharArray();
+                characters[0] = char.ToLower(characters[0]);
+                return string.Intern(new string(characters));
+            }
+
+            return "result";
+        }
+
+        private Diagnostic AnalyzeTryMethod(IMethodSymbol method) => method.Name.StartsWith("Try", StringComparison.Ordinal)
+                                                                         ? AnalyzeOutParameter(method)
+                                                                         : null;
+
+        private Diagnostic AnalyzeOutParameter(IMethodSymbol method)
+        {
+            var parameterName = GetPreferredParameterName(method.Name);
+
+            var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
+            if (outParameter != null && outParameter.Name != parameterName)
+            {
+                return Issue(outParameter, parameterName);
             }
 
             return null;

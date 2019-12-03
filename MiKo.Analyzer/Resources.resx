@@ -693,14 +693,17 @@ Types that are named so should be better named directly after the interface they
     <value>Methods should not be suffixed with a number.</value>
   </data>
   <data name="MiKo_1061_Description" xml:space="preserve">
-    <value>If a 'Try' method has an [out] parameter, that [out] parameter shall be named 'result' because it is the actual result of the method.
-The method's return value only exists to indicate a success or failure of the operation.</value>
+    <value>If a 'TryXyz' method has an [out] parameter, that [out] parameter shall be named specifically because it is the actual result of the method. The method's return value only exists to indicate a success or failure of the operation.
+
+- For a 'Try' method, that parameter shall be named 'result'.
+- For a 'TryGet' method, that parameter shall be named after the name of the method without the 'TryGet' prefix.
+   Example: For the 'TryGetMyValue' method the parameter shall be named 'myValue'.</value>
   </data>
   <data name="MiKo_1061_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1061_Title" xml:space="preserve">
-    <value>The name of 'Try' method's [out] parameter should be 'result'.</value>
+    <value>The name of 'Try' method's [out] parameter should be specific.</value>
   </data>
   <data name="MiKo_1062_Description" xml:space="preserve">
     <value>Detection methods (properties or fields) such as 'Is', 'Has' or 'Contains' should consist only of a few words, such as 'IsOnline' or 'ContainsKey'.

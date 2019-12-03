@@ -1770,8 +1770,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a &apos;Try&apos; method has an [out] parameter, that [out] parameter shall be named &apos;result&apos; because it is the actual result of the method.
-        ///The method&apos;s return value only exists to indicate a success or failure of the operation..
+        ///   Looks up a localized string similar to If a &apos;TryXyz&apos; method has an [out] parameter, that [out] parameter shall be named specifically because it is the actual result of the method. The method&apos;s return value only exists to indicate a success or failure of the operation.
+        ///
+        ///- For a &apos;Try&apos; method, that parameter shall be named &apos;result&apos;.
+        ///- For a &apos;TryGet&apos; method, that parameter shall be named after the name of the method without the &apos;TryGet&apos; prefix.
+        ///   Example: For the &apos;TryGetMyValue&apos; method the parameter shall be named &apos;myValue&apos;..
         /// </summary>
         public static string MiKo_1061_Description {
             get {
@@ -1789,7 +1792,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of &apos;Try&apos; method&apos;s [out] parameter should be &apos;result&apos;..
+        ///   Looks up a localized string similar to The name of &apos;Try&apos; method&apos;s [out] parameter should be specific..
         /// </summary>
         public static string MiKo_1061_Title {
             get {

@@ -79,7 +79,7 @@ The following tables list all the 239 rules that are currently provided by the a
 |MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|&#x2713;|
 |MiKo_1059|Do not name types 'Impl' or 'Implementation'.|&#x2713;|
 |MiKo_1060|Methods should not be suffixed with a number.|&#x2713;|
-|MiKo_1061|The name of 'Try' method's [out] parameter should be 'result'.|&#x2713;|
+|MiKo_1061|The name of 'Try' method's [out] parameter should be specific.|&#x2713;|
 |MiKo_1062|'Is/Has/Contains' methods, properties or fields shall consist of only a few words.|&#x2713;|
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|
