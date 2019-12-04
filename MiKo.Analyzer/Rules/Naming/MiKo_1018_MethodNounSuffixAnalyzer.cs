@@ -91,6 +91,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Handle",
                                                                    "Free",
                                                                    "Calculate",
+                                                                   "Open",
+                                                                   "Close",
+                                                                   "Clone",
                                                                }.OrderBy(_ => _.Length)
                                                                 .ThenBy(_ => _)
                                                                 .ToArray();
