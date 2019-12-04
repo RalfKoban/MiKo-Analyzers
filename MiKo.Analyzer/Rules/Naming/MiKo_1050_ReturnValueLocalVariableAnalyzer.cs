@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1050_ReturnValueLocalVariableAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1050_ReturnValueLocalVariableAnalyzer : NamingLocalVariableAnalyzer
     {
         public const string Id = "MiKo_1050";
 
@@ -21,15 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] WrongNames = CreateWrongNames(AllowedCompleteNames, "ret", "return", "returning", "retval", "res", "resulting");
 
-        public MiKo_1050_ReturnValueLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_1050_ReturnValueLocalVariableAnalyzer() : base(Id)
         {
-        }
-
-        protected override void InitializeCore(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
-            context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
-            context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);

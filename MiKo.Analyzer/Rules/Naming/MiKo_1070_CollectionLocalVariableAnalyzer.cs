@@ -3,24 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1070_CollectionLocalVariableAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1070_CollectionLocalVariableAnalyzer : NamingLocalVariableAnalyzer
     {
         public const string Id = "MiKo_1070";
 
-        public MiKo_1070_CollectionLocalVariableAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_1070_CollectionLocalVariableAnalyzer() : base(Id)
         {
-        }
-
-        protected override void InitializeCore(AnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
-            context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
         }
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsEnumerable();
