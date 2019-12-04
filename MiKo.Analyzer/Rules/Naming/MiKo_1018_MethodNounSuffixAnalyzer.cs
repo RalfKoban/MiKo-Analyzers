@@ -89,6 +89,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Rollback",
                                                                    "Invert",
                                                                    "Handle",
+                                                                   "Free",
+                                                                   "Calculate",
                                                                }.OrderBy(_ => _.Length)
                                                                 .ThenBy(_ => _)
                                                                 .ToArray();
