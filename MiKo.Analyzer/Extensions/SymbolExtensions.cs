@@ -666,14 +666,14 @@ namespace MiKoSolutions.Analyzers
             return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
         }
 
-        internal static bool NameMatchesTypeName(this ISymbol symbol, ITypeSymbol type, uint minimumUpperCaseLetters = 0)
+        internal static bool NameMatchesTypeName(this ISymbol symbol, ITypeSymbol type, ushort minimumUpperCaseLetters = 0)
         {
             var symbolName = symbol.Name;
 
             if (string.Equals(symbolName, type.Name, StringComparison.OrdinalIgnoreCase))
             {
                 // ignore all those that have a lower case only
-                return symbolName.Count(_ => _.IsUpperCase()) > minimumUpperCaseLetters;
+                return symbolName.HasUpperCaseLettersAbove(minimumUpperCaseLetters);
             }
 
             var typeName = type.GetNameWithoutInterfacePrefix();
@@ -681,7 +681,7 @@ namespace MiKoSolutions.Analyzers
             if (string.Equals(symbolName, typeName, StringComparison.OrdinalIgnoreCase))
             {
                 // there must be at least a minimum of upper case letters (except the first character)
-                if (typeName.Count(_ => _.IsUpperCase()) > minimumUpperCaseLetters)
+                if (typeName.HasUpperCaseLettersAbove(minimumUpperCaseLetters))
                 {
                     return true;
                 }

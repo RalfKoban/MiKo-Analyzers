@@ -213,5 +213,24 @@ namespace System
         internal static string GetPartAfterLastDot(this string value) => value?.Substring(value.LastIndexOf('.') + 1);
 
         internal static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
+
+        internal static bool HasUpperCaseLettersAbove(this string value, ushort limit)
+        {
+            var count = 0;
+            for (var index = 0; index < value.Length; index++)
+            {
+                if (char.IsUpper(value[index]))
+                {
+                    if (count == limit)
+                    {
+                        return true;
+                    }
+
+                    count++;
+                }
+            }
+
+            return count > limit;
+        }
     }
 }
