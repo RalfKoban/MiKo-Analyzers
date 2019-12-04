@@ -82,6 +82,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Has",
                                                                    "Cancel",
                                                                    "Prepare",
+                                                                   "Parse",
+                                                                   "Wrap",
+                                                                   "Select",
+                                                                   "Deselect",
+                                                                   "Rollback",
+                                                                   "Invert",
+                                                                   "Handle",
                                                                }.OrderBy(_ => _.Length)
                                                                 .ThenBy(_ => _)
                                                                 .ToArray();
