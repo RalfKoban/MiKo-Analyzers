@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield break;
             }
 
-            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(1))
+            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
             {
                 yield return Issue(symbol);
             }
