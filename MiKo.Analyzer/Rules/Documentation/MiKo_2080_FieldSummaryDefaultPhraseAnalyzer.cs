@@ -47,9 +47,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var fieldSymbol = (IFieldSymbol)symbol;
             var type = fieldSymbol.Type;
 
-            var phrase = fieldSymbol.IsConst || type.SpecialType != SpecialType.System_Boolean
-                             ? StartingDefaultPhrase
-                             : StartingBooleanDefaultPhrase;
+            var phrase = fieldSymbol.IsConst is false && type.IsBoolean()
+                             ? StartingBooleanDefaultPhrase
+                             : StartingDefaultPhrase;
 
             if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
             {

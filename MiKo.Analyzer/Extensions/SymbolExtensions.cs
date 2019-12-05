@@ -499,6 +499,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAsyncTaskBased(this IMethodSymbol method) => method.IsAsync || method.ReturnType.IsTask();
 
+        internal static bool IsBoolean(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Boolean;
+
         internal static bool IsObject(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Object;
 
         internal static bool IsRoutedEvent(this ITypeSymbol symbol) => symbol.Name == "RoutedEvent" || symbol.Name == "System.Windows.RoutedEvent";
@@ -534,7 +536,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsValidateValueCallback(this IMethodSymbol method)
         {
-            if (method.ReturnType.SpecialType == SpecialType.System_Boolean)
+            if (method.ReturnType.IsBoolean())
             {
                 var parameters = method.Parameters;
                 return parameters.Length == 1 && parameters[0].Type.IsObject();

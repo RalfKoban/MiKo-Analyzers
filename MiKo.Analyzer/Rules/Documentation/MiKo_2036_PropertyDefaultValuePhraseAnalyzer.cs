@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            return returnType.SpecialType == SpecialType.System_Boolean || returnType.IsEnum();
+            return returnType.IsBoolean() || returnType.IsEnum();
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             string proposedEndingPhrase;
             string[] endingPhrases;
 
-            if (returnType.SpecialType == SpecialType.System_Boolean)
+            if (returnType.IsBoolean())
             {
                 proposedEndingPhrase = string.Format(Constants.Comments.DefaultLangwordPhrase, "...");
 

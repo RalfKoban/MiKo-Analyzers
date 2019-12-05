@@ -21,17 +21,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // MiKo 2022
             }
 
-            if (parameter.Type.IsEnum())
+            var parameterType = parameter.Type;
+            if (parameterType.IsEnum())
             {
                 return false; // MiKo 2023
             }
 
-            if (parameter.Type.IsCancellationToken())
+            if (parameterType.IsCancellationToken())
             {
                 return false; // MiKo 2024
             }
 
-            return parameter.Type.SpecialType != SpecialType.System_Boolean;
+            return parameterType.IsBoolean() is false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => AnalyzeStartingPhrase(parameter, comment, Constants.Comments.ParameterStartingPhrase);

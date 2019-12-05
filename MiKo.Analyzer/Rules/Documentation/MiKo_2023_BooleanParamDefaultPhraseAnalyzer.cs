@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out
-                                                                                  && parameter.Type.SpecialType == SpecialType.System_Boolean
+                                                                                  && parameter.Type.IsBoolean()
                                                                                   && parameter.ContainingSymbol.Name != nameof(IDisposable.Dispose);
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)

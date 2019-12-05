@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         // ReSharper disable once RedundantNameQualifier
-        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.SpecialType == SpecialType.System_Boolean;
+        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsBoolean();
 
         protected override string[] GetStartingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
                                                                                      ? Constants.Comments.BooleanReturnTypeStartingPhrase

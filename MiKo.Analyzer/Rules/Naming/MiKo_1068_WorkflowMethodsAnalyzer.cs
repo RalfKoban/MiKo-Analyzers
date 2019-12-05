@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var returnType = method.ReturnType;
 
-            if (returnType.SpecialType == SpecialType.System_Boolean)
+            if (returnType.IsBoolean())
             {
                 return "CanRun";
             }
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return "Run";
             }
 
-            return returnType.TryGetGenericArgumentType(out var argumentType) && argumentType.SpecialType == SpecialType.System_Boolean
+            return returnType.TryGetGenericArgumentType(out var argumentType) && argumentType.IsBoolean()
                        ? "CanRunAsync"
                        : "RunAsync";
         }

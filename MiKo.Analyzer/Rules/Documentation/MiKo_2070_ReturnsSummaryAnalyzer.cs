@@ -50,8 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (symbol)
             {
-                case IPropertySymbol p when p.GetReturnType()?.SpecialType == SpecialType.System_Boolean:
-                case IMethodSymbol m when m.ReturnType.SpecialType == SpecialType.System_Boolean:
+                case IPropertySymbol p when p.GetReturnType()?.IsBoolean() is true:
+                case IMethodSymbol m when m.ReturnType.IsBoolean():
                 {
                     return "Determines";
                 }

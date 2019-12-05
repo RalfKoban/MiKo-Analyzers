@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Boolean;
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsBoolean();
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {

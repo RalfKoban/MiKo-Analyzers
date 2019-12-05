@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return method.Parameters
-                         .Where(_ => _.Type.SpecialType == SpecialType.System_Boolean)
+                         .Where(_ => _.Type.IsBoolean())
                          .Select(_ => (ParameterSyntax)_.DeclaringSyntaxReferences[0].GetSyntax())
                          .Select(_ => Issue(_.Identifier.ValueText, _.Type.GetLocation()))
                          .ToList();
