@@ -80,7 +80,7 @@ The following tables list all the 239 rules that are currently provided by the a
 |MiKo_1059|Do not name types 'Impl' or 'Implementation'.|&#x2713;|
 |MiKo_1060|Methods should not be suffixed with a number.|&#x2713;|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be specific.|&#x2713;|
-|MiKo_1062|'Is/Has/Contains' methods, properties or fields shall consist of only a few words.|&#x2713;|
+|MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words.|&#x2713;|
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|

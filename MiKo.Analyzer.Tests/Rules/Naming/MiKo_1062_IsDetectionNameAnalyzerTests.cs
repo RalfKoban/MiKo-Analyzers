@@ -13,33 +13,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public void No_issue_is_reported_for_non_matching_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public void DoSomething() { }
+    public bool DoSomething() { }
 }
 ");
 
-        [TestCase("IsSomething")]
-        [TestCase("AreSomething")]
+        [TestCase("CanSomething")]
         [TestCase("HasSomething")]
         [TestCase("ContainsSomething")]
-        [TestCase("IsSomethingThatFits")]
-        [TestCase("AreSomethingThatFits")]
+        [TestCase("CanSomethingThatFits")]
         [TestCase("HasSomethingThatFits")]
         [TestCase("ContainsSomethingStillFitting")]
         public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public void " + methodName + @"() { }
+    public bool " + methodName + @"() => true;
 }
 ");
 
-        [TestCase("IsSomethingThatNotFits")]
-        [TestCase("AreSomethingThatNotFits")]
+        [TestCase("CanSomethingThatNotFits")]
         [TestCase("HasSomethingThatNotFits")]
         [TestCase("ContainsSomethingNotFittingAnymore")]
         public void An_issue_is_reported_for_incorrectly_named_method(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
-    public void " + methodName + @"() { }
+    public bool " + methodName + @"() => true;
 }
 ");
 
@@ -47,55 +44,50 @@ public class TestMe
         public void No_issue_is_reported_for_non_matching_property() => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public void DoSomething { get; set; }
+    public bool DoSomething { get; set; }
 }
 ");
 
-        [TestCase("IsSomething")]
-        [TestCase("AreSomething")]
+        [TestCase("CanSomething")]
         [TestCase("HasSomething")]
         [TestCase("ContainsSomething")]
-        [TestCase("IsSomethingFitting")]
-        [TestCase("AreSomethingFitting")]
+        [TestCase("CanSomethingFitting")]
         [TestCase("HasSomethingFitting")]
         [TestCase("ContainsSomethingFitting")]
         public void No_issue_is_reported_for_correctly_named_property(string propertyName) => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public void " + propertyName + @" { get; set; }
+    public bool " + propertyName + @" { get; set; }
 }
 ");
 
-        [TestCase("IsSomethingNotFitting")]
-        [TestCase("AreSomethingNotFitting")]
+        [TestCase("CanSomethingNotFitting")]
         [TestCase("HasSomethingNotFitting")]
         [TestCase("ContainsSomethingNotFitting")]
         public void An_issue_is_reported_for_incorrectly_named_property(string propertyName) => An_issue_is_reported_for(@"
 public class TestMe
 {
-    public void " + propertyName + @" { get; set; }
+    public bool " + propertyName + @" { get; set; }
 }
 ");
 
-        [TestCase("IsSomething")]
-        [TestCase("AreSomething")]
+        [TestCase("CanSomething")]
         [TestCase("HasSomething")]
         [TestCase("ContainsSomething")]
         public void No_issue_is_reported_for_correctly_named_field(string fieldName) => No_issue_is_reported_for(@"
 public class TestMe
 {
-    private int m_" + fieldName + @";
+    private bool m_" + fieldName + @";
 }
 ");
 
-        [TestCase("IsSomethingNotFitting")]
-        [TestCase("AreSomethingNotFitting")]
+        [TestCase("CanSomethingNotFitting")]
         [TestCase("HasSomethingNotFitting")]
         [TestCase("ContainsSomethingNotFitting")]
         public void An_issue_is_reported_for_incorrectly_named_field(string fieldName) => An_issue_is_reported_for(@"
 public class TestMe
 {
-    private int m_" + fieldName + @";
+    private bool m_" + fieldName + @";
 }
 ");
 

@@ -7,18 +7,26 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
+    /// <seealso cref="MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer"/>
+    /// <seealso cref="MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1062_IsDetectionNameAnalyzer : NamingAnalyzer
     {
         public const string Id = "MiKo_1062";
 
-        private static readonly string[] Prefixes = { "Is", "Are", "Has", "Contains" };
+        private static readonly string[] Prefixes = { "Can", "Has", "Contains" };
 
         public MiKo_1062_IsDetectionNameAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
+
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsBoolean();
+
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsBoolean() == true;
+
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsBoolean();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeCamelCase(symbol, symbol.Name, 4);
 
