@@ -89,6 +89,7 @@ The following tables list all the 239 rules that are currently provided by the a
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|
 |MiKo_1069|Property names reflect their meaning and not their type.|&#x2713;|
 |MiKo_1070|Local collection variables shall use plural name.|&#x2713;|
+|MiKo_1070|Local boolean variables should be named as statements and not as questions.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|

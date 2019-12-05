@@ -2058,6 +2058,41 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Boolean variables define some state. So they should be named as statements and not as questions.
+        ///That easies reading, as most likely, boolean variables are used in if/else or switch statements.
+        ///
+        ///Example:
+        ///   &apos;isDeviceOnline&apos; is a question.
+        ///   &apos;deviceIsOnline&apos; instead is a statement.
+        ///
+        ///   &apos;if (isDeviceOnline) DoSomething();&apos; is harder to read
+        ///   &apos;if (deviceIsOnline) DoSomething();&apos; is more fluent to read..
+        /// </summary>
+        public static string MiKo_1071_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1071_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it as statement.
+        /// </summary>
+        public static string MiKo_1071_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1071_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local boolean variables should be named as statements and not as questions..
+        /// </summary>
+        public static string MiKo_1071_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1071_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

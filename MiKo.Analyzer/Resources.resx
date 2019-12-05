@@ -794,6 +794,23 @@ Hence, their methods should be named 'CanRun' or 'Run' (similar to commands wher
   <data name="MiKo_1070_Title" xml:space="preserve">
     <value>Local collection variables shall use plural name.</value>
   </data>
+  <data name="MiKo_1071_Description" xml:space="preserve">
+    <value>Boolean variables define some state. So they should be named as statements and not as questions.
+That easies reading, as most likely, boolean variables are used in if/else or switch statements.
+
+Example:
+   'isDeviceOnline' is a question.
+   'deviceIsOnline' instead is a statement.
+
+   'if (isDeviceOnline) DoSomething();' is harder to read
+   'if (deviceIsOnline) DoSomething();' is more fluent to read.</value>
+  </data>
+  <data name="MiKo_1071_MessageFormat" xml:space="preserve">
+    <value>Name it as statement</value>
+  </data>
+  <data name="MiKo_1071_Title" xml:space="preserve">
+    <value>Local boolean variables should be named as statements and not as questions.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
