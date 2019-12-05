@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = identifier.ValueText;
 
-                if (name.Length <= 3)
+                if (name.Length <= 5)
                 {
-                    // skip all short names
+                    // skip all short names (such as isIP)
                     continue;
                 }
 
