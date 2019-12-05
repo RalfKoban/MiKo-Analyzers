@@ -828,6 +828,23 @@ Example:
   <data name="MiKo_1072_Title" xml:space="preserve">
     <value>Boolean properties or methods should be named as statements and not as questions.</value>
   </data>
+  <data name="MiKo_1073_Description" xml:space="preserve">
+    <value>Boolean fields define some state. So they should be named as statements and not as questions.
+That easies reading, as most likely, boolean fields are used in if/else or switch statements.
+
+Example:
+   'IsDeviceOnline' is a question.
+   'DeviceIsOnline' instead is a statement.
+
+   'if (IsDeviceOnline) DoSomething();' is harder to read
+   'if (DeviceIsOnline) DoSomething();' is more fluent to read.</value>
+  </data>
+  <data name="MiKo_1073_MessageFormat" xml:space="preserve">
+    <value>Name it as statement</value>
+  </data>
+  <data name="MiKo_1073_Title" xml:space="preserve">
+    <value>Boolean fields should be named as statements and not as questions.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
