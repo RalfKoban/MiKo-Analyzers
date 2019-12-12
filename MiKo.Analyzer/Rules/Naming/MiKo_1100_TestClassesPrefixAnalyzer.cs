@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1100";
 
-        private const string TestsSuffix = "Tests";
-
         public MiKo_1100_TestClassesPrefixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -37,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var className = symbol.Name;
             return className.StartsWith(typeUnderTestName, StringComparison.Ordinal)
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, typeUnderTestName + TestsSuffix) };
+                       : new[] { Issue(symbol, typeUnderTestName + Constants.TestsSuffix) };
         }
 
         private static string GetTypeUnderTestName(INamedTypeSymbol testClass, ITypeSymbol typeUnderTest)

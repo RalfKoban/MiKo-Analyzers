@@ -12,7 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1101";
 
-        private const string TestsSuffix = "Tests";
         private const string TestSuffix = "Test";
 
         public MiKo_1101_TestClassesSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
@@ -25,12 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var className = symbol.Name;
 
-            if (className.EndsWith(TestsSuffix, StringComparison.Ordinal))
+            if (className.EndsWith(Constants.TestsSuffix, StringComparison.Ordinal))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var suffix = className.EndsWith(TestSuffix, StringComparison.Ordinal) ? "s" : TestsSuffix;
+            var suffix = className.EndsWith(TestSuffix, StringComparison.Ordinal) ? "s" : Constants.TestsSuffix;
 
             return new[] { Issue(symbol, className + suffix) };
         }
