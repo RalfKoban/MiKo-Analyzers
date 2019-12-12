@@ -206,23 +206,36 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsInterfaceImplementation(this IMethodSymbol symbol)
+        internal static bool IsInterfaceImplementation(this IMethodSymbol method)
         {
-            if (symbol.IsStatic)
+            switch (method.MethodKind)
             {
-                return false;
+                case MethodKind.Constructor:
+                case MethodKind.SharedConstructor:
+                case MethodKind.UserDefinedOperator:
+                {
+                    return false;
+                }
+
+                default:
+                {
+                    if (method.IsStatic)
+                    {
+                        return false;
+                    }
+
+                    if (method.ExplicitInterfaceImplementations.Any())
+                    {
+                        return true;
+                    }
+
+                    var typeSymbol = method.ContainingType;
+                    var methodName = method.Name;
+
+                    var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
+                    return symbols.Any(_ => method.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
+                }
             }
-
-            if (symbol.ExplicitInterfaceImplementations.Any())
-            {
-                return true;
-            }
-
-            var typeSymbol = symbol.ContainingType;
-            var methodName = symbol.Name;
-
-            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-            return symbols.Any(_ => symbol.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
         }
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol symbol) => symbol.GetAttributes().Select(_ => _.AttributeClass.Name);
@@ -231,11 +244,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestClass(this ITypeSymbol symbol) => symbol?.TypeKind == TypeKind.Class && symbol.GetAttributeNames().Any(TestClassAttributeNames.Contains);
 
-        internal static bool IsTestMethod(this IMethodSymbol method) => method.GetAttributeNames().Any(TestMethodAttributeNames.Contains);
+        internal static bool IsTestMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestMethodAttributeNames.Contains);
 
-        internal static bool IsTestSetupMethod(this IMethodSymbol method) => method.GetAttributeNames().Any(TestSetupAttributeNames.Contains);
+        internal static bool IsTestSetupMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestSetupAttributeNames.Contains);
 
-        internal static bool IsTestTeardownMethod(this IMethodSymbol method) => method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
+        internal static bool IsTestTeardownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
 
         internal static bool IsSpecialAccessor(this IMethodSymbol method)
         {
