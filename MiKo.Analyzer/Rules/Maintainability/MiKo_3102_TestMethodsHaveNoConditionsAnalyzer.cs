@@ -30,8 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodName = method.Name;
 
-            var conditions = method.DeclaringSyntaxReferences // get the syntax tree
-                                   .SelectMany(_ => _.GetSyntax().DescendantTokens())
+            var conditions = method.GetSyntax().DescendantTokens()
                                    .Where(_ => ConditionTokens.Contains(_.Kind()))
                                    .Select(_ => Issue(methodName, _.GetLocation()))
                                    .ToList();

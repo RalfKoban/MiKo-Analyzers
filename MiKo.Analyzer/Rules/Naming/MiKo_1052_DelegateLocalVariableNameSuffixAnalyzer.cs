@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -28,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var identifier in identifiers)
             {
                 var name = identifier.ValueText;
+
                 if (name.EndsWithAny(WrongNames))
                 {
                     var symbol = identifier.GetSymbol(semanticModel);

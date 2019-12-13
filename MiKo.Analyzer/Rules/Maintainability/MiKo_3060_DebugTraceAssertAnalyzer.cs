@@ -25,8 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
-            var methodCalls = method.DeclaringSyntaxReferences // get the syntax tree
-                                    .SelectMany(_ => _.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>());
+            var methodCalls = method.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>();
 
             List<Diagnostic> diagnostics = null;
             foreach (var methodCall in methodCalls)

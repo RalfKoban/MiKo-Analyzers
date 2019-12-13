@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (returnType.Locations.IsEmpty)
                 {
-                    var syntax = (MethodDeclarationSyntax)method.DeclaringSyntaxReferences[0].GetSyntax();
+                    var syntax = (MethodDeclarationSyntax)method.GetSyntax();
                     return Issue(returnTypeString, syntax.ReturnType.GetLocation());
                 }
 

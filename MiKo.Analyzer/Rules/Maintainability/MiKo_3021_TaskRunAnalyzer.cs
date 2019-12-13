@@ -26,37 +26,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodName = method.Name;
 
-            foreach (var methodNode in method.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
+            var descendantNodes = method.GetSyntax().DescendantNodes();
+
+            foreach (var taskRunExpression in descendantNodes.OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
             {
-                var descendantNodes = methodNode.DescendantNodes();
-
-                foreach (var taskRunExpression in descendantNodes.OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
+                var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
+                var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
+                switch (node?.Kind())
                 {
-                    var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
-                    var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
-                    switch (node?.Kind())
-                    {
-                        case SyntaxKind.ReturnStatement:
-                        case SyntaxKind.ArrowExpressionClause:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.ArrowExpressionClause:
+                        yield return ReportIssue(taskRunExpression, methodName);
+
+                        break;
+
+                    case SyntaxKind.VariableDeclarator:
+                        var variable = (VariableDeclaratorSyntax)node;
+                        var variableName = variable.Identifier.ValueText;
+
+                        foreach (var unused in descendantNodes
+                                               .OfType<ReturnStatementSyntax>()
+                                               .Select(_ => _.Expression)
+                                               .OfType<IdentifierNameSyntax>()
+                                               .Where(_ => _.Identifier.ValueText == variableName))
+                        {
                             yield return ReportIssue(taskRunExpression, methodName);
+                        }
 
-                            break;
-
-                        case SyntaxKind.VariableDeclarator:
-                            var variable = (VariableDeclaratorSyntax)node;
-                            var variableName = variable.Identifier.ValueText;
-
-                            foreach (var unused in descendantNodes
-                                                             .OfType<ReturnStatementSyntax>()
-                                                             .Select(_ => _.Expression)
-                                                             .OfType<IdentifierNameSyntax>()
-                                                             .Where(_ => _.Identifier.ValueText == variableName))
-                            {
-                                yield return ReportIssue(taskRunExpression, methodName);
-                            }
-
-                            break;
-                    }
+                        break;
                 }
             }
         }
