@@ -396,6 +396,43 @@ namespace BlaBla.BlaBlubb
                                        }
                                    });
 
+        [Test]
+        public void An_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_different_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var propertyName in PropertyNames)
+                                           {
+                                               An_issue_is_reported_for(@"
+namespace BlaBla
+{
+    public class BaseTestMe
+    {
+    }
+}
+
+namespace BlaBla.BlaBlubb
+{
+    public class TestMe : BaseTestMe
+    {
+    }
+
+}
+
+namespace BlaBla.BlaBlubb.Tests
+{
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        private BaseTestMe " + methodPrefix + propertyName + @"() => new TestMe();
+    }
+}
+");
+                                           }
+                                       }
+                                   });
+
         protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer();

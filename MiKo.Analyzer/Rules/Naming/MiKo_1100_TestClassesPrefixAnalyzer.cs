@@ -29,8 +29,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
-            var className = symbol.Name;
-
             var typesUnderTest = symbol.GetTypeUnderTestTypes().ToList();
             if (typesUnderTest.Any())
             {
@@ -38,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                        .Where(_ => _ != null) // ignore generic class or struct constraint
                                                        .ToList();
 
-                if (typeUnderTestNames.Any(_ => className.StartsWith(_, StringComparison.Ordinal)))
+                if (typeUnderTestNames.Any(_ => TestClassStartsWithName(symbol, _)))
                 {
                     // names seem to match
                     return Enumerable.Empty<Diagnostic>();
@@ -47,45 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (typeUnderTestNames.Any())
                 {
                     // non-matching types, maybe we have some base types and have to investigate the creation methods
-                    return TestTypeIsNamedAfterCreatedTypeUnderTest(symbol)
+                    return TestClassIsNamedAfterCreatedTypeUnderTest(symbol)
                                ? Enumerable.Empty<Diagnostic>()
                                : new[] { Issue(symbol, typeUnderTestNames.First() + Constants.TestsSuffix) };
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
-        }
-
-        private static bool TestTypeIsNamedAfterCreatedTypeUnderTest(ITypeSymbol symbol)
-        {
-            var className = symbol.Name;
-
-            var methods = symbol.GetTypeUnderTestCreationMethods();
-            foreach (var method in methods)
-            {
-                var methodSyntax = (MethodDeclarationSyntax)method.GetSyntax();
-                foreach (var createdObject in methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
-                {
-                    switch (createdObject.Parent)
-                    {
-                        case ArrowExpressionClauseSyntax arrow when arrow.Parent == methodSyntax:
-                        case ReturnStatementSyntax rs when rs.Parent == methodSyntax:
-                        {
-                            // we have a created one
-                            var typeName = createdObject.Type.GetNameOnlyPart();
-
-                            if (typeName != null && className.StartsWith(typeName, StringComparison.Ordinal))
-                            {
-                                return true;
-                            }
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return false;
         }
 
         private static string GetTypeUnderTestName(INamedTypeSymbol testClass, ITypeSymbol typeUnderTest)
@@ -100,6 +66,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // for generic class or struct constraints there is no constraint type available
             var constraint = typeParameter.ConstraintTypes.FirstOrDefault();
             return constraint?.Name;
+        }
+
+        private static bool TestClassStartsWithName(ITypeSymbol testClass, string typeUnderTestName) => testClass.Name.StartsWith(typeUnderTestName, StringComparison.Ordinal);
+
+        private static bool TestClassIsNamedAfterCreatedTypeUnderTest(ITypeSymbol testClass)
+        {
+            var types = testClass.GetTypeUnderTestTypeSyntaxesCreatedInCode();
+
+            foreach (var type in types)
+            {
+                var typeName = type.GetNameOnlyPart();
+                if (typeName is null)
+                {
+                    continue;
+                }
+
+                if (TestClassStartsWithName(testClass, typeName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private new void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
@@ -118,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var typeUnderTest = declaration.GetTypeSymbol(context.SemanticModel);
                     var typeUnderTestName = GetTypeUnderTestName(testClass, typeUnderTest);
 
-                    if (testClass.Name.StartsWith(typeUnderTestName, StringComparison.Ordinal) is false)
+                    if (TestClassStartsWithName(testClass, typeUnderTestName) is false)
                     {
                         var diagnostic = Issue(testClass, typeUnderTestName + Constants.TestsSuffix);
                         context.ReportDiagnostic(diagnostic);

@@ -13,31 +13,68 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3100";
 
-        public MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(AnalysisContext context)
         {
-            base.InitializeCore(context);
-
+            context.RegisterSyntaxNodeAction(AnalyzeClassDeclaration, SyntaxKind.ClassDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsTestClass();
-
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
+        private static bool TestClassHasNamespaceOfTypeUnderTestCreatedInCode(ITypeSymbol testClass, IEnumerable<TypeSyntax> otherTypesUnderTest, SemanticModel semanticModel)
         {
-            var typesUnderTest = symbol.GetTypeUnderTestTypes();
-            foreach (var typeUnderTest in typesUnderTest)
+            var unitTestNamespace = testClass.ContainingNamespace.FullyQualifiedName();
+
+            var namespacesMatch = otherTypesUnderTest.Select(_ => _.GetTypeSymbol(semanticModel))
+                                                     .Select(_ => _.ContainingNamespace.FullyQualifiedName())
+                                                     .Any(_ => _ == unitTestNamespace);
+            return namespacesMatch;
+        }
+
+        private bool TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest, IEnumerable<TypeSyntax> otherTypesUnderTest, SemanticModel semanticModel, out Diagnostic result)
+        {
+            if (typeUnderTest != null)
             {
-                if (TryAnalyzeType(symbol, typeUnderTest, out var diagnostic))
+                var expectedNamespace = typeUnderTest.ContainingNamespace.FullyQualifiedName();
+                var unitTestNamespace = testClass.ContainingNamespace.FullyQualifiedName();
+
+                if (expectedNamespace != unitTestNamespace)
                 {
-                    return new[] { diagnostic };
+                    // try to find an assignment to see if a more concrete type is a better match
+                    if (TestClassHasNamespaceOfTypeUnderTestCreatedInCode(testClass, otherTypesUnderTest, semanticModel) is false)
+                    {
+                        result = Issue(testClass, expectedNamespace);
+                        return true;
+                    }
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            result = null;
+            return false;
+        }
+
+        private void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
+        {
+            var node = (ClassDeclarationSyntax)context.Node;
+
+            var symbol = node.GetTypeSymbol(context.SemanticModel);
+
+            if (symbol.IsTestClass())
+            {
+                var typesUnderTest = symbol.GetTypeUnderTestTypes();
+
+                var otherTypesUnderTest = symbol.GetTypeUnderTestTypeSyntaxesCreatedInCode().ToList();
+
+                foreach (var typeUnderTest in typesUnderTest)
+                {
+                    if (TypeHasNamespaceIssue(symbol, typeUnderTest, otherTypesUnderTest, context.SemanticModel, out var diagnostic))
+                    {
+                        context.ReportDiagnostic(diagnostic);
+                    }
+                }
+            }
         }
 
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
@@ -51,33 +88,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var method = context.GetEnclosingMethod();
                 if (method.IsTestMethod())
                 {
+                    var testClass = method.ContainingType;
+                    var otherTypesUnderTest = testClass.GetTypeUnderTestTypeSyntaxesCreatedInCode();
+
                     var typeUnderTest = declaration.GetTypeSymbol(context.SemanticModel);
 
-                    if (TryAnalyzeType(method.ContainingType, typeUnderTest, out var diagnostic))
+                    if (TypeHasNamespaceIssue(testClass, typeUnderTest, otherTypesUnderTest, context.SemanticModel, out var diagnostic))
                     {
                         context.ReportDiagnostic(diagnostic);
                     }
                 }
             }
-        }
-
-        private bool TryAnalyzeType(INamedTypeSymbol symbol, ITypeSymbol typeUnderTest, out Diagnostic result)
-        {
-            if (typeUnderTest != null)
-            {
-                var expectedNamespace = typeUnderTest.ContainingNamespace.FullyQualifiedName();
-                var unitTestNamespace = symbol.ContainingNamespace.FullyQualifiedName();
-
-                if (expectedNamespace != unitTestNamespace)
-                {
-                    // TODO: try to find assignment to see if a more concrete type is better match
-                    result = Issue(symbol, expectedNamespace);
-                    return true;
-                }
-            }
-
-            result = null;
-            return false;
         }
     }
 }

@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            token = default(SyntaxToken);
+            token = default;
             return false;
         }
 
