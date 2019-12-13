@@ -100,6 +100,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 "uut",
             };
 
+        private static readonly string[] MethodPrefixes =
+            {
+                "Get",
+                "Create",
+            };
+
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"
 namespace BlaBla
@@ -147,7 +153,7 @@ namespace BlaBla.BlaBlubb
                                                                                                                                         });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace([Values("Get", "Create")] string methodPrefix)
+        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => Assert.Multiple(() =>
                                    {
                                        foreach (var testFixture in TestFixtures)
@@ -356,6 +362,39 @@ namespace BlaBla.BlaBlubb
                                                                                                                                                             }
                                                                                                                                                         }
                                                                                                                                                     });
+
+        [Test]
+        public void No_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_same_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var propertyName in PropertyNames)
+                                           {
+                                               No_issue_is_reported_for(@"
+namespace BlaBla
+{
+    public class BaseTestMe
+    {
+    }
+}
+
+namespace BlaBla.BlaBlubb
+{
+    public class TestMe : BaseTestMe
+    {
+    }
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        private BaseTestMe " + methodPrefix + propertyName + @"() => new TestMe();
+    }
+}
+");
+                                           }
+                                       }
+                                   });
 
         protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.Id;
 

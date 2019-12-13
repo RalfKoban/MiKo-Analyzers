@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -11,12 +12,26 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxExtensions
     {
+        private static readonly HashSet<string> TypeUnderTestVariableNames = new HashSet<string>
+                                                                                 {
+                                                                                     "objectUnderTest",
+                                                                                     "sut",
+                                                                                     "subjectUnderTest",
+                                                                                     "unitUnderTest",
+                                                                                     "uut",
+                                                                                     "testCandidate",
+                                                                                     "testObject",
+                                                                                 };
+
         internal static bool IsSupported(this SyntaxNodeAnalysisContext context, LanguageVersion expectedVersion)
         {
             var languageVersion = ((CSharpParseOptions)context.Node.SyntaxTree.Options).LanguageVersion;
 
-            return languageVersion >= expectedVersion;
+            // ignore the latest versions (or above)
+            return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
+
+        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => TypeUnderTestVariableNames.Contains(syntax.Identifier.ValueText);
 
         internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
         {

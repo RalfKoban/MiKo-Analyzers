@@ -13,17 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3100";
 
-        private static readonly HashSet<string> TypeUnderTestVariableNames = new HashSet<string>
-            {
-                "objectUnderTest",
-                "sut",
-                "subjectUnderTest",
-                "unitUnderTest",
-                "uut",
-                "testCandidate",
-                "testObject",
-            };
-
         public MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -51,20 +40,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private static bool IsTypeUnderTestVariable(VariableDeclarationSyntax variable) => variable.Variables.Any(_ => TypeUnderTestVariableNames.Contains(_.Identifier.ValueText));
-
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
-            var variable = node.Declaration;
+            var declaration = node.Declaration;
 
-            if (IsTypeUnderTestVariable(variable))
+            if (declaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))
             {
                 // inspect associated test method
                 var method = context.GetEnclosingMethod();
                 if (method.IsTestMethod())
                 {
-                    var typeUnderTest = variable.GetTypeSymbol(context.SemanticModel);
+                    var typeUnderTest = declaration.GetTypeSymbol(context.SemanticModel);
 
                     if (TryAnalyzeType(method.ContainingType, typeUnderTest, out var diagnostic))
                     {

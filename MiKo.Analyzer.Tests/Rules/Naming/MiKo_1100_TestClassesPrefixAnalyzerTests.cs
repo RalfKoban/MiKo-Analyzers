@@ -9,6 +9,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1100_TestClassesPrefixAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] VariableNames =
+            {
+                "objectUnderTest",
+                "subjectUnderTest",
+                "unitUnderTest",
+                "testCandidate",
+                "testObject",
+                "sut",
+                "uut",
+            };
+
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"
 namespace Bla
@@ -103,9 +114,14 @@ namespace Bla
 }
 ");
 
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_correct_prefix([ValueSource(nameof(TestFixtures))]string testFixture, [Values("class", "struct")] string constraint)
-            => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_correct_prefix() => Assert.Multiple(() =>
+                                                                                                                                                       {
+                                                                                                                                                           foreach (var constraint in new[] { "class", "struct" })
+                                                                                                                                                           {
+                                                                                                                                                               foreach (var testFixture in TestFixtures)
+                                                                                                                                                               {
+                                                                                                                                                                   No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe
@@ -121,6 +137,9 @@ namespace Bla
     }
 }
 ");
+                                                                                                                                                               }
+                                                                                                                                                           }
+                                                                                                                                                       });
 
         [Test]
         public void An_issue_is_reported_for_test_class_of_generic_type_with_wrong_prefix([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
@@ -157,6 +176,73 @@ namespace Bla
     }
 }
 ");
+
+        [Test]
+        public void No_issue_is_reported_for_test_class_if_factory_method_returns_concrete_type_but_has_base_type_as_return_type([ValueSource(nameof(TestFixtures))]string testFixture) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class BaseTestMe
+    {
+    }
+}
+
+namespace Bla.Blubb
+{
+    public class TestMe : BaseTestMe
+    {
+    }
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        private BaseTestMe CreateObjectUnderTest() => new TestMe();
+
+        private BaseTestMe GetObjectUnderTest() => new TestMe();
+
+        private BaseTestMe CreateTestCandidate()
+        {
+            return new TestMe();
+        }
+
+        private BaseTestMe GetTestCandidate()
+        {
+            return new TestMe();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_class_if_class_under_test_as_local_variable_has_wrong_prefix() => Assert.Multiple(() =>
+                                                                                                                                        {
+                                                                                                                                            foreach (var testFixture in TestFixtures)
+                                                                                                                                            {
+                                                                                                                                                foreach (var test in Tests)
+                                                                                                                                                {
+                                                                                                                                                    foreach (var variableName in VariableNames)
+                                                                                                                                                    {
+                                                                                                                                                        An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+    }
+
+    [" + testFixture + @"]
+    public class WhateverTestsTests
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            var " + variableName + @" = new TestMe();
+        }
+    }
+}
+");
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        });
 
         protected override string GetDiagnosticId() => MiKo_1100_TestClassesPrefixAnalyzer.Id;
 
