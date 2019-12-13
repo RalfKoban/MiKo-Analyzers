@@ -572,12 +572,14 @@ namespace MiKoSolutions.Analyzers
         {
             // TODO: RKN what about base types?
             var members = symbol.GetMembersIncludingInherited<ISymbol>().ToList();
-            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => _.ReturnsVoid is false).Where(_ => TypeUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
+            var methodTypes = GetTypeUnderTestCreationMethods(members).Select(_ => _.ReturnType);
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
         }
+
+        internal static IEnumerable<IMethodSymbol> GetTypeUnderTestCreationMethods(this ITypeSymbol symbol) => GetTypeUnderTestCreationMethods(symbol.GetMembers());
 
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {
@@ -730,6 +732,8 @@ namespace MiKoSolutions.Analyzers
                 CollectAllNestedTypes(nestedType, types);
             }
         }
+
+        private static IEnumerable<IMethodSymbol> GetTypeUnderTestCreationMethods(IEnumerable<ISymbol> members) => members.OfType<IMethodSymbol>().Where(_ => _.ReturnsVoid is false).Where(_ => TypeUnderTestMethodNames.Contains(_.Name));
 
         private static string GetMethodNameForKind(IMethodSymbol method)
         {

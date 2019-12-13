@@ -40,22 +40,52 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (typeUnderTestNames.Any(_ => className.StartsWith(_, StringComparison.Ordinal)))
                 {
+                    // names seem to match
                     return Enumerable.Empty<Diagnostic>();
                 }
 
                 if (typeUnderTestNames.Any())
                 {
-                    // TODO: RKN Get SyntaxNode symbol.DeclaringSyntaxReferences
                     // non-matching types, maybe we have some base types and have to investigate the creation methods
-                    return new[] { Issue(symbol, typeUnderTestNames.First() + Constants.TestsSuffix) };
+                    return TestTypeIsNamedAfterCreatedTypeUnderTest(symbol)
+                               ? Enumerable.Empty<Diagnostic>()
+                               : new[] { Issue(symbol, typeUnderTestNames.First() + Constants.TestsSuffix) };
                 }
-            }
-            else
-            {
-                return Enumerable.Empty<Diagnostic>();
             }
 
             return Enumerable.Empty<Diagnostic>();
+        }
+
+        private static bool TestTypeIsNamedAfterCreatedTypeUnderTest(ITypeSymbol symbol)
+        {
+            var className = symbol.Name;
+
+            var methods = symbol.GetTypeUnderTestCreationMethods();
+            foreach (var method in methods)
+            {
+                var methodSyntax = (MethodDeclarationSyntax)method.GetSyntax();
+                foreach (var createdObject in methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
+                {
+                    switch (createdObject.Parent)
+                    {
+                        case ArrowExpressionClauseSyntax arrow when arrow.Parent == methodSyntax:
+                        case ReturnStatementSyntax rs when rs.Parent == methodSyntax:
+                        {
+                            // we have a created one
+                            var typeName = createdObject.Type.GetNameOnlyPart();
+
+                            if (typeName != null && className.StartsWith(typeName, StringComparison.Ordinal))
+                            {
+                                return true;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static string GetTypeUnderTestName(INamedTypeSymbol testClass, ITypeSymbol typeUnderTest)

@@ -213,6 +213,45 @@ namespace Bla.Blubb
 ");
 
         [Test]
+        public void An_issue_is_reported_for_test_class_if_factory_method_returns_different_concrete_type_but_has_base_type_as_return_type([ValueSource(nameof(TestFixtures))]string testFixture) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class BaseTestMe
+    {
+    }
+}
+
+namespace Bla.Blubb
+{
+    public class TestMe : BaseTestMe
+    {
+    }
+
+    public class OtherTestMe : BaseTestMe
+    {
+    }
+
+    [" + testFixture + @"]
+    public class TestMeTests
+    {
+        private BaseTestMe CreateObjectUnderTest() => new OtherTestMe();
+
+        private BaseTestMe GetObjectUnderTest() => new OtherTestMe();
+
+        private BaseTestMe CreateTestCandidate()
+        {
+            return new OtherTestMe();
+        }
+
+        private BaseTestMe GetTestCandidate()
+        {
+            return new OtherTestMe();
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_test_class_if_class_under_test_as_local_variable_has_wrong_prefix() => Assert.Multiple(() =>
                                                                                                                                         {
                                                                                                                                             foreach (var testFixture in TestFixtures)
