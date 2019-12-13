@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -35,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return method.Parameters
                          .Where(_ => _.Type.IsBoolean())
-                         .Select(_ => (ParameterSyntax)_.DeclaringSyntaxReferences[0].GetSyntax())
+                         .Select(_ => _.GetSyntax())
                          .Select(_ => Issue(_.Identifier.ValueText, _.Type.GetLocation()))
                          .ToList();
         }

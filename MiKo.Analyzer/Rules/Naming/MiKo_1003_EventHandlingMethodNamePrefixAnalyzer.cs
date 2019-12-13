@@ -50,27 +50,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = method.Name;
 
-            foreach (var reference in method.DeclaringSyntaxReferences)
+            var owningClass = method.GetSyntax().GetEnclosing<ClassDeclarationSyntax>();
+            if (owningClass is null)
             {
-                var owningClass = reference.GetSyntax().GetEnclosing<ClassDeclarationSyntax>();
-                if (owningClass is null)
-                {
-                    // may happen in case the class is currently in uncompilable state (such as it contains an additional bracket)
-                    continue;
-                }
+                // may happen in case the class is currently in uncompilable state (such as it contains an additional bracket)
+                return null;
+            }
 
-                foreach (var assignment in owningClass.DescendantNodes()
-                                                      .OfType<AssignmentExpressionSyntax>()
-                                                      .Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression)))
+            foreach (var assignment in owningClass.DescendantNodes()
+                                                  .OfType<AssignmentExpressionSyntax>()
+                                                  .Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression)))
+            {
+                var rightIdentifier = (assignment.Right as IdentifierNameSyntax)?.Identifier.ValueText;
+                if (rightIdentifier == methodName)
                 {
-                    var rightIdentifier = (assignment.Right as IdentifierNameSyntax)?.Identifier.ValueText;
-                    if (rightIdentifier == methodName)
+                    switch (assignment.Left)
                     {
-                        switch (assignment.Left)
-                        {
-                            case IdentifierNameSyntax s: return s.Identifier.ValueText;
-                            case MemberAccessExpressionSyntax s: return s.Name.Identifier.ValueText;
-                        }
+                        case IdentifierNameSyntax s: return s.Identifier.ValueText;
+                        case MemberAccessExpressionSyntax s: return s.Name.Identifier.ValueText;
                     }
                 }
             }

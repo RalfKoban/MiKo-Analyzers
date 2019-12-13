@@ -33,14 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         return Enumerable.Empty<Diagnostic>();
                     }
 
-                    var loc = symbol
-                              .GetMembers()
-                              .OfType<IMethodSymbol>()
-                              .SelectMany(_ => _.DeclaringSyntaxReferences.Select(__ => __.GetSyntax()).SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect))
-                              .Sum(Counter.CountLinesOfCode);
+                    var loc = symbol.GetMembers().OfType<IMethodSymbol>()
+                                    .Select(_ => _.GetSyntax())
+                                    .SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect)
+                                    .Sum(Counter.CountLinesOfCode);
 
-                    TryCreateDiagnostic(symbol, loc, MaxLinesOfCode, out var diagnostic);
-                    return diagnostic != null ? new[] { diagnostic } : Enumerable.Empty<Diagnostic>();
+                    return TryCreateDiagnostic(symbol, loc, MaxLinesOfCode, out var diagnostic)
+                               ? new[] { diagnostic }
+                               : Enumerable.Empty<Diagnostic>();
                 }
 
                 // ignore interfaces

@@ -581,12 +581,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {
-            return symbol.DeclaringSyntaxReferences
-                         .Select(_ => _.GetSyntax())
-                         .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
-                         .SelectMany(_ => _.DescendantNodes()
-                                           .OfType<MemberAccessExpressionSyntax>()
-                                           .Where(__ => __.ToCleanedUpString() == invocation));
+            var field = symbol.GetSyntax();
+            return field is null
+                       ? Enumerable.Empty<MemberAccessExpressionSyntax>()
+                       : field.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToCleanedUpString() == invocation);
         }
 
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol symbol, string invocation) => symbol.GetAssignmentsVia(invocation)
@@ -666,7 +664,18 @@ namespace MiKoSolutions.Analyzers
             return matchesField;
         }
 
-        internal static int GetStartingLine(this IMethodSymbol method) => method.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition.Line;
+        internal static int GetStartingLine(this IMethodSymbol method) => method.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
+
+        // methods could also be constructors so we would get a ConstructorDeclarationSyntax instead of a MethodDeclarationSyntax
+        internal static SyntaxNode GetSyntax(this IMethodSymbol symbol) => symbol.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+
+        internal static ParameterSyntax GetSyntax(this IParameterSymbol symbol) => symbol.DeclaringSyntaxReferences.Select(_ => (ParameterSyntax)_.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+
+        internal static FieldDeclarationSyntax GetSyntax(this IFieldSymbol symbol) => symbol.DeclaringSyntaxReferences
+                                                                                            .Select(_ => _.GetSyntax())
+                                                                                            .Where(_ => _.GetLocation().IsInSource)
+                                                                                            .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
+                                                                                            .FirstOrDefault();
 
         internal static string GetMethodSignature(this IMethodSymbol method)
         {
