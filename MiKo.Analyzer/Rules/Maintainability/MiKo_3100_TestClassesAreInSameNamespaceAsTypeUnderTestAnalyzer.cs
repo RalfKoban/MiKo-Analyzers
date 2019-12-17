@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -23,17 +24,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
         }
 
-        private static bool TestClassHasNamespaceOfTypeUnderTestCreatedInCode(ITypeSymbol testClass, IEnumerable<TypeSyntax> otherTypesUnderTest, SemanticModel semanticModel)
+        private static Lazy<IEnumerable<ITypeSymbol>> GetTypeUnderTestTypeSyntaxesCreatedInCode(ITypeSymbol symbol, SemanticModel semanticModel)
+        {
+            return new Lazy<IEnumerable<ITypeSymbol>>(() => symbol.GetCreatedObjectSyntaxReturnedByMethod()
+                                                                  .Select(_ => semanticModel.GetTypeInfo(_))
+                                                                  .Select(_ => _.Type)
+                                                                  .ToList());
+        }
+
+        private static bool NamespaceMatchesTypeUnderTestCreatedInCode(ITypeSymbol testClass, Lazy<IEnumerable<ITypeSymbol>> otherTypesUnderTest)
         {
             var unitTestNamespace = testClass.ContainingNamespace.FullyQualifiedName();
 
-            var namespacesMatch = otherTypesUnderTest.Select(_ => _.GetTypeSymbol(semanticModel))
+            var namespacesMatch = otherTypesUnderTest.Value
                                                      .Select(_ => _.ContainingNamespace.FullyQualifiedName())
                                                      .Any(_ => _ == unitTestNamespace);
             return namespacesMatch;
         }
 
-        private bool TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest, IEnumerable<TypeSyntax> otherTypesUnderTest, SemanticModel semanticModel, out Diagnostic result)
+        private bool TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest, Lazy<IEnumerable<ITypeSymbol>> otherTypesUnderTest, out Diagnostic result)
         {
             if (typeUnderTest != null)
             {
@@ -43,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (expectedNamespace != unitTestNamespace)
                 {
                     // try to find an assignment to see if a more concrete type is a better match
-                    if (TestClassHasNamespaceOfTypeUnderTestCreatedInCode(testClass, otherTypesUnderTest, semanticModel) is false)
+                    if (NamespaceMatchesTypeUnderTestCreatedInCode(testClass, otherTypesUnderTest) is false)
                     {
                         result = Issue(testClass, expectedNamespace);
                         return true;
@@ -59,20 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (ClassDeclarationSyntax)context.Node;
 
-            var symbol = node.GetTypeSymbol(context.SemanticModel);
+            var typeSymbol = node.GetTypeSymbol(context.SemanticModel);
 
-            if (symbol.IsTestClass())
+            if (typeSymbol.IsTestClass())
             {
-                var typesUnderTest = symbol.GetTypeUnderTestTypes();
-
-                var otherTypesUnderTest = symbol.GetTypeUnderTestTypeSyntaxesCreatedInCode().ToList();
+                var typesUnderTest = typeSymbol.GetTypeUnderTestTypes();
+                var otherTypesUnderTest = GetTypeUnderTestTypeSyntaxesCreatedInCode(typeSymbol, context.SemanticModel);
 
                 foreach (var typeUnderTest in typesUnderTest)
                 {
-                    if (TypeHasNamespaceIssue(symbol, typeUnderTest, otherTypesUnderTest, context.SemanticModel, out var diagnostic))
-                    {
-                        context.ReportDiagnostic(diagnostic);
-                    }
+                    AnalyzeNamespaces(context, typeSymbol, typeUnderTest, otherTypesUnderTest);
                 }
             }
         }
@@ -89,15 +94,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (method.IsTestMethod())
                 {
                     var testClass = method.ContainingType;
-                    var otherTypesUnderTest = testClass.GetTypeUnderTestTypeSyntaxesCreatedInCode();
-
                     var typeUnderTest = declaration.GetTypeSymbol(context.SemanticModel);
+                    var otherTypesUnderTest = GetTypeUnderTestTypeSyntaxesCreatedInCode(testClass, context.SemanticModel);
 
-                    if (TypeHasNamespaceIssue(testClass, typeUnderTest, otherTypesUnderTest, context.SemanticModel, out var diagnostic))
-                    {
-                        context.ReportDiagnostic(diagnostic);
-                    }
+                    AnalyzeNamespaces(context, testClass, typeUnderTest, otherTypesUnderTest);
                 }
+            }
+        }
+
+        private void AnalyzeNamespaces(SyntaxNodeAnalysisContext context, ITypeSymbol testClass, ITypeSymbol typeUnderTest, Lazy<IEnumerable<ITypeSymbol>> otherTypesUnderTest)
+        {
+            if (TypeHasNamespaceIssue(testClass, typeUnderTest, otherTypesUnderTest, out var diagnostic))
+            {
+                context.ReportDiagnostic(diagnostic);
             }
         }
     }

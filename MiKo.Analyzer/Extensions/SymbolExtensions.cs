@@ -568,7 +568,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
 
-        /// <seealso cref="GetTypeUnderTestTypeSyntaxesCreatedInCode"/>
+        /// <seealso cref="GetCreatedObjectSyntaxReturnedByMethod"/>
         internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol symbol)
         {
             // TODO: RKN what about base types?
@@ -580,7 +580,8 @@ namespace MiKoSolutions.Analyzers
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
         }
 
-        internal static IEnumerable<TypeSyntax> GetTypeUnderTestTypeSyntaxesCreatedInCode(this ITypeSymbol symbol)
+        // TODO RKN: find better name
+        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this ITypeSymbol symbol)
         {
             var methods = GetTypeUnderTestCreationMethods(symbol.GetMembers());
             foreach (var method in methods)
@@ -593,7 +594,7 @@ namespace MiKoSolutions.Analyzers
                         case ArrowExpressionClauseSyntax arrow when arrow.Parent == methodSyntax:
                         case ReturnStatementSyntax rs when rs.Parent == methodSyntax:
                         {
-                            yield return createdObject.Type;
+                            yield return createdObject;
 
                             break;
                         }

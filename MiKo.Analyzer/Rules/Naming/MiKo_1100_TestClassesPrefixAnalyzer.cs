@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool TestClassIsNamedAfterCreatedTypeUnderTest(ITypeSymbol testClass)
         {
-            var types = testClass.GetTypeUnderTestTypeSyntaxesCreatedInCode();
+            var types = testClass.GetCreatedObjectSyntaxReturnedByMethod().Select(_ => _.Type);
 
             foreach (var type in types)
             {

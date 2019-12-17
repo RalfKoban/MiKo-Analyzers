@@ -71,16 +71,7 @@ namespace MiKoSolutions.Analyzers
         internal static ITypeSymbol GetTypeSymbol(this TypeSyntax syntax, SemanticModel semanticModel)
         {
             var typeInfo = semanticModel.GetTypeInfo(syntax);
-            var type = typeInfo.Type;
-
-            // we might have no type but an identifeier for a type, so we have to search for that one instead
-            if (type is null && syntax is IdentifierNameSyntax i)
-            {
-                var symbol = GetSymbol(i.Identifier, semanticModel);
-                type = symbol as ITypeSymbol;
-            }
-
-            return type;
+            return typeInfo.Type;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax syntax, SemanticModel semanticModel)
