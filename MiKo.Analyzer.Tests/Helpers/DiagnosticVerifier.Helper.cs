@@ -10,6 +10,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
+using MiKoSolutions.Analyzers.Rules;
+
 namespace TestHelper
 {
     /// <summary>
@@ -30,6 +32,7 @@ namespace TestHelper
         private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
         private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
         private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(NUnit.Framework.Assert).Assembly.Location);
+        private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.
@@ -156,7 +159,8 @@ namespace TestHelper
                 .AddMetadataReference(projectId, SystemCompositionReference)
                 .AddMetadataReference(projectId, CSharpSymbolsReference)
                 .AddMetadataReference(projectId, CodeAnalysisReference)
-                .AddMetadataReference(projectId, NUnitReference);
+                .AddMetadataReference(projectId, NUnitReference)
+                .AddMetadataReference(projectId, MiKoAnalyzersReference);
 
             var count = 0;
             foreach (var source in sources)

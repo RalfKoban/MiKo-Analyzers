@@ -44,14 +44,17 @@
   </ItemGroup>
    
   <ItemGroup>
-    <PackageReference Include="Codecov" Version="1.7.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.3.1" PrivateAssets="all" />
+    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(NCrunch)' != '1'">
+    <PackageReference Include="Codecov" Version="1.7.2" />
     <PackageReference Include="OpenCover" Version="4.7.922" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

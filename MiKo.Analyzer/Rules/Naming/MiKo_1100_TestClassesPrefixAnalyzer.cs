@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -16,26 +18,40 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override void InitializeCore(AnalysisContext context)
+        {
+            base.InitializeCore(context);
+
+            context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
+        }
+
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
-            var typeUnderTest = symbol.GetTypeUnderTestType();
-            if (typeUnderTest is null)
+            var typesUnderTest = symbol.GetTypeUnderTestTypes().ToList();
+            if (typesUnderTest.Any())
             {
-                return Enumerable.Empty<Diagnostic>();
+                var typeUnderTestNames = typesUnderTest.Select(_ => GetTypeUnderTestName(symbol, _))
+                                                       .Where(_ => _ != null) // ignore generic class or struct constraint
+                                                       .ToList();
+
+                if (typeUnderTestNames.Any(_ => TestClassStartsWithName(symbol, _)))
+                {
+                    // names seem to match
+                    return Enumerable.Empty<Diagnostic>();
+                }
+
+                if (typeUnderTestNames.Any())
+                {
+                    // non-matching types, maybe we have some base types and have to investigate the creation methods
+                    return TestClassIsNamedAfterCreatedTypeUnderTest(symbol)
+                               ? Enumerable.Empty<Diagnostic>()
+                               : new[] { Issue(symbol, typeUnderTestNames.First() + Constants.TestsSuffix) };
+                }
             }
 
-            var typeUnderTestName = GetTypeUnderTestName(symbol, typeUnderTest);
-            if (typeUnderTestName is null)
-            {
-                return Enumerable.Empty<Diagnostic>(); // ignore generic class or struct constraint
-            }
-
-            var className = symbol.Name;
-            return className.StartsWith(typeUnderTestName, StringComparison.Ordinal)
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, typeUnderTestName + Constants.TestsSuffix) };
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static string GetTypeUnderTestName(INamedTypeSymbol testClass, ITypeSymbol typeUnderTest)
@@ -50,6 +66,54 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // for generic class or struct constraints there is no constraint type available
             var constraint = typeParameter.ConstraintTypes.FirstOrDefault();
             return constraint?.Name;
+        }
+
+        private static bool TestClassStartsWithName(ITypeSymbol testClass, string typeUnderTestName) => testClass.Name.StartsWith(typeUnderTestName, StringComparison.Ordinal);
+
+        private static bool TestClassIsNamedAfterCreatedTypeUnderTest(ITypeSymbol testClass)
+        {
+            var types = testClass.GetCreatedObjectSyntaxReturnedByMethods().Select(_ => _.Type);
+
+            foreach (var type in types)
+            {
+                var typeName = type.GetNameOnlyPart();
+                if (typeName is null)
+                {
+                    continue;
+                }
+
+                if (TestClassStartsWithName(testClass, typeName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private new void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
+        {
+            var node = (LocalDeclarationStatementSyntax)context.Node;
+            var declaration = node.Declaration;
+
+            if (declaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))
+            {
+                // inspect associated test method
+                var method = context.GetEnclosingMethod();
+                if (method.IsTestMethod())
+                {
+                    var testClass = method.ContainingType;
+
+                    var typeUnderTest = declaration.GetTypeSymbol(context.SemanticModel);
+                    var typeUnderTestName = GetTypeUnderTestName(testClass, typeUnderTest);
+
+                    if (TestClassStartsWithName(testClass, typeUnderTestName) is false)
+                    {
+                        var diagnostic = Issue(testClass, typeUnderTestName + Constants.TestsSuffix);
+                        context.ReportDiagnostic(diagnostic);
+                    }
+                }
+            }
         }
     }
 }

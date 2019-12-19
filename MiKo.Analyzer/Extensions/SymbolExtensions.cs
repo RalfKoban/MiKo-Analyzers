@@ -250,6 +250,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestTeardownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
 
+        internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol method) => method.ReturnsVoid is false && TypeUnderTestMethodNames.Contains(method.Name);
+
         internal static bool IsSpecialAccessor(this IMethodSymbol method)
         {
             switch (method.MethodKind)
@@ -572,14 +574,36 @@ namespace MiKoSolutions.Analyzers
         {
             // TODO: RKN what about base types?
             var members = symbol.GetMembersIncludingInherited<ISymbol>().ToList();
-            var methodTypes = members.OfType<IMethodSymbol>().Where(_ => _.ReturnsVoid is false).Where(_ => TypeUnderTestMethodNames.Contains(_.Name)).Select(_ => _.ReturnType);
+            var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).Select(_ => _.ReturnType);
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes);
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
         }
 
-        internal static ITypeSymbol GetTypeUnderTestType(this ITypeSymbol symbol) => symbol.GetTypeUnderTestTypes().FirstOrDefault(_ => _ != null);
+        // TODO RKN: find better name
+        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethods(this ITypeSymbol symbol)
+        {
+            return symbol.GetMembers().OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).SelectMany(GetCreatedObjectSyntaxReturnedByMethod);
+        }
+
+        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol symbol)
+        {
+            var method = (MethodDeclarationSyntax)symbol.GetSyntax();
+            foreach (var createdObject in method.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
+            {
+                switch (createdObject.Parent)
+                {
+                    case ArrowExpressionClauseSyntax arrow when arrow.Parent == method:
+                    case ReturnStatementSyntax rs when rs.Parent == method:
+                    {
+                        yield return createdObject;
+
+                        break;
+                    }
+                }
+            }
+        }
 
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {
