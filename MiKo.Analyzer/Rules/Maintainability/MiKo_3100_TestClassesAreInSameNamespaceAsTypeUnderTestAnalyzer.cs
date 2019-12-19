@@ -83,20 +83,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var controlFlow = semanticModel.AnalyzeControlFlow(methodDeclaration.Body);
                 var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
 
-                foreach (var variableDeclaration in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>())
+                foreach (var variable in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>().SelectMany(_ => _.Variables))
                 {
-                    foreach (var variable in variableDeclaration.Variables)
+                    if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.Identifier.Text == ins.Identifier.Text) && variable.Initializer.Value is ObjectCreationExpressionSyntax oces)
                     {
-                        if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.Identifier.Text == ins.Identifier.Text))
-                        {
-                            if (variable.Initializer.Value is ObjectCreationExpressionSyntax oces)
-                            {
-                                var typeInfo = semanticModel.GetTypeInfo(oces);
-                                var type = typeInfo.Type;
+                        var typeInfo = semanticModel.GetTypeInfo(oces);
+                        var type = typeInfo.Type;
 
-                                types.Add(type);
-                            }
-                        }
+                        types.Add(type);
                     }
                 }
             }
