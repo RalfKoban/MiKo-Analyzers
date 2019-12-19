@@ -66,6 +66,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<ITypeSymbol> AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
+            if (semanticModel.SyntaxTree != methodDeclaration.SyntaxTree)
+            {
+                // TODO: RKN Consider partial classes
+                // Warning AD0001 Analyzer 'MiKoSolutions.Analyzers.Rules.Maintainability.MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer' threw an exception of type 'System.ArgumentException' with message 'Syntax node is not within syntax tree'.
+                // happens for 'MiKo_1063_AbbreviationsInNameAnalyzerTests.MidTerms.cs'
+                return Enumerable.Empty<ITypeSymbol>();
+            }
+
             var types = new HashSet<ITypeSymbol>();
 
             if (methodDeclaration.Body is null)
