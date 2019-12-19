@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -18,31 +17,133 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context)
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeClassDeclaration, SyntaxKind.ClassDeclaration);
+
+        private static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(ITypeSymbol testClass, SemanticModel semanticModel)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeClassDeclaration, SyntaxKind.ClassDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
+            var typesUnderTest = new HashSet<ITypeSymbol>();
+
+            // Idea:
+            // 1. Collect created types of objects (ObjectCreationExpression) that are either directly returned (or assigned to variable that is returned)
+            foreach (var methodSymbol in testClass.GetMembers().OfType<IMethodSymbol>().Where(_ => _.IsTypeUnderTestCreationMethod()))
+            {
+                var methodDeclaration = (MethodDeclarationSyntax)methodSymbol.GetSyntax();
+
+                var types = AnalyzeTestCreationMethod(methodDeclaration, semanticModel);
+                foreach (var type in types)
+                {
+                    typesUnderTest.Add(type);
+                }
+            }
+
+            // if anything is found, we only use those as those are the most concrete ones
+            if (typesUnderTest.Any())
+            {
+                return typesUnderTest;
+            }
+
+            // 2. If none is found, go into each test method and try to find out which objects get created that are assigned to a local variable named 'objectUnderTest' (or similar)
+            foreach (var methodSymbol in testClass.GetMembers().OfType<IMethodSymbol>().Where(_ => _.IsTestSetupMethod() || _.IsTestMethod()))
+            {
+                var methodDeclaration = (MethodDeclarationSyntax)methodSymbol.GetSyntax();
+
+                var types = AnalyzeTestMethod(methodDeclaration, semanticModel);
+                foreach (var type in types)
+                {
+                    typesUnderTest.Add(type);
+                }
+            }
+
+            // if anything is found, we only use those as those are the most concrete ones
+            if (typesUnderTest.Any())
+            {
+                return typesUnderTest;
+            }
+
+            // 3. If none is found, check for fields or properties that are named ObjectUnderTest
+            return testClass.GetTypeUnderTestTypes();
         }
 
-        private static Lazy<IEnumerable<ITypeSymbol>> GetTypeUnderTestTypeSyntaxesCreatedInCode(ITypeSymbol symbol, SemanticModel semanticModel)
+        private static IEnumerable<ITypeSymbol> AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            return new Lazy<IEnumerable<ITypeSymbol>>(() => symbol.GetCreatedObjectSyntaxReturnedByMethod()
-                                                                  .Select(_ => semanticModel.GetTypeInfo(_))
-                                                                  .Select(_ => _.Type)
-                                                                  .ToList());
+            var types = new HashSet<ITypeSymbol>();
+
+            if (methodDeclaration.Body is null)
+            {
+                if (methodDeclaration.ExpressionBody?.Expression is ObjectCreationExpressionSyntax oces)
+                {
+                    var typeInfo = semanticModel.GetTypeInfo(oces);
+                    var type = typeInfo.Type;
+
+                    types.Add(type);
+                }
+            }
+            else
+            {
+                var controlFlow = semanticModel.AnalyzeControlFlow(methodDeclaration.Body);
+                var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
+
+                foreach (var variableDeclaration in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>())
+                {
+                    foreach (var variable in variableDeclaration.Variables)
+                    {
+                        if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.Identifier.Text == ins.Identifier.Text))
+                        {
+                            if (variable.Initializer.Value is ObjectCreationExpressionSyntax oces)
+                            {
+                                var typeInfo = semanticModel.GetTypeInfo(oces);
+                                var type = typeInfo.Type;
+
+                                types.Add(type);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return types;
         }
 
-        private static bool NamespaceMatchesTypeUnderTestCreatedInCode(ITypeSymbol testClass, Lazy<IEnumerable<ITypeSymbol>> otherTypesUnderTest)
+        private static IEnumerable<ITypeSymbol> AnalyzeTestMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            var unitTestNamespace = testClass.ContainingNamespace.FullyQualifiedName();
+            var types = new HashSet<ITypeSymbol>();
 
-            var namespacesMatch = otherTypesUnderTest.Value
-                                                     .Select(_ => _.ContainingNamespace.FullyQualifiedName())
-                                                     .Any(_ => _ == unitTestNamespace);
-            return namespacesMatch;
+            foreach (var variableDeclaration in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>())
+            {
+                // inspect associated test method
+                if (variableDeclaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))
+                {
+                    var typeUnderTest = variableDeclaration.GetTypeSymbol(semanticModel);
+                    types.Add(typeUnderTest);
+                }
+            }
+
+            return types;
         }
 
-        private bool TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest, Lazy<IEnumerable<ITypeSymbol>> otherTypesUnderTest, out Diagnostic result)
+        private void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
+        {
+            var semanticModel = context.SemanticModel;
+
+            var node = (ClassDeclarationSyntax)context.Node;
+
+            var testClass = node.GetTypeSymbol(semanticModel);
+
+            if (testClass.IsTestClass())
+            {
+                var typesUnderTest = GetTypeUnderTestTypes(testClass, semanticModel);
+
+                foreach (var typeUnderTest in typesUnderTest)
+                {
+                    if (TypeHasNamespaceIssue(testClass, typeUnderTest, out var diagnostic))
+                    {
+                        context.ReportDiagnostic(diagnostic);
+                    }
+                }
+            }
+        }
+
+        private bool TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest, out Diagnostic result)
         {
             if (typeUnderTest != null)
             {
@@ -51,63 +152,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (expectedNamespace != unitTestNamespace)
                 {
-                    // try to find an assignment to see if a more concrete type is a better match
-                    if (NamespaceMatchesTypeUnderTestCreatedInCode(testClass, otherTypesUnderTest) is false)
-                    {
-                        result = Issue(testClass, expectedNamespace);
-                        return true;
-                    }
+                    result = Issue(testClass, expectedNamespace);
+                    return true;
                 }
             }
 
             result = null;
             return false;
-        }
-
-        private void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
-        {
-            var node = (ClassDeclarationSyntax)context.Node;
-
-            var typeSymbol = node.GetTypeSymbol(context.SemanticModel);
-
-            if (typeSymbol.IsTestClass())
-            {
-                var typesUnderTest = typeSymbol.GetTypeUnderTestTypes();
-                var otherTypesUnderTest = GetTypeUnderTestTypeSyntaxesCreatedInCode(typeSymbol, context.SemanticModel);
-
-                foreach (var typeUnderTest in typesUnderTest)
-                {
-                    AnalyzeNamespaces(context, typeSymbol, typeUnderTest, otherTypesUnderTest);
-                }
-            }
-        }
-
-        private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
-        {
-            var node = (LocalDeclarationStatementSyntax)context.Node;
-            var declaration = node.Declaration;
-
-            if (declaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))
-            {
-                // inspect associated test method
-                var method = context.GetEnclosingMethod();
-                if (method.IsTestMethod())
-                {
-                    var testClass = method.ContainingType;
-                    var typeUnderTest = declaration.GetTypeSymbol(context.SemanticModel);
-                    var otherTypesUnderTest = GetTypeUnderTestTypeSyntaxesCreatedInCode(testClass, context.SemanticModel);
-
-                    AnalyzeNamespaces(context, testClass, typeUnderTest, otherTypesUnderTest);
-                }
-            }
-        }
-
-        private void AnalyzeNamespaces(SyntaxNodeAnalysisContext context, ITypeSymbol testClass, ITypeSymbol typeUnderTest, Lazy<IEnumerable<ITypeSymbol>> otherTypesUnderTest)
-        {
-            if (TypeHasNamespaceIssue(testClass, typeUnderTest, otherTypesUnderTest, out var diagnostic))
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
         }
     }
 }

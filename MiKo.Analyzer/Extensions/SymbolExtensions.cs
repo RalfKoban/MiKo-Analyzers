@@ -250,6 +250,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestTeardownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
 
+        internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol method) => method.ReturnsVoid is false && TypeUnderTestMethodNames.Contains(method.Name);
+
         internal static bool IsSpecialAccessor(this IMethodSymbol method)
         {
             switch (method.MethodKind)
@@ -568,12 +570,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
 
-        /// <seealso cref="GetCreatedObjectSyntaxReturnedByMethod"/>
         internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol symbol)
         {
             // TODO: RKN what about base types?
             var members = symbol.GetMembersIncludingInherited<ISymbol>().ToList();
-            var methodTypes = GetTypeUnderTestCreationMethods(members).Select(_ => _.ReturnType);
+            var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).Select(_ => _.ReturnType);
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
@@ -581,23 +582,24 @@ namespace MiKoSolutions.Analyzers
         }
 
         // TODO RKN: find better name
-        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this ITypeSymbol symbol)
+        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethods(this ITypeSymbol symbol)
         {
-            var methods = GetTypeUnderTestCreationMethods(symbol.GetMembers());
-            foreach (var method in methods)
-            {
-                var methodSyntax = (MethodDeclarationSyntax)method.GetSyntax();
-                foreach (var createdObject in methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
-                {
-                    switch (createdObject.Parent)
-                    {
-                        case ArrowExpressionClauseSyntax arrow when arrow.Parent == methodSyntax:
-                        case ReturnStatementSyntax rs when rs.Parent == methodSyntax:
-                        {
-                            yield return createdObject;
+            return symbol.GetMembers().OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).SelectMany(GetCreatedObjectSyntaxReturnedByMethod);
+        }
 
-                            break;
-                        }
+        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol symbol)
+        {
+            var method = (MethodDeclarationSyntax)symbol.GetSyntax();
+            foreach (var createdObject in method.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
+            {
+                switch (createdObject.Parent)
+                {
+                    case ArrowExpressionClauseSyntax arrow when arrow.Parent == method:
+                    case ReturnStatementSyntax rs when rs.Parent == method:
+                    {
+                        yield return createdObject;
+
+                        break;
                     }
                 }
             }
@@ -754,8 +756,6 @@ namespace MiKoSolutions.Analyzers
                 CollectAllNestedTypes(nestedType, types);
             }
         }
-
-        private static IEnumerable<IMethodSymbol> GetTypeUnderTestCreationMethods(IEnumerable<ISymbol> members) => members.OfType<IMethodSymbol>().Where(_ => _.ReturnsVoid is false).Where(_ => TypeUnderTestMethodNames.Contains(_.Name));
 
         private static string GetMethodNameForKind(IMethodSymbol method)
         {
