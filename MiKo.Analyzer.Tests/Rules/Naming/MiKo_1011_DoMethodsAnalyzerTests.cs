@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("IsInDoubt")]
         [TestCase("Whatever")]
         [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
+        [TestCase("Dogfood")]
         public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {

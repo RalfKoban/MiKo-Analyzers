@@ -52,12 +52,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var escapedMethod = methodName
                                 .Replace("Doc", EscapedPhrase + "c")
+                                .Replace("Dog", EscapedPhrase + "g")
+                                .Replace("Dot", EscapedPhrase + "t")
+                                .Replace("Done", EscapedPhrase + "ne")
                                 .Replace("DoEvents", EscapedPhrase + "Events")
+                                .Replace("Domain", EscapedPhrase + "main")
                                 .Replace("Double", EscapedPhrase + "uble")
                                 .Replace("Doubt", EscapedPhrase + "ubt")
-                                .Replace("Domain", EscapedPhrase + "main")
-                                .Replace("Done", EscapedPhrase + "ne")
-                                .Replace("Dot", EscapedPhrase + "t")
                                 .Replace("Down", EscapedPhrase + "wn");
             return escapedMethod;
         }
