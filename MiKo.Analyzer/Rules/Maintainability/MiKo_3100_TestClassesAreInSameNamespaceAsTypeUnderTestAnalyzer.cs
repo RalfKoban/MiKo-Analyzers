@@ -21,11 +21,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(ITypeSymbol testClass, SemanticModel semanticModel)
         {
+            var methods = testClass.GetMembers().OfType<IMethodSymbol>().ToList();
+            if (testClass.IsPartial() && methods.Any(_ => _.GetSyntax().SyntaxTree != semanticModel.SyntaxTree))
+            {
+                // different syntax trees means that it's inside a partial part which we do not want/need to inspect (because namespaces for such parts are all the same and we only need to inspect one part)
+                return Enumerable.Empty<ITypeSymbol>();
+            }
+
             var typesUnderTest = new HashSet<ITypeSymbol>();
 
             // Idea:
             // 1. Collect created types of objects (ObjectCreationExpression) that are either directly returned (or assigned to variable that is returned)
-            foreach (var methodSymbol in testClass.GetMembers().OfType<IMethodSymbol>().Where(_ => _.IsTypeUnderTestCreationMethod()))
+            foreach (var methodSymbol in methods.Where(_ => _.IsTypeUnderTestCreationMethod()))
             {
                 var methodDeclaration = (MethodDeclarationSyntax)methodSymbol.GetSyntax();
 
@@ -43,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // 2. If none is found, go into each test method and try to find out which objects get created that are assigned to a local variable named 'objectUnderTest' (or similar)
-            foreach (var methodSymbol in testClass.GetMembers().OfType<IMethodSymbol>().Where(_ => _.IsTestSetupMethod() || _.IsTestMethod()))
+            foreach (var methodSymbol in methods.Where(_ => _.IsTestSetupMethod() || _.IsTestMethod()))
             {
                 var methodDeclaration = (MethodDeclarationSyntax)methodSymbol.GetSyntax();
 
@@ -66,14 +73,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<ITypeSymbol> AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            if (semanticModel.SyntaxTree != methodDeclaration.SyntaxTree)
-            {
-                // TODO: RKN Consider partial classes
-                // Warning AD0001 Analyzer 'MiKoSolutions.Analyzers.Rules.Maintainability.MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer' threw an exception of type 'System.ArgumentException' with message 'Syntax node is not within syntax tree'.
-                // happens for 'MiKo_1063_AbbreviationsInNameAnalyzerTests.MidTerms.cs'
-                return Enumerable.Empty<ITypeSymbol>();
-            }
-
             var types = new HashSet<ITypeSymbol>();
 
             if (methodDeclaration.Body is null)

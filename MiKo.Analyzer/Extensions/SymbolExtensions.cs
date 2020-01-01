@@ -618,7 +618,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                              .Select(_ => _.ArgumentList.Arguments)
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
-        internal static bool IsPartial(this INamedTypeSymbol symbol) => symbol.Locations.Length > 1;
+        internal static bool IsPartial(this ITypeSymbol symbol) => symbol.Locations.Length > 1;
 
         internal static bool TryGetGenericArgumentType(this ITypeSymbol symbol, out ITypeSymbol result, int index = 0)
         {
@@ -691,6 +691,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static int GetStartingLine(this IMethodSymbol method) => method.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
+
+        internal static SyntaxNode GetSyntax(this ITypeSymbol symbol) => symbol.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
 
         // methods could also be constructors so we would get a ConstructorDeclarationSyntax instead of a MethodDeclarationSyntax
         internal static SyntaxNode GetSyntax(this IMethodSymbol symbol) => symbol.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);

@@ -2,7 +2,7 @@
 Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 ## Build / Project status
-[![Maintenance](https://img.shields.io/maintenance/yes/2019.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
+[![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
 [![Build status](https://ci.appveyor.com/api/projects/status/qanrqn7r4q9frr9m/branch/master?svg=true)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/branch/master)
 [![codecov](https://codecov.io/gh/RalfKoban/MiKo-Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/RalfKoban/MiKo-Analyzers)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)

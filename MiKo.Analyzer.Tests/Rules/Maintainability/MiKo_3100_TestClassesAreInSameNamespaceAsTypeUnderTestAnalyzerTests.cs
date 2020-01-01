@@ -511,9 +511,6 @@ namespace BlaBla.BlaBlubb.Tests
                                        }
                                    });
 
-        [Test]
-        public void DogFood() => No_issue_is_reported_for_file(@"D:\Private\MiKo Solutions\MiKo Analyzers\MiKo.Analyzer.Tests\Rules\Naming\MiKo_1063_AbbreviationsInNameAnalyzerTests.MidTerms.cs");
-
         protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer();
