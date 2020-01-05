@@ -39,11 +39,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var method = (IMethodSymbol)symbol;
 
-            var summaryViolations = AnalyzeSummaries(method, commentXml);
-            var paramViolations = AnalyzeParameters(method.Parameters, commentXml);
-            var returnViolations = AnalyzeReturns(method, commentXml);
+            var violationsInSummaries = AnalyzeSummaries(method, commentXml);
+            var violationsInParameters = AnalyzeParameters(method.Parameters, commentXml);
+            var violationsInReturns = AnalyzeReturns(method, commentXml);
 
-            return summaryViolations.Concat(paramViolations).Concat(returnViolations).Where(_ => _ != null);
+            return violationsInSummaries.Concat(violationsInParameters).Concat(violationsInReturns).Where(_ => _ != null);
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
