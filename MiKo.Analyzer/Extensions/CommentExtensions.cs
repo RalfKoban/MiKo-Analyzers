@@ -73,9 +73,24 @@ namespace MiKoSolutions.Analyzers
 
         internal static string FirstWord(this string text)
         {
-            var firstSpace = text.IndexOf(" ", StringComparison.OrdinalIgnoreCase);
-            var firstWord = firstSpace == -1 ? text : text.Substring(0, firstSpace);
-            return firstWord;
+            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+            if (firstSpace != -1)
+            {
+                // we found a whitespace
+                return text.Substring(0, firstSpace);
+            }
+
+            for (var index = 0; index < text.Length; index++)
+            {
+                var c = text[index];
+                if (c.IsUpperCase())
+                {
+                    var firstWord = text.Substring(0, index);
+                    return firstWord;
+                }
+            }
+
+            return text;
         }
 
         private static XElement GetCommentElement(string commentXml)

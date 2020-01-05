@@ -19,6 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "list",
                 "collection",
                 "dictionary",
+                "variablesRead",
+                "variablesWritten",
+                "typesUnderTest",
             };
 
         private static readonly string[] WrongNames =

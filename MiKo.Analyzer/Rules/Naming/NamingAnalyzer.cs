@@ -352,6 +352,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return "m_source"; // special handling
             }
 
+            var firstWord = pluralName.FirstWord();
+            if (firstWord.EndsWith("s", comparison))
+            {
+                // TODO: RKN check MiKo_1070 for spelling mistakes
+                return pluralName;
+            }
+
             return candidate;
         }
 

@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers
         internal const string TestsSuffix = "Tests";
 
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
+        internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
+
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
 
         public static class MaxNamingLengths
