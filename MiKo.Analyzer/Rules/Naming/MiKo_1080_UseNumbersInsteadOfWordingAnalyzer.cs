@@ -64,6 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "tone",
                                                                          "Tone",
                                                                          "tWord", // 'firstWord'
+                                                                         "WaitOne",
                                                                          "weight",
                                                                          "Weight",
                                                                          "zone",
