@@ -845,6 +845,15 @@ Example:
   <data name="MiKo_1073_Title" xml:space="preserve">
     <value>Boolean fields should be named as statements and not as questions.</value>
   </data>
+  <data name="MiKo_1080_Description" xml:space="preserve">
+    <value>It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. 'issue42' in contrast to 'issueFortyTwo').</value>
+  </data>
+  <data name="MiKo_1080_MessageFormat" xml:space="preserve">
+    <value>Use number instead of spelling</value>
+  </data>
+  <data name="MiKo_1080_Title" xml:space="preserve">
+    <value>Names should contain numbers instead of their spellings.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>

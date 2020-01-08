@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 239 rules that are currently provided by the analyzer.
+The following tables list all the 247 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -92,6 +92,7 @@ The following tables list all the 239 rules that are currently provided by the a
 |MiKo_1071|Local boolean variables should be named as statements and not as questions.|&#x2713;|
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions.|&#x2713;|
 |MiKo_1073|Boolean fields should be named as statements and not as questions.|&#x2713;|
+|MiKo_1080|Names should contain numbers instead of their spellings.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
@@ -227,6 +228,7 @@ The following tables list all the 239 rules that are currently provided by the a
 |MiKo_3025|Do not re-assign method parameters.|&#x2713;|
 |MiKo_3026|Unused parameters should be removed.|&#x2713;|
 |MiKo_3027|Parameters should not be marked to be reserved for future usage.|&#x2713;|
+|MiKo_3028|Do not assign null to lambda parameters.|&#x2713;|
 |MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|
 |MiKo_3032|Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.|&#x2713;|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|
@@ -260,6 +262,7 @@ The following tables list all the 239 rules that are currently provided by the a
 |MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|&#x2713;|
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|
 |MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|
+|MiKo_3107|Moq Mock condition matchers should be used on mocks only.|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|
 
 ### Ordering

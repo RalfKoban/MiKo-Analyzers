@@ -2163,6 +2163,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
+        /// </summary>
+        public static string MiKo_1080_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1080_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use number instead of spelling.
+        /// </summary>
+        public static string MiKo_1080_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1080_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Names should contain numbers instead of their spellings..
+        /// </summary>
+        public static string MiKo_1080_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1080_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
