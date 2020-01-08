@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,10 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1080";
 
-        private const string NumberOne = "one";
-
-        private static readonly string[] NumbersWithoutOne =
+        private static readonly string[] Numbers =
             {
+                "one",
                 "two",
                 "three",
                 "four",
@@ -33,7 +33,42 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "fifty",
             };
 
-        private static readonly HashSet<char> NumberOneAllowedPreceedings = new HashSet<char>("bcdghlmnstxzBCDGHLMNSTXZ");
+        private static readonly IEnumerable<string> KnownParts = new[]
+                                                                     {
+                                                                         "_one_",
+                                                                         "bone",
+                                                                         "Bone",
+                                                                         "cone",
+                                                                         "Cone",
+                                                                         "done",
+                                                                         "Done",
+                                                                         "gone",
+                                                                         "Gone",
+                                                                         "height",
+                                                                         "Height",
+                                                                         "hone",
+                                                                         "Hone",
+                                                                         "ionE",
+                                                                         "IonE",
+                                                                         "lone",
+                                                                         "Lone",
+                                                                         "mone",
+                                                                         "Mone",
+                                                                         "none",
+                                                                         "None",
+                                                                         "oxone",
+                                                                         "Oxone",
+                                                                         "sEven", // 'isEvent'
+                                                                         "sone",
+                                                                         "Sone",
+                                                                         "tone",
+                                                                         "Tone",
+                                                                         "tWord", // 'firstWord'
+                                                                         "weight",
+                                                                         "Weight",
+                                                                         "zone",
+                                                                         "Zone",
+                                                                     };
 
         public MiKo_1080_UseNumbersInsteadOfWordingAnalyzer() : base(Id)
         {
@@ -60,62 +95,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
-        {
-            foreach (var identifier in identifiers)
-            {
-                var name = identifier.Text;
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from identifier in identifiers
+                                                                                                                                        let name = identifier.Text
+                                                                                                                                        where HasIssue(name)
+                                                                                                                                        select Issue(name, identifier.GetLocation());
 
-                if (HasIssue(name))
-                {
-                    yield return Issue(name, identifier.GetLocation());
-                }
-            }
+        private static bool HasIssue(string name)
+        {
+            var nameToInspect = Prepare(name);
+
+            return nameToInspect.ContainsAny(Numbers, StringComparison.OrdinalIgnoreCase);
         }
 
-        private static bool HasIssue(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        private static string Prepare(string name)
         {
-            // special handling for name 'one'
-            var index = name.IndexOf(NumberOne, comparison);
-            if (index == 0)
-            {
-                return true;
-            }
-
-            if (index > 0)
-            {
-                var charBeforeOne = name[index - 1];
-
-                switch (name[index])
-                {
-                    case 'o':
-                    {
-                        if (NumberOneAllowedPreceedings.Contains(charBeforeOne) is false)
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-
-                    case 'O':
-                    {
-                        if (charBeforeOne.IsUpperCase())
-                        {
-                            return true; // its a new word
-                        }
-
-                        if (NumberOneAllowedPreceedings.Contains(charBeforeOne) is false)
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            return name.ContainsAny(NumbersWithoutOne, comparison);
+            var finalName = KnownParts.Aggregate(name, (current, part) => current.Replace(part, "#"));
+            return finalName;
         }
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)

@@ -32,6 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "oxone",
                 "zone",
                 "Zone",
+                "exceptionEnding",
+                "firstWord",
+                "IsEventArgs",
+                "height",
+                "weight",
+                "InvocationExpression",
             };
 
         private static readonly string[] WrongNames =
