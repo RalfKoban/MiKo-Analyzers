@@ -417,6 +417,12 @@ namespace MiKoSolutions.Analyzers
                     "When ",
                     "Throws ",
                     "Throw ",
+                    "Exception ",
+                    "The exception ",
+                    "A exception ",
+                    "An exception ",
+                    "Fired ",
+                    "Is fired ",
                 };
 
             internal const string XmlElementStartingTag = "<";

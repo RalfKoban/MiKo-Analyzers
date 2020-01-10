@@ -98,6 +98,12 @@ public class TestMe
                                   "Is thrown ",
                                   "Gets thrown ",
                                   "Will be thrown ",
+                                  "The exception in case ",
+                                  "Exception in case ",
+                                  "A exception thrown ",
+                                  "An exception thrown ",
+                                  "Fired ",
+                                  "Is fired ",
                               };
 
             return phrases.Concat(phrases.Select(_ => _.ToLower())).Distinct().OrderBy(_ => _).ToArray();
