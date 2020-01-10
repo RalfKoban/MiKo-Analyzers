@@ -854,6 +854,21 @@ Example:
   <data name="MiKo_1080_Title" xml:space="preserve">
     <value>Names should contain numbers instead of their spellings.</value>
   </data>
+  <data name="MiKo_1081_Description" xml:space="preserve">
+    <value>Sometimes, developers try to report that an entity was not found.
+
+For example, a repository is requested to return an entity 'Xyz' (e.g. via method 'GetXyz'). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
+
+The name of the exception is then sometimes 'GetXyzFailedException' which is not that clear (why did it fail?). A better name would be 'XyzNotFoundException' to indicate that 'Xyz' was not found.
+
+The same applies for 'XyzMissingException'. It is probably not missing (which means it should be actually there but is not); it is just not there and therefore cannot be found. So, 'XyzNotFoundException' would be a better, more precise name as well.</value>
+  </data>
+  <data name="MiKo_1081_MessageFormat" xml:space="preserve">
+    <value>Consider to name it '{0}'</value>
+  </data>
+  <data name="MiKo_1081_Title" xml:space="preserve">
+    <value>Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>

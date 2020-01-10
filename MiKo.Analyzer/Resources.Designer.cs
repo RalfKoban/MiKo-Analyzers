@@ -2190,6 +2190,39 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sometimes, developers try to report that an entity was not found.
+        ///
+        ///For example, a repository is requested to return an entity &apos;Xyz&apos; (e.g. via method &apos;GetXyz&apos;). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
+        ///
+        ///The name of the exception is then sometimes &apos;GetXyzFailedException&apos; which is not that clear (why did it fail?). A better name would be &apos;XyzNotFoundException&apos; to indicate that &apos;Xyz&apos; was not found.
+        ///
+        ///The same applies for &apos;XyzMissin [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_1081_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1081_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consider to name it &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_1081_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1081_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;&lt;Entity&gt;NotFound&apos; instead of &apos;Get&lt;Entity&gt;Failed&apos; or &apos;&lt;Entity&gt;Missing&apos;..
+        /// </summary>
+        public static string MiKo_1081_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1081_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

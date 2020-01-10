@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 247 rules that are currently provided by the analyzer.
+The following tables list all the 248 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -93,6 +93,7 @@ The following tables list all the 247 rules that are currently provided by the a
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions.|&#x2713;|
 |MiKo_1073|Boolean fields should be named as statements and not as questions.|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings.|&#x2713;|
+|MiKo_1081|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
