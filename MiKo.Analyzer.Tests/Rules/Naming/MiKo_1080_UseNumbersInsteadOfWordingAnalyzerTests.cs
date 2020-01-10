@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 "bone",
                 "Bone",
+                "component",
+                "Component",
                 "cone",
                 "Cone",
                 "done",

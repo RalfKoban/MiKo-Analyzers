@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "_one_",
                                                                          "bone",
                                                                          "Bone",
+                                                                         "omponent",
                                                                          "cone",
                                                                          "Cone",
                                                                          "done",
