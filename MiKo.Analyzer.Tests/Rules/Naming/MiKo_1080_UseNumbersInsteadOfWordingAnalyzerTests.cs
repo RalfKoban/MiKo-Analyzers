@@ -39,6 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "weight",
                 "InvocationExpression",
                 "WaitOne",
+                "OnExit",
+                "OnEntry",
             };
 
         private static readonly string[] WrongNames =

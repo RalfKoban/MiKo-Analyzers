@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "Mone",
                                                                          "none",
                                                                          "None",
+                                                                         "OnE",
                                                                          "oxone",
                                                                          "Oxone",
                                                                          "sEven", // 'isEvent'
