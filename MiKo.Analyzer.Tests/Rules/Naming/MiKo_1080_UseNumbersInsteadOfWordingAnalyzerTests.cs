@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "WaitOne",
                 "OnExit",
                 "OnEntry",
+                "validOnes",
             };
 
         private static readonly string[] WrongNames =
