@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 248 rules that are currently provided by the analyzer.
+The following tables list all the 250 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -194,6 +194,7 @@ The following tables list all the 248 rules that are currently provided by the a
 |MiKo_2209|Do not use double periods in documentation.|&#x2713;|
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'.|&#x2713;|
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|
+|MiKo_2212|Documentation should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|
@@ -201,6 +202,7 @@ The following tables list all the 248 rules that are currently provided by the a
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|
 |MiKo_2306|Do end comments with a period.|\-|
+|MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|

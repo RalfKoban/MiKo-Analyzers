@@ -472,6 +472,8 @@ namespace MiKoSolutions.Analyzers
                 };
 
             internal static readonly string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
+
+            internal const string WasNotSuccessfulPhrase = "was not successful";
         }
 
         internal static class XmlTag

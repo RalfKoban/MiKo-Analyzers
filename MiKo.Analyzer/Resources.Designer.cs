@@ -4863,6 +4863,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To shorten documentation - and still be to the point - the documentation should use the phrase &apos;failed&apos; instead of &apos;was not succesful&apos;..
+        /// </summary>
+        public static string MiKo_2212_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2212_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;failed&apos; instead of &apos;was not successful&apos;.
+        /// </summary>
+        public static string MiKo_2212_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2212_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use the phrase &apos;failed&apos; instead of the phrase &apos;was not sucessful&apos;..
+        /// </summary>
+        public static string MiKo_2212_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2212_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
@@ -5055,6 +5082,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2306_Title {
             get {
                 return ResourceManager.GetString("MiKo_2306_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To shorten comments - and still be to the point - comments should use the phrase &apos;failed&apos; instead of &apos;was not succesful&apos;..
+        /// </summary>
+        public static string MiKo_2307_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2307_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;failed&apos; instead of &apos;was not successful&apos;.
+        /// </summary>
+        public static string MiKo_2307_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2307_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should use the phrase &apos;failed&apos; instead of the phrase &apos;was not sucessful&apos;..
+        /// </summary>
+        public static string MiKo_2307_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2307_Title", resourceCulture);
             }
         }
         
