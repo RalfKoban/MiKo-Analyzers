@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "blackList",
                 "whiteList",
                 "playList",
+                "stack",
             };
 
         protected NamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(nameof(Naming), diagnosticId, kind)

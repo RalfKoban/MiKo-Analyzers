@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] Entities = { "Model", "Models", "model", "models" };
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
             internal static readonly string[] SpecialModels = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
-            internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "list", "dictionary", "observableCollection", "collection", "array", "hashSet" };
+            internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "Stack", "list", "dictionary", "observableCollection", "collection", "array", "hashSet", "stack" };
             internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "E:", "!:" };
             internal static readonly string[] SymbolsAndLineBreaks = Symbols.Concat(new[] { Environment.NewLine }).ToArray();
             internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
@@ -139,6 +139,8 @@ namespace MiKoSolutions.Analyzers
                     "Protected ",
                     "Internal ",
                     "Private ",
+                    //// "Represents a component that ", // TODO: RKN is it really meaningless?
+                    //// "Represents a component, that ", // TODO: RKN is it really meaningless?
                 };
 
             internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.Concat(new[] { "Contains", "Contain", "Has" }).ToArray();

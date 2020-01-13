@@ -11,17 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] CorrectNames =
             {
+                "array",
+                "collection",
+                "dictionary",
                 "items",
+                "list",
                 "result",
                 "results",
                 "source",
-                "array",
-                "list",
-                "collection",
-                "dictionary",
+                "stack",
+                "typesUnderTest",
                 "variablesRead",
                 "variablesWritten",
-                "typesUnderTest",
             };
 
         private static readonly string[] WrongNames =
