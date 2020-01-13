@@ -10,30 +10,31 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     internal static class Counter
     {
-        // if | do... while | while | for | foreach | case | continue | goto | && | || | catch | catch when | ternary operator ?: | ?? | ?.
-        private static readonly SyntaxKind[] CCSyntaxKinds =
+        // if | do... while | while | for | foreach | case | continue | goto | && | || | catch | catch when | ternary operator ?: | ?? | ??= | ?.
+        private static readonly HashSet<int> CCSyntaxKinds = new HashSet<int>
             {
-                SyntaxKind.IfStatement,
-                SyntaxKind.DoStatement,
-                SyntaxKind.WhileStatement,
-                SyntaxKind.ForStatement,
-                SyntaxKind.ForEachStatement,
-                SyntaxKind.CaseSwitchLabel,
-                SyntaxKind.CasePatternSwitchLabel,
-                SyntaxKind.ContinueStatement,
-                SyntaxKind.GotoStatement,
-                SyntaxKind.LogicalAndExpression,
-                SyntaxKind.LogicalOrExpression,
-                SyntaxKind.CatchClause,
-                SyntaxKind.CatchFilterClause,
-                SyntaxKind.ConditionalExpression,
-                SyntaxKind.CoalesceExpression,
-                SyntaxKind.ConditionalAccessExpression,
+                (int)SyntaxKind.IfStatement,
+                (int)SyntaxKind.DoStatement,
+                (int)SyntaxKind.WhileStatement,
+                (int)SyntaxKind.ForStatement,
+                (int)SyntaxKind.ForEachStatement,
+                (int)SyntaxKind.CaseSwitchLabel,
+                (int)SyntaxKind.CasePatternSwitchLabel,
+                (int)SyntaxKind.ContinueStatement,
+                (int)SyntaxKind.GotoStatement,
+                (int)SyntaxKind.LogicalAndExpression,
+                (int)SyntaxKind.LogicalOrExpression,
+                (int)SyntaxKind.CatchClause,
+                (int)SyntaxKind.CatchFilterClause,
+                (int)SyntaxKind.ConditionalExpression,
+                (int)SyntaxKind.CoalesceExpression,
+                (int)SyntaxKind.CoalesceAssignmentExpression,
+                (int)SyntaxKind.ConditionalAccessExpression,
             };
 
         public static int CountCyclomaticComplexity(BlockSyntax body)
         {
-            var count = SyntaxNodeCollector<SyntaxNode>.Collect(body).Count(_ => CCSyntaxKinds.Any(_.IsKind));
+            var count = SyntaxNodeCollector<SyntaxNode>.Collect(body).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
             return 1 + count;
         }
 
@@ -79,9 +80,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case ObjectCreationExpressionSyntax s:
 
-                        var singleLine = s.Initializer is null;
-                        if (singleLine)
+                        if (s.Initializer is null)
                         {
+                            // it's a single line
                             CountLinesOfCode(s.GetLocation(), lines);
                         }
                         else
