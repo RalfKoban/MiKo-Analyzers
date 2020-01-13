@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "validOnes",
                 "Network",
                 "versioned",
+                "ImportWorkflow",
             };
 
         private static readonly string[] WrongNames =

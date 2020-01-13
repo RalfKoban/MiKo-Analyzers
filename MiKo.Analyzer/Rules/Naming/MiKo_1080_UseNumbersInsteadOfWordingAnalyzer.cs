@@ -77,6 +77,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "weight",
                                                                          "Weight",
                                                                          "WEIGHT",
+                                                                         "work", // 'ImportWorkflow'
+                                                                         "Work",
                                                                          "zone",
                                                                          "Zone",
                                                                          "ZONE",
