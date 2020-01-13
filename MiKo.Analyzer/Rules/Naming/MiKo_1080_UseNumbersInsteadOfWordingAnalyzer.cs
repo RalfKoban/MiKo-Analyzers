@@ -106,12 +106,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string name)
         {
-            var nameToInspect = Prepare(name);
+            // double check for performance improvements (we don't need to replace if it's not contained at all)
+            if (name.ContainsAny(Numbers, StringComparison.OrdinalIgnoreCase))
+            {
+                var nameToInspect = HandleKnownParts(name);
 
-            return nameToInspect.ContainsAny(Numbers, StringComparison.OrdinalIgnoreCase);
+                return nameToInspect.ContainsAny(Numbers, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
         }
 
-        private static string Prepare(string name)
+        private static string HandleKnownParts(string name)
         {
             var finalName = KnownParts.Aggregate(name, (current, part) => current.Replace(part, "#"));
             return finalName;
