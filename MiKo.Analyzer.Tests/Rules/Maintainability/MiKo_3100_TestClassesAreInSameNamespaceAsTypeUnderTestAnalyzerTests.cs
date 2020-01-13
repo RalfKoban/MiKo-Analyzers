@@ -511,6 +511,9 @@ namespace BlaBla.BlaBlubb.Tests
                                        }
                                    });
 
+        [Test]
+        public void Dogfood() => No_issue_is_reported_for_file(@"D:\WAGO\e!COCKPIT\latest\managed\Products\WAC\Wago.WAC\CodesysIntegration\CodesysIntegration.Plugin.UnitTests\Customization\Commands\CustomizedStandardCommandTests{T}.cs");
+
         protected override string GetDiagnosticId() => MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer();

@@ -21,8 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(ITypeSymbol testClass, SemanticModel semanticModel)
         {
-            var methods = testClass.GetMembers().OfType<IMethodSymbol>().ToList();
-            if (testClass.IsPartial() && methods.Any(_ => _.GetSyntax().SyntaxTree != semanticModel.SyntaxTree))
+            var syntaxTree = semanticModel.SyntaxTree;
+
+            var allMethods = testClass.GetMembers().OfType<IMethodSymbol>().ToList();
+            var methods = allMethods.Where(_ => _.GetSyntax()?.SyntaxTree == syntaxTree).ToList();
+
+            if (testClass.IsPartial() && allMethods.Count != methods.Count)
             {
                 // different syntax trees means that it's inside a partial part which we do not want/need to inspect (because namespaces for such parts are all the same and we only need to inspect one part)
                 return Enumerable.Empty<ITypeSymbol>();
@@ -32,9 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // Idea:
             // 1. Collect created types of objects (ObjectCreationExpression) that are either directly returned (or assigned to variable that is returned)
-            foreach (var methodSymbol in methods.Where(_ => _.IsTypeUnderTestCreationMethod()))
+            foreach (var method in methods.Where(_ => _.IsTypeUnderTestCreationMethod()))
             {
-                var methodDeclaration = (MethodDeclarationSyntax)methodSymbol.GetSyntax();
+                var methodDeclaration = (MethodDeclarationSyntax)method.GetSyntax();
 
                 var types = AnalyzeTestCreationMethod(methodDeclaration, semanticModel);
                 foreach (var type in types)
@@ -50,9 +54,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // 2. If none is found, go into each test method and try to find out which objects get created that are assigned to a local variable named 'objectUnderTest' (or similar)
-            foreach (var methodSymbol in methods.Where(_ => _.IsTestSetupMethod() || _.IsTestMethod()))
+            foreach (var method in methods.Where(_ => _.IsTestSetupMethod() || _.IsTestMethod()))
             {
-                var methodDeclaration = (MethodDeclarationSyntax)methodSymbol.GetSyntax();
+                var methodDeclaration = (MethodDeclarationSyntax)method.GetSyntax();
 
                 var types = AnalyzeTestMethod(methodDeclaration, semanticModel);
                 foreach (var type in types)
