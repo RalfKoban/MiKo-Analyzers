@@ -44,6 +44,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "OnExit",
                 "OnEntry",
                 "validOnes",
+                "Network",
+                "versioned",
             };
 
         private static readonly string[] WrongNames =

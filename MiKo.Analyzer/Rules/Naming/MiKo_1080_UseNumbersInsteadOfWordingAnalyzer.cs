@@ -38,17 +38,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "_one_",
                                                                          "bone",
                                                                          "Bone",
-                                                                         "omponent",
+                                                                         "omponent", // 'component'
+                                                                         "OMPONENT",
                                                                          "cone",
                                                                          "Cone",
                                                                          "done",
                                                                          "Done",
+                                                                         "etwork", // 'network'
+                                                                         "ETWORK",
                                                                          "gone",
                                                                          "Gone",
                                                                          "height",
                                                                          "Height",
+                                                                         "HEIGHT",
                                                                          "hone",
                                                                          "Hone",
+                                                                         "ione",
                                                                          "ionE",
                                                                          "IonE",
                                                                          "lone",
@@ -68,10 +73,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "Tone",
                                                                          "tWord", // 'firstWord'
                                                                          "WaitOne",
+                                                                         "WAITONE",
                                                                          "weight",
                                                                          "Weight",
+                                                                         "WEIGHT",
                                                                          "zone",
                                                                          "Zone",
+                                                                         "ZONE",
                                                                      };
 
         public MiKo_1080_UseNumbersInsteadOfWordingAnalyzer() : base(Id)
