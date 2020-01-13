@@ -12,13 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3102";
 
-        private static readonly HashSet<SyntaxKind> ConditionTokens = new HashSet<SyntaxKind>
-                                                                          {
-                                                                              SyntaxKind.SwitchKeyword,
-                                                                              SyntaxKind.IfKeyword,
-                                                                              SyntaxKind.QuestionToken, // that is a "SyntaxKind.ConditionalExpression" or a "SyntaxKind.ConditionalAccessExpression"
-                                                                              SyntaxKind.QuestionQuestionToken, // that is a "SyntaxKind.CoalesceExpression"
-                                                                          };
+        private static readonly HashSet<int> ConditionTokens = new HashSet<int>
+                                                                   {
+                                                                       (int)SyntaxKind.SwitchKeyword,
+                                                                       (int)SyntaxKind.IfKeyword,
+                                                                       (int)SyntaxKind.QuestionToken, // that is a "SyntaxKind.ConditionalExpression" or a "SyntaxKind.ConditionalAccessExpression"
+                                                                       (int)SyntaxKind.QuestionQuestionToken, // that is a "SyntaxKind.CoalesceExpression"
+                                                                       (int)SyntaxKind.QuestionQuestionEqualsToken, // that is a "SyntaxKind.CoalesceAssignmentExpression"
+                                                                   };
 
         public MiKo_3102_TestMethodsHaveNoConditionsAnalyzer() : base(Id)
         {
@@ -31,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var methodName = method.Name;
 
             var conditions = method.GetSyntax().DescendantTokens()
-                                   .Where(_ => ConditionTokens.Contains(_.Kind()))
+                                   .Where(_ => ConditionTokens.Contains(_.RawKind))
                                    .Select(_ => Issue(methodName, _.GetLocation()))
                                    .ToList();
             return conditions;

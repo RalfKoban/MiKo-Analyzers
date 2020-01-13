@@ -165,6 +165,46 @@ public class TestMe1
 }
 ");
 
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_condition(
+                                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                    [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + testFixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public void DoSomething(object o1, object o2)
+    {
+        var x = o1 ?? o2;
+
+        Assert.That(x, Is.Not.Null);
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_assignment_condition(
+                                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                    [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + testFixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public void DoSomething(object o1, object o2)
+    {
+            o1 ??= o2;
+
+            Assert.That(o1, Is.Not.Null);
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3102_TestMethodsHaveNoConditionsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3102_TestMethodsHaveNoConditionsAnalyzer();
