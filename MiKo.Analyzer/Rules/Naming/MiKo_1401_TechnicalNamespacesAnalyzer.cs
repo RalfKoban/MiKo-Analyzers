@@ -33,10 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
+            var name = qualifiedName.Replace("Structure", "#");
+
             var markers = TechnicalNamespaces;
 
-            return HasMarker(qualifiedName)
-                       ? new[] { Issue(qualifiedName, location, markers.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
+            return HasMarker(name)
+                       ? new[] { Issue(qualifiedName, location, markers.Last(_ => name.Contains(_, StringComparison.OrdinalIgnoreCase))) }
                        : Enumerable.Empty<Diagnostic>();
         }
 
