@@ -15,7 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ContainingType.IsEventArgs();
+
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.ContainingType.IsEventArgs();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
         {
@@ -26,14 +30,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case MethodKind.Constructor:
                 case MethodKind.Ordinary:
-                case MethodKind.PropertySet:
-                    return method.Parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate).Select(_ => Issue(_)).ToList();
-
-                case MethodKind.PropertyGet when method.ReturnType.TypeKind == TypeKind.Delegate:
-                    return new[] { Issue(method.ContainingSymbol) };
+                    return method.Parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate).Select(_ => Issue(_.Type)).ToList();
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
+            }
+        }
+
+        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol)
+        {
+            var returnType = symbol.GetReturnType();
+            if (returnType?.TypeKind == TypeKind.Delegate)
+            {
+                yield return Issue(returnType);
             }
         }
     }

@@ -15,7 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol)
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.ContainingType?.IsEventArgs() is true;
+
+        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol)
         {
             if (symbol.IsReadOnly)
             {
@@ -28,17 +30,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (setter.DeclaredAccessibility == Accessibility.Private)
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
-            if (symbol.ContainingType?.IsEventArgs() is true)
-            {
-                return new[] { Issue(setter) };
-            }
-
-            return Enumerable.Empty<Diagnostic>();
+            return setter.DeclaredAccessibility != Accessibility.Private
+                       ? new[] { Issue(setter) }
+                       : Enumerable.Empty<Diagnostic>();
         }
     }
 }

@@ -23,6 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                      ? Analyze(method)
                                                                                                      : Enumerable.Empty<Diagnostic>();
 
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol property) => ShallAnalyze(property)
+                                                                                                           ? Analyze(property)
+                                                                                                           : Enumerable.Empty<Diagnostic>();
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol field) => ShallAnalyze(field)
                                                                                                   ? Analyze(field)
                                                                                                   : Enumerable.Empty<Diagnostic>();
@@ -31,15 +35,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => !symbol.IsOverride;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride is false;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => !symbol.IsOverride;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false;
+
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
 
         protected virtual IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol) => Enumerable.Empty<Diagnostic>();
     }
