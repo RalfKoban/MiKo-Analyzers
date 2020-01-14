@@ -24,7 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // allow indicators such as http:// or ftp://
             var questionMarkWithoutHyperlink = comment.Split(Constants.WhiteSpaces, StringSplitOptions.RemoveEmptyEntries)
-                                                      .Any(_ => _.Contains("?") is false || _.Contains("://") is false);
+                                                      .Where(_ => _.Contains("?"))
+                                                      .Any(_ => _.Contains("://") is false);
             return questionMarkWithoutHyperlink;
         }
     }
