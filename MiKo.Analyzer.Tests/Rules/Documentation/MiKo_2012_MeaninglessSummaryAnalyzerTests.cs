@@ -306,6 +306,7 @@ public class TestMe : ITestMe
                                 "Builder",
                                 "Entity",
                                 "Model",
+                                "View",
                                 "ViewModel",
                                 "Command",
                                 "Action",

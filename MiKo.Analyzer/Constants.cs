@@ -133,7 +133,8 @@ namespace MiKoSolutions.Analyzers
                     "Used ",
                     "Uses ",
                     "Use this ",
-                    "ViewModel",
+                    "View", // includes 'ViewModel'
+                    //// "ViewModel",
                     "Which ",
                     "Public ",
                     "Protected ",
