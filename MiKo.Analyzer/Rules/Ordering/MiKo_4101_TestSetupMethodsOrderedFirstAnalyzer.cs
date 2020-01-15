@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var path = setupMethod.Locations.First(_ => _.IsInSource).GetLineSpan().Path;
 
-            var firstMethod = GetMethodsOrderedByLocation(symbol, path).First();
+            var method = GetMethodsOrderedByLocation(symbol, path).First();
 
-            return setupMethod.Equals(firstMethod)
+            return ReferenceEquals(setupMethod, method)
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { Issue(setupMethod) };
         }

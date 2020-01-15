@@ -35,8 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var methods = GetMethodsOrderedByLocation(symbol, path).ToList();
             var index = methods.Any(_ => _.IsTestSetupMethod()) ? 1 : 0;
+            var method = methods[index];
 
-            return teardownMethod.Equals(methods[index])
+            return ReferenceEquals(teardownMethod, method)
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { Issue(teardownMethod) };
         }

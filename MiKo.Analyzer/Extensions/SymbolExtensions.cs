@@ -170,7 +170,7 @@ namespace MiKoSolutions.Analyzers
                 var methodSymbols = typeSymbol.AllInterfaces
                                               .Where(_ => _.Name == interfaceTypeName)
                                               .SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-                return methodSymbols.Any(_ => method.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
+                return methodSymbols.Any(_ => ReferenceEquals(method, typeSymbol.FindImplementationForInterfaceMember(_)));
             }
 
             return false;
@@ -233,7 +233,7 @@ namespace MiKoSolutions.Analyzers
                     var methodName = method.Name;
 
                     var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-                    return symbols.Any(_ => method.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
+                    return symbols.Any(_ => ReferenceEquals(method, typeSymbol.FindImplementationForInterfaceMember(_)));
                 }
             }
         }
