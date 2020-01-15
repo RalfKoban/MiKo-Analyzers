@@ -615,7 +615,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol symbol, string invocation) => symbol.GetAssignmentsVia(invocation)
                                                                                                                                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                                                                             .Select(_ => _.ArgumentList.Arguments)
+                                                                                                                                             .Select(_ => _.ArgumentList)
+                                                                                                                                             .Where(_ => _ != null)
+                                                                                                                                             .Select(_ => _.Arguments)
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
         internal static bool IsPartial(this ITypeSymbol symbol) => symbol.Locations.Length > 1;
