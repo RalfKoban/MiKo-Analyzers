@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1081_UseNotFoundInsteadOfMissingAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1081";
+        public const string Id = "MiKo_1060";
 
-        public MiKo_1081_UseNotFoundInsteadOfMissingAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 

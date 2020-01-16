@@ -1743,7 +1743,13 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing methods with number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name..
+        ///   Looks up a localized string similar to Sometimes, developers try to report that an entity was not found.
+        ///
+        ///For example, a repository is requested to return an entity &apos;Xyz&apos; (e.g. via method &apos;GetXyz&apos;). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
+        ///
+        ///The name of the exception is then sometimes &apos;GetXyzFailedException&apos; which is not that clear (why did it fail?). A better name would be &apos;XyzNotFoundException&apos; to indicate that &apos;Xyz&apos; was not found.
+        ///
+        ///The same applies for &apos;XyzMissin [rest of string was truncated]&quot;;.
         /// </summary>
         public static string MiKo_1060_Description {
             get {
@@ -1752,7 +1758,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use a number as suffix.
+        ///   Looks up a localized string similar to Consider to name it &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_1060_MessageFormat {
             get {
@@ -1761,7 +1767,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be suffixed with a number..
+        ///   Looks up a localized string similar to Use &apos;&lt;Entity&gt;NotFound&apos; instead of &apos;Get&lt;Entity&gt;Failed&apos; or &apos;&lt;Entity&gt;Missing&apos;..
         /// </summary>
         public static string MiKo_1060_Title {
             get {
@@ -2190,13 +2196,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sometimes, developers try to report that an entity was not found.
-        ///
-        ///For example, a repository is requested to return an entity &apos;Xyz&apos; (e.g. via method &apos;GetXyz&apos;). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
-        ///
-        ///The name of the exception is then sometimes &apos;GetXyzFailedException&apos; which is not that clear (why did it fail?). A better name would be &apos;XyzNotFoundException&apos; to indicate that &apos;Xyz&apos; was not found.
-        ///
-        ///The same applies for &apos;XyzMissin [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Suffixing methods with a number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name..
         /// </summary>
         public static string MiKo_1081_Description {
             get {
@@ -2205,7 +2205,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider to name it &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Do not use a number as suffix.
         /// </summary>
         public static string MiKo_1081_MessageFormat {
             get {
@@ -2214,11 +2214,65 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;&lt;Entity&gt;NotFound&apos; instead of &apos;Get&lt;Entity&gt;Failed&apos; or &apos;&lt;Entity&gt;Missing&apos;..
+        ///   Looks up a localized string similar to Methods should not be suffixed with a number..
         /// </summary>
         public static string MiKo_1081_Title {
             get {
                 return ResourceManager.GetString("MiKo_1081_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffixing properties with a number makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes the names of the properties easier to read (and they are to the point)..
+        /// </summary>
+        public static string MiKo_1082_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1082_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a number as suffix.
+        /// </summary>
+        public static string MiKo_1082_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1082_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties should not be suffixed with a number..
+        /// </summary>
+        public static string MiKo_1082_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1082_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffixing fields with a number makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes the names of the fields easier to read (and they are to the point)..
+        /// </summary>
+        public static string MiKo_1083_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1083_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a number as suffix.
+        /// </summary>
+        public static string MiKo_1083_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1083_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields should not be suffixed with a number..
+        /// </summary>
+        public static string MiKo_1083_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1083_Title", resourceCulture);
             }
         }
         

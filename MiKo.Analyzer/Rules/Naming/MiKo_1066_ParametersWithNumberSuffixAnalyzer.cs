@@ -16,8 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => (symbol.Name.IsNullOrWhiteSpace() || !symbol.Name.Last().IsNumber())
-                                                                                               ? Enumerable.Empty<Diagnostic>()
-                                                                                               : new[] { Issue(symbol) };
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithNumber()
+                                                                                               ? new[] { Issue(symbol) }
+                                                                                               : Enumerable.Empty<Diagnostic>();
     }
 }

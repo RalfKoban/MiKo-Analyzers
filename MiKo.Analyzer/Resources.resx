@@ -684,13 +684,19 @@ Types that are named so should be better named directly after the interface they
     <value>Do not name types 'Impl' or 'Implementation'.</value>
   </data>
   <data name="MiKo_1060_Description" xml:space="preserve">
-    <value>Suffixing methods with number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name.</value>
+    <value>Sometimes, developers try to report that an entity was not found.
+
+For example, a repository is requested to return an entity 'Xyz' (e.g. via method 'GetXyz'). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
+
+The name of the exception is then sometimes 'GetXyzFailedException' which is not that clear (why did it fail?). A better name would be 'XyzNotFoundException' to indicate that 'Xyz' was not found.
+
+The same applies for 'XyzMissingException'. It is probably not missing (which means it should be actually there but is not); it is just not there and therefore cannot be found. So, 'XyzNotFoundException' would be a better, more precise name as well.</value>
   </data>
   <data name="MiKo_1060_MessageFormat" xml:space="preserve">
-    <value>Do not use a number as suffix</value>
+    <value>Consider to name it '{0}'</value>
   </data>
   <data name="MiKo_1060_Title" xml:space="preserve">
-    <value>Methods should not be suffixed with a number.</value>
+    <value>Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'.</value>
   </data>
   <data name="MiKo_1061_Description" xml:space="preserve">
     <value>If a 'TryXyz' method has an [out] parameter, that [out] parameter shall be named specifically because it is the actual result of the method. The method's return value only exists to indicate a success or failure of the operation.
@@ -855,19 +861,31 @@ Example:
     <value>Names should contain numbers instead of their spellings.</value>
   </data>
   <data name="MiKo_1081_Description" xml:space="preserve">
-    <value>Sometimes, developers try to report that an entity was not found.
-
-For example, a repository is requested to return an entity 'Xyz' (e.g. via method 'GetXyz'). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
-
-The name of the exception is then sometimes 'GetXyzFailedException' which is not that clear (why did it fail?). A better name would be 'XyzNotFoundException' to indicate that 'Xyz' was not found.
-
-The same applies for 'XyzMissingException'. It is probably not missing (which means it should be actually there but is not); it is just not there and therefore cannot be found. So, 'XyzNotFoundException' would be a better, more precise name as well.</value>
+    <value>Suffixing methods with a number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name.</value>
   </data>
   <data name="MiKo_1081_MessageFormat" xml:space="preserve">
-    <value>Consider to name it '{0}'</value>
+    <value>Do not use a number as suffix</value>
   </data>
   <data name="MiKo_1081_Title" xml:space="preserve">
-    <value>Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'.</value>
+    <value>Methods should not be suffixed with a number.</value>
+  </data>
+  <data name="MiKo_1082_Description" xml:space="preserve">
+    <value>Suffixing properties with a number makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes the names of the properties easier to read (and they are to the point).</value>
+  </data>
+  <data name="MiKo_1082_MessageFormat" xml:space="preserve">
+    <value>Do not use a number as suffix</value>
+  </data>
+  <data name="MiKo_1082_Title" xml:space="preserve">
+    <value>Properties should not be suffixed with a number.</value>
+  </data>
+  <data name="MiKo_1083_Description" xml:space="preserve">
+    <value>Suffixing fields with a number makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes the names of the fields easier to read (and they are to the point).</value>
+  </data>
+  <data name="MiKo_1083_MessageFormat" xml:space="preserve">
+    <value>Do not use a number as suffix</value>
+  </data>
+  <data name="MiKo_1083_Title" xml:space="preserve">
+    <value>Fields should not be suffixed with a number.</value>
   </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
