@@ -35,6 +35,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_OS_bit_number_suffix([Values(32, 64)] int number) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething" + number + @"() { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1081_MethodsWithNumberSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1081_MethodsWithNumberSuffixAnalyzer();

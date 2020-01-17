@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.EndsWithNumber()
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.EndsWithNumber() && symbol.Name.EndsWithAny(Constants.Markers.OSBitNumbers) is false
                                                                                             ? new[] { Issue(symbol) }
                                                                                             : Enumerable.Empty<Diagnostic>();
     }

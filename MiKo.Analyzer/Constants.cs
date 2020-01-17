@@ -47,6 +47,8 @@ namespace MiKoSolutions.Analyzers
                     "m_",
                     "s_",
                 };
+
+            internal static readonly string[] OSBitNumbers = { "32", "64" };
         }
 
         internal static class Comments

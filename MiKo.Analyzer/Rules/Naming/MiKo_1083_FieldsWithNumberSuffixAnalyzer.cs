@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,12 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
-        {
-            if (symbol.Name.EndsWithNumber() && symbol.Type.Name.EndsWithNumber())
-            {
-                yield return Issue(symbol);
-            }
-        }
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.Name.EndsWithNumber();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => symbol.Name.EndsWithNumber() && symbol.Name.EndsWithAny(Constants.Markers.OSBitNumbers) is false
+                                                                                           ? new[] { Issue(symbol) }
+                                                                                           : Enumerable.Empty<Diagnostic>();
     }
 }

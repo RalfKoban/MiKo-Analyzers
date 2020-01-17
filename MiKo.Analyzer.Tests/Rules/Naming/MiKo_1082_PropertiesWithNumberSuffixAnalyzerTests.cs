@@ -31,12 +31,21 @@ public class TestMe
 
 public class TestMe
 {
-    public int DoSomething" + number + @" { get; set; }
+    public object DoSomething" + number + @" { get; set; }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_property_with_number_suffix_if_type_of_property_has_number_suffix([Range(0, 10)] int number) => An_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public Int32 DoSomething" + number + @" { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_with_OS_bit_number_suffix_if_type_of_property_has_number_suffix([Values(32, 64)] int number) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
