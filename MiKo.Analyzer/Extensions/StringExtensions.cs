@@ -84,7 +84,7 @@ namespace System
 
         public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
 
-        public static bool EndsWithNumber(this string value) => value?.Last().IsNumber() == true;
+        public static bool EndsWithNumber(this string value) => value.IsNullOrWhiteSpace() is false && value.Last().IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
