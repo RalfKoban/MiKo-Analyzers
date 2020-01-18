@@ -33,6 +33,7 @@ namespace TestHelper
         private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
         private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(NUnit.Framework.Assert).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
+        private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.
@@ -160,7 +161,8 @@ namespace TestHelper
                 .AddMetadataReference(projectId, CSharpSymbolsReference)
                 .AddMetadataReference(projectId, CodeAnalysisReference)
                 .AddMetadataReference(projectId, NUnitReference)
-                .AddMetadataReference(projectId, MiKoAnalyzersReference);
+                .AddMetadataReference(projectId, MiKoAnalyzersReference)
+                .AddMetadataReference(projectId, MiKoAnalyzersTestsReference);
 
             var count = 0;
             foreach (var source in sources)

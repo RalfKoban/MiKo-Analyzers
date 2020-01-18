@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return methodName.StartsWith(prefix, StringComparison.Ordinal)
                 && methodName.Length > prefix.Length
                 && methodName[prefix.Length].IsUpperCase()
-                && !method.HasDependencyObjectParameter();
+                && method.HasDependencyObjectParameter() == false;
         }
     }
 }

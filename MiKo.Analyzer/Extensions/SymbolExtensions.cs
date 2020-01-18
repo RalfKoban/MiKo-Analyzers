@@ -286,55 +286,80 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClass)
         {
-            while (true)
+            if (symbol.SpecialType == SpecialType.System_Void)
             {
-                var fullName = string.Intern(symbol.ToString());
-
-                if (baseClass == fullName)
-                {
-                    return true;
-                }
-
-                var baseType = symbol.BaseType;
-                if (baseType is null)
-                {
-                    return false;
-                }
-
-                symbol = baseType;
+                return false;
             }
+
+            if (symbol.TypeKind == TypeKind.Class)
+            {
+                while (true)
+                {
+                    var fullName = string.Intern(symbol.ToString());
+
+                    if (baseClass == fullName)
+                    {
+                        return true;
+                    }
+
+                    var baseType = symbol.BaseType;
+                    if (baseType is null)
+                    {
+                        return false;
+                    }
+
+                    symbol = baseType;
+                }
+            }
+
+            return false;
         }
 
         internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClassName, string baseClassFullQualifiedName)
         {
-            while (true)
+            if (symbol.SpecialType == SpecialType.System_Void)
             {
-                var fullName = string.Intern(symbol.ToString());
-
-                if (baseClassName == fullName)
-                {
-                    return true;
-                }
-
-                if (baseClassFullQualifiedName == fullName)
-                {
-                    return true;
-                }
-
-                var baseType = symbol.BaseType;
-                if (baseType is null)
-                {
-                    return false;
-                }
-
-                symbol = baseType;
+                return false;
             }
+
+            if (symbol.TypeKind == TypeKind.Class)
+            {
+                while (true)
+                {
+                    var fullName = string.Intern(symbol.ToString());
+
+                    if (baseClassName == fullName)
+                    {
+                        return true;
+                    }
+
+                    if (baseClassFullQualifiedName == fullName)
+                    {
+                        return true;
+                    }
+
+                    var baseType = symbol.BaseType;
+                    if (baseType is null)
+                    {
+                        return false;
+                    }
+
+                    symbol = baseType;
+                }
+            }
+
+            return false;
         }
 
         internal static bool Implements<T>(this ITypeSymbol symbol) => Implements(symbol, string.Intern(typeof(T).FullName));
 
         internal static bool Implements(this ITypeSymbol symbol, string interfaceType)
         {
+            if (symbol.SpecialType == SpecialType.System_Void)
+            {
+                return false;
+            }
+
             var fullName = string.Intern(symbol.ToString());
 
             if (fullName == interfaceType)
@@ -361,6 +386,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool ImplementsPotentialGeneric(this ITypeSymbol symbol, string interfaceType)
         {
+            if (symbol.SpecialType == SpecialType.System_Void)
+            {
+                return false;
+            }
+
             var index = interfaceType.IndexOf('`');
             var interfaceTypeWithoutGeneric = index > -1
                                                   ? interfaceType.Substring(0, index)
@@ -463,7 +493,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol symbol)
         {
-            var baseTypes = new Queue<ITypeSymbol>(1);
+            var baseTypes = new Queue<ITypeSymbol>(symbol.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
             baseTypes.Enqueue(symbol);
 
             while (true)
@@ -484,7 +514,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol symbol)
         {
-            var types = new Queue<ITypeSymbol>(1);
+            var types = new Queue<ITypeSymbol>(symbol.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
             types.Enqueue(symbol);
 
             CollectAllNestedTypes(symbol, types);
@@ -526,9 +556,23 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol symbol) => symbol.Name == "DependencyPropertyKey" || symbol.Name == "System.Windows.DependencyPropertyKey";
 
-        internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct
-                                                                                              && symbol.SpecialType == SpecialType.None
-                                                                                              && symbol.InheritsFrom("DependencyPropertyChangedEventArgs", "System.Windows.DependencyPropertyChangedEventArgs");
+        internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol symbol)
+        {
+            if (symbol.TypeKind == TypeKind.Struct && symbol.SpecialType == SpecialType.None)
+            {
+                switch (symbol.Name)
+                {
+                    case "DependencyPropertyChangedEventArgs":
+                    case "System.Windows.DependencyPropertyChangedEventArgs":
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+
+            return false;
+        }
 
         internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol method)
         {
