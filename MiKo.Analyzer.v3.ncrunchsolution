@@ -1,6 +1,9 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <HotSpotsExclusionList>
+      <Value>Rules\Analyzer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
+    </HotSpotsExclusionList>
     <MetricsExclusionList>
       <Value>Resources.Designer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </MetricsExclusionList>
