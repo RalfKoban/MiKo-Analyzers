@@ -14,6 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string Suffix = "Command";
 
+        private static readonly string[] SingleSuffix = { Suffix };
+        private static readonly string[] Suffixes = { "_command", Suffix };
+
         public MiKo_1044_CommandSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -34,12 +37,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeNames(symbol, "_command", Suffix);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeNames(symbol, Suffixes);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol, string suffix = Suffix) => AnalyzeNames(symbol, suffix);
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => AnalyzeNames(symbol, SingleSuffix);
 
-        private IEnumerable<Diagnostic> AnalyzeNames(ISymbol symbol, params string[] suffixes) => suffixes.Any(_ => symbol.Name.EndsWith(_, StringComparison.Ordinal))
-                                                                                                  ? Enumerable.Empty<Diagnostic>()
-                                                                                                  : new[] { Issue(symbol, Suffix) };
+        private IEnumerable<Diagnostic> AnalyzeNames(ISymbol symbol, IEnumerable<string> suffixes) => suffixes.Any(_ => symbol.Name.EndsWith(_, StringComparison.Ordinal))
+                                                                                                          ? Enumerable.Empty<Diagnostic>()
+                                                                                                          : new[] { Issue(symbol, Suffix) };
     }
 }

@@ -15,18 +15,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] XmlTags =
             {
+                Constants.XmlTag.Summary,
+                Constants.XmlTag.Remarks,
+                Constants.XmlTag.Returns,
+                Constants.XmlTag.Value,
+                Constants.XmlTag.Param,
+                Constants.XmlTag.TypeParam,
                 Constants.XmlTag.Example,
                 Constants.XmlTag.Exception,
                 Constants.XmlTag.Note,
                 Constants.XmlTag.Overloads,
                 Constants.XmlTag.Para,
-                Constants.XmlTag.Param,
                 Constants.XmlTag.Permission,
-                Constants.XmlTag.Remarks,
-                Constants.XmlTag.Returns,
-                Constants.XmlTag.Summary,
-                Constants.XmlTag.TypeParam,
-                Constants.XmlTag.Value,
             };
 
         private static readonly string[] WellknownFileExtensions =

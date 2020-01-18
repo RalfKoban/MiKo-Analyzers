@@ -20,21 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
-            List<Diagnostic> findings = null;
-
             var comment = symbol.GetComment();
 
-            foreach (var item in Items.Where(_ => comment.Contains(_.Key, StringComparison.OrdinalIgnoreCase)))
-            {
-                if (findings is null)
-                {
-                    findings = new List<Diagnostic>(1);
-                }
-
-                findings.Add(Issue(symbol, item.Key, item.Value));
-            }
-
-            return findings ?? Enumerable.Empty<Diagnostic>();
+            return from item in Items
+                   where comment.Contains(item.Key, StringComparison.OrdinalIgnoreCase)
+                   select Issue(symbol, item.Key, item.Value);
         }
 
         private static KeyValuePair<string, string>[] CreateItems()
