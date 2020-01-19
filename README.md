@@ -94,8 +94,9 @@ The following tables list all the 252 rules that are currently provided by the a
 |MiKo_1073|Boolean fields should be named as statements and not as questions.|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings.|&#x2713;|
 |MiKo_1081|Methods should not be suffixed with a number.|&#x2713;|
-|MiKo_1082|Properties should not be suffixed with a number.|&#x2713;|
-|MiKo_1083|Fields should not be suffixed with a number.|&#x2713;|
+|MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes.|&#x2713;|
+|MiKo_1083|Fields should not be suffixed with a number if their types have number suffixes.|&#x2713;|
+|MiKo_1084|Variables should not be suffixed with a number if their types have number suffixes.|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|

@@ -2223,7 +2223,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing properties with a number makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes the names of the properties easier to read (and they are to the point)..
+        ///   Looks up a localized string similar to Suffixing properties with a number (especially if the type they return have a number as well) makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes them easier to read (and they are to the point)..
         /// </summary>
         public static string MiKo_1082_Description {
             get {
@@ -2241,7 +2241,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties should not be suffixed with a number..
+        ///   Looks up a localized string similar to Properties should not be suffixed with a number if their types have number suffixes..
         /// </summary>
         public static string MiKo_1082_Title {
             get {
@@ -2250,7 +2250,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing fields with a number makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes the names of the fields easier to read (and they are to the point)..
+        ///   Looks up a localized string similar to Suffixing fields with a number (especially if their types have a number as well) makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes them easier to read (and they are to the point)..
         /// </summary>
         public static string MiKo_1083_Description {
             get {
@@ -2268,11 +2268,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields should not be suffixed with a number..
+        ///   Looks up a localized string similar to Fields should not be suffixed with a number if their types have number suffixes..
         /// </summary>
         public static string MiKo_1083_Title {
             get {
                 return ResourceManager.GetString("MiKo_1083_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffixing variables with a number (especially if their types have a number as well) makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes them easier to read (and they are to the point)..
+        /// </summary>
+        public static string MiKo_1084_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1084_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a number as suffix.
+        /// </summary>
+        public static string MiKo_1084_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1084_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variables should not be suffixed with a number if their types have number suffixes..
+        /// </summary>
+        public static string MiKo_1084_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1084_Title", resourceCulture);
             }
         }
         
