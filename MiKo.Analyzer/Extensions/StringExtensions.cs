@@ -7,7 +7,7 @@ using MiKoSolutions.Analyzers;
 // ReSharper disable once CheckNamespace
 namespace System
 {
-    internal static class StringExtensions
+    public static class StringExtensions
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
@@ -148,7 +148,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
 
-        internal static string HumanizedTakeFirst(this string value, int max)
+        public static string HumanizedTakeFirst(this string value, int max)
         {
             var index = Math.Min(max, value.Length);
             return index <= 0 || index == value.Length
@@ -156,9 +156,9 @@ namespace System
                        : value.Substring(0, index) + "...";
         }
 
-        internal static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
+        public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
 
-        internal static bool HasEntityMarker(this string symbolName)
+        public static bool HasEntityMarker(this string symbolName)
         {
             var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
             if (hasMarker)
@@ -177,23 +177,54 @@ namespace System
             return hasMarker;
         }
 
-        internal static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
+        public static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
 
-        internal static string WithoutParaTags(this string value) => value.RemoveAll(Constants.ParaTags);
+        public static string WithoutParaTags(this string value) => value.RemoveAll(Constants.ParaTags);
 
-        internal static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
+        public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
 
-        internal static string Remove(this string value, string phrase) => value.Replace(phrase, string.Empty);
+        public static string Remove(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        internal static string RemoveAll(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Remove(s));
+        public static string RemoveAll(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Remove(s));
 
-        internal static string WithoutSuffix(this string value, string suffix)
+        public static string WithoutSuffix(this string value, string suffix)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             var length = value.Length - suffix.Length;
             return length > 0 ? value.Substring(0, length) : string.Empty;
         }
 
-        internal static string GetNameOnlyPart(this string fullName)
+        public static string WithoutNumberSuffix(this string value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var end = value.Length - 1;
+            while (end >= 0)
+            {
+                if (value[end].IsNumber())
+                {
+                    end--;
+                }
+                else
+                {
+                    end++; // fix last character
+                    break;
+                }
+            }
+
+            return end < value.Length - 1
+                       ? value.Substring(0, end)
+                       : value;
+        }
+
+        public static string GetNameOnlyPart(this string fullName)
         {
             var genericIndexStart = fullName.IndexOf('<');
             var genericIndexEnd = fullName.LastIndexOf('>');
@@ -212,11 +243,11 @@ namespace System
             return fullName.GetPartAfterLastDot();
         }
 
-        internal static string GetPartAfterLastDot(this string value) => value?.Substring(value.LastIndexOf('.') + 1);
+        public static string GetPartAfterLastDot(this string value) => value?.Substring(value.LastIndexOf('.') + 1);
 
-        internal static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
+        public static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
 
-        internal static bool HasUpperCaseLettersAbove(this string value, ushort limit)
+        public static bool HasUpperCaseLettersAbove(this string value, ushort limit)
         {
             var count = 0;
             for (var index = 0; index < value.Length; index++)

@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "enumerable",
                 "target",
                 "myDictionary",
+                "myList42",
             };
 
         [Test]

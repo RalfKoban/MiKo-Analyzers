@@ -21,7 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var identifier in identifiers)
             {
-                var name = identifier.ValueText;
+                var originalName = identifier.ValueText;
+
+                var name = originalName;
 
                 // skip all short names
                 if (name.Length <= 1
@@ -34,11 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (name.EndsWithNumber())
                 {
-                    // TODO RKN: Check for numbers at the end (get rid of them)
-                    continue;
+                    name = name.WithoutNumberSuffix();
                 }
 
-                // TODO RKN: Check for numbers at the end (get rid of them)
                 var pluralName = name.EndsWithAny(Constants.Markers.Collections)
                                      ? GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections)
                                      : GetPluralName(name);
@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (pluralName != name)
                 {
-                    yield return Issue(name, identifier.GetLocation(), pluralName);
+                    yield return Issue(originalName, identifier.GetLocation(), pluralName);
                 }
             }
         }
