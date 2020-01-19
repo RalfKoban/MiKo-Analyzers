@@ -2496,6 +2496,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sometimes types or some of their functionality cannot be tested directly due to wrong visibility. To work around that, a solution is to inherit from such types and use that special type during test. Additionally, additional methods or properties are added to such types to access the orginal, invisible method resp. property.
+        ///Those specifically introduced types should be named as the original type, but prefixed with &apos;Testable&apos; - they should not be suffixed with the hard-to-understand &apos;Ut&apos; suffix..
+        /// </summary>
+        public static string MiKo_1107_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1107_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1107_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1107_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefix testable types with &apos;Testable&apos; instead of using the &apos;Ut&apos; suffix..
+        /// </summary>
+        public static string MiKo_1107_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1107_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, exceptions in catch blocks should be named consistently..
         /// </summary>
         public static string MiKo_1200_Description {

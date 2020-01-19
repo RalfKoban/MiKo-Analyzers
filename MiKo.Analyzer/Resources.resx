@@ -962,6 +962,16 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
   <data name="MiKo_1106_Title" xml:space="preserve">
     <value>Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.</value>
   </data>
+  <data name="MiKo_1107_Description" xml:space="preserve">
+    <value>Sometimes types or some of their functionality cannot be tested directly due to wrong visibility. To work around that, a solution is to inherit from such types and use that special type during test. Additionally, additional methods or properties are added to such types to access the orginal, invisible method resp. property.
+Those specifically introduced types should be named as the original type, but prefixed with 'Testable' - they should not be suffixed with the hard-to-understand 'Ut' suffix.</value>
+  </data>
+  <data name="MiKo_1107_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1107_Title" xml:space="preserve">
+    <value>Prefix testable types with 'Testable' instead of using the 'Ut' suffix.</value>
+  </data>
   <data name="MiKo_1200_Description" xml:space="preserve">
     <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
   </data>
