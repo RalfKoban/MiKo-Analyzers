@@ -876,6 +876,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
+        /// </summary>
+        public static string MiKo_1027_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1027_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name in loop exceeds limit of {2} chars by {1}.
+        /// </summary>
+        public static string MiKo_1027_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1027_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable names in loops should be limited in length..
+        /// </summary>
+        public static string MiKo_1027_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1027_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Indicating that a type is a base type by putting &apos;Abstract&apos; or &apos;Base&apos; in its name does not make sense. Every interface or class that is not sealed can act as a base class..
         /// </summary>
         public static string MiKo_1030_Description {

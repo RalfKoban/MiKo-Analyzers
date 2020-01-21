@@ -202,6 +202,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        protected void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
+        {
+            var node = (ForStatementSyntax)context.Node;
+
+            var semanticModel = context.SemanticModel;
+            var type = node.Declaration.GetTypeSymbol(semanticModel);
+
+            if (ShallAnalyze(type) is false)
+            {
+                return;
+            }
+
+            var diagnostics = AnalyzeIdentifiers(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+            foreach (var diagnostic in diagnostics)
+            {
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
+
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)

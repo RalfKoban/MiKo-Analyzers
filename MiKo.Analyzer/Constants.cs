@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers
             public const int Parameters = 20;
             public const int Fields = Parameters + 2;
             public const int LocalVariables = 15;
+            public const int LocalVariablesInLoops = 9;
         }
 
         internal static class Markers
