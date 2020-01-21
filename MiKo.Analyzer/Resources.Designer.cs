@@ -2304,6 +2304,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so(comparer, view or item).
+        ///
+        ///The reason is that the type already states what the parameter is so its name should not have that additional, redundant information..
+        /// </summary>
+        public static string MiKo_1090_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1090_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1090_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1090_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with specific types..
+        /// </summary>
+        public static string MiKo_1090_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1090_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
