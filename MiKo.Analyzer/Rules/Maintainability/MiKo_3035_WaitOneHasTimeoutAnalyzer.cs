@@ -12,36 +12,49 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3035";
 
+        private static readonly string TimeSpanFullName = typeof(TimeSpan).FullName;
+
         public MiKo_3035_WaitOneHasTimeoutAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        private static bool NodeHasIssue(MemberAccessExpressionSyntax node, SemanticModel semanticModel)
         {
-            var node = (MemberAccessExpressionSyntax)context.Node;
             if (node.Name.Identifier.ValueText != "WaitOne")
             {
-                return;
+                return false;
             }
 
             if (node.Parent is InvocationExpressionSyntax i)
             {
                 foreach (var argument in i.ArgumentList.Arguments)
                 {
-                    var argumentType = argument.Expression.GetTypeSymbol(context.SemanticModel);
+                    var argumentType = argument.Expression.GetTypeSymbol(semanticModel);
 
-                    if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == typeof(TimeSpan).FullName)
+                    if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TimeSpanFullName)
                     {
                         // we use a timeout parameter (int or TimeSpan)
-                        return;
+                        return false;
                     }
                 }
             }
 
-            var method = context.GetEnclosingMethod();
-            context.ReportDiagnostic(Issue(method.Name, node.GetLocation()));
+            return true;
+        }
+
+        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        {
+            var node = (MemberAccessExpressionSyntax)context.Node;
+
+            if (NodeHasIssue(node, context.SemanticModel))
+            {
+                var method = context.GetEnclosingMethod();
+                var issue = Issue(method.Name, node.GetLocation());
+
+                context.ReportDiagnostic(issue);
+            }
         }
     }
 }

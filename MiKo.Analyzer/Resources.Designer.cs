@@ -6165,7 +6165,8 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to The &apos;TimeSpan&apos; .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as &apos;FromMinutes&apos; or &apos;FromDays&apos;, these should be preferred. They are much easier to read and more explicit.
         ///
-        ///Please note: It would be even better to use extension methods such as &apos;Minutes()&apos; or &apos;Days()&apos; that would allow a more natural usage, such as &apos; var x = 5.Days(); &apos;..
+        ///Please note:
+        ///It would be even better to use extension methods such as &apos;Minutes()&apos; or &apos;Days()&apos; that would allow a more natural usage, such as &apos; var x = 5.Days(); &apos;..
         /// </summary>
         public static string MiKo_3036_Description {
             get {
@@ -6188,6 +6189,38 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3036_Title {
             get {
                 return ResourceManager.GetString("MiKo_3036_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classes may provide methods such as WaitForExit, WaitOne, ... that have a parameter that is of type int. That parameter is used to specify a timeout, but - as it is a &apos;magic&apos; number - it is hard to find out the exact amount of time just from reading the number (is it milliseconds, seconds, ... ?)
+        ///So to ease maintenance, the number should not be hard-coded. Most times a TimeSpan an be used instead that eases reading a lot.
+        ///
+        ///
+        ///Please note:
+        ///It would be even better to use extension methods such as &apos;Minutes( [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_3037_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3037_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use magic number.
+        /// </summary>
+        public static string MiKo_3037_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3037_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use magic numbers for timeouts..
+        /// </summary>
+        public static string MiKo_3037_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3037_Title", resourceCulture);
             }
         }
         
@@ -6219,7 +6252,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use Booleans unless you are absolutely sure there will never be a need for more than two values..
+        ///   Looks up a localized string similar to Do not use Booleans unless you are absolutely sure there will never be a need for more than 2 values..
         /// </summary>
         public static string MiKo_3040_Title {
             get {
