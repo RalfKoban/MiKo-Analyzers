@@ -79,6 +79,30 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_correct_WaitOne_usage_and_extension_method() => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+namespace Bla
+{
+    public static class Extensions
+    {
+        public static TimeSpan Minutes(this int value) => TimeSpan.FromMinutes(value);
+    }
+
+    public class TestMe
+    {
+        private WaitHandle h = null;
+            
+        public void DoSomething()
+        {
+            h.WaitOne(5.Minutes());
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3035_WaitOneHasTimeoutAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3035_WaitOneHasTimeoutAnalyzer();
