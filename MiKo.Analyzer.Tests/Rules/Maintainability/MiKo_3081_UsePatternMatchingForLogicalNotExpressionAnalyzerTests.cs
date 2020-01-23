@@ -123,6 +123,27 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_logical_NOT_condition_with_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool Exists()
+    {
+        return true;
+    }
+
+    public bool DoSomething()
+    {
+        if (!Exists())
+            return true;
+        else
+            return false;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer();
