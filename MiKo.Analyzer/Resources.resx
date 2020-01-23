@@ -2268,6 +2268,15 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3042_Title" xml:space="preserve">
     <value>EventArgs shall not implement interfaces.</value>
   </data>
+  <data name="MiKo_3048_Description" xml:space="preserve">
+    <value>To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute.</value>
+  </data>
+  <data name="MiKo_3048_MessageFormat" xml:space="preserve">
+    <value>Apply the [ValueConversion] attribute</value>
+  </data>
+  <data name="MiKo_3048_Title" xml:space="preserve">
+    <value>ValueConverters shall have the [ValueConversion] attribute applied.</value>
+  </data>
   <data name="MiKo_3050_Description" xml:space="preserve">
     <value>Fields that are the back of a DependencyProperty should be made 'public static readonly' to allow the .NET framework and other clients to find and access those fields.</value>
   </data>

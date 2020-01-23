@@ -6316,6 +6316,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute..
+        /// </summary>
+        public static string MiKo_3048_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3048_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply the [ValueConversion] attribute.
+        /// </summary>
+        public static string MiKo_3048_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3048_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ValueConverters shall have the [ValueConversion] attribute applied..
+        /// </summary>
+        public static string MiKo_3048_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3048_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fields that are the back of a DependencyProperty should be made &apos;public static readonly&apos; to allow the .NET framework and other clients to find and access those fields..
         /// </summary>
         public static string MiKo_3050_Description {

@@ -240,7 +240,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol symbol) => symbol.GetAttributes().Select(_ => _.AttributeClass.Name);
 
-        internal static bool IsEnhancedByPostSharpAdvice(this ISymbol symbol) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom("PostSharp.Aspects.Advices.Advice"));
+        internal static bool IsEnhancedByPostSharpAdvice(this ISymbol symbol) => symbol.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
+
+        internal static bool HasAttributeApplied(this ISymbol symbol, string attributeName) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
 
         internal static bool IsTestClass(this ITypeSymbol symbol) => symbol?.TypeKind == TypeKind.Class && symbol.GetAttributeNames().Any(TestClassAttributeNames.Contains);
 
