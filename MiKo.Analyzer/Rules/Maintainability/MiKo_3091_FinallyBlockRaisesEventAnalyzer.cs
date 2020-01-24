@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (possibleEvent is IEventSymbol)
                 {
                     var location = token.GetLocation();
-                    var issue = Issue(method, location, token.ValueText);
+                    var issue = Issue(method.Name, location, token.ValueText);
                     context.ReportDiagnostic(issue);
                 }
             }
