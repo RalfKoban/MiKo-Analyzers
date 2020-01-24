@@ -30,13 +30,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = context.GetEnclosingMethod();
             var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
 
-            foreach (var token in finallyBlock.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken) && events.Contains(_.ValueText)))
+            foreach (var token in finallyBlock.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
             {
-                var possibleEvent = token.GetSymbol(context.SemanticModel);
-                if (possibleEvent is IEventSymbol)
+                var eventName = token.ValueText;
+
+                if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
                 {
                     var location = token.GetLocation();
-                    var issue = Issue(method.Name, location, token.ValueText);
+                    var issue = Issue(method.Name, location, eventName);
                     context.ReportDiagnostic(issue);
                 }
             }
