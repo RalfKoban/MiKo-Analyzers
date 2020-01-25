@@ -205,16 +205,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ForStatementSyntax)context.Node;
+            var variableDeclaration = node.Declaration;
+
+            if (variableDeclaration is null)
+            {
+                // ignore variables that are not set
+                return;
+            }
 
             var semanticModel = context.SemanticModel;
-            var type = node.Declaration.GetTypeSymbol(semanticModel);
+            var type = variableDeclaration.GetTypeSymbol(semanticModel);
 
             if (ShallAnalyze(type) is false)
             {
                 return;
             }
 
-            var diagnostics = AnalyzeIdentifiers(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+            var diagnostics = AnalyzeIdentifiers(semanticModel, variableDeclaration.Variables.Select(_ => _.Identifier).ToArray());
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);

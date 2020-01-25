@@ -151,6 +151,21 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_for_statement_without_identifier() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int i, string methodName)
+    {
+        for (; i < methodName.Length; i++)
+        {
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1070_CollectionLocalVariableAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1070_CollectionLocalVariableAnalyzer();
