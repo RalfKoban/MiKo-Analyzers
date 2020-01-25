@@ -51,9 +51,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
-            var method = context.GetEnclosingMethod();
 
-            foreach (var issue in AnalyzeIssue(node, method))
+            var methodSymbol = context.GetEnclosingMethod();
+            if (methodSymbol is null)
+            {
+                // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown
+                return;
+            }
+
+            foreach (var issue in AnalyzeIssue(node, methodSymbol))
             {
                 context.ReportDiagnostic(issue);
             }

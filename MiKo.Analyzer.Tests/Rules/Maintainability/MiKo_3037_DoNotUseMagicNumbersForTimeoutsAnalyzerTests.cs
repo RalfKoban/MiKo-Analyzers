@@ -103,6 +103,29 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_WaitOne_with_nameof() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Threading;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private static readonly HashSet<string> Names = new HashSet<string>
+                                                            {
+                                                                nameof(WaitHandle.WaitOne),
+                                                            };
+            
+        public void DoSomething()
+        {
+            Names.Clear();
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3037_DoNotUseMagicNumbersForTimeoutsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3037_DoNotUseMagicNumbersForTimeoutsAnalyzer();

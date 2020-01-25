@@ -141,6 +141,30 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_in_nameof() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private static readonly HashSet<string> Names = new HashSet<string>
+                                                            {
+                                                                nameof(Assert.AreEqual),
+                                                            };
+            
+        public void DoSomething()
+        {
+            Names.Clear();
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3105_TestMethodsUseAssertThatAnalyzer();
