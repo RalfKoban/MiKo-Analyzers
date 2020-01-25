@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
-        private static bool IsLogManagerGetLoggerCall(MemberAccessExpressionSyntax node) => node.Name.Identifier.ValueText == "GetLogger"
+        private static bool IsLogManagerGetLoggerCall(MemberAccessExpressionSyntax node) => node.GetName() == "GetLogger"
                                                                                          && node.Expression is IdentifierNameSyntax i
-                                                                                         && i.Identifier.ValueText.EndsWith("LogManager", StringComparison.Ordinal);
+                                                                                         && i.GetName().EndsWith("LogManager", StringComparison.Ordinal);
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {

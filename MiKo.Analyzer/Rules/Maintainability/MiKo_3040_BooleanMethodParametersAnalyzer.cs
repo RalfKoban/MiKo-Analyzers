@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return method.Parameters
                          .Where(_ => _.Type.IsBoolean())
                          .Select(_ => _.GetSyntax())
-                         .Select(_ => Issue(_.Identifier.ValueText, _.Type.GetLocation()))
+                         .Select(_ => Issue(_.GetName(), _.Type.GetLocation()))
                          .ToList();
         }
     }

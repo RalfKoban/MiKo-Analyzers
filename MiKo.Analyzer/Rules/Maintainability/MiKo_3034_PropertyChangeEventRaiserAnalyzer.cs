@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arguments[0].Expression is IdentifierNameSyntax s)
             {
-                return AnalyzeParameter(s.Identifier.ValueText, method.Parameters);
+                return AnalyzeParameter(s.GetName(), method.Parameters);
             }
 
             return Enumerable.Empty<Diagnostic>();

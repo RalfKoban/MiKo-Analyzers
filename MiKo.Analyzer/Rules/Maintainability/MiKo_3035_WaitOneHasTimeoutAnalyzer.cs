@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool NodeHasIssue(MemberAccessExpressionSyntax node, SemanticModel semanticModel)
         {
-            if (node.Name.Identifier.ValueText != "WaitOne")
+            if (node.GetName() != "WaitOne")
             {
                 return false;
             }

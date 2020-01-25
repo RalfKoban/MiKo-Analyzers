@@ -54,10 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (argumentExpression)
             {
-                case InvocationExpressionSyntax i when i.Expression is IdentifierNameSyntax sa && sa.Identifier.ValueText == "nameof":
+                case InvocationExpressionSyntax i when i.Expression is IdentifierNameSyntax sa && sa.GetName() == "nameof":
                     return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
 
-                case IdentifierNameSyntax s when IdentifierIsParameter(node, s.Identifier.ValueText, semanticModel):
+                case IdentifierNameSyntax s when IdentifierIsParameter(node, s.GetName(), semanticModel):
                     return false; // it's a parameter, so don't report an issue
 
                 default:
@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             // it might happen that the code is currently being written so there might not yet exist a specific property name
             var a = arguments.Select(_ => _.Expression).OfType<IdentifierNameSyntax>().FirstOrDefault();
-            var propertyName = a?.Identifier.ValueText;
+            var propertyName = a.GetName();
             if (propertyName is null)
             {
                 return false;

@@ -96,7 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var variable in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>().SelectMany(_ => _.Variables))
                 {
-                    if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.Identifier.Text == ins.Identifier.Text) && variable.Initializer.Value is ObjectCreationExpressionSyntax oces)
+                    if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.GetName() == ins.GetName()) && variable.Initializer.Value is ObjectCreationExpressionSyntax oces)
                     {
                         var typeInfo = semanticModel.GetTypeInfo(oces);
                         var type = typeInfo.Type;

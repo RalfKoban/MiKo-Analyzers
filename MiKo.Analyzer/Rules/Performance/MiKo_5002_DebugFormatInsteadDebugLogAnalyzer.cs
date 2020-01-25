@@ -42,8 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private Diagnostic Analyze(MemberAccessExpressionSyntax methodCall, SemanticModel semanticModel)
         {
-            var methodCallName = methodCall.Name;
-            var methodName = methodCallName.ToString();
+            var methodName = methodCall.GetName();
             switch (methodName)
             {
                 case Debug + Format:
@@ -61,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     }
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
-                    return Issue(enclosingMethod.Name, methodCallName.GetLocation(), methodName, methodName.Remove(Format));
+                    return Issue(enclosingMethod.Name, methodCall.Name.GetLocation(), methodName, methodName.Remove(Format));
                 }
 
                 default:

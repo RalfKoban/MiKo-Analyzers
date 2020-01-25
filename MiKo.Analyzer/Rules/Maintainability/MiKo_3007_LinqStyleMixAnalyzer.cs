@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (methodDeclarationSyntax != null)
             {
                 result = methodDeclarationSyntax;
-                identifier = methodDeclarationSyntax.Identifier.ValueText;
+                identifier = methodDeclarationSyntax.GetName();
                 return true;
             }
 
@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (variableDeclaratorSyntax != null)
             {
                 result = variableDeclaratorSyntax;
-                identifier = variableDeclaratorSyntax.Identifier.ValueText;
+                identifier = variableDeclaratorSyntax.GetName();
                 return true;
             }
 
@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (ctorDeclarationSyntax != null)
             {
                 result = ctorDeclarationSyntax;
-                identifier = ctorDeclarationSyntax.Identifier.ValueText;
+                identifier = ctorDeclarationSyntax.GetName();
                 return true;
             }
 

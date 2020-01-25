@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeIssue(MemberAccessExpressionSyntax node, ISymbol method)
         {
-            if (Names.Contains(node.Name.Identifier.ValueText))
+            if (Names.Contains(node.GetName()))
             {
                 if (node.Parent is InvocationExpressionSyntax i)
                 {

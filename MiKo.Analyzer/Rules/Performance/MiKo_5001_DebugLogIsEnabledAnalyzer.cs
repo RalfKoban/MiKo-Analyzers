@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private Diagnostic Analyze(MemberAccessExpressionSyntax methodCall, SemanticModel semanticModel)
         {
-            var methodName = methodCall.Name.ToString();
+            var methodName = methodCall.GetName();
             switch (methodName)
             {
                 case Debug:

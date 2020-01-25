@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case VariableDeclaratorSyntax variable:
                 {
-                    if (names.Contains(variable.Identifier.ValueText) && variable.Initializer != null)
+                    if (variable.Initializer != null && names.Contains(variable.GetName()))
                     {
                         return new[] { variable.Initializer.Value };
                     }
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case AssignmentExpressionSyntax a:
                 {
-                    if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.Identifier.ValueText))
+                    if (a.Left is IdentifierNameSyntax ins && names.Contains(ins.GetName()))
                     {
                         return new[] { a.Right };
                     }
@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case ParameterSyntax p:
                 {
-                    if (names.Contains(p.Identifier.ValueText))
+                    if (names.Contains(p.GetName()))
                     {
                         return p.DescendantNodes().OfType<LiteralExpressionSyntax>();
                     }
@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<ExpressionSyntax>();
         }
 
-        private static bool HasIssue(SyntaxNode node) => node.IsKind(SyntaxKind.NullLiteralExpression) && !ParentWithoutIssue(node.Parent);
+        private static bool HasIssue(SyntaxNode node) => node.IsKind(SyntaxKind.NullLiteralExpression) && ParentWithoutIssue(node.Parent) is false;
 
         private static bool ParentWithoutIssue(SyntaxNode node)
         {

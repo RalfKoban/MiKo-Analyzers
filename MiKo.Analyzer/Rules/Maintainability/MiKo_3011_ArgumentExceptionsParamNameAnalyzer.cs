@@ -171,7 +171,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var ifStatement = node.GetEnclosing<IfStatementSyntax>();
             if (ifStatement != null)
             {
-                var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.Identifier.ValueText).ToHashSet();
+                var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
                 var parameter = method.Parameters.FirstOrDefault(_ => identifiers.Contains(_.Name));
                 if (parameter != null)
                 {

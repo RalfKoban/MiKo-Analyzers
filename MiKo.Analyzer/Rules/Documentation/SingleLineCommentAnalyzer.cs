@@ -40,9 +40,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivias(MethodDeclarationSyntax node, SemanticModel semanticModel)
         {
+            var methodName = node.GetName();
+
             return node.DescendantTrivia()
                        .Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia))
-                       .Select(_ => AnalyzeSingleLineComment(_, node.Identifier.Text, semanticModel))
+                       .Select(_ => AnalyzeSingleLineComment(_, methodName, semanticModel))
                        .Where(_ => _ != null);
         }
 

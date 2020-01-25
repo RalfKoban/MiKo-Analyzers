@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case IdentifierNameSyntax i:
                 {
                     var type = context.FindContainingType();
-                    var isConst = type.GetMembers(i.Identifier.ValueText).OfType<IFieldSymbol>().Any(_ => _.IsConst);
+                    var isConst = type.GetMembers(i.GetName()).OfType<IFieldSymbol>().Any(_ => _.IsConst);
                     return isConst;
                 }
 

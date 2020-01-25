@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
 
-        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => TypeUnderTestVariableNames.Contains(syntax.Identifier.ValueText);
+        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => TypeUnderTestVariableNames.Contains(syntax.GetName());
 
         internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
         {
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers
             if (syntaxNode is ParameterSyntax node)
             {
                 // we might have a ctor here and no method
-                var methodName = node.GetEnclosing<MethodDeclarationSyntax>()?.Identifier.ValueText ?? node.GetEnclosing<ConstructorDeclarationSyntax>()?.Identifier.ValueText;
+                var methodName = node.GetEnclosing<MethodDeclarationSyntax>().GetName() ?? node.GetEnclosing<ConstructorDeclarationSyntax>().GetName();
                 var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
                 return parameterSymbol;
@@ -139,6 +139,20 @@ namespace MiKoSolutions.Analyzers
                 node = node.Parent;
             }
         }
+
+        internal static string GetName(this MemberAccessExpressionSyntax syntax) => syntax?.Name.Identifier.ValueText;
+
+        internal static string GetName(this VariableDeclaratorSyntax syntax) => syntax?.Identifier.ValueText;
+
+        internal static string GetName(this MethodDeclarationSyntax syntax) => syntax?.Identifier.ValueText;
+
+        internal static string GetName(this PropertyDeclarationSyntax syntax) => syntax?.Identifier.ValueText;
+
+        internal static string GetName(this ConstructorDeclarationSyntax syntax) => syntax?.Identifier.ValueText;
+
+        internal static string GetName(this ParameterSyntax syntax) => syntax?.Identifier.ValueText;
+
+        internal static string GetName(this IdentifierNameSyntax syntax) => syntax?.Identifier.ValueText;
 
         internal static string GetNameOnlyPart(this TypeSyntax syntax) => syntax.ToString().GetNameOnlyPart();
 

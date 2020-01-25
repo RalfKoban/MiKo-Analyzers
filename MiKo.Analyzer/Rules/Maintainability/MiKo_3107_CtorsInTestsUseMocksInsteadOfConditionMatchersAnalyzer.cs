@@ -41,9 +41,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsConditionMatcher(MemberAccessExpressionSyntax node)
         {
-            if (node.Expression is IdentifierNameSyntax invokedType && invokedType.Identifier.ValueText == "It")
+            if (node.Expression is IdentifierNameSyntax invokedType && invokedType.GetName() == "It")
             {
-                switch (node.Name.Identifier.ValueText)
+                switch (node.GetName())
                 {
                     case "Is":
                     case "IsAny":

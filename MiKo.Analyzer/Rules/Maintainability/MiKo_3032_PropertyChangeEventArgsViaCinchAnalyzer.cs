@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var lambda = node.DescendantNodes().OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault();
             var property = lambda?.Body as MemberAccessExpressionSyntax;
-            var propertyName = property?.Name.Identifier.ValueText ?? string.Empty;
+            var propertyName = property.GetName() ?? string.Empty;
             return propertyName;
         }
 
@@ -31,9 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
-            if (node.Expression is IdentifierNameSyntax i && i.Identifier.ValueText.EndsWith("ObservableHelper", StringComparison.Ordinal))
+            if (node.Expression is IdentifierNameSyntax i && i.GetName().EndsWith("ObservableHelper", StringComparison.Ordinal))
             {
-                switch (node.Name.Identifier.ValueText)
+                switch (node.GetName())
                 {
                     case "CreateArgs":
                         ReportIssue(context, node.Parent, "new PropertyChangedEventArgs(nameof({0}))");

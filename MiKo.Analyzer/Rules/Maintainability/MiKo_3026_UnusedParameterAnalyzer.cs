@@ -123,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var parameter in parameters)
             {
-                var parameterName = parameter.Identifier.ValueText;
+                var parameterName = parameter.GetName();
 
                 if (used.Contains(parameterName))
                 {

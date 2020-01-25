@@ -37,7 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var identifier = node.Parameter.Identifier;
-            switch (identifier.ValueText)
+            var parameterName = node.Parameter.GetName();
+            switch (parameterName)
             {
                 case null: // we don't have one
                 case Constants.LambdaIdentifiers.Default: // correct identifier (default one)
@@ -46,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return null;
 
                 default:
-                    return Issue(identifier.ValueText, identifier.GetLocation(), Constants.LambdaIdentifiers.Default);
+                    return Issue(parameterName, identifier.GetLocation(), Constants.LambdaIdentifiers.Default);
             }
         }
     }

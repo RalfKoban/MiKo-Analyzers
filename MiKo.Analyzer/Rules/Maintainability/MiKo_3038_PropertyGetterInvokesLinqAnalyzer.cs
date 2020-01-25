@@ -35,12 +35,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var property = node.GetEnclosing<PropertyDeclarationSyntax>();
             if (property != null)
             {
-                var propertyName = property.Identifier.ValueText;
+                var propertyName = property.GetName();
 
                 foreach (var linq in node.LinqExtensionMethods(semanticModel))
                 {
-                    var x = (MemberAccessExpressionSyntax)linq.Expression;
-                    var linqCall = x.Name.Identifier.ValueText;
+                    var linqCall = ((MemberAccessExpressionSyntax)linq.Expression).GetName();
 
                     yield return Issue(propertyName, linq.Expression.GetLocation(), linqCall);
                 }

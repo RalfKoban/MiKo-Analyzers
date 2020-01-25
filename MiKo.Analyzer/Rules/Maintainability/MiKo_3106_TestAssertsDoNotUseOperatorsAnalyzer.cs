@@ -41,9 +41,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
-        private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.Name.Identifier.ValueText)
+        private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.GetName())
                                                                                  && node.Expression is IdentifierNameSyntax invokedType
-                                                                                 && AssertionTypes.Contains(invokedType.Identifier.ValueText);
+                                                                                 && AssertionTypes.Contains(invokedType.GetName());
 
         private static bool IsBinaryMethod(string methodName)
         {
@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.InvocationExpression when ((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae:
                 {
                     token = mae.Name.Identifier;
-                    return IsBinaryMethod(token.ValueText);
+                    return IsBinaryMethod(mae.GetName());
                 }
             }
 

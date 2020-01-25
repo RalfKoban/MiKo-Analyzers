@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private static string GetName(ArgumentSyntax nameArgument)
+        private static string GetName(ArgumentSyntax nameArgument) // TODO: RKN Move to SyntaxExtensions
         {
             switch (nameArgument.Expression)
             {
@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (expression.IsKind(SyntaxKind.StringLiteralExpression))
             {
-                var name = ((LiteralExpressionSyntax)expression).Token.ValueText;
+                var name = ((LiteralExpressionSyntax)expression).Token.ValueText; // TODO: RKN Move to SyntaxExtensions
                 ReportIssue(symbol, nameArgument, "'nameof(" + name + ")'", ref diagnostics);
             }
         }

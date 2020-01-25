@@ -42,13 +42,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case SyntaxKind.VariableDeclarator:
                         var variable = (VariableDeclaratorSyntax)node;
-                        var variableName = variable.Identifier.ValueText;
+                        var variableName = variable.GetName();
 
                         foreach (var unused in descendantNodes
                                                .OfType<ReturnStatementSyntax>()
                                                .Select(_ => _.Expression)
                                                .OfType<IdentifierNameSyntax>()
-                                               .Where(_ => _.Identifier.ValueText == variableName))
+                                               .Where(_ => _.GetName() == variableName))
                         {
                             yield return ReportIssue(taskRunExpression, methodName);
                         }

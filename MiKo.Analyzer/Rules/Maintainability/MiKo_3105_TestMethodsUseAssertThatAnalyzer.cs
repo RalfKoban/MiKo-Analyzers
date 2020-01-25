@@ -49,12 +49,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (node.Expression is IdentifierNameSyntax invokedClass)
             {
-                if (AllowedAssertionMethods.Contains(node.Name.Identifier.ValueText))
+                if (AllowedAssertionMethods.Contains(node.GetName()))
                 {
                     return;
                 }
 
-                if (AssertionTypes.Contains(invokedClass.Identifier.ValueText) is false)
+                if (AssertionTypes.Contains(invokedClass.GetName()) is false)
                 {
                     return;
                 }

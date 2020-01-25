@@ -61,13 +61,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                   .OfType<AssignmentExpressionSyntax>()
                                                   .Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression)))
             {
-                var rightIdentifier = (assignment.Right as IdentifierNameSyntax)?.Identifier.ValueText;
+                var rightIdentifier = (assignment.Right as IdentifierNameSyntax).GetName();
                 if (rightIdentifier == methodName)
                 {
                     switch (assignment.Left)
                     {
-                        case IdentifierNameSyntax s: return s.Identifier.ValueText;
-                        case MemberAccessExpressionSyntax s: return s.Name.Identifier.ValueText;
+                        case IdentifierNameSyntax s: return s.GetName();
+                        case MemberAccessExpressionSyntax s: return s.GetName();
                     }
                 }
             }
