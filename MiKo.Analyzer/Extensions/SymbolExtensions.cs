@@ -753,6 +753,20 @@ namespace MiKoSolutions.Analyzers
                                                                                             .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
                                                                                             .FirstOrDefault();
 
+        internal static bool IsLinqExtensionMethod(this ISymbol symbol)
+        {
+            if (symbol is IMethodSymbol)
+            {
+                // this is an extension method !
+                if (symbol.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static string GetMethodSignature(this IMethodSymbol method)
         {
             var parameters = "(" + method.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";

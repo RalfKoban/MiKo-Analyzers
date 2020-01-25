@@ -199,6 +199,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.DescendantNodes().OfType<InvocationExpressionSyntax>()
+                                                                                                                                                           .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
+
+        internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
+
+        private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+
         private static IfStatementSyntax GetEnclosingIfStatement(SyntaxNode node)
         {
             // consider brackets:

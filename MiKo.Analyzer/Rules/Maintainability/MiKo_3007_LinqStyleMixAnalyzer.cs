@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -52,30 +49,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool HasLinqExtensionMethod(SyntaxNode syntaxNode, SemanticModel semanticModel)
-        {
-            return syntaxNode.DescendantNodes()
-                             .OfType<InvocationExpressionSyntax>()
-                             .Select(_ => semanticModel.GetSymbolInfo(_))
-                             .Any(IsLinqExtensionMethod);
-        }
-
-        private static bool IsLinqExtensionMethod(SymbolInfo info) => IsLinqExtensionMethod(info.Symbol) || info.CandidateSymbols.Any(IsLinqExtensionMethod);
-
-        private static bool IsLinqExtensionMethod(ISymbol symbol)
-        {
-            if (symbol is IMethodSymbol)
-            {
-                // this is an extension method !
-                if (symbol.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private void AnalyzeQueryExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (QueryExpressionSyntax)context.Node;
@@ -87,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel) => TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && HasLinqExtensionMethod(syntaxNode, semanticModel)
+        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel) => TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && syntaxNode.HasLinqExtensionMethod(semanticModel)
                                                                                                                    ? Issue(identifier, query.GetLocation())
                                                                                                                    : null;
     }
