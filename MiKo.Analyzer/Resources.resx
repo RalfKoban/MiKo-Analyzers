@@ -2278,6 +2278,15 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3042_Title" xml:space="preserve">
     <value>EventArgs shall not implement interfaces.</value>
   </data>
+  <data name="MiKo_3047_Description" xml:space="preserve">
+    <value>To prevent typos, any applied [ContentProperty] attribute shall use 'nameof' to define the property.</value>
+  </data>
+  <data name="MiKo_3047_MessageFormat" xml:space="preserve">
+    <value>Use 'nameof' instead</value>
+  </data>
+  <data name="MiKo_3047_Title" xml:space="preserve">
+    <value>Applied [ContentProperty] attributes shall use 'nameof'.</value>
+  </data>
   <data name="MiKo_3048_Description" xml:space="preserve">
     <value>To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute.</value>
   </data>

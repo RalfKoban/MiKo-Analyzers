@@ -6344,6 +6344,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To prevent typos, any applied [ContentProperty] attribute shall use &apos;nameof&apos; to define the property..
+        /// </summary>
+        public static string MiKo_3047_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3047_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        /// </summary>
+        public static string MiKo_3047_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3047_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applied [ContentProperty] attributes shall use &apos;nameof&apos;..
+        /// </summary>
+        public static string MiKo_3047_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3047_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute..
         /// </summary>
         public static string MiKo_3048_Description {
