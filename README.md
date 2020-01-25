@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 258 rules that are currently provided by the analyzer.
+The following tables list all the 260 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -245,9 +245,11 @@ The following tables list all the 258 rules that are currently provided by the a
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|
 |MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors.|&#x2713;|
 |MiKo_3037|Do not use magic numbers for timeouts.|&#x2713;|
+|MiKo_3038|Properties should not use Linq or yield.|&#x2713;|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than 2 values.|&#x2713;|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|
 |MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|
+|MiKo_3047|Applied [ContentProperty] attributes shall use 'nameof'.|&#x2713;|
 |MiKo_3048|ValueConverters shall have the [ValueConversion] attribute applied.|&#x2713;|
 |MiKo_3050|DependencyProperty fields should be 'public static readonly'.|&#x2713;|
 |MiKo_3051|DependencyProperty fields should be properly registered.|&#x2713;|
