@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsCombinatorial(IMethodSymbol method)
         {
-            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in method.GetAttributeNames())
             {
                 switch (name)
                 {
@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsSequential(IMethodSymbol method)
         {
-            foreach (var name in method.GetAttributes().Select(_ => _.AttributeClass.Name))
+            foreach (var name in method.GetAttributeNames())
             {
                 switch (name)
                 {
@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static int CountValueSources(IMethodSymbol method)
         {
             return method.Parameters
-                         .SelectMany(_ => _.GetAttributes().Select(__ => __.AttributeClass.Name))
+                         .SelectMany(_ => _.GetAttributeNames())
                          .Count(_ => _.EqualsAny(ValueSourceAttributeNames));
         }
     }

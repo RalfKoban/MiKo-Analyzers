@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Composition;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
@@ -27,13 +29,17 @@ namespace TestHelper
 
         private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
         private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
-        private static readonly MetadataReference SystemWindowsInputReference = MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location);
         private static readonly MetadataReference SystemCompositionReference = MetadataReference.CreateFromFile(typeof(ImportAttribute).Assembly.Location);
+        private static readonly MetadataReference SystemRuntimeReference = MetadataReference.CreateFromFile(typeof(DataContractAttribute).Assembly.Location); // needed also for other attributes
+        private static readonly MetadataReference SystemWindowsInputReference = MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location);
         private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
         private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
         private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(NUnit.Framework.Assert).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
+        private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
+        private static readonly MetadataReference AttributeTargetsReference = MetadataReference.CreateFromFile(typeof(AttributeTargets).Assembly.Location);
+        private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.
@@ -156,8 +162,12 @@ namespace TestHelper
                 .AddProject(projectId, TestProjectName, TestProjectName, language)
                 .AddMetadataReference(projectId, CorlibReference)
                 .AddMetadataReference(projectId, SystemCoreReference)
-                .AddMetadataReference(projectId, SystemWindowsInputReference)
                 .AddMetadataReference(projectId, SystemCompositionReference)
+                .AddMetadataReference(projectId, SystemRuntimeReference)
+                .AddMetadataReference(projectId, SystemWindowsInputReference)
+                .AddMetadataReference(projectId, AttributeReference)
+                .AddMetadataReference(projectId, AttributeTargetsReference)
+                .AddMetadataReference(projectId, DescriptionAttributeReference)
                 .AddMetadataReference(projectId, CSharpSymbolsReference)
                 .AddMetadataReference(projectId, CodeAnalysisReference)
                 .AddMetadataReference(projectId, NUnitReference)

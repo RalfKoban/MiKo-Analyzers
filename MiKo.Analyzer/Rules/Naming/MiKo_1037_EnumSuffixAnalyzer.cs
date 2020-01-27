@@ -36,8 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // ReSharper disable once RedundantNameQualifier we need the complete name here
             if (symbol.IsEnum()
-                && symbol.GetAttributes().Any(_ => _.AttributeClass.Name == nameof(FlagsAttribute))
-                && !betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase))
+                && symbol.GetAttributeNames().Any(_ => _ == nameof(FlagsAttribute))
+                && betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase) is false)
             {
                 betterName = GetPluralName(symbolName, betterName);
             }

@@ -293,24 +293,28 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            if (symbol.TypeKind == TypeKind.Class)
+            switch (symbol.TypeKind)
             {
-                while (true)
+                case TypeKind.Class:
+                case TypeKind.Error: // needed for attribute types
                 {
-                    var fullName = string.Intern(symbol.ToString());
-
-                    if (baseClass == fullName)
+                    while (true)
                     {
-                        return true;
-                    }
+                        var fullName = string.Intern(symbol.ToString());
 
-                    var baseType = symbol.BaseType;
-                    if (baseType is null)
-                    {
-                        return false;
-                    }
+                        if (baseClass == fullName)
+                        {
+                            return true;
+                        }
 
-                    symbol = baseType;
+                        var baseType = symbol.BaseType;
+                        if (baseType is null)
+                        {
+                            return false;
+                        }
+
+                        symbol = baseType;
+                    }
                 }
             }
 
@@ -324,29 +328,33 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            if (symbol.TypeKind == TypeKind.Class)
+            switch (symbol.TypeKind)
             {
-                while (true)
-                {
-                    var fullName = string.Intern(symbol.ToString());
-
-                    if (baseClassName == fullName)
+                case TypeKind.Class:
+                case TypeKind.Error: // needed for attribute types
                     {
-                        return true;
-                    }
-
-                    if (baseClassFullQualifiedName == fullName)
+                    while (true)
                     {
-                        return true;
-                    }
+                        var fullName = string.Intern(symbol.ToString());
 
-                    var baseType = symbol.BaseType;
-                    if (baseType is null)
-                    {
-                        return false;
-                    }
+                        if (baseClassName == fullName)
+                        {
+                            return true;
+                        }
 
-                    symbol = baseType;
+                        if (baseClassFullQualifiedName == fullName)
+                        {
+                            return true;
+                        }
+
+                        var baseType = symbol.BaseType;
+                        if (baseType is null)
+                        {
+                            return false;
+                        }
+
+                        symbol = baseType;
+                    }
                 }
             }
 

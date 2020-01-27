@@ -4444,7 +4444,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Try&apos; methods attempt to acchieve something. So their &lt;summary&gt; documentation should start with the phrase &apos;Attempts to&apos;..
+        ///   Looks up a localized string similar to &apos;Try&apos; methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase &apos;Attempts to&apos;..
         /// </summary>
         public static string MiKo_2072_Description {
             get {
@@ -6394,6 +6394,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3048_Title {
             get {
                 return ResourceManager.GetString("MiKo_3048_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When working with enums in C#, it is sometimes necessary to get a string description of the value associated with the enum. To achieve that, the &apos;System.ComponentModel.DescriptionAttribute&apos; can be used..
+        /// </summary>
+        public static string MiKo_3049_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3049_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply a [Description] attribute.
+        /// </summary>
+        public static string MiKo_3049_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3049_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum members shall have the [Description] attribute applied..
+        /// </summary>
+        public static string MiKo_3049_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3049_Title", resourceCulture);
             }
         }
         
