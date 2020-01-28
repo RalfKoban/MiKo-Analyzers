@@ -6235,7 +6235,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; inside property.
         /// </summary>
         public static string MiKo_3038_MessageFormat {
             get {

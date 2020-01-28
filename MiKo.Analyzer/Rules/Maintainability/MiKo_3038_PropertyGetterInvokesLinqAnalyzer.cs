@@ -39,9 +39,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var linq in node.LinqExtensionMethods(semanticModel))
                 {
-                    var linqCall = ((MemberAccessExpressionSyntax)linq.Expression).GetName();
+                    var linqExpression = (MemberAccessExpressionSyntax)linq.Expression;
+                    var linqCall = linqExpression.GetName();
 
-                    yield return Issue(propertyName, linq.Expression.GetLocation(), linqCall);
+                    yield return Issue(propertyName, linqExpression.Name.GetLocation(), linqCall);
                 }
 
                 foreach (var yieldKeyword in node.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.YieldKeyword)))
