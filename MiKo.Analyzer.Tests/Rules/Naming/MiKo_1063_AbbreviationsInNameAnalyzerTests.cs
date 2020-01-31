@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "cmd",
                 "ddl",
                 "desc",
+                "dict",
                 "dir",
                 "idx",
                 "itf",
@@ -27,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "mgr",
                 "mngr",
                 "msg",
+                "num",
                 "param",
                 "params",
                 "pos",
@@ -49,6 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Cmd",
                 "Ddl",
                 "Desc",
+                "Dict",
                 "Dir",
                 "Idx",
                 "Itf",
@@ -56,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Mgr",
                 "Mngr",
                 "Msg",
+                "Num",
                 "Pos",
                 "Params",
                 "Proc",
@@ -100,6 +104,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "measures",
                 "mixtures",
                 "tires",
+                "number",
+                "firstNumber",
             };
 
         [Test]
