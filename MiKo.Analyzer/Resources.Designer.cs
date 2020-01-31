@@ -5065,7 +5065,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove comment or describe the intent.
+        ///   Looks up a localized string similar to Remove comment or describe why exactly the code is the way it is.
         /// </summary>
         public static string MiKo_2300_MessageFormat {
             get {
