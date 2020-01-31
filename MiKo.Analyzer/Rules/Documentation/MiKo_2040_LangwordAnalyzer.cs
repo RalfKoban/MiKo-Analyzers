@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var results = new Dictionary<string, string>();
 
             var items = new[] { "true", "false", "null" };
-            var attributes = new[] { "langref", "langowrd", "langwrod" };
+            var attributes = new[] { "langref", "langowrd", "langwrod", "langwowd" };
 
             foreach (var item in items)
             {
