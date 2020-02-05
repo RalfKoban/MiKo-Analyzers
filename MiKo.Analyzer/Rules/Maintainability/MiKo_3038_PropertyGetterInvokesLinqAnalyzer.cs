@@ -19,6 +19,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeGetAccessorDeclaration, SyntaxKind.GetAccessorDeclaration);
 
+        private static SimpleNameSyntax FindNameSyntax(InvocationExpressionSyntax linq)
+        {
+            switch (linq.Expression)
+            {
+                case MemberAccessExpressionSyntax a: return a.Name;
+                case MemberBindingExpressionSyntax b: return b.Name;
+                default: return null;
+            }
+        }
+
         private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context)
         {
             var node = (AccessorDeclarationSyntax)context.Node;
@@ -33,22 +43,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> Analyze(AccessorDeclarationSyntax node, SemanticModel semanticModel)
         {
             var property = node.GetEnclosing<PropertyDeclarationSyntax>();
-            if (property != null)
+            if (property is null)
             {
-                var propertyName = property.GetName();
+                yield break;
+            }
 
-                foreach (var linq in node.LinqExtensionMethods(semanticModel))
+            var propertyName = property.GetName();
+
+            foreach (var linq in node.LinqExtensionMethods(semanticModel))
+            {
+                var name = FindNameSyntax(linq);
+                if (name is null)
                 {
-                    var linqExpression = (MemberAccessExpressionSyntax)linq.Expression;
-                    var linqCall = linqExpression.GetName();
-
-                    yield return Issue(propertyName, linqExpression.Name.GetLocation(), linqCall);
+                    continue;
                 }
 
-                foreach (var yieldKeyword in node.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.YieldKeyword)))
+                var linqCall = name.GetName();
+                if (linqCall == nameof(Enumerable.Empty))
                 {
-                    yield return Issue(propertyName, yieldKeyword.GetLocation(), yieldKeyword.ValueText);
+                    // Do not report 'Empty' as violation as the field behind never changes
+                    continue;
                 }
+
+                yield return Issue(propertyName, name.GetLocation(), linqCall);
+            }
+
+            foreach (var yieldKeyword in node.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.YieldKeyword)))
+            {
+                yield return Issue(propertyName, yieldKeyword.GetLocation(), yieldKeyword.ValueText);
             }
         }
     }

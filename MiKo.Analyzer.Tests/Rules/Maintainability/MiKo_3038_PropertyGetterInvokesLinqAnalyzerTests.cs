@@ -115,6 +115,26 @@ namespace Bla
 }
 ");
 
+        [Test, Ignore("Currently extension methods are detected as error symbols during test but work when used in production.")]
+        public void An_issue_is_reported_for_property_getter_as_arrow_clause_with_Linq_extension_and_elvis_operator() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private IEnumerable<string> _bla;
+
+        public IEnumerable<string> Bla
+        {
+            get => bla?.Select(_ => _).ToList();
+        }
+    }
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_property_getter_with_yield() => An_issue_is_reported_for(@"
 using System;
@@ -134,6 +154,24 @@ namespace Bla
                     yield return x;
                 }
             }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_getter_as_arrow_clause_with_Enumerable_Empty() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla
+        {
+            get => Enumerable.Empty<string>();
         }
     }
 }

@@ -140,7 +140,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetName(this MemberAccessExpressionSyntax syntax) => syntax?.Name.Identifier.ValueText;
+        internal static string GetName(this MemberAccessExpressionSyntax syntax) => syntax?.Name.GetName();
+
+        internal static string GetName(this MemberBindingExpressionSyntax syntax) => syntax?.Name.GetName();
+
+        internal static string GetName(this SimpleNameSyntax syntax) => syntax?.Identifier.ValueText;
 
         internal static string GetName(this VariableDeclaratorSyntax syntax) => syntax?.Identifier.ValueText;
 
