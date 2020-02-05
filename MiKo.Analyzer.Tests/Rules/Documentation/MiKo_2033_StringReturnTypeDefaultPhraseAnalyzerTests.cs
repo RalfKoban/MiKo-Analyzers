@@ -90,6 +90,27 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_commented_consist_String_only_method(
+                                                                                [Values("returns", "value")] string xmlTag,
+                                                                                [Values("", " ")] string space,
+                                                                                [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
+            => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <" + xmlTag + @">
+    /// A " + "<see cref=\"" + returnType + "\"" + space + @"/> that consists of something.
+    /// </" + xmlTag + @">
+    public " + returnType + @" DoSomething(object o) => null;
+}
+");
+
+        [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_ToString_method(
                                                                             [Values("returns")] string xmlTag,
                                                                             [Values("", " ")] string space,

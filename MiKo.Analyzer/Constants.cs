@@ -218,14 +218,18 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
-                    "A <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
-                    "A <see cref=\"string\"/> that contains ",
-                    "A <see cref=\"System.String\" /> that contains ",
-                    "A <see cref=\"System.String\"/> that contains ",
-                    "A <see cref=\"string\" /> that represents ",
+                    "A <see cref=\"string\"/> that contains ", // this is just to have a proposal how to optimize
+                    "A <see cref=\"string\"/> that consists of ",
                     "A <see cref=\"string\"/> that represents ",
-                    "A <see cref=\"System.String\" /> that represents ",
+                    "A <see cref=\"string\" /> that contains ",
+                    "A <see cref=\"string\" /> that consists of ",
+                    "A <see cref=\"string\" /> that represents ",
+                    "A <see cref=\"System.String\"/> that consists of ",
+                    "A <see cref=\"System.String\"/> that contains ",
                     "A <see cref=\"System.String\"/> that represents ",
+                    "A <see cref=\"System.String\" /> that consists of ",
+                    "A <see cref=\"System.String\" /> that contains ",
+                    "A <see cref=\"System.String\" /> that represents ",
                 };
 
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
@@ -235,6 +239,11 @@ namespace MiKoSolutions.Analyzers
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that contains ",
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that contains ",
                     "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that contains ",
+                    "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that consists of ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\"/> that consists of ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that consists of ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that consists of ",
+                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that consists of ",
                 };
 
             internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
