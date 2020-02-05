@@ -134,6 +134,31 @@ public class TestMe
                                                                                                                                                           }
                                                                                                                                                       });
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_with_visual_separators([Values("", " ")] string gap) => Assert.Multiple(() =>
+                                                                                                                                                      {
+                                                                                                                                                          foreach (var fixture in TestFixtures)
+                                                                                                                                                          {
+                                                                                                                                                              foreach (var comment in Comments)
+                                                                                                                                                              {
+                                                                                                                                                                  An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[" + fixture + @"]
+public class TestMe
+{
+    private void DoSomething()
+    {
+        // ---------------------
+        //" + gap + comment + @"
+        // ---------------------
+    }
+}
+");
+                                                                                                                                                              }
+                                                                                                                                                          }
+                                                                                                                                                      });
+
         protected override string GetDiagnosticId() => MiKo_2301_TestArrangeActAssertCommentAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2301_TestArrangeActAssertCommentAnalyzer();

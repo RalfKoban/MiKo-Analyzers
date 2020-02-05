@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2301_TestArrangeActAssertCommentAnalyzer : SingleLineCommentAnalyzer
+    public sealed class MiKo_2301_TestArrangeActAssertCommentAnalyzer : MultiLineCommentAnalyzer
     {
         public const string Id = "MiKo_2301";
 
