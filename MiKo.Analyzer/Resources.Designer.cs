@@ -6407,7 +6407,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply a [Description] attribute.
+        ///   Looks up a localized string similar to Apply a [Description] attribute with a proper description.
         /// </summary>
         public static string MiKo_3049_MessageFormat {
             get {

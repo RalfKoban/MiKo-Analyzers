@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -22,10 +21,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
         {
-            var issues = symbol.GetMembers().OfType<IFieldSymbol>()
-                               .Where(_ => _.HasAttributeApplied(DescriptionAttributeName) is false)
-                               .Select(_ => Issue(_));
-            return issues;
+            foreach (var field in symbol.GetMembers().OfType<IFieldSymbol>())
+            {
+                var descriptionAttributes = field.GetAttributes().Where(_ => _.AttributeClass.InheritsFrom(DescriptionAttributeName)).ToList();
+
+                if (descriptionAttributes.Count == 0)
+                {
+                    yield return Issue(field);
+                }
+
+                foreach (var attribute in descriptionAttributes)
+                {
+                    if (attribute.ConstructorArguments.Length == 0)
+                    {
+                        yield return Issue(field);
+                    }
+                }
+            }
         }
     }
 }

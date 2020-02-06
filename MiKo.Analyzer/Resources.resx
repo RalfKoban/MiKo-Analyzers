@@ -2300,7 +2300,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>When working with enums in C#, it is sometimes necessary to get a string description of the value associated with the enum. To achieve that, the 'System.ComponentModel.DescriptionAttribute' can be used.</value>
   </data>
   <data name="MiKo_3049_MessageFormat" xml:space="preserve">
-    <value>Apply a [Description] attribute</value>
+    <value>Apply a [Description] attribute with a proper description</value>
   </data>
   <data name="MiKo_3049_Title" xml:space="preserve">
     <value>Enum members shall have the [Description] attribute applied.</value>

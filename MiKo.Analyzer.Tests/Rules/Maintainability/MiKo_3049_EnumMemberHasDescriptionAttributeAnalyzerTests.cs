@@ -39,8 +39,20 @@ public enum TestMe
 }
 ");
 
+        [Test, Ignore("Roslyn attribute issue: Detection of attribute's ctor currently does not work within test, but works in production code.")]
+        public void No_issue_is_reported_for_documented_enum_type_with_description() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public enum TestMe
+{
+    [Description(""some description"")]
+    None = 0,
+}
+");
+
         [Test]
-        public void No_issue_is_reported_for_documented_enum_type() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_documented_enum_type_without_description() => An_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;
 
@@ -58,7 +70,7 @@ using System.ComponentModel;
 
 public enum TestMe
 {
-    [Description]
+    [Description(""some description"")]
     None = 0,
     Something = 1,
 }
