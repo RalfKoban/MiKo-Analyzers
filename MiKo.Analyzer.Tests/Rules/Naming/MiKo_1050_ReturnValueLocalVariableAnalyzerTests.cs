@@ -81,38 +81,33 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1050_ReturnValueLocalVariableAnalyzer();
 
         [ExcludeFromCodeCoverage]
-        private static string[] CreateNonFitting()
-        {
-            var terms = new[]
-                            {
-                                "resultList",
-                                "resultingList",
-                                "ret",
-                                "retval",
-                                "retVal",
-                                "retVals",
-                                "returnVal",
-                                "returnVals",
-                                "returnValue",
-                                "returnValues",
-                                "res1",
-                                "res2",
-                                "ret1",
-                                "ret2",
-                                "retVal3",
-                                "returnValue4",
-                                "retVal_5",
-                                "retList",
-                                "returningList",
-                                "retValid",
-                                "retGuid",
-                                "returnCommunicationChannel",
-                                "retMock",
-                                "retMockVm",
-                            };
-
-            var nonFitting = new HashSet<string>(terms);
-            return nonFitting.OrderBy(_ => _).ToArray();
-        }
+        private static string[] CreateNonFitting() => new HashSet<string>(new[]
+                                                                              {
+                                                                                  "resultList",
+                                                                                  "resultingList",
+                                                                                  "ret",
+                                                                                  "retval",
+                                                                                  "retVal",
+                                                                                  "retVals",
+                                                                                  "returnVal",
+                                                                                  "returnVals",
+                                                                                  "returnValue",
+                                                                                  "returnValues",
+                                                                                  "res1",
+                                                                                  "res2",
+                                                                                  "ret1",
+                                                                                  "ret2",
+                                                                                  "retVal3",
+                                                                                  "returnValue4",
+                                                                                  "retVal_5",
+                                                                                  "retList",
+                                                                                  "returningList",
+                                                                                  "retValid",
+                                                                                  "retGuid",
+                                                                                  "returnCommunicationChannel",
+                                                                                  "retMock",
+                                                                                  "retMockVm",
+                                                                                  "returned",
+                                                                              }).OrderBy(_ => _).ToArray();
     }
 }

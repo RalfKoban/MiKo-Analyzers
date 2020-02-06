@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "results",
                                                                            };
 
-        private static readonly string[] WrongNames = CreateWrongNames(AllowedCompleteNames, "ret", "return", "returning", "retval", "res", "resulting");
+        private static readonly string[] WrongNames = CreateWrongNames(AllowedCompleteNames, "ret", "return", "returned", "returning", "retval", "res", "resulting");
 
         public MiKo_1050_ReturnValueLocalVariableAnalyzer() : base(Id)
         {
