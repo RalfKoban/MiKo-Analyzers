@@ -47,6 +47,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Network",
                 "versioned",
                 "ImportWorkflow",
+                "InfoNeeded",
+                "NONE",
             };
 
         private static readonly string[] WrongNames =
@@ -315,6 +317,16 @@ public class TestMe
         {
         }
     }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_constant_with_incorrect_name([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private const string " + name + @" = ""something"";
 }
 ");
 
