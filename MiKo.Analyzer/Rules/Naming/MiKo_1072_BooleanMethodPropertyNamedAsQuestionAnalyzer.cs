@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,6 +17,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 "Is",
                 "Are",
+            };
+
+        private static readonly string[] AllowedNames =
+            {
+                nameof(string.IsNullOrEmpty),
+                nameof(string.IsNullOrWhiteSpace),
             };
 
         public MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer() : base(Id)
@@ -48,6 +55,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
             {
+                // skip all well known names
+                if (AllowedNames.Contains(name))
+                {
+                    yield break;
+                }
+
                 yield return Issue(symbol);
             }
         }

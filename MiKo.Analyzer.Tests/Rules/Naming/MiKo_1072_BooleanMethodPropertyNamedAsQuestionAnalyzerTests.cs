@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Connected",
                 "HasConnectionEstablished",
                 "CanBeConnected",
+                nameof(string.IsNullOrEmpty),
+                nameof(string.IsNullOrWhiteSpace),
             };
 
         private static readonly string[] WrongNames =
