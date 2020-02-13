@@ -10,13 +10,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1106_MockNamingAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1108_MockNamingAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1106";
+        public const string Id = "MiKo_1108";
 
         private static readonly string[] MockNames = { "mock", "stub" };
 
-        public MiKo_1106_MockNamingAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_1108_MockNamingAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 

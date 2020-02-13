@@ -963,33 +963,51 @@ The name should be constructed by having the name of the type under test as pref
     <value>Test cleanup methods should be named 'CleanupTest'.</value>
   </data>
   <data name="MiKo_1105_Description" xml:space="preserve">
+    <value>A method that is marked as one-time unit test initialization method should be named 'PrepareTestEnvironment'.</value>
+  </data>
+  <data name="MiKo_1105_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1105_Title" xml:space="preserve">
+    <value>One-time test initialization methods should be named 'PrepareTestEnvironment'.</value>
+  </data>
+  <data name="MiKo_1106_Description" xml:space="preserve">
+    <value>A method that is marked as one-time unit test cleanup method should be named 'CleanupTestEnvironment'.</value>
+  </data>
+  <data name="MiKo_1106_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1106_Title" xml:space="preserve">
+    <value>One-time test cleanup methods should be named 'CleanupTestEnvironment'.</value>
+  </data>
+  <data name="MiKo_1107_Description" xml:space="preserve">
     <value>For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
 To ease reading, use underscores between the different words instead.</value>
   </data>
-  <data name="MiKo_1105_MessageFormat" xml:space="preserve">
+  <data name="MiKo_1107_MessageFormat" xml:space="preserve">
     <value>Use underscores instead of Pascal-casing</value>
   </data>
-  <data name="MiKo_1105_Title" xml:space="preserve">
+  <data name="MiKo_1107_Title" xml:space="preserve">
     <value>Test methods should not be in Pascal-casing.</value>
   </data>
-  <data name="MiKo_1106_Description" xml:space="preserve">
+  <data name="MiKo_1108_Description" xml:space="preserve">
     <value>For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
 Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
   </data>
-  <data name="MiKo_1106_MessageFormat" xml:space="preserve">
+  <data name="MiKo_1108_MessageFormat" xml:space="preserve">
     <value>Do not name it 'Mock' or 'Stub'</value>
   </data>
-  <data name="MiKo_1106_Title" xml:space="preserve">
+  <data name="MiKo_1108_Title" xml:space="preserve">
     <value>Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.</value>
   </data>
-  <data name="MiKo_1107_Description" xml:space="preserve">
+  <data name="MiKo_1109_Description" xml:space="preserve">
     <value>Sometimes types or some of their functionality cannot be tested directly due to wrong visibility. To work around that, a solution is to inherit from such types and use that special type during test. Additionally, additional methods or properties are added to such types to access the orginal, invisible method resp. property.
 Those specifically introduced types should be named as the original type, but prefixed with 'Testable' - they should not be suffixed with the hard-to-understand 'Ut' suffix.</value>
   </data>
-  <data name="MiKo_1107_MessageFormat" xml:space="preserve">
+  <data name="MiKo_1109_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
-  <data name="MiKo_1107_Title" xml:space="preserve">
+  <data name="MiKo_1109_Title" xml:space="preserve">
     <value>Prefix testable types with 'Testable' instead of using the 'Ut' suffix.</value>
   </data>
   <data name="MiKo_1200_Description" xml:space="preserve">
@@ -2617,13 +2635,13 @@ Such namespaces should be flattened.</value>
     <value>Dispose methods should be placed directly after constructors and finalizers.</value>
   </data>
   <data name="MiKo_4101_Description" xml:space="preserve">
-    <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first.</value>
+    <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods.</value>
   </data>
   <data name="MiKo_4101_MessageFormat" xml:space="preserve">
-    <value>Place test initialization method before all other methods</value>
+    <value>Place test initialization method between one-time and all other methods</value>
   </data>
   <data name="MiKo_4101_Title" xml:space="preserve">
-    <value>Test initialization methods should be ordered first.</value>
+    <value>Test initialization methods should be ordered directly after One-Time methods.</value>
   </data>
   <data name="MiKo_4102_Description" xml:space="preserve">
     <value>Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods.</value>
@@ -2633,6 +2651,24 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4102_Title" xml:space="preserve">
     <value>Test cleanup methods should be ordered before test methods.</value>
+  </data>
+  <data name="MiKo_4103_Description" xml:space="preserve">
+    <value>One-Time test initialization method define the most common parts that the test environment shall have. So to ease their finding they should be ordered first.</value>
+  </data>
+  <data name="MiKo_4103_MessageFormat" xml:space="preserve">
+    <value>Place one-time test initialization method before all other methods</value>
+  </data>
+  <data name="MiKo_4103_Title" xml:space="preserve">
+    <value>One-Time test initialization methods should be ordered before all other methods.</value>
+  </data>
+  <data name="MiKo_4104_Description" xml:space="preserve">
+    <value>One-Time test cleanup methods define the common parts that shall be executed after all tests have been finished, to clean up the test environment. So to ease their finding they should be ordered directly after the One-Time test initialization methods.</value>
+  </data>
+  <data name="MiKo_4104_MessageFormat" xml:space="preserve">
+    <value>Place one-time test cleanup methods directly after one-time test initialization and before all other methods</value>
+  </data>
+  <data name="MiKo_4104_Title" xml:space="preserve">
+    <value>One-Time test cleanup methods should be ordered directly after One-Time test initialization methods.</value>
   </data>
   <data name="MiKo_5001_Description" xml:space="preserve">
     <value>For performance reasons, 'IsDebugEnabled' should be invoked before the 'Debug' or 'DebugFormat' methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the 'Debug' log level is not set.</value>

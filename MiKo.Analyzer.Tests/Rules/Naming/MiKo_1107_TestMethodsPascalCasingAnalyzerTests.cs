@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1105_TestMethodsPascalCasingAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1107_TestMethodsPascalCasingAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"
@@ -60,8 +60,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1105_TestMethodsPascalCasingAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1107_TestMethodsPascalCasingAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1105_TestMethodsPascalCasingAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1107_TestMethodsPascalCasingAnalyzer();
     }
 }

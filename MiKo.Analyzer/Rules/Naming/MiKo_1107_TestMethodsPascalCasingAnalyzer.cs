@@ -9,13 +9,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1105_TestMethodsPascalCasingAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1107_TestMethodsPascalCasingAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1105";
+        public const string Id = "MiKo_1107";
 
         private const string PascalCasingRegex = "[a-z]+[A-Z]+";
 
-        public MiKo_1105_TestMethodsPascalCasingAnalyzer() : base(Id)
+        public MiKo_1107_TestMethodsPascalCasingAnalyzer() : base(Id)
         {
         }
 

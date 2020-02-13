@@ -2496,8 +2496,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
-        ///To ease reading, use underscores between the different words instead..
+        ///   Looks up a localized string similar to A method that is marked as one-time unit test initialization method should be named &apos;PrepareTestEnvironment&apos;..
         /// </summary>
         public static string MiKo_1105_Description {
             get {
@@ -2506,7 +2505,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use underscores instead of Pascal-casing.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1105_MessageFormat {
             get {
@@ -2515,7 +2514,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should not be in Pascal-casing..
+        ///   Looks up a localized string similar to One-time test initialization methods should be named &apos;PrepareTestEnvironment&apos;..
         /// </summary>
         public static string MiKo_1105_Title {
             get {
@@ -2524,8 +2523,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-        ///Hence naming them e.g. &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
+        ///   Looks up a localized string similar to A method that is marked as one-time unit test cleanup method should be named &apos;CleanupTestEnvironment&apos;..
         /// </summary>
         public static string MiKo_1106_Description {
             get {
@@ -2534,7 +2532,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos; or &apos;Stub&apos;.
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1106_MessageFormat {
             get {
@@ -2543,7 +2541,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos; or &apos;Stub&apos;..
+        ///   Looks up a localized string similar to One-time test cleanup methods should be named &apos;CleanupTestEnvironment&apos;..
         /// </summary>
         public static string MiKo_1106_Title {
             get {
@@ -2552,8 +2550,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sometimes types or some of their functionality cannot be tested directly due to wrong visibility. To work around that, a solution is to inherit from such types and use that special type during test. Additionally, additional methods or properties are added to such types to access the orginal, invisible method resp. property.
-        ///Those specifically introduced types should be named as the original type, but prefixed with &apos;Testable&apos; - they should not be suffixed with the hard-to-understand &apos;Ut&apos; suffix..
+        ///   Looks up a localized string similar to For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
+        ///To ease reading, use underscores between the different words instead..
         /// </summary>
         public static string MiKo_1107_Description {
             get {
@@ -2562,7 +2560,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use underscores instead of Pascal-casing.
         /// </summary>
         public static string MiKo_1107_MessageFormat {
             get {
@@ -2571,11 +2569,67 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefix testable types with &apos;Testable&apos; instead of using the &apos;Ut&apos; suffix..
+        ///   Looks up a localized string similar to Test methods should not be in Pascal-casing..
         /// </summary>
         public static string MiKo_1107_Title {
             get {
                 return ResourceManager.GetString("MiKo_1107_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
+        ///Hence naming them e.g. &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
+        /// </summary>
+        public static string MiKo_1108_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1108_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos; or &apos;Stub&apos;.
+        /// </summary>
+        public static string MiKo_1108_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1108_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos; or &apos;Stub&apos;..
+        /// </summary>
+        public static string MiKo_1108_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1108_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sometimes types or some of their functionality cannot be tested directly due to wrong visibility. To work around that, a solution is to inherit from such types and use that special type during test. Additionally, additional methods or properties are added to such types to access the orginal, invisible method resp. property.
+        ///Those specifically introduced types should be named as the original type, but prefixed with &apos;Testable&apos; - they should not be suffixed with the hard-to-understand &apos;Ut&apos; suffix..
+        /// </summary>
+        public static string MiKo_1109_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1109_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1109_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1109_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefix testable types with &apos;Testable&apos; instead of using the &apos;Ut&apos; suffix..
+        /// </summary>
+        public static string MiKo_1109_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1109_Title", resourceCulture);
             }
         }
         
@@ -7292,7 +7346,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered first..
+        ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods..
         /// </summary>
         public static string MiKo_4101_Description {
             get {
@@ -7301,7 +7355,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test initialization method before all other methods.
+        ///   Looks up a localized string similar to Place test initialization method between one-time and all other methods.
         /// </summary>
         public static string MiKo_4101_MessageFormat {
             get {
@@ -7310,7 +7364,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test initialization methods should be ordered first..
+        ///   Looks up a localized string similar to Test initialization methods should be ordered directly after One-Time methods..
         /// </summary>
         public static string MiKo_4101_Title {
             get {
@@ -7342,6 +7396,60 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_4102_Title {
             get {
                 return ResourceManager.GetString("MiKo_4102_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One-Time test initialization method define the most common parts that the test environment shall have. So to ease their finding they should be ordered first..
+        /// </summary>
+        public static string MiKo_4103_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4103_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place one-time test initialization method before all other methods.
+        /// </summary>
+        public static string MiKo_4103_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4103_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One-Time test initialization methods should be ordered before all other methods..
+        /// </summary>
+        public static string MiKo_4103_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4103_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One-Time test cleanup methods define the common parts that shall be executed after all tests have been finished, to clean up the test environment. So to ease their finding they should be ordered directly after the One-Time test initialization methods..
+        /// </summary>
+        public static string MiKo_4104_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4104_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place one-time test cleanup methods directly after one-time test initialization and before all other methods.
+        /// </summary>
+        public static string MiKo_4104_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4104_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One-Time test cleanup methods should be ordered directly after One-Time test initialization methods..
+        /// </summary>
+        public static string MiKo_4104_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4104_Title", resourceCulture);
             }
         }
         

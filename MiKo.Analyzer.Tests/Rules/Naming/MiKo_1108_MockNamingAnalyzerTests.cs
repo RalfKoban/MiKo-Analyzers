@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1106_MockNamingAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1108_MockNamingAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongNames =
             {
@@ -251,8 +251,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1106_MockNamingAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1108_MockNamingAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1106_MockNamingAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1108_MockNamingAnalyzer();
     }
 }

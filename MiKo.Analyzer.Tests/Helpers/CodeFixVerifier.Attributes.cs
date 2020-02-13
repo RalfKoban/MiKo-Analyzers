@@ -42,6 +42,22 @@ namespace TestHelper
                                                                            "TestCleanupAttribute()",
                                                                        };
 
+        public static readonly IEnumerable<string> TestOneTimeSetUps = new[]
+                                                                    {
+                                                                        "OneTimeSetUp",
+                                                                        "OneTimeSetUp()",
+                                                                        nameof(OneTimeSetUpAttribute),
+                                                                        nameof(OneTimeSetUpAttribute) + "()",
+                                                                    };
+
+        public static readonly IEnumerable<string> TestOneTimeTearDowns = new[]
+                                                                       {
+                                                                           "OneTimeTearDown",
+                                                                           "OneTimeTearDown()",
+                                                                           nameof(OneTimeTearDownAttribute),
+                                                                           nameof(OneTimeTearDownAttribute) + "()",
+                                                                       };
+
         public static readonly IEnumerable<string> Tests = new[]
                                                                {
                                                                    nameof(TestAttribute),

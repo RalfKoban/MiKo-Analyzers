@@ -43,7 +43,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_cleanup_method_with_correct_name(
+        public void No_issue_is_reported_for_test_teardown_method_with_correct_name(
                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                             [ValueSource(nameof(TestTearDowns))] string test)
             => No_issue_is_reported_for(@"
@@ -56,7 +56,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_cleanup_method_with_wrong_name(
+        public void An_issue_is_reported_for_test_teardown_method_with_wrong_name(
                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                             [ValueSource(nameof(TestTearDowns))] string test)
             => An_issue_is_reported_for(@"

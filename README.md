@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 261 rules that are currently provided by the analyzer.
+The following tables list all the 265 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -104,9 +104,11 @@ The following tables list all the 261 rules that are currently provided by the a
 |MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|&#x2713;|
 |MiKo_1104|Test cleanup methods should be named 'CleanupTest'.|&#x2713;|
-|MiKo_1105|Test methods should not be in Pascal-casing.|&#x2713;|
-|MiKo_1106|Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.|&#x2713;|
-|MiKo_1107|Prefix testable types with 'Testable' instead of using the 'Ut' suffix.|&#x2713;|
+|MiKo_1105|One-time test initialization methods should be named 'PrepareTestEnvironment'.|&#x2713;|
+|MiKo_1106|One-time test cleanup methods should be named 'CleanupTestEnvironment'.|&#x2713;|
+|MiKo_1107|Test methods should not be in Pascal-casing.|&#x2713;|
+|MiKo_1108|Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.|&#x2713;|
+|MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix.|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently.|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently.|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|&#x2713;|
@@ -285,8 +287,10 @@ The following tables list all the 261 rules that are currently provided by the a
 |MiKo_4001|Methods with same name should be ordered based on the number of their parameters.|&#x2713;|
 |MiKo_4002|Methods with same name and accessibility should be placed side-by-side.|&#x2713;|
 |MiKo_4003|Dispose methods should be placed directly after constructors and finalizers.|&#x2713;|
-|MiKo_4101|Test initialization methods should be ordered first.|&#x2713;|
+|MiKo_4101|Test initialization methods should be ordered directly after One-Time methods.|&#x2713;|
 |MiKo_4102|Test cleanup methods should be ordered before test methods.|&#x2713;|
+|MiKo_4103|One-Time test initialization methods should be ordered before all other methods.|&#x2713;|
+|MiKo_4104|One-Time test cleanup methods should be ordered directly after One-Time test initialization methods.|&#x2713;|
 
 ### Performance
 |ID|Title|Enabled by default|

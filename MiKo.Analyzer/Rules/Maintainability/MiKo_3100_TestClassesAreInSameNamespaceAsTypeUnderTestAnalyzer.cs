@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // 2. If none is found, go into each test method and try to find out which objects get created that are assigned to a local variable named 'objectUnderTest' (or similar)
-            foreach (var method in methods.Where(_ => _.IsTestSetupMethod() || _.IsTestMethod()))
+            foreach (var method in methods.Where(_ => _.IsTestSetUpMethod() || _.IsTestMethod()))
             {
                 var methodDeclaration = (MethodDeclarationSyntax)method.GetSyntax();
 

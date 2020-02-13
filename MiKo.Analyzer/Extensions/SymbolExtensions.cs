@@ -55,6 +55,18 @@ namespace MiKoSolutions.Analyzers
                                                                                      "TestCleanupAttribute",
                                                                                  };
 
+        private static readonly HashSet<string> TestOneTimeSetupAttributeNames = new HashSet<string>
+                                                                              {
+                                                                                  "OneTimeSetUp",
+                                                                                  "OneTimeSetUpAttribute",
+                                                                              };
+
+        private static readonly HashSet<string> TestOneTimeTearDownAttributeNames = new HashSet<string>
+                                                                                 {
+                                                                                     "OneTimeTearDown",
+                                                                                     "OneTimeTearDownAttribute",
+                                                                                 };
+
         private static readonly HashSet<string> ImportAttributeNames = new HashSet<string>
                                                                            {
                                                                                "Import",
@@ -248,9 +260,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestMethodAttributeNames.Contains);
 
-        internal static bool IsTestSetupMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestSetupAttributeNames.Contains);
+        internal static bool IsTestSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestSetupAttributeNames.Contains);
 
-        internal static bool IsTestTeardownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
+        internal static bool IsTestTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
+
+        internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestOneTimeSetupAttributeNames.Contains);
+
+        internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestOneTimeTearDownAttributeNames.Contains);
 
         internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol method) => method.ReturnsVoid is false && TypeUnderTestMethodNames.Contains(method.Name);
 

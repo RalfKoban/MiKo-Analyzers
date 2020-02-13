@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1107_TestableClassesShouldNotBeSuffixedWithUtAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
@@ -25,8 +25,8 @@ public class TestMeUt
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1107_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1107_TestableClassesShouldNotBeSuffixedWithUtAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer();
     }
 }
