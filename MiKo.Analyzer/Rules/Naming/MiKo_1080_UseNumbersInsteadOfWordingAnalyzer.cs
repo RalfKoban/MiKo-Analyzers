@@ -64,6 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "None",
                                                                          "NONE",
                                                                          "OnE",
+                                                                         "OneTime",
                                                                          "Ones",
                                                                          "oNeeded",
                                                                          "oxone",
