@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "CanBeConnected",
                 nameof(string.IsNullOrEmpty),
                 nameof(string.IsNullOrWhiteSpace),
+                "IsSameKey",
             };
 
         private static readonly string[] WrongNames =

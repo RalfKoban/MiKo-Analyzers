@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
             {
                 // skip all well known names
-                if (AllowedNames.Contains(name))
+                if (name.StartsWith("IsSame", StringComparison.Ordinal) || AllowedNames.Contains(name))
                 {
                     yield break;
                 }
