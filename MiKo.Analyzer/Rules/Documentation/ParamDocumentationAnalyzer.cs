@@ -14,9 +14,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => AnalyzeParameters(symbol, commentXml);
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
-                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                    : new[] { Issue(parameter, phrase.HumanizedConcatenated()) };
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase)
+        {
+            if (comment.StartsWithAny(phrase, StringComparison.Ordinal))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
+            return useAllPhrases
+                       ? new[] { Issue(parameter, phrase.HumanizedConcatenated()) }
+                       : new[] { Issue(parameter, phrase[0]) };
+        }
 
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;
 
