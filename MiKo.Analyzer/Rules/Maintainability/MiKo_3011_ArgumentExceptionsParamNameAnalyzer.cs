@@ -175,7 +175,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var parameter = method.Parameters.FirstOrDefault(_ => identifiers.Contains(_.Name));
                 if (parameter != null)
                 {
-                    parameters = parameter.Name.SurroundedWith("\'");
+                    parameters = parameter.Name.SurroundedWithApostrophe();
                 }
             }
 

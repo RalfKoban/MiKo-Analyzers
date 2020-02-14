@@ -130,7 +130,7 @@ namespace System
 
         public static string HumanizedConcatenated(this IEnumerable<string> values)
         {
-            var items = values.Select(_ => _.SurroundedWith("\'")).ToList();
+            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToList();
 
             const string Separator = ", ";
             const string SeparatorForLast = " or ";
@@ -147,6 +147,9 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string SurroundedWithApostrophe(this string value) => string.Concat("\'", value, "\'");
 
         public static string HumanizedTakeFirst(this string value, int max)
         {
