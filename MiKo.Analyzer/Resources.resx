@@ -906,15 +906,35 @@ Example:
     <value>Variables should not be suffixed with a number if their types have number suffixes.</value>
   </data>
   <data name="MiKo_1090_Description" xml:space="preserve">
-    <value>Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so(comparer, view or item).
+    <value>Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so (comparer, view or item).
 
-The reason is that the type already states what the parameter is so its name should not have that additional, redundant information.</value>
+The reason is that the type already states what the parameter is - so its name should not have that additional, redundant information.</value>
   </data>
   <data name="MiKo_1090_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1090_Title" xml:space="preserve">
     <value>Parameters should not be suffixed with specific types.</value>
+  </data>
+  <data name="MiKo_1091_Description" xml:space="preserve">
+    <value>Instead of suffixing a variable with a specific type (such as xyzComparer, xyzView, or xyzItem), the variable should be named so (comparer, view or item).
+
+The reason is that the type already states what the variable is - so its name should not have that additional, redundant information.</value>
+  </data>
+  <data name="MiKo_1091_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1091_Title" xml:space="preserve">
+    <value>Variables should not be suffixed with specific types.</value>
+  </data>
+  <data name="MiKo_1092_Description" xml:space="preserve">
+    <value>Instead of suffixing an 'ability' type with redundant information (such as ComparableItem), the redundant information should be left out of the name of the type (such as Comarable).</value>
+  </data>
+  <data name="MiKo_1092_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}'</value>
+  </data>
+  <data name="MiKo_1092_Title" xml:space="preserve">
+    <value>'Ability' Types should not be suffixed with redundant information.</value>
   </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.

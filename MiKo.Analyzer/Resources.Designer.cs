@@ -2331,9 +2331,9 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so(comparer, view or item).
+        ///   Looks up a localized string similar to Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so (comparer, view or item).
         ///
-        ///The reason is that the type already states what the parameter is so its name should not have that additional, redundant information..
+        ///The reason is that the type already states what the parameter is - so its name should not have that additional, redundant information..
         /// </summary>
         public static string MiKo_1090_Description {
             get {
@@ -2356,6 +2356,62 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1090_Title {
             get {
                 return ResourceManager.GetString("MiKo_1090_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instead of suffixing a variable with a specific type (such as xyzComparer, xyzView, or xyzItem), the variable should be named so (comparer, view or item).
+        ///
+        ///The reason is that the type already states what the variable is - so its name should not have that additional, redundant information..
+        /// </summary>
+        public static string MiKo_1091_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1091_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1091_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1091_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variables should not be suffixed with specific types..
+        /// </summary>
+        public static string MiKo_1091_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1091_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instead of suffixing an &apos;ability&apos; type with redundant information (such as ComparableItem), the redundant information should be left out of the name of the type (such as Comarable)..
+        /// </summary>
+        public static string MiKo_1092_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1092_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1092_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1092_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Ability&apos; Types should not be suffixed with redundant information..
+        /// </summary>
+        public static string MiKo_1092_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1092_Title", resourceCulture);
             }
         }
         

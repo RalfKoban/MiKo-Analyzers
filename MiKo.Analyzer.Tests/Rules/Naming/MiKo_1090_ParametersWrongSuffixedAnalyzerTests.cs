@@ -36,7 +36,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_incorrectly_named_parameter([Values("myComparer", "myView", "myItem", "myEntity")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_incorrectly_named_parameter([Values("myComparer", "myView", "myItem", "myEntity", "myElement")] string name) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
