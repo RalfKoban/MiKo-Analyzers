@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
+    /// <seealso cref="MiKo_1026_LocalVariableNameLengthAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1027_LocalVariableNameInForLoopsLengthAnalyzer : NamingLengthAnalyzer
     {
@@ -18,35 +19,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(AnalysisContext context)
         {
+            // normal local variables are covered in MiKo_1026
             context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
             context.RegisterSyntaxNodeAction(AnalyzeForStatement, SyntaxKind.ForStatement);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
 
-        private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers)
-        {
-            List<Diagnostic> results = null;
-
-            foreach (var identifier in identifiers)
-            {
-                var exceeding = GetExceedingCharacters(identifier.ValueText);
-                if (exceeding <= 0)
-                {
-                    continue;
-                }
-
-                var symbol = identifier.GetSymbol(semanticModel);
-
-                if (results is null)
-                {
-                    results = new List<Diagnostic>(1);
-                }
-
-                results.Add(Issue(symbol, exceeding));
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
-        }
+        private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers) => from identifier in identifiers
+                                                                                                                                 let exceeding = GetExceedingCharacters(identifier.ValueText)
+                                                                                                                                 where exceeding > 0
+                                                                                                                                 let symbol = identifier.GetSymbol(semanticModel)
+                                                                                                                                 select Issue(symbol, exceeding);
     }
 }
