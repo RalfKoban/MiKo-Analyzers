@@ -2389,7 +2389,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instead of suffixing an &apos;ability&apos; type with redundant information (such as ComparableItem), the redundant information should be left out of the name of the type (such as Comarable)..
+        ///   Looks up a localized string similar to Instead of suffixing an &apos;ability&apos; type with redundant information (such as &apos;ComparableItem&apos;), the redundant information should be left out of the name of the type (such as &apos;Comparable&apos;)..
         /// </summary>
         public static string MiKo_1092_Description {
             get {

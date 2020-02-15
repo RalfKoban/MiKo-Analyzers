@@ -928,7 +928,7 @@ The reason is that the type already states what the variable is - so its name sh
     <value>Variables should not be suffixed with specific types.</value>
   </data>
   <data name="MiKo_1092_Description" xml:space="preserve">
-    <value>Instead of suffixing an 'ability' type with redundant information (such as ComparableItem), the redundant information should be left out of the name of the type (such as Comarable).</value>
+    <value>Instead of suffixing an 'ability' type with redundant information (such as 'ComparableItem'), the redundant information should be left out of the name of the type (such as 'Comparable').</value>
   </data>
   <data name="MiKo_1092_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
