@@ -5,7 +5,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public partial class MiKo_1063_AbbreviationsInNameAnalyzerTests
     {
         [Test]
-        public void An_issue_is_reported_for_local_variable_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_variable_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -21,7 +21,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_local_foreach_variable_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_foreach_variable_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -39,7 +39,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_field_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -51,7 +51,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_property_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -63,7 +63,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_event_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_event_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -75,7 +75,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -87,7 +87,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -99,7 +99,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -109,13 +109,27 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_namespace_with_prefix([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace " + prefix + @"Namespace
 {
     public class TestMe
     { }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_special_name_([Values("paramName")] string specialName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(string " + specialName + @")
+        {
+        }
+    }
 }");
     }
 }

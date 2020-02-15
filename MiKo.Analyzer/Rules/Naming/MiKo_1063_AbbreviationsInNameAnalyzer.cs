@@ -118,7 +118,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => AnalyzeName(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name == "paramName"
+                                                                                               ? Enumerable.Empty<Diagnostic>()
+                                                                                               : AnalyzeName(symbol);
 
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
 
