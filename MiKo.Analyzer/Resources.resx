@@ -936,6 +936,15 @@ The reason is that the type already states what the variable is - so its name sh
   <data name="MiKo_1092_Title" xml:space="preserve">
     <value>'Ability' Types should not be suffixed with redundant information.</value>
   </data>
+  <data name="MiKo_1093_Description" xml:space="preserve">
+    <value>Identifiers should not have the term 'Object' or 'Struct' as suffix. Many times, a mcuh better name can be given that avoids the usage of the term 'Object' or 'Struct' at all (such as 'Identifier' instead of 'IdentificationObject').</value>
+  </data>
+  <data name="MiKo_1093_MessageFormat" xml:space="preserve">
+    <value>Do not use suffix '{1}'</value>
+  </data>
+  <data name="MiKo_1093_Title" xml:space="preserve">
+    <value>Do not use the suffix 'Object' or 'Struct'.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>

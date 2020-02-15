@@ -2416,6 +2416,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Identifiers should not have the term &apos;Object&apos; or &apos;Struct&apos; as suffix. Many times, a mcuh better name can be given that avoids the usage of the term &apos;Object&apos; or &apos;Struct&apos; at all (such as &apos;Identifier&apos; instead of &apos;IdentificationObject&apos;)..
+        /// </summary>
+        public static string MiKo_1093_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1093_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use suffix &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1093_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1093_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use the suffix &apos;Object&apos; or &apos;Struct&apos;..
+        /// </summary>
+        public static string MiKo_1093_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1093_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
