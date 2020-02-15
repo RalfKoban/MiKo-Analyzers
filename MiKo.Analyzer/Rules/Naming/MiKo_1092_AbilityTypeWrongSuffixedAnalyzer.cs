@@ -32,16 +32,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var name = symbol.Name;
 
-            if (name.Contains("able"))
+            if (name.Contains("able") && name.EndsWithAny(TypeSuffixes, Comparison))
+            {
+                var proposedName = GetProposedName(name);
+                yield return Issue(symbol, proposedName);
+            }
+        }
+
+        private static string GetProposedName(string name)
+        {
+            var proposedName = name;
+
+            do
             {
                 foreach (var suffix in TypeSuffixes)
                 {
-                    if (name.EndsWith(suffix, Comparison))
+                    if (proposedName.EndsWith(suffix, Comparison))
                     {
-                        yield return Issue(symbol, name.WithoutSuffix(suffix));
+                        proposedName = proposedName.WithoutSuffix(suffix);
                     }
                 }
             }
+            while (proposedName.EndsWithAny(TypeSuffixes, Comparison));
+
+            return proposedName;
         }
     }
 }
