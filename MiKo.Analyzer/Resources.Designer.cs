@@ -7411,7 +7411,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test initialization method between one-time and all other methods.
+        ///   Looks up a localized string similar to Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before all test methods.
         /// </summary>
         public static string MiKo_4101_MessageFormat {
             get {
@@ -7465,7 +7465,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place one-time test initialization method before all other methods.
+        ///   Looks up a localized string similar to Place [OneTimeSetUp] method before all other methods.
         /// </summary>
         public static string MiKo_4103_MessageFormat {
             get {
@@ -7492,7 +7492,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place one-time test cleanup methods directly after one-time test initialization and before all other methods.
+        ///   Looks up a localized string similar to Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods.
         /// </summary>
         public static string MiKo_4104_MessageFormat {
             get {

@@ -2658,7 +2658,7 @@ Such namespaces should be flattened.</value>
     <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods.</value>
   </data>
   <data name="MiKo_4101_MessageFormat" xml:space="preserve">
-    <value>Place test initialization method between one-time and all other methods</value>
+    <value>Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before all test methods</value>
   </data>
   <data name="MiKo_4101_Title" xml:space="preserve">
     <value>Test initialization methods should be ordered directly after One-Time methods.</value>
@@ -2676,7 +2676,7 @@ Such namespaces should be flattened.</value>
     <value>One-Time test initialization method define the most common parts that the test environment shall have. So to ease their finding they should be ordered first.</value>
   </data>
   <data name="MiKo_4103_MessageFormat" xml:space="preserve">
-    <value>Place one-time test initialization method before all other methods</value>
+    <value>Place [OneTimeSetUp] method before all other methods</value>
   </data>
   <data name="MiKo_4103_Title" xml:space="preserve">
     <value>One-Time test initialization methods should be ordered before all other methods.</value>
@@ -2685,7 +2685,7 @@ Such namespaces should be flattened.</value>
     <value>One-Time test cleanup methods define the common parts that shall be executed after all tests have been finished, to clean up the test environment. So to ease their finding they should be ordered directly after the One-Time test initialization methods.</value>
   </data>
   <data name="MiKo_4104_MessageFormat" xml:space="preserve">
-    <value>Place one-time test cleanup methods directly after one-time test initialization and before all other methods</value>
+    <value>Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods</value>
   </data>
   <data name="MiKo_4104_Title" xml:space="preserve">
     <value>One-Time test cleanup methods should be ordered directly after One-Time test initialization methods.</value>
