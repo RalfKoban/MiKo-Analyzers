@@ -43,8 +43,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var found = false;
 
-            foreach (var wrongName in wrongNames.Where(_ => identifier.Length >= _.Length))
+            foreach (var wrongName in wrongNames)
             {
+                if (identifier.Length < wrongName.Length)
+                {
+                    continue;
+                }
+
                 if (identifier.Length == wrongName.Length)
                 {
                     if (string.Equals(identifier, wrongName, StringComparison.OrdinalIgnoreCase))
@@ -77,8 +82,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers)
         {
-            List<Diagnostic> results = null;
-
             foreach (var identifier in identifiers)
             {
                 var name = identifier.ValueText;
@@ -88,16 +91,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
 
-                    if (results is null)
-                    {
-                        results = new List<Diagnostic>(1);
-                    }
-
-                    results.Add(Issue(symbol, name));
+                    yield return Issue(symbol, name);
                 }
             }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

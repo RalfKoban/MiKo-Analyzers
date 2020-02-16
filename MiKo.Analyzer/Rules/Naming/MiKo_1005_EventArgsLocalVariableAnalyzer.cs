@@ -22,36 +22,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             const string E = "e";
             const string Args = "args";
 
-            List<Diagnostic> results = null;
-
             foreach (var identifier in identifiers)
             {
                 var name = identifier.ValueText;
-                switch (name)
+
+                if (name != E && name != Args)
                 {
-                    case E:
-                    case Args:
-                        break;
+                    var symbol = identifier.GetSymbol(semanticModel);
 
-                    default:
-                        var symbol = identifier.GetSymbol(semanticModel);
+                    // there might be methods that have a parameter named 'e', thus we have to use 'args' instead
+                    var method = identifier.Parent.GetEnclosingMethod(semanticModel);
+                    var proposedName = method.Parameters.Any(_ => _.Name == E) ? Args : E;
 
-                        // there might be methods that have a parameter named 'e', thus we have to use 'args' instead
-                        var method = identifier.Parent.GetEnclosingMethod(semanticModel);
-                        var proposedName = method.Parameters.Any(_ => _.Name == E) ? Args : E;
-
-                        if (results is null)
-                        {
-                            results = new List<Diagnostic>(1);
-                        }
-
-                        results.Add(Issue(symbol, proposedName));
-
-                        break;
+                    yield return Issue(symbol, proposedName);
                 }
             }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

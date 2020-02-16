@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,19 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
-            List<Diagnostic> issues = null;
-
-            foreach (var diagnostic in method.Parameters.Select(AnalyzeCollectionSuffix).Where(_ => _ != null))
+            foreach (var parameter in method.Parameters)
             {
-                if (issues is null)
+                var diagnostic = AnalyzeCollectionSuffix(parameter);
+                if (diagnostic != null)
                 {
-                    issues = new List<Diagnostic>(1);
+                    yield return diagnostic;
                 }
-
-                issues.Add(diagnostic);
             }
-
-            return issues ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

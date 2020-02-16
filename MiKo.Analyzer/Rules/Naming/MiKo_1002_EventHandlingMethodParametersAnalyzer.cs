@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,25 +20,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameters = method.Parameters;
 
-            List<Diagnostic> diagnostics = null;
-            VerifyParameterName("sender", parameters[0], ref diagnostics);
-            VerifyParameterName("e", parameters[1], ref diagnostics);
-            return diagnostics ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        private void VerifyParameterName(string expected, IParameterSymbol parameter, ref List<Diagnostic> diagnostics)
-        {
-            if (expected == parameter.Name)
+            if (parameters[0].Name != "sender")
             {
-                return;
+                yield return Issue(parameters[0], "sender");
             }
 
-            if (diagnostics is null)
+            if (parameters[1].Name != "e")
             {
-                diagnostics = new List<Diagnostic>(1);
+                yield return Issue(parameters[1], "e");
             }
-
-            diagnostics.Add(Issue(parameter, expected));
         }
     }
 }

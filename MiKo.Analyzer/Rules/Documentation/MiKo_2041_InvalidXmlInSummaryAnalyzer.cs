@@ -20,21 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
-        {
-            List<Diagnostic> findings = null;
-
-            foreach (var phrase in summaries.SelectMany(_ => Constants.Comments.InvalidSummaryCrefPhrases.Where(__ => _.Contains(__, Comparison))))
-            {
-                if (findings is null)
-                {
-                    findings = new List<Diagnostic>(1);
-                }
-
-                findings.Add(Issue(symbol, phrase + Constants.Comments.XmlElementEndingTag));
-            }
-
-            return findings ?? Enumerable.Empty<Diagnostic>();
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
+                                                                                                                    from phrase in Constants.Comments.InvalidSummaryCrefPhrases
+                                                                                                                    where summary.Contains(phrase, Comparison)
+                                                                                                                    select Issue(symbol, phrase + Constants.Comments.XmlElementEndingTag);
     }
 }

@@ -20,28 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
 
-        private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers)
-        {
-            List<Diagnostic> results = null;
-
-            foreach (var identifier in identifiers)
-            {
-                var name = identifier.ValueText;
-
-                if (name.EndsWithAny(WrongNames))
-                {
-                    var symbol = identifier.GetSymbol(semanticModel);
-
-                    if (results is null)
-                    {
-                        results = new List<Diagnostic>(1);
-                    }
-
-                    results.Add(Issue(symbol));
-                }
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
-        }
+        private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers) => from identifier in identifiers
+                                                                                                                                 where identifier.ValueText.EndsWithAny(WrongNames)
+                                                                                                                                 select Issue(identifier.GetSymbol(semanticModel));
     }
 }

@@ -121,31 +121,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var used = GetAllUsedVariables(context, methodBody);
 
-            List<Diagnostic> results = null;
-            foreach (var parameter in method.Parameters)
-            {
-                if (!used.Contains(parameter.Name))
-                {
-                    continue;
-                }
-
-                // check comment
-                var commentXml = method.GetDocumentationCommentXml();
-                var comment = parameter.GetComment(commentXml);
-
-                if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (results is null)
-                    {
-                        results = new List<Diagnostic>(1);
-                    }
-
-                    var diagnostic = Issue(parameter);
-                    results.Add(diagnostic);
-                }
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
+            return from parameter in method.Parameters
+                   where used.Contains(parameter.Name)
+                   let commentXml = method.GetDocumentationCommentXml()
+                   let comment = parameter.GetComment(commentXml)
+                   where comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase)
+                   select Issue(parameter);
         }
     }
 }

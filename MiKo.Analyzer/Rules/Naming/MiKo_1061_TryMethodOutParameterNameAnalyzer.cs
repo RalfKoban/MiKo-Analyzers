@@ -18,23 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
-            if (symbol.IsTestClass())
-            {
-                return Enumerable.Empty<Diagnostic>(); // ignore tests
-            }
-
-            List<Diagnostic> results = null;
-            foreach (var finding in symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null))
-            {
-                if (results is null)
-                {
-                    results = new List<Diagnostic>(1);
-                }
-
-                results.Add(finding);
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
+            return symbol.IsTestClass()
+                       ? Enumerable.Empty<Diagnostic>() // ignore tests
+                       : symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null);
         }
 
         private static string GetPreferredParameterName(string methodName)
