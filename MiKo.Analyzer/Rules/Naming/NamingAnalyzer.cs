@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
+        protected virtual void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ForEachStatementSyntax)context.Node;
 
@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
+        protected virtual void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ForStatementSyntax)context.Node;
             var variableDeclaration = node.Declaration;

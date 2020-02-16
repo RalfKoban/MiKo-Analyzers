@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1108_MockNamingAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1108_MockNamingAnalyzer : NamingAnalyzer // NamingLocalVariableAnalyzer
     {
         public const string Id = "MiKo_1108";
 
@@ -22,11 +22,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void InitializeCore(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
             context.RegisterSyntaxNodeAction(AnalyzeParameter, SyntaxKind.Parameter);
             context.RegisterSyntaxNodeAction(AnalyzePropertyDeclaration, SyntaxKind.PropertyDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeFieldDeclaration, SyntaxKind.FieldDeclaration);
+
+            context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeDeclarationPattern, SyntaxKind.DeclarationPattern);
+            context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);
         }
 
         protected override void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
@@ -37,27 +39,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
+        protected override void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
-            List<Diagnostic> results = null;
-
-            foreach (var syntaxToken in identifiers.Where(_ => _.ValueText.ContainsAny(MockNames)))
+            if (ShallAnalyze(context))
             {
-                var symbol = syntaxToken.GetSymbol(semanticModel);
-                var issue = symbol is null
-                                ? Issue(syntaxToken.ValueText, syntaxToken.GetLocation())
-                                : Issue(symbol);
-
-                if (results is null)
-                {
-                    results = new List<Diagnostic>(1);
-                }
-
-                results.Add(issue);
+                base.AnalyzeForEachStatement(context);
             }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
+
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from syntaxToken in identifiers
+                                                                                                                                        where syntaxToken.ValueText.ContainsAny(MockNames)
+                                                                                                                                        let symbol = syntaxToken.GetSymbol(semanticModel)
+                                                                                                                                        select symbol is null
+                                                                                                                                                   ? Issue(syntaxToken.ValueText, syntaxToken.GetLocation())
+                                                                                                                                                   : Issue(symbol);
 
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
         {
@@ -75,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var assemblyName = type.ContainingAssembly.Name;
             if (assemblyName.Contains("Test"))
             {
-                return !assemblyName.Contains("MiKoSolutions.Analyzers");
+                return assemblyName.Contains("MiKoSolutions.Analyzers") is false;
             }
 
             return false;

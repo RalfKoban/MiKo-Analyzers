@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "somethingStub",
                 "stub",
                 "StubManager",
+                "childMock1",
+                "mockChild1",
             };
 
         [Test]
@@ -84,6 +86,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_variable_in_foreach_loop() => No_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var c in Path.InvalidPathChars)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_variable([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 [TestFixture]
 public class TestMe
@@ -91,6 +107,20 @@ public class TestMe
     public void DoSomething()
     {
         int " + name + @" = 0;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_variable_in_foreach_loop([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+[TestFixture]
+public class TestMe
+{
+    public void DoSomething()
+    {
+        foreach (var " + name + @" in Path.InvalidPathChars)
+        {
+        }
     }
 }
 ");
