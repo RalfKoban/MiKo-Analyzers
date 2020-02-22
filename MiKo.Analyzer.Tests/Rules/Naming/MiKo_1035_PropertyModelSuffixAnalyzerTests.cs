@@ -24,6 +24,7 @@ public class TestMe
         [TestCase("CreateModels")]
         [TestCase("CreateitemModel")]
         [TestCase("CreateModelItem")]
+        [TestCase("ModelCollection", Description = "Special situation as plural name becomes null and we don't want to have a NRE.")]
         public void An_issue_is_reported_for_invalid_property(string name) => An_issue_is_reported_for(@"
 public class TestMe
 {

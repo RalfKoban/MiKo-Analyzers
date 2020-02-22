@@ -127,7 +127,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (expected.HasCollectionMarker())
             {
-                expected = GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+                var plural = GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+
+                // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
+                expected = plural ?? (symbol.Name[0].IsUpperCase() ? "Entities" : "entities");
             }
 
             return new[] { Issue(symbol, expected) };
