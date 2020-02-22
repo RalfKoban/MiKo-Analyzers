@@ -31,9 +31,6 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_dogfood() => No_issue_is_reported_for_file(@"D:\KM\KCS-Tools\Dev_MM\Source\KM.Tools.HMIProduction.OSViewMaker\ViewModel\Project\TreeNodes\ProjectTreeNodeForCollectionBase.cs");
-
         protected override string GetDiagnosticId() => MiKo_1035_PropertyModelSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1035_PropertyModelSuffixAnalyzer();
