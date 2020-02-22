@@ -69,7 +69,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (ForbiddenTypes.Any(returnType.ImplementsPotentialGeneric))
             {
-                if (returnType.Locations.IsEmpty)
+                // detect for same assembly to avoid AD0001 (which reports that the return type is in a different compilation than the method/property)
+                var sameAssembly = method.ContainingAssembly.Equals(returnType.ContainingAssembly, SymbolEqualityComparer.IncludeNullability);
+
+                if (returnType.Locations.IsEmpty || sameAssembly is false)
                 {
                     var syntax = (MethodDeclarationSyntax)method.GetSyntax();
                     return Issue(returnTypeString, syntax.ReturnType.GetLocation());
