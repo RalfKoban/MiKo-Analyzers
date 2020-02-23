@@ -7056,6 +7056,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nested conditional (or coalesce) statements are hard to read and understand. Therefore such statements should not be nested. Instead, if-else statements should be used..
+        /// </summary>
+        public static string MiKo_3086_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3086_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not nest conditional.
+        /// </summary>
+        public static string MiKo_3086_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3086_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not nest conditional statements..
+        /// </summary>
+        public static string MiKo_3086_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3086_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
         ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
         /// </summary>
