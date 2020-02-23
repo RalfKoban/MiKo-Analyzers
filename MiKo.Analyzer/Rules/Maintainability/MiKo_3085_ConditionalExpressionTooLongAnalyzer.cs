@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3085";
 
-        private const int MaxExpressionLength = 20;
+        private const int MaxExpressionLength = 35;
 
         public MiKo_3085_ConditionalExpressionTooLongAnalyzer() : base(Id, (SymbolKind)(-1))
         {
