@@ -7028,6 +7028,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conditional statements which span a lot of characters are hard to read. That makes them harder to maintain.
+        ///They should be either short (to see at a glance what&apos;s going on) or refactored into if-else statements..
+        /// </summary>
+        public static string MiKo_3085_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3085_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shorten conditional or use &apos;if ... else ...&apos; instead.
+        /// </summary>
+        public static string MiKo_3085_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3085_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional statements should be short..
+        /// </summary>
+        public static string MiKo_3085_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3085_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
         ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
         /// </summary>

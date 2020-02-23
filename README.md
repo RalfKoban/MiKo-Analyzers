@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 268 rules that are currently provided by the analyzer.
+The following tables list all the 269 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -272,6 +272,7 @@ The following tables list all the 268 rules that are currently provided by the a
 |MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|
 |MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|
 |MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|
+|MiKo_3085|Conditional statements should be short.|&#x2713;|
 |MiKo_3090|Do not throw exceptions in finally blocks.|&#x2713;|
 |MiKo_3091|Do not raise events in finally blocks.|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|
