@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     if (symbolName.IsEntityMarker())
                     {
-                        proposedName = proposedName.RemoveAll(Constants.Markers.Entities);
+                        proposedName = proposedName.Without(Constants.Markers.Entities);
                     }
 
                     return GetPluralName(symbolName, proposedName, comparison);
@@ -235,7 +235,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {
-            var name = symbolName.RemoveAll(Constants.Markers.Entities);
+            var name = symbolName.Without(Constants.Markers.Entities);
             switch (name.Length)
             {
                 case 0:
@@ -347,7 +347,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (proposedName.HasEntityMarker())
             {
-                pluralName = proposedName.RemoveAll(Constants.Markers.Entities);
+                pluralName = proposedName.Without(Constants.Markers.Entities);
             }
 
             var candidate = pluralName.EndsWith("s", comparison) ? pluralName : pluralName + "s";

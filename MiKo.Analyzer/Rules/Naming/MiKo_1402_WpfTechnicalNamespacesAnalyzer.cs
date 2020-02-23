@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            var fullName = qualifiedName.RemoveAll(ModelNamespaces);
+            var fullName = qualifiedName.Without(ModelNamespaces);
 
             return fullName.ContainsAny(TechnicalWPFNamespaces)
                        ? new[] { Issue(qualifiedName, location, TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase))) }

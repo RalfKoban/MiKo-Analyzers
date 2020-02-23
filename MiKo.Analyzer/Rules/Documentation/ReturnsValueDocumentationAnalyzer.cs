@@ -60,7 +60,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Returns) ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Value) ?? Enumerable.Empty<Diagnostic>();
+            return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Returns)
+                   ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Value)
+                   ?? Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> TryAnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag)

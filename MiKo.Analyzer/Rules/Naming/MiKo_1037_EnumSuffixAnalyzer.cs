@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var betterName = symbolName
                                    .Replace("TypeEnums", "Kinds")
                                    .Replace("TypeEnum", "Kind")
-                                   .RemoveAll(WrongNames);
+                                   .Without(WrongNames);
 
             if (betterName.IsNullOrWhiteSpace())
             {

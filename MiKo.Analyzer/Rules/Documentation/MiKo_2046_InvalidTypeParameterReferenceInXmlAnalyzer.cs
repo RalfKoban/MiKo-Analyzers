@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (type.IsGenericType)
             {
-                var comment = commentXml.RemoveAll(Constants.Markers.Symbols);
+                var comment = commentXml.Without(Constants.Markers.Symbols);
 
                 foreach (var parameter in type.TypeParameters)
                 {
@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (method.IsGenericMethod || method.ContainingType.IsGenericType)
             {
-                var comment = commentXml.RemoveAll(Constants.Markers.Symbols);
+                var comment = commentXml.Without(Constants.Markers.Symbols);
 
                 foreach (var parameter in method.TypeParameters.Concat(method.ContainingType.TypeParameters))
                 {

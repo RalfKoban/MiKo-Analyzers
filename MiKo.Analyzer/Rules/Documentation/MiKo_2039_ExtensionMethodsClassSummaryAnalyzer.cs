@@ -22,9 +22,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = Constants.Comments.ExtensionMethodClassStartingPhrase;
 
-            return summaries.All(_ => !_.StartsWithAny(phrases, StringComparison.Ordinal))
-                       ? new[] { Issue(symbol, Constants.XmlTag.Summary, phrases.First()) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (summaries.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
+            {
+                return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

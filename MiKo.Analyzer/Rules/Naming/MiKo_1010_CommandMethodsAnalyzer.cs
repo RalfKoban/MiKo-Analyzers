@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                              : forbiddenName;
 
             // TODO RKN: find better name by inspecting method assignment (?)
-            return methodName.Remove(phrase);
+            return methodName.Without(phrase);
         }
 
         private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ref List<Diagnostic> results)

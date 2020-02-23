@@ -96,23 +96,32 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
-        protected Diagnostic Issue(ISymbol symbol) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol));
+        protected Diagnostic Issue(ISymbol symbol) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol));
 
-        protected Diagnostic Issue<T>(ISymbol symbol, T arg) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
+        protected Diagnostic Issue<T>(ISymbol symbol, T arg) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
 
-        protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
+        protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
 
-        protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3) => ReportIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
+        protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
-        protected Diagnostic Issue(string name, Location location) => ReportIssue(location, name);
+        protected Diagnostic Issue(string name, Location location) => CreateIssue(location, name);
 
-        protected Diagnostic Issue<T>(string name, Location location, T arg1) => ReportIssue(location, name, arg1.ToString());
+        protected Diagnostic Issue<T>(string name, Location location, T arg1) => CreateIssue(location, name, arg1.ToString());
 
-        protected Diagnostic Issue<T1, T2>(string name, Location location, T1 arg1, T2 arg2) => ReportIssue(location, name, arg1.ToString(), arg2.ToString());
+        protected Diagnostic Issue<T1, T2>(string name, Location location, T1 arg1, T2 arg2) => CreateIssue(location, name, arg1.ToString(), arg2.ToString());
 
-        private static string GetSymbolName(ISymbol symbol) => symbol is IMethodSymbol m && (m.MethodKind == MethodKind.StaticConstructor || m.MethodKind == MethodKind.Constructor)
-                                                                   ? symbol.ContainingSymbol.Name + symbol.Name
-                                                                   : symbol.Name;
+        private static string GetSymbolName(ISymbol symbol)
+        {
+            if (symbol is IMethodSymbol m)
+            {
+                if (m.MethodKind == MethodKind.Constructor || m.MethodKind == MethodKind.StaticConstructor)
+                {
+                    return symbol.ContainingSymbol.Name + symbol.Name;
+                }
+            }
+
+            return symbol.Name;
+        }
 
         // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
@@ -129,7 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private Diagnostic ReportIssue(Location location, params object[] args) => Diagnostic.Create(Rule, location, args);
+        private Diagnostic CreateIssue(Location location, params object[] args) => Diagnostic.Create(Rule, location, args);
 
         private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)
         {

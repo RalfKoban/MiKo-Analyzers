@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasEventSummary(IEnumerable<string> summaries)
         {
-            foreach (var summary in summaries.Select(_ => _.Remove(Constants.Comments.SealedClassPhrase).Trim()))
+            foreach (var summary in summaries.Select(_ => _.Without(Constants.Comments.SealedClassPhrase).Trim()))
             {
                 if (summary.StartsWith(StartingPhrase, Comparison))
                 {

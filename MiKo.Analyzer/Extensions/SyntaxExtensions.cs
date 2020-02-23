@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().RemoveAll(Constants.WhiteSpaces);
+        internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
         internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode node, string methodName)
         {

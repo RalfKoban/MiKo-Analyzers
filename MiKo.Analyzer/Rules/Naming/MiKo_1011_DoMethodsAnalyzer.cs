@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 // special case "Does"
                 if (ContainsPhrase(methodName, DoesPhrase))
                 {
-                    escapedMethod = EscapeValidPhrases(methodName.Remove(DoesPhrase));
+                    escapedMethod = EscapeValidPhrases(methodName.Without(DoesPhrase));
                     found = !method.IsTestMethod(); // ignore tests
                 }
                 else
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return found
-                   ? new[] { Issue(method, UnescapeValidPhrases(escapedMethod.Remove(DoPhrase))) }
+                   ? new[] { Issue(method, UnescapeValidPhrases(escapedMethod.Without(DoPhrase))) }
                    : Enumerable.Empty<Diagnostic>();
         }
 

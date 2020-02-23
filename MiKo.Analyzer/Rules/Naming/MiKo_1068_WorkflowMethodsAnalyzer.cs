@@ -22,9 +22,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var proposedMethodName = GetProposedMethodName(method);
 
-            return method.Name != proposedMethodName
-                       ? new[] { Issue(method, proposedMethodName) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (method.Name == proposedMethodName)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { Issue(method, proposedMethodName) };
         }
 
         private static string GetProposedMethodName(IMethodSymbol method)
@@ -42,7 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return "Run";
             }
 
-            return returnType.TryGetGenericArgumentType(out var argumentType) && argumentType.IsBoolean()
+            var isBoolean = returnType.TryGetGenericArgumentType(out var argumentType) && argumentType.IsBoolean();
+
+            return isBoolean
                        ? "CanRunAsync"
                        : "RunAsync";
         }

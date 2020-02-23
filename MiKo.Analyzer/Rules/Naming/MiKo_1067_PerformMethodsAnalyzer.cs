@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = method.Name;
 
-            var found = ContainsPhrase(methodName) && ContainsPhrase(methodName.Remove("Performance"));
+            var found = ContainsPhrase(methodName) && ContainsPhrase(methodName.Without("Performance"));
 
             return found
                        ? new[] { Issue(method) }

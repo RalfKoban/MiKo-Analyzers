@@ -7,6 +7,8 @@ namespace System.Linq
     {
         public static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
+        public static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate) => source.All(_ => predicate(_) is false);
+
         public static bool MoreThan<T>(this IEnumerable<T> source, int count)
         {
             switch (source)

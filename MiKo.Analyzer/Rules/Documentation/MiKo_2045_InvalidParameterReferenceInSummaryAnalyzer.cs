@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<Diagnostic> findings = null;
             foreach (var summary in summaries)
             {
-                var comment = summary.RemoveAll(Constants.Markers.Symbols);
+                var comment = summary.Without(Constants.Markers.Symbols);
 
                 foreach (var parameter in method.Parameters)
                 {
@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var nonParamPhrases = CreateNonParamPhrases(parameter.Name);
 
             InspectPhrases(parameter, commentXml, paramPhrases, ref findings);
-            InspectPhrases(parameter, commentXml.RemoveAll(paramPhrases), nonParamPhrases, ref findings);
+            InspectPhrases(parameter, commentXml.Without(paramPhrases), nonParamPhrases, ref findings);
         }
 
         private void InspectPhrases(IParameterSymbol parameter, string commentXml, string[] phrases, ref List<Diagnostic> findings)

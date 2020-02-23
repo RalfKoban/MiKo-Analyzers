@@ -10,9 +10,17 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
     {
-        internal static string GetComment(this ISymbol symbol) => symbol is IParameterSymbol p
-                                                                      ? GetComment(p, (p.ContainingSymbol as IMethodSymbol)?.GetDocumentationCommentXml())
-                                                                      : Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
+        internal static string GetComment(this ISymbol symbol)
+        {
+            if (symbol is IParameterSymbol p)
+            {
+                var methodSymbol = p.ContainingSymbol as IMethodSymbol;
+
+                return GetComment(p, methodSymbol?.GetDocumentationCommentXml());
+            }
+
+            return Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
+        }
 
         internal static string GetComment(this IParameterSymbol parameter, string commentXml)
         {
@@ -56,7 +64,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
-            var commentElements = GetCommentElements(commentXml.RemoveAll(Constants.Markers.Symbols), Constants.XmlTag.Exception);
+            var comment = commentXml.Without(Constants.Markers.Symbols);
+            var commentElements = GetCommentElements(comment, Constants.XmlTag.Exception);
             return commentElements;
         }
 
@@ -111,10 +120,13 @@ namespace MiKoSolutions.Analyzers
 
         private static string FlattenComment(IEnumerable<XElement> comments)
         {
-            var comment = comments.Any()
-                              ? Cleaned(comments.Nodes().ConcatenatedWith())
-                              : null;
-            return comment;
+            if (comments.Any())
+            {
+                var comment = Cleaned(comments.Nodes().ConcatenatedWith());
+                return comment;
+            }
+
+            return null;
         }
 
         private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements)
@@ -141,7 +153,7 @@ namespace MiKoSolutions.Analyzers
 
             return value
                    .WithoutParaTags()
-                   .RemoveAll(Constants.Markers.SymbolsAndLineBreaks)
+                   .Without(Constants.Markers.SymbolsAndLineBreaks)
                    .Replace("    ", " ")
                    .Replace("   ", " ")
                    .Replace("  ", " ")

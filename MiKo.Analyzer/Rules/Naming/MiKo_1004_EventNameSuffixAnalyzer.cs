@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                           ? new[] { Issue(symbol, symbol.Name.Remove(Suffix)) }
+                                                                                           ? new[] { Issue(symbol, symbol.Name.Without(Suffix)) }
                                                                                            : Enumerable.Empty<Diagnostic>();
     }
 }

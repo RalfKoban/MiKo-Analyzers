@@ -21,8 +21,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.Contains(TestMarker)
-                                                                                            ? new[] { Issue(symbol, symbol.Name.Contains(TestCaseMarker, StringComparison.OrdinalIgnoreCase) ? TestCaseMarker : TestMarker) }
-                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        {
+            var symbolName = symbol.Name;
+
+            if (symbolName.Contains(TestMarker))
+            {
+                var testCase = symbolName.Contains(TestCaseMarker, StringComparison.OrdinalIgnoreCase);
+
+                return new[] { Issue(symbol, testCase ? TestCaseMarker : TestMarker) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }

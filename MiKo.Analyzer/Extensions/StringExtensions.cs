@@ -182,13 +182,13 @@ namespace System
 
         public static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
 
-        public static string WithoutParaTags(this string value) => value.RemoveAll(Constants.ParaTags);
+        public static string WithoutParaTags(this string value) => value.Without(Constants.ParaTags);
 
         public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
 
-        public static string Remove(this string value, string phrase) => value.Replace(phrase, string.Empty);
+        public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string RemoveAll(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Remove(s));
+        public static string Without(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Without(s));
 
         public static string WithoutSuffix(this string value, string suffix)
         {

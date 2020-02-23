@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
             foreach (var summary in summaries
-                                        .Select(_ => _.Remove(Constants.Comments.AsynchrounouslyStartingPhrase).Trim())
+                                        .Select(_ => _.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim())
                                         .Where(_ => _.StartsWithAny(Comments)))
             {
                 return new[] { Issue(symbol, summary.Substring(0, summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase))) };

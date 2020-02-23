@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var marker in Constants.Markers.BaseClasses)
             {
-                if (symbol.Name.Remove("Abstraction").Contains(marker))
+                if (symbol.Name.Without("Abstraction").Contains(marker))
                 {
                     yield return Issue(symbol, marker);
                 }

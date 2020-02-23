@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var unused in CommentExtensions.GetCommentElements(commentXml, xmlTag)
                                      .Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
-                                     .Select(_ => _.Remove(Constants.Comments.SpecialOrPhrase))
+                                     .Select(_ => _.Without(Constants.Comments.SpecialOrPhrase))
                                      .Where(_ => _.Length > 0)
                                      .Where(_ => _[0].IsUpperCase() is false && _[0] != Constants.Comments.XmlElementStartingTag[0]))
                 {

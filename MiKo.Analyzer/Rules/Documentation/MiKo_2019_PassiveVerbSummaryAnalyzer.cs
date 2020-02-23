@@ -30,8 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static bool HasPassiveVerb(string summary)
         {
             var trimmed = summary
-                              .Remove(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                              .Remove(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                              .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                              .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
                               .Trim();
 
             return HasPassiveVerbCore(trimmed);
