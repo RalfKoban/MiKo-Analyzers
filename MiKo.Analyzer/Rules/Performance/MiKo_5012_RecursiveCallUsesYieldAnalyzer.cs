@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethodDeclarationSyntax, SyntaxKind.MethodDeclaration);
 
-        private static bool IsRecursiveYield(YieldStatementSyntax node, string methodName)
+        private static bool IsRecursiveYield(YieldStatementSyntax node, SemanticModel semanticModel, IMethodSymbol method)
         {
             foreach (var ancestor in node.Ancestors())
             {
@@ -31,8 +31,21 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 if (ancestor is ForEachStatementSyntax foreachLoop)
                 {
                     var invocations = foreachLoop.DescendantNodes().OfType<InvocationExpressionSyntax>();
-                    var isRecursiveYield = invocations.Any(_ => _.Expression is IdentifierNameSyntax i && i.GetName() == methodName);
-                    return isRecursiveYield;
+
+                    foreach (var invocation in invocations)
+                    {
+                        if (invocation.Expression is IdentifierNameSyntax i && i.GetName() == method.Name)
+                        {
+                            var calledMethod = i.Identifier.GetSymbol(semanticModel);
+
+                            if (method.Equals(calledMethod, SymbolEqualityComparer.IncludeNullability))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                    break;
                 }
             }
 
@@ -60,14 +73,15 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             if (ReturnsEnumerable(method))
             {
-                var methodName = method.GetName();
+                var semanticModel = context.SemanticModel;
+                var methodSymbol = (IMethodSymbol)method.GetEnclosingSymbol(semanticModel);
 
                 // https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return
                 foreach (var yieldStatement in method.DescendantNodes().OfType<YieldStatementSyntax>())
                 {
-                    if (IsRecursiveYield(yieldStatement, methodName))
+                    if (IsRecursiveYield(yieldStatement, semanticModel, methodSymbol))
                     {
-                        var issue = Issue(methodName, yieldStatement.GetLocation());
+                        var issue = Issue(method.GetName(), yieldStatement.GetLocation());
                         context.ReportDiagnostic(issue);
                     }
                 }

@@ -116,6 +116,37 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(IEnumerable<int> items)
+        {
+            foreach (var item in items)
+            {
+                yield return item + 42;
+            }
+        }
+
+        public IEnumerable<int> DoSomething(IEnumerable<IEnumerable<int>> items)
+        {
+            foreach (var item in items)
+            {
+                foreach (var i in DoSomething(item))
+                {
+                    yield return i + 42;
+                }
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_recursive_yield() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
