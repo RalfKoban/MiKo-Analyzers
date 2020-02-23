@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 270 rules that are currently provided by the analyzer.
+The following tables list all the 271 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -305,3 +305,4 @@ The following tables list all the 270 rules that are currently provided by the a
 |MiKo_5003|Correct Log methods should be invoked for exceptions.|&#x2713;|
 |MiKo_5010|Do not use 'object.Equals()' on value types.|&#x2713;|
 |MiKo_5011|Do not concatenate strings with += operator.|&#x2713;|
+|MiKo_5012|Do not use 'yield return' for recursively defined structures.|&#x2713;|

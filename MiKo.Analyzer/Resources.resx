@@ -2766,4 +2766,16 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_5011_Title" xml:space="preserve">
     <value>Do not concatenate strings with += operator.</value>
   </data>
+  <data name="MiKo_5012_Description" xml:space="preserve">
+    <value>From performance point of view it is a bad idea to let methods that use yield invoke themselves recursively. The underlying iterators are called much more times than intended, thus leading to an unexpectedly bad performance.</value>
+  </data>
+  <data name="MiKo_5012_HelpLinkUri" xml:space="preserve">
+    <value>https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return</value>
+  </data>
+  <data name="MiKo_5012_MessageFormat" xml:space="preserve">
+    <value>Do not use yield recursively</value>
+  </data>
+  <data name="MiKo_5012_Title" xml:space="preserve">
+    <value>Do not use 'yield return' for recursively defined structures.</value>
+  </data>
 </root>

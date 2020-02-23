@@ -7728,5 +7728,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_5011_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From performance point of view it is a bad idea to let methods that use yield invoke themselves recursively. The underlying iterators are called much more times than intended, thus leading to an unexpectedly bad performance..
+        /// </summary>
+        public static string MiKo_5012_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5012_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return.
+        /// </summary>
+        public static string MiKo_5012_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_5012_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use yield recursively.
+        /// </summary>
+        public static string MiKo_5012_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5012_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;yield return&apos; for recursively defined structures..
+        /// </summary>
+        public static string MiKo_5012_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5012_Title", resourceCulture);
+            }
+        }
     }
 }
