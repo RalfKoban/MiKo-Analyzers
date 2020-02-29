@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -19,39 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethodDeclarationSyntax, SyntaxKind.MethodDeclaration);
 
-        private static bool IsRecursiveYield(YieldStatementSyntax node, SemanticModel semanticModel, IMethodSymbol method)
-        {
-            foreach (var ancestor in node.Ancestors())
-            {
-                if (ancestor is MethodDeclarationSyntax)
-                {
-                    break;
-                }
-
-                if (ancestor is ForEachStatementSyntax foreachLoop)
-                {
-                    var invocations = foreachLoop.DescendantNodes().OfType<InvocationExpressionSyntax>();
-
-                    foreach (var invocation in invocations)
-                    {
-                        if (invocation.Expression is IdentifierNameSyntax i && i.GetName() == method.Name)
-                        {
-                            var calledMethod = i.Identifier.GetSymbol(semanticModel);
-
-                            if (method.Equals(calledMethod, SymbolEqualityComparer.IncludeNullability))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            return false;
-        }
-
         private static bool ReturnsEnumerable(MethodDeclarationSyntax method)
         {
             foreach (var unknown in method.ChildNodes())
@@ -65,6 +33,79 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             return false;
+        }
+
+        private static bool IsRecursiveYield(YieldStatementSyntax node, SemanticModel semanticModel, IMethodSymbol method)
+        {
+            foreach (var ancestor in node.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case MethodDeclarationSyntax _:
+                    {
+                        return false;
+                    }
+
+                    case ForEachStatementSyntax loop:
+                    {
+                        foreach (var invocation in loop.DescendantNodes().OfType<InvocationExpressionSyntax>())
+                        {
+                            if (invocation.Expression is IdentifierNameSyntax i && i.GetName() == method.Name)
+                            {
+                                var calledMethod = DetectCalledMethod(semanticModel, i, invocation);
+
+                                if (method.Equals(calledMethod, SymbolEqualityComparer.IncludeNullability))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static ISymbol DetectCalledMethod(SemanticModel semanticModel, IdentifierNameSyntax identifier, InvocationExpressionSyntax invocation)
+        {
+            var symbolInfo = semanticModel.GetSymbolInfo(identifier);
+
+            if (symbolInfo.CandidateReason == CandidateReason.OverloadResolutionFailure)
+            {
+                var arguments = invocation.ArgumentList.Arguments;
+
+                // we might have multiple symbols, so we have to choose the right one (compare parameter types)
+                foreach (var candidate in symbolInfo.CandidateSymbols.OfType<IMethodSymbol>()
+                                                    .Where(_ => _.Parameters.Length == arguments.Count)
+                                                    .Where(_ => ParametersHaveSameTypes(_.Parameters, arguments, semanticModel)))
+                {
+                    return candidate;
+                }
+            }
+
+            return symbolInfo.Symbol;
+        }
+
+        private static bool ParametersHaveSameTypes(ImmutableArray<IParameterSymbol> candidateParameters, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
+        {
+            for (var index = 0; index < candidateParameters.Length; index++)
+            {
+                var c = candidateParameters[index];
+
+                var argument = arguments[index];
+                var argumentTypeInfo = semanticModel.GetTypeInfo(argument);
+                var argumentType = argumentTypeInfo.Type;
+
+                if (c.Type.Equals(argumentType, SymbolEqualityComparer.Default) is false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void AnalyzeMethodDeclarationSyntax(SyntaxNodeAnalysisContext context)

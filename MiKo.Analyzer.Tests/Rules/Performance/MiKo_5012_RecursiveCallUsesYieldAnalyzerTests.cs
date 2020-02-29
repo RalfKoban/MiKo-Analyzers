@@ -147,12 +147,50 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_methods_with_same_name_but_no_recursive_yield_alternatively_sorted() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(IEnumerable<IEnumerable<int>> items)
+        {
+            foreach (var item in items)
+            {
+                foreach (var i in DoSomething(item))
+                {
+                    yield return i + 42;
+                }
+            }
+        }
+
+        public IEnumerable<int> DoSomething(IEnumerable<int> items)
+        {
+            foreach (var item in items)
+            {
+                yield return item + 42;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_recursive_yield() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
 namespace Bla
 {
+    public class Tree<T>
+    {
+        public T Value;
+        public Tree<T> Left;
+        public Tree<T> Right;
+    }
+
     public class TestMe
     {
         public static IEnumerable<T> PreorderTraversal<T>(Tree<T> root)
@@ -174,6 +212,43 @@ namespace Bla
                 yield return item;
             }
         }
+    }
+}
+");
+
+        // TODO: RKN this test is not working as expected - test should simulate 'MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer' source code but does not
+        [Test]
+        public void No_issue_is_reported_for_non_recursive_yield_due_to_different_parameter_types() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public interface IBase
+    {
+    }
+
+    public interface IInherited : IBase
+    {
+        IEnumerable<IBase> Children { get; }
+    }
+
+    public class TestMe
+    {
+        public IEnumerable<IBase> Call(IInherited i)
+        {
+            foreach (var item in i.Children)
+            {
+                var b = Call(item);
+
+                if (b != null)
+                {
+                    yield return b;
+                }
+            }
+        }
+
+        private IBase Call(IBase i) => i;
     }
 }
 ");
