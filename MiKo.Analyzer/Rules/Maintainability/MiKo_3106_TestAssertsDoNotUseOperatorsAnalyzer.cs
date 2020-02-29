@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token)
         {
             var methodName = context.GetEnclosingMethod()?.Name;
-            var issue = Issue(methodName, token.GetLocation(), token.ValueText);
+            var issue = Issue(methodName, token, token.ValueText);
             context.ReportDiagnostic(issue);
         }
     }

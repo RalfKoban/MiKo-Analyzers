@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (returnType.Locations.IsEmpty || sameAssembly is false)
                 {
                     var syntax = (MethodDeclarationSyntax)method.GetSyntax();
-                    return Issue(returnTypeString, syntax.ReturnType.GetLocation());
+                    return Issue(returnTypeString, syntax.ReturnType);
                 }
 
                 return Issue(returnType);

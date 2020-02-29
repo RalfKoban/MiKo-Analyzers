@@ -51,7 +51,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var propertyName = GetPropertyName(node);
             var symbol = node.GetEnclosingSymbol(context.SemanticModel);
 
-            var issue = Issue(symbol?.Name, node.GetLocation(), string.Format(proposalFormat, propertyName));
+            // TODO: RKN Fix performance issue
+            var format = string.Format(proposalFormat, propertyName);
+
+            var issue = Issue(symbol?.Name, node, format);
             context.ReportDiagnostic(issue);
         }
     }

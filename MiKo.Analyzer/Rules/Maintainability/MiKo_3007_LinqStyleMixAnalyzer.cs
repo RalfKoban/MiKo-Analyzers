@@ -60,8 +60,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel) => TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && syntaxNode.HasLinqExtensionMethod(semanticModel)
-                                                                                                                   ? Issue(identifier, query.GetLocation())
-                                                                                                                   : null;
+        private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)
+        {
+            if (TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && syntaxNode.HasLinqExtensionMethod(semanticModel))
+            {
+                return Issue(identifier, query);
+            }
+
+            return null;
+        }
     }
 }

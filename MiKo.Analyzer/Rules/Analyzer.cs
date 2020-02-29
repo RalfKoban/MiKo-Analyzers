@@ -98,17 +98,37 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(ISymbol symbol) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol));
 
+        protected Diagnostic Issue(SyntaxNode node) => CreateIssue(node.GetLocation(), node.ToString());
+
+        protected Diagnostic Issue(SyntaxToken token) => CreateIssue(token.GetLocation(), token.ValueText);
+
         protected Diagnostic Issue<T>(ISymbol symbol, T arg) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
 
-        protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
+        protected Diagnostic Issue(string name, ISymbol symbol) => CreateIssue(symbol.Locations[0], name);
 
-        protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
+        protected Diagnostic Issue(string name, SyntaxNode node) => CreateIssue(node.GetLocation(), name);
+
+        protected Diagnostic Issue(string name, SyntaxToken token) => CreateIssue(token.GetLocation(), name);
+
+        protected Diagnostic Issue(string name, SyntaxTrivia trivia) => CreateIssue(trivia.GetLocation(), name);
 
         protected Diagnostic Issue(string name, Location location) => CreateIssue(location, name);
 
+        protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1) => CreateIssue(node.GetLocation(), name, arg1.ToString());
+
+        protected Diagnostic Issue<T>(string name, SyntaxToken token, T arg1) => CreateIssue(token.GetLocation(), name, arg1.ToString());
+
         protected Diagnostic Issue<T>(string name, Location location, T arg1) => CreateIssue(location, name, arg1.ToString());
 
-        protected Diagnostic Issue<T1, T2>(string name, Location location, T1 arg1, T2 arg2) => CreateIssue(location, name, arg1.ToString(), arg2.ToString());
+        protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
+
+        protected Diagnostic Issue<T1, T2>(string name, ISymbol symbol, T1 arg1, T2 arg2) => CreateIssue(symbol.Locations[0], name, arg1.ToString(), arg2.ToString());
+
+        protected Diagnostic Issue<T1, T2>(string name, SyntaxNode node, T1 arg1, T2 arg2) => CreateIssue(node.GetLocation(), name, arg1.ToString(), arg2.ToString());
+
+        protected Diagnostic Issue<T1, T2>(string name, SyntaxToken token, T1 arg1, T2 arg2) => CreateIssue(token.GetLocation(), name, arg1.ToString(), arg2.ToString());
+
+        protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
         private static string GetSymbolName(ISymbol symbol)
         {

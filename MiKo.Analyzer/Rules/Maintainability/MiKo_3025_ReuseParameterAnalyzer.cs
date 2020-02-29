@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var name = node.Left.ToCleanedUpString();
                 if (names.Contains(name))
                 {
-                    return Issue(name, node.Left.GetLocation());
+                    return Issue(name, node.Left);
                 }
             }
 

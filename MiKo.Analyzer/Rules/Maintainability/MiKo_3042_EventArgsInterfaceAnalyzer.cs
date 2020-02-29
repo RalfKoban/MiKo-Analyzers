@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEventArgs();
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.Interfaces.Select(_ => Issue(symbol.Name, _.Locations[0]));
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.Interfaces.Select(_ => Issue(symbol.Name, _));
     }
 }

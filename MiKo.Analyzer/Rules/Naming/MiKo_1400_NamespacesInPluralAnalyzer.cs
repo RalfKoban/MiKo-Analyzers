@@ -53,14 +53,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var name = qualifiedName.GetNameOnlyPart();
 
             // maybe it's a number, so we have to check for that
-            if (name.EndsWithNumber())
+            if (name.EndsWithNumber() || name.EndsWithAny(AllowedSuffixes))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return name.EndsWithAny(AllowedSuffixes)
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(qualifiedName, location, GetPluralName(name)) };
+            var pluralName = GetPluralName(name);
+            return new[] { Issue(qualifiedName, location, pluralName) };
         }
     }
 }

@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         // TODO RKN: Check for ForEach
                         if (node.FirstAncestorOrSelf<SimpleLambdaExpressionSyntax>() != null)
                         {
-                            return Issue(name, node.GetLocation());
+                            return Issue(name, node);
                         }
                     }
                 }

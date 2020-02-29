@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var conditions = method.GetSyntax().DescendantTokens()
                                    .Where(_ => ConditionTokens.Contains(_.RawKind))
-                                   .Select(_ => Issue(methodName, _.GetLocation()))
+                                   .Select(_ => Issue(methodName, _))
                                    .ToList();
             return conditions;
         }

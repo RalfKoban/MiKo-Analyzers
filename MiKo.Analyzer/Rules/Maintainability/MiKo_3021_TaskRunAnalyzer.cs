@@ -58,6 +58,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic ReportIssue(CSharpSyntaxNode expression, string methodName) => Issue(Invocation, expression.GetLocation(), methodName);
+        private Diagnostic ReportIssue(CSharpSyntaxNode expression, string methodName) => Issue(Invocation, expression, methodName);
     }
 }

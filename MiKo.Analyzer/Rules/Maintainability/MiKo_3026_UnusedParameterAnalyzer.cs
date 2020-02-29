@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                var diagnostic = Issue(parameterName, parameter.Identifier.GetLocation());
+                var diagnostic = Issue(parameterName, parameter.Identifier);
                 context.ReportDiagnostic(diagnostic);
             }
         }

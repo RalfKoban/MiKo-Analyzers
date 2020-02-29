@@ -43,10 +43,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         foreach (var expression in argumentList.Arguments
                                                                .Select(_ => _.Expression)
-                                                               .Where(_ => _ != null)
-                                                               .Where(_ => _.IsKind(SyntaxKind.StringLiteralExpression)))
+                                                               .Where(_ => _?.IsKind(SyntaxKind.StringLiteralExpression) is true))
                         {
-                            context.ReportDiagnostic(Issue(attributeName, expression.GetLocation()));
+                            var issue = Issue(attributeName, expression);
+                            context.ReportDiagnostic(issue);
                         }
                     }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,8 +15,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location) => qualifiedName.Contains("Test", StringComparison.OrdinalIgnoreCase)
-                                                                                                                        ? new[] { Issue(qualifiedName, location) }
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
+        {
+            if (qualifiedName.Contains("Test", StringComparison.OrdinalIgnoreCase))
+            {
+                yield return Issue(qualifiedName, location);
+            }
+        }
     }
 }

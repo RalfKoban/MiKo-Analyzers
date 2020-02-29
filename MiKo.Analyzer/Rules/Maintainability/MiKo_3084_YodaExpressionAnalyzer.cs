@@ -80,10 +80,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token, CSharpSyntaxNode node)
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token, SyntaxNode node)
         {
-            var location = node.GetLocation();
-            var issue = Issue(string.Empty, location, token.ValueText);
+            var issue = Issue(string.Empty, node, token.ValueText);
             context.ReportDiagnostic(issue);
         }
     }

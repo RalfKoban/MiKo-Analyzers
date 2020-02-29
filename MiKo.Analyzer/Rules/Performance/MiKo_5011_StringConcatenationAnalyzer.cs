@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         }
 
         private Diagnostic AnalyzeAddAssignmentExpression(AssignmentExpressionSyntax node, SemanticModel semanticModel) => node.Left.IsString(semanticModel)
-                                                                                                                               ? Issue(node.OperatorToken.ValueText, node.OperatorToken.GetLocation())
+                                                                                                                               ? Issue(node.OperatorToken)
                                                                                                                                : null;
     }
 }

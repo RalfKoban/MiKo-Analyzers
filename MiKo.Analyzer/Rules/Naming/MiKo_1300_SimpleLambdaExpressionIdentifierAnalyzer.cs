@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return null;
 
                 default:
-                    return Issue(parameterName, identifier.GetLocation(), Constants.LambdaIdentifiers.Default);
+                    return Issue(parameterName, identifier, Constants.LambdaIdentifiers.Default);
             }
         }
     }

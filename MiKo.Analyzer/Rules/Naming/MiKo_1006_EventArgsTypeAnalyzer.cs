@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return null; // ignore inherited events that we cannot change anymore
             }
 
-            return Issue(typeName, declaration.Type.GetLocation(), expectedName);
+            return Issue(typeName, declaration.Type, expectedName);
         }
     }
 }

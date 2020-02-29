@@ -45,9 +45,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var somethingInside = HasSomethingInsideRegion(regionNode);
 
-            if (!somethingInside)
+            if (somethingInside is false)
             {
-                context.ReportDiagnostic(Issue(regionNode.ToString(), regionNode.GetLocation()));
+                var issue = Issue(regionNode);
+                context.ReportDiagnostic(issue);
             }
         }
     }

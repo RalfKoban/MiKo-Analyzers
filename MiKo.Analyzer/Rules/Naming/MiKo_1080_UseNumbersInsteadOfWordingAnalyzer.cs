@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from identifier in identifiers
                                                                                                                                         let name = identifier.Text
                                                                                                                                         where HasIssue(name)
-                                                                                                                                        select Issue(name, identifier.GetLocation());
+                                                                                                                                        select Issue(name, identifier);
 
         private static bool HasIssue(string name)
         {

@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var refKeyword = syntax.Modifiers.First(_ => _.IsKind(SyntaxKind.RefKeyword));
 
-                yield return Issue(parameter.Name, refKeyword.GetLocation());
+                yield return Issue(parameter.Name, refKeyword);
             }
         }
     }

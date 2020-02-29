@@ -14,12 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected abstract void AnalyzeExpression(SyntaxNodeAnalysisContext context);
 
-        protected void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token)
-        {
-            var location = token.GetLocation();
-            var issue = Issue(string.Empty, location);
-            context.ReportDiagnostic(issue);
-        }
+        protected void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token) => context.ReportDiagnostic(Issue(string.Empty, token));
 
         private void AnalyzeExpressionLanguageAware(SyntaxNodeAnalysisContext context)
         {

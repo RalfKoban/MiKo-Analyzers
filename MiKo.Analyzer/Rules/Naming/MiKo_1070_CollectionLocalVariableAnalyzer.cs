@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (pluralName != name)
                 {
-                    yield return Issue(originalName, identifier.GetLocation(), pluralName);
+                    yield return Issue(originalName, identifier, pluralName);
                 }
             }
         }

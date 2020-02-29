@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(1))
                 {
-                    yield return Issue(name, identifier.GetLocation());
+                    yield return Issue(name, identifier);
                 }
             }
         }

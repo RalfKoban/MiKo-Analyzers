@@ -116,7 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 results = new List<Diagnostic>(1);
             }
 
-            results.Add(Issue(symbol.Name, argument.GetLocation(), parameter));
+            results.Add(Issue(symbol.Name, argument, parameter));
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var argument = i.ArgumentList?.Arguments.FirstOrDefault(_ => _.Expression.IsKind(SyntaxKind.NumericLiteralExpression));
                     if (argument != null)
                     {
-                        yield return Issue(method.Name, argument.GetLocation());
+                        yield return Issue(method.Name, argument);
                     }
                 }
             }

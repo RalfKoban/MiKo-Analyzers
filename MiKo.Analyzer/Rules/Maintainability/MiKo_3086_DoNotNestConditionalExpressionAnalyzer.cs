@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (ConditionalExpressionSyntax)context.Node;
 
-            foreach (var descendant in node.DescendantNodes().OfType<CSharpSyntaxNode>())
+            foreach (var descendant in node.DescendantNodes())
             {
                 if (descendant.IsKind(SyntaxKind.ConditionalExpression))
                 {
@@ -35,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, CSharpSyntaxNode node)
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
-            var issue = Issue(string.Empty, node.GetLocation());
+            var issue = Issue(string.Empty, node);
             context.ReportDiagnostic(issue);
         }
     }

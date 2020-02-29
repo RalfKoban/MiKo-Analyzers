@@ -65,12 +65,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                yield return Issue(propertyName, name.GetLocation(), linqCall);
+                yield return Issue(propertyName, name, linqCall);
             }
 
             foreach (var yieldKeyword in node.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.YieldKeyword)))
             {
-                yield return Issue(propertyName, yieldKeyword.GetLocation(), yieldKeyword.ValueText);
+                yield return Issue(propertyName, yieldKeyword, yieldKeyword.ValueText);
             }
         }
     }

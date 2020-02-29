@@ -36,8 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
                 {
-                    var location = token.GetLocation();
-                    var issue = Issue(method.Name, location, eventName);
+                    var issue = Issue(method.Name, token, eventName);
                     context.ReportDiagnostic(issue);
                 }
             }

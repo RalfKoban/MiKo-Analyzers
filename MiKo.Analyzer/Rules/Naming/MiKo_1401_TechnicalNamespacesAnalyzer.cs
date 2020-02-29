@@ -35,11 +35,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var name = qualifiedName.Replace("Structure", "#");
 
-            var markers = TechnicalNamespaces;
+            if (HasMarker(name))
+            {
+                var marker = TechnicalNamespaces.Last(_ => name.Contains(_, StringComparison.OrdinalIgnoreCase));
 
-            return HasMarker(name)
-                       ? new[] { Issue(qualifiedName, location, markers.Last(_ => name.Contains(_, StringComparison.OrdinalIgnoreCase))) }
-                       : Enumerable.Empty<Diagnostic>();
+                yield return Issue(qualifiedName, location, marker);
+            }
         }
 
         private static bool HasMarker(string name) => name.EqualsAny(TechnicalNamespaces)

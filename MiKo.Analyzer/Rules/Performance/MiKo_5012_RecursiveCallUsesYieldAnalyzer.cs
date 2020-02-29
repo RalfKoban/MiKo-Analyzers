@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     if (IsRecursiveYield(yieldStatement, semanticModel, methodSymbol))
                     {
-                        var issue = Issue(method.GetName(), yieldStatement.GetLocation());
+                        var issue = Issue(method.GetName(), yieldStatement);
                         context.ReportDiagnostic(issue);
                     }
                 }

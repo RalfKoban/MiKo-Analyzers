@@ -23,9 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var fullName = qualifiedName.Without(ModelNamespaces);
 
-            return fullName.ContainsAny(TechnicalWPFNamespaces)
-                       ? new[] { Issue(qualifiedName, location, TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (fullName.ContainsAny(TechnicalWPFNamespaces))
+            {
+                var ns = TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase));
+
+                yield return Issue(qualifiedName, location, ns);
+            }
         }
     }
 }

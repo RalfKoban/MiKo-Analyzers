@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                                         where syntaxToken.ValueText.ContainsAny(MockNames)
                                                                                                                                         let symbol = syntaxToken.GetSymbol(semanticModel)
                                                                                                                                         select symbol is null
-                                                                                                                                                   ? Issue(syntaxToken.ValueText, syntaxToken.GetLocation())
+                                                                                                                                                   ? Issue(syntaxToken)
                                                                                                                                                    : Issue(symbol);
 
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)

@@ -32,10 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return arguments
-                           .Where(_ => _.Expression is LambdaExpressionSyntax)
-                           .Select(_ => Issue(_.ToString(), _.GetLocation()))
-                           .ToList();
+            var issues = arguments.Where(_ => _.Expression is LambdaExpressionSyntax).Select(Issue).ToList();
+            return issues;
         }
     }
 }

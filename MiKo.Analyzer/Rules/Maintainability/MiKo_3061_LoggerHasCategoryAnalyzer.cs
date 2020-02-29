@@ -30,9 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var argument = s.ArgumentList.Arguments[0];
                 var type = context.SemanticModel.GetTypeInfo(argument.Expression).Type;
+
                 if (type.SpecialType != SpecialType.System_String)
                 {
-                    var issue = Issue(context.ContainingSymbol?.Name, argument.GetLocation());
+                    var issue = Issue(context.ContainingSymbol?.Name, argument);
+
                     context.ReportDiagnostic(issue);
                 }
             }

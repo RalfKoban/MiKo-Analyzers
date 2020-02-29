@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             diagnostics = new List<Diagnostic>(1);
                         }
 
-                        diagnostics.Add(Issue(method.Name, methodCall.GetLocation(), call));
+                        diagnostics.Add(Issue(method.Name, methodCall, call));
                         break;
                 }
             }

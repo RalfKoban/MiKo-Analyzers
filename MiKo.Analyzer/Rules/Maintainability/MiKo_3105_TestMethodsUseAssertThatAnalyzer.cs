@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
                 }
 
-                context.ReportDiagnostic(Issue(method.Name, node.GetLocation()));
+                context.ReportDiagnostic(Issue(method.Name, node));
             }
         }
     }

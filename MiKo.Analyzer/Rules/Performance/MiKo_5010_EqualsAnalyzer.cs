@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 var method = node.GetEnclosingMethod(semanticModel);
                 if (method.MethodKind != MethodKind.UserDefinedOperator)
                 {
-                    return Issue(node.ToString(), node.GetLocation());
+                    return Issue(node);
                 }
             }
 

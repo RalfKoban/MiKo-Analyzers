@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (CommentHasIssue(comment, semanticModel))
             {
-                return Issue(methodName, trivia.GetLocation());
+                return Issue(methodName, trivia);
             }
 
             return null;

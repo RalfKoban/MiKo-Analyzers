@@ -119,15 +119,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeExpression(ExpressionSyntax expression, string methodName, Location location)
         {
-            if (expression is InvocationExpressionSyntax ies)
+            var hasIssue = expression is InvocationExpressionSyntax ies
+                        && ies.Expression is MemberAccessExpressionSyntax mae
+                        && mae.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                        && IsConditionMatcher(mae);
+
+            if (hasIssue)
             {
-                if (ies.Expression is MemberAccessExpressionSyntax mae && mae.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-                {
-                    if (IsConditionMatcher(mae))
-                    {
-                        yield return Issue(methodName, location);
-                    }
-                }
+                yield return Issue(methodName, location);
             }
         }
     }

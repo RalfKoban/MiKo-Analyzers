@@ -28,7 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                           .Where(_ => _.ToCleanedUpString() == Invocation)
                                                                                           .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
                                                                                           .Where(_ => _.Parent.IsKind(SyntaxKind.Argument) is false)
-                                                                                          .Select(_ => _.GetLocation())
                                                                                           .Select(_ => Issue(Invocation, _))
                                                                                           .ToList();
     }

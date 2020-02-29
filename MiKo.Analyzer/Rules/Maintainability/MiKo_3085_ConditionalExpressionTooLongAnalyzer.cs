@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             AnalyzeLength(context, node.WhenFalse);
         }
 
-        private void AnalyzeLength(SyntaxNodeAnalysisContext context, CSharpSyntaxNode node)
+        private void AnalyzeLength(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
             if (node.Span.Length > MaxExpressionLength)
             {
@@ -35,9 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, CSharpSyntaxNode node)
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
-            var issue = Issue(string.Empty, node.GetLocation());
+            var issue = Issue(string.Empty, node);
             context.ReportDiagnostic(issue);
         }
     }

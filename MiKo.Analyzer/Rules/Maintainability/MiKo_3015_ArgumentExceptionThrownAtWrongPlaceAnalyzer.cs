@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -40,10 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = node.GetEnclosingMethod(semanticModel);
             if (method != null && method.Parameters.Length == 0)
             {
-                return new[] { Issue(node.Type.ToString(), node.GetLocation()) };
+                yield return Issue(node.Type.ToString(), node);
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

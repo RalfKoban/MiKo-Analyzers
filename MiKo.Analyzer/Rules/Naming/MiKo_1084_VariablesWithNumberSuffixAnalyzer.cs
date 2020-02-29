@@ -21,6 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from identifier in identifiers
                                                                                                                                         let name = identifier.ValueText
                                                                                                                                         where name.EndsWithNumber() && name.EndsWithAny(Constants.Markers.OSBitNumbers) is false
-                                                                                                                                        select Issue(name, identifier.GetLocation());
+                                                                                                                                        select Issue(name, identifier);
     }
 }

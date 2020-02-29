@@ -35,19 +35,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var argumentList = node.ArgumentList;
             if (argumentList is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
             var arguments = argumentList.Arguments;
             if (arguments.Count != 1)
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
             var argument = arguments[0];
-            return HasIssue(node, argument.Expression, semanticModel)
-                       ? new[] { Issue(node.Type.ToString(), argument.GetLocation()) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (HasIssue(node, argument.Expression, semanticModel))
+            {
+                yield return Issue(node.Type.ToString(), argument);
+            }
         }
 
         private static bool HasIssue(SyntaxNode node, ExpressionSyntax argumentExpression, SemanticModel semanticModel)

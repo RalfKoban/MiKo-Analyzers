@@ -20,9 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
         {
-            return qualifiedName.ContainsAny(NonsenseNamespaces)
-                       ? new[] { Issue(qualifiedName, location, NonsenseNamespaces.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase))) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (qualifiedName.ContainsAny(NonsenseNamespaces))
+            {
+                var ns = NonsenseNamespaces.Last(_ => qualifiedName.Contains(_, StringComparison.OrdinalIgnoreCase));
+
+                yield return Issue(qualifiedName, location, ns);
+            }
         }
     }
 }

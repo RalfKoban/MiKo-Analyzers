@@ -79,11 +79,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return null; // ignore same namespaces
             }
 
-            var location = declaration.Type is GenericNameSyntax g
-                               ? g.TypeArgumentList.Arguments[0].GetLocation()
-                               : eventArgsType.Locations[0];
+            if (declaration.Type is GenericNameSyntax g)
+            {
+                return Issue(eventName, g.TypeArgumentList.Arguments[0], eventArgsType.Name, eventUsageNamespace);
+            }
 
-            return Issue(eventName, location, eventArgsType.Name, eventUsageNamespace);
+            return Issue(eventName, eventArgsType, eventArgsType.Name, eventUsageNamespace);
         }
     }
 }
