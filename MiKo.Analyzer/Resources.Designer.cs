@@ -7139,6 +7139,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To avoid deadlocks, events should never be raised inside of lock statements. Instead, the event handlers should be collected and the event should be raised outside the lock..
+        /// </summary>
+        public static string MiKo_3092_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3092_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not raise event from lock statement.
+        /// </summary>
+        public static string MiKo_3092_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3092_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not raise events in locks..
+        /// </summary>
+        public static string MiKo_3092_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3092_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
