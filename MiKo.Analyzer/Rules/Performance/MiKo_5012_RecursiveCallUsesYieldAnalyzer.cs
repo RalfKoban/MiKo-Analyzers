@@ -96,8 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 var c = candidateParameters[index];
 
                 var argument = arguments[index];
-                var argumentTypeInfo = semanticModel.GetTypeInfo(argument);
-                var argumentType = argumentTypeInfo.Type;
+                var argumentType = argument.GetTypeSymbol(semanticModel);
 
                 if (c.Type.Equals(argumentType, SymbolEqualityComparer.Default) is false)
                 {
@@ -115,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             if (ReturnsEnumerable(method))
             {
                 var semanticModel = context.SemanticModel;
-                var methodSymbol = (IMethodSymbol)method.GetEnclosingSymbol(semanticModel);
+                var methodSymbol = method.GetEnclosingMethod(semanticModel);
 
                 // https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return
                 foreach (var yieldStatement in method.DescendantNodes().OfType<YieldStatementSyntax>())
