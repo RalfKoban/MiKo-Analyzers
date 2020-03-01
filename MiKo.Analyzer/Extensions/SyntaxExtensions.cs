@@ -88,8 +88,6 @@ namespace MiKoSolutions.Analyzers
             return typeInfo.Type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this SyntaxToken token, SemanticModel semanticModel) => token.Parent.GetTypeSymbol(semanticModel);
-
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode node, SemanticModel semanticModel)
         {
             switch (node)

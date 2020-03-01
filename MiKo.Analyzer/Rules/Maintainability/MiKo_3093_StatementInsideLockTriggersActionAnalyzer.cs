@@ -26,7 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var token in lockStatement.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
             {
-                var type = token.GetTypeSymbol(semanticModel);
+                var identifier = token.Parent;
+
+                var type = identifier.GetTypeSymbol(semanticModel);
                 if (type?.TypeKind == TypeKind.Delegate)
                 {
                     if (token.GetSymbol(semanticModel) is IEventSymbol)
@@ -35,9 +37,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         continue;
                     }
 
-                    var method = context.GetEnclosingMethod();
-                    var issue = Issue(method.Name, token);
-                    context.ReportDiagnostic(issue);
+                    // only warn if it is an invocation
+                    switch (identifier.Parent.Kind())
+                    {
+                        case SyntaxKind.ConditionalAccessExpression:
+                        case SyntaxKind.InvocationExpression:
+                        {
+                            var method = context.GetEnclosingMethod();
+                            var issue = Issue(method.Name, token);
+                            context.ReportDiagnostic(issue);
+
+                            break;
+                        }
+                    }
                 }
             }
         }

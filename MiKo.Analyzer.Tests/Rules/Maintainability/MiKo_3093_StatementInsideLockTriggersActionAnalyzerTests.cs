@@ -174,6 +174,28 @@ public class TestMe
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_just_using_delegate_variables_in_lock_statement_of_method() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    private readonly List<Action> _actions = new List<Action>();
+
+    public bool DoSomething(Action action)
+    {
+        lock (this)
+        {
+            if (!_actions.Contains(action))
+            {
+                _actions.Add(action);
+            }
+        }
+    }
+}");
+
         protected override string GetDiagnosticId() => MiKo_3093_StatementInsideLockTriggersActionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3093_StatementInsideLockTriggersActionAnalyzer();
