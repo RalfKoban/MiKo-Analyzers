@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,13 +7,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    /// <seealso cref="MiKo_3093_StatementInsideLockTriggersActionAnalyzer"/>
+    /// <seealso cref="MiKo_3092_StatementInsideLockRaisesEventAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3092_StatementInsideLockRaisesEventAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3093_StatementInsideLockTriggersActionAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3092";
+        public const string Id = "MiKo_3093";
 
-        public MiKo_3092_StatementInsideLockRaisesEventAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3093_StatementInsideLockTriggersActionAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -23,16 +22,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {
             var lockStatement = (LockStatementSyntax)context.Node;
-
-            var method = context.GetEnclosingMethod();
-            var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
+            var semanticModel = context.SemanticModel;
 
             foreach (var token in lockStatement.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
             {
-                var eventName = token.ValueText;
-
-                if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
+                var type = token.GetTypeSymbol(semanticModel);
+                if (type?.TypeKind == TypeKind.Delegate)
                 {
+                    if (token.GetSymbol(semanticModel) is IEventSymbol)
+                    {
+                        // found by rule MiKo 3092
+                        continue;
+                    }
+
+                    var method = context.GetEnclosingMethod();
                     var issue = Issue(method.Name, token);
                     context.ReportDiagnostic(issue);
                 }

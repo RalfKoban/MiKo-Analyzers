@@ -2563,10 +2563,19 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>To avoid deadlocks, events should never be raised inside of lock statements. Instead, the event handlers should be collected and the event should be raised outside the lock.</value>
   </data>
   <data name="MiKo_3092_MessageFormat" xml:space="preserve">
-    <value>Do not raise event from lock statement</value>
+    <value>Do not raise event inside lock</value>
   </data>
   <data name="MiKo_3092_Title" xml:space="preserve">
     <value>Do not raise events in locks.</value>
+  </data>
+  <data name="MiKo_3093_Description" xml:space="preserve">
+    <value>To avoid deadlocks, delegates should never be invoked inside of lock statements. Instead, the information needed should be collected inside the lock and the delegate should be invoked outside the lock.</value>
+  </data>
+  <data name="MiKo_3093_MessageFormat" xml:space="preserve">
+    <value>Do not invoke delegate inside lock</value>
+  </data>
+  <data name="MiKo_3093_Title" xml:space="preserve">
+    <value>Do not invoke delegates inside locks.</value>
   </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.

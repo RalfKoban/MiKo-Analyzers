@@ -7148,7 +7148,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not raise event from lock statement.
+        ///   Looks up a localized string similar to Do not raise event inside lock.
         /// </summary>
         public static string MiKo_3092_MessageFormat {
             get {
@@ -7162,6 +7162,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3092_Title {
             get {
                 return ResourceManager.GetString("MiKo_3092_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To avoid deadlocks, delegates should never be invoked inside of lock statements. Instead, the information needed should be collected inside the lock and the delegate should be invoked outside the lock..
+        /// </summary>
+        public static string MiKo_3093_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3093_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not invoke delegate inside lock.
+        /// </summary>
+        public static string MiKo_3093_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3093_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not invoke delegates inside locks..
+        /// </summary>
+        public static string MiKo_3093_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3093_Title", resourceCulture);
             }
         }
         
