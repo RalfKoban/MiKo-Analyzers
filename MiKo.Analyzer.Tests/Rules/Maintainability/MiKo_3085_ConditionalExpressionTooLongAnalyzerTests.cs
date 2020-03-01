@@ -19,6 +19,31 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_conditional_expression_with_simple_member_access() => No_issue_is_reported_for(@"
+using System;
+
+public static class Some
+{
+    public static class Constants
+    {
+        public static class That
+        {
+            public static class CannotBe
+            {
+                public const bool ShortenedAnymore = true;
+            }
+        }
+    }
+}
+
+public class TestMe
+{
+    public bool DoSomething(object o) => o != null
+                                         ? Some.Constants.That.CannotBe.ShortenedAnymore
+                                         : false;
+}");
+
+        [Test]
         public void An_issue_is_reported_for_conditional_expression_with_long_condition_and_short_paths() => An_issue_is_reported_for(@"
 using System;
 

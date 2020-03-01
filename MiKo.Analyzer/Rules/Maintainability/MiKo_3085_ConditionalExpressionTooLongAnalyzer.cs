@@ -29,6 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeLength(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
+            if (node.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            {
+                // ignore as it cannot be shorted anymore
+                return;
+            }
+
             if (node.Span.Length > MaxExpressionLength)
             {
                 ReportIssue(context, node);
