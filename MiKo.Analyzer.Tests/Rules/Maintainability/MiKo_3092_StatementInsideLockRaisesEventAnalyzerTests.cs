@@ -54,26 +54,6 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_event_raise_in_catch_block_of_method_without_finally_block() => No_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public event EventHandler MyEvent;
-
-    public bool DoSomething()
-    {
-        try
-        {
-        }
-        catch
-        {
-            MyEvent?.Invoke(this, EventArgs.Empty);
-        }
-    }
-}");
-
-        [Test]
         public void An_issue_is_reported_for_event_raise_in_lock_statement_of_method() => An_issue_is_reported_for(@"
 using System;
 
