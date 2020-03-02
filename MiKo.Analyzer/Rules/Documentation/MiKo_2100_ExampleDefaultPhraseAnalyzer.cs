@@ -20,9 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)
         {
-            return comments.All(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
+            var found = comments.All(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)));
+            return found
                        ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, phrases.First()) };
+                       : new[] { Issue(symbol, phrases[0]) };
         }
     }
 }

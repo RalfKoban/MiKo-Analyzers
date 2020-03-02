@@ -678,9 +678,12 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
         {
             var field = symbol.GetSyntax();
-            return field is null
-                       ? Enumerable.Empty<MemberAccessExpressionSyntax>()
-                       : field.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToCleanedUpString() == invocation);
+            if (field is null)
+            {
+                return Enumerable.Empty<MemberAccessExpressionSyntax>();
+            }
+
+            return field.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToCleanedUpString() == invocation);
         }
 
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol symbol, string invocation) => symbol.GetAssignmentsVia(invocation)
