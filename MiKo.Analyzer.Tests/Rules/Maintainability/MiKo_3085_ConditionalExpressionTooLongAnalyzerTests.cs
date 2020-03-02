@@ -82,6 +82,42 @@ public class TestMe
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_object_creation_only() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ObjectDisposedException ObjectDisposed(string objectName, string message) => string.IsNullOrWhiteSpace(message)
+                                                                                                 ? new ObjectDisposedException(objectName)
+                                                                                                 : new ObjectDisposedException(objectName, message);
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_object_creation_with_literal() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string message, object value) => string.IsNullOrWhiteSpace(message)
+                                                                                                                      ? new ArgumentOutOfRangeException(paramName, 0815, string.Empty)
+                                                                                                                      : new ArgumentOutOfRangeException(paramName, 0815, message);
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_object_creation_with_Linq() => An_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string[] messages, object value) => messages.Any()
+                                                                                                                          ? new ArgumentOutOfRangeException(paramName, 0815, messages.Where(_ => _.Length > 1).FirstOrDefault())
+                                                                                                                          : new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
+}");
+
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();
