@@ -22,7 +22,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool ObjectCreationCannotBeShortened(ObjectCreationExpressionSyntax syntax, SemanticModel semanticModel)
         {
-            var arguments = syntax.ArgumentList.Arguments;
+            var argumentList = syntax.ArgumentList;
+            if (argumentList is null)
+            {
+                // ignore object initializers
+                return true;
+            }
+
+            var arguments = argumentList.Arguments;
             if (arguments.Count == 0)
             {
                 // ignore as it cannot be shorted anymore

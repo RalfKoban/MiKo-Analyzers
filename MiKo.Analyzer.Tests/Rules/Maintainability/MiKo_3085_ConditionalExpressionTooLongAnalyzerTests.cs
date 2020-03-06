@@ -118,6 +118,21 @@ public class TestMe
                                                                                                                           : new ArgumentOutOfRangeException(paramName, 0815, string.Empty);
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_object_initializer() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public Guid ID { get; set; }
+
+    pubic static TestMe Create(bool flag) => flag
+                                            ? new TestMe { Name = ""my very long name to see whether it is too long"", ID = Guid.Empty }
+                                            : new TestMe { Name = ""my very long name to see whether it is too long"", ID = new Guid(""45A3C8BA-2BC9-41F4-BA0D-997D38C8E6BA"") };
+}");
+
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();
