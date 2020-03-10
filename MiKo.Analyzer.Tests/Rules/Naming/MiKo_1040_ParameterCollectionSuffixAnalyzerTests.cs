@@ -23,7 +23,8 @@ using System.Collections.Generic;
 
 public class TestMe
 {
-    public void DoSomething(" + parameter + @");
+    public void DoSomething(" + parameter + @")
+    { }
 }
 ");
 
@@ -37,7 +38,25 @@ public class TestMe
 
 public class TestMe
 {
-    public void DoSomething(" + parameter + @");
+    public void DoSomething(" + parameter + @")
+    { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_parameter_of_method_that_implements_interface() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public interface ITestMe
+{
+    void DoSomething(List<string> items);
+}
+
+public class TestMe : ITestMe
+{
+    public void DoSomething(List<string> itemList)
+    { }
 }
 ");
 

@@ -197,6 +197,12 @@ namespace MiKoSolutions.Analyzers
 
             switch (symbol)
             {
+                case IFieldSymbol _:
+                case ITypeSymbol _:
+                {
+                    return false;
+                }
+
                 case IMethodSymbol method:
                 {
                     return method.IsInterfaceImplementation();
@@ -245,7 +251,8 @@ namespace MiKoSolutions.Analyzers
                     var methodName = method.Name;
 
                     var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-                    return symbols.Any(_ => ReferenceEquals(method, typeSymbol.FindImplementationForInterfaceMember(_)));
+                    var result = symbols.Any(_ => ReferenceEquals(method, typeSymbol.FindImplementationForInterfaceMember(_)));
+                    return result;
                 }
             }
         }
