@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "typesUnderTest",
                 "variablesRead",
                 "variablesWritten",
+                "gateways",
             };
 
         private static readonly string[] WrongNames =
