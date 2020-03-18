@@ -84,6 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "special handling",
                 "@formatter:off",
                 "@formatter:on",
+                "No-Op",
             };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
