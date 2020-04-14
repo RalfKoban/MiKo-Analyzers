@@ -200,8 +200,7 @@ namespace MiKoSolutions.Analyzers
                 var ifStatement = GetEnclosingIfStatement(node);
                 if (ifStatement != null)
                 {
-                    var ifExpression = ifStatement.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
-                    if (ifExpression?.Name.ToString() == methodName)
+                    if (IsIfStatementWithCallTo(ifStatement, methodName))
                     {
                         return true;
                     }
@@ -229,6 +228,27 @@ namespace MiKoSolutions.Analyzers
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+
+        private static bool IsIfStatementWithCallTo(IfStatementSyntax ifStatement, string methodName)
+        {
+            var ifExpression = ifStatement.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
+            if (ifExpression?.Name.ToString() == methodName)
+            {
+                return true;
+            }
+
+            var binaryExpression = ifStatement.ChildNodes().OfType<BinaryExpressionSyntax>().FirstOrDefault();
+            if (binaryExpression?.OperatorToken.Kind() == SyntaxKind.AmpersandAmpersandToken)
+            {
+                if ((binaryExpression.Left is MemberAccessExpressionSyntax l && l.Name.ToString() == methodName)
+                 || (binaryExpression.Right is MemberAccessExpressionSyntax r && r.Name.ToString() == methodName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         private static IfStatementSyntax GetEnclosingIfStatement(SyntaxNode node)
         {
