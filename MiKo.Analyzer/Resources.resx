@@ -1522,7 +1522,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The &lt;summary&gt; documentation should not reference method parameters as its only purpose is to give a brief description.</value>
   </data>
   <data name="MiKo_2045_MessageFormat" xml:space="preserve">
-    <value>&lt;summary&gt; should not contain parameter reference: '{1}'</value>
+    <value>&lt;summary&gt; should not contain parameter reference ' {1} '</value>
   </data>
   <data name="MiKo_2045_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not reference parameters.</value>
@@ -1540,7 +1540,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of an Attribute should start with a specific phrase that describes its purpose.</value>
   </data>
   <data name="MiKo_2047_MessageFormat" xml:space="preserve">
-    <value>Start &lt;summary&gt; with {1}</value>
+    <value>Start &lt;summary&gt; with: {1}</value>
   </data>
   <data name="MiKo_2047_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of Attributes should have a  default starting phrase.</value>

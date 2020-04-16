@@ -4153,7 +4153,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should not contain parameter reference: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain parameter reference &apos; {1} &apos;.
         /// </summary>
         public static string MiKo_2045_MessageFormat {
             get {
@@ -4207,7 +4207,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;summary&gt; with {1}.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: {1}.
         /// </summary>
         public static string MiKo_2047_MessageFormat {
             get {
