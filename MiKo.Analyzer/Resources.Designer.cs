@@ -3721,6 +3721,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The documentation of parameters should describe what they represent and what they are used for. Only stating the name of the parameter is simply not enough..
+        /// </summary>
+        public static string MiKo_2028_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2028_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should contain more than just the parameter name.
+        /// </summary>
+        public static string MiKo_2028_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2028_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of parameter should not just contain the name of the parameter..
+        /// </summary>
+        public static string MiKo_2028_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2028_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {
