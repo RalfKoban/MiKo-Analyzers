@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 274 rules that are currently provided by the analyzer.
+The following tables list all the 275 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
