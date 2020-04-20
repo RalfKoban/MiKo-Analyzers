@@ -2709,6 +2709,15 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4003_Title" xml:space="preserve">
     <value>Dispose methods should be placed directly after constructors and finalizers.</value>
   </data>
+  <data name="MiKo_4004_Description" xml:space="preserve">
+    <value>To ease reading, the interface that gives the type its name should be listed as first interface. All the other implemented interfaces should be placed behind.</value>
+  </data>
+  <data name="MiKo_4004_MessageFormat" xml:space="preserve">
+    <value>Place '{1}' as first interface directly after type declaration</value>
+  </data>
+  <data name="MiKo_4004_Title" xml:space="preserve">
+    <value>The interface that gives a type its name should be placed directly after the type's declaration.</value>
+  </data>
   <data name="MiKo_4101_Description" xml:space="preserve">
     <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods.</value>
   </data>

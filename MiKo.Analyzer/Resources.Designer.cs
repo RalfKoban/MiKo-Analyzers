@@ -7565,6 +7565,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease reading, the interface that gives the type its name should be listed as first interface. All the other implemented interfaces should be placed behind..
+        /// </summary>
+        public static string MiKo_4004_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4004_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;{1}&apos; as first interface directly after type declaration.
+        /// </summary>
+        public static string MiKo_4004_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4004_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The interface that gives a type its name should be placed directly after the type&apos;s declaration..
+        /// </summary>
+        public static string MiKo_4004_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4004_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods..
         /// </summary>
         public static string MiKo_4101_Description {
