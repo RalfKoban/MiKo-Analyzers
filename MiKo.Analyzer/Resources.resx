@@ -945,6 +945,16 @@ The reason is that the type already states what the variable is - so its name sh
   <data name="MiKo_1093_Title" xml:space="preserve">
     <value>Do not use the suffix 'Object' or 'Struct'.</value>
   </data>
+  <data name="MiKo_1094_Description" xml:space="preserve">
+    <value>Types should use suffixes that identify them as types and are in active case, they should not use suffixes that are passive and would belong into names of namespaces.
+For example, types should not be suffixed with 'Management' or 'Handling'. Instead, they should be suffixed with the more active terms 'Manager' or 'Handler'.</value>
+  </data>
+  <data name="MiKo_1094_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' instead</value>
+  </data>
+  <data name="MiKo_1094_Title" xml:space="preserve">
+    <value>Do not suffix types with passive namespace names.</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
