@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_empty_catch_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_catch_block() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_unnamed_exception_in_catch_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_unnamed_exception_in_catch_block() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -85,6 +85,42 @@ public class TestMe
         {
         }
         catch (Exception exception)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incomplete_catch_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+        }
+        catch (
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incomplete_exception_in_catch_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+        }
+        catch (Exception 
         {
         }
     }

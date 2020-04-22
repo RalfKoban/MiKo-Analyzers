@@ -36,17 +36,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return null; // we don't have an exception
             }
 
-            const string ExceptionIdentifier = "ex";
-
             var identifier = node.Declaration.Identifier;
-            switch (identifier.ValueText)
+            var name = identifier.ValueText;
+
+            switch (name)
             {
                 case null: // we don't have one
-                case ExceptionIdentifier: // correct identifier
+                case "": // we don't have one
+                case "ex": // correct identifier
                     return null;
 
                 default:
-                    return Issue(identifier.ValueText, identifier, ExceptionIdentifier);
+                    return Issue(name, identifier, "ex");
             }
         }
     }
