@@ -2331,6 +2331,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Using numbers in method names such &apos;Send2You&apos; or &apos;Do4You&apos; is slang and should be avoided. Instead, the correct words &apos;To&apos; or &apos;For&apos; should be used..
+        /// </summary>
+        public static string MiKo_1085_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1085_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a number as slang.
+        /// </summary>
+        public static string MiKo_1085_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1085_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be named using numbers as slang..
+        /// </summary>
+        public static string MiKo_1085_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1085_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so (comparer, view or item).
         ///
         ///The reason is that the type already states what the parameter is - so its name should not have that additional, redundant information..

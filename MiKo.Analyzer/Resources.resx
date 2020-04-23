@@ -905,6 +905,15 @@ Example:
   <data name="MiKo_1084_Title" xml:space="preserve">
     <value>Variables should not be suffixed with a number if their types have number suffixes.</value>
   </data>
+  <data name="MiKo_1085_Description" xml:space="preserve">
+    <value>Using numbers in method names such 'Send2You' or 'Do4You' is slang and should be avoided. Instead, the correct words 'To' or 'For' should be used.</value>
+  </data>
+  <data name="MiKo_1085_MessageFormat" xml:space="preserve">
+    <value>Do not use a number as slang</value>
+  </data>
+  <data name="MiKo_1085_Title" xml:space="preserve">
+    <value>Methods should not be named using numbers as slang.</value>
+  </data>
   <data name="MiKo_1090_Description" xml:space="preserve">
     <value>Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so (comparer, view or item).
 
