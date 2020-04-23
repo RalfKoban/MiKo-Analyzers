@@ -75,6 +75,19 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_EventArgs_class_itself() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public event EventHandler<EventArgs> My;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_event_in_different_namespace() => An_issue_is_reported_for(@"
 using System;
 

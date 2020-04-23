@@ -361,7 +361,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events and the event arguments they use belong together logically. Hence, both should be located in the same namespace..
+        ///   Looks up a localized string similar to Events and their event arguments belong together logically. Hence, both should be located in the same namespace..
         /// </summary>
         public static string MiKo_1007_Description {
             get {
