@@ -21,6 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        /// <inheritdoc />
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass() is false;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
             var symbolName = symbol.Name;

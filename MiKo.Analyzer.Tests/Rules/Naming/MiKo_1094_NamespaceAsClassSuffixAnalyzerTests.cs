@@ -26,6 +26,17 @@ public class My" + suffix + @"
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_test_class([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+/// <summary>
+/// Some documentation
+/// </summary>
+[" + testFixture + @"]
+public sealed class TestManagement
+{
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1094_NamespaceAsClassSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1094_NamespaceAsClassSuffixAnalyzer();
