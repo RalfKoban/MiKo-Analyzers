@@ -3803,6 +3803,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instead of faking an XML documentation by using &lt;inheritdoc&gt; with a &apos;cref&apos; to itself, a well-written &lt;summary&gt; XML documentation should be used..
+        /// </summary>
+        public static string MiKo_2029_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2029_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &lt;inheritdoc cref=&quot;{0}&quot; /&gt;.
+        /// </summary>
+        public static string MiKo_2029_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2029_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;inheritdoc&gt; documentation should not use a &apos;cref&apos; to itself..
+        /// </summary>
+        public static string MiKo_2029_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2029_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of a return value should have a default starting phrase that describes the returned value in more detail..
         /// </summary>
         public static string MiKo_2030_Description {

@@ -643,7 +643,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool ContainsExtensionMethods(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
-        internal static string FullyQualifiedName(this ISymbol symbol) => symbol.ToDisplayString(FullyQualifiedDisplayFormat);
+        internal static string FullyQualifiedName(this ISymbol symbol)
+        {
+            switch (symbol)
+            {
+                case IMethodSymbol m:
+                    return m.ContainingType.FullyQualifiedName() + "." + m.Name;
+
+                case IPropertySymbol p:
+                    return p.ContainingType.FullyQualifiedName() + "." + p.Name;
+
+                default:
+                    return symbol.ToDisplayString(FullyQualifiedDisplayFormat);
+            }
+        }
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
 

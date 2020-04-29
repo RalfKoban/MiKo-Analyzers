@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 277 rules that are currently provided by the analyzer.
+The following tables list all the 278 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|
@@ -156,6 +156,7 @@ The following tables list all the 277 rules that are currently provided by the a
 |MiKo_2026|Used parameters should not be documented to be unused.|&#x2713;|
 |MiKo_2027|Serialization constructor parameters shall be documented with a specific phrase.|&#x2713;|
 |MiKo_2028|Documentation of parameter should not just contain the name of the parameter.|&#x2713;|
+|MiKo_2029|&lt;inheritdoc&gt; documentation should not use a 'cref' to itself.|&#x2713;|
 |MiKo_2030|Documentation of return value should have a default starting phrase.|&#x2713;|
 |MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|&#x2713;|
 |MiKo_2032|Documentation of Boolean return value should have a specific phrase.|&#x2713;|

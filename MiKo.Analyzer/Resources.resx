@@ -1405,6 +1405,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2028_Title" xml:space="preserve">
     <value>Documentation of parameter should not just contain the name of the parameter.</value>
   </data>
+  <data name="MiKo_2029_Description" xml:space="preserve">
+    <value>Instead of faking an XML documentation by using &lt;inheritdoc&gt; with a 'cref' to itself, a well-written &lt;summary&gt; XML documentation should be used.</value>
+  </data>
+  <data name="MiKo_2029_MessageFormat" xml:space="preserve">
+    <value>Do not use &lt;inheritdoc cref="{0}" /&gt;</value>
+  </data>
+  <data name="MiKo_2029_Title" xml:space="preserve">
+    <value>&lt;inheritdoc&gt; documentation should not use a 'cref' to itself.</value>
+  </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
     <value>The documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
   </data>
