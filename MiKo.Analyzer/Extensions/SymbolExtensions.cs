@@ -59,12 +59,16 @@ namespace MiKoSolutions.Analyzers
                                                                               {
                                                                                   "OneTimeSetUp",
                                                                                   "OneTimeSetUpAttribute",
+                                                                                  "TestFixtureSetUp", // deprecated NUnit 2.6
+                                                                                  "TestFixtureSetUpAttribute", // deprecated NUnit 2.6
                                                                               };
 
         private static readonly HashSet<string> TestOneTimeTearDownAttributeNames = new HashSet<string>
                                                                                  {
                                                                                      "OneTimeTearDown",
                                                                                      "OneTimeTearDownAttribute",
+                                                                                     "TestFixtureTearDown", // deprecated NUnit 2.6
+                                                                                     "TestFixtureTearDownAttribute", // deprecated NUnit 2.6
                                                                                  };
 
         private static readonly HashSet<string> ImportAttributeNames = new HashSet<string>

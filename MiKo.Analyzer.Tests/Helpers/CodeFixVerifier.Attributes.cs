@@ -48,6 +48,7 @@ namespace TestHelper
                                                                         "OneTimeSetUp()",
                                                                         nameof(OneTimeSetUpAttribute),
                                                                         nameof(OneTimeSetUpAttribute) + "()",
+                                                                        "TestFixtureSetUp", // deprecated NUnit 2.6
                                                                     };
 
         public static readonly IEnumerable<string> TestOneTimeTearDowns = new[]
@@ -56,6 +57,7 @@ namespace TestHelper
                                                                            "OneTimeTearDown()",
                                                                            nameof(OneTimeTearDownAttribute),
                                                                            nameof(OneTimeTearDownAttribute) + "()",
+                                                                           "TestFixtureTearDown", // deprecated NUnit 2.6
                                                                        };
 
         public static readonly IEnumerable<string> Tests = new[]
