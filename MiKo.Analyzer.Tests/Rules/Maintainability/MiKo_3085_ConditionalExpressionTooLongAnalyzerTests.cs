@@ -133,6 +133,21 @@ public class TestMe
                                             : new TestMe { Name = ""my very long name to see whether it is too long"", ID = new Guid(""45A3C8BA-2BC9-41F4-BA0D-997D38C8E6BA"") };
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_interpolated_string_literal() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public Guid ID { get; set; }
+
+    pubic static string Create(bool flag) => flag
+                                            ? $""my very long interpolated string with {Name} and {ID} to see whether it is too long""
+                                            : $""my very long interpolated string with {Name} and {ID} to see whether it is too long"";
+}");
+
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();

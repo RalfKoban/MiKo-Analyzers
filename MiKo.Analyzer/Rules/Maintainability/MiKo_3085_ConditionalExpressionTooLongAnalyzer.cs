@@ -69,13 +69,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            if (node is ObjectCreationExpressionSyntax o && ObjectCreationCannotBeShortened(o, semanticModel))
+            switch (node)
             {
-                // ignore as it cannot be shorted anymore
-                return false;
-            }
+                case InterpolatedStringExpressionSyntax _:
+                case ObjectCreationExpressionSyntax o when ObjectCreationCannotBeShortened(o, semanticModel):
+                {
+                    return false; // ignore as it cannot be shorted anymore
+                }
 
-            return true;
+                default:
+                    return true;
+            }
         }
 
         private void AnalyzeLength(SyntaxNodeAnalysisContext context, SyntaxNode node)
