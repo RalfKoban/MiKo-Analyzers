@@ -45,7 +45,6 @@ namespace Bla
                                                                                                  "The result.",
                                                                                                  "the result",
                                                                                                  "An result.",
-                                                                                                 "the result",
                                                                                                  "   a result   ",
                                                                                                  "Result.",
                                                                                                  "result",

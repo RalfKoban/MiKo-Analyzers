@@ -4,13 +4,15 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture]
+    [TestFixture, Isolated]
     public sealed class MiKo_2040_LangwordAnalyzerTests : CodeFixVerifier
     {
         private static readonly IEnumerable<string> CorrectItems = new[]
@@ -240,7 +242,6 @@ public sealed class TestMe
                 results.Add(token + ".");
                 results.Add("<see langowrd=\"" + token + "\"/>");
                 results.Add("<see langwrod=\"" + token + "\"/>");
-                results.Add("<see langwowd=\"" + token + "\"/>");
                 results.Add("<see langwowd=\"" + token + "\"/>");
             }
 
