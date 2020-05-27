@@ -40,6 +40,7 @@ namespace TestHelper
         private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
         private static readonly MetadataReference AttributeTargetsReference = MetadataReference.CreateFromFile(typeof(AttributeTargets).Assembly.Location);
         private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
+        private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder).Assembly.Location);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.
@@ -168,6 +169,7 @@ namespace TestHelper
                 .AddMetadataReference(projectId, AttributeReference)
                 .AddMetadataReference(projectId, AttributeTargetsReference)
                 .AddMetadataReference(projectId, DescriptionAttributeReference)
+                .AddMetadataReference(projectId, AspNetCoreMvcAbstractionsReference)
                 .AddMetadataReference(projectId, CSharpSymbolsReference)
                 .AddMetadataReference(projectId, CodeAnalysisReference)
                 .AddMetadataReference(projectId, NUnitReference)
