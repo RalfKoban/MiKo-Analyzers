@@ -1058,6 +1058,16 @@ Those specifically introduced types should be named as the original type, but pr
   <data name="MiKo_1109_Title" xml:space="preserve">
     <value>Prefix testable types with 'Testable' instead of using the 'Ut' suffix.</value>
   </data>
+  <data name="MiKo_1110_Description" xml:space="preserve">
+    <value>For maintenance reasons, parameterized test methods should be easy to read.
+Therefore, they should be suffixed with underscores.</value>
+  </data>
+  <data name="MiKo_1110_MessageFormat" xml:space="preserve">
+    <value>Suffix name with underscore</value>
+  </data>
+  <data name="MiKo_1110_Title" xml:space="preserve">
+    <value>Test methods with parameters should be suffixed with underscore.</value>
+  </data>
   <data name="MiKo_1200_Description" xml:space="preserve">
     <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
   </data>

@@ -2772,6 +2772,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For maintenance reasons, parameterized test methods should be easy to read.
+        ///Therefore, they should be suffixed with underscores..
+        /// </summary>
+        public static string MiKo_1110_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1110_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffix name with underscore.
+        /// </summary>
+        public static string MiKo_1110_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1110_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods with parameters should be suffixed with underscore..
+        /// </summary>
+        public static string MiKo_1110_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1110_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, exceptions in catch blocks should be named consistently..
         /// </summary>
         public static string MiKo_1200_Description {
