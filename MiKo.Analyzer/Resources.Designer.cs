@@ -162,7 +162,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not have too many parameters..
+        ///   Looks up a localized string similar to Methods has too many parameters..
         /// </summary>
         public static string MiKo_0004_Title {
             get {

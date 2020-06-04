@@ -18,7 +18,7 @@ The following tables list all the 279 rules that are currently provided by the a
 |MiKo_0001|Method is too big.|&#x2713;|
 |MiKo_0002|Method is too complex.|&#x2713;|
 |MiKo_0003|Type is too big.|&#x2713;|
-|MiKo_0004|Methods should not have too many parameters.|&#x2713;|
+|MiKo_0004|Methods has too many parameters.|&#x2713;|
 
 ### Naming
 |ID|Title|Enabled by default|
