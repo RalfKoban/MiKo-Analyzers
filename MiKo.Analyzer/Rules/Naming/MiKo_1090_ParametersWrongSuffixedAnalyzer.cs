@@ -37,9 +37,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 return new[] { Issue(symbol, symbolName.WithoutSuffix("Entity")) };
             }
-            else if (symbolName.EndsWith("Element", Comparison))
+
+            if (symbolName.EndsWith("Element", Comparison))
             {
-                return new[] { Issue(symbol, symbolName.WithoutSuffix("Element")) };
+                var proposedAlternative = symbolName == "frameworkElement"
+                                              ? "element"
+                                              : symbolName.WithoutSuffix("Element");
+
+                return new[] { Issue(symbol, proposedAlternative) };
             }
 
             foreach (var pair in WrongSuffixes)
