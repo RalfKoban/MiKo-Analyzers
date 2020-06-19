@@ -37,12 +37,36 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_correct_comment_phrase_for_bool() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>On successful return, indicates the object.</param>
+    public void DoSomething(out bool o) { }
+}
+");
+
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
         [TestCase("On true, returns something.")]
         [TestCase("On <see langword='true' />, returns something.")]
+        [TestCase("On successful return, indicates something.")]
         [TestCase("")]
         public void An_issue_is_reported_for_method_with_wrong_comment_phrase(string comment) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>" + comment + @"</param>
+    public void DoSomething(out object o) { }
+}
+");
+
+        [TestCase("On true, returns something.")]
+        [TestCase("On false, returns something.")]
+        [TestCase("On successful return, contains something.")]
+        [TestCase("")]
+        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_on_bool(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />

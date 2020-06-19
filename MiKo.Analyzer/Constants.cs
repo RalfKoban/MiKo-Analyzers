@@ -67,6 +67,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ParameterStartingPhrase = { "A ", "An ", "The " };
             internal static readonly string[] OutParameterStartingPhrase = { "On successful return, contains " };
+            internal static readonly string[] OutBoolParameterStartingPhrase = { "On successful return, indicates " };
             internal static readonly string[] EnumParameterStartingPhrase =
                 {
                     "One of the enumeration members that specifies ",

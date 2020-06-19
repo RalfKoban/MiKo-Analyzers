@@ -16,6 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind == RefKind.Out;
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => AnalyzeStartingPhrase(parameter, comment, Constants.Comments.OutParameterStartingPhrase);
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
+        {
+            var phrase = parameter.Type.IsBoolean()
+                             ? Constants.Comments.OutBoolParameterStartingPhrase
+                             : Constants.Comments.OutParameterStartingPhrase;
+
+            return AnalyzeStartingPhrase(parameter, comment, phrase);
+        }
     }
 }
