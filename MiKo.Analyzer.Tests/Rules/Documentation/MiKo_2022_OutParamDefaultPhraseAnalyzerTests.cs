@@ -70,8 +70,8 @@ public class TestMe
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>" + comment + @"</param>
-    public void DoSomething(out object o) { }
+    /// <param name='b'>" + comment + @"</param>
+    public void DoSomething(out bool b) { }
 }
 ");
 
