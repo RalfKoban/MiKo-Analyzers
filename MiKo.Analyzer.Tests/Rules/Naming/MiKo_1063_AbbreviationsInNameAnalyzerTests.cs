@@ -99,17 +99,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedTerms =
             {
-                "allowedFeatures",
                 "accept",
                 "acceptName",
+                "adopt",
+                "adoptWhatever",
+                "allowedFeatures",
+                "corrupt",
+                "corruptNumber",
                 "except",
                 "firmwares",
+                "firstNumber",
                 "fixtures",
                 "measures",
                 "mixtures",
-                "tires",
                 "number",
-                "firstNumber",
+                "tires",
             };
 
         [Test]

@@ -91,8 +91,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] AllowedPostFixTerms =
             {
                 "cept",
+                "dopt",
                 "ires",
                 "ixtures",
+                "rupt",
                 "ures",
                 "wares",
             };
