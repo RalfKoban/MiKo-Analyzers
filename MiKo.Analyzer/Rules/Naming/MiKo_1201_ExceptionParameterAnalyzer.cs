@@ -28,10 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 case ExceptionIdentifier1:
                 case ExceptionIdentifier2:
+                case InnerExceptionIdentifier2:
                     return Enumerable.Empty<Diagnostic>();
 
                 case InnerExceptionIdentifier:
-                case InnerExceptionIdentifier2:
                     if (symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException())
                     {
                         return Enumerable.Empty<Diagnostic>();
