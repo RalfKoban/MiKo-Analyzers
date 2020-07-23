@@ -128,7 +128,7 @@ public class TestMe
 
     public Guid ID { get; set; }
 
-    pubic static TestMe Create(bool flag) => flag
+    public static TestMe Create(bool flag) => flag
                                             ? new TestMe { Name = ""my very long name to see whether it is too long"", ID = Guid.Empty }
                                             : new TestMe { Name = ""my very long name to see whether it is too long"", ID = new Guid(""45A3C8BA-2BC9-41F4-BA0D-997D38C8E6BA"") };
 }");
@@ -143,9 +143,18 @@ public class TestMe
 
     public Guid ID { get; set; }
 
-    pubic static string Create(bool flag) => flag
+    public static string Create(bool flag) => flag
                                             ? $""my very long interpolated string with {Name} and {ID} to see whether it is too long""
                                             : $""my very long interpolated string with {Name} and {ID} to see whether it is too long"";
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_long_Try_term() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static bool Do(string input) => Guid.TryParseExact(input, ""X"", out var veryLongGuidToMatchRule) ? 1 : 0;
 }");
 
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -56,6 +57,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return found;
         }
 
+        private static bool InvocationCannotBeShortened(InvocationExpressionSyntax syntax) => syntax.Expression is MemberAccessExpressionSyntax m
+                                                                                           && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                                                           && m.GetName().StartsWith("Try", StringComparison.Ordinal);
+
         private static bool AnalyzeLength(SyntaxNode node, SemanticModel semanticModel)
         {
             if (node.Span.Length <= MaxExpressionLength)
@@ -73,6 +78,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case InterpolatedStringExpressionSyntax _:
                 case ObjectCreationExpressionSyntax o when ObjectCreationCannotBeShortened(o, semanticModel):
+                {
+                    return false; // ignore as it cannot be shorted anymore
+                }
+
+                case InvocationExpressionSyntax i when InvocationCannotBeShortened(i):
                 {
                     return false; // ignore as it cannot be shorted anymore
                 }
