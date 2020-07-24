@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,21 +24,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var originalName = identifier.ValueText;
 
-                var name = originalName;
-
                 // skip all short names
-                if (name.Length <= 1
-                    || name == Constants.LambdaIdentifiers.Fallback
-                    || name == Constants.LambdaIdentifiers.Fallback2
-                    || name == "result")
+                if (IsShort(originalName))
                 {
                     continue;
                 }
 
-                if (name.EndsWithNumber())
-                {
-                    name = name.WithoutNumberSuffix();
-                }
+                var name = originalName.EndsWithNumber() ? originalName.WithoutNumberSuffix() : originalName;
 
                 var pluralName = name.EndsWithAny(Constants.Markers.Collections)
                                      ? GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections)
@@ -52,6 +45,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     yield return Issue(originalName, identifier, pluralName);
                 }
+            }
+        }
+
+        private static bool IsShort(string name)
+        {
+            if (name.Length <= 1)
+            {
+                return true;
+            }
+
+            switch (name)
+            {
+                case Constants.LambdaIdentifiers.Default:
+                case Constants.LambdaIdentifiers.Fallback:
+                case Constants.LambdaIdentifiers.Fallback2:
+                case "list":
+                case "array":
+                case "buffer":
+                case "result":
+                case "stack":
+                case "queue":
+                {
+                    return true;
+                }
+
+                default:
+                    return false;
             }
         }
     }

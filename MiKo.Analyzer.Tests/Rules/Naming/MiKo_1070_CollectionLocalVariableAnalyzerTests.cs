@@ -12,10 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] CorrectNames =
             {
                 "array",
+                "buffer",
                 "collection",
                 "dictionary",
                 "items",
                 "list",
+                "queue",
                 "result",
                 "results",
                 "source",
