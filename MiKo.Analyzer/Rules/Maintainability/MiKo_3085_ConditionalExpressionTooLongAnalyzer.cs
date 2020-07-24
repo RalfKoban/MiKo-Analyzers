@@ -57,9 +57,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return found;
         }
 
-        private static bool InvocationCannotBeShortened(InvocationExpressionSyntax syntax) => syntax.Expression is MemberAccessExpressionSyntax m
-                                                                                           && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                                                           && m.GetName().StartsWith("Try", StringComparison.Ordinal);
+        private static bool InvocationCannotBeShortened(InvocationExpressionSyntax syntax)
+        {
+            if (syntax.Expression is MemberAccessExpressionSyntax m && m.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            {
+                var name = m.GetName();
+
+                if (name.StartsWith("Try", StringComparison.Ordinal))
+                {
+                    return true;
+                }
+
+                if (name == nameof(Enumerable.Empty) && m.Expression is IdentifierNameSyntax i)
+                {
+                    switch (i.GetName())
+                    {
+                        case nameof(Array):
+                        case nameof(Enumerable):
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
 
         private static bool AnalyzeLength(SyntaxNode node, SemanticModel semanticModel)
         {

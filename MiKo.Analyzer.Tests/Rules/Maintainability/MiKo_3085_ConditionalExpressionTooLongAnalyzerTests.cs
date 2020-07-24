@@ -157,6 +157,30 @@ public class TestMe
     public static bool Do(string input) => Guid.TryParseExact(input, ""X"", out var veryLongGuidToMatchRule) ? 1 : 0;
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_Empty_enumerable() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMeWithAVeryLongName
+{
+    public static IEnumerable<TestMeWithAVeryLongName> Do(bool flag) => flag
+                                                            ? new TestMeWithAVeryLongName[0]
+                                                            : Enumerable.Empty<TestMeWithAVeryLongName>()
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Empty_array() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMeWithAVeryLongName
+{
+    public static IEnumerable<TestMeWithAVeryLongName> Do(bool flag) => flag
+                                                            ? new TestMeWithAVeryLongName[0]
+                                                            : Array.Empty<TestMeWithAVeryLongName>()
+}");
+
         protected override string GetDiagnosticId() => MiKo_3085_ConditionalExpressionTooLongAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3085_ConditionalExpressionTooLongAnalyzer();
