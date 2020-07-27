@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 new KeyValuePair<string, string>("mentation", "ment"),
                 new KeyValuePair<string, string>("unction", "unction"),
                 new KeyValuePair<string, string>("ptation", "pt"),
+                new KeyValuePair<string, string>("iption", "ibe"),
                 new KeyValuePair<string, string>("rmation", "rm"),
                 new KeyValuePair<string, string>("llation", "ll"),
                 new KeyValuePair<string, string>("stration", "ster"),

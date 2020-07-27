@@ -134,6 +134,7 @@ public class TestMe
         [TestCase("Connection", ExpectedResult = "Connect")]
         [TestCase("Creation", ExpectedResult = "Create")]
         [TestCase("Documentation", ExpectedResult = "Document")]
+        [TestCase("Description", ExpectedResult = "Describe")]
         [TestCase("Estimation", ExpectedResult = "Estimate")]
         [TestCase("Exception", ExpectedResult = "Exception", Description = "The noun is most-probably meant in such case")]
         [TestCase("Information", ExpectedResult = "Inform")]
