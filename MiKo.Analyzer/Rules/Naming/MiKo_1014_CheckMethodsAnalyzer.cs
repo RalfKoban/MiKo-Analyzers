@@ -18,10 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
-            var forbidden = methodName.StartsWith("Check", StringComparison.Ordinal) && !methodName.StartsWithAny(StartingPhrases, StringComparison.Ordinal);
+            var forbidden = methodName.StartsWith("Check", StringComparison.Ordinal) && methodName.StartsWithAny(StartingPhrases, StringComparison.Ordinal) is false;
             return forbidden
                        ? new[] { Issue(method) }
                        : Enumerable.Empty<Diagnostic>();

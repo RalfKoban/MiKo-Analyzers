@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("DoSomething")]
         [TestCase("CheckIn")]
         [TestCase("CheckOut")]
-        public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_method_(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -24,10 +24,19 @@ public class TestMe
         [TestCase("CheckConnection")]
         [TestCase("CheckOnline")]
         [TestCase("Check")]
-        public void An_issue_is_reported_for_wrong_named_method(string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_named_method_(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    [" + test + @"]
+    public void Check() { }
 }
 ");
 
