@@ -2800,6 +2800,37 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For maintenance reasons, the names of test methods should be easy to read.
+        ///They should describe the scenario that is tested in a fluent way and not in a &apos;Yoda&apos; like way.
+        ///
+        ///Example:
+        ///&quot;Send_EMailAddressValid_SendsMail&quot; is hard to read. Much easier to read udn understand would be &quot;Send_sends_email_to_valid_address&quot;..
+        /// </summary>
+        public static string MiKo_1111_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1111_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use Yoda speak for method names.
+        /// </summary>
+        public static string MiKo_1111_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1111_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should be named in a fluent way..
+        /// </summary>
+        public static string MiKo_1111_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1111_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, exceptions in catch blocks should be named consistently..
         /// </summary>
         public static string MiKo_1200_Description {
