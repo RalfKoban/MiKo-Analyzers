@@ -25,6 +25,8 @@ public class TestMe
         public void No_issue_is_reported_for_test_class() => No_issue_is_reported_for(@"
 using System;
 
+using NUnit.Framework;
+
 [TestFixture]
 public class TestMe
 {
@@ -84,6 +86,23 @@ public class TestMe
     public bool TryDoSomething(out int i, int j)
     {
         i = j;
+        return false;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Try_method_as_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+public class TestMe
+{
+    [" + test + @"]
+    public bool TryDoSomething(int i)
+    {
+        i = 42;
         return false;
     }
 }

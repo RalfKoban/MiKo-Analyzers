@@ -18,15 +18,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsTestClass() is false;
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)
+                                                                   && symbol.IsInterfaceImplementation() is false
+                                                                   && symbol.IsTestMethod() is false;
+
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IMethodSymbol>()
+                                                                                             .Where(ShallAnalyze)
+                                                                                             .Select(AnalyzeTryMethod)
+                                                                                             .Where(_ => _ != null);
 
         private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
         {
-            if (method.IsOverride)
-            {
-                return null;
-            }
-
             if (!method.Name.StartsWith("Try", StringComparison.Ordinal))
             {
                 return null;
