@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 "MethodName_Scenario_ExpectedOutcome",
                 "DoSomething_WithUnnecessaryData_ReturnsTrue",
+                "DoSomething_WithUnnecessaryDataForSomething",
             };
 
         [Test]
