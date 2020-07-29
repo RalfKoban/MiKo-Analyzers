@@ -44,6 +44,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Sone",
                 "tone",
                 "Tone",
+                "twoLetter",
+                "TwoLetter",
                 "validOnes",
                 "versioned",
                 "WaitOne",

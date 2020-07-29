@@ -74,6 +74,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "Sone",
                                                                          "tone",
                                                                          "Tone",
+                                                                         "twoLetter", // 'twoLetterLanguageCode'
+                                                                         "TwoLetter", // 'TwoLetterLanguageCode'
                                                                          "tWord", // 'firstWord'
                                                                          "WaitOne",
                                                                          "WAITONE",
