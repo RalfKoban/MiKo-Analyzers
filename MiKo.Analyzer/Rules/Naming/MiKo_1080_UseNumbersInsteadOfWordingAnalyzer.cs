@@ -31,6 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "thirty",
                 "forty",
                 "fifty",
+                "first",
+                "second",
+                "third",
             };
 
         private static readonly IEnumerable<string> KnownParts = new[]
@@ -72,6 +75,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "sEven", // 'isEvent'
                                                                          "sone",
                                                                          "Sone",
+                                                                         "seconds",
+                                                                         "Seconds",
                                                                          "tone",
                                                                          "Tone",
                                                                          "twoLetter", // 'twoLetterLanguageCode'

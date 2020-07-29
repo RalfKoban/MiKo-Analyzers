@@ -40,6 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "OnExit",
                 "oxone",
                 "phone",
+                "Seconds",
+                "seconds",
                 "sone",
                 "Sone",
                 "tone",
@@ -68,6 +70,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "fortyTwo",
                 "FiftyShadesOfBlue",
                 "OceanThirteen",
+                "firstItem",
+                "secondItem",
+                "thirdItem",
             };
 
         [Test]
