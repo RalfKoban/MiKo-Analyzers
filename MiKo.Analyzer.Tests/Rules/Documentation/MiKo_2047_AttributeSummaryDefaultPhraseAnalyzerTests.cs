@@ -44,7 +44,7 @@ public class TestMe : Attribute
 ");
 
         [Test]
-        public void No_issue_is_reported_for_attribute_class_documentation_that_starts_with([ValueSource(nameof(ValidPhrases))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_attribute_class_documentation_that_starts_with_([ValueSource(nameof(ValidPhrases))] string phrase) => No_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -56,7 +56,7 @@ public class TestMe : Attribute
 ");
 
         [Test]
-        public void An_issue_is_reported_for_attribute_class_documentation_that_starts_with([ValueSource(nameof(InvalidPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_attribute_class_documentation_that_starts_with_([ValueSource(nameof(InvalidPhrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>

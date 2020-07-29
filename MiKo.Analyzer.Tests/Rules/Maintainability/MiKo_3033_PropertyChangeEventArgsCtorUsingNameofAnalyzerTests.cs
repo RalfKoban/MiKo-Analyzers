@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                     };
 
         [Test]
-        public void No_issue_is_reported_for_correct_usage_inside_property([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_usage_inside_property_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -48,7 +48,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incomplete_nameof_usage([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incomplete_nameof_usage_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -76,7 +76,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_usage_on_field_assignment([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_usage_on_field_assignment_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -93,7 +93,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_usage_of_inherited_property_on_field_assignment([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_usage_of_inherited_property_on_field_assignment_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -113,7 +113,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_string_usage([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_string_usage_([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -141,7 +141,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_nameof_usage_with_unknown_property_name([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_nameof_usage_with_unknown_property_name_([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -156,7 +156,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_nameof_invocation_usage([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_non_nameof_invocation_usage_([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -173,7 +173,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_nameof_parameter_invocation_usage([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_nameof_parameter_invocation_usage_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;
@@ -188,7 +188,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_null([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_null_([ValueSource(nameof(TypeNames))] string typeName) => An_issue_is_reported_for(@"
 
 using System;
 using System.ComponentModel;

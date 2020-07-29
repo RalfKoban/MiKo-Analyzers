@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_converter_class([ValueSource(nameof(ConverterInterfaces))] string interfaceName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_converter_class_([ValueSource(nameof(ConverterInterfaces))] string interfaceName) => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Data;
 
@@ -37,7 +37,7 @@ public class TestMeConverter : " + interfaceName + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_converter_class([ValueSource(nameof(ConverterInterfaces))] string interfaceName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_converter_class_([ValueSource(nameof(ConverterInterfaces))] string interfaceName) => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Data;
 

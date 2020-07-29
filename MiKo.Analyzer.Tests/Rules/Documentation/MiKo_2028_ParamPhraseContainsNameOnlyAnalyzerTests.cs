@@ -39,7 +39,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_incorrectly_commented_parameter([Values(
+        public void An_issue_is_reported_for_method_with_incorrectly_commented_parameter_([Values(
                                                                                                  "A result.",
                                                                                                  "a result",
                                                                                                  "The result.",

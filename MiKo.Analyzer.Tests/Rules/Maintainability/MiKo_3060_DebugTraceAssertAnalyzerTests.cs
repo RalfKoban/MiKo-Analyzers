@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_Assert_usage_method([Values("Debug", "Trace")] string className) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Assert_usage_method_([Values("Debug", "Trace")] string className) => No_issue_is_reported_for(@"
 using System;
 using System.Diagnostics;
 
@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Assert_usage_method([Values("Debug", "Trace")] string className) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Assert_usage_method_([Values("Debug", "Trace")] string className) => An_issue_is_reported_for(@"
 using System;
 using System.Diagnostics;
 
@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_fully_qualified_Assert_usage_method([Values("Debug", "Trace")] string className) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_fully_qualified_Assert_usage_method_([Values("Debug", "Trace")] string className) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

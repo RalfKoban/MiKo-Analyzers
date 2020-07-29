@@ -117,7 +117,7 @@ namespace BlaBla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_test_class([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_test_class_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
 namespace BlaBla
 {
     [" + testFixture + @"]
@@ -153,7 +153,7 @@ namespace BlaBla.BlaBlubb
                                                                                                                                         });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+        public void No_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_same_namespace_([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => Assert.Multiple(() =>
                                    {
                                        foreach (var testFixture in TestFixtures)
@@ -236,7 +236,7 @@ namespace BlaBla.BlaBlubb
                                                                                                                                              });
 
         [Test]
-        public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces([Values("Get", "Create")] string methodPrefix)
+        public void An_issue_is_reported_for_method_if_test_class_and_class_under_test_are_in_different_namespaces_([Values("Get", "Create")] string methodPrefix)
             => Assert.Multiple(() =>
                                     {
                                         foreach (var testFixture in TestFixtures)
@@ -364,7 +364,7 @@ namespace BlaBla.BlaBlubb
                                                                                                                                                     });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_same_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+        public void No_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_same_namespace_([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => Assert.Multiple(() =>
                                    {
                                        foreach (var testFixture in TestFixtures)
@@ -397,7 +397,7 @@ namespace BlaBla.BlaBlubb
                                    });
 
         [Test]
-        public void An_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_different_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+        public void An_issue_is_reported_for_method_if_test_class_and_returned_class_under_test_are_in_different_namespace_([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => Assert.Multiple(() =>
                                    {
                                        foreach (var testFixture in TestFixtures)
@@ -434,7 +434,7 @@ namespace BlaBla.BlaBlubb.Tests
                                    });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_same_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+        public void No_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_same_namespace_([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => Assert.Multiple(() =>
                                    {
                                        foreach (var testFixture in TestFixtures)
@@ -471,7 +471,7 @@ namespace BlaBla.BlaBlubb
                                    });
 
         [Test]
-        public void An_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_different_namespace([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+        public void An_issue_is_reported_for_method_if_variable_that_is_test_class_and_returned_class_under_test_are_in_different_namespace_([ValueSource(nameof(MethodPrefixes))] string methodPrefix)
             => Assert.Multiple(() =>
                                    {
                                        foreach (var testFixture in TestFixtures)

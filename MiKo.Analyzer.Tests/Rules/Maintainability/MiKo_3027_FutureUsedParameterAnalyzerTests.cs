@@ -36,7 +36,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_that_has_no_reserved_parameter([Values("ref", "out", "")] string modifier) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_that_has_no_reserved_parameter_([Values("ref", "out", "")] string modifier) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla

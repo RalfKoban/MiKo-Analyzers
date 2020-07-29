@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -75,7 +75,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -89,7 +89,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_test_method([Values("", " ")] string gap) => Assert.Multiple(() =>
+        public void An_issue_is_reported_for_incorrectly_commented_test_method_([Values("", " ")] string gap) => Assert.Multiple(() =>
                                                                                                                                     {
                                                                                                                                         foreach (var test in Tests)
                                                                                                                                         {
@@ -112,7 +112,7 @@ public class TestMe
                                                                                                                                     });
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class([Values("", " ")] string gap) => Assert.Multiple(() =>
+        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_([Values("", " ")] string gap) => Assert.Multiple(() =>
                                                                                                                                                       {
                                                                                                                                                           foreach (var fixture in TestFixtures)
                                                                                                                                                           {
@@ -135,7 +135,7 @@ public class TestMe
                                                                                                                                                       });
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_with_visual_separators([Values("", " ")] string gap) => Assert.Multiple(() =>
+        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_with_visual_separators_([Values("", " ")] string gap) => Assert.Multiple(() =>
                                                                                                                                                       {
                                                                                                                                                           foreach (var fixture in TestFixtures)
                                                                                                                                                           {

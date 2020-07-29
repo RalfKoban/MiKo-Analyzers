@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] EnumerableReturnValues = EnumerableOnlyReturnValues.Concat(EnumerableTaskReturnValues).ToArray();
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething(object o) => null;
@@ -39,7 +39,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }

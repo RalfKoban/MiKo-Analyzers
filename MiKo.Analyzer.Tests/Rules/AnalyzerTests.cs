@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
 
         [Test]
-        public static void Resources_contains_texts([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        public static void Resources_contains_texts_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
             var findings = new[]
                                {
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void Titles_should_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        public static void Titles_should_end_with_dot_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
             var key = analyzer.DiagnosticId + "_Title";
 
@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void Descriptions_should_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        public static void Descriptions_should_end_with_dot_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
             var key = analyzer.DiagnosticId + "_Description";
 
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void Messages_should_not_end_with_dot([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        public static void Messages_should_not_end_with_dot_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
             var key = analyzer.DiagnosticId + "_MessageFormat";
 
@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules
             => Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.Contain(word));
 
         [Test]
-        public static void Analyzers_start_with_their_Id([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer) => Assert.That(analyzer.GetType().Name, Is.Not.Null.And.StartsWith(analyzer.DiagnosticId + "_"));
+        public static void Analyzers_start_with_their_Id_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer) => Assert.That(analyzer.GetType().Name, Is.Not.Null.And.StartsWith(analyzer.DiagnosticId + "_"));
 
         [Test]
         public static void Analyzers_have_unique_Ids()
@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void Analyzer_starts_with_correct_number([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        public static void Analyzer_starts_with_correct_number_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
             var id = GetDiagnosticIdStartingNumber(analyzer);
 
@@ -108,13 +108,13 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
             Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
         }
 
         [Test, Ignore("Just to find gaps")]
-        public static void Gaps_in_Analyzer_numbers([Range(1, 5, 1)] int i)
+        public static void Gaps_in_Analyzer_numbers_([Range(1, 5, 1)] int i)
         {
             var gaps = new List<string>();
 

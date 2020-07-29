@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_EventArgs_variable_with_correct_name([Values("e", "args")] string variableName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_EventArgs_variable_with_correct_name_([Values("e", "args")] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -48,7 +48,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_var_EventArgs_variable_with_correct_name([Values("e", "args")] string variableName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_var_EventArgs_variable_with_correct_name_([Values("e", "args")] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

@@ -73,7 +73,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -87,7 +87,7 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase_([Values("Contains", "Contain", "Has")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_special_phrase_([Values("Contains", "Contain", "Has")] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
 /// " + phrase + @" whatever
 /// </summary>
@@ -108,7 +108,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -156,7 +156,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_meaningless_phrase([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -171,7 +171,7 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -188,7 +188,7 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_text([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_text_([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -235,7 +235,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_with_meaningless_phrase([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -250,7 +250,7 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -267,7 +267,7 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_text([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_text_([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }

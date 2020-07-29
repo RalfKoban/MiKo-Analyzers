@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentException([Values("is", "does", "has", "contains")] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentException_([Values("is", "does", "has", "contains")] string phrase) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

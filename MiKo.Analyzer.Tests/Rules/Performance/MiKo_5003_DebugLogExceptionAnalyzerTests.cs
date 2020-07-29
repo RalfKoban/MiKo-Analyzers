@@ -33,7 +33,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_body_without_exception_argument([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_body_without_exception_argument_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -54,7 +54,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_expression_body_without_exception_argument([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_expression_body_without_exception_argument_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -72,7 +72,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_ctor_body_without_exception_argument([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_ctor_body_without_exception_argument_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -93,7 +93,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_ctor_expression_body_without_exception_argument([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_ctor_expression_body_without_exception_argument_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog

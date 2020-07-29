@@ -29,7 +29,7 @@ public " + type + @" TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_method([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_method_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -40,7 +40,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_property([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_property_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_field([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_field_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_XML_summary_of_event([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_event_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

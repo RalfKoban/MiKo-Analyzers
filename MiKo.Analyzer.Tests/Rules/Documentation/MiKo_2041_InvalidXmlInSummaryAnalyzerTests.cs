@@ -45,7 +45,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_ambiguous_phrase([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_ambiguous_phrase_([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -59,7 +59,7 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_ambiguous_phrase_in_para_tag([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_ambiguous_phrase_in_para_tag_([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -107,7 +107,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_ambiguous_phrase([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_ambiguous_phrase_([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -122,7 +122,7 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_ambiguous_phrase_in_para_tag([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_ambiguous_phrase_in_para_tag_([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }

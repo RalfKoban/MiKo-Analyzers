@@ -55,7 +55,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_commented_out_code_in_method([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_commented_out_code_in_method_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -67,7 +67,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_multiline_commented_out_code_in_method([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_multiline_commented_out_code_in_method_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -81,7 +81,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_normal_comment_with_else([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_normal_comment_with_else_([Values("", " ")] string gap) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -93,7 +93,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_website_link([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_website_link_([Values("", " ")] string gap) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -105,7 +105,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_ReSharper_comment([Values("", " ", "//", "// ")] string gap, [Values("ReSharper disable whatever", "ReSharper restore whatever")] string resharperText) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ReSharper_comment_([Values("", " ", "//", "// ")] string gap, [Values("ReSharper disable whatever", "ReSharper restore whatever")] string resharperText) => No_issue_is_reported_for(@"
 
 public class TestMe
 {

@@ -49,7 +49,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_class_with_incorrect_name([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_class_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 public static class " + name + @"
 {
     public static void DoSomething(this int value) { }

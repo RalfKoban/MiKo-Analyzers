@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_single_period([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_single_period_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_multi_line_comment_with_single_period([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_comment_with_single_period_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -53,7 +53,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_triple_period([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_triple_period_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -68,7 +68,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_multi_line_comment_with_triple_period([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_comment_with_triple_period_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -84,7 +84,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_relative_file_path([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_relative_file_path_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -99,7 +99,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_multi_line_comment_with_relative_file_path([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_multi_line_comment_with_relative_file_path_([ValueSource(nameof(XmlTags))] string tag) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -115,7 +115,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_comment_with_double_period([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_comment_with_double_period_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -127,7 +127,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_multi_line_comment_with_double_period([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_multi_line_comment_with_double_period_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

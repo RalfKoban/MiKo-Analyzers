@@ -18,7 +18,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_wrong_name([Values("Management", "Handling")] string suffix)
+        public void An_issue_is_reported_for_type_with_wrong_name_([Values("Management", "Handling")] string suffix)
             => An_issue_is_reported_for(@"
 
 public class My" + suffix + @"
@@ -27,7 +27,7 @@ public class My" + suffix + @"
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_class([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation
 /// </summary>

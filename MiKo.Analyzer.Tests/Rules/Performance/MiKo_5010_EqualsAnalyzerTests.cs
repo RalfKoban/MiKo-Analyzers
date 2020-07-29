@@ -127,7 +127,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_field_structs([ValueSource(nameof(ValueTypes))] string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_equals_method_on_field_structs_([ValueSource(nameof(ValueTypes))] string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -148,7 +148,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_Method_structs([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_equals_method_on_Method_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -168,7 +168,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_inlined_Func_structs([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_equals_method_on_inlined_Func_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -186,7 +186,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_Func_structs([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_equals_method_on_Func_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

@@ -88,7 +88,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_that_has_correctly_documented_unused_parameter([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_that_has_correctly_documented_unused_parameter_([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -107,7 +107,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_that_has_correctly_documented_unused_parameter([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ctor_that_has_correctly_documented_unused_parameter_([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -203,7 +203,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_that_has_used_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_that_has_used_parameter_documented_as_unused_([ValueSource(nameof(UnusedPhrases))] string comment) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -222,7 +222,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_that_has_used_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ctor_that_has_used_parameter_documented_as_unused_([ValueSource(nameof(UnusedPhrases))] string comment) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -242,7 +242,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_yet_unfinished_method_that_has_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_yet_unfinished_method_that_has_parameter_documented_as_unused_([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -257,7 +257,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_yet_unfinished_ctor_that_has_parameter_documented_as_unused([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_yet_unfinished_ctor_that_has_parameter_documented_as_unused_([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla

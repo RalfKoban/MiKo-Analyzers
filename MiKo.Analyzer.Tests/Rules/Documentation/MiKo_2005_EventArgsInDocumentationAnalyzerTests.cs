@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_class([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_class_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
 /// " + phrase + @"
 /// </summary>
@@ -79,7 +79,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_event([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_event_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -90,7 +90,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_property([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_property_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -101,7 +101,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_method([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_method_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -112,7 +112,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_field([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_field_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

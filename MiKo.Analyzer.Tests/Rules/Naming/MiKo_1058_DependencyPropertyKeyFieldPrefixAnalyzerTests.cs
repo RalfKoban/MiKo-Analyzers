@@ -134,7 +134,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_if_class_has_no_properties([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
+        public void No_issue_is_reported_for_incorrectly_named_DependencyPropertyKey_field_if_class_has_no_properties_([Values("m_field", "m_fieldKey", "m_fieldProperty", "Field", "FieldKey", "FieldProperty")] string fieldName)
             => No_issue_is_reported_for(@"
 using System.Windows;
 

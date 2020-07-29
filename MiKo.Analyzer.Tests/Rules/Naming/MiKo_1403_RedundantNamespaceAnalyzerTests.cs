@@ -32,7 +32,7 @@ namespace Bla.Blubb
 ");
 
         [Test]
-        public void An_issue_is_reported_for_redundant_namespace([Values("Bla.Bla", "Bla.Blubb.Bla", "Bla.Blubb.Blubber.Blubb")] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_redundant_namespace_([Values("Bla.Bla", "Bla.Blubb.Bla", "Bla.Blubb.Blubber.Blubb")] string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @"
 {
   public class TestMe

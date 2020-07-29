@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             };
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_method_([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -32,7 +32,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_named_method([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_named_method_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -40,7 +40,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_interface_named_method([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_interface_named_method_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
 public interface TestMe
 {
     public bool " + methodName + @"();

@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_number_suffix([Range(0, 10)] int number) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_number_suffix_([Range(0, 10)] int number) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -36,7 +36,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_OS_bit_number_suffix([Values(32, 64)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_OS_bit_number_suffix_([Values(32, 64)] int number) => No_issue_is_reported_for(@"
 
 public class TestMe
 {

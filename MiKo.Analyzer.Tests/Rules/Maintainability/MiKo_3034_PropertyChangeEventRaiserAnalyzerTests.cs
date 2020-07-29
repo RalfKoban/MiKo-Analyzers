@@ -48,7 +48,7 @@ namespace Bla
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged_([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -76,7 +76,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_no_usage_in_property([Values("nameof(Something)", "\"Something\"")] string propertyName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_no_usage_in_property_([Values("nameof(Something)", "\"Something\"")] string propertyName) => No_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;
 

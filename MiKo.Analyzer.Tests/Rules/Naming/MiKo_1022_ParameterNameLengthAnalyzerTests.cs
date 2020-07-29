@@ -11,16 +11,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.Parameters);
 
         [Test]
-        public void No_issue_is_reported_for_parameter_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("private bool DoSomething(int " + name + ") => true;");
+        public void No_issue_is_reported_for_parameter_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("private bool DoSomething(int " + name + ") => true;");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("private bool DoSomething(int " + name + ") => true;");
+        public void An_issue_is_reported_for_parameter_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("private bool DoSomething(int " + name + ") => true;");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_parameter_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("private DoSomething(int " + name + ") { }");
+        public void No_issue_is_reported_for_ctor_parameter_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("private DoSomething(int " + name + ") { }");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_parameter_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("private DoSomething(int " + name + ") { }");
+        public void An_issue_is_reported_for_ctor_parameter_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("private DoSomething(int " + name + ") { }");
 
         protected override string GetDiagnosticId() => MiKo_1022_ParameterNameLengthAnalyzer.Id;
 

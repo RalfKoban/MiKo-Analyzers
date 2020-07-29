@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_usage_in_a_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_usage_in_a_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -63,7 +63,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_correct_usage_in_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_usage_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -96,7 +96,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_an_operator_in_a_test_method([ValueSource(nameof(Tests))] string test, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_test_method_([ValueSource(nameof(Tests))] string test, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -113,7 +113,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -130,7 +130,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_an_operator_in_a_non_test_class([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_an_operator_in_a_non_test_class_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -162,7 +162,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_an_operator_in_an_Assert_Multiple([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_an_operator_in_an_Assert_Multiple_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -182,7 +182,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_boolean_operation_in_a_non_test_class([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_boolean_operation_in_a_non_test_class_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla

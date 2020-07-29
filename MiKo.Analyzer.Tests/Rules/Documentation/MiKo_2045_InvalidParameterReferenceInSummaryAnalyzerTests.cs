@@ -49,7 +49,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method([Values("param", "paramref")] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("param", "paramref")] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_apostrophes([Values("'i'", "\"i\"")] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_apostrophes_([Values("'i'", "\"i\"")] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

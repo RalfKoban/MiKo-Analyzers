@@ -38,7 +38,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_CanExecuteChanged_trigger_method([Values("OnCanExecuteChanged", "RaiseCanExecuteChanged")] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_CanExecuteChanged_trigger_method_([Values("OnCanExecuteChanged", "RaiseCanExecuteChanged")] string methodName) => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
@@ -84,7 +84,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 public class TestMe
 {
     [" + test + @"]

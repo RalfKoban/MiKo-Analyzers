@@ -36,7 +36,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_public_static_readonly_DependencyProperty_field([Values("protected", "internal", "protected internal", "private", "")] string visibility)
+        public void An_issue_is_reported_for_non_public_static_readonly_DependencyProperty_field_([Values("protected", "internal", "protected internal", "private", "")] string visibility)
             => An_issue_is_reported_for(@"
 using System.Windows;
 

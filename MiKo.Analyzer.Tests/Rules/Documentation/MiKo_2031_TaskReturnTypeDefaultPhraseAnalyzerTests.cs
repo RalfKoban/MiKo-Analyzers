@@ -77,7 +77,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_Task_only_method([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_commented_Task_only_method_([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -115,7 +115,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_generic_Task_method([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_commented_generic_Task_method_([Values("returns", "value")] string xmlTag, [Values("A whatever", "An whatever", "The whatever")] string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 

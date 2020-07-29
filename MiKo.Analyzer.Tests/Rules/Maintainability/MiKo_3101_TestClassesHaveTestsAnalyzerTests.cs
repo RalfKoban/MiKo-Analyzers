@@ -64,7 +64,7 @@ public partial class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_partial_test_class_without_tests([ValueSource(nameof(TestFixtures))] string testFixture)
+        public void No_issue_is_reported_for_partial_test_class_without_tests_([ValueSource(nameof(TestFixtures))] string testFixture)
             => No_issue_is_reported_for(@"
 public partial class TestMe
 {
@@ -103,7 +103,7 @@ public class TestMe1
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_without_tests([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_without_tests_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
 {
@@ -112,7 +112,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_without_tests([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_without_tests_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe3 : TestMe2
 {

@@ -120,7 +120,7 @@ using Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_starting_verb_in_passive_form([ValueSource(nameof(PassiveVerbs))] string passiveVerb) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_starting_verb_in_passive_form_([ValueSource(nameof(PassiveVerbs))] string passiveVerb) => No_issue_is_reported_for(@"
 using System;
 
 using Bla
@@ -147,7 +147,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method([Values("Perform", "Miss", "Mixs", "Buzzs", "Enrichs")] string verb) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Perform", "Miss", "Mixs", "Buzzs", "Enrichs")] string verb) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

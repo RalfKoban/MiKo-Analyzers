@@ -32,7 +32,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_exception([Values("ex", "exception", "innerException")] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_exception_([Values("ex", "exception", "innerException")] string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_exception([Values("e", "exc", "except")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_exception_([Values("e", "exc", "except")] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

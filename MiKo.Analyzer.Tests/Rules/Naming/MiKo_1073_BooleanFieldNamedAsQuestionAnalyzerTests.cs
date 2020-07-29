@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_Boolean_field([Values("m_", "s_", "_")] string prefix) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Boolean_field_([Values("m_", "s_", "_")] string prefix) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_Boolean_field_with_correct_name([ValueSource(nameof(CorrectNames))] string name, [Values("m_", "s_", "_")] string prefix) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Boolean_field_with_correct_name_([ValueSource(nameof(CorrectNames))] string name, [Values("m_", "s_", "_")] string prefix) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -55,7 +55,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_Boolean_field_with_incorrect_name([ValueSource(nameof(WrongNames))] string name, [Values("m_", "s_", "_")] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Boolean_field_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name, [Values("m_", "s_", "_")] string prefix) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 

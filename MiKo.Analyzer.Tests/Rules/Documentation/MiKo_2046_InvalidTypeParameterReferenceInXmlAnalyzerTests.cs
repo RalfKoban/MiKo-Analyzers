@@ -96,7 +96,7 @@ public class TestMe<T> where T: class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_on_generic_method([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_summary_on_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -110,7 +110,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_on_non_generic_method([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_summary_on_non_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe<T> where T : class
@@ -124,7 +124,7 @@ public class TestMe<T> where T : class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_returnValue_on_non_generic_method([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_returnValue_on_non_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe<T> where T : class
@@ -137,7 +137,7 @@ public class TestMe<T> where T : class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_exception_on_non_generic_method([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_exception_on_non_generic_method_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe<T> where T : class
@@ -150,7 +150,7 @@ public class TestMe<T> where T : class
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_on_generic_type([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_summary_on_generic_type_([ValueSource(nameof(WrongTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>

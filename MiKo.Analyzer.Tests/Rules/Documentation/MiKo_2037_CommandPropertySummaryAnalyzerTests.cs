@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_readwrite_property([ValueSource(nameof(ValidPhrasesForReadWrite))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_readwrite_property_([ValueSource(nameof(ValidPhrasesForReadWrite))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_readonly_property([ValueSource(nameof(ValidPhrasesForReadOnly))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_readonly_property_([ValueSource(nameof(ValidPhrasesForReadOnly))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_writeonly_property([ValueSource(nameof(ValidPhrasesForWriteOnly))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_writeonly_property_([ValueSource(nameof(ValidPhrasesForWriteOnly))] string phrase) => No_issue_is_reported_for(@"
 using System.Windows.Input;
 
 public class TestMe

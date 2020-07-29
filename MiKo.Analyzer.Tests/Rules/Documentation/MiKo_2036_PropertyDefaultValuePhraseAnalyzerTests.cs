@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             };
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_commented_method([ValueSource(nameof(BooleanReturnValues))] string returnType, [Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_method_([ValueSource(nameof(BooleanReturnValues))] string returnType, [Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -31,7 +31,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -127,7 +127,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_commented_Enum_property_with_missing_default_value([Values("returns", "value")] string xmlTag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_commented_Enum_property_with_missing_default_value_([Values("returns", "value")] string xmlTag) => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -150,7 +150,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_Enum_property_with_default_value([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_Enum_property_with_default_value_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -173,7 +173,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_Enum_property_with_default_value_and_line_break([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_Enum_property_with_default_value_and_line_break_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -197,7 +197,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_Enum_property_with_explicitely_commented_no_default_value([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_Enum_property_with_explicitely_commented_no_default_value_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 

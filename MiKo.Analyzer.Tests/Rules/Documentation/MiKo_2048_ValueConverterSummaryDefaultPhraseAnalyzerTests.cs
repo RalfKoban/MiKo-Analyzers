@@ -30,7 +30,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_undocumented_value_converter_class([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_value_converter_class_([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Data;
 
@@ -40,7 +40,7 @@ public class TestMe : " + interfaceName + @"
 ");
 
         [Test]
-        public void No_issue_is_reported_for_value_converter_class_documentation_that_starts_with_phrase([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_value_converter_class_documentation_that_starts_with_phrase_([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Data;
 
@@ -53,7 +53,7 @@ public class TestMe : " + interfaceName + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_value_converter_class_documentation_that_starts_with_invalid_phrase([ValueSource(nameof(ValidTypes))] string interfaceName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_value_converter_class_documentation_that_starts_with_invalid_phrase_([ValueSource(nameof(ValidTypes))] string interfaceName) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>

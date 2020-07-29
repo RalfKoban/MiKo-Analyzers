@@ -55,7 +55,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_exception([Values("TestMeMissingException", "GetTestMeFailedException")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_exception_([Values("TestMeMissingException", "GetTestMeFailedException")] string name) => An_issue_is_reported_for(@"
 using System;
 
 public class " + name + @" : Exception
@@ -67,7 +67,7 @@ public class " + name + @" : Exception
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_enum_member([Values("Missing", "GetFailed")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_enum_member_([Values("Missing", "GetFailed")] string name) => An_issue_is_reported_for(@"
 using System;
 
 public enum TestMe

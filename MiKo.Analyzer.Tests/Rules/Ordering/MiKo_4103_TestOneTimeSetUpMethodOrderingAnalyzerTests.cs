@@ -17,7 +17,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_test_class([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_test_class_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]

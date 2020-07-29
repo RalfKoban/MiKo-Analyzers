@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] StringReturnValues = StringOnlyReturnValues.Concat(StringTaskReturnValues).ToArray();
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_method([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething(object o) => null;
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_uncommented_property([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_property_([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public " + returnType + @" DoSomething { get; set; }
@@ -49,7 +49,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a(
+        public void No_issue_is_reported_for_method_that_returns_a_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
             => No_issue_is_reported_for(@"
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_String_only_method(
+        public void No_issue_is_reported_for_correctly_commented_String_only_method_(
                                                                                 [Values("returns", "value")] string xmlTag,
                                                                                 [Values("", " ")] string space,
                                                                                 [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
@@ -90,7 +90,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_consist_String_only_method(
+        public void No_issue_is_reported_for_correctly_commented_consist_String_only_method_(
                                                                                 [Values("returns", "value")] string xmlTag,
                                                                                 [Values("", " ")] string space,
                                                                                 [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
@@ -111,7 +111,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_ToString_method(
+        public void No_issue_is_reported_for_correctly_commented_ToString_method_(
                                                                             [Values("returns")] string xmlTag,
                                                                             [Values("", " ")] string space,
                                                                             [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
@@ -132,7 +132,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_String_Task_method(
+        public void No_issue_is_reported_for_correctly_commented_String_Task_method_(
                                                                                 [Values("returns", "value")] string xmlTag,
                                                                                 [Values("", " ")] string space,
                                                                                 [ValueSource(nameof(StringTaskReturnValues))] string returnType)
@@ -153,7 +153,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method(
+        public void An_issue_is_reported_for_wrong_commented_method_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
                                                                 [ValueSource(nameof(StringReturnValues))] string returnType)

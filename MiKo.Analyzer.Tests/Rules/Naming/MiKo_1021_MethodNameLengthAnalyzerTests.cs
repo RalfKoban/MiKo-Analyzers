@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.Methods);
 
         [Test]
-        public void No_issue_is_reported_for_method_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 
 public void " + name + @"()
 {
@@ -19,7 +19,7 @@ public void " + name + @"()
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 
 public void " + name + @"()
 {
@@ -27,7 +27,7 @@ public void " + name + @"()
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method_with_exceeding_length([ValueSource(nameof(Tests))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_with_exceeding_length_([ValueSource(nameof(Tests))] string name) => No_issue_is_reported_for(@"
 
 [" + name + @"]
 public void Abcdefghijklmnopqrstuvwxyz()

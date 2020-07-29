@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly char[] InvalidStartingCharacter = "abcdefghijklmnopqrstuvwxyz1234567890-#+*.,;".ToCharArray();
 
         [Test, Combinatorial]
-        public void Documentation_starting_with_upper_case_is_not_reported_for([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(ValidStartingCharacter))] char startingChar) => No_issue_is_reported_for(@"
+        public void Documentation_starting_with_upper_case_is_not_reported_for_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(ValidStartingCharacter))] char startingChar) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// " + startingChar + @" something.
 /// </" + xmlTag + @">
@@ -38,7 +38,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void Documentation_starting_with_lower_case_is_reported_for([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(InvalidStartingCharacter))] char startingChar) => An_issue_is_reported_for(@"
+        public void Documentation_starting_with_lower_case_is_reported_for_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(InvalidStartingCharacter))] char startingChar) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// " + startingChar + @" something.
 /// </" + xmlTag + @">
@@ -46,13 +46,13 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Empty_documentation_is_not_reported_for([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void Empty_documentation_is_not_reported_for_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @" />
 public sealed class TestMe { }
 ");
 
         [Test]
-        public void Nested_XML_documentation_is_not_reported_for([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void Nested_XML_documentation_is_not_reported_for_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// <some />
 /// </" + xmlTag + @">

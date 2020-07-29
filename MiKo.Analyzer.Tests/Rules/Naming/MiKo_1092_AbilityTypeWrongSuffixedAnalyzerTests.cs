@@ -28,7 +28,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_type_with_wrong_name([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_type_with_wrong_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 
 public class " + name + @"
 {

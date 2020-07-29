@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.LocalVariablesInLoops);
 
         [Test]
-        public void No_issue_is_reported_for_variable_in_foreach_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_in_foreach_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(string[] data)
@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_in_for_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_in_for_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_in_foreach_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_in_foreach_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(string[] data)
@@ -50,7 +50,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_in_for_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_in_for_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()

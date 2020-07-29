@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             };
 
         [Test]
-        public void No_issue_is_reported_for_normal_created_object([Values(nameof(Object), nameof(Int32), nameof(ArgumentException))] string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_normal_created_object_([Values(nameof(Object), nameof(Int32), nameof(ArgumentException))] string type) => No_issue_is_reported_for(@"
 using System;
 using System.Runtime.InteropServices;
 
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_forbidden_exception([ValueSource(nameof(ForbiddenExceptions))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_forbidden_exception_([ValueSource(nameof(ForbiddenExceptions))] string type) => An_issue_is_reported_for(@"
 using System;
 using System.Runtime.InteropServices;
 

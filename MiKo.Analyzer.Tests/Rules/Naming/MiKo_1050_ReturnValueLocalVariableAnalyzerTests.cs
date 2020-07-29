@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] NonFitting = CreateNonFitting();
 
         [Test]
-        public void No_issue_is_reported_for_variable_with_fitting_name([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_with_fitting_name_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething()
@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_with_non_fitting_name([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_with_non_fitting_name_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething()
@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_declaration_with_fitting_name([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_variable_declaration_with_fitting_name_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething(object o)
@@ -62,7 +62,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_declaration_with_non_fitting_name([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_variable_declaration_with_non_fitting_name_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething(object o)

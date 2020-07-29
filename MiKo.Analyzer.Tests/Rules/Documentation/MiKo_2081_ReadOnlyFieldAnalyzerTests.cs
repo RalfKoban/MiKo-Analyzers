@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2081_ReadOnlyFieldAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_uncommented_readonly_field_with_visibility([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_uncommented_readonly_field_with_visibility_([Values("protected", "public", "private", "internal")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_commented_readonly_field_with_visibility([Values("private", "internal")] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_commented_readonly_field_with_visibility_([Values("private", "internal")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_readonly_field_with_visibility([Values("protected", "public")] string visibility) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_readonly_field_with_visibility_([Values("protected", "public")] string visibility) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_commented_readonly_field_with_visibility([Values("protected", "public")] string visibility) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_commented_readonly_field_with_visibility_([Values("protected", "public")] string visibility) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

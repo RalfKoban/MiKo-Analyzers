@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_preferred_usage_in_a_test_method([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_preferred_usage_in_a_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -43,7 +43,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_preferred_usage_in_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_preferred_usage_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -76,7 +76,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_method([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_test_method_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -93,7 +93,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla

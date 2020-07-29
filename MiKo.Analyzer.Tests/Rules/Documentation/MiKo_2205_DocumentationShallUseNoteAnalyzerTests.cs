@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             };
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_information_marker_in_Xml_tag([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(Markers))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_information_marker_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(Markers))] string marker) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// " + marker + @" something.
 /// </" + xmlTag + @">
@@ -54,7 +54,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_normal_comment_in_XML_tag([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_normal_comment_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The something.
 /// </" + xmlTag + @">
@@ -62,7 +62,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correct_comment_in_XML_tag([ValueSource(nameof(XmlTags))] string xmlTag, [Values("caution", "important")] string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_comment_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [Values("caution", "important")] string type) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// <note type=""" + type + @""" >
 /// The something.

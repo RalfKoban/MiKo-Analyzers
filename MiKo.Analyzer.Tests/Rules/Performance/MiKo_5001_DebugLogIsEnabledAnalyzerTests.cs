@@ -33,7 +33,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -59,7 +59,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement_with_AND_condition([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement_with_AND_condition_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -85,7 +85,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_in_block_in_deeply_nested_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_in_block_in_deeply_nested_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -114,7 +114,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_in_else_block_in_deeply_nested_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_in_else_block_in_deeply_nested_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -146,7 +146,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_without_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_without_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -170,7 +170,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_ctor_in_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_ctor_in_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -196,7 +196,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_ctor_without_block_in_if_statement([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_ctor_without_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -220,7 +220,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -243,7 +243,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_method_expression_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_method_expression_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -263,7 +263,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_ctor_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -286,7 +286,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_expression_body_without_IsDebugEnabled([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_ctor_expression_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog

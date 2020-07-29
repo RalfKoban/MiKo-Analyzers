@@ -33,7 +33,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_formatting_call_in_method_body([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_formatting_call_in_method_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -54,7 +54,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_formatting_call_in_method_expression_body([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_formatting_call_in_method_expression_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -72,7 +72,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_formatting_call_in_ctor_body([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_formatting_call_in_ctor_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -93,7 +93,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_formatting_call_in_ctor_expression_body([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_formatting_call_in_ctor_expression_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -111,7 +111,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_formatting_call_in_method_body([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_formatting_call_in_method_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -132,7 +132,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_formatting_call_in_method_expression_body([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_formatting_call_in_method_expression_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -150,7 +150,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_formatting_call_in_ctor_body([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_formatting_call_in_ctor_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -171,7 +171,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_formatting_call_in_ctor_expression_body([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_formatting_call_in_ctor_expression_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog

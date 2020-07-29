@@ -38,7 +38,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_method([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_test_method_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_strangely_formatted_test_method([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_strangely_formatted_test_method_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -68,7 +68,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + testFixture + @"]
@@ -82,7 +82,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_strangely_formatted_non_test_method_inside_a_test([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_strangely_formatted_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + testFixture + @"]

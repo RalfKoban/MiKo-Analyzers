@@ -28,7 +28,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_type([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_type_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class " + marker + @"TestMe
@@ -37,7 +37,7 @@ public class " + marker + @"TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_field([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_field_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_named_const_field([ValueSource(nameof(Marker))] string marker) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_named_const_field_([ValueSource(nameof(Marker))] string marker) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_event([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_event_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -67,7 +67,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_property([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_property_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -77,7 +77,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_method([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_method_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

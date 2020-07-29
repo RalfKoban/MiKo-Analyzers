@@ -121,7 +121,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_website_link_in_comment([Values("http://", "https://")] string link) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_website_link_in_comment_([Values("http://", "https://")] string link) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -133,7 +133,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_small_comment([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_method_with_small_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -145,7 +145,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_long_comment([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_method_with_long_comment_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -157,7 +157,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_method_with_arrow_inside_comment([Values("", " ")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_method_with_arrow_inside_comment_([Values("", " ")] string gap) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -169,7 +169,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_incorrectly_commented_method_with_small_comment_but_escaped_Comments([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_commented_method_with_small_comment_but_escaped_Comments_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -181,7 +181,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_comment([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_comment_([Values("", " ")] string gap) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -193,7 +193,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_hex_number_in_comment([Values("", " ")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_hex_number_in_comment_([Values("", " ")] string gap) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -205,7 +205,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_allowed_text_in_comment([Values("", " ")] string gap, [ValueSource(nameof(AllowedComments))] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_allowed_text_in_comment_([Values("", " ")] string gap, [ValueSource(nameof(AllowedComments))] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -217,7 +217,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_ReSharper_formatter_advice_comment([Values("", " ")] string gap, [Values("@formatter:off", "@formatter:on")] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ReSharper_formatter_advice_comment_([Values("", " ")] string gap, [Values("@formatter:off", "@formatter:on")] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -230,7 +230,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_separator_comment([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_separator_comment_([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

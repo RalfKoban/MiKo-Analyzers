@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -67,7 +67,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_property_([Values("Return", "Returns", "return", "returns")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

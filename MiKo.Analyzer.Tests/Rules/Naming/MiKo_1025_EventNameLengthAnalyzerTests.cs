@@ -11,10 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.Events);
 
         [Test]
-        public void No_issue_is_reported_for_event_with_fitting_length([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("public event EventHandler " + name + ";");
+        public void No_issue_is_reported_for_event_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("public event EventHandler " + name + ";");
 
         [Test]
-        public void An_issue_is_reported_for_event_with_exceeding_length([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("public event EventHandler " + name + ";");
+        public void An_issue_is_reported_for_event_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("public event EventHandler " + name + ";");
 
         protected override string GetDiagnosticId() => MiKo_1025_EventNameLengthAnalyzer.Id;
 

@@ -31,35 +31,35 @@ namespace " + ns + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_namespace_([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_namespace_that_starts_with_wrong_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_that_starts_with_wrong_sub_namespace_([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @".ABCD.EFG
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_namespace_that_ends_with_wrong_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_that_ends_with_wrong_sub_namespace_([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace ABCD.EFG." + ns + @"
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_namespace_that_contains_wrong_sub_namespace([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_that_contains_wrong_sub_namespace_([ValueSource(nameof(ForbiddenNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace ABCD.EFG." + ns + @".HIJK
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_namespace_that_contains_acceptable_sub_namespace([Values(nameof(System.ComponentModel), "ServiceModel")] string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_namespace_that_contains_acceptable_sub_namespace_([Values(nameof(System.ComponentModel), "ServiceModel")] string ns) => No_issue_is_reported_for(@"
 namespace ABCD.EFG." + ns + @".HIJK
 {
 }

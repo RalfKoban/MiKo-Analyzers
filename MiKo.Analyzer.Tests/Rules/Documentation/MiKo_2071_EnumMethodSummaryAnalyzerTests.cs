@@ -54,7 +54,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_property([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_property_([ValueSource(nameof(BooleanPhrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

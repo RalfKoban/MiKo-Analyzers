@@ -64,7 +64,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_factory_method_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
 using System;
 
 public class Whatever : IWhatever
@@ -85,7 +85,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_factory_method_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
 using System;
 
 public class Whatever : IWhatever
@@ -106,7 +106,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_type([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_type_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
 using System;
 
 public class Whatever<T> : IWhatever<T>
@@ -127,7 +127,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_type([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
 using System;
 
 public class Whatever<T> : IWhatever<T>
@@ -148,7 +148,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_collection_type([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_collection_type_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -170,7 +170,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_collection_type([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_collection_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 

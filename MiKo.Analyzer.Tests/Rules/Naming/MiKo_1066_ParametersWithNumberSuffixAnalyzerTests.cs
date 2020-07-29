@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_with_number_suffix([Range(0, 10)] int number) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parameter_with_number_suffix_([Range(0, 10)] int number) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

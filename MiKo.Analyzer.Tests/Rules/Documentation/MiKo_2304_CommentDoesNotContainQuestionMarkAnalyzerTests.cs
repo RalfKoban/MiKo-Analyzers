@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_comment_with_question_mark([Values("Wtf?", "??? That's strange", "Wtf? Does not make sense!")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_comment_with_question_mark_([Values("Wtf?", "??? That's strange", "Wtf? Does not make sense!")] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_multi_line_comment_with_question_mark([Values("Wtf?", "??? That's strange", "Wtf? Does not make sense!")] string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_multi_line_comment_with_question_mark_([Values("Wtf?", "??? That's strange", "Wtf? Does not make sense!")] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

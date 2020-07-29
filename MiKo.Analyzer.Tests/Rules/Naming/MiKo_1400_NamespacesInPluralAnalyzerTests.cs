@@ -58,42 +58,42 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                             };
 
         [Test]
-        public void No_issue_is_reported_for_known_namespace_name([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_combined_known_namespace_name([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_combined_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"
 namespace Abc." + ns + @"
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_proper_namespace([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_proper_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_combined_proper_namespace([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_combined_proper_namespace_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
 namespace Abc." + ns + @"
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_singular_namespace([ValueSource(nameof(SingularNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_singular_namespace_([ValueSource(nameof(SingularNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_combined_singular_namespace([ValueSource(nameof(SingularNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_combined_singular_namespace_([ValueSource(nameof(SingularNamespaceNames))] string ns) => An_issue_is_reported_for(@"
 namespace Abc." + ns + @"
 {
 }

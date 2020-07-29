@@ -31,7 +31,7 @@ public static class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name([ValueSource(nameof(CorrectParameterNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_([ValueSource(nameof(CorrectParameterNames))] string name) => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int " + name + @") { }
@@ -39,7 +39,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name([ValueSource(nameof(WrongParameterNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name_([ValueSource(nameof(WrongParameterNames))] string name) => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int " + name + @") { }
@@ -47,7 +47,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ToXyz_extension_method_with_correct_parameter_name([ValueSource(nameof(CorrectConversionParameterNames))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ToXyz_extension_method_with_correct_parameter_name_([ValueSource(nameof(CorrectConversionParameterNames))] string name) => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static int ToSomething(this int " + name + @") => 42;
@@ -55,7 +55,7 @@ public static class TestMeExtensions
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ToXyz_extension_method_with_incorrect_parameter_name([ValueSource(nameof(WrongConversionParameterNames))] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_ToXyz_extension_method_with_incorrect_parameter_name_([ValueSource(nameof(WrongConversionParameterNames))] string name) => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static int ToSomething(this int " + name + @") => 42;

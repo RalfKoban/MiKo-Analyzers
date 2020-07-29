@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_exception_thrown_in_switch_default_clause([Values(nameof(ArgumentOutOfRangeException), nameof(InvalidEnumArgumentException))] string exceptionName)
+        public void No_issue_is_reported_for_correct_exception_thrown_in_switch_default_clause_([Values(nameof(ArgumentOutOfRangeException), nameof(InvalidEnumArgumentException))] string exceptionName)
             => No_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_exception_thrown_in_switch_default_clause([Values(nameof(ArgumentException), nameof(ArgumentNullException))] string exceptionName)
+        public void An_issue_is_reported_for_wrong_exception_thrown_in_switch_default_clause_([Values(nameof(ArgumentException), nameof(ArgumentNullException))] string exceptionName)
             => An_issue_is_reported_for(@"
 using System;
 

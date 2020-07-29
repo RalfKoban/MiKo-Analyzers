@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             };
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_Enumeration_in_Xml_tag([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(EnumerationMarkers))] string marker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumeration_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(EnumerationMarkers))] string marker) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The " + marker + @" something.
 /// </" + xmlTag + @">
@@ -48,7 +48,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_dot_enumeration_in_comment([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_dot_enumeration_in_comment_([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(@"
 /// <summary>
 /// The reason" + markerBegin + @"
 /// - It is something.
@@ -63,7 +63,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_normal_comment_in_XML_tag([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_normal_comment_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier for something.
 /// </" + xmlTag + @">
@@ -71,7 +71,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_with_slash_in_XML_tag([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_with_slash_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier - if available - for something.
 /// </" + xmlTag + @">

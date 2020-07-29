@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_Try_method([Values("Try", "Tries", "try", "tries")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_Try_method_([Values("Try", "Tries", "try", "tries")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_async_Try_method([Values("Try", "Tries", "try", "tries")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_async_Try_method_([Values("Try", "Tries", "try", "tries")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_incorrectly_documented_non_Try_method([Values("Try", "Tries", "try", "tries")] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_documented_non_Try_method_([Values("Try", "Tries", "try", "tries")] string phrase) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

@@ -31,14 +31,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             };
 
         [Test]
-        public void No_issue_is_reported_for_namespace_within_depth([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_namespace_within_depth_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_namespace_within_depth([ValueSource(nameof(TooDeepNamespaceNames))]string ns) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_namespace_within_depth_([ValueSource(nameof(TooDeepNamespaceNames))]string ns) => An_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }

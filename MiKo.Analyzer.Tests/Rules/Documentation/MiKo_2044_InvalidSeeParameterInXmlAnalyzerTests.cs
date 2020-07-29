@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method([Values("see", "seealso")] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("see", "seealso")] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

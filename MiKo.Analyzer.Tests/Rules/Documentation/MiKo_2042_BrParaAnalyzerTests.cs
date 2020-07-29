@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] WrongItems = CreateWrongItems();
 
         [Test]
-        public void Wrong_documentation_is_reported_on_class([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + finding + @"
 /// </summary>
@@ -28,7 +28,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_method([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_method_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -39,7 +39,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_property([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_property_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -50,7 +50,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_event([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_event_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -61,7 +61,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_field([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_field_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -72,7 +72,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_class([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_documentation_is_not_reported_on_class_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + finding + @"
 /// </summary>
@@ -82,7 +82,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_method([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_documentation_is_not_reported_on_method_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -93,7 +93,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_property([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_documentation_is_not_reported_on_property_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -104,7 +104,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_event([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_documentation_is_not_reported_on_event_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -115,7 +115,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_field([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_documentation_is_not_reported_on_field_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -126,7 +126,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_example_for_documentation_is_not_reported_on_class([ValueSource(nameof(WrongItems))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_example_for_documentation_is_not_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -139,7 +139,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_example_for_documentation_is_reported_on_class([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_example_for_documentation_is_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
