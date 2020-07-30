@@ -29,14 +29,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private Diagnostic AnalyzeCatchClause(CatchClauseSyntax node)
+        private Diagnostic AnalyzeCatchClause(CatchClauseSyntax node) => AnalyzeCatchDeclaration(node.Declaration);
+
+        private Diagnostic AnalyzeCatchDeclaration(CatchDeclarationSyntax node)
         {
-            if (node.Declaration is null)
+            if (node is null)
             {
                 return null; // we don't have an exception
             }
 
-            var identifier = node.Declaration.Identifier;
+            var identifier = node.Identifier;
             var name = identifier.ValueText;
 
             switch (name)
