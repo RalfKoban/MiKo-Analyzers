@@ -2831,6 +2831,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tests usually deal with arbitrary test data, hence there is no benefit in naming a field, parameter, variable (etc.) &apos;arbitrary&apos;. That phrase can be removed without losing any meaning..
+        /// </summary>
+        public static string MiKo_1112_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1112_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;arbitrary&apos; from name.
+        /// </summary>
+        public static string MiKo_1112_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1112_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test data should not be named &apos;arbitrary&apos;..
+        /// </summary>
+        public static string MiKo_1112_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1112_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, exceptions in catch blocks should be named consistently..
         /// </summary>
         public static string MiKo_1200_Description {

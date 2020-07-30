@@ -1081,6 +1081,15 @@ Example:
   <data name="MiKo_1111_Title" xml:space="preserve">
     <value>Test methods should be named in a fluent way.</value>
   </data>
+  <data name="MiKo_1112_Description" xml:space="preserve">
+    <value>Tests usually deal with arbitrary test data, hence there is no benefit in naming a field, parameter, variable (etc.) 'arbitrary'. That phrase can be removed without losing any meaning.</value>
+  </data>
+  <data name="MiKo_1112_MessageFormat" xml:space="preserve">
+    <value>Remove 'arbitrary' from name</value>
+  </data>
+  <data name="MiKo_1112_Title" xml:space="preserve">
+    <value>Test data should not be named 'arbitrary'.</value>
+  </data>
   <data name="MiKo_1200_Description" xml:space="preserve">
     <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
   </data>
