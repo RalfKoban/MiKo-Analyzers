@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -28,29 +29,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
             var diagnostic = context.Diagnostics.First();
-            var codeAction = CreateCodeAction(context, diagnostic, root);
+            var diagnosticSpan = diagnostic.Location.SourceSpan;
+            var syntaxNodes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
+
+            var codeAction = CreateCodeAction(context.Document, syntaxNodes);
             if (codeAction != null)
             {
                 context.RegisterCodeFix(codeAction, diagnostic);
             }
         }
 
-        private static CodeAction CreateCodeAction(CodeFixContext context, Diagnostic diagnostic, SyntaxNode root)
+        private static CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-
-            var syntaxes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().ToList();
+            var syntaxes = syntaxNodes.ToList();
 
             var enumSyntax = syntaxes.OfType<EnumDeclarationSyntax>().FirstOrDefault();
             if (enumSyntax != null)
             {
-                return CodeAction.Create(Title, c => RenameEnumAsync(context.Document, enumSyntax, c), Title);
+                return CodeAction.Create(Title, c => RenameEnumAsync(document, enumSyntax, c), Title);
             }
 
             var typeSyntax = syntaxes.OfType<TypeDeclarationSyntax>().FirstOrDefault();
             if (typeSyntax != null)
             {
-                return CodeAction.Create(Title, c => RenameTypeAsync(context.Document, typeSyntax, c), Title);
+                return CodeAction.Create(Title, c => RenameTypeAsync(document, typeSyntax, c), Title);
             }
 
             return null;

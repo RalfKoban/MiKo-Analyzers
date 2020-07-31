@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -29,14 +30,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
+            var syntaxNodes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
 
-            var syntax = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<ParameterSyntax>().First();
-
-            // TODO: RKN maybe the equivalenceKey "Title" is wrong and should contain the name of the resulting parameter (such as "e" or "sender")
-            context.RegisterCodeFix(CodeAction.Create(Title, _ => RenameAsync(context.Document, syntax, _), Title), diagnostic);
+            var codeAction = CreateCodeAction(context.Document, syntaxNodes);
+            if (codeAction != null)
+            {
+                context.RegisterCodeFix(codeAction, diagnostic);
+            }
         }
 
-        private async Task<Solution> RenameAsync(Document document, ParameterSyntax syntax, CancellationToken cancellationToken)
+        private static CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            var syntax = syntaxNodes.OfType<ParameterSyntax>().First();
+
+            // TODO: RKN maybe the equivalenceKey "Title" is wrong and should contain the name of the resulting parameter (such as "e" or "sender")
+            return CodeAction.Create(Title, _ => RenameAsync(document, syntax, _), Title);
+        }
+
+        private static async Task<Solution> RenameAsync(Document document, ParameterSyntax syntax, CancellationToken cancellationToken)
         {
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
             var symbol = semanticModel.GetDeclaredSymbol(syntax, cancellationToken);

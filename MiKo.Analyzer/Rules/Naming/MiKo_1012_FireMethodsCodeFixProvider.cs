@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -28,20 +29,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
             var diagnostic = context.Diagnostics.First();
-            var codeAction = CreateCodeAction(context, diagnostic, root);
+            var diagnosticSpan = diagnostic.Location.SourceSpan;
+            var syntaxNodes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
+
+            var codeAction = CreateCodeAction(context.Document, syntaxNodes);
             if (codeAction != null)
             {
                 context.RegisterCodeFix(codeAction, diagnostic);
             }
         }
 
-        private static CodeAction CreateCodeAction(CodeFixContext context, Diagnostic diagnostic, SyntaxNode root)
+        private static CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
+            var syntax = syntaxNodes.OfType<MethodDeclarationSyntax>().First();
 
-            var syntax = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
-
-            return CodeAction.Create(Title, c => RenameSymbolAsync(context.Document, syntax, c), Title);
+            return CodeAction.Create(Title, c => RenameSymbolAsync(document, syntax, c), Title);
         }
 
         private static async Task<Solution> RenameSymbolAsync(Document document, BaseMethodDeclarationSyntax syntax, CancellationToken cancellationToken)
