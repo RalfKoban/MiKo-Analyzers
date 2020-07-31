@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(ITypeSymbol symbol) => FindBetterName(symbol.Name);
+
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
@@ -29,9 +31,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
+            var name = FindBetterName(className);
+            return new[] { Issue(symbol, name) };
+        }
+
+        private static string FindBetterName(string className)
+        {
             var suffix = className.EndsWith(TestSuffix, StringComparison.Ordinal) ? "s" : Constants.TestsSuffix;
 
-            return new[] { Issue(symbol, className + suffix) };
+            return className + suffix;
         }
     }
 }
