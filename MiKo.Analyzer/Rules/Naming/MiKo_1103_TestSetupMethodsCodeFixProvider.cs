@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    var newName = MiKo_1103_TestSetupMethodsAnalyzer.ExpectedName;
+                                                                    const string NewName = MiKo_1103_TestSetupMethodsAnalyzer.ExpectedName;
 
-                                                                    return new Tuple<ISymbol, string>(symbol, newName);
+                                                                    return new Tuple<ISymbol, string>(symbol, NewName);
                                                                 },
                                                             _),
                                      Title);
