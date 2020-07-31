@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1012_FireMethodsCodeFixProvider)), Shared]
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1104_TestTeardownMethodsCodeFixProvider)), Shared]
     public sealed class MiKo_1104_TestTeardownMethodsCodeFixProvider : NamingCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_1104_TestTeardownMethodsAnalyzer.Id;
