@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 && symbol.GetAttributeNames().Any(_ => _ == nameof(FlagsAttribute))
                 && betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase) is false)
             {
-                betterName = GetPluralName(symbolName, betterName);
+                betterName = Pluralizer.GetPluralName(symbolName, betterName);
             }
 
             return new[] { Issue(symbol, betterName) };

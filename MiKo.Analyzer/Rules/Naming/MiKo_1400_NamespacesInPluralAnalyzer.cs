@@ -58,7 +58,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var pluralName = GetPluralName(name);
+            var pluralName = Pluralizer.GetPluralName(name);
+
             return new[] { Issue(qualifiedName, location, pluralName) };
         }
     }

@@ -1,11 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class NamingAnalyzerTests
+    public sealed class PluralizerTests
     {
         [TestCase("Access", ExpectedResult = "Accesses")]
         [TestCase("Child", ExpectedResult = "Children")]
@@ -20,15 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Nested", ExpectedResult = "Nested")]
         [TestCase("Security", ExpectedResult = "Securities")]
         [TestCase("Securitys", ExpectedResult = "Securities")]
-        public string Creates_correct_plural_name(string singularName) => TestableNamingAnalyzer.GetPluralName(singularName);
-
-        private sealed class TestableNamingAnalyzer : NamingAnalyzer
-        {
-            public TestableNamingAnalyzer(string diagnosticId, SymbolKind kind = SymbolKind.Method) : base(diagnosticId, kind)
-            {
-            }
-
-            public static string GetPluralName(string singularName) => NamingAnalyzer.GetPluralName(singularName);
-        }
+        public string Creates_correct_plural_name(string singularName) => Pluralizer.GetPluralName(singularName);
     }
 }
