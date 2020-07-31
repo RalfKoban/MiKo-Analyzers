@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -61,8 +62,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Fix_can_be_made([ValueSource(nameof(Tests))] string test) => VerifyCSharpFix(
+                                                                                         "class TestMe { [" + test + "] void DoSomething(int i) { } }",
+                                                                                         "class TestMe { [" + test + "] void DoSomething_(int i) { } }");
+
         protected override string GetDiagnosticId() => MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1110_TestMethodsSuffixedWithUnderscoreCodeFixProvider();
     }
 }
