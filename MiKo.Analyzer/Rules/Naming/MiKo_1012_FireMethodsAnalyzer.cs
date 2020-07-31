@@ -19,12 +19,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IMethodSymbol method) => method.Name.Replace("Fire", "Raise")
+                                                                                  .Replace("_fire", "_raise")
+                                                                                  .Replace("Firing", "Raising")
+                                                                                  .Replace("_firing", "_raising");
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
-            var forbidden = methodName.ContainsAny(FirePhrases) && !methodName.ContainsAny(FirewallPhrases);
+
+            var forbidden = methodName.ContainsAny(FirePhrases) && methodName.ContainsAny(FirewallPhrases) is false;
+
             return forbidden
-                       ? new[] { Issue(method, methodName.Replace("Fire", "Raise").Replace("_fire", "_raise").Replace("Firing", "Raising").Replace("_firing", "_raising")) }
+                       ? new[] { Issue(method, FindBetterName(method)) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
+
 using NUnit.Framework;
 
 using TestHelper;
@@ -32,8 +34,21 @@ public class TestMe
 }
 ");
 
+        [TestCase("FireEvent", "RaiseEvent")]
+        [TestCase("OnEventFired", "OnEventRaised")]
+        [TestCase("IsFiringEvent", "IsRaisingEvent")]
+        [TestCase("_fire_", "_raise_")]
+        [TestCase("_fired_", "_raised_")]
+        [TestCase("_fires_", "_raises_")]
+        [TestCase("_firing_", "_raising_")]
+        public void Fix_can_be_made(string method, string wanted) => VerifyCSharpFix(
+                                                                                 @"using System; class TestMe { void " + method + "() { } }",
+                                                                                 @"using System; class TestMe { void " + wanted + "() { } }");
+
         protected override string GetDiagnosticId() => MiKo_1012_FireMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1012_FireMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1012_FireMethodsCodeFixProvider();
     }
 }
