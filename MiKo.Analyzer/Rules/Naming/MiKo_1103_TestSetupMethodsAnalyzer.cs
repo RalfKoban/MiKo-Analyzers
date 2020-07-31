@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1103";
 
-        private const string Marker = "PrepareTest";
+        public const string ExpectedName = "PrepareTest";
 
         public MiKo_1103_TestSetupMethodsAnalyzer() : base(Id)
         {
@@ -19,8 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsTestSetUpMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name == Marker
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name == ExpectedName
                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                        : new[] { Issue(symbol, Marker) };
+                                                                                        : new[] { Issue(symbol, ExpectedName) };
     }
 }
