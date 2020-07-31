@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Rename;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
@@ -32,6 +35,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 context.RegisterCodeFix(codeAction, diagnostic);
             }
+        }
+
+        protected static async Task<Solution> RenameSymbolAsync(
+                                                            Document document,
+                                                            Func<SemanticModel, CancellationToken, Tuple<ISymbol, string>> callback,
+                                                            CancellationToken cancellationToken)
+        {
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+
+            var symbolAndName = callback(semanticModel, cancellationToken);
+
+            var symbol = symbolAndName.Item1;
+            var newName = symbolAndName.Item2;
+
+            // Produce a new solution that has all references to that symbol renamed, including the declaration.
+            var originalSolution = document.Project.Solution;
+
+            // Return the new solution with the new symbol name.
+            return await Renamer.RenameSymbolAsync(document.Project.Solution, symbol, newName, originalSolution.Workspace.Options, cancellationToken).ConfigureAwait(false);
         }
 
         protected abstract CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes);
