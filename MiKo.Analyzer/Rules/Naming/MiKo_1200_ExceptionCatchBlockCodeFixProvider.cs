@@ -14,15 +14,15 @@ using Microsoft.CodeAnalysis.Rename;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1200_ExceptionCatchBlockCodeFixProvider)), Shared]
-    public class MiKo_1200_ExceptionCatchBlockCodeFixProvider : CodeFixProvider
+    public sealed class MiKo_1200_ExceptionCatchBlockCodeFixProvider : CodeFixProvider
     {
         private const string Title = "Rename exception";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MiKo_1200_ExceptionCatchBlockAnalyzer.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MiKo_1200_ExceptionCatchBlockAnalyzer.Id);
 
-        public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
