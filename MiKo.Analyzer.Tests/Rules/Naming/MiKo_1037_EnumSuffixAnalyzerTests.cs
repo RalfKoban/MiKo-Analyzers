@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -53,8 +54,23 @@ public enum TestMeEnums
 }
 ");
 
+        [TestCase("interface")]
+        [TestCase("class")]
+        [TestCase("struct")]
+        [TestCase("enum")]
+        public void Fix_can_be_made(string type) => VerifyCSharpFix(
+                                                         @"using System; " + type + " TestMeEnum { }",
+                                                         @"using System; " + type + " TestMe { }");
+
+        [Test]
+        public void Fix_can_be_made_for_Flags() => VerifyCSharpFix(
+                                                              @"using System; [Flags] enum TestMeEnum { }",
+                                                              @"using System; [Flags] enum TestMes { }");
+
         protected override string GetDiagnosticId() => MiKo_1037_EnumSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1037_EnumSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1037_EnumSuffixCodeFixProvider();
     }
 }
