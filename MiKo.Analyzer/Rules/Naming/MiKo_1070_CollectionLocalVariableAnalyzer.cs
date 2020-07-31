@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -33,8 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var name = originalName.EndsWithNumber() ? originalName.WithoutNumberSuffix() : originalName;
 
                 var pluralName = name.EndsWithAny(Constants.Markers.Collections)
-                                     ? GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections)
-                                     : GetPluralName(name);
+                                     ? Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections)
+                                     : Pluralizer.GetPluralName(name);
 
                 if (pluralName is null)
                 {
