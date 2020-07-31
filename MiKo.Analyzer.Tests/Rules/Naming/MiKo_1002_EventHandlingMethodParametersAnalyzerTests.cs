@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -80,8 +81,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Fix_can_be_made() => VerifyCSharpFix(
+            @"class TestMe { void OnWhatever(object s, EventArgs args)  { System.Diagnostics.Trace.Write(args.GetType().ToString() + s.ToString(); } }",
+            @"class TestMe { void OnWhatever(object sender, EventArgs e)  { System.Diagnostics.Trace.Write(e.GetType().ToString() + sender.ToString(); } }");
+
         protected override string GetDiagnosticId() => MiKo_1002_EventHandlingMethodParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1002_EventHandlingMethodParametersAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1002_EventHandlingMethodParametersCodeFixProvider();
     }
 }
