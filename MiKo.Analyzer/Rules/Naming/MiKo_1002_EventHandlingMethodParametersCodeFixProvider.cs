@@ -14,16 +14,16 @@ using Microsoft.CodeAnalysis.Rename;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1002_EventHandlingMethodParametersCodeFixProvider)), Shared]
-    public class MiKo_1002_EventHandlingMethodParametersCodeFixProvider : CodeFixProvider
+    public sealed class MiKo_1002_EventHandlingMethodParametersCodeFixProvider : CodeFixProvider
     {
         private const string Title = "Rename event argument";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MiKo_1002_EventHandlingMethodParametersAnalyzer.Id);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MiKo_1002_EventHandlingMethodParametersAnalyzer.Id);
 
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
-        public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
+        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
