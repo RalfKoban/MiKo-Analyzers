@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Threading;
@@ -15,34 +14,15 @@ using Microsoft.CodeAnalysis.Rename;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1200_ExceptionCatchBlockCodeFixProvider)), Shared]
-    public sealed class MiKo_1200_ExceptionCatchBlockCodeFixProvider : CodeFixProvider
+    public sealed class MiKo_1200_ExceptionCatchBlockCodeFixProvider : NamingCodeFixProvider
     {
-        private const string Title = "Rename exception";
+        public override string FixableDiagnosticId => MiKo_1200_ExceptionCatchBlockAnalyzer.Id;
 
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(MiKo_1200_ExceptionCatchBlockAnalyzer.Id);
-
-        public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
-
-        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
-        {
-            var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-
-            var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var syntaxNodes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
-
-            var codeAction = CreateCodeAction(context.Document, syntaxNodes);
-            if (codeAction != null)
-            {
-                context.RegisterCodeFix(codeAction, diagnostic);
-            }
-        }
-
-        private static CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
+        protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
             var syntax = syntaxNodes.OfType<CatchDeclarationSyntax>().First();
 
-            // TODO: RKN maybe the equivalenceKey "Title" is wrong and should contain the name of the resulting parameter (such as "e" or "sender")
+            const string Title = "Rename exception";
             return CodeAction.Create(Title, _ => RenameAsync(document, syntax, _), Title);
         }
 
