@@ -45,7 +45,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = symbolProvider(semanticModel, token);
-
                                                                     var newName = MiKo_1037_EnumSuffixAnalyzer.FindBetterName(symbol);
 
                                                                     return new Tuple<ISymbol, string>(symbol, newName);

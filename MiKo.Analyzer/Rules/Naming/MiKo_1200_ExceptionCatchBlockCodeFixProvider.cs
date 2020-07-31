@@ -29,8 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
+                                                                    const string NewName = MiKo_1200_ExceptionCatchBlockAnalyzer.ExpectedName;
 
-                                                                    return new Tuple<ISymbol, string>(symbol, "ex");
+                                                                    return new Tuple<ISymbol, string>(symbol, NewName);
                                                                 },
                                                             _),
                                      Title);
