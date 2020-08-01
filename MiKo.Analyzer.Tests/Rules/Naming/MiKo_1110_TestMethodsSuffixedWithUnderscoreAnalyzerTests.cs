@@ -71,6 +71,6 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1110_TestMethodsSuffixedWithUnderscoreCodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1110_CodeFixProvider();
     }
 }

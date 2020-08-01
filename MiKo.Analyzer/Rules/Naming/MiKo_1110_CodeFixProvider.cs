@@ -11,16 +11,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1012_FireMethodsCodeFixProvider)), Shared]
-    public sealed class MiKo_1012_FireMethodsCodeFixProvider : NamingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1110_CodeFixProvider)), Shared]
+    public sealed class MiKo_1110_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1012_FireMethodsAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer.Id;
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
             var syntax = syntaxNodes.OfType<MethodDeclarationSyntax>().First();
 
-            const string Title = "Rename 'fire' to 'raise'";
+            const string Title = "Append underscore";
 
             return CodeAction.Create(
                                      Title,
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    var newName = MiKo_1012_FireMethodsAnalyzer.FindBetterName(symbol);
+                                                                    var newName = MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer.FindBetterName(symbol);
 
                                                                     return new Tuple<ISymbol, string>(symbol, newName);
                                                                 },

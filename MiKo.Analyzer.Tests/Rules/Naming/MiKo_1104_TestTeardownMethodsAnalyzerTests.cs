@@ -78,6 +78,6 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1104_TestTeardownMethodsAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1104_TestTeardownMethodsCodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1104_CodeFixProvider();
     }
 }

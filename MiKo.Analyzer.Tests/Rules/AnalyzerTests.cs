@@ -124,10 +124,23 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void CodeFixProviders_use_Id_of_corresponding_Analyzer_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
+        public static void CodeFixProviders_use_Id_of_corresponding_Analyzer()
         {
-            // we compare the names as both shall have the similar one
-            Assert.That(provider.FixableDiagnosticIds.Single(), Is.Not.Null.And.StartsWith(provider.GetType().Name.Substring(0, 9)));
+            var map = AllAnalyzers.ToDictionary(_ => _.DiagnosticId);
+
+            Assert.Multiple(() =>
+                                {
+                                    foreach (var id in AllCodeFixProviders.Select(_ => _.FixableDiagnosticIds.First()))
+                                    {
+                                        Assert.That(map.ContainsKey(id), Is.True, $"Analyzer for '{id}' missing");
+                                    }
+                                });
+        }
+
+        [Test]
+        public static void CodeFixProviders_use_simplified_name_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
+        {
+            Assert.That(provider.GetType().Name, Is.EqualTo(provider.FixableDiagnosticIds.Single() + "_CodeFixProvider"));
         }
 
         [Test, Ignore("Just to find gaps")]

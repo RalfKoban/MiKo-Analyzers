@@ -11,16 +11,17 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1106_OneTimeTestTeardownMethodsCodeFixProvider)), Shared]
-    public sealed class MiKo_1106_OneTimeTestTeardownMethodsCodeFixProvider : NamingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1002_CodeFixProvider)), Shared]
+    public sealed class MiKo_1002_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1106_OneTimeTestTeardownMethodsAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1002_EventHandlingMethodParametersAnalyzer.Id;
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var syntax = syntaxNodes.OfType<MethodDeclarationSyntax>().First();
+            var syntax = syntaxNodes.OfType<ParameterSyntax>().First();
 
-            const string Title = "Rename to '" + MiKo_1106_OneTimeTestTeardownMethodsAnalyzer.ExpectedName + "'";
+            // TODO: RKN maybe the equivalenceKey "Title" is wrong and should contain the name of the resulting parameter (such as "e" or "sender")
+            const string Title = "Rename event argument";
 
             return CodeAction.Create(
                                      Title,
@@ -29,9 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    const string NewName = MiKo_1106_OneTimeTestTeardownMethodsAnalyzer.ExpectedName;
+                                                                    var newName = symbol.Type.IsObject()
+                                                                                      ? MiKo_1002_EventHandlingMethodParametersAnalyzer.Sender
+                                                                                      : MiKo_1002_EventHandlingMethodParametersAnalyzer.EventArgs;
 
-                                                                    return new Tuple<ISymbol, string>(symbol, NewName);
+                                                                    return new Tuple<ISymbol, string>(symbol, newName);
                                                                 },
                                                             _),
                                      Title);

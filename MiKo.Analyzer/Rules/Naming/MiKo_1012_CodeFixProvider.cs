@@ -11,16 +11,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1200_ExceptionCatchBlockCodeFixProvider)), Shared]
-    public sealed class MiKo_1200_ExceptionCatchBlockCodeFixProvider : NamingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1012_CodeFixProvider)), Shared]
+    public sealed class MiKo_1012_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1200_ExceptionCatchBlockAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1012_FireMethodsAnalyzer.Id;
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var syntax = syntaxNodes.OfType<CatchDeclarationSyntax>().First();
+            var syntax = syntaxNodes.OfType<MethodDeclarationSyntax>().First();
 
-            const string Title = "Rename exception";
+            const string Title = "Rename 'fire' to 'raise'";
 
             return CodeAction.Create(
                                      Title,
@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    const string NewName = MiKo_1200_ExceptionCatchBlockAnalyzer.ExpectedName;
+                                                                    var newName = MiKo_1012_FireMethodsAnalyzer.FindBetterName(symbol);
 
-                                                                    return new Tuple<ISymbol, string>(symbol, NewName);
+                                                                    return new Tuple<ISymbol, string>(symbol, newName);
                                                                 },
                                                             _),
                                      Title);

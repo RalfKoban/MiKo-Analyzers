@@ -49,6 +49,6 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1012_FireMethodsAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1012_FireMethodsCodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1012_CodeFixProvider();
     }
 }

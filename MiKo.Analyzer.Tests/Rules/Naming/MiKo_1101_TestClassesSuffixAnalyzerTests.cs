@@ -43,6 +43,6 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1101_TestClassesSuffixAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1101_TestClassesSuffixCodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1101_CodeFixProvider();
     }
 }

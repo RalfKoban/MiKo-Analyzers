@@ -71,6 +71,6 @@ public enum TestMeEnums
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1037_EnumSuffixAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1037_EnumSuffixCodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1037_CodeFixProvider();
     }
 }

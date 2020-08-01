@@ -11,16 +11,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtCodeFixProvider)), Shared]
-    public sealed class MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtCodeFixProvider : NamingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1106_CodeFixProvider)), Shared]
+    public sealed class MiKo_1106_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1106_OneTimeTestTeardownMethodsAnalyzer.Id;
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var syntax = syntaxNodes.OfType<TypeDeclarationSyntax>().First();
+            var syntax = syntaxNodes.OfType<MethodDeclarationSyntax>().First();
 
-            const string Title = "Prefix with '" + MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Prefix + "' instead of suffix '" + MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Suffix + "'";
+            const string Title = "Rename to '" + MiKo_1106_OneTimeTestTeardownMethodsAnalyzer.ExpectedName + "'";
 
             return CodeAction.Create(
                                      Title,
@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    var newName = MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.FindBetterName(symbol);
+                                                                    const string NewName = MiKo_1106_OneTimeTestTeardownMethodsAnalyzer.ExpectedName;
 
-                                                                    return new Tuple<ISymbol, string>(symbol, newName);
+                                                                    return new Tuple<ISymbol, string>(symbol, NewName);
                                                                 },
                                                             _),
                                      Title);

@@ -11,17 +11,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1002_EventHandlingMethodParametersCodeFixProvider)), Shared]
-    public sealed class MiKo_1002_EventHandlingMethodParametersCodeFixProvider : NamingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1109_CodeFixProvider)), Shared]
+    public sealed class MiKo_1109_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1002_EventHandlingMethodParametersAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Id;
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var syntax = syntaxNodes.OfType<ParameterSyntax>().First();
+            var syntax = syntaxNodes.OfType<TypeDeclarationSyntax>().First();
 
-            // TODO: RKN maybe the equivalenceKey "Title" is wrong and should contain the name of the resulting parameter (such as "e" or "sender")
-            const string Title = "Rename event argument";
+            const string Title = "Prefix with '" + MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Prefix + "' instead of suffix '" + MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Suffix + "'";
 
             return CodeAction.Create(
                                      Title,
@@ -30,9 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    var newName = symbol.Type.IsObject()
-                                                                                      ? MiKo_1002_EventHandlingMethodParametersAnalyzer.Sender
-                                                                                      : MiKo_1002_EventHandlingMethodParametersAnalyzer.EventArgs;
+                                                                    var newName = MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.FindBetterName(symbol);
 
                                                                     return new Tuple<ISymbol, string>(symbol, newName);
                                                                 },

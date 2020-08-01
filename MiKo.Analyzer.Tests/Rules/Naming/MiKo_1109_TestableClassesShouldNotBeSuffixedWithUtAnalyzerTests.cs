@@ -32,6 +32,6 @@ public class TestMeUt
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtCodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1109_CodeFixProvider();
     }
 }

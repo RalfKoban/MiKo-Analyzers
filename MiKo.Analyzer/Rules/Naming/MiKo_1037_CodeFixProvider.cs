@@ -12,8 +12,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1037_EnumSuffixCodeFixProvider)), Shared]
-    public sealed class MiKo_1037_EnumSuffixCodeFixProvider : NamingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1037_CodeFixProvider)), Shared]
+    public sealed class MiKo_1037_CodeFixProvider : NamingCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_1037_EnumSuffixAnalyzer.Id;
 

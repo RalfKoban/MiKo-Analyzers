@@ -11,16 +11,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1101_TestClassesSuffixCodeFixProvider)), Shared]
-    public sealed class MiKo_1101_TestClassesSuffixCodeFixProvider : NamingCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1105_CodeFixProvider)), Shared]
+    public sealed class MiKo_1105_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1101_TestClassesSuffixAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1105_OneTimeTestSetupMethodsAnalyzer.Id;
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var syntax = syntaxNodes.OfType<TypeDeclarationSyntax>().First();
+            var syntax = syntaxNodes.OfType<MethodDeclarationSyntax>().First();
 
-            const string Title = "Append 'Tests' suffix";
+            const string Title = "Rename to '" + MiKo_1105_OneTimeTestSetupMethodsAnalyzer.ExpectedName + "'";
 
             return CodeAction.Create(
                                      Title,
@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    var newName = MiKo_1101_TestClassesSuffixAnalyzer.FindBetterName(symbol);
+                                                                    const string NewName = MiKo_1105_OneTimeTestSetupMethodsAnalyzer.ExpectedName;
 
-                                                                    return new Tuple<ISymbol, string>(symbol, newName);
+                                                                    return new Tuple<ISymbol, string>(symbol, NewName);
                                                                 },
                                                             _),
                                      Title);

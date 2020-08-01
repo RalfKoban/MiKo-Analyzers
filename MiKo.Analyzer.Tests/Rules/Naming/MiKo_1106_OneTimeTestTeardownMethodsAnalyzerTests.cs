@@ -104,6 +104,6 @@ public class TestMe
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1106_OneTimeTestTeardownMethodsAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1106_OneTimeTestTeardownMethodsCodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1106_CodeFixProvider();
     }
 }
