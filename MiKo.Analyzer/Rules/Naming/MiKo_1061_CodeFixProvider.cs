@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var syntax = syntaxNodes.OfType<ParameterSyntax>().First();
 
-            const string Title = "Rename 'fire' to 'raise'";
+            const string Title = "Rename out parameter";
 
             return CodeAction.Create(
                                      Title,
