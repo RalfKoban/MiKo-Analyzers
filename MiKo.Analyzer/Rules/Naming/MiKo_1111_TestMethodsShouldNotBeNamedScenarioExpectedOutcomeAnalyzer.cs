@@ -24,12 +24,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            var parts = methodName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
-            var partsStartUpperCase = parts.Length >= 1 && parts.All(_ => _[0].IsUpperCase());
+            if (methodName.Length > 10)
+            {
+                var parts = methodName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
 
-            return partsStartUpperCase
-                       ? new[] { Issue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+                var partsStartUpperCase = parts.Length >= 1 && parts.All(_ => _[0].IsUpperCase());
+                if (partsStartUpperCase)
+                {
+                    return new[] { Issue(symbol) };
+                }
+            }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }
