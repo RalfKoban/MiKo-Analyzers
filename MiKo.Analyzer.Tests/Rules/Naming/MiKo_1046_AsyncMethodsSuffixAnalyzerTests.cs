@@ -87,7 +87,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_() => VerifyCSharpFix(
+        public void Code_gets_fixed() => VerifyCSharpFix(
                                                   "using System.Threading.Tasks; class TestMe { Task DoSomething() { } }",
                                                   "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { } }");
 
