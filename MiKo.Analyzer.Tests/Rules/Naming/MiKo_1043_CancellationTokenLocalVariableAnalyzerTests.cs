@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -141,8 +142,24 @@ public class TestMe
 }
 ");
 
+        [TestCase(
+             "using System.Threading; class TestMe { void DoSomething() { var cancellationToken = CancellationToken.None; } }",
+             "using System.Threading; class TestMe { void DoSomething() { var token = CancellationToken.None; } }")]
+        [TestCase(
+            "using System.Threading; class TestMe { void DoSomething(object o) { switch (o) { case CancellationToken cancellationToken: return; default: return; } } }",
+            "using System.Threading; class TestMe { void DoSomething(object o) { switch (o) { case CancellationToken token: return; default: return; } } }")]
+        [TestCase(
+            "using System.Threading; class TestMe { void DoSomething() { foreach (CancellationToken c in new CancellationToken[0]) { } } } }",
+            "using System.Threading; class TestMe { void DoSomething() { foreach (CancellationToken token in new CancellationToken[0]) { } } } }")]
+        [TestCase(
+             "using System.Threading; class TestMe { void DoSomething(object o) { if (o is CancellationToken c) return; } } }",
+             "using System.Threading; class TestMe { void DoSomething(object o) { if (o is CancellationToken token) return; } } }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1043_CancellationTokenLocalVariableAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1043_CancellationTokenLocalVariableAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1043_CodeFixProvider();
     }
 }
