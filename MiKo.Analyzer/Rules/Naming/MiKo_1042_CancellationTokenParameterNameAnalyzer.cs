@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1042";
 
-        private const string Name = "cancellationToken";
+        public const string ExpectedName = "cancellationToken";
 
         public MiKo_1042_CancellationTokenParameterNameAnalyzer() : base(Id)
         {
@@ -23,9 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var parameter in method.Parameters)
             {
-                if (parameter.Type.IsCancellationToken() && parameter.Name != Name)
+                if (parameter.Type.IsCancellationToken() && parameter.Name != ExpectedName)
                 {
-                    return new[] { Issue(parameter, Name) };
+                    return new[] { Issue(parameter, ExpectedName) };
                 }
             }
 
