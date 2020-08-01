@@ -174,7 +174,9 @@ namespace MiKoSolutions.Analyzers.Rules
                                                      .AppendLine($"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
 
             var category = string.Empty;
-            var tableFormat = "|{0}|{1}|{2}|" + Environment.NewLine;
+            var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
+
+            var codeFixProviders = AllCodeFixProviders.ToDictionary(_ => _.FixableDiagnosticIds.Single());
 
             foreach (var descriptor in AllAnalyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {
@@ -185,15 +187,19 @@ namespace MiKoSolutions.Analyzers.Rules
                     markdownBuilder
                         .AppendLine()
                         .AppendLine("### " + category)
-                        .AppendFormat(tableFormat, "ID", "Title", "Enabled by default")
-                        .AppendFormat(tableFormat, ":-", ":----", ":----------------:");
+                        .AppendFormat(tableFormat, "ID", "Title", "Enabled by default", "CodeFix available")
+                        .AppendFormat(tableFormat, ":-", ":----", ":----------------:", ":---------------:");
                 }
 
+                const string Check = "&#x2713;";
+                const string NoCheck = "\\-";
+
                 markdownBuilder.AppendFormat(
-                                         tableFormat,
-                                         descriptor.Id,
-                                         descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
-                                         descriptor.IsEnabledByDefault ? "&#x2713;" : "\\-");
+                                             tableFormat,
+                                             descriptor.Id,
+                                             descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
+                                             descriptor.IsEnabledByDefault ? Check : NoCheck,
+                                             codeFixProviders.ContainsKey(descriptor.Id) ? Check : NoCheck);
             }
 
             var markdown = markdownBuilder.ToString();
