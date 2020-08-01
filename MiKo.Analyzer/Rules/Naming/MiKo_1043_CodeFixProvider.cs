@@ -19,19 +19,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var variableSyntax = syntaxNodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault();
+            var nodes = syntaxNodes.ToList();
+
+            var variableSyntax = nodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault();
             if (variableSyntax != null)
             {
                 return CreateCodeAction(document, (s, t) => s.GetDeclaredSymbol(variableSyntax, t));
             }
 
-            var variableDesignationSyntax = syntaxNodes.OfType<SingleVariableDesignationSyntax>().FirstOrDefault();
+            var variableDesignationSyntax = nodes.OfType<SingleVariableDesignationSyntax>().FirstOrDefault();
             if (variableDesignationSyntax != null)
             {
                 return CreateCodeAction(document, (s, t) => s.GetDeclaredSymbol(variableDesignationSyntax, t));
             }
 
-            var forEachStatementSyntax = syntaxNodes.OfType<ForEachStatementSyntax>().FirstOrDefault();
+            var forEachStatementSyntax = nodes.OfType<ForEachStatementSyntax>().FirstOrDefault();
             if (forEachStatementSyntax != null)
             {
                 return CreateCodeAction(document, (s, t) => s.GetDeclaredSymbol(forEachStatementSyntax, t));
