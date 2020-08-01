@@ -14,6 +14,6 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("abc42", ExpectedResult = "abc")]
         [TestCase("a1bc", ExpectedResult = "a1bc")]
         [TestCase("a1bc42", ExpectedResult = "a1bc")]
-        public static string Test(string input) => input.WithoutNumberSuffix();
+        public static string Test_(string input) => input.WithoutNumberSuffix();
     }
 }

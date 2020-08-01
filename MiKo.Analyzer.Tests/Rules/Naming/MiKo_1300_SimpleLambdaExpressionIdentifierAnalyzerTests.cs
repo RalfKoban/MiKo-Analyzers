@@ -60,7 +60,7 @@ public class TestMe
 
         [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Where(### => ### == null) { } } }")]
         [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Where(### => ###.Length == 0 || ###.Length == 1) { } } }")]
-        public void Code_gets_fixed(string template)
+        public void Code_gets_fixed_(string template)
         {
             var originalCode = template.Replace("###", "item");
             var fixedCode = template.Replace("###", "_");

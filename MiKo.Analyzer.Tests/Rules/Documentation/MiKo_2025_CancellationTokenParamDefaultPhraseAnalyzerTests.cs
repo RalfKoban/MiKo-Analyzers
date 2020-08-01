@@ -43,7 +43,7 @@ public class TestMe
 ");
 
         [TestCase("The token to monitor for cancellation requests.")]
-        public void No_issue_is_reported_for_method_with_correct_comment(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_correct_comment_(string comment) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -57,7 +57,7 @@ public class TestMe
 
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -72,7 +72,7 @@ public class TestMe
         [TestCase("<summary />")]
         [TestCase("<inheritdoc />")]
         [TestCase("<exclude />")]
-        public void No_issue_is_reported_for_method_with_missing_documentation(string xmlElement) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_missing_documentation_(string xmlElement) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

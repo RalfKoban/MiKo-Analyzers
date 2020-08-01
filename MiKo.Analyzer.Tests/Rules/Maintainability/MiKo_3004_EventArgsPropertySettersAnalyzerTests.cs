@@ -48,7 +48,7 @@ public class TestMeEventArgs : EventArgs
         [TestCase("")]
         [TestCase("internal")]
         [TestCase("protected")]
-        public void An_issue_is_reported_for_EventArgs_with_property_and_private_setter(string visibility) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventArgs_with_property_and_private_setter_(string visibility) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMeEventArgs : EventArgs

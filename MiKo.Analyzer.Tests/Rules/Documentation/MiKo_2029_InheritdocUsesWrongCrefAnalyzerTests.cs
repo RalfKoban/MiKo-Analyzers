@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("enum")]
-        public void No_issue_is_reported_for_undocumented_named_type(string type) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_undocumented_named_type_(string type) => No_issue_is_reported_for(@"
 public " + type + @" TestMe
 {
 }
@@ -21,7 +21,7 @@ public " + type + @" TestMe
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("enum")]
-        public void An_issue_is_reported_for_wrong_inherited_XML_of_named_type(string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_inherited_XML_of_named_type_(string type) => An_issue_is_reported_for(@"
 namespace Bla
 {
     /// <inheritdoc cref='TestMe' />

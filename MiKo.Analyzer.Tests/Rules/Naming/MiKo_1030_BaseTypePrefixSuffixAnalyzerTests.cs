@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("class", "Something")]
         [TestCase("class", "IAbstraction")]
         [TestCase("class", "Abstraction")]
-        public void No_issue_is_reported_for(string type, string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_(string type, string name) => No_issue_is_reported_for(@"
 public " + type + " " + name + @"
 {
 }
@@ -29,7 +29,7 @@ public " + type + " " + name + @"
         [TestCase("class", "AbstractSomething")]
         [TestCase("interface", "IAbstractSomethingBase")]
         [TestCase("class", "AbstractSomethingBase")]
-        public void An_issue_is_reported_for(string type, string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_(string type, string name) => An_issue_is_reported_for(@"
 public " + type + " " + name + @"
 {
 }

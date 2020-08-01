@@ -77,7 +77,7 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
-        public void An_issue_is_reported_for_full_qualified_object_equals_method_on_structs(string x, string y) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_full_qualified_object_equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -94,7 +94,7 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
-        public void An_issue_is_reported_for_object_equals_method_on_structs(string x, string y) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -111,7 +111,7 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
-        public void No_issue_is_reported_for_IEquatable_equals_method_on_structs(string x, string y) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_IEquatable_equals_method_on_structs_(string x, string y) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

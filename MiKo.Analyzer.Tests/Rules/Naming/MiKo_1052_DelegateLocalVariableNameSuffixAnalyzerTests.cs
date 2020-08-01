@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         [TestCase("string s")]
         [TestCase("int i")]
-        public void No_issue_is_reported_for_non_delegate_variable(string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_delegate_variable_(string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correct_variable_name(
+        public void No_issue_is_reported_for_correct_variable_name_(
                                                                 [ValueSource(nameof(DelegateTypes))] string type,
                                                                 [ValueSource(nameof(CorrectDelegateNames))] string name)
             => No_issue_is_reported_for(@"
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_variable_with_non_fitting_name(
+        public void An_issue_is_reported_for_variable_with_non_fitting_name_(
                                                                         [ValueSource(nameof(DelegateTypes))] string type,
                                                                         [ValueSource(nameof(WrongDelegateNames))] string name)
             => An_issue_is_reported_for(@"

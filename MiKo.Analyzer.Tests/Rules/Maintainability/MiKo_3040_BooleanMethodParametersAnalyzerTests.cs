@@ -31,7 +31,7 @@ public class TestMe
 
         [TestCase("DependencyObject o, bool b")]
         [TestCase("bool b, DependencyObject o")]
-        public void No_issue_is_reported_for_boolean_parameter_on_method_that_has_an_additional_DependencyObject_parameter_as_well(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_boolean_parameter_on_method_that_has_an_additional_DependencyObject_parameter_as_well_(string parameters) => No_issue_is_reported_for(@"
 using System;
 using System.Windows;
 
@@ -121,7 +121,7 @@ namespace My
         [TestCase("int x, bool b")]
         [TestCase("bool b1, bool b2, bool b3")]
         [TestCase("bool b, DependencyObject o, int x")] // check for method with dependency object but 3 parameters
-        public void An_issue_is_reported_for_boolean_parameter_on_method(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_boolean_parameter_on_method_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

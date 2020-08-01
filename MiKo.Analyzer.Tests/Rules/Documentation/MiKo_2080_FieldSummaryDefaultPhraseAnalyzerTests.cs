@@ -168,7 +168,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_incorrectly_commented_constant_boolean_field(
+        public void An_issue_is_reported_for_incorrectly_commented_constant_boolean_field_(
                                                                                 [Values("Bla bla", "Indicates whether the field", "Contains something.")] string comment,
                                                                                 [Values("bool", "string")] string fieldType)
             => An_issue_is_reported_for(@"

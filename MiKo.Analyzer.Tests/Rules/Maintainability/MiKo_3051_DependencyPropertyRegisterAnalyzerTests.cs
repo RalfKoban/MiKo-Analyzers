@@ -117,7 +117,7 @@ namespace Bla
         [TestCase("ObservableCollection<System.Windows.Controls.Control>")]
         [TestCase("System.Collections.ObjectModel.ObservableCollection<Control>")]
         [TestCase("System.Collections.ObjectModel.ObservableCollection<System.Windows.Controls.Control>")]
-        public void No_issue_is_reported_for_DependencyProperty_field_that_is_registered_with_correct_collection_type(string propertyType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_DependencyProperty_field_that_is_registered_with_correct_collection_type_(string propertyType) => No_issue_is_reported_for(@"
 
 using System.Collections.ObjectModel;
 using System.Windows;

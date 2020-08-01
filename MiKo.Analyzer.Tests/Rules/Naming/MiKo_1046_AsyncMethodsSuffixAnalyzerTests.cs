@@ -65,7 +65,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method(
+        public void No_issue_is_reported_for_test_method_(
                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                     [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"

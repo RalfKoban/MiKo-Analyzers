@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("interface", "ISomething")]
         [TestCase("interface", "ISomethingViewModel")]
         [TestCase("interface", "ISomethingViewModels")]
-        public void No_issue_is_reported_for(string type, string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_(string type, string name) => No_issue_is_reported_for(@"
 public " + type + " " + name + @"
 {
 }
@@ -26,7 +26,7 @@ public " + type + " " + name + @"
         [TestCase("interface", "ISomethingModels")]
         [TestCase("class", "SomethingModel")]
         [TestCase("class", "SomethingModels")]
-        public void An_issue_is_reported_for(string type, string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_(string type, string name) => An_issue_is_reported_for(@"
 public " + type + " " + name + @"
 {
 }

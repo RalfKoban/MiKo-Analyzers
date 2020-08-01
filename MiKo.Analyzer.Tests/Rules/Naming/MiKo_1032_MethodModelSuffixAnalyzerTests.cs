@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("CreateViewModels")]
         [TestCase("DoSomething")]
         [TestCase("EnableModelessStuff")]
-        public void No_issue_is_reported_for_valid_method(string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_method_(string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + name + @"() { }
@@ -24,7 +24,7 @@ public class TestMe
         [TestCase("CreateModels")]
         [TestCase("CreateitemModel")]
         [TestCase("CreateModelItem")]
-        public void An_issue_is_reported_for_invalid_method(string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_invalid_method_(string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + name + @"() { }

@@ -119,7 +119,7 @@ public class TestMe
         [TestCase("m_command")]
         [TestCase("_myCommand")]
         [TestCase("m_myCommand")]
-        public void No_issue_is_reported_for_correctly_named_command_field(string fieldName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_command_field_(string fieldName) => No_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 

@@ -44,7 +44,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a(
+        public void No_issue_is_reported_for_method_that_returns_a_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("void", "int", "Task", "Task<int>", "Task<bool>")] string returnType)
             => No_issue_is_reported_for(@"
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enum_only_method(
+        public void No_issue_is_reported_for_correctly_commented_Enum_only_method_(
                                                                         [Values("returns", "value")] string xmlTag,
                                                                         [ValueSource(nameof(EnumOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
@@ -84,7 +84,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enum_Task_method(
+        public void No_issue_is_reported_for_correctly_commented_Enum_Task_method_(
                                                                             [Values("returns", "value")] string xmlTag,
                                                                             [Values("", " ")] string space,
                                                                             [ValueSource(nameof(EnumTaskReturnValues))] string returnType)
@@ -105,7 +105,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method(
+        public void An_issue_is_reported_for_wrong_commented_method_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
                                                                 [ValueSource(nameof(EnumReturnValues))] string returnType)

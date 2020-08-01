@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("DependencyPropertyChangedEventArgs args, DependencyObject d")]
         [TestCase("DependencyObject d, DependencyPropertyChangedEventArgs args, object whatever")]
         [TestCase("object whatever, DependencyObject d, DependencyPropertyChangedEventArgs args")]
-        public void No_issue_is_reported_for_non_event_handling_method(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_event_handling_method_(string parameters) => No_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs

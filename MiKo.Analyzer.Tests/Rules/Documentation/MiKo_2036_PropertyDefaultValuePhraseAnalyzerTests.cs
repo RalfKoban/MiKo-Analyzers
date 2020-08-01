@@ -39,7 +39,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a(
+        public void No_issue_is_reported_for_method_that_returns_a_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("void", "int", "Task", "Task<int>", "Task<string>")] string returnType) => No_issue_is_reported_for(@"
 using System;
@@ -58,7 +58,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_commented_Boolean_property_with_missing_default_value(
+        public void An_issue_is_reported_for_commented_Boolean_property_with_missing_default_value_(
                                                                                             [Values("returns", "value")] string xmlTag,
                                                                                             [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
                                                                                             [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
@@ -80,7 +80,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_property_with_default_phrase(
+        public void No_issue_is_reported_for_correctly_commented_Boolean_property_with_default_phrase_(
                                                                                         [Values("returns", "value")] string xmlTag,
                                                                                         [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
                                                                                         [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
@@ -103,7 +103,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Boolean_property_with_default_phrase_and_line_break(
+        public void No_issue_is_reported_for_correctly_commented_Boolean_property_with_default_phrase_and_line_break_(
                                                                                                         [Values("returns", "value")] string xmlTag,
                                                                                                         [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
                                                                                                         [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,

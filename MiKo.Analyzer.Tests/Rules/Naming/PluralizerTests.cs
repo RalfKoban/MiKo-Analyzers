@@ -18,6 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Nested", ExpectedResult = "Nested")]
         [TestCase("Security", ExpectedResult = "Securities")]
         [TestCase("Securitys", ExpectedResult = "Securities")]
-        public string Creates_correct_plural_name(string singularName) => Pluralizer.GetPluralName(singularName);
+        public string Creates_correct_plural_name_(string singularName) => Pluralizer.GetPluralName(singularName);
     }
 }

@@ -29,7 +29,7 @@ public class TestMe
         [TestCase("void")]
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void No_issue_is_reported_for_correctly_documented_async_method(string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_async_method_(string returnType) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -41,7 +41,7 @@ public class TestMe
 
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void No_issue_is_reported_for_correctly_documented_non_async_Task_method(string returnType) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_non_async_Task_method_(string returnType) => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -54,7 +54,7 @@ public class TestMe
         [TestCase("void")]
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void An_issue_is_reported_for_incorrectly_documented_async_method(string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_async_method_(string returnType) => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe
@@ -66,7 +66,7 @@ public class TestMe
 
         [TestCase("Task")]
         [TestCase("Task<int>")]
-        public void An_issue_is_reported_for_incorrectly_documented_Task_method(string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_Task_method_(string returnType) => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
 public class TestMe

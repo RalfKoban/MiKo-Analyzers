@@ -52,7 +52,7 @@ public class TestMe
         [TestCase("Occur")]
         [TestCase("The")]
         [TestCase("Whatever that comment means")]
-        public void An_issue_is_reported_for_wrong_comment(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_comment_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>

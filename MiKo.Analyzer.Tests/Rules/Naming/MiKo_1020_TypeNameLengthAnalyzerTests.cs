@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.Types);
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_type_with_fitting_length(
+        public void No_issue_is_reported_for_type_with_fitting_length_(
             [ValueSource(nameof(FittingTypes))] string type,
             [ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 
@@ -22,7 +22,7 @@ public " + type + " " + name + @"
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_type_with_exceeding_length(
+        public void An_issue_is_reported_for_type_with_exceeding_length_(
             [ValueSource(nameof(FittingTypes))] string type,
             [ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 
@@ -35,7 +35,7 @@ public " + type + " " + name + @"
         [TestCase("TestFixture()")]
         [TestCase("TestClass")]
         [TestCase("TestClass()")]
-        public void No_issue_is_reported_for_test_class_with_exceeding_length(string attributeName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_class_with_exceeding_length_(string attributeName) => No_issue_is_reported_for(@"
 
 [" + attributeName + @"]
 public class Abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz

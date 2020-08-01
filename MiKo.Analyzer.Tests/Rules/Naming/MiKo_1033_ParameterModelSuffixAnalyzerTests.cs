@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("item")]
         [TestCase("modeless")]
         [TestCase("semanticModel")]
-        public void No_issue_is_reported_for_valid_parameter(string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_parameter_(string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(int " + name + @") { }
@@ -25,7 +25,7 @@ public class TestMe
         [TestCase("models")]
         [TestCase("itemModel")]
         [TestCase("modelItem")]
-        public void An_issue_is_reported_for_invalid_parameter(string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_invalid_parameter_(string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(int " + name + @") { }

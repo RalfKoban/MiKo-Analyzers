@@ -21,7 +21,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_parameterless_test_method_with_correct_name(
+        public void No_issue_is_reported_for_parameterless_test_method_with_correct_name_(
                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -35,7 +35,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_parameterized_test_method_with_correct_name(
+        public void No_issue_is_reported_for_parameterized_test_method_with_correct_name_(
                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -49,7 +49,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_method_with_wrong_name(
+        public void An_issue_is_reported_for_test_method_with_wrong_name_(
                                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                     [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
@@ -63,7 +63,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed([ValueSource(nameof(Tests))] string test) => VerifyCSharpFix(
+        public void Code_gets_fixed_([ValueSource(nameof(Tests))] string test) => VerifyCSharpFix(
                                                                                          "class TestMe { [" + test + "] void DoSomething(int i) { } }",
                                                                                          "class TestMe { [" + test + "] void DoSomething_(int i) { } }");
 

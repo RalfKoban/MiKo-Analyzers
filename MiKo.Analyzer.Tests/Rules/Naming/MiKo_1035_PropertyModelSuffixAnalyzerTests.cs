@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("CreateViewModels")]
         [TestCase("DoSomething")]
         [TestCase("EnableModelessStuff")]
-        public void No_issue_is_reported_for_valid_property(string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_property_(string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public string " + name + @" { get; set; }
@@ -25,7 +25,7 @@ public class TestMe
         [TestCase("CreateitemModel")]
         [TestCase("CreateModelItem")]
         [TestCase("ModelCollection", Description = "Special situation as plural name becomes null and we don't want to have a NRE.")]
-        public void An_issue_is_reported_for_invalid_property(string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_invalid_property_(string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public string " + name + @" { get; set; }

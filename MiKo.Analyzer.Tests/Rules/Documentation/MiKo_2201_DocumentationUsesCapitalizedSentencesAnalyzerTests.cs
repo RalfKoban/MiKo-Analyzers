@@ -146,7 +146,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_well_known_file_extension_in_code_block_in_XML_documentation(
+        public void No_issue_is_reported_for_well_known_file_extension_in_code_block_in_XML_documentation_(
                                                                                                     [ValueSource(nameof(XmlTags))] string xmlTag,
                                                                                                     [ValueSource(nameof(WellknownFileExtensions))] string fileExtension,
                                                                                                     [Values("c", "code")] string codeBlock)
@@ -158,7 +158,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_well_known_file_extension_not_within_code_block_in_XML_documentation(
+        public void No_issue_is_reported_for_well_known_file_extension_not_within_code_block_in_XML_documentation_(
                                                                                                             [ValueSource(nameof(XmlTags))] string xmlTag,
                                                                                                             [ValueSource(nameof(WellknownFileExtensions))] string fileExtension)
             => No_issue_is_reported_for(@"

@@ -21,7 +21,7 @@ public class TestMe
 
         [TestCase("interface", "MyEvent")]
         [TestCase("class", "MyEvent")]
-        public void An_issue_is_reported_for_incorrectly_named_event(string type, string eventName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_event_(string type, string eventName) => An_issue_is_reported_for(@"
 using System;
 
 public " + type + @" TestMe

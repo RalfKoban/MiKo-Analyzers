@@ -37,7 +37,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a(
+        public void No_issue_is_reported_for_method_that_returns_a_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("Task<bool>", "Task<string>")] string returnType)
             => No_issue_is_reported_for(@"
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Task_only_method(
+        public void No_issue_is_reported_for_correctly_commented_Task_only_method_(
                                                                                 [Values("returns", "value")] string xmlTag,
                                                                                 [Values("task", "<see cref=\"Task\" />", "<see cref=\"Task\"/>")] string comment)
             => No_issue_is_reported_for(@"
@@ -94,7 +94,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_generic_Task_method(
+        public void No_issue_is_reported_for_correctly_commented_generic_Task_method_(
             [Values("returns", "value")] string xmlTag,
             [Values("task", "<see cref=\"Task{TResult}\" />", "<see cref=\"Task{TResult}\"/>", "<see cref=\"System.Threading.Tasks.Task{TResult}\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}\"/>")] string task,
             [Values("<see cref=\"System.Threading.Tasks.Task{TResult}.Result\" />", "<see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/>")] string result)

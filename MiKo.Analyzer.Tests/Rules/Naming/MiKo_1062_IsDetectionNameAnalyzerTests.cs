@@ -23,7 +23,7 @@ public class TestMe
         [TestCase("CanSomethingThatFits")]
         [TestCase("HasSomethingThatFits")]
         [TestCase("ContainsSomethingStillFitting")]
-        public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_method_(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public bool " + methodName + @"() => true;
@@ -33,7 +33,7 @@ public class TestMe
         [TestCase("CanSomethingThatNotFits")]
         [TestCase("HasSomethingThatNotFits")]
         [TestCase("ContainsSomethingNotFittingAnymore")]
-        public void An_issue_is_reported_for_incorrectly_named_method(string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_method_(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public bool " + methodName + @"() => true;
@@ -54,7 +54,7 @@ public class TestMe
         [TestCase("CanSomethingFitting")]
         [TestCase("HasSomethingFitting")]
         [TestCase("ContainsSomethingFitting")]
-        public void No_issue_is_reported_for_correctly_named_property(string propertyName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_property_(string propertyName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public bool " + propertyName + @" { get; set; }
@@ -64,7 +64,7 @@ public class TestMe
         [TestCase("CanSomethingNotFitting")]
         [TestCase("HasSomethingNotFitting")]
         [TestCase("ContainsSomethingNotFitting")]
-        public void An_issue_is_reported_for_incorrectly_named_property(string propertyName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_property_(string propertyName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public bool " + propertyName + @" { get; set; }
@@ -74,7 +74,7 @@ public class TestMe
         [TestCase("CanSomething")]
         [TestCase("HasSomething")]
         [TestCase("ContainsSomething")]
-        public void No_issue_is_reported_for_correctly_named_field(string fieldName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_field_(string fieldName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private bool m_" + fieldName + @";
@@ -84,7 +84,7 @@ public class TestMe
         [TestCase("CanSomethingNotFitting")]
         [TestCase("HasSomethingNotFitting")]
         [TestCase("ContainsSomethingNotFitting")]
-        public void An_issue_is_reported_for_incorrectly_named_field(string fieldName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_field_(string fieldName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     private bool m_" + fieldName + @";

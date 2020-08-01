@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         [TestCase(nameof(PropertyChangedEventHandler))]
         [TestCase(nameof(PropertyChangingEventHandler))]
         [TestCase(nameof(CancelEventHandler))]
-        public void No_issue_is_reported_for_EventHandler(string handler) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_EventHandler_(string handler) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -33,7 +33,7 @@ public class TestMe
         [TestCase(nameof(PropertyChangedEventHandler))]
         [TestCase(nameof(PropertyChangingEventHandler))]
         [TestCase(nameof(CancelEventHandler))]
-        public void No_issue_is_reported_for_EventHandler_with_usings(string handler) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_EventHandler_with_usings_(string handler) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
