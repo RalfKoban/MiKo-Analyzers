@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1012_FireMethodsCodeFixProvider)), Shared]
     public sealed class MiKo_1012_FireMethodsCodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1037_EnumSuffixAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1012_FireMethodsAnalyzer.Id;
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {

@@ -123,6 +123,13 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(type, Has.Attribute<ExportCodeFixProviderAttribute>().With.Property(nameof(ExportCodeFixProviderAttribute.Name)).EqualTo(type.Name));
         }
 
+        [Test]
+        public static void CodeFixProviders_use_Id_of_corresponding_Analyzer_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
+        {
+            // we compare the names as both shall have the similar one
+            Assert.That(provider.FixableDiagnosticIds.Single(), Is.Not.Null.And.StartsWith(provider.GetType().Name.Substring(0, 9)));
+        }
+
         [Test, Ignore("Just to find gaps")]
         public static void Gaps_in_Analyzer_numbers_([Range(1, 5, 1)] int i)
         {
