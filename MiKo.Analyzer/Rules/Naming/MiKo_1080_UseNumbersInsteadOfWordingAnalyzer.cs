@@ -39,6 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly IEnumerable<string> KnownParts = new[]
                                                                      {
                                                                          "_one_",
+                                                                         "_first_",
+                                                                         "_second_",
+                                                                         "_third_",
                                                                          "bone",
                                                                          "Bone",
                                                                          "omponent", // 'component'

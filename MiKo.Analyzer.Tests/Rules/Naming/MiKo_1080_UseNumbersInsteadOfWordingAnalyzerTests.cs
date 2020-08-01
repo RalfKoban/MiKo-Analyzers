@@ -54,6 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "weight",
                 "zone",
                 "Zone",
+                "_one_",
+                "_first_",
+                "_second_",
+                "_third_",
             };
 
         private static readonly string[] WrongNames =
