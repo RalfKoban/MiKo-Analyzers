@@ -58,12 +58,12 @@ public enum TestMeEnums
         [TestCase("class")]
         [TestCase("struct")]
         [TestCase("enum")]
-        public void Fix_can_be_made(string type) => VerifyCSharpFix(
+        public void Code_gets_fixed(string type) => VerifyCSharpFix(
                                                          @"using System; " + type + " TestMeEnum { }",
                                                          @"using System; " + type + " TestMe { }");
 
         [Test]
-        public void Fix_can_be_made_for_Flags() => VerifyCSharpFix(
+        public void Code_gets_fixed_for_Flags() => VerifyCSharpFix(
                                                               @"using System; [Flags] enum TestMeEnum { }",
                                                               @"using System; [Flags] enum TestMes { }");
 

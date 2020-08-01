@@ -41,7 +41,7 @@ public class TestMe
         [TestCase("_fired_", "_raised_")]
         [TestCase("_fires_", "_raises_")]
         [TestCase("_firing_", "_raising_")]
-        public void Fix_can_be_made(string method, string wanted) => VerifyCSharpFix(
+        public void Code_gets_fixed(string method, string wanted) => VerifyCSharpFix(
                                                                                  @"using System; class TestMe { void " + method + "() { } }",
                                                                                  @"using System; class TestMe { void " + wanted + "() { } }");
 

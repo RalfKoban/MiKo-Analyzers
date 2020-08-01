@@ -33,7 +33,7 @@ public class TestMe
         [TestCase("class TestMe { void Init() { } }", "class TestMe { void Initialize() { } }")]
         [TestCase("class TestMe { void Init2() { } }", "class TestMe { void Initialize2() { } }")]
         [TestCase("class TestMe { void InitSomething() { } }", "class TestMe { void InitializeSomething() { } }")]
-        public void Fix_can_be_made(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+        public void Code_gets_fixed(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1015_InitMethodsAnalyzer.Id;
 

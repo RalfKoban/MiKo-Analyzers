@@ -82,7 +82,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Fix_can_be_made() => VerifyCSharpFix(
+        public void Code_gets_fixed() => VerifyCSharpFix(
             @"using System; class TestMe { void OnWhatever(object s, EventArgs args)  { System.Diagnostics.Trace.Write(args.GetType().ToString() + s.ToString(); } }",
             @"using System; class TestMe { void OnWhatever(object sender, EventArgs e)  { System.Diagnostics.Trace.Write(e.GetType().ToString() + sender.ToString(); } }");
 

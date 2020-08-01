@@ -102,7 +102,7 @@ public class TestMe
         [TestCase("class TestMe { void TryGet(out int i) { } }", "class TestMe { void TryGet(out int value) { } }")]
         [TestCase("class TestMe { void TryGetWhatever(out int i) { } }", "class TestMe { void TryGetWhatever(out int whatever) { } }")]
         [TestCase("class TestMe { void TryParse(out int i) { } }", "class TestMe { void TryParse(out int result) { } }")]
-        public void Fix_can_be_made(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+        public void Code_gets_fixed(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1061_TryMethodOutParameterNameAnalyzer.Id;
 

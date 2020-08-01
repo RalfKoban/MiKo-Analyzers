@@ -70,7 +70,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Fix_can_be_made([ValueSource(nameof(TestSetUps))] string test) => VerifyCSharpFix(
+        public void Code_gets_fixed([ValueSource(nameof(TestSetUps))] string test) => VerifyCSharpFix(
                                                               @"using System; class TestMe { [" + test + @"] void Setup()  { } }",
                                                               @"using System; class TestMe { [" + test + @"] void PrepareTest()  { } }");
 

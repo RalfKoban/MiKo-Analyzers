@@ -26,7 +26,7 @@ public class TestMeUt
 
         [TestCase("class TestMeUt { }", "class TestableTestMe { }")]
         [TestCase("class TestableMeUt { }", "class TestableMe { }")]
-        public void Fix_can_be_made(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+        public void Code_gets_fixed(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer.Id;
 
