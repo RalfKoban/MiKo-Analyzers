@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1093";
 
-        private static readonly string[] WrongSuffixes =
+        internal static readonly string[] WrongSuffixes =
             {
                 "Object",
                 "Struct",
@@ -19,6 +20,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         public MiKo_1093_ObjectSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {
+        }
+
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var newName = symbol.Name;
+            foreach (var suffix in WrongSuffixes.Where(_ => newName.EndsWith(_, StringComparison.OrdinalIgnoreCase)))
+            {
+                newName = newName.WithoutSuffix(suffix);
+            }
+
+            // do it twice as maybe the name is a combination of both words
+            foreach (var suffix in WrongSuffixes.Where(_ => newName.EndsWith(_, StringComparison.OrdinalIgnoreCase)))
+            {
+                newName = newName.WithoutSuffix(suffix);
+            }
+
+            return newName;
         }
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Namespace, SymbolKind.NamedType, SymbolKind.Property, SymbolKind.Field);
