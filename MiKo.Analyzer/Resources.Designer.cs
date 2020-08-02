@@ -3021,7 +3021,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid redundancy and confused developers, namespaces should ot be named after any parent namespace. Instead, it should be made more clear into which namespace a type belongs by choosing a proper name..
+        ///   Looks up a localized string similar to To avoid redundancy and confused developers, namespaces should not be named after any parent namespace. Instead, it should be made more clear into which namespace a type belongs by choosing a proper name..
         /// </summary>
         public static string MiKo_1403_Description {
             get {
@@ -3039,7 +3039,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should be named after any of their parent namespaces..
+        ///   Looks up a localized string similar to Namespaces should not be named after any of their parent namespaces..
         /// </summary>
         public static string MiKo_1403_Title {
             get {
