@@ -25,12 +25,12 @@ The following tables list all the 281 rules that are currently provided by the a
 |:-|:----|:----------------:|:---------------:|
 |MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|&#x2713;|\-|
 |MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
-|MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|&#x2713;|\-|
-|MiKo_1004|Events should not contain term 'Event' in their names.|&#x2713;|\-|
+|MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|&#x2713;|&#x2713;|
+|MiKo_1004|Events should not contain term 'Event' in their names.|&#x2713;|&#x2713;|
 |MiKo_1005|'System.EventArgs' variables should be named properly.|&#x2713;|\-|
 |MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|&#x2713;|\-|
 |MiKo_1007|Events and 'EventArgs' types shall be located in the same namespace.|&#x2713;|\-|
-|MiKo_1008|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.|&#x2713;|\-|
+|MiKo_1008|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.|&#x2713;|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names.|&#x2713;|\-|
 |MiKo_1011|Methods should not contain 'Do' in their names.|&#x2713;|\-|
 |MiKo_1012|Methods should not be named 'Fire'.|&#x2713;|&#x2713;|
@@ -116,7 +116,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix.|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore.|&#x2713;|&#x2713;|
 |MiKo_1111|Test methods should be named in a fluent way.|&#x2713;|\-|
-|MiKo_1112|Test data should not be named 'arbitrary'.|&#x2713;|\-|
+|MiKo_1112|Do not name test data 'arbitrary'.|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently.|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently.|&#x2713;|\-|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|&#x2713;|&#x2713;|
