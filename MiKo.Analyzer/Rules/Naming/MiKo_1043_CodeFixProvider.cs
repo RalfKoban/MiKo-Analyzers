@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Threading;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -19,31 +17,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var nodes = syntaxNodes.ToList();
-
-            var variableSyntax = nodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault();
-            if (variableSyntax != null)
+            var syntax = FindSyntax(syntaxNodes.ToList());
+            if (syntax is null)
             {
-                return CreateCodeAction(document, (s, t) => s.GetDeclaredSymbol(variableSyntax, t));
+                return null;
             }
 
-            var variableDesignationSyntax = nodes.OfType<SingleVariableDesignationSyntax>().FirstOrDefault();
-            if (variableDesignationSyntax != null)
-            {
-                return CreateCodeAction(document, (s, t) => s.GetDeclaredSymbol(variableDesignationSyntax, t));
-            }
-
-            var forEachStatementSyntax = nodes.OfType<ForEachStatementSyntax>().FirstOrDefault();
-            if (forEachStatementSyntax != null)
-            {
-                return CreateCodeAction(document, (s, t) => s.GetDeclaredSymbol(forEachStatementSyntax, t));
-            }
-
-            return null;
-        }
-
-        private static CodeAction CreateCodeAction(Document document, Func<SemanticModel, CancellationToken, ISymbol> symbolProvider)
-        {
             const string Title = "Name it '" + MiKo_1042_CancellationTokenParameterNameAnalyzer.ExpectedName + "'";
 
             return CodeAction.Create(
@@ -52,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             document,
                                                             (semanticModel, token) =>
                                                                 {
-                                                                    var symbol = symbolProvider(semanticModel, token);
+                                                                    var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
 
                                                                     const string NewName = MiKo_1043_CancellationTokenLocalVariableAnalyzer.ExpectedName;
 
@@ -60,6 +39,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                 },
                                                             _),
                                      Title);
+        }
+
+        private static SyntaxNode FindSyntax(IEnumerable<SyntaxNode> nodes)
+        {
+            var variableSyntax = nodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault();
+            if (variableSyntax != null)
+            {
+                return variableSyntax;
+            }
+
+            var variableDesignationSyntax = nodes.OfType<SingleVariableDesignationSyntax>().FirstOrDefault();
+            if (variableDesignationSyntax != null)
+            {
+                return variableDesignationSyntax;
+            }
+
+            var forEachStatementSyntax = nodes.OfType<ForEachStatementSyntax>().FirstOrDefault();
+            if (forEachStatementSyntax != null)
+            {
+                return forEachStatementSyntax;
+            }
+
+            return null;
         }
     }
 }
