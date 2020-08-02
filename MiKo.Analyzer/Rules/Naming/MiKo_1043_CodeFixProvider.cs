@@ -6,12 +6,11 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1043_CodeFixProvider)), Shared]
-    public sealed class MiKo_1043_CodeFixProvider : NamingCodeFixProvider
+    public sealed class MiKo_1043_CodeFixProvider : NamingLocalVariableCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_1043_CancellationTokenLocalVariableAnalyzer.Id;
 
@@ -32,36 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-
                                                                     const string NewName = MiKo_1043_CancellationTokenLocalVariableAnalyzer.ExpectedName;
 
                                                                     return new Tuple<ISymbol, string>(symbol, NewName);
                                                                 },
                                                             _),
                                      Title);
-        }
-
-        private static SyntaxNode FindSyntax(IEnumerable<SyntaxNode> nodes)
-        {
-            var variableSyntax = nodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault();
-            if (variableSyntax != null)
-            {
-                return variableSyntax;
-            }
-
-            var variableDesignationSyntax = nodes.OfType<SingleVariableDesignationSyntax>().FirstOrDefault();
-            if (variableDesignationSyntax != null)
-            {
-                return variableDesignationSyntax;
-            }
-
-            var forEachStatementSyntax = nodes.OfType<ForEachStatementSyntax>().FirstOrDefault();
-            if (forEachStatementSyntax != null)
-            {
-                return forEachStatementSyntax;
-            }
-
-            return null;
         }
     }
 }
