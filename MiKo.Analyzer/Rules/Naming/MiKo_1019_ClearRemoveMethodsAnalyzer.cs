@@ -12,16 +12,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1019";
 
+        private const string Remove = "Remove";
+        private const string Clear = "Clear";
+
         public MiKo_1019_ClearRemoveMethodsAnalyzer() : base(Id)
         {
         }
+
+        internal static string FindBetterName(IMethodSymbol method) => method.Parameters.Any()
+                                                                           ? method.Name.Replace(Clear, Remove)
+                                                                           : method.Name.Replace(Remove, Clear);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
 
-            const string Remove = "Remove";
-            const string Clear = "Clear";
             const StringComparison Comparison = StringComparison.Ordinal;
 
             if (methodName.StartsWith(Clear, Comparison) && !methodName.StartsWith(Clear + "s", Comparison))

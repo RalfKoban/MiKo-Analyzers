@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -84,8 +85,18 @@ public class TestMe
 }
 ");
 
+        [TestCase("Clear(int i)", "Remove(int i)")]
+        [TestCase("ClearAll(int i)", "RemoveAll(int i)")]
+        [TestCase("Remove()", "Clear()")]
+        [TestCase("RemoveAll()", "ClearAll()")]
+        public void Code_gets_fixed_(string method, string wanted) => VerifyCSharpFix(
+                                                                                      @"using System; class TestMe { void " + method + " { } }",
+                                                                                      @"using System; class TestMe { void " + wanted + " { } }");
+
         protected override string GetDiagnosticId() => MiKo_1019_ClearRemoveMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1019_ClearRemoveMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1019_CodeFixProvider();
     }
 }
