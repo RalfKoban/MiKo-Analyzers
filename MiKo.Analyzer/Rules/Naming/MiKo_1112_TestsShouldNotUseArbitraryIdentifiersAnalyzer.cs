@@ -12,8 +12,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1112";
 
+        internal const string Phrase = "arbitrary";
+
         public MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer() : base(Id)
         {
+        }
+
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var betterName = symbol.Name.Without("Arbitrary");
+            var i = betterName.IndexOf(Phrase, StringComparison.Ordinal);
+            if (i < 0)
+            {
+                return betterName;
+            }
+
+            var characters = betterName.Without(Phrase).ToCharArray();
+            if (characters.Length != 0)
+            {
+                characters[i] = char.ToLower(characters[i]);
+                return string.Intern(new string(characters));
+            }
+
+            // we cannot find a better name
+            return Phrase;
         }
 
         protected override void InitializeCore(AnalysisContext context)
@@ -59,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool HasIssue(string name) => name?.Contains("arbitrary", StringComparison.OrdinalIgnoreCase) is true;
+        private static bool HasIssue(string name) => name?.Contains(Phrase, StringComparison.OrdinalIgnoreCase) is true;
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => HasIssue(symbol.Name)
                                                                            ? new[] { Issue(symbol) }

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -168,8 +169,28 @@ public class TestMe
 }
 ");
 
+        [TestCase("arbitrary", "arbitrary")]
+        [TestCase("arbitraryValue", "value")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        int ### = 42;
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1112_CodeFixProvider();
     }
 }
