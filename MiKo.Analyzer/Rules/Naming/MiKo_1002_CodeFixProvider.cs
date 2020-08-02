@@ -30,9 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             (semanticModel, token) =>
                                                                 {
                                                                     var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    var newName = symbol.Type.IsObject()
-                                                                                      ? MiKo_1002_EventHandlingMethodParametersAnalyzer.Sender
-                                                                                      : MiKo_1002_EventHandlingMethodParametersAnalyzer.EventArgs;
+                                                                    var newName = MiKo_1002_EventHandlingMethodParametersAnalyzer.FindBetterName(symbol);
 
                                                                     return new Tuple<ISymbol, string>(symbol, newName);
                                                                 },
