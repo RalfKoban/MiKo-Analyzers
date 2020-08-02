@@ -40,7 +40,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1016|Factory methods should be named 'Create'.|&#x2713;|\-|
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|\-|
 |MiKo_1018|Methods should not be suffixed with noun of a verb.|&#x2713;|\-|
-|MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|&#x2713;|\-|
+|MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|&#x2713;|&#x2713;|
 |MiKo_1020|Type names should be limited in length.|&#x2713;|\-|
 |MiKo_1021|Method names should be limited in length.|&#x2713;|\-|
 |MiKo_1022|Parameter names should be limited in length.|&#x2713;|\-|
@@ -49,7 +49,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1025|Event names should be limited in length.|&#x2713;|\-|
 |MiKo_1026|Variable names should be limited in length.|&#x2713;|\-|
 |MiKo_1027|Variable names in loops should be limited in length.|&#x2713;|\-|
-|MiKo_1030|Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types.|&#x2713;|\-|
+|MiKo_1030|Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types.|&#x2713;|&#x2713;|
 |MiKo_1031|Entity types should not use a 'Model' suffix.|&#x2713;|\-|
 |MiKo_1032|Methods dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
 |MiKo_1033|Parameters representing entities should not use a 'Model' suffix.|&#x2713;|\-|
@@ -57,7 +57,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1035|Properties dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
 |MiKo_1036|Events dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
 |MiKo_1037|Types should not be suffixed with 'Enum'.|&#x2713;|&#x2713;|
-|MiKo_1038|Classes that contain extension methods should end with same suffix.|&#x2713;|\-|
+|MiKo_1038|Classes that contain extension methods should end with same suffix.|&#x2713;|&#x2713;|
 |MiKo_1039|The 'this' parameter of extension methods should have a default name.|&#x2713;|\-|
 |MiKo_1040|Parameters should not be suffixed with implementation details.|&#x2713;|\-|
 |MiKo_1041|Fields should not be suffixed with implementation details.|&#x2713;|\-|
@@ -67,7 +67,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1045|Methods that are invoked by commands should not be suffixed with 'Command'.|&#x2713;|\-|
 |MiKo_1046|Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).|&#x2713;|&#x2713;|
 |MiKo_1047|Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.|&#x2713;|&#x2713;|
-|MiKo_1048|To ease maintenance, the names of classes that are value converters should end with the same suffix.|&#x2713;|\-|
+|MiKo_1048|To ease maintenance, the names of classes that are value converters should end with the same suffix.|&#x2713;|&#x2713;|
 |MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|&#x2713;|\-|
 |MiKo_1050|Return values should have descriptive names.|&#x2713;|\-|
 |MiKo_1051|Do not suffix parameters with delegate types.|&#x2713;|\-|
@@ -102,7 +102,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1090|Parameters should not be suffixed with specific types.|&#x2713;|\-|
 |MiKo_1091|Variables should not be suffixed with specific types.|&#x2713;|\-|
 |MiKo_1092|'Ability' Types should not be suffixed with redundant information.|&#x2713;|\-|
-|MiKo_1093|Do not use the suffix 'Object' or 'Struct'.|&#x2713;|\-|
+|MiKo_1093|Do not use the suffix 'Object' or 'Struct'.|&#x2713;|&#x2713;|
 |MiKo_1094|Do not suffix types with passive namespace names.|&#x2713;|\-|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|\-|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|&#x2713;|
