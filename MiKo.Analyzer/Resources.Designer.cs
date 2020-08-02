@@ -2849,7 +2849,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test data should not be named &apos;arbitrary&apos;..
+        ///   Looks up a localized string similar to Do not name test data &apos;arbitrary&apos;..
         /// </summary>
         public static string MiKo_1112_Title {
             get {

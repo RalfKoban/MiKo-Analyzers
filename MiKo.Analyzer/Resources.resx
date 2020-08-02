@@ -1088,7 +1088,7 @@ Example:
     <value>Remove 'arbitrary' from name</value>
   </data>
   <data name="MiKo_1112_Title" xml:space="preserve">
-    <value>Test data should not be named 'arbitrary'.</value>
+    <value>Do not name test data 'arbitrary'.</value>
   </data>
   <data name="MiKo_1200_Description" xml:space="preserve">
     <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
