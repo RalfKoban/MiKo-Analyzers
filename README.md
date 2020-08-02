@@ -123,7 +123,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1400|Namespace names should be in plural.|&#x2713;|\-|
 |MiKo_1401|Namespaces should not contain technical language names.|&#x2713;|\-|
 |MiKo_1402|Namespaces should not be named after WPF specific design patterns.|&#x2713;|\-|
-|MiKo_1403|Namespaces should be named after any of their parent namespaces.|&#x2713;|\-|
+|MiKo_1403|Namespaces should not be named after any of their parent namespaces.|&#x2713;|\-|
 |MiKo_1404|Namespaces should not contain unspecific names.|&#x2713;|\-|
 |MiKo_1405|Namespaces should not contain 'Lib'.|&#x2713;|\-|
 |MiKo_1406|Value converters should be placed in 'Converters' namespace.|&#x2713;|\-|

@@ -11,6 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] CorrectNames =
             {
+                "map",
                 "array",
                 "buffer",
                 "collection",

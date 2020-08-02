@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
@@ -11,6 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedListNames =
             {
+                "map",
                 "array",
                 "collection",
                 "dictionary",
