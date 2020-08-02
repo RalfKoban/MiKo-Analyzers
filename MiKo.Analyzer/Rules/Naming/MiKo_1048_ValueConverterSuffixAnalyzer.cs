@@ -12,11 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1048";
 
-        private const string Suffix = "Converter";
+        internal const string Suffix = "Converter";
 
         public MiKo_1048_ValueConverterSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
+
+        internal static string FindBetterName(ITypeSymbol symbol) => symbol.Name + Suffix;
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsValueConverter() || symbol.IsMultiValueConverter();
 
