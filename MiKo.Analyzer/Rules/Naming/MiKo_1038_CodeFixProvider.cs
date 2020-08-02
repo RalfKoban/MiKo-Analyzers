@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var syntax = syntaxNodes.OfType<TypeDeclarationSyntax>().First();
 
-            const string Title = "Suffix type with '" + MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Suffix + "' ";
+            const string Title = "Suffix type with '" + MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Suffix + "'";
 
             return CodeAction.Create(
                                      Title,
