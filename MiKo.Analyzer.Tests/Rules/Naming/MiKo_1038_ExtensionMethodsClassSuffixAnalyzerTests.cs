@@ -11,8 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] WrongNames =
             {
+                "Extension",
+                "ExtensionClass",
                 "ExtensionsClass",
                 "SomeExtensionMethods",
+                "SomeExtensionMethod",
                 "Something",
             };
 
@@ -55,6 +58,15 @@ public static class " + name + @"
     public static void DoSomething(this int value) { }
 }
 ");
+
+        [TestCase("ExtensionClass")]
+        [TestCase("ExtensionsClass")]
+        [TestCase("ExtensionMethod")]
+        [TestCase("ExtensionMethods")]
+        [TestCase("Extension")]
+        public void Code_gets_fixed_(string name) => VerifyCSharpFix(
+                               "public static class TestMe" + name + " { public static void DoSomething(this int value) { } }",
+                               "public static class TestMeExtensions { public static void DoSomething(this int value) { } }");
 
         protected override string GetDiagnosticId() => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Id;
 
