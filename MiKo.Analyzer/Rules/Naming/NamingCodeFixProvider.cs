@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -14,9 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingCodeFixProvider : CodeFixProvider
     {
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
+
         public abstract string FixableDiagnosticId { get; }
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
+        protected abstract string Title { get; }
 
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
@@ -37,25 +38,37 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected static async Task<Solution> RenameSymbolAsync(
-                                                            Document document,
-                                                            Func<SemanticModel, CancellationToken, Tuple<ISymbol, string>> callback,
-                                                            CancellationToken cancellationToken)
+        protected abstract SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes);
+
+        protected abstract string GetNewName(ISymbol symbol);
+
+        private CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            var syntax = GetSyntax(syntaxNodes.ToList());
+            if (syntax is null)
+            {
+                return null;
+            }
+
+            return CodeAction.Create(
+                                     Title,
+                                     _ => RenameSymbolAsync(document, syntax, _),
+                                     GetType().Name);
+        }
+
+        private async Task<Solution> RenameSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
         {
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
 
-            var symbolAndName = callback(semanticModel, cancellationToken);
-
-            var symbol = symbolAndName.Item1;
-            var newName = symbolAndName.Item2;
+            var symbol = semanticModel.GetDeclaredSymbol(syntax, cancellationToken);
+            var newName = GetNewName(symbol);
 
             // Produce a new solution that has all references to that symbol renamed, including the declaration.
             var originalSolution = document.Project.Solution;
 
             // Return the new solution with the new symbol name.
-            return await Renamer.RenameSymbolAsync(document.Project.Solution, symbol, newName, originalSolution.Workspace.Options, cancellationToken).ConfigureAwait(false);
+            return await Renamer.RenameSymbolAsync(document.Project.Solution, symbol, newName, originalSolution.Workspace.Options, cancellationToken)
+                                .ConfigureAwait(false);
         }
-
-        protected abstract CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes);
     }
 }

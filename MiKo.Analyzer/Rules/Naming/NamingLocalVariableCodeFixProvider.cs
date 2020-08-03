@@ -7,7 +7,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingLocalVariableCodeFixProvider : NamingCodeFixProvider
     {
-        protected static SyntaxNode FindSyntax(IReadOnlyCollection<SyntaxNode> nodes)
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> nodes)
         {
             foreach (var node in nodes)
             {

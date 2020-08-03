@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -15,25 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1300_SimpleLambdaExpressionIdentifierAnalyzer.Id;
 
-        protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
-        {
-            var syntax = syntaxNodes.OfType<SimpleLambdaExpressionSyntax>().First().Parameter;
+        protected override string Title => "Name it '" + Constants.LambdaIdentifiers.Default + "'";
 
-            const string NewName = Constants.LambdaIdentifiers.Default;
-            const string Title = "Name it '" + NewName + "'";
+        protected override string GetNewName(ISymbol symbol) => Constants.LambdaIdentifiers.Default;
 
-            return CodeAction.Create(
-                                     Title,
-                                     _ => RenameSymbolAsync(
-                                                            document,
-                                                            (semanticModel, token) =>
-                                                                {
-                                                                    var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-
-                                                                    return new Tuple<ISymbol, string>(symbol, NewName);
-                                                                },
-                                                            _),
-                                     Title);
-        }
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SimpleLambdaExpressionSyntax>().First().Parameter;
     }
 }

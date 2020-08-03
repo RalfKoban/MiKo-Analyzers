@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Composition;
-using System.Linq;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -14,29 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.Id;
 
-        protected override CodeAction CreateCodeAction(Document document, IEnumerable<SyntaxNode> syntaxNodes)
-        {
-            var syntax = FindSyntax(syntaxNodes.ToList());
-            if (syntax is null)
-            {
-                return null;
-            }
+        protected override string Title => "Remove '" + MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.Phrase + "' from name";
 
-            const string Title = "Remove '" + MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.Phrase + "' from name";
-
-            return CodeAction.Create(
-                                     Title,
-                                     _ => RenameSymbolAsync(
-                                                            document,
-                                                            (semanticModel, token) =>
-                                                                {
-                                                                    var symbol = semanticModel.GetDeclaredSymbol(syntax, token);
-                                                                    var newName = MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.FindBetterName(symbol);
-
-                                                                    return new Tuple<ISymbol, string>(symbol, newName);
-                                                                },
-                                                            _),
-                                     Title);
-        }
+        protected override string GetNewName(ISymbol symbol) => MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.FindBetterName(symbol);
     }
 }
