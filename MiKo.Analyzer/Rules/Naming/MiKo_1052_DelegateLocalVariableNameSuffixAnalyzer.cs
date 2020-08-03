@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1052";
 
+        public const string ExpectedName = "callback";
+
         private static readonly string[] WrongNames = { "Action", "Delegate", "Func" };
 
         public MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer() : base(Id)

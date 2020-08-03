@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,22 +9,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         protected static SyntaxNode FindSyntax(IReadOnlyCollection<SyntaxNode> nodes)
         {
-            var variableSyntax = nodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault();
-            if (variableSyntax != null)
+            foreach (var node in nodes)
             {
-                return variableSyntax;
-            }
-
-            var variableDesignationSyntax = nodes.OfType<SingleVariableDesignationSyntax>().FirstOrDefault();
-            if (variableDesignationSyntax != null)
-            {
-                return variableDesignationSyntax;
-            }
-
-            var forEachStatementSyntax = nodes.OfType<ForEachStatementSyntax>().FirstOrDefault();
-            if (forEachStatementSyntax != null)
-            {
-                return forEachStatementSyntax;
+                switch (node)
+                {
+                    case VariableDeclaratorSyntax vds: return vds;
+                    case SingleVariableDesignationSyntax svds: return svds;
+                    case ForEachStatementSyntax fess: return fess;
+                    case ForStatementSyntax fss: return fss;
+                }
             }
 
             return null;

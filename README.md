@@ -71,7 +71,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|&#x2713;|\-|
 |MiKo_1050|Return values should have descriptive names.|&#x2713;|\-|
 |MiKo_1051|Do not suffix parameters with delegate types.|&#x2713;|\-|
-|MiKo_1052|Do not suffix variables with delegate types.|&#x2713;|\-|
+|MiKo_1052|Do not suffix variables with delegate types.|&#x2713;|&#x2713;|
 |MiKo_1053|Do not suffix fields with delegate types.|&#x2713;|\-|
 |MiKo_1054|Do not name types 'Helper' or 'Utility'.|&#x2713;|\-|
 |MiKo_1055|Dependency properties should be suffixed with 'Property' (as in the .NET Framework).|&#x2713;|\-|
