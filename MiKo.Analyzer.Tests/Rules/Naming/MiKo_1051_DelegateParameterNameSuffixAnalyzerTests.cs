@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -76,9 +77,16 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed() => VerifyCSharpFix(
+                                                         "using System; public class TestMe { public void DoSomething(Action action) { } }",
+                                                         "using System; public class TestMe { public void DoSomething(Action callback) { } }");
+
         protected override string GetDiagnosticId() => MiKo_1051_DelegateParameterNameSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1051_DelegateParameterNameSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1051_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static string[] CreateWrongDelegateNames()
