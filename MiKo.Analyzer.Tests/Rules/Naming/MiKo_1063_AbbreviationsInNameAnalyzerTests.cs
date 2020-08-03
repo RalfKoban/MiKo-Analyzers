@@ -121,6 +121,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "mixtures",
                 "number",
                 "tires",
+                "Enum",
+                "Enumeration",
             };
 
         [Test]

@@ -103,6 +103,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "wares",
             };
 
+        private static readonly string[] AllowedNames =
+            {
+                "Enumerable",
+                "Enumeration",
+                "Enum", // must be after the others so that those get properly replaced
+            };
+
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)
         {
         }
@@ -134,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
 
-        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && !symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal);
+        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
 
         private static bool MidTermHasIssue(string key, string symbolName)
         {
@@ -178,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            var symbolName = symbol.Name;
+            var symbolName = symbol.Name.Without(AllowedNames);
 
             var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
             var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
