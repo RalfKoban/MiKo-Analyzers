@@ -6557,7 +6557,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties that use Linq most probably behave differently when being accessed later on. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
+        ///   Looks up a localized string similar to Properties that use Linq internally most probably behave differently when being accessed later on or multiple times. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
         ///Such properties should be methods instead to make it clear that they behave differently between calls..
         /// </summary>
         public static string MiKo_3038_Description {
