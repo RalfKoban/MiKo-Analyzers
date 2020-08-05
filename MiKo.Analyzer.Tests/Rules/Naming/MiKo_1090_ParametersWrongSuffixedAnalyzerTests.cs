@@ -27,7 +27,8 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_properly_named_parameter_([Values("comparer", "view", "item", "entity")] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_properly_named_parameter_([Values("comparer", "view", "item", "entity", "oldView", "newView")] string name)
+            => No_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -36,7 +37,8 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_incorrectly_named_parameter_([Values("myComparer", "myView", "myItem", "myEntity", "myElement")] string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_incorrectly_named_parameter_([Values("myComparer", "myView", "myItem", "myEntity", "myElement")] string name)
+            => An_issue_is_reported_for(@"
 
 public class TestMe
 {
