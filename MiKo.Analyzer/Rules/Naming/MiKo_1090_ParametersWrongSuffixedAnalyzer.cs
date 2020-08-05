@@ -12,6 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1090";
 
+        private static readonly string[] Prefixes =
+            {
+                "old",
+                "new",
+            };
+
         private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>
                                                                                {
                                                                                    { "Comparer", "comparer" },
@@ -49,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var pair in WrongSuffixes)
             {
-                if (symbolName.EndsWith(pair.Key, Comparison))
+                if (symbolName.EndsWith(pair.Key, Comparison) && symbolName.StartsWithAny(Prefixes) is false)
                 {
                     return new[] { Issue(symbol, pair.Value) };
                 }
