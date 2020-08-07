@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingCodeFixProvider : CodeFixProvider
     {
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
 
         public abstract string FixableDiagnosticId { get; }
 

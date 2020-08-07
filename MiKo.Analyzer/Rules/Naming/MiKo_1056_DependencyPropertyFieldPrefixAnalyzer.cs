@@ -22,6 +22,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IFieldSymbol symbol)
+        {
+            var propertyName = FindPropertyNames(symbol).First();
+            return propertyName + Suffix;
+        }
+
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
             if (!symbol.Type.IsDependencyProperty())
@@ -36,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            // ignore  "Key.DependencyProperty" assignments
+            // ignore "Key.DependencyProperty" assignments
             var keys = symbol.ContainingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + ".DependencyProperty").ToHashSet();
 
             foreach (var key in keys)
@@ -53,12 +59,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
         {
             // find properties
+            var propertyNames = FindPropertyNames(symbol);
+            if (propertyNames.Any())
+            {
+                return new[] { Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
+
+        private static IEnumerable<string> FindPropertyNames(IFieldSymbol symbol)
+        {
             var propertyNames = symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Select(_ => _.Name).ToHashSet();
 
             // there might be none available; in such case don't report anything
             if (propertyNames.None())
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Enumerable.Empty<string>();
             }
 
             var symbolName = symbol.Name.WithoutSuffix(Suffix);
@@ -69,21 +86,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (propertyNames.Contains(symbolName))
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Enumerable.Empty<string>();
                 }
             }
             else
             {
                 if (registeredName == symbolName)
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    return Enumerable.Empty<string>();
                 }
 
                 propertyNames.Clear();
                 propertyNames.Add(registeredName);
             }
 
-            return new[] { Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
+            return propertyNames;
         }
 
         private static string GetRegisteredName(IFieldSymbol symbol)
@@ -95,6 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     case LiteralExpressionSyntax s:
                         return s.Token.ValueText;
+
                     case InvocationExpressionSyntax s:
                         return s.ArgumentList.Arguments.FirstOrDefault()?.ToString();
                 }

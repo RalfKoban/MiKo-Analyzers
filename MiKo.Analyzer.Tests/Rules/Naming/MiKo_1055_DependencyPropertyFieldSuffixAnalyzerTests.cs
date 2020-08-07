@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -48,8 +49,30 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string Template = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int Xyz { get; set; }
+
+        private DependencyProperty ###;
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "m_field"), Template.Replace("###", "XyzProperty"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1055_DependencyPropertyFieldSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1055_DependencyPropertyFieldSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1055_1056_CodeFixProvider();
     }
 }
