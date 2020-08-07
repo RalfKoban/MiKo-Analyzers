@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
 
-            var codeFixProviders = AllCodeFixProviders.ToDictionary(_ => _.FixableDiagnosticIds.Single());
+            var codeFixProviders = AllCodeFixProviders.SelectMany(_ => _.FixableDiagnosticIds).ToHashSet();
 
             foreach (var descriptor in AllAnalyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {
@@ -199,7 +199,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                              descriptor.Id,
                                              descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
                                              descriptor.IsEnabledByDefault ? Check : NoCheck,
-                                             codeFixProviders.ContainsKey(descriptor.Id) ? Check : NoCheck);
+                                             codeFixProviders.Contains(descriptor.Id) ? Check : NoCheck);
             }
 
             var markdown = markdownBuilder.ToString();
