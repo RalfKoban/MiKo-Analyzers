@@ -47,7 +47,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_method_that_returns_a(
+        public void No_issue_is_reported_for_method_that_returns_a_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("void", "int", "string", "Task", "Task<int>", "Task<bool>, Task<string>")] string returnType)
             => No_issue_is_reported_for(@"
@@ -69,7 +69,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Array_only_method(
+        public void No_issue_is_reported_for_correctly_commented_Array_only_method_(
                                                                                 [Values("returns", "value")] string xmlTag,
                                                                                 [Values("int", "string")] string returnType,
                                                                                 [Values("An array of", "The array of")] string startingPhrase)
@@ -92,7 +92,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method(
+        public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_(
                                                                                     [Values("returns", "value")] string xmlTag,
                                                                                     [ValueSource(nameof(EnumerableOnlyReturnValues))] string returnType) => No_issue_is_reported_for(@"
 using System;
@@ -113,7 +113,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_List_method(
+        public void No_issue_is_reported_for_correctly_commented_List_method_(
                                                                         [Values("returns", "value")] string xmlTag,
                                                                         [Values("A", "An")] string startingWord) => No_issue_is_reported_for(@"
 using System;
@@ -134,7 +134,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_correctly_commented_Enumerable_Task_method(
+        public void No_issue_is_reported_for_correctly_commented_Enumerable_Task_method_(
                                                                                     [Values("returns", "value")] string xmlTag,
                                                                                     [Values("", " ")] string space,
                                                                                     [ValueSource(nameof(EnumerableTaskReturnValues))] string returnType) => No_issue_is_reported_for(@"
@@ -156,7 +156,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_wrong_commented_method(
+        public void An_issue_is_reported_for_wrong_commented_method_(
                                                                 [Values("returns", "value")] string xmlTag,
                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
                                                                 [ValueSource(nameof(EnumerableReturnValues))] string returnType) => An_issue_is_reported_for(@"

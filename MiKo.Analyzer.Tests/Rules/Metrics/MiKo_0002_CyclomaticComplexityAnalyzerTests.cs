@@ -21,7 +21,7 @@ public class TestMe
 
         [TestCase("default(T);")]
         [TestCase("default")]
-        public void Valid_term_is_not_reported(string term) => No_issue_is_reported_for(@"
+        public void Valid_term_is_not_reported_(string term) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -47,7 +47,7 @@ public class TestMe
         [TestCase("bool result = true || false;")]
         [TestCase("try { throw new Exception(); } catch { }")]
         [TestCase("try { throw new Exception(); } catch (Exception ex) when (ex is InvalidOperationException) { }")]
-        public void Method_with_too_complex_term_is_reported(string term) => An_issue_is_reported_for(@"
+        public void Method_with_too_complex_term_is_reported_(string term) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()

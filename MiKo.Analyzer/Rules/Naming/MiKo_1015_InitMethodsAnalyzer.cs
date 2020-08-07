@@ -12,29 +12,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1015";
 
+        private const string Name = "Initialize";
+
         public MiKo_1015_InitMethodsAnalyzer() : base(Id)
         {
         }
 
+        internal static string FindBetterName(IMethodSymbol method) => GetExpectedName(method.Name);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
-            if (!methodName.StartsWith("Init", StringComparison.Ordinal))
+            if (methodName.StartsWith("Init", StringComparison.Ordinal) is false)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (methodName.StartsWith("Initialize", StringComparison.Ordinal))
+            if (methodName.StartsWith(Name, StringComparison.Ordinal))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var expectedName = GetExpectedName(methodName, "Initialize");
+            var expectedName = FindBetterName(method);
 
             return new[] { Issue(method, expectedName) };
         }
 
-        private static string GetExpectedName(string methodName, string expectedName)
+        private static string GetExpectedName(string methodName)
         {
             var i = 1;
             for (; i < methodName.Length; i++)
@@ -51,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return i >= methodName.Length ? expectedName : expectedName + methodName.Substring(i);
+            return i >= methodName.Length ? Name : Name + methodName.Substring(i);
         }
     }
 }

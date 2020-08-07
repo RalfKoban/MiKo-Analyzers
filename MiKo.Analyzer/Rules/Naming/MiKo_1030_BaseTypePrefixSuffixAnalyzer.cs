@@ -15,11 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(INamedTypeSymbol symbol) => symbol.Name.Without(Constants.Markers.BaseClasses);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
+            var symbolName = symbol.Name.Without("Abstraction");
+
             foreach (var marker in Constants.Markers.BaseClasses)
             {
-                if (symbol.Name.Without("Abstraction").Contains(marker))
+                if (symbolName.Contains(marker))
                 {
                     yield return Issue(symbol, marker);
                 }

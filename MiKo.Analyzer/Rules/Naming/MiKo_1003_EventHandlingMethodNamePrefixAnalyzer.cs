@@ -20,6 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IMethodSymbol method)
+        {
+            var suffix = FindProperNameSuffix(method);
+
+            return Prefix + suffix;
+        }
+
         protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && method.IsEventHandler();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
@@ -28,7 +35,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var methodName = method.Name;
 
-            return methodName.StartsWith(Prefix, StringComparison.Ordinal) && methodName.EndsWith(suffix, StringComparison.Ordinal) && !methodName.Contains("_")
+            var nameFits = methodName.StartsWith(Prefix, StringComparison.Ordinal)
+                        && methodName.EndsWith(suffix, StringComparison.Ordinal)
+                        && methodName.Contains("_") is false;
+
+            return nameFits
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { Issue(method, Prefix + suffix) };
         }

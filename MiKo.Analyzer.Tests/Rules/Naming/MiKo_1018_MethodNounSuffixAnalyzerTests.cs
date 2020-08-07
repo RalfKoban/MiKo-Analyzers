@@ -156,7 +156,7 @@ public class TestMe
         [TestCase("Func", ExpectedResult = "Function")]
         [TestCase("DoFunc", ExpectedResult = "DoFunction")]
         [TestCase("IsRelevantFunc", ExpectedResult = "IsRelevantFunc")]
-        public string A_proper_name_is_found(string name)
+        public string A_proper_name_is_found_(string name)
         {
             MiKo_1018_MethodNounSuffixAnalyzer.TryFindBetterName(name, out var result);
             return result;

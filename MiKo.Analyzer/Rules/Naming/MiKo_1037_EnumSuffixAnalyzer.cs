@@ -18,31 +18,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(WrongNames); // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
+        internal static string FindBetterName(ITypeSymbol symbol)
         {
             var symbolName = symbol.Name;
 
             var betterName = symbolName
-                                   .Replace("TypeEnums", "Kinds")
-                                   .Replace("TypeEnum", "Kind")
-                                   .Without(WrongNames);
+                             .Replace("TypeEnum", "Kind")
+                             .Without(WrongNames);
 
-            if (betterName.IsNullOrWhiteSpace())
+            if (betterName.IsNullOrWhiteSpace() is false)
             {
-                return Enumerable.Empty<Diagnostic>();
+                if (symbol.IsEnum() && symbol.GetAttributeNames().Any(_ => _ == nameof(FlagsAttribute))
+                                    && betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase) is false)
+                {
+                    betterName = Pluralizer.GetPluralName(symbolName, betterName);
+                }
             }
 
-            // ReSharper disable once RedundantNameQualifier we need the complete name here
-            if (symbol.IsEnum()
-                && symbol.GetAttributeNames().Any(_ => _ == nameof(FlagsAttribute))
-                && betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase) is false)
-            {
-                betterName = Pluralizer.GetPluralName(symbolName, betterName);
-            }
+            return betterName;
+        }
 
-            return new[] { Issue(symbol, betterName) };
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(WrongNames); // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
+        {
+            var betterName = FindBetterName(symbol);
+
+            return betterName.IsNullOrWhiteSpace()
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { Issue(symbol, betterName) };
         }
     }
 }

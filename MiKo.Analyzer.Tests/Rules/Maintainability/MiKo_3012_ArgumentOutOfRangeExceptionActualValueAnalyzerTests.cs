@@ -37,7 +37,7 @@ public class TestMe
 
         [TestCase("\"x\", 42, \"some message\"")]
         [TestCase("nameof(x), 42, \"some message\"")]
-        public void No_issue_is_reported_for_correctly_thrown_ArgumentOutOfRangeException(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_thrown_ArgumentOutOfRangeException_(string parameters) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -58,7 +58,7 @@ public class TestMe
         [TestCase("\"some message\", \"x\"")]
         [TestCase("\"some message\", nameof(x)")]
         [TestCase("\"some message\", new Exception()")]
-        public void An_issue_is_reported_for_incorrectly_thrown_ArgumentOutOfRangeException(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_thrown_ArgumentOutOfRangeException_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -72,7 +72,7 @@ public class TestMe
 
         [TestCase("\"x\", 42, typeof(StringComparison)")]
         [TestCase("nameof(x), 42, typeof(StringComparison)")]
-        public void No_issue_is_reported_for_correctly_thrown_InvalidEnumArgumentException(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_thrown_InvalidEnumArgumentException_(string parameters) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -93,7 +93,7 @@ public class TestMe
         [TestCase("\"some message\", \"x\"")]
         [TestCase("\"some message\", nameof(x)")]
         [TestCase("\"some message\", new Exception()")]
-        public void An_issue_is_reported_for_incorrectly_thrown_InvalidEnumArgumentException(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_thrown_InvalidEnumArgumentException_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

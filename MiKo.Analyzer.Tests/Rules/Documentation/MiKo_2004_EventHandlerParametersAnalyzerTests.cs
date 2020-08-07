@@ -65,7 +65,7 @@ namespace Bla
         [TestCase("The source of the event", "Unused")]
         [TestCase("<para>The source of the event.</para>", "<para>Unused.</para>")]
         [TestCase("<para>The source of the event</para>", "<para>Unused</para>")]
-        public void No_issue_is_reported_for_correctly_documented_event_handling_method(string sender, string e) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_event_handling_method_(string sender, string e) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -87,7 +87,7 @@ namespace Bla
         [TestCase("The source of the event.", "An <see cref=\"EventArgs\" /> that contains the event data.")]
         [TestCase("The source of the event.", "An <see cref='System.EventArgs' /> that contains the event data.")]
         [TestCase("The source of the event.", "An <see cref=\"System.EventArgs\" /> that contains the event data.")]
-        public void No_issue_is_reported_for_correctly_documented_event_handling_method_with_vocal_at_begin(string sender, string e) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_event_handling_method_with_vocal_at_begin_(string sender, string e) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla

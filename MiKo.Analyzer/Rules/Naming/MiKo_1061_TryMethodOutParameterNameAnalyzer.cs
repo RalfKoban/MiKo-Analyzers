@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IMethodSymbol method) => GetPreferredParameterName(method.Name);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
         {
             return symbol.IsTestClass()
@@ -47,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic AnalyzeOutParameter(IMethodSymbol method)
         {
-            var parameterName = GetPreferredParameterName(method.Name);
+            var parameterName = FindBetterName(method);
 
             var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
             if (outParameter != null && outParameter.Name != parameterName)

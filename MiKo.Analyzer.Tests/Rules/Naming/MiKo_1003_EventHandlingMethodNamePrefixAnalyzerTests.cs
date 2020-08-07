@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -134,8 +135,35 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string Template = @"
+using System;
+
+public class TestMeEvent
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public TestMe(TestMeEvent tme) => TME = tme;
+
+    public TestMeEvent TME { get; set; }
+
+    public void Initialize() => TME.MyEvent += #;
+
+    public void #(object sender, EventArgs e) { }
+}";
+
+            VerifyCSharpFix(Template.Replace("#", "TME_MyEvent"), Template.Replace("#", "OnMyEvent"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1003_EventHandlingMethodNamePrefixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1003_EventHandlingMethodNamePrefixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1003_CodeFixProvider();
     }
 }

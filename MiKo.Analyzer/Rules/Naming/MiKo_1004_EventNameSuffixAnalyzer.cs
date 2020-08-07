@@ -12,14 +12,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1004";
 
-        private const string Suffix = "Event";
+        internal const string Suffix = "Event";
 
         public MiKo_1004_EventNameSuffixAnalyzer() : base(Id, SymbolKind.Event)
         {
         }
 
+        internal static string FindBetterName(ISymbol symbol) => symbol.Name.Without(Suffix);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                           ? new[] { Issue(symbol, symbol.Name.Without(Suffix)) }
+                                                                                           ? new[] { Issue(symbol, FindBetterName(symbol)) }
                                                                                            : Enumerable.Empty<Diagnostic>();
     }
 }

@@ -7,6 +7,7 @@ using System.Resources;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Rules.Documentation;
@@ -23,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules
     {
         private static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Resources));
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
+        private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
         [Test]
         public static void Resources_contains_texts_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
@@ -113,6 +115,34 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
         }
 
+        [Test]
+        public static void CodeFixProvider_are_marked_with_ExportCodeFixProvider_attribute_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
+        {
+            var type = provider.GetType();
+
+            Assert.That(type, Has.Attribute<ExportCodeFixProviderAttribute>().With.Property(nameof(ExportCodeFixProviderAttribute.Name)).EqualTo(type.Name));
+        }
+
+        [Test]
+        public static void CodeFixProviders_use_Id_of_corresponding_Analyzer()
+        {
+            var map = AllAnalyzers.ToDictionary(_ => _.DiagnosticId);
+
+            Assert.Multiple(() =>
+                                {
+                                    foreach (var id in AllCodeFixProviders.Select(_ => _.FixableDiagnosticIds.First()))
+                                    {
+                                        Assert.That(map.ContainsKey(id), Is.True, $"Analyzer for '{id}' missing");
+                                    }
+                                });
+        }
+
+        [Test]
+        public static void CodeFixProviders_use_simplified_name_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
+        {
+            Assert.That(provider.GetType().Name, Is.EqualTo(provider.FixableDiagnosticIds.Single() + "_CodeFixProvider"));
+        }
+
         [Test, Ignore("Just to find gaps")]
         public static void Gaps_in_Analyzer_numbers_([Range(1, 5, 1)] int i)
         {
@@ -144,7 +174,9 @@ namespace MiKoSolutions.Analyzers.Rules
                                                      .AppendLine($"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
 
             var category = string.Empty;
-            var tableFormat = "|{0}|{1}|{2}|" + Environment.NewLine;
+            var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
+
+            var codeFixProviders = AllCodeFixProviders.ToDictionary(_ => _.FixableDiagnosticIds.Single());
 
             foreach (var descriptor in AllAnalyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {
@@ -155,15 +187,19 @@ namespace MiKoSolutions.Analyzers.Rules
                     markdownBuilder
                         .AppendLine()
                         .AppendLine("### " + category)
-                        .AppendFormat(tableFormat, "ID", "Title", "Enabled by default")
-                        .AppendFormat(tableFormat, ":-", ":----", ":----------------:");
+                        .AppendFormat(tableFormat, "ID", "Title", "Enabled by default", "CodeFix available")
+                        .AppendFormat(tableFormat, ":-", ":----", ":----------------:", ":---------------:");
                 }
 
+                const string Check = "&#x2713;";
+                const string NoCheck = "\\-";
+
                 markdownBuilder.AppendFormat(
-                                         tableFormat,
-                                         descriptor.Id,
-                                         descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
-                                         descriptor.IsEnabledByDefault ? "&#x2713;" : "\\-");
+                                             tableFormat,
+                                             descriptor.Id,
+                                             descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
+                                             descriptor.IsEnabledByDefault ? Check : NoCheck,
+                                             codeFixProviders.ContainsKey(descriptor.Id) ? Check : NoCheck);
             }
 
             var markdown = markdownBuilder.ToString();
@@ -196,12 +232,24 @@ namespace MiKoSolutions.Analyzers.Rules
 
             //// TODO: RKN Fix Markdown for those that are enabled
 
-            var analyzerBaseType = typeof(Analyzer);
+            var baseType = typeof(Analyzer);
 
-            var allAnalyzers = analyzerBaseType.Assembly.GetExportedTypes()
-                                               .Where(_ => !_.IsAbstract && analyzerBaseType.IsAssignableFrom(_))
-                                               .Select(_ => (Analyzer)_.GetConstructor(Type.EmptyTypes).Invoke(null))
-                                               .OrderBy(_ => _.DiagnosticId)
+            var allAnalyzers = baseType.Assembly.GetExportedTypes()
+                                       .Where(_ => !_.IsAbstract && baseType.IsAssignableFrom(_))
+                                       .Select(_ => (Analyzer)_.GetConstructor(Type.EmptyTypes).Invoke(null))
+                                       .OrderBy(_ => _.DiagnosticId)
+                                       .ToArray();
+            return allAnalyzers;
+        }
+
+        private static CodeFixProvider[] CreateAllCodeFixProviders()
+        {
+            var baseType = typeof(CodeFixProvider);
+
+            var allAnalyzers = typeof(Analyzer).Assembly.GetExportedTypes()
+                                               .Where(_ => !_.IsAbstract && baseType.IsAssignableFrom(_))
+                                               .Select(_ => (CodeFixProvider)_.GetConstructor(Type.EmptyTypes).Invoke(null))
+                                               .OrderBy(_ => _.GetType().Name)
                                                .ToArray();
             return allAnalyzers;
         }

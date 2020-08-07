@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -46,8 +47,15 @@ public class TestMe : " + interfaceName + @"
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_() => VerifyCSharpFix(
+                                                      @"using System; class TestMe : System.Windows.Data.IValueConverter { }",
+                                                      @"using System; class TestMeConverter : System.Windows.Data.IValueConverter { }");
+
         protected override string GetDiagnosticId() => MiKo_1048_ValueConverterSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1048_ValueConverterSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1048_CodeFixProvider();
     }
 }

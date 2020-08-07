@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Whatever")]
         [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
         [TestCase("Dogfood")]
-        public void No_issue_is_reported_for_correctly_named_method(string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_method_(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -56,7 +56,7 @@ public class TestMe
         [TestCase("DoDownload")]
         [TestCase("DoWhatever")]
         [TestCase("IsDoDown")]
-        public void An_issue_is_reported_for_wrong_named_method(string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_named_method_(string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
@@ -64,7 +64,7 @@ public class TestMe
 ");
 
         [TestCase("DoesSupport")]
-        public void An_issue_is_reported_for_wrong_interface_named_method(string methodName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_interface_named_method_(string methodName) => An_issue_is_reported_for(@"
 public interface TestMe
 {
     public bool " + methodName + @"();
@@ -72,7 +72,7 @@ public interface TestMe
 ");
 
         [TestCase("Whatever_it_Does")]
-        public void No_issue_is_reported_for_test_method(string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_(string methodName) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [TestFixture]

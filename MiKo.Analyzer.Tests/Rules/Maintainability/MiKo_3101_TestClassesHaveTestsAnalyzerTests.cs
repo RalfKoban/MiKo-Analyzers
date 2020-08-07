@@ -17,7 +17,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_class_with_tests(
+        public void No_issue_is_reported_for_test_class_with_tests_(
                                                                 [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                 [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -30,7 +30,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_class_with_nested_tests(
+        public void No_issue_is_reported_for_test_class_with_nested_tests_(
                                                                 [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                 [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_partial_test_class_with_tests(
+        public void No_issue_is_reported_for_partial_test_class_with_tests_(
                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -79,7 +79,7 @@ public partial class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(
+        public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_(
                                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"

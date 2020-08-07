@@ -10,9 +10,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1002";
 
+        private const string Parameter1 = "sender";
+        private const string Parameter2 = "e";
+
         public MiKo_1002_EventHandlingMethodParametersAnalyzer() : base(Id)
         {
         }
+
+        internal static string FindBetterName(IParameterSymbol symbol) => symbol.Type.IsObject()
+                                                                              ? Parameter1
+                                                                              : Parameter2;
 
         protected override bool ShallAnalyze(IMethodSymbol method) => method.IsEventHandler();
 
@@ -20,14 +27,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameters = method.Parameters;
 
-            if (parameters[0].Name != "sender")
+            if (parameters[0].Name != Parameter1)
             {
-                yield return Issue(parameters[0], "sender");
+                yield return Issue(parameters[0], Parameter1);
             }
 
-            if (parameters[1].Name != "e")
+            if (parameters[1].Name != Parameter2)
             {
-                yield return Issue(parameters[1], "e");
+                yield return Issue(parameters[1], Parameter2);
             }
         }
     }

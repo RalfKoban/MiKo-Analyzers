@@ -59,7 +59,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_incorrectly_commented_readonly_TestClass_field_with_visibility(
+        public void No_issue_is_reported_for_incorrectly_commented_readonly_TestClass_field_with_visibility_(
                                                                                                         [Values("protected", "public")] string visibility,
                                                                                                         [ValueSource(nameof(TestFixtures))] string testFixture)
             => No_issue_is_reported_for(@"

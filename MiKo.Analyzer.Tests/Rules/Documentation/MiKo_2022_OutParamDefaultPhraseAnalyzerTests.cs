@@ -53,7 +53,7 @@ public class TestMe
         [TestCase("On <see langword='true' />, returns something.")]
         [TestCase("On successful return, indicates something.")]
         [TestCase("")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -66,7 +66,7 @@ public class TestMe
         [TestCase("On false, returns something.")]
         [TestCase("On successful return, contains something.")]
         [TestCase("")]
-        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_on_bool(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_comment_phrase_on_bool_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary />
@@ -78,7 +78,7 @@ public class TestMe
         [TestCase("<summary />")]
         [TestCase("<inheritdoc />")]
         [TestCase("<exclude />")]
-        public void No_issue_is_reported_for_method_with_missing_documentation(string xmlElement) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_missing_documentation_(string xmlElement) => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// " + xmlElement + @"

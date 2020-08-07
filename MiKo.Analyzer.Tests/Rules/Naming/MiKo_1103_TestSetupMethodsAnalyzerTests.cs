@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -17,7 +18,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method(
+        public void No_issue_is_reported_for_test_method_(
                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                     [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -30,7 +31,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_teardown_method(
+        public void No_issue_is_reported_for_test_teardown_method_(
                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                     [ValueSource(nameof(TestTearDowns))] string test)
             => No_issue_is_reported_for(@"
@@ -43,7 +44,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_setup_method_with_correct_name(
+        public void No_issue_is_reported_for_test_setup_method_with_correct_name_(
                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                             [ValueSource(nameof(TestSetUps))] string test)
             => No_issue_is_reported_for(@"
@@ -56,7 +57,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_setup_method_with_wrong_name(
+        public void An_issue_is_reported_for_test_setup_method_with_wrong_name_(
                                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                     [ValueSource(nameof(TestSetUps))] string test)
             => An_issue_is_reported_for(@"
@@ -68,8 +69,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_([ValueSource(nameof(TestSetUps))] string test) => VerifyCSharpFix(
+                                                              @"using System; class TestMe { [" + test + @"] void Setup()  { } }",
+                                                              @"using System; class TestMe { [" + test + @"] void PrepareTest()  { } }");
+
         protected override string GetDiagnosticId() => MiKo_1103_TestSetupMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1103_TestSetupMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1103_CodeFixProvider();
     }
 }

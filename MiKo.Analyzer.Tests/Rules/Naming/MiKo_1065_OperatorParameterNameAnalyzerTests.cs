@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -49,8 +50,18 @@ public class TestMe
 }
 ");
 
+        [TestCase(
+                @"class TestMe { public static implicit operator string(TestMe v) => ""bla""; }",
+                @"class TestMe { public static implicit operator string(TestMe value) => ""bla""; }")]
+        [TestCase(
+                "class TestMe { public static bool operator !=(TestMe l, TestMe r) => false; }",
+                "class TestMe { public static bool operator !=(TestMe left, TestMe right) => false; }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1065_OperatorParameterNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1065_OperatorParameterNameAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1065_CodeFixProvider();
     }
 }

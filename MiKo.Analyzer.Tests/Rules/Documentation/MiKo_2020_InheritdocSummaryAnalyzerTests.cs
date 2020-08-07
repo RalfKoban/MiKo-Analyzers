@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("enum")]
-        public void An_issue_is_reported_for_XML_summary_of_named_type(string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_XML_summary_of_named_type_(string type) => An_issue_is_reported_for(@"
 
 /// <summary>
 /// <see cref='bla' />

@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         [TestCase("object s, EventArgs args")]
         [TestCase("DependencyObject d, DependencyPropertyChangedEventArgs args")]
-        public void No_issue_is_reported_for_event_handling_method(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_(string parameters) => No_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -36,7 +36,7 @@ namespace Bla
         [TestCase("object s")]
         [TestCase("object s, int args, object whatever")]
         [TestCase("object whatever, object s, int args")]
-        public void No_issue_is_reported_for_non_matching_method(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_matching_method_(string parameters) => No_issue_is_reported_for(@"
 
 using System;
 
@@ -56,7 +56,7 @@ public class TestMe
         [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a")]
         [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever")]
         [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args")]
-        public void An_issue_is_reported_for_matching_method(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_matching_method_(string parameters) => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -82,7 +82,7 @@ namespace Bla
         [TestCase("DependencyPropertyChangedEventArgs e")]
         [TestCase("DependencyPropertyChangedEventArgs e, string a")]
         [TestCase("DependencyPropertyChangedEventArgs e1, DependencyPropertyChangedEventArgs e2")]
-        public void No_issue_is_reported_for_correctly_named_method(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_method_(string parameters) => No_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs

@@ -23,7 +23,7 @@ public class TestMe
         [TestCase("blaObservableCollection")]
         [TestCase("blaArray")]
         [TestCase("blaHashSet")]
-        public void No_issue_is_reported_for_incorrectly_named_field_in_enum(string field) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_incorrectly_named_field_in_enum_(string field) => No_issue_is_reported_for(@"
 
 public enum TestMe
 {
@@ -36,7 +36,7 @@ public enum TestMe
         [TestCase("string blaObservableCollection")]
         [TestCase("string blaArray")]
         [TestCase("string blaHashSet")]
-        public void An_issue_is_reported_for_incorrectly_named_field(string field) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_field_(string field) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

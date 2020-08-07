@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_class_with_tests(
+        public void No_issue_is_reported_for_test_class_with_tests_(
                                                                 [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                 [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -51,7 +51,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_partial_test_class_with_tests(
+        public void No_issue_is_reported_for_partial_test_class_with_tests_(
                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -74,7 +74,7 @@ public partial class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests(
+        public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_(
                                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -110,7 +110,7 @@ public class TestMe1
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_class_with_tests_that_have_conditions(
+        public void An_issue_is_reported_for_test_class_with_tests_that_have_conditions_(
                                                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                                     [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
@@ -129,7 +129,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_that_have_conditions(
+        public void An_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_that_have_conditions_(
                                                                                                                 [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                                                                 [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
@@ -166,7 +166,7 @@ public class TestMe1
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_condition(
+        public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_condition_(
                                                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                                     [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"
@@ -186,7 +186,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_assignment_condition(
+        public void An_issue_is_reported_for_test_class_with_tests_that_have_a_coalesce_assignment_condition_(
                                                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                                     [ValueSource(nameof(Tests))] string test)
             => An_issue_is_reported_for(@"

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("EventArgs args, object s")]
         [TestCase("object s, EventArgs args, object whatever")]
         [TestCase("object whatever, object s, EventArgs args")]
-        public void No_issue_is_reported_for_non_event_handling_method(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_event_handling_method_(string parameters) => No_issue_is_reported_for(@"
 
 using System;
 
@@ -80,8 +81,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed() => VerifyCSharpFix(
+            @"using System; class TestMe { void OnWhatever(object s, EventArgs args)  { System.Diagnostics.Trace.Write(args.GetType().ToString() + s.ToString(); } }",
+            @"using System; class TestMe { void OnWhatever(object sender, EventArgs e)  { System.Diagnostics.Trace.Write(e.GetType().ToString() + sender.ToString(); } }");
+
         protected override string GetDiagnosticId() => MiKo_1002_EventHandlingMethodParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1002_EventHandlingMethodParametersAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1002_CodeFixProvider();
     }
 }

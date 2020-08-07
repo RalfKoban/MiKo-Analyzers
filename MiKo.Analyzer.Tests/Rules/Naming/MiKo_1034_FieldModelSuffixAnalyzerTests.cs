@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("s_viewModels")]
         [TestCase("s_item")]
         [TestCase("s_modeless")]
-        public void No_issue_is_reported_for_valid_field(string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_field_(string name) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private int " + name + @";
@@ -44,7 +44,7 @@ public class TestMe
         [TestCase("s_models")]
         [TestCase("s_itemModel")]
         [TestCase("s_modelItem")]
-        public void An_issue_is_reported_for_invalid_field(string name) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_invalid_field_(string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
     private int " + name + @";

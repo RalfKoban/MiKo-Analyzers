@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                   };
 
         [TestCase("MiKoSolutions")]
-        public void No_issue_is_reported_for_proper_namespace(string ns) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_proper_namespace_(string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }

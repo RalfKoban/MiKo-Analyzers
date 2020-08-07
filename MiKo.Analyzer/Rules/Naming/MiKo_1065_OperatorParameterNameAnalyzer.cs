@@ -16,6 +16,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IParameterSymbol symbol)
+        {
+            var method = (IMethodSymbol)symbol.ContainingSymbol;
+            var parameters = method.Parameters;
+            if (parameters.Length != 2)
+            {
+                return "value";
+            }
+
+            var isParameter1 = symbol.Equals(parameters[0], SymbolEqualityComparer.Default);
+            return isParameter1 ? "left" : "right";
+        }
+
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
             switch (symbol.MethodKind)

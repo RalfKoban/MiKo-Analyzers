@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("DependencyPropertyChangedEventArgs args, DependencyObject d")]
         [TestCase("DependencyObject d, DependencyPropertyChangedEventArgs args, object whatever")]
         [TestCase("object whatever, DependencyObject d, DependencyPropertyChangedEventArgs args")]
-        public void No_issue_is_reported_for_non_event_handling_method(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_event_handling_method_(string parameters) => No_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -139,8 +140,38 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string Template = @"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public override void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
+    }
+}";
+
+            var originalCode = Template.Replace("#1", "obj").Replace("#2", "args");
+            var fixedCode = Template.Replace("#1", "d").Replace("#2", "e");
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1008_DependencyPropertyEventHandlingMethodParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1008_DependencyPropertyEventHandlingMethodParametersAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1008_CodeFixProvider();
     }
 }

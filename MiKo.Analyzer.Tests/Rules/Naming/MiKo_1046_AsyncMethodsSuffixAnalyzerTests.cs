@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -65,7 +66,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method(
+        public void No_issue_is_reported_for_test_method_(
                                                     [ValueSource(nameof(TestFixtures))] string testFixture,
                                                     [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -85,8 +86,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed() => VerifyCSharpFix(
+                                                  "using System.Threading.Tasks; class TestMe { Task DoSomething() { } }",
+                                                  "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { } }");
+
         protected override string GetDiagnosticId() => MiKo_1046_AsyncMethodsSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1046_AsyncMethodsSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1046_CodeFixProvider();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -11,8 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] WrongNames =
             {
+                "Extension",
+                "ExtensionClass",
                 "ExtensionsClass",
                 "SomeExtensionMethods",
+                "SomeExtensionMethod",
                 "Something",
             };
 
@@ -56,8 +60,19 @@ public static class " + name + @"
 }
 ");
 
+        [TestCase("ExtensionClass")]
+        [TestCase("ExtensionsClass")]
+        [TestCase("ExtensionMethod")]
+        [TestCase("ExtensionMethods")]
+        [TestCase("Extension")]
+        public void Code_gets_fixed_(string name) => VerifyCSharpFix(
+                               "public static class TestMe" + name + " { public static void DoSomething(this int value) { } }",
+                               "public static class TestMeExtensions { public static void DoSomething(this int value) { } }");
+
         protected override string GetDiagnosticId() => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1038_ExtensionMethodsClassSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1038_CodeFixProvider();
     }
 }

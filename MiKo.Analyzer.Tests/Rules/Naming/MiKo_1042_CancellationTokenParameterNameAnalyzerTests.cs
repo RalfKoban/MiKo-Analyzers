@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -62,8 +63,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed() => VerifyCSharpFix(
+                                      "using System.Threading; class TestMe { void DoSomething(CancellationToken token) { } }",
+                                      "using System.Threading; class TestMe { void DoSomething(CancellationToken cancellationToken) { } }");
+
         protected override string GetDiagnosticId() => MiKo_1042_CancellationTokenParameterNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1042_CancellationTokenParameterNameAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1042_CodeFixProvider();
     }
 }

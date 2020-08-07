@@ -16,10 +16,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => !method.IsAsyncTaskBased() && base.ShallAnalyze(method);
+        internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.WithoutSuffix(Constants.AsyncSuffix);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal)
-                                                                                        ? new[] { Issue(symbol, symbol.Name.WithoutSuffix(Constants.AsyncSuffix)) }
-                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyze(IMethodSymbol method) => method.IsAsyncTaskBased() is false && base.ShallAnalyze(method);
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        {
+            if (symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
+            {
+                var betterName = FindBetterName(symbol);
+                return new[] { Issue(symbol, betterName) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }

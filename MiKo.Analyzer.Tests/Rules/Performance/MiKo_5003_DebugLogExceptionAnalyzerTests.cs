@@ -111,7 +111,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_call_in_method_body_with_exception_argument(
+        public void An_issue_is_reported_for_call_in_method_body_with_exception_argument_(
                                                                                     [ValueSource(nameof(Methods))] string method,
                                                                                     [Values("ex", "ex.ToString()")] string call)
             => An_issue_is_reported_for(@"
@@ -137,7 +137,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_call_in_method_expression_body_with_exception_argument(
+        public void An_issue_is_reported_for_call_in_method_expression_body_with_exception_argument_(
                                                                                         [ValueSource(nameof(Methods))] string method,
                                                                                         [Values("ex", "ex.ToString()")] string call)
             => An_issue_is_reported_for(@"
@@ -160,7 +160,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_call_in_ctor_body_with_exception_argument(
+        public void An_issue_is_reported_for_call_in_ctor_body_with_exception_argument_(
                                                                                     [ValueSource(nameof(Methods))] string method,
                                                                                     [Values("ex", "ex.ToString()")] string call)
             => An_issue_is_reported_for(@"
@@ -186,7 +186,7 @@ namespace Bla
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_call_in_ctor_expression_body_with_exception_argument(
+        public void An_issue_is_reported_for_call_in_ctor_expression_body_with_exception_argument_(
                                                                                         [ValueSource(nameof(Methods))] string method,
                                                                                         [Values("ex", "ex.ToString()")] string call)
             => An_issue_is_reported_for(@"
