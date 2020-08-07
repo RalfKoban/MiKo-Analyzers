@@ -41,14 +41,14 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|\-|
 |MiKo_1018|Methods should not be suffixed with noun of a verb.|&#x2713;|\-|
 |MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|&#x2713;|&#x2713;|
-|MiKo_1020|Type names should be limited in length.|&#x2713;|\-|
-|MiKo_1021|Method names should be limited in length.|&#x2713;|\-|
-|MiKo_1022|Parameter names should be limited in length.|&#x2713;|\-|
-|MiKo_1023|Field names should be limited in length.|&#x2713;|\-|
-|MiKo_1024|Property names should be limited in length.|&#x2713;|\-|
-|MiKo_1025|Event names should be limited in length.|&#x2713;|\-|
-|MiKo_1026|Variable names should be limited in length.|&#x2713;|\-|
-|MiKo_1027|Variable names in loops should be limited in length.|&#x2713;|\-|
+|MiKo_1020|Type names should be limited in length.|\-|\-|
+|MiKo_1021|Method names should be limited in length.|\-|\-|
+|MiKo_1022|Parameter names should be limited in length.|\-|\-|
+|MiKo_1023|Field names should be limited in length.|\-|\-|
+|MiKo_1024|Property names should be limited in length.|\-|\-|
+|MiKo_1025|Event names should be limited in length.|\-|\-|
+|MiKo_1026|Variable names should be limited in length.|\-|\-|
+|MiKo_1027|Variable names in loops should be limited in length.|\-|\-|
 |MiKo_1030|Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types.|&#x2713;|&#x2713;|
 |MiKo_1031|Entity types should not use a 'Model' suffix.|&#x2713;|\-|
 |MiKo_1032|Methods dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
@@ -219,7 +219,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2303|Do not end comments with a period.|&#x2713;|\-|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|\-|
-|MiKo_2306|Do end comments with a period.|&#x2713;|\-|
+|MiKo_2306|Do end comments with a period.|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
 
 ### Maintainability
