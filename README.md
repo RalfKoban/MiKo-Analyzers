@@ -23,7 +23,7 @@ The following tables list all the 281 rules that are currently provided by the a
 ### Naming
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
-|MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|&#x2713;|\-|
+|MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|&#x2713;|&#x2713;|
 |MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|&#x2713;|&#x2713;|
 |MiKo_1004|Events should not contain term 'Event' in their names.|&#x2713;|&#x2713;|

@@ -15,6 +15,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IParameterSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method)
+            {
+                if (method.Parameters.Length == 1)
+                {
+                    return method.Name != nameof(Equals) ? "e" : "other";
+                }
+
+                var i = method.Parameters.IndexOf(symbol);
+                return "e" + i;
+            }
+
+            return "e";
+        }
+
         protected override bool ShallAnalyze(IMethodSymbol method)
         {
             if (method.IsOverride)
@@ -67,13 +83,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         var diagnostics = new List<Diagnostic>(parameters.Count);
                         foreach (var parameter in parameters)
                         {
-                            var parameterName = parameter.Name;
+                            var expected = "e" + i;
 
-                            var expected = "e" + (++i);
-                            if (parameterName != expected)
+                            if (parameter.Name != expected)
                             {
                                 diagnostics.Add(Issue(parameter, expected));
                             }
+
+                            i++;
                         }
 
                         return diagnostics;
