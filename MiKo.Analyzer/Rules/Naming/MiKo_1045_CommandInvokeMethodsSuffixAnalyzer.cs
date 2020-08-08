@@ -14,11 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1045";
 
-        private const string Suffix = "Command";
+        internal const string Suffix = "Command";
 
         public MiKo_1045_CommandInvokeMethodsSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
+
+        internal static string FindBetterName(ISymbol symbol) => symbol.Name.WithoutSuffix(Suffix);
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
 
