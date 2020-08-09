@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -33,6 +34,23 @@ public class TestMe
    public void DoSomething()
    {
        var x = Guid.NewGuid();
+   }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_method_using_(
+                                                        [ValueSource(nameof(Tests))] string test,
+                                                        [Values("new Guid()", @"Guid.Parse(""62AD86A4-3F05-403E-B53F-B2B21A62D6C7"")")] string call)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [" + test + @"]
+   public void DoSomething()
+   {
+       var x = " + call + @";
    }
 }
 ");
@@ -98,8 +116,18 @@ public class TestMe
 }
 ");
 
+        [Test, Ignore("Cannot be executed for the moment as a new GUID is generated each time.")]
+        public void Code_gets_fixed()
+        {
+            const string Template = @"using NUnit.Framework; public class TestMe { [Test] public void Test() { var x = ###; } }";
+
+            VerifyCSharpFix(Template.Replace("###", "Guid.NewGuid()"), Template.Replace("###", @"Guid.Parse("""")"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3103_CodeFixProvider();
     }
 }

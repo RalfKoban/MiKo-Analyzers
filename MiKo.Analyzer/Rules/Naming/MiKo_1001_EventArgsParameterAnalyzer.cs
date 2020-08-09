@@ -17,22 +17,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IParameterSymbol symbol)
         {
-            if (symbol.ContainingSymbol is IMethodSymbol method)
-            {
-                if (method.Parameters.Length == 1)
-                {
-                    return method.Name != nameof(Equals) ? "e" : "other";
-                }
+            var method = symbol.GetEnclosingMethod();
 
-                var i = method.Parameters.IndexOf(symbol);
-                return "e" + i;
+            if (method.Parameters.Length == 1)
+            {
+                return method.Name != nameof(Equals) ? "e" : "other";
             }
 
-            return "e";
+            var i = method.Parameters.IndexOf(symbol);
+            return "e" + i;
         }
 
-        internal static bool IsAccepted(IParameterSymbol parameter, IMethodSymbol method) => GetParameters(method).Contains(parameter)
-                                                                                          && FindBetterName(parameter) == parameter.Name;
+        internal static bool IsAccepted(IParameterSymbol parameter)
+        {
+            var method = parameter.GetEnclosingMethod();
+
+            return GetParameters(method).Contains(parameter) && FindBetterName(parameter) == parameter.Name;
+        }
 
         protected override bool ShallAnalyze(IMethodSymbol method)
         {

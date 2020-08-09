@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Rename out parameter";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1061_TryMethodOutParameterNameAnalyzer.FindBetterName(symbol.ContainingSymbol as IMethodSymbol);
+        protected override string GetNewName(ISymbol symbol) => MiKo_1061_TryMethodOutParameterNameAnalyzer.FindBetterName(symbol.GetEnclosingMethod());
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().FirstOrDefault();
     }

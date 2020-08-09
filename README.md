@@ -27,7 +27,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|&#x2713;|&#x2713;|
 |MiKo_1004|Events should not contain term 'Event' in their names.|&#x2713;|&#x2713;|
-|MiKo_1005|'System.EventArgs' variables should be named properly.|&#x2713;|\-|
+|MiKo_1005|'System.EventArgs' variables should be named properly.|&#x2713;|&#x2713;|
 |MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|&#x2713;|\-|
 |MiKo_1007|Events and 'EventArgs' types shall be located in the same namespace.|&#x2713;|\-|
 |MiKo_1008|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.|&#x2713;|&#x2713;|
@@ -275,10 +275,10 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_3071|Methods that return Task shall never return null.|&#x2713;|\-|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.|&#x2713;|\-|
 |MiKo_3073|Do not leave objects partially initialized.|&#x2713;|\-|
-|MiKo_3081|Pattern matching is preferred over a logical NOT condition.|&#x2713;|\-|
-|MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|\-|
-|MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|\-|
-|MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|\-|
+|MiKo_3081|Pattern matching is preferred over a logical NOT condition.|&#x2713;|&#x2713;|
+|MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|&#x2713;|
+|MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|&#x2713;|
+|MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|&#x2713;|
 |MiKo_3085|Conditional statements should be short.|&#x2713;|\-|
 |MiKo_3086|Do not nest conditional statements.|&#x2713;|\-|
 |MiKo_3090|Do not throw exceptions in finally blocks.|&#x2713;|\-|
@@ -288,7 +288,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_3100|Test classes and types under test belong in same namespace.|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests.|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|\-|
-|MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|&#x2713;|\-|
+|MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|&#x2713;|&#x2713;|
 |MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|&#x2713;|\-|
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|\-|
 |MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|\-|

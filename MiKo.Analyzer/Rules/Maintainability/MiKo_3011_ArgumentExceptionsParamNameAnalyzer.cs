@@ -159,7 +159,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argumentName = argument.ToString();
 
-            return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == _.SurroundedWith("\"") || argumentName == AsNameof(_));
+            return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == _.SurroundedWithDoubleQuote() || argumentName == AsNameof(_));
         }
 
         private static Location GetLocation(ArgumentListSyntax syntax) => Location.Create(syntax.SyntaxTree, syntax.Arguments.Span);

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -280,8 +281,18 @@ public class TestMe
     }
 }");
 
+        [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A == a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a == A; } }")]
+        [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A != a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a != A; } }")]
+        [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A <= a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a >= A; } }")]
+        [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A < a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a > A; } }")]
+        [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A >= a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a <= A; } }")]
+        [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A > a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a < A; } }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_3084_YodaExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3084_YodaExpressionAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3084_CodeFixProvider();
     }
 }

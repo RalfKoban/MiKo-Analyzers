@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name.EndsWithCommonNumber())
             {
-                if (symbol.ContainingSymbol is IMethodSymbol m && MiKo_1001_EventArgsParameterAnalyzer.IsAccepted(symbol, m))
+                if (MiKo_1001_EventArgsParameterAnalyzer.IsAccepted(symbol))
                 {
                     return false;
                 }

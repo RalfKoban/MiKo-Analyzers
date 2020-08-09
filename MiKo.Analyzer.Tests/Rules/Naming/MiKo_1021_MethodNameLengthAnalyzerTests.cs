@@ -12,26 +12,34 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         [Test]
         public void No_issue_is_reported_for_method_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
-
-public void " + name + @"()
+public class TestMe
 {
+    public void " + name + @"()
+    {
+    }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_method_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
-
-public void " + name + @"()
+public class TestMe
 {
+    public void " + name + @"()
+    {
+    }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_test_method_with_exceeding_length_([ValueSource(nameof(Tests))] string name) => No_issue_is_reported_for(@"
+using NUnit;
 
-[" + name + @"]
-public void Abcdefghijklmnopqrstuvwxyz()
+public class TestMe
 {
+    [" + name + @"]
+    public void Abcdefghijklmnopqrstuvwxyz()
+    {
+    }
 }
 ");
 

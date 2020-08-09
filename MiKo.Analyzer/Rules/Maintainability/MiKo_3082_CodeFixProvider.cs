@@ -1,0 +1,15 @@
+﻿using System.Composition;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
+
+namespace MiKoSolutions.Analyzers.Rules.Maintainability
+{
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3082_CodeFixProvider)), Shared]
+    public sealed class MiKo_3082_CodeFixProvider : UsePatternMatchingCodeFixProvider
+    {
+        public override string FixableDiagnosticId => MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer.Id;
+
+        protected override string Title => "Apply 'is' pattern";
+    }
+}
