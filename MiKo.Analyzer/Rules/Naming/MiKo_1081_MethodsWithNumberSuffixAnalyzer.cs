@@ -18,10 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.WithoutNumberSuffix();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => HasIssue(symbol.Name)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.EndsWithCommonNumber()
                                                                                             ? new[] { Issue(symbol) }
                                                                                             : Enumerable.Empty<Diagnostic>();
-
-        private static bool HasIssue(string symbolName) => symbolName.EndsWithNumber() && symbolName.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
     }
 }

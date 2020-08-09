@@ -86,6 +86,8 @@ namespace System
 
         public static bool EndsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value.Last().IsNumber();
 
+        public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
 

@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(IParameterSymbol symbol)
         {
-            if (symbol.Name.EndsWithNumber())
+            if (symbol.Name.EndsWithCommonNumber())
             {
                 if (symbol.ContainingSymbol is IMethodSymbol m && MiKo_1001_EventArgsParameterAnalyzer.IsAccepted(symbol, m))
                 {
