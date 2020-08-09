@@ -153,6 +153,9 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithApostrophe(this string value) => string.Concat("\'", value, "\'");
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string SurroundedWithDoubleQuote(this string value) => string.Concat("\"", value, "\"");
+
         public static string HumanizedTakeFirst(this string value, int max)
         {
             var index = Math.Min(max, value.Length);
