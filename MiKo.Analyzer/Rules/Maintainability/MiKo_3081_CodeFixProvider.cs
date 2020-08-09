@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override string Title => "Apply 'is false' pattern";
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault(_ => _.IsKind(SyntaxKind.LogicalNotExpression));
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(SyntaxKind.LogicalNotExpression));
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
