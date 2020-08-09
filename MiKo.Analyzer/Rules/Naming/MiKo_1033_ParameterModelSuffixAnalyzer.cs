@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.ContainingSymbol.IsInterfaceImplementation() is false;
+        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.GetEnclosingMethod().IsInterfaceImplementation() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => AnalyzeEntityMarkers(symbol);
     }

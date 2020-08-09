@@ -51,9 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => base.ShallAnalyze(symbol) && symbol.ContainingType.IsTestClass();
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => base.ShallAnalyze(symbol)
-                                                                      && symbol.ContainingSymbol is IMethodSymbol m
-                                                                      && ShallAnalyze(m);
+        protected override bool ShallAnalyze(IParameterSymbol symbol) => base.ShallAnalyze(symbol) && ShallAnalyze(symbol.GetEnclosingMethod());
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeName(symbol);
 

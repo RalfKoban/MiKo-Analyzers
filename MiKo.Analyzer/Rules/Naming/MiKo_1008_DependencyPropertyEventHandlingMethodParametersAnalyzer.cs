@@ -19,8 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IParameterSymbol symbol)
         {
-            var isParameter1 = symbol.ContainingSymbol is IMethodSymbol m && symbol.Equals(m.Parameters[0], SymbolEqualityComparer.Default);
-            return isParameter1
+            var method = symbol.GetEnclosingMethod();
+
+            return symbol.Equals(method.Parameters[0], SymbolEqualityComparer.Default)
                        ? Parameter1
                        : Parameter2;
         }

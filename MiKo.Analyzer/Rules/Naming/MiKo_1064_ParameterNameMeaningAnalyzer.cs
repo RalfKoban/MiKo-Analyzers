@@ -30,22 +30,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol)
         {
-            if (symbol.ContainingSymbol is IMethodSymbol method)
-            {
-                if (method.MethodKind == MethodKind.Constructor)
-                {
-                    if (symbol.MatchesProperty() || symbol.MatchesField())
-                    {
-                        // ignore those ctor parameters that get assigned to a property having the same name
-                        return Enumerable.Empty<Diagnostic>();
-                    }
-                }
+            var method = symbol.GetEnclosingMethod();
 
-                if (method.IsOverride || method.IsInterfaceImplementation())
+            if (method.MethodKind == MethodKind.Constructor)
+            {
+                if (symbol.MatchesProperty() || symbol.MatchesField())
                 {
-                    // ignore overrides/interfaces as the signatures should match the base signature
+                    // ignore those ctor parameters that get assigned to a property having the same name
                     return Enumerable.Empty<Diagnostic>();
                 }
+            }
+
+            if (method.IsOverride || method.IsInterfaceImplementation())
+            {
+                // ignore overrides/interfaces as the signatures should match the base signature
+                return Enumerable.Empty<Diagnostic>();
             }
 
             return symbol.NameMatchesTypeName(symbol.Type)
