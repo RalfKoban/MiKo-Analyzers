@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -63,8 +64,16 @@ public class TestMe
     }
 }");
 
+        [TestCase("class TestMe { bool Do(object a) { return (a == null); } }", "class TestMe { bool Do(object a) { return (a is null); } }")]
+        [TestCase("class TestMe { bool Do(object a) { return (null == a); } }", "class TestMe { bool Do(object a) { return (a is null); } }")]
+        [TestCase("class TestMe { bool Do(object a) => a == null; }", "class TestMe { bool Do(object a) => a is null; }")]
+        [TestCase("class TestMe { bool Do(object a) => null == a; }", "class TestMe { bool Do(object a) => a is null; }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_3083_UsePatternMatchingForNullEqualsExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3083_UsePatternMatchingForNullEqualsExpressionAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3083_CodeFixProvider();
     }
 }

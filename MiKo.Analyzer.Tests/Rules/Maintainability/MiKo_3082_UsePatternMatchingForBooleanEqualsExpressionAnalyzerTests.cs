@@ -89,6 +89,10 @@ public class TestMe
         [TestCase("class TestMe { bool Do(bool a) { return (a == false); } }", "class TestMe { bool Do(bool a) { return (a is false); } }")]
         [TestCase("class TestMe { bool Do(bool a) => a == true; }", "class TestMe { bool Do(bool a) => a is true; }")]
         [TestCase("class TestMe { bool Do(bool a) => a == false; }", "class TestMe { bool Do(bool a) => a is false; }")]
+        [TestCase("class TestMe { bool Do(bool a) { return (true == a); } }", "class TestMe { bool Do(bool a) { return (a is true); } }")]
+        [TestCase("class TestMe { bool Do(bool a) { return (false == a); } }", "class TestMe { bool Do(bool a) { return (a is false); } }")]
+        [TestCase("class TestMe { bool Do(bool a) => true == a; }", "class TestMe { bool Do(bool a) => a is true; }")]
+        [TestCase("class TestMe { bool Do(bool a) => false == a; }", "class TestMe { bool Do(bool a) => a is false; }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer.Id;
