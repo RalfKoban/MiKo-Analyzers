@@ -222,7 +222,7 @@ namespace System
                 }
             }
 
-            return end < value.Length - 1
+            return end >= 0 && end <= value.Length - 1
                        ? value.Substring(0, end)
                        : value;
         }
