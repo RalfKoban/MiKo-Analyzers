@@ -98,7 +98,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes.|&#x2713;|\-|
 |MiKo_1083|Fields should not be suffixed with a number if their types have number suffixes.|&#x2713;|\-|
 |MiKo_1084|Variables should not be suffixed with a number if their types have number suffixes.|&#x2713;|\-|
-|MiKo_1085|Methods should not be named using numbers as slang.|&#x2713;|\-|
+|MiKo_1086|Methods should not be named using numbers as slang.|&#x2713;|\-|
 |MiKo_1090|Parameters should not be suffixed with specific types.|&#x2713;|\-|
 |MiKo_1091|Variables should not be suffixed with specific types.|&#x2713;|\-|
 |MiKo_1092|'Ability' Types should not be suffixed with redundant information.|&#x2713;|\-|

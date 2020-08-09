@@ -7,13 +7,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_1085_MethodsWithNumberSlangAnalyzer : NamingAnalyzer
+    public sealed class MiKo_1086_MethodsWithNumberSlangAnalyzer : NamingAnalyzer
     {
-        public const string Id = "MiKo_1085";
+        public const string Id = "MiKo_1086";
 
         private static readonly char[] SlangNumbers = { '2', '4' };
 
-        public MiKo_1085_MethodsWithNumberSlangAnalyzer() : base(Id)
+        public MiKo_1086_MethodsWithNumberSlangAnalyzer() : base(Id)
         {
         }
 
