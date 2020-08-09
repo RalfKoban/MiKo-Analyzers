@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -30,6 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return "e";
         }
+
+        internal static bool IsAccepted(IParameterSymbol parameter, IMethodSymbol method) => GetParameters(method).Contains(parameter)
+                                                                                          && FindBetterName(parameter) == parameter.Name;
 
         protected override bool ShallAnalyze(IMethodSymbol method)
         {
@@ -63,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
-            var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs() || _.Type.IsDependencyPropertyChangedEventArgs()).ToList();
+            var parameters = GetParameters(method);
             switch (parameters.Count)
             {
                 case 0: return Enumerable.Empty<Diagnostic>();
@@ -96,6 +100,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return diagnostics;
                     }
             }
+        }
+
+        private static List<IParameterSymbol> GetParameters(IMethodSymbol method)
+        {
+            var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs() || _.Type.IsDependencyPropertyChangedEventArgs()).ToList();
+            return parameters;
         }
     }
 }

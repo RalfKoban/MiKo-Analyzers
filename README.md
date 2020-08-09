@@ -85,7 +85,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|\-|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|\-|
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|&#x2713;|
-|MiKo_1066|Parameters should not be suffixed with a number.|&#x2713;|\-|
+|MiKo_1066|Parameters should not be suffixed with a number.|&#x2713;|&#x2713;|
 |MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|\-|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|\-|
 |MiKo_1069|Property names reflect their meaning and not their type.|&#x2713;|\-|

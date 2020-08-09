@@ -16,8 +16,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => symbol.Name.EndsWithNumber()
+        public static string FindBetterName(IParameterSymbol symbol) => symbol.Name.WithoutNumberSuffix();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => HasIssue(symbol)
                                                                                                ? new[] { Issue(symbol) }
                                                                                                : Enumerable.Empty<Diagnostic>();
+
+        private static bool HasIssue(IParameterSymbol symbol)
+        {
+            if (symbol.Name.EndsWithNumber())
+            {
+                if (symbol.ContainingSymbol is IMethodSymbol m && MiKo_1001_EventArgsParameterAnalyzer.IsAccepted(symbol, m))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
     }
 }
