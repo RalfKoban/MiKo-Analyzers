@@ -1955,33 +1955,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name..
-        /// </summary>
-        public static string MiKo_1066_Description {
-            get {
-                return ResourceManager.GetString("MiKo_1066_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do not use a number as suffix.
-        /// </summary>
-        public static string MiKo_1066_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_1066_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameters should not be suffixed with a number..
-        /// </summary>
-        public static string MiKo_1066_Title {
-            get {
-                return ResourceManager.GetString("MiKo_1066_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;Perform&apos; in their names..
         /// </summary>
         public static string MiKo_1067_Description {
@@ -2327,6 +2300,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1084_Title {
             get {
                 return ResourceManager.GetString("MiKo_1084_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name..
+        /// </summary>
+        public static string MiKo_1085_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1085_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a number as suffix.
+        /// </summary>
+        public static string MiKo_1085_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1085_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not be suffixed with a number..
+        /// </summary>
+        public static string MiKo_1085_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1085_Title", resourceCulture);
             }
         }
         

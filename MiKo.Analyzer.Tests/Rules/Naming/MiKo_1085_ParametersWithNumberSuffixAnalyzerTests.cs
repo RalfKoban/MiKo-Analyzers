@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1066_ParametersWithNumberSuffixAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1085_ParametersWithNumberSuffixAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
@@ -60,10 +60,10 @@ public class TestMe
                                                          "class TestMe { void Method(object o1) { } }",
                                                          "class TestMe { void Method(object o) { } }");
 
-        protected override string GetDiagnosticId() => MiKo_1066_ParametersWithNumberSuffixAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1085_ParametersWithNumberSuffixAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1066_ParametersWithNumberSuffixAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1085_ParametersWithNumberSuffixAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1066_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1085_CodeFixProvider();
     }
 }
