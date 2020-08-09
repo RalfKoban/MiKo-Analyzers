@@ -278,7 +278,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_3081|Pattern matching is preferred over a logical NOT condition.|&#x2713;|&#x2713;|
 |MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|&#x2713;|
 |MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|&#x2713;|
-|MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|\-|
+|MiKo_3084|Do not place constants on the left side for comparisons.|&#x2713;|&#x2713;|
 |MiKo_3085|Conditional statements should be short.|&#x2713;|\-|
 |MiKo_3086|Do not nest conditional statements.|&#x2713;|\-|
 |MiKo_3090|Do not throw exceptions in finally blocks.|&#x2713;|\-|
