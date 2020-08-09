@@ -16,10 +16,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IPropertySymbol symbol) => symbol.Name.WithoutNumberSuffix();
+
         protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && symbol.GetReturnType()?.Name.EndsWithNumber() is true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => symbol.Name.EndsWithNumber() && symbol.Name.EndsWithAny(Constants.Markers.OSBitNumbers) is false
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => HasIssue(symbol.Name)
                                                                                               ? new[] { Issue(symbol) }
                                                                                               : Enumerable.Empty<Diagnostic>();
+
+        private static bool HasIssue(string symbolName) => symbolName.EndsWithNumber() && symbolName.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
     }
 }
