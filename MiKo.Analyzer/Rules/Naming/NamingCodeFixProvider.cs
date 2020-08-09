@@ -8,7 +8,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingCodeFixProvider : MiKoCodeFixProvider
     {
-        protected sealed override async Task<Solution> ApplyCodeFixAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
+        protected NamingCodeFixProvider() : base(true)
+        {
+        }
+
+        protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
         {
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
 
