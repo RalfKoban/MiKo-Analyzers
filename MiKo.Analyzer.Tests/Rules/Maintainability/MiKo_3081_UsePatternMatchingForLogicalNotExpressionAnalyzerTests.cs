@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -144,8 +145,18 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            VerifyCSharpFix(
+                            "class TestMe { bool DoSomething(bool a) { if (!a) return true; return false; } }",
+                            "class TestMe { bool DoSomething(bool a) { if (a is false) return true; return false; } }");
+        }
+
         protected override string GetDiagnosticId() => MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3081_CodeFixProvider();
     }
 }
