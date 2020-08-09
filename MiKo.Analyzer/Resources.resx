@@ -763,15 +763,6 @@ For binary operator overloads use the names 'left' and 'right', for unary operat
   <data name="MiKo_1065_Title" xml:space="preserve">
     <value>Parameter names do not follow .NET Framework Guidelines for operator overloads.</value>
   </data>
-  <data name="MiKo_1066_Description" xml:space="preserve">
-    <value>Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name.</value>
-  </data>
-  <data name="MiKo_1066_MessageFormat" xml:space="preserve">
-    <value>Do not use a number as suffix</value>
-  </data>
-  <data name="MiKo_1066_Title" xml:space="preserve">
-    <value>Parameters should not be suffixed with a number.</value>
-  </data>
   <data name="MiKo_1067_Description" xml:space="preserve">
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'Perform' in their names.</value>
   </data>
@@ -906,12 +897,21 @@ Example:
     <value>Variables should not be suffixed with a number if their types have number suffixes.</value>
   </data>
   <data name="MiKo_1085_Description" xml:space="preserve">
-    <value>Using numbers in method names such 'Send2You' or 'Do4You' is slang and should be avoided. Instead, the correct words 'To' or 'For' should be used.</value>
+    <value>Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name.</value>
   </data>
   <data name="MiKo_1085_MessageFormat" xml:space="preserve">
-    <value>Do not use a number as slang</value>
+    <value>Do not use a number as suffix</value>
   </data>
   <data name="MiKo_1085_Title" xml:space="preserve">
+    <value>Parameters should not be suffixed with a number.</value>
+  </data>
+  <data name="MiKo_1086_Description" xml:space="preserve">
+    <value>Using numbers in method names such 'Send2You' or 'Do4You' is slang and should be avoided. Instead, the correct words 'To' or 'For' should be used.</value>
+  </data>
+  <data name="MiKo_1086_MessageFormat" xml:space="preserve">
+    <value>Do not use a number as slang</value>
+  </data>
+  <data name="MiKo_1086_Title" xml:space="preserve">
     <value>Methods should not be named using numbers as slang.</value>
   </data>
   <data name="MiKo_1090_Description" xml:space="preserve">

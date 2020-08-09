@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -78,10 +79,10 @@ namespace Bla
 
         [TestCase("EventArgs e")]
         [TestCase("EventArgs e, string a")]
-        [TestCase("EventArgs e1, EventArgs e2")]
+        [TestCase("EventArgs e0, EventArgs e1")]
         [TestCase("DependencyPropertyChangedEventArgs e")]
         [TestCase("DependencyPropertyChangedEventArgs e, string a")]
-        [TestCase("DependencyPropertyChangedEventArgs e1, DependencyPropertyChangedEventArgs e2")]
+        [TestCase("DependencyPropertyChangedEventArgs e0, DependencyPropertyChangedEventArgs e1")]
         public void No_issue_is_reported_for_correctly_named_method_(string parameters) => No_issue_is_reported_for(@"
 namespace System.Windows
 {
@@ -112,8 +113,19 @@ public class TestMe
 }
 ");
 
+        [TestCase("EventArgs args", "EventArgs e")]
+        [TestCase("EventArgs args, EventArgs eventArgs", "EventArgs e0, EventArgs e1")]
+        public void Code_gets_fixed_(string expected, string wanted)
+        {
+            const string Template = "using System; class TestMe { void DoSomething(###) { } }";
+
+            VerifyCSharpFix(Template.Replace("###", expected), Template.Replace("###", wanted));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1001_EventArgsParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1001_EventArgsParameterAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1001_CodeFixProvider();
     }
 }

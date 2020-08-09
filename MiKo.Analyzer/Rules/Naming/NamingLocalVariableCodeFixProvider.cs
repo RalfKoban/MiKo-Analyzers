@@ -13,10 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 switch (node)
                 {
-                    case VariableDeclaratorSyntax vds: return vds;
-                    case SingleVariableDesignationSyntax svds: return svds;
-                    case ForEachStatementSyntax fess: return fess;
-                    case ForStatementSyntax fss: return fss;
+                    case VariableDeclaratorSyntax _:
+                    case SingleVariableDesignationSyntax _:
+                    case ForEachStatementSyntax _:
+                    case ForStatementSyntax _:
+                        return node;
                 }
             }
 

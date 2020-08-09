@@ -23,7 +23,7 @@ The following tables list all the 281 rules that are currently provided by the a
 ### Naming
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
-|MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|&#x2713;|\-|
+|MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|&#x2713;|&#x2713;|
 |MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|&#x2713;|&#x2713;|
 |MiKo_1004|Events should not contain term 'Event' in their names.|&#x2713;|&#x2713;|
@@ -41,14 +41,14 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|\-|
 |MiKo_1018|Methods should not be suffixed with noun of a verb.|&#x2713;|\-|
 |MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|&#x2713;|&#x2713;|
-|MiKo_1020|Type names should be limited in length.|&#x2713;|\-|
-|MiKo_1021|Method names should be limited in length.|&#x2713;|\-|
-|MiKo_1022|Parameter names should be limited in length.|&#x2713;|\-|
-|MiKo_1023|Field names should be limited in length.|&#x2713;|\-|
-|MiKo_1024|Property names should be limited in length.|&#x2713;|\-|
-|MiKo_1025|Event names should be limited in length.|&#x2713;|\-|
-|MiKo_1026|Variable names should be limited in length.|&#x2713;|\-|
-|MiKo_1027|Variable names in loops should be limited in length.|&#x2713;|\-|
+|MiKo_1020|Type names should be limited in length.|\-|\-|
+|MiKo_1021|Method names should be limited in length.|\-|\-|
+|MiKo_1022|Parameter names should be limited in length.|\-|\-|
+|MiKo_1023|Field names should be limited in length.|\-|\-|
+|MiKo_1024|Property names should be limited in length.|\-|\-|
+|MiKo_1025|Event names should be limited in length.|\-|\-|
+|MiKo_1026|Variable names should be limited in length.|\-|\-|
+|MiKo_1027|Variable names in loops should be limited in length.|\-|\-|
 |MiKo_1030|Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types.|&#x2713;|&#x2713;|
 |MiKo_1031|Entity types should not use a 'Model' suffix.|&#x2713;|\-|
 |MiKo_1032|Methods dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
@@ -64,20 +64,20 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1042|'CancellationToken' parameters should have specific name.|&#x2713;|&#x2713;|
 |MiKo_1043|'CancellationToken' variables should have specific name.|&#x2713;|&#x2713;|
 |MiKo_1044|Commands should be suffixed with 'Command'.|&#x2713;|\-|
-|MiKo_1045|Methods that are invoked by commands should not be suffixed with 'Command'.|&#x2713;|\-|
+|MiKo_1045|Methods that are invoked by commands should not be suffixed with 'Command'.|&#x2713;|&#x2713;|
 |MiKo_1046|Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).|&#x2713;|&#x2713;|
 |MiKo_1047|Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.|&#x2713;|&#x2713;|
 |MiKo_1048|To ease maintenance, the names of classes that are value converters should end with the same suffix.|&#x2713;|&#x2713;|
 |MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|&#x2713;|\-|
-|MiKo_1050|Return values should have descriptive names.|&#x2713;|\-|
+|MiKo_1050|Return values should have descriptive names.|&#x2713;|&#x2713;|
 |MiKo_1051|Do not suffix parameters with delegate types.|&#x2713;|&#x2713;|
 |MiKo_1052|Do not suffix variables with delegate types.|&#x2713;|&#x2713;|
-|MiKo_1053|Do not suffix fields with delegate types.|&#x2713;|\-|
+|MiKo_1053|Do not suffix fields with delegate types.|&#x2713;|&#x2713;|
 |MiKo_1054|Do not name types 'Helper' or 'Utility'.|&#x2713;|\-|
-|MiKo_1055|Dependency properties should be suffixed with 'Property' (as in the .NET Framework).|&#x2713;|\-|
-|MiKo_1056|Dependency properties should be prefixed with property names (as in the .NET Framework).|&#x2713;|\-|
-|MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework).|&#x2713;|\-|
-|MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|&#x2713;|\-|
+|MiKo_1055|Dependency properties should be suffixed with 'Property' (as in the .NET Framework).|&#x2713;|&#x2713;|
+|MiKo_1056|Dependency properties should be prefixed with property names (as in the .NET Framework).|&#x2713;|&#x2713;|
+|MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework).|&#x2713;|&#x2713;|
+|MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework).|&#x2713;|&#x2713;|
 |MiKo_1059|Do not name types 'Impl' or 'Implementation'.|&#x2713;|\-|
 |MiKo_1060|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'.|&#x2713;|\-|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be specific.|&#x2713;|&#x2713;|
@@ -85,7 +85,6 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|\-|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|\-|
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|&#x2713;|
-|MiKo_1066|Parameters should not be suffixed with a number.|&#x2713;|\-|
 |MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|\-|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|\-|
 |MiKo_1069|Property names reflect their meaning and not their type.|&#x2713;|\-|
@@ -94,11 +93,12 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions.|&#x2713;|\-|
 |MiKo_1073|Boolean fields should be named as statements and not as questions.|&#x2713;|\-|
 |MiKo_1080|Names should contain numbers instead of their spellings.|&#x2713;|\-|
-|MiKo_1081|Methods should not be suffixed with a number.|&#x2713;|\-|
-|MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes.|&#x2713;|\-|
-|MiKo_1083|Fields should not be suffixed with a number if their types have number suffixes.|&#x2713;|\-|
-|MiKo_1084|Variables should not be suffixed with a number if their types have number suffixes.|&#x2713;|\-|
-|MiKo_1085|Methods should not be named using numbers as slang.|&#x2713;|\-|
+|MiKo_1081|Methods should not be suffixed with a number.|&#x2713;|&#x2713;|
+|MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes.|&#x2713;|&#x2713;|
+|MiKo_1083|Fields should not be suffixed with a number if their types have number suffixes.|&#x2713;|&#x2713;|
+|MiKo_1084|Variables should not be suffixed with a number if their types have number suffixes.|&#x2713;|&#x2713;|
+|MiKo_1085|Parameters should not be suffixed with a number.|&#x2713;|&#x2713;|
+|MiKo_1086|Methods should not be named using numbers as slang.|&#x2713;|\-|
 |MiKo_1090|Parameters should not be suffixed with specific types.|&#x2713;|\-|
 |MiKo_1091|Variables should not be suffixed with specific types.|&#x2713;|\-|
 |MiKo_1092|'Ability' Types should not be suffixed with redundant information.|&#x2713;|\-|
@@ -219,7 +219,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2303|Do not end comments with a period.|&#x2713;|\-|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|\-|
-|MiKo_2306|Do end comments with a period.|&#x2713;|\-|
+|MiKo_2306|Do end comments with a period.|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
 
 ### Maintainability

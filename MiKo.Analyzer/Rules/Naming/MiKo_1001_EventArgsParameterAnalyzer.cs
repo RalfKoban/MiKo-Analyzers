@@ -15,6 +15,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IParameterSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method)
+            {
+                if (method.Parameters.Length == 1)
+                {
+                    return method.Name != nameof(Equals) ? "e" : "other";
+                }
+
+                var i = method.Parameters.IndexOf(symbol);
+                return "e" + i;
+            }
+
+            return "e";
+        }
+
+        internal static bool IsAccepted(IParameterSymbol parameter, IMethodSymbol method) => GetParameters(method).Contains(parameter)
+                                                                                          && FindBetterName(parameter) == parameter.Name;
+
         protected override bool ShallAnalyze(IMethodSymbol method)
         {
             if (method.IsOverride)
@@ -47,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
-            var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs() || _.Type.IsDependencyPropertyChangedEventArgs()).ToList();
+            var parameters = GetParameters(method);
             switch (parameters.Count)
             {
                 case 0: return Enumerable.Empty<Diagnostic>();
@@ -67,18 +86,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         var diagnostics = new List<Diagnostic>(parameters.Count);
                         foreach (var parameter in parameters)
                         {
-                            var parameterName = parameter.Name;
+                            var expected = "e" + i;
 
-                            var expected = "e" + (++i);
-                            if (parameterName != expected)
+                            if (parameter.Name != expected)
                             {
                                 diagnostics.Add(Issue(parameter, expected));
                             }
+
+                            i++;
                         }
 
                         return diagnostics;
                     }
             }
+        }
+
+        private static List<IParameterSymbol> GetParameters(IMethodSymbol method)
+        {
+            var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs() || _.Type.IsDependencyPropertyChangedEventArgs()).ToList();
+            return parameters;
         }
     }
 }

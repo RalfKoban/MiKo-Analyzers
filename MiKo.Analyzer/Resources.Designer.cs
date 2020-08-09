@@ -1955,33 +1955,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name..
-        /// </summary>
-        public static string MiKo_1066_Description {
-            get {
-                return ResourceManager.GetString("MiKo_1066_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do not use a number as suffix.
-        /// </summary>
-        public static string MiKo_1066_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_1066_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Parameters should not be suffixed with a number..
-        /// </summary>
-        public static string MiKo_1066_Title {
-            get {
-                return ResourceManager.GetString("MiKo_1066_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;Perform&apos; in their names..
         /// </summary>
         public static string MiKo_1067_Description {
@@ -2331,7 +2304,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using numbers in method names such &apos;Send2You&apos; or &apos;Do4You&apos; is slang and should be avoided. Instead, the correct words &apos;To&apos; or &apos;For&apos; should be used..
+        ///   Looks up a localized string similar to Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name..
         /// </summary>
         public static string MiKo_1085_Description {
             get {
@@ -2340,7 +2313,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use a number as slang.
+        ///   Looks up a localized string similar to Do not use a number as suffix.
         /// </summary>
         public static string MiKo_1085_MessageFormat {
             get {
@@ -2349,11 +2322,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named using numbers as slang..
+        ///   Looks up a localized string similar to Parameters should not be suffixed with a number..
         /// </summary>
         public static string MiKo_1085_Title {
             get {
                 return ResourceManager.GetString("MiKo_1085_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using numbers in method names such &apos;Send2You&apos; or &apos;Do4You&apos; is slang and should be avoided. Instead, the correct words &apos;To&apos; or &apos;For&apos; should be used..
+        /// </summary>
+        public static string MiKo_1086_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1086_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a number as slang.
+        /// </summary>
+        public static string MiKo_1086_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1086_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should not be named using numbers as slang..
+        /// </summary>
+        public static string MiKo_1086_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1086_Title", resourceCulture);
             }
         }
         
