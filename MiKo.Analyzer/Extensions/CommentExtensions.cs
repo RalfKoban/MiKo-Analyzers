@@ -14,9 +14,8 @@ namespace MiKoSolutions.Analyzers
         {
             if (symbol is IParameterSymbol p)
             {
-                var methodSymbol = p.GetEnclosingMethod();
-
-                return GetComment(p, methodSymbol?.GetDocumentationCommentXml());
+                // parameter might be method or property (setter or indexer)
+                return GetComment(p, p.ContainingSymbol?.GetDocumentationCommentXml());
             }
 
             return Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
