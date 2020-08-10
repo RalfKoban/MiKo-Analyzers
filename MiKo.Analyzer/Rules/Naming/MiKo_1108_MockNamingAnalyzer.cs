@@ -14,10 +14,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1108";
 
-        private static readonly string[] MockNames = { "mock", "stub" };
+        internal static readonly string[] MockNames = { "Mock", "mock", "Stub", "stub" };
 
         public MiKo_1108_MockNamingAnalyzer() : base(Id, (SymbolKind)(-1))
         {
+        }
+
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var symbolName = symbol.Name.Without(MockNames);
+
+            if (symbolName.IsNullOrWhiteSpace() || symbolName.StartsWithNumber())
+            {
+                return symbol.Name;
+            }
+
+            return symbolName;
         }
 
         protected override void InitializeCore(AnalysisContext context)
@@ -48,7 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from syntaxToken in identifiers
-                                                                                                                                        where syntaxToken.ValueText.ContainsAny(MockNames)
+                                                                                                                                        let name = syntaxToken.ValueText
+                                                                                                                                        where name.Length > 3 && name.ContainsAny(MockNames)
                                                                                                                                         let symbol = syntaxToken.GetSymbol(semanticModel)
                                                                                                                                         select symbol is null
                                                                                                                                                    ? Issue(syntaxToken)
