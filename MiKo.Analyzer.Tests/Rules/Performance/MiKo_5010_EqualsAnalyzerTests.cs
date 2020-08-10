@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -220,8 +221,33 @@ public class TestMe
 }
 ");
 
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x, Guid y) { if (object.Equals(x, y)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x, Guid y) { if (x == y) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (object.Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x == Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x == Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(int x) { if (object.Equals(x, 42)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(int x) { if (x == 42) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (!Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (!(Equals(x, Guid.Empty))) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) == false) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_5010_EqualsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5010_EqualsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_5010_CodeFixProvider();
     }
 }
