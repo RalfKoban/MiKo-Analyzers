@@ -19,24 +19,21 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
             var invocation = syntaxNodes.OfType<InvocationExpressionSyntax>().First();
-            if (invocation.Parent.IsKind(SyntaxKind.LogicalNotExpression))
-            {
-                return invocation.Parent;
-            }
 
-            if (invocation.Parent.IsKind(SyntaxKind.ParenthesizedExpression) && invocation.Parent.Parent.IsKind(SyntaxKind.LogicalNotExpression))
+            var parent = invocation.Parent;
+            switch (parent.Kind())
             {
-                return invocation.Parent.Parent;
-            }
+                case SyntaxKind.ParenthesizedExpression when parent.Parent.IsKind(SyntaxKind.LogicalNotExpression):
+                    return parent.Parent;
 
-            if (invocation.Parent is BinaryExpressionSyntax b
-                && b.IsKind(SyntaxKind.EqualsExpression)
-                && b.Right.IsKind(SyntaxKind.FalseLiteralExpression))
-            {
-                return invocation.Parent;
-            }
+                case SyntaxKind.LogicalNotExpression:
+                case SyntaxKind.EqualsExpression:
+                case SyntaxKind.NotEqualsExpression:
+                    return parent;
 
-            return invocation;
+                default:
+                    return invocation;
+            }
         }
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -82,6 +79,17 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     var b = (BinaryExpressionSyntax)syntax;
                     if (b.Right.IsKind(SyntaxKind.FalseLiteralExpression))
+                    {
+                        kind = SyntaxKind.NotEqualsExpression;
+                    }
+
+                    return (InvocationExpressionSyntax)b.Left;
+                }
+
+                case SyntaxKind.NotEqualsExpression:
+                {
+                    var b = (BinaryExpressionSyntax)syntax;
+                    if (b.Right.IsKind(SyntaxKind.TrueLiteralExpression))
                     {
                         kind = SyntaxKind.NotEqualsExpression;
                     }
