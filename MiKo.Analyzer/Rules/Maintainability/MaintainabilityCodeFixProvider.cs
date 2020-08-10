@@ -11,6 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected sealed override Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
+            => base.ApplySolutionCodeFixAsync(document, root, syntax, cancellationToken);
+
         protected sealed override Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
         {
             var updatedSyntax = GetUpdatedSyntax(syntax);
