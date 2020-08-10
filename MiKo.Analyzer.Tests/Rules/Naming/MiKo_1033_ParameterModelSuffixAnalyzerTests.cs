@@ -32,6 +32,17 @@ public class TestMe
 }
 ");
 
+        [TestCase("model")]
+        [TestCase("models")]
+        [TestCase("itemModel")]
+        [TestCase("modelItem")]
+        public void An_issue_is_reported_for_invalid_index_parameter_(string name) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public int this[int " + name + @"] => " + name + @"
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1033_ParameterModelSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1033_ParameterModelSuffixAnalyzer();
