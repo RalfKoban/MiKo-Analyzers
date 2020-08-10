@@ -112,7 +112,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1105|One-time test initialization methods should be named 'PrepareTestEnvironment'.|&#x2713;|&#x2713;|
 |MiKo_1106|One-time test cleanup methods should be named 'CleanupTestEnvironment'.|&#x2713;|&#x2713;|
 |MiKo_1107|Test methods should not be in Pascal-casing.|&#x2713;|\-|
-|MiKo_1108|Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.|&#x2713;|\-|
+|MiKo_1108|Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.|&#x2713;|&#x2713;|
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix.|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore.|&#x2713;|&#x2713;|
 |MiKo_1111|Test methods should be named in a fluent way.|&#x2713;|\-|
@@ -313,6 +313,6 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_5001|'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.|&#x2713;|\-|
 |MiKo_5002|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|\-|
 |MiKo_5003|Correct Log methods should be invoked for exceptions.|&#x2713;|\-|
-|MiKo_5010|Do not use 'object.Equals()' on value types.|&#x2713;|\-|
+|MiKo_5010|Do not use 'object.Equals()' on value types.|&#x2713;|&#x2713;|
 |MiKo_5011|Do not concatenate strings with += operator.|&#x2713;|\-|
 |MiKo_5012|Do not use 'yield return' for recursively defined structures.|&#x2713;|\-|

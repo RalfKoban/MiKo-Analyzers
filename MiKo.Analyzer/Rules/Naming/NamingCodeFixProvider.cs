@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -28,5 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected abstract string GetNewName(ISymbol symbol);
+
+        protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => throw new NotSupportedException("This code fix provider does not modify the syntax");
     }
 }

@@ -18,5 +18,22 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("a1bc", ExpectedResult = "a1bc")]
         [TestCase("a1bc42", ExpectedResult = "a1bc")]
         public static string WithoutNumberSuffix_works_(string input) => input.WithoutNumberSuffix();
+
+        [TestCase("ab123", ExpectedResult = true)]
+        [TestCase("ab1", ExpectedResult = true)]
+        [TestCase("ab", ExpectedResult = false)]
+        [TestCase("a8b", ExpectedResult = false)]
+        [TestCase("42ab", ExpectedResult = false)]
+        [TestCase("1", ExpectedResult = true)]
+        public static bool EndsWithNumber_works_(string input) => input.EndsWithNumber();
+
+        [TestCase("ab123", ExpectedResult = false)]
+        [TestCase("ab1", ExpectedResult = false)]
+        [TestCase("ab", ExpectedResult = false)]
+        [TestCase("a8b", ExpectedResult = false)]
+        [TestCase("42ab", ExpectedResult = true)]
+        [TestCase("1ab", ExpectedResult = true)]
+        [TestCase("1", ExpectedResult = true)]
+        public static bool StartsWithNumber_works_(string input) => input.StartsWithNumber();
     }
 }

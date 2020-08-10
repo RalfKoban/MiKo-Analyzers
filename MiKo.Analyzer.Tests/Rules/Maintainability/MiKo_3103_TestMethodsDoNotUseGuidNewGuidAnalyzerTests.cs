@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -116,18 +118,23 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Cannot be executed for the moment as a new GUID is generated each time.")]
+        [Test]
         public void Code_gets_fixed()
         {
             const string Template = @"using NUnit.Framework; public class TestMe { [Test] public void Test() { var x = ###; } }";
 
-            VerifyCSharpFix(Template.Replace("###", "Guid.NewGuid()"), Template.Replace("###", @"Guid.Parse("""")"));
+            VerifyCSharpFix(Template.Replace("###", "Guid.NewGuid()"), Template.Replace("###", @"Guid.Parse(""111e32b2-0b54-44e2-958b-06ff2bc2b353"")"));
         }
 
         protected override string GetDiagnosticId() => MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3103_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new Testable_MiKo_3103_CodeFixProvider();
+
+        private sealed class Testable_MiKo_3103_CodeFixProvider : MiKo_3103_CodeFixProvider
+        {
+            protected override Guid CreateGuid() => new Guid("111e32b2-0b54-44e2-958b-06ff2bc2b353");
+        }
     }
 }

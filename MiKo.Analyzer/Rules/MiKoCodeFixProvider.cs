@@ -46,8 +46,16 @@ namespace MiKoSolutions.Analyzers.Rules
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
             => Task.FromResult(document.Project.Solution);
 
-        protected virtual Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
-            => Task.FromResult(document);
+        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax)
+        {
+            var updatedSyntax = GetUpdatedSyntax(syntax);
+            var newDocument = updatedSyntax is null
+                                  ? document
+                                  : document.WithSyntaxRoot(root.ReplaceNode(syntax, updatedSyntax));
+            return Task.FromResult(newDocument);
+        }
+
+        protected abstract SyntaxNode GetUpdatedSyntax(SyntaxNode syntax);
 
         protected abstract SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes);
 
@@ -61,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return IsSolutionWide
                        ? CodeAction.Create(Title, _ => ApplySolutionCodeFixAsync(document, root, syntax, _), GetType().Name)
-                       : CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, syntax, _), GetType().Name);
+                       : CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, syntax), GetType().Name);
         }
     }
 }

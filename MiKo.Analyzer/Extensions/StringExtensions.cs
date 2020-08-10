@@ -80,11 +80,13 @@ namespace System
 
         public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
 
+        public static bool StartsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[0].IsNumber();
+
         public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
 
-        public static bool EndsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value.Last().IsNumber();
+        public static bool EndsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[value.Length - 1].IsNumber();
 
         public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
 
@@ -143,7 +145,7 @@ namespace System
                 case 0: return string.Empty;
                 case 1: return items[0];
                 case 2: return items.ConcatenatedWith(SeparatorForLast);
-                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), SeparatorForLast, items.Last());
+                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), SeparatorForLast, items[count - 1]);
             }
         }
 

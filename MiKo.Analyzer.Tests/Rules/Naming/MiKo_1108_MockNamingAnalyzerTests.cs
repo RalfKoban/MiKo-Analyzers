@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -281,8 +282,18 @@ public class TestMe
 }
 ");
 
+        [TestCase("[TestFixture] class TestMe { int MyMock { get; } }", "[TestFixture] class TestMe { int My { get; } }")]
+        [TestCase("[TestFixture] class TestMe { int MyMock; }", "[TestFixture] class TestMe { int My; }")]
+        [TestCase("[TestFixture] class TestMe { void Do() { int myMock = 0; } }", "[TestFixture] class TestMe { void Do() { int my = 0; } }")]
+        [TestCase("[TestFixture] class TestMe { void Do(int myMock) { } }", "[TestFixture] class TestMe { void Do(int my) { } }")]
+        [TestCase("[TestFixture] class TestMe { void Do(int mock) { } }", "[TestFixture] class TestMe { void Do(int mock) { } }")]
+        [TestCase("[TestFixture] class TestMe { void Do(int mock1) { } }", "[TestFixture] class TestMe { void Do(int mock1) { } }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1108_MockNamingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1108_MockNamingAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1108_CodeFixProvider();
     }
 }
