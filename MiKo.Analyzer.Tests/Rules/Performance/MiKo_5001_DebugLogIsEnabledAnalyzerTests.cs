@@ -354,7 +354,7 @@ namespace Bla
     {
         bool IsDebugEnabled { get; }
 
-        void Debug();
+        void Debug(string text);
     }
 
     public class TestMe
@@ -375,7 +375,7 @@ namespace Bla
     {
         bool IsDebugEnabled { get; }
 
-        void Debug();
+        void Debug(string text);
     }
 
     public class TestMe
