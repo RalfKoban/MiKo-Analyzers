@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -343,8 +344,61 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe()
+        {
+            Log.Debug(""something"");
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""something"");
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5001_DebugLogIsEnabledAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_5001_CodeFixProvider();
     }
 }

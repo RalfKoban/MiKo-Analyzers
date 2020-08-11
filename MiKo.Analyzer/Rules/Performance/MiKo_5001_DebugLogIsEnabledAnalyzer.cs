@@ -10,9 +10,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public const string Id = "MiKo_5001";
 
+        internal const string IsDebugEnabled = "IsDebugEnabled";
         private const string Debug = "Debug";
         private const string DebugFormat = "DebugFormat";
-        private const string IsDebugEnabled = "IsDebugEnabled";
 
         public MiKo_5001_DebugLogIsEnabledAnalyzer() : base(Id, (SymbolKind)(-1))
         {
