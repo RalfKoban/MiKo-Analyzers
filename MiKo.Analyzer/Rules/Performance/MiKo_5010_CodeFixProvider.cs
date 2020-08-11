@@ -47,7 +47,14 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var arguments = invocation.ArgumentList.Arguments;
             var left = arguments[0].Expression;
             var right = arguments[1].Expression;
-            return SyntaxFactory.BinaryExpression(kind, left, right);
+            var expression = SyntaxFactory.BinaryExpression(kind, left, right);
+
+            if (syntax.HasTrailingTrivia)
+            {
+                return expression.WithTrailingTrivia(syntax.GetTrailingTrivia());
+            }
+
+            return expression;
         }
 
         private static InvocationExpressionSyntax GetInvocationExpressionSyntax(SyntaxNode syntax, out SyntaxKind kind)

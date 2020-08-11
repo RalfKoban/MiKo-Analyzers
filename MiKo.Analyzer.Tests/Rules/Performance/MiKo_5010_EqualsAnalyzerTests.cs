@@ -251,6 +251,12 @@ public class TestMe
         [TestCase(
              "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) != true) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x, bool b) { if (Equals(x, Guid.Empty) && b) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x, bool b) { if (x == Guid.Empty && b) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x, bool b) { if (b && Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x, bool b) { if (b && x == Guid.Empty) throw new NotSupportedException(); } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_5010_EqualsAnalyzer.Id;
