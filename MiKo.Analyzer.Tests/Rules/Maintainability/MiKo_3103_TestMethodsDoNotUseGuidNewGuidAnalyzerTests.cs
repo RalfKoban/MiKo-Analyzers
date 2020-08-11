@@ -126,6 +126,14 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", "Guid.NewGuid()"), Template.Replace("###", @"Guid.Parse(""111e32b2-0b54-44e2-958b-06ff2bc2b353"")"));
         }
 
+        [Test]
+        public void Code_with_ToString_gets_fixed_and_simplified()
+        {
+            const string Template = @"using NUnit.Framework; public class TestMe { [Test] public string Test() => ###; }";
+
+            VerifyCSharpFix(Template.Replace("###", @"Guid.NewGuid().ToString(""B"")"), Template.Replace("###", @"""{111e32b2-0b54-44e2-958b-06ff2bc2b353}"""));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer();
