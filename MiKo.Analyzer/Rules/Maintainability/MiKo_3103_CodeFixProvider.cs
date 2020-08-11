@@ -78,17 +78,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
         }
 
-        private static bool IsToStringCall(SyntaxNode node)
-        {
-            if (node is MemberAccessExpressionSyntax m && m.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-            {
-                if (m.Name is IdentifierNameSyntax i && i.Identifier.ValueText == nameof(ToString))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
+                                                            && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                            && m.GetName() == nameof(ToString);
     }
 }
