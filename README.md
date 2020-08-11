@@ -311,7 +311,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |MiKo_5001|'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.|&#x2713;|&#x2713;|
-|MiKo_5002|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|\-|
+|MiKo_5002|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|&#x2713;|
 |MiKo_5003|Correct Log methods should be invoked for exceptions.|&#x2713;|\-|
 |MiKo_5010|Do not use 'object.Equals()' on value types.|&#x2713;|&#x2713;|
 |MiKo_5011|Do not concatenate strings with += operator.|&#x2713;|\-|
