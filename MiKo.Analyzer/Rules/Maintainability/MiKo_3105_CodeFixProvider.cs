@@ -37,6 +37,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         case "IsFalse":
                             return FixAssertIsFalse(original.ArgumentList.Arguments);
+
+                        case "NotNull":
+                            return FixAssertNotNull(original.ArgumentList.Arguments);
                     }
                 }
             }
@@ -80,11 +83,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(args.ToArray());
         }
 
+        private static InvocationExpressionSyntax FixAssertNotNull(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var args = PrepareArguments(arguments[0], Is("Not", "Null"));
+
+            if (arguments.Count > 1)
+            {
+                args.AddRange(arguments.Skip(1));
+            }
+
+            return AssertThat(args.ToArray());
+        }
+
         private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => CreateInvocationSyntax("Assert", "That", arguments);
 
         private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
 
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
+
+        private static ArgumentSyntax Is(string name, string nextName) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName));
 
         private static List<ArgumentSyntax> PrepareArguments(ArgumentSyntax argument, ArgumentSyntax constraint)
         {
