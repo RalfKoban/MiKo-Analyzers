@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
+
 using NUnit.Framework;
 
 using TestHelper;
@@ -118,8 +120,36 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_sender()
+        {
+            const string OriginalCode = @"
+using System;
+
+class TestMe
+{
+    /// <param name=""sender"">The sender.</param>
+    /// <param name=""e"">Event arguments.</param>
+    void DoSomething(object sender, EventArgs e) { }
+}";
+
+            const string FixedCode = @"
+using System;
+
+class TestMe
+{
+    /// <param name=""sender"">The source of the event.</param>
+    /// <param name=""e"">An <see cref=""EventArgs""/> that contains the event data.</param>
+    void DoSomething(object sender, EventArgs e) { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2004_EventHandlerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2004_EventHandlerParametersAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2004_CodeFixProvider();
     }
 }
