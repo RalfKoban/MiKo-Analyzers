@@ -46,31 +46,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var newGuid = guid.ToString(format).SurroundedWithDoubleQuote();
 
+            var literal = CreateStringLiteralExpressionSyntax(newGuid);
+
+            // we only want to have a GUID
             if (isToString)
             {
                 // we only want to have a GUID
-                return CreateStringLiteralExpressionSyntax(newGuid);
+                return literal;
             }
 
-            return CreateInvocationSyntax(nameof(Guid), nameof(Guid.Parse), newGuid);
+            return CreateInvocationSyntax(nameof(Guid), nameof(Guid.Parse), SyntaxFactory.Argument(literal));
         }
 
         protected virtual Guid CreateGuid() => Guid.NewGuid();
-
-        private static SyntaxNode CreateInvocationSyntax(string className, string methodName, string argument)
-        {
-            // that's for the method call
-            var type = SyntaxFactory.IdentifierName(className);
-            var method = SyntaxFactory.IdentifierName(methodName);
-            var member = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
-
-            // that's for the argument
-            var stringLiteral = CreateStringLiteralExpressionSyntax(argument);
-            var arguments = SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(stringLiteral) }));
-
-            // combine both to complete call
-            return SyntaxFactory.InvocationExpression(member, arguments);
-        }
 
         private static LiteralExpressionSyntax CreateStringLiteralExpressionSyntax(string value)
         {
