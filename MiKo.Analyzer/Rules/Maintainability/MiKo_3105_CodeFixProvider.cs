@@ -44,16 +44,54 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        private static InvocationExpressionSyntax FixAssertAreEqual(SeparatedSyntaxList<ArgumentSyntax> arguments) => AssertThat(arguments[1], Is("EqualTo", arguments[0]));
+        private static InvocationExpressionSyntax FixAssertAreEqual(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var args = PrepareArguments(arguments[1], Is("EqualTo", arguments[0]));
 
-        private static InvocationExpressionSyntax FixAssertIsTrue(SeparatedSyntaxList<ArgumentSyntax> arguments) => AssertThat(arguments[0], Is("True"));
+            if (arguments.Count > 2)
+            {
+                args.AddRange(arguments.Skip(2));
+            }
 
-        private static InvocationExpressionSyntax FixAssertIsFalse(SeparatedSyntaxList<ArgumentSyntax> arguments) => AssertThat(arguments[0], Is("False"));
+            return AssertThat(args.ToArray());
+        }
+
+        private static InvocationExpressionSyntax FixAssertIsTrue(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var args = PrepareArguments(arguments[0], Is("True"));
+
+            if (arguments.Count > 1)
+            {
+                args.AddRange(arguments.Skip(1));
+            }
+
+            return AssertThat(args.ToArray());
+        }
+
+        private static InvocationExpressionSyntax FixAssertIsFalse(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var args = PrepareArguments(arguments[0], Is("False"));
+
+            if (arguments.Count > 1)
+            {
+                args.AddRange(arguments.Skip(1));
+            }
+
+            return AssertThat(args.ToArray());
+        }
 
         private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => CreateInvocationSyntax("Assert", "That", arguments);
 
         private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
 
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
+
+        private static List<ArgumentSyntax> PrepareArguments(ArgumentSyntax argument, ArgumentSyntax constraint)
+        {
+            var args = new List<ArgumentSyntax>();
+            args.Add(argument);
+            args.Add(constraint);
+            return args;
+        }
     }
 }
