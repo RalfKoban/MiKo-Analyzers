@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                               {
                                                                                   "That",
                                                                                   "Fail",
+                                                                                  "Pass",
                                                                                   "CatchAsync",
                                                                                   "Catch",
                                                                                   "ThrowsAsync",

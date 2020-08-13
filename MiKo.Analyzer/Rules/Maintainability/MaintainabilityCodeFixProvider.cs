@@ -9,16 +9,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected static InvocationExpressionSyntax CreateInvocationSyntax(string typeName, string methodName, params ArgumentSyntax[] arguments)
+        protected static InvocationExpressionSyntax CreateInvocationSyntax(MemberAccessExpressionSyntax member, params ArgumentSyntax[] arguments)
         {
-            // that's for the method call
-            var member = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName);
-
             // that's for the argument
             var argumentList = SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
 
             // combine both to complete call
             return SyntaxFactory.InvocationExpression(member, argumentList);
+        }
+
+        protected static InvocationExpressionSyntax CreateInvocationSyntax(string typeName, string methodName, params ArgumentSyntax[] arguments)
+        {
+            // that's for the method call
+            var member = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName);
+
+            return CreateInvocationSyntax(member, arguments);
         }
 
         protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName)

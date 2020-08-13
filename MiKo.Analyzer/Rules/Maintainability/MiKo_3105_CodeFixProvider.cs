@@ -29,17 +29,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     switch (maes.GetName())
                     {
-                        case "AreEqual":
-                            return FixAssertAreEqual(original.ArgumentList.Arguments);
+                        case "AreEqual": return FixAssertAreEqual(original.ArgumentList.Arguments);
+                        case "AreNotEqual": return FixAssertAreNotEqual(original.ArgumentList.Arguments);
+                        case "IsTrue": return FixAssertIsTrue(original.ArgumentList.Arguments);
+                        case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
+                        case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
+                        case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
 
-                        case "IsTrue":
-                            return FixAssertIsTrue(original.ArgumentList.Arguments);
-
-                        case "IsFalse":
-                            return FixAssertIsFalse(original.ArgumentList.Arguments);
-
-                        case "NotNull":
-                            return FixAssertNotNull(original.ArgumentList.Arguments);
+                            // Assert.AreSame(1, 2);
+                            // Assert.AreNotSame(1, 2);
+                            // Assert.Greater(2,3);
+                            // Assert.GreaterOrEqual(2,3);
+                            // Assert.Less(2,3);
+                            // Assert.LessOrEqual(2,3);
+                            // Assert.IsNotEmpty();
                     }
                 }
             }
@@ -49,66 +52,60 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAssertAreEqual(SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var args = PrepareArguments(arguments[1], Is("EqualTo", arguments[0]));
+            return AssertThat(arguments[1], Is("EqualTo", arguments[0]), 2, arguments);
+        }
 
-            if (arguments.Count > 2)
-            {
-                args.AddRange(arguments.Skip(2));
-            }
-
-            return AssertThat(args.ToArray());
+        private static InvocationExpressionSyntax FixAssertAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            return AssertThat(arguments[1], Is("Not", "EqualTo", arguments[0]), 2, arguments);
         }
 
         private static InvocationExpressionSyntax FixAssertIsTrue(SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var args = PrepareArguments(arguments[0], Is("True"));
-
-            if (arguments.Count > 1)
-            {
-                args.AddRange(arguments.Skip(1));
-            }
-
-            return AssertThat(args.ToArray());
+            return AssertThat(arguments[0], Is("True"), 1, arguments);
         }
 
         private static InvocationExpressionSyntax FixAssertIsFalse(SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var args = PrepareArguments(arguments[0], Is("False"));
+            return AssertThat(arguments[0], Is("False"), 1, arguments);
+        }
 
-            if (arguments.Count > 1)
-            {
-                args.AddRange(arguments.Skip(1));
-            }
-
-            return AssertThat(args.ToArray());
+        private static InvocationExpressionSyntax FixAssertIsNull(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            return AssertThat(arguments[0], Is("Null"), 1, arguments);
         }
 
         private static InvocationExpressionSyntax FixAssertNotNull(SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var args = PrepareArguments(arguments[0], Is("Not", "Null"));
-
-            if (arguments.Count > 1)
-            {
-                args.AddRange(arguments.Skip(1));
-            }
-
-            return AssertThat(args.ToArray());
+            return AssertThat(arguments[0], Is("Not", "Null"), 1, arguments);
         }
 
         private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => CreateInvocationSyntax("Assert", "That", arguments);
 
-        private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
+        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        {
+            var args = new List<ArgumentSyntax>();
+            args.Add(argument);
+            args.Add(constraint);
+
+            if (arguments.Count > skip)
+            {
+                args.AddRange(arguments.Skip(skip));
+            }
+
+            return AssertThat(args.ToArray());
+        }
 
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
         private static ArgumentSyntax Is(string name, string nextName) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName));
 
-        private static List<ArgumentSyntax> PrepareArguments(ArgumentSyntax argument, ArgumentSyntax constraint)
+        private static ArgumentSyntax Is(string name, string nextName, params ArgumentSyntax[] arguments)
         {
-            var args = new List<ArgumentSyntax>();
-            args.Add(argument);
-            args.Add(constraint);
-            return args;
+            var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName);
+            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, arguments));
         }
+
+        private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
     }
 }
