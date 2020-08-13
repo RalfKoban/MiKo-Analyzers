@@ -14,15 +14,15 @@ namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class MiKoCodeFixProvider : CodeFixProvider
     {
-        protected MiKoCodeFixProvider(bool isSolutionWide) => IsSolutionWide = isSolutionWide;
-
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
 
         public abstract string FixableDiagnosticId { get; }
 
         protected abstract string Title { get; }
 
-        private bool IsSolutionWide { get; }
+        protected virtual bool IsSolutionWide => false;
+
+        protected virtual bool IsTrivia => false;
 
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
@@ -34,9 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-            var syntaxNodes = root.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf();
-
-            var codeFix = CreateCodeFix(context.Document, root, syntaxNodes);
+            var codeFix = CreateCodeFix(context.Document, root, diagnosticSpan.Start);
             if (codeFix != null)
             {
                 context.RegisterCodeFix(codeFix, diagnostic);
@@ -55,21 +53,45 @@ namespace MiKoSolutions.Analyzers.Rules
             return Task.FromResult(newDocument);
         }
 
-        protected abstract SyntaxNode GetUpdatedSyntax(SyntaxNode syntax);
-
-        protected abstract SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes);
-
-        private CodeAction CreateCodeFix(Document document, SyntaxNode root, IEnumerable<SyntaxNode> syntaxNodes)
+        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxTrivia trivia)
         {
+            var oldToken = GetToken(trivia);
+            var updatedToken = GetUpdatedToken(oldToken);
+            var newDocument = document.WithSyntaxRoot(root.ReplaceToken(oldToken, updatedToken));
+            return Task.FromResult(newDocument);
+        }
+
+        protected virtual SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => null;
+
+        protected virtual SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => null;
+
+        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
+
+        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token) => token;
+
+        private CodeAction CreateCodeFix(Document document, SyntaxNode root, int startPosition)
+        {
+            if (IsTrivia)
+            {
+                var trivia = root.FindTrivia(startPosition);
+
+                return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, trivia), GetType().Name);
+            }
+
+            var syntaxNodes = root.FindToken(startPosition).Parent.AncestorsAndSelf();
+
             var syntax = GetSyntax(syntaxNodes.ToList());
             if (syntax is null)
             {
                 return null;
             }
 
-            return IsSolutionWide
-                       ? CodeAction.Create(Title, _ => ApplySolutionCodeFixAsync(document, root, syntax, _), GetType().Name)
-                       : CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, syntax), GetType().Name);
+            if (IsSolutionWide)
+            {
+                return CodeAction.Create(Title, _ => ApplySolutionCodeFixAsync(document, root, syntax, _), GetType().Name);
+            }
+
+            return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, syntax), GetType().Name);
         }
     }
 }

@@ -8,10 +8,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
-        protected DocumentationCodeFixProvider() : base(false)
-        {
-        }
-
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes)
         {
             // we have to delve into the trivias to find the XML syntax nodes

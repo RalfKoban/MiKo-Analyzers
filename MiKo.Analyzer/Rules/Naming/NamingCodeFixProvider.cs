@@ -9,9 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingCodeFixProvider : MiKoCodeFixProvider
     {
-        protected NamingCodeFixProvider() : base(true)
-        {
-        }
+        protected override bool IsSolutionWide => true;
 
         protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
         {

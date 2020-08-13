@@ -5,10 +5,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MaintainabilityCodeFixProvider : MiKoCodeFixProvider
     {
-        protected MaintainabilityCodeFixProvider() : base(false)
-        {
-        }
-
         protected static InvocationExpressionSyntax CreateInvocationSyntax(MemberAccessExpressionSyntax member, params ArgumentSyntax[] arguments)
         {
             // that's for the argument

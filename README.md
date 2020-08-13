@@ -214,7 +214,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|\-|
 |MiKo_2212|Documentation should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
-|MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|\-|
+|MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|
 |MiKo_2303|Do not end comments with a period.|&#x2713;|\-|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
