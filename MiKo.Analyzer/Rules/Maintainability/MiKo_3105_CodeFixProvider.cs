@@ -31,28 +31,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         case "AreEqual": return FixAssertAreEqual(original.ArgumentList.Arguments);
                         case "AreNotEqual": return FixAssertAreNotEqual(original.ArgumentList.Arguments);
+                        case "AreSame": return FixAssertAreSame(original.ArgumentList.Arguments);
+                        case "AreNotSame": return FixAssertAreNotSame(original.ArgumentList.Arguments);
                         case "IsTrue": return FixAssertIsTrue(original.ArgumentList.Arguments);
                         case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
                         case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
                         case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
+                        case "IsNotEmpty": return FixAssertIsNotEmpty(original.ArgumentList.Arguments);
                         case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
                         case "GreaterOrEqual": return FixAssertGreaterOrEqual(original.ArgumentList.Arguments);
                         case "Less": return FixAssertLess(original.ArgumentList.Arguments);
                         case "LessOrEqual": return FixAssertLessOrEqual(original.ArgumentList.Arguments);
-
-                            // Assert.AreSame(1, 2);
-                            // Assert.AreNotSame(1, 2);
-                            // Assert.Greater(2,3);
-                            // Assert.GreaterOrEqual(2,3);
-                            // Assert.Less(2,3);
-                            // Assert.LessOrEqual(2,3);
-                            //
-                            // Assert.That(1, Is.GreaterThan(2));
-                            // Assert.That(1, Is.GreaterThanOrEqualTo(2));
-                            // Assert.That(1, Is.LessThan(2));
-                            // Assert.That(1, Is.LessThanOrEqualTo(2));
-                            //
-                            // Assert.IsNotEmpty();
                     }
                 }
             }
@@ -68,6 +57,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixAssertAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args)
         {
             return AssertThat(args[1], Is("Not", "EqualTo", args[0]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertAreSame(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Is("SameAs", args[0]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertAreNotSame(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Is("Not", "SameAs", args[0]), 2, args);
         }
 
         private static InvocationExpressionSyntax FixAssertIsTrue(SeparatedSyntaxList<ArgumentSyntax> args)
@@ -90,6 +89,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(args[0], Is("Not", "Null"), 1, args);
         }
 
+        private static InvocationExpressionSyntax FixAssertIsNotEmpty(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("Not", "Empty"), 1, args);
+        }
+
         private static InvocationExpressionSyntax FixAssertGreater(SeparatedSyntaxList<ArgumentSyntax> args)
         {
             return AssertThat(args[0], Is("GreaterThan", args[1]), 2, args);
@@ -110,8 +114,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), 2, args);
         }
 
-        private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => CreateInvocationSyntax("Assert", "That", arguments);
-
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var args = new List<ArgumentSyntax>();
@@ -126,16 +128,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(args.ToArray());
         }
 
+        private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => CreateInvocationSyntax("Assert", "That", arguments);
+
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
         private static ArgumentSyntax Is(string name, string nextName) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName));
+
+        private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
 
         private static ArgumentSyntax Is(string name, string nextName, params ArgumentSyntax[] arguments)
         {
             var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName);
             return SyntaxFactory.Argument(CreateInvocationSyntax(expression, arguments));
         }
-
-        private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
     }
 }
