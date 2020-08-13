@@ -21,9 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
             var repeat = p.GetSyntax().Ancestors().OfType<ArgumentSyntax>().Count(_ => _.ChildNodes().OfType<SimpleLambdaExpressionSyntax>().Any());
+            if (repeat == 0)
+            {
+                return Constants.LambdaIdentifiers.Default;
+            }
 
-            var newName = string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, repeat));
-            return newName;
+            return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, repeat));
         }
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SimpleLambdaExpressionSyntax>().First().Parameter;
