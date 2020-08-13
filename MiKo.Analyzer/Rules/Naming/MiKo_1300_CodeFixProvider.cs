@@ -17,18 +17,55 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string GetNewName(ISymbol symbol)
         {
-            var p = (IParameterSymbol)symbol;
-
             // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
-            var repeat = p.GetSyntax().Ancestors().OfType<ArgumentSyntax>().Count(_ => _.ChildNodes().OfType<SimpleLambdaExpressionSyntax>().Any());
-            if (repeat == 0)
+            var count = CountArgumentSyntaxes(((IParameterSymbol)symbol).GetSyntax());
+            switch (count)
             {
-                return Constants.LambdaIdentifiers.Default;
-            }
+                case 0:
+                case 1:
+                    return Constants.LambdaIdentifiers.Default;
 
-            return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, repeat));
+                case 2:
+                    return Constants.LambdaIdentifiers.Fallback;
+
+                case 3:
+                    return Constants.LambdaIdentifiers.Fallback2;
+
+                default:
+                    return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, count));
+            }
         }
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SimpleLambdaExpressionSyntax>().First().Parameter;
+
+        private static int CountArgumentSyntaxes(ParameterSyntax parameter)
+        {
+            var count = 0;
+
+            foreach (var ancestor in parameter.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case ArgumentSyntax a:
+                    {
+                        if (a.ChildNodes().OfType<SimpleLambdaExpressionSyntax>().Any())
+                        {
+                            count++;
+                        }
+
+                        break;
+                    }
+
+                    case ExpressionStatementSyntax _:
+                    case MethodDeclarationSyntax _:
+                    {
+                        // we do not need to look up further, so we can speed up search when done project- or solution-wide
+                        break;
+                    }
+                }
+            }
+
+            return count;
+        }
     }
 }
