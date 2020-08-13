@@ -35,6 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
                         case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
                         case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
+                        case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
+                        case "GreaterOrEqual": return FixAssertGreaterOrEqual(original.ArgumentList.Arguments);
+                        case "Less": return FixAssertLess(original.ArgumentList.Arguments);
+                        case "LessOrEqual": return FixAssertLessOrEqual(original.ArgumentList.Arguments);
 
                             // Assert.AreSame(1, 2);
                             // Assert.AreNotSame(1, 2);
@@ -42,6 +46,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             // Assert.GreaterOrEqual(2,3);
                             // Assert.Less(2,3);
                             // Assert.LessOrEqual(2,3);
+                            //
+                            // Assert.That(1, Is.GreaterThan(2));
+                            // Assert.That(1, Is.GreaterThanOrEqualTo(2));
+                            // Assert.That(1, Is.LessThan(2));
+                            // Assert.That(1, Is.LessThanOrEqualTo(2));
+                            //
                             // Assert.IsNotEmpty();
                     }
                 }
@@ -50,34 +60,54 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        private static InvocationExpressionSyntax FixAssertAreEqual(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax FixAssertAreEqual(SeparatedSyntaxList<ArgumentSyntax> args)
         {
-            return AssertThat(arguments[1], Is("EqualTo", arguments[0]), 2, arguments);
+            return AssertThat(args[1], Is("EqualTo", args[0]), 2, args);
         }
 
-        private static InvocationExpressionSyntax FixAssertAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax FixAssertAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args)
         {
-            return AssertThat(arguments[1], Is("Not", "EqualTo", arguments[0]), 2, arguments);
+            return AssertThat(args[1], Is("Not", "EqualTo", args[0]), 2, args);
         }
 
-        private static InvocationExpressionSyntax FixAssertIsTrue(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax FixAssertIsTrue(SeparatedSyntaxList<ArgumentSyntax> args)
         {
-            return AssertThat(arguments[0], Is("True"), 1, arguments);
+            return AssertThat(args[0], Is("True"), 1, args);
         }
 
-        private static InvocationExpressionSyntax FixAssertIsFalse(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax FixAssertIsFalse(SeparatedSyntaxList<ArgumentSyntax> args)
         {
-            return AssertThat(arguments[0], Is("False"), 1, arguments);
+            return AssertThat(args[0], Is("False"), 1, args);
         }
 
-        private static InvocationExpressionSyntax FixAssertIsNull(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax FixAssertIsNull(SeparatedSyntaxList<ArgumentSyntax> args)
         {
-            return AssertThat(arguments[0], Is("Null"), 1, arguments);
+            return AssertThat(args[0], Is("Null"), 1, args);
         }
 
-        private static InvocationExpressionSyntax FixAssertNotNull(SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax FixAssertNotNull(SeparatedSyntaxList<ArgumentSyntax> args)
         {
-            return AssertThat(arguments[0], Is("Not", "Null"), 1, arguments);
+            return AssertThat(args[0], Is("Not", "Null"), 1, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertGreater(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("GreaterThan", args[1]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertGreaterOrEqual(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("GreaterThanOrEqualTo", args[1]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertLess(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("LessThan", args[1]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), 2, args);
         }
 
         private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => CreateInvocationSyntax("Assert", "That", arguments);
