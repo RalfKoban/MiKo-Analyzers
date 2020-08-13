@@ -121,13 +121,16 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_sender()
+        public void Code_gets_fixed()
         {
             const string OriginalCode = @"
 using System;
 
 class TestMe
 {
+    /// <summary>
+    /// Does something.
+    /// </summary>
     /// <param name=""sender"">The sender.</param>
     /// <param name=""e"">Event arguments.</param>
     void DoSomething(object sender, EventArgs e) { }
@@ -138,6 +141,9 @@ using System;
 
 class TestMe
 {
+    /// <summary>
+    /// Does something.
+    /// </summary>
     /// <param name=""sender"">The source of the event.</param>
     /// <param name=""e"">An <see cref=""EventArgs""/> that contains the event data.</param>
     void DoSomething(object sender, EventArgs e) { }

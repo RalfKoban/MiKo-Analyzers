@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameterName = syntaxNodes.OfType<ParameterSyntax>().First().Identifier.Text;
 
             // we are called for each parameter, s we have to find out the correct XML element
-            return GetXmlSyntax(syntaxNodes.OfType<MethodDeclarationSyntax>()).FirstOrDefault(_ => GetParameterName(_) == parameterName);
+            return GetXmlSyntax(Constants.XmlTag.Param, syntaxNodes.OfType<MethodDeclarationSyntax>()).FirstOrDefault(_ => GetParameterName(_) == parameterName);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)

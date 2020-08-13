@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override string Title => "Use <inheritdoc/>";
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes).FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Summary, syntaxNodes).FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
     }
