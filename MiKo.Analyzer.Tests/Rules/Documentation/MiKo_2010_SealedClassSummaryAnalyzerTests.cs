@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2010_SealedClassSummaryAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2010_SealedClassSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void Struct_is_not_reported() => No_issue_is_reported_for(@"

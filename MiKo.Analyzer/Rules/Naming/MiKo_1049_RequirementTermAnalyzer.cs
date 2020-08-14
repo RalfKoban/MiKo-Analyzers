@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var symbolName = symbol.Name;
 
             return Constants.Markers.Requirements.Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))
-                                                 .Select(_ => Issue(symbol, _));
+                            .Select(_ => Issue(symbol, _));
         }
     }
 }

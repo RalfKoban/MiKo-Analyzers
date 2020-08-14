@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [TestFixture]
-    public class MiKo_5003_DebugLogExceptionAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_5003_DebugLogExceptionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Methods = { "Debug", "Info", "Error", "Warn", "Fatal" };
 

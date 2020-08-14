@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public class MiKo_1042_CancellationTokenParameterNameAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1042_CancellationTokenParameterNameAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_method_without_parameters() => No_issue_is_reported_for(@"

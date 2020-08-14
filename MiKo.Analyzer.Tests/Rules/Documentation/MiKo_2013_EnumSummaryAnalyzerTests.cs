@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
+
 using NUnit.Framework;
 
 using TestHelper;

@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis.CSharp;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2301_CodeFixProvider)), Shared]
-    public class MiKo_2301_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2301_CodeFixProvider : DocumentationCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_2301_TestArrangeActAssertCommentAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_2301_TestArrangeActAssertCommentAnalyzer.Id;
 
-        protected sealed override string Title => "Remove obvious AAA comment";
+        protected override string Title => "Remove obvious AAA comment";
 
         protected override bool IsTrivia => true;
 

@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_correct_object_creation_on_field() => No_issue_is_reported_for(@"

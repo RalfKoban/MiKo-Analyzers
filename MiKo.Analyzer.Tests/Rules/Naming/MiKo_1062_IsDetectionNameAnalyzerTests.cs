@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public class MiKo_1062_IsDetectionNameAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1062_IsDetectionNameAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_matching_method() => No_issue_is_reported_for(@"

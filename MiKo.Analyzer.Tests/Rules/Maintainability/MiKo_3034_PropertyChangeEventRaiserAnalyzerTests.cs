@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3034_PropertyChangeEventRaiserAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3034_PropertyChangeEventRaiserAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

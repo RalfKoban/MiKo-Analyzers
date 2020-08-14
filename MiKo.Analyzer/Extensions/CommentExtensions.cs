@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -110,7 +111,7 @@ namespace MiKoSolutions.Analyzers
             {
                 return XElement.Parse(xml);
             }
-            catch (System.Xml.XmlException)
+            catch (XmlException)
             {
                 // happens in case of an invalid character
                 return null;

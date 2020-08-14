@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -19,8 +21,8 @@ public class TestMe
 
         [TestCase("bool")]
         [TestCase("System.Boolean")]
-        [TestCase(nameof(System.Boolean))]
-        [TestCase(nameof(System.Object))]
+        [TestCase(nameof(Boolean))]
+        [TestCase(nameof(Object))]
         public void No_issue_is_reported_for_method_with_(string type) => No_issue_is_reported_for(@"
 using System;
 

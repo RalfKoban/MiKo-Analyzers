@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2004_CodeFixProvider)), Shared]
-    public class MiKo_2004_CodeFixProvider : ParameterDocumentationCodeFixProvider
+    public sealed class MiKo_2004_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_2004_EventHandlerParametersAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_2004_EventHandlerParametersAnalyzer.Id;
 
-        protected sealed override string Title => "Fix comment of event handler parameter";
+        protected override string Title => "Fix comment of event handler parameter";
 
         protected override XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {

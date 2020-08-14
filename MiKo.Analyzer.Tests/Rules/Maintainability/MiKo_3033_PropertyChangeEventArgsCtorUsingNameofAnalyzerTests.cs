@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] TypeNames =
                                                     {

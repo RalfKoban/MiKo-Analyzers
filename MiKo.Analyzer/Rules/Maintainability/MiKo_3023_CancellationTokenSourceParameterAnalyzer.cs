@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var parameterType = parameter.Type;
                 if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)
                 {
-                    return new[] { Issue(parameter, nameof(System.Threading.CancellationToken)) };
+                    return new[] { Issue(parameter, nameof(CancellationToken)) };
                 }
             }
 

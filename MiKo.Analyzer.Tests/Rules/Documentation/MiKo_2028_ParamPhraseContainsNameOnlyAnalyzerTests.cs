@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2028_ParamPhraseContainsNameOnlyAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2028_ParamPhraseContainsNameOnlyAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_method_that_has_no_parameter() => No_issue_is_reported_for(@"

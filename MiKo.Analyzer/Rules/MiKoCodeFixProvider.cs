@@ -8,8 +8,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 
-using Document = Microsoft.CodeAnalysis.Document;
-
 namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class MiKoCodeFixProvider : CodeFixProvider

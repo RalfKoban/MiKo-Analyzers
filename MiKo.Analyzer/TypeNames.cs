@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 
 // ReSharper disable AssignNullToNotNullAttribute
 namespace MiKoSolutions.Analyzers
 {
     internal static class TypeNames
     {
-        internal static readonly string CancellationToken = string.Intern(typeof(System.Threading.CancellationToken).FullName);
-        internal static readonly string CancellationTokenSource = string.Intern(typeof(System.Threading.CancellationTokenSource).FullName);
+        internal static readonly string CancellationToken = string.Intern(typeof(CancellationToken).FullName);
+        internal static readonly string CancellationTokenSource = string.Intern(typeof(CancellationTokenSource).FullName);
 
         internal static readonly string Delegate = string.Intern(typeof(Delegate).FullName);
 

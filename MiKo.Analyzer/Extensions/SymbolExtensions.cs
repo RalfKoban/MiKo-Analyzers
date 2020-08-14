@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
@@ -563,7 +564,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
 
-        internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(System.Threading.Tasks.Task);
+        internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(Task);
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext context) => FindContainingType(context.ContainingSymbol);
 
