@@ -161,7 +161,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2028|Documentation of parameter should not just contain the name of the parameter.|&#x2713;|\-|
 |MiKo_2029|&lt;inheritdoc&gt; documentation should not use a 'cref' to itself.|&#x2713;|\-|
 |MiKo_2030|Documentation of return value should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|&#x2713;|\-|
+|MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|&#x2713;|&#x2713;|
 |MiKo_2032|Documentation of Boolean return value should have a specific phrase.|&#x2713;|\-|
 |MiKo_2033|Documentation of String return value should have a default starting phrase.|&#x2713;|\-|
 |MiKo_2034|Documentation of Enum return value should have a default starting phrase.|&#x2713;|\-|

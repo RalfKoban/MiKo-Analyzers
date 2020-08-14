@@ -163,22 +163,24 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
 
-            internal static readonly string[] GenericTaskReturnTypeStartingPhrase =
-                {
-                    "A task that represents the asynchronous operation. The value of the <see cref=\"Task{TResult}.Result\" /> parameter contains ", // this is just to have a proposal how to optimize
-                    "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
-                    "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
-                };
-
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
                     "A task that represents the asynchronous operation.",
                     "A <see cref=\"System.Threading.Tasks.Task\"/> that represents the asynchronous operation.",
                     "A <see cref=\"System.Threading.Tasks.Task\" /> that represents the asynchronous operation.",
+                };
+
+            internal static readonly string GenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation. The value of the {1} parameter contains ";
+
+            internal static readonly string[] GenericTaskReturnTypeStartingPhrase =
+                {
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"Task{TResult}.Result\" />"), // this is just to have a proposal how to optimize
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
                 };
 
             internal static readonly string[] BooleanReturnTypeStartingPhrase =
