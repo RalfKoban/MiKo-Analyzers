@@ -140,7 +140,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly.|&#x2713;|\-|
 |MiKo_2006|Routed events should be documented as done by the .NET Framework.|&#x2713;|\-|
-|MiKo_2010|Sealed classes should document being sealed.|&#x2713;|\-|
+|MiKo_2010|Sealed classes should document being sealed.|&#x2713;|&#x2713;|
 |MiKo_2011|Unsealed classes should not lie about sealing.|&#x2713;|\-|
 |MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|&#x2713;|\-|
 |MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|\-|

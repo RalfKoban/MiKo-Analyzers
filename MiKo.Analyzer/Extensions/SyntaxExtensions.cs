@@ -225,6 +225,47 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.DescendantNodes().OfType<InvocationExpressionSyntax>()
                                                                                                                                                            .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
 
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax comment, string text)
+        {
+            var contents = new List<XmlNodeSyntax>(comment.Content);
+
+            for (var index = 0; index < comment.Content.Count; index++)
+            {
+                if (comment.Content[index] is XmlTextSyntax s)
+                {
+                    var originalTextTokens = s.TextTokens;
+                    var textTokens = new List<SyntaxToken>(originalTextTokens);
+
+                    for (var i = 0; i < originalTextTokens.Count; i++)
+                    {
+                        var token = originalTextTokens[i];
+
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
+                        {
+                            var modifiedText = token.Text.Without(text).Replace("  ", " ").TrimEnd();
+                            if (modifiedText.IsNullOrWhiteSpace())
+                            {
+                                textTokens.Remove(token);
+
+                                if (i > 0)
+                                {
+                                    textTokens.Remove(originalTextTokens[i - 1]);
+                                }
+                            }
+                            else
+                            {
+                                textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                            }
+                        }
+                    }
+
+                    contents[index] = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                }
+            }
+
+            return SyntaxFactory.List(contents);
+        }
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());

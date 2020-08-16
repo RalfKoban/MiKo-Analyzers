@@ -9,6 +9,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
+        protected const string CommentExterior = "/// ";
+
+        protected static readonly SyntaxTrivia[] XmlCommentStart =
+            {
+                SyntaxFactory.CarriageReturnLineFeed,
+                SyntaxFactory.DocumentationCommentExterior(CommentExterior),
+            };
+
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes)
         {
             // we have to delve into the trivias to find the XML syntax nodes
