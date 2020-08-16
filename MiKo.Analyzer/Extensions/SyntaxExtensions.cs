@@ -23,6 +23,12 @@ namespace MiKoSolutions.Analyzers
                                                                                      "testObject",
                                                                                  };
 
+        private static readonly SyntaxTrivia[] XmlCommentStart =
+                                                                {
+                                                                    SyntaxFactory.CarriageReturnLineFeed,
+                                                                    SyntaxFactory.DocumentationCommentExterior("/// "),
+                                                                };
+
         internal static bool IsSupported(this SyntaxNodeAnalysisContext context, LanguageVersion expectedVersion)
         {
             var languageVersion = ((CSharpParseOptions)context.Node.SyntaxTree.Options).LanguageVersion;
@@ -259,12 +265,17 @@ namespace MiKoSolutions.Analyzers
                         }
                     }
 
-                    contents[index] = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                    var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                    contents[index] = xmlText;
                 }
             }
 
             return SyntaxFactory.List(contents);
         }
+
+        internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken token) => token.WithLeadingTrivia(XmlCommentStart);
+
+        internal static T WithLeadingXmlComment<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(XmlCommentStart);
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
 

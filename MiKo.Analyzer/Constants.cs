@@ -253,6 +253,8 @@ namespace MiKoSolutions.Analyzers
                     string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "consists of"),
                 };
 
+            internal const string EnumStartingPhrase = "Defines values that specify ";
+
             internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "the enumerated constant that is the ").ToArray();

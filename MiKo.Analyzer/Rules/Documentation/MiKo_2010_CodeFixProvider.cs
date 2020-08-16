@@ -24,10 +24,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             const string SealedText = Constants.Comments.SealedClassPhrase;
 
-            var contents = comment.WithoutText(SealedText)
-                                  .Add(SyntaxFactory.XmlText(SealedText).WithTrailingTrivia(XmlCommentStart)); // place on new line
-
-            return SyntaxFactory.XmlElement(comment.StartTag, contents, comment.EndTag);
+            return SyntaxFactory.XmlElement(
+                                        comment.StartTag,
+                                        comment.WithoutText(SealedText).Add(SyntaxFactory.XmlText(SealedText)),
+                                        comment.EndTag.WithLeadingXmlComment()); // place on new line
         }
     }
 }

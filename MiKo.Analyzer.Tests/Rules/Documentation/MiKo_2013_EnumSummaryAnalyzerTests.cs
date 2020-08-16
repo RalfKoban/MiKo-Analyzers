@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -77,8 +78,127 @@ public enum TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Something.
+/// </summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Defines values that specify Something.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_single_line()
+        {
+            const string OriginalText = @"
+/// <summary>Something to do.</summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Defines values that specify Something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_multiline()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Something
+/// to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Defines values that specify Something
+/// to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_seecref_multiline()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// <see cref=""TestMe""/>
+/// Something
+/// to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Defines values that specify <see cref=""TestMe""/>
+/// Something
+/// to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_seecref_on_single_line()
+        {
+            const string OriginalText = @"
+/// <summary><see cref=""TestMe""/> Something to do.</summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Defines values that specify <see cref=""TestMe""/> Something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2013_EnumSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2013_EnumSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2013_CodeFixProvider();
     }
 }
