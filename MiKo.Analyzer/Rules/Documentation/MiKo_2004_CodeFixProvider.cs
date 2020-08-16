@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // this is the event args
             var name = parameter.Type.GetNameOnlyPart();
 
-            return CommentWithSeeCRef(comment, name.StartsWithAnyChar("AEIOU") ? "An " : "A ", parameter.Type, " that contains the event data.");
+            return Comment(comment, name.StartsWithAnyChar("AEIOU") ? "An " : "A ", parameter.Type, " that contains the event data.");
         }
     }
 }

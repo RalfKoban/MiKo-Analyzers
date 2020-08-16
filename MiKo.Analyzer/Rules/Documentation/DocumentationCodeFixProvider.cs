@@ -21,34 +21,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.WithContent(new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText(text[0])));
         }
 
-        protected static XmlElementSyntax CommentWithSeeCRef(XmlElementSyntax comment, string commentStart, TypeSyntax type, NameSyntax member, string commentEnd)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
         {
-            return CommentWithSeeCRef(comment, commentStart, Cref(Constants.XmlTag.See, type, member), commentEnd);
+            return Comment(comment, commentStart, Cref(Constants.XmlTag.See, type), commentEnd);
         }
 
-        protected static XmlElementSyntax CommentWithSeeCRef(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
+        protected static XmlElementSyntax Comment(
+                                                XmlElementSyntax comment,
+                                                string commentStart,
+                                                XmlEmptyElementSyntax seeCref,
+                                                string commentEnd)
         {
-            return CommentWithSeeCRef(comment, commentStart, Cref(Constants.XmlTag.See, type), commentEnd);
+            var content = SyntaxFactory.List<XmlNodeSyntax>()
+                                       .Add(SyntaxFactory.XmlText(commentStart))
+                                       .Add(seeCref)
+                                       .Add(SyntaxFactory.XmlText(commentEnd));
+
+            return comment.WithContent(content);
         }
 
-        private static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
+        protected static XmlElementSyntax Comment(
+                                                XmlElementSyntax comment,
+                                                string commentStart,
+                                                XmlEmptyElementSyntax seeCref1,
+                                                string commentMiddle,
+                                                XmlEmptyElementSyntax seeCref2,
+                                                string commentEnd)
+        {
+            var content = SyntaxFactory.List<XmlNodeSyntax>()
+                                       .Add(SyntaxFactory.XmlText(commentStart))
+                                       .Add(seeCref1)
+                                       .Add(SyntaxFactory.XmlText(commentMiddle))
+                                       .Add(seeCref2)
+                                       .Add(SyntaxFactory.XmlText(commentEnd));
+
+            return comment.WithContent(content);
+        }
+
+        protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
         {
             return Cref(tag, SyntaxFactory.TypeCref(type.WithoutTrailingTrivia()));
         }
 
-        private static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type, NameSyntax member)
+        protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type, NameSyntax member)
         {
             return Cref(tag, SyntaxFactory.QualifiedCref(type, SyntaxFactory.NameMemberCref(member)));
-        }
-
-        private static XmlElementSyntax CommentWithSeeCRef(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seecref, string commentEnd)
-        {
-            var content = SyntaxFactory.List<XmlNodeSyntax>()
-                                       .Add(SyntaxFactory.XmlText(commentStart))
-                                       .Add(seecref)
-                                       .Add(SyntaxFactory.XmlText(commentEnd));
-
-            return comment.WithContent(content);
         }
 
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
