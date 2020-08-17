@@ -25,6 +25,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var name = symbol.Name;
+
+            if (name.EndsWith("Entity", Comparison))
+            {
+                return name.WithoutSuffix("Entity");
+            }
+
+            if (name.EndsWith("Element", Comparison))
+            {
+                return name.WithoutSuffix("Element");
+            }
+
+            foreach (var pair in WrongSuffixes)
+            {
+                if (name.EndsWith(pair.Key, Comparison))
+                {
+                    return pair.Value;
+                }
+            }
+
+            return name;
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
             foreach (var identifier in identifiers)

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -50,8 +51,18 @@ public class TestMe
 }
 ");
 
+        [TestCase("class TestMe { void DoSomething() { object myComparer; } }", "class TestMe { void DoSomething() { object comparer; } }")]
+        [TestCase("class TestMe { void DoSomething() { object myView; } }", "class TestMe { void DoSomething() { object view; } }")]
+        [TestCase("class TestMe { void DoSomething() { object myItem; } }", "class TestMe { void DoSomething() { object item; } }")]
+        [TestCase("class TestMe { void DoSomething() { object myEditor; } }", "class TestMe { void DoSomething() { object editor; } }")]
+        [TestCase("class TestMe { void DoSomething() { object userEntity; } }", "class TestMe { void DoSomething() { object user; } }")]
+        [TestCase("class TestMe { void DoSomething() { object userElement; } }", "class TestMe { void DoSomething() { object user; } }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1091_VariableWrongSuffixedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1091_VariableWrongSuffixedAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1091_CodeFixProvider();
     }
 }
