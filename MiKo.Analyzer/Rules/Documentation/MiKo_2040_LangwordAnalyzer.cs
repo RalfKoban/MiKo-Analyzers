@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var results = new Dictionary<string, string>();
 
             var items = new[] { "true", "false", "null" };
-            var attributes = new[] { "langref", "langowrd", "langwrod", "langwowd" };
+            var attributes = new[] { "langref", "langowrd", "langwrod", "langwowd" }; // find typos
 
             foreach (var item in items)
             {
@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add($" {item},", $" {proposal},");
                 results.Add($" {item};", $" {proposal};");
                 results.Add($"<c>{item}</c>", proposal);
+                results.Add($"<value>{item}</value>", proposal);
 
                 foreach (var attribute in attributes)
                 {
