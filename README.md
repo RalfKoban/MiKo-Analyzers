@@ -101,7 +101,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1086|Methods should not be named using numbers as slang.|&#x2713;|\-|
 |MiKo_1090|Parameters should not be suffixed with specific types.|&#x2713;|\-|
 |MiKo_1091|Variables should not be suffixed with specific types.|&#x2713;|\-|
-|MiKo_1092|'Ability' Types should not be suffixed with redundant information.|&#x2713;|\-|
+|MiKo_1092|'Ability' Types should not be suffixed with redundant information.|&#x2713;|&#x2713;|
 |MiKo_1093|Do not use the suffix 'Object' or 'Struct'.|&#x2713;|&#x2713;|
 |MiKo_1094|Do not suffix types with passive namespace names.|&#x2713;|\-|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|\-|
