@@ -225,6 +225,7 @@ public sealed class TestMe
             foreach (var token in tokens)
             {
                 results.Add("<c>" + token + "</c>");
+                results.Add("<value>" + token + "</value>");
                 results.Add("<see langref=\"" + token + "\" />");
                 results.Add("<see langref=\"" + token + "\"/>");
                 results.Add("<see langref=\"" + token + "\"></see>");
@@ -240,9 +241,9 @@ public sealed class TestMe
                 results.Add(token + ",");
                 results.Add(token + ";");
                 results.Add(token + ".");
-                results.Add("<see langowrd=\"" + token + "\"/>");
-                results.Add("<see langwrod=\"" + token + "\"/>");
-                results.Add("<see langwowd=\"" + token + "\"/>");
+                results.Add("<see langowrd=\"" + token + "\"/>"); // find typos
+                results.Add("<see langwrod=\"" + token + "\"/>"); // find typos
+                results.Add("<see langwowd=\"" + token + "\"/>"); // find typos
             }
 
             return results.OrderBy(_ => _).ToArray();
