@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                               .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
-            var content = SyntaxFactory.List<XmlNodeSyntax>().Add(SyntaxFactory.XmlText(text[0]));
+            var content = SyntaxFactory.List<XmlNodeSyntax>().Add(SyntaxFactory.XmlText(text[0] + additionalComment));
 
             return comment
                    .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())

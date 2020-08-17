@@ -164,7 +164,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|&#x2713;|&#x2713;|
 |MiKo_2032|Documentation of Boolean return value should have a specific phrase.|&#x2713;|\-|
 |MiKo_2033|Documentation of String return value should have a default starting phrase.|&#x2713;|&#x2713;|
-|MiKo_2034|Documentation of Enum return value should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2034|Documentation of Enum return value should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2035|Documentation of collection return value should have a default starting phrase.|&#x2713;|\-|
 |MiKo_2036|Documentation of Boolean or Enum property shall describe the default value.|&#x2713;|\-|
 |MiKo_2037|&lt;summary&gt; documentation of command properties should have a default starting phrase.|&#x2713;|\-|
