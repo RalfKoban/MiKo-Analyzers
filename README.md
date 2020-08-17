@@ -58,7 +58,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1036|Events dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
 |MiKo_1037|Types should not be suffixed with 'Enum'.|&#x2713;|&#x2713;|
 |MiKo_1038|Classes that contain extension methods should end with same suffix.|&#x2713;|&#x2713;|
-|MiKo_1039|The 'this' parameter of extension methods should have a default name.|&#x2713;|\-|
+|MiKo_1039|The 'this' parameter of extension methods should have a default name.|&#x2713;|&#x2713;|
 |MiKo_1040|Parameters should not be suffixed with implementation details.|&#x2713;|\-|
 |MiKo_1041|Fields should not be suffixed with implementation details.|&#x2713;|\-|
 |MiKo_1042|'CancellationToken' parameters should have specific name.|&#x2713;|&#x2713;|
