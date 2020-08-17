@@ -221,20 +221,22 @@ namespace MiKoSolutions.Analyzers
                     ", otherwise with a result of <see langword=\"false\" />.",
                 };
 
+            internal static readonly string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
+
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
-                    "A <see cref=\"string\"/> that contains ", // this is just to have a proposal how to optimize
-                    "A <see cref=\"string\"/> that consists of ",
-                    "A <see cref=\"string\"/> that represents ",
-                    "A <see cref=\"string\" /> that contains ",
-                    "A <see cref=\"string\" /> that consists of ",
-                    "A <see cref=\"string\" /> that represents ",
-                    "A <see cref=\"System.String\"/> that consists of ",
-                    "A <see cref=\"System.String\"/> that contains ",
-                    "A <see cref=\"System.String\"/> that represents ",
-                    "A <see cref=\"System.String\" /> that consists of ",
-                    "A <see cref=\"System.String\" /> that contains ",
-                    "A <see cref=\"System.String\" /> that represents ",
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "contains"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "contains"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "contains"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "represents"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "represents"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "represents"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "represents"),
                 };
 
             internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "task") + " The {0} property on the task object returns a {1} that {2} ";

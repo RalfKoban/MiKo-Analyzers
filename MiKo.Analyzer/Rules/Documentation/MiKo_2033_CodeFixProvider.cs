@@ -20,6 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, parts[0], SeeCrefTaskResult(), parts[1], SeeCref("string"), parts[2] + comment.Content);
         }
 
-        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment) => Comment(comment, Constants.Comments.NonGenericTaskReturnTypePhrase);
+        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment)
+        {
+            var parts = string.Format(Constants.Comments.StringReturnTypeStartingPhraseTemplate, "|", "contains").Split('|');
+
+            return Comment(comment, parts[0], SeeCref("string"), parts[1] + comment.Content);
+        }
     }
 }

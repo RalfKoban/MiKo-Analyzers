@@ -154,7 +154,9 @@ using System.Threading.Tasks;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <returns>
+    /// A task that represents the asynchronous operation.
+    /// </returns>
     public Task DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -184,7 +186,9 @@ using System.Threading.Tasks;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains Something.</returns>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains Something.
+    /// </returns>
     public Task<int> DoSomething(object o) => throw new NotSupportedException();
 }
 ";

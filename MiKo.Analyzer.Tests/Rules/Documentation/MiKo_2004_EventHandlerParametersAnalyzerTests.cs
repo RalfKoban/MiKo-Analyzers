@@ -144,8 +144,52 @@ class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <param name=""sender"">The source of the event.</param>
-    /// <param name=""e"">An <see cref=""EventArgs""/> that contains the event data.</param>
+    /// <param name=""sender"">
+    /// The source of the event.
+    /// </param>
+    /// <param name=""e"">
+    /// An <see cref=""EventArgs""/> that contains the event data.
+    /// </param>
+    void DoSomething(object sender, EventArgs e) { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_on_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""sender"">
+    /// The sender.
+    /// </param>
+    /// <param name=""e"">
+    /// Event arguments.
+    /// </param>
+    void DoSomething(object sender, EventArgs e) { }
+}";
+
+            const string FixedCode = @"
+using System;
+
+class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""sender"">
+    /// The source of the event.
+    /// </param>
+    /// <param name=""e"">
+    /// An <see cref=""EventArgs""/> that contains the event data.
+    /// </param>
     void DoSomething(object sender, EventArgs e) { }
 }";
 

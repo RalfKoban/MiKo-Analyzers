@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly SyntaxTrivia[] XmlCommentStart =
                                                                 {
-                                                                    SyntaxFactory.CarriageReturnLineFeed,
+                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
                                                                     SyntaxFactory.DocumentationCommentExterior("/// "),
                                                                 };
 
@@ -276,6 +276,10 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken token) => token.WithLeadingTrivia(XmlCommentStart);
 
         internal static T WithLeadingXmlComment<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(XmlCommentStart);
+
+        internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken token) => token.WithTrailingTrivia(XmlCommentStart);
+
+        internal static T WithTrailingXmlComment<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(XmlCommentStart);
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
 

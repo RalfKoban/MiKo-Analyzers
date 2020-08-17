@@ -175,7 +175,41 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fCode_gets_fixed_for_generic_methodixed()
+        public void Code_gets_fixed_for_non_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>Something.</returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains Something.
+    /// </returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_method()
         {
             const string OriginalCode = @"
 using System;
@@ -200,7 +234,9 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <returns>A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains Something.</returns>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains Something.
+    /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
 ";

@@ -107,7 +107,42 @@ using System.Threading;
 public class TestMe
 {
     /// <summary />
-    /// <param name='token'>The token to monitor for cancellation requests.</param>
+    /// <param name='token'>
+    /// The token to monitor for cancellation requests.
+    /// </param>
+    public void DoSomething(CancellationToken token) { }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_on_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='token'>
+    /// Whatever.
+    /// </param>
+    public void DoSomething(CancellationToken token) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='token'>
+    /// The token to monitor for cancellation requests.
+    /// </param>
     public void DoSomething(CancellationToken token) { }
 }
 ";

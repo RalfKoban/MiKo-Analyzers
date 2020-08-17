@@ -18,7 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text)
         {
-            return comment.WithContent(new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText(text[0])));
+            var content = SyntaxFactory.List<XmlNodeSyntax>().Add(SyntaxFactory.XmlText(text[0]));
+
+            return comment
+                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                   .WithContent(content)
+                   .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
@@ -37,7 +42,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                        .Add(seeCref)
                                        .Add(SyntaxFactory.XmlText(commentEnd));
 
-            return comment.WithContent(content);
+            return comment
+                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                   .WithContent(content)
+                   .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
         }
 
         protected static XmlElementSyntax Comment(
@@ -55,7 +63,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                        .Add(seeCref2)
                                        .Add(SyntaxFactory.XmlText(commentEnd));
 
-            return comment.WithContent(content);
+            return comment
+                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                   .WithContent(content)
+                   .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
