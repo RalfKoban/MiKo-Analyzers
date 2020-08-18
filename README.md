@@ -53,7 +53,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1031|Entity types should not use a 'Model' suffix.|&#x2713;|&#x2713;|
 |MiKo_1032|Methods dealing with entities should not use a 'Model' marker.|&#x2713;|&#x2713;|
 |MiKo_1033|Parameters representing entities should not use a 'Model' suffix.|&#x2713;|&#x2713;|
-|MiKo_1034|Fields representing entities should not use a 'Model' suffix.|&#x2713;|\-|
+|MiKo_1034|Fields representing entities should not use a 'Model' suffix.|&#x2713;|&#x2713;|
 |MiKo_1035|Properties dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
 |MiKo_1036|Events dealing with entities should not use a 'Model' marker.|&#x2713;|&#x2713;|
 |MiKo_1037|Types should not be suffixed with 'Enum'.|&#x2713;|&#x2713;|

@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] TypeSuffixes =
             {
                 "Element",
-                "Entity",
+                Constants.Entity,
                 "Item",
                 "Info",
                 "Information",

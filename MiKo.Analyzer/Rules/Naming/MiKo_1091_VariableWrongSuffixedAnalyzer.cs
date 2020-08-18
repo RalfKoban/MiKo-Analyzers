@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var name = symbol.Name;
 
-            if (name.EndsWith("Entity", Comparison))
+            if (name.EndsWith(Constants.Entity, Comparison))
             {
-                return name.WithoutSuffix("Entity");
+                return name.WithoutSuffix(Constants.Entity);
             }
 
             if (name.EndsWith("Element", Comparison))
@@ -57,9 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var name = identifier.ValueText;
                 var location = identifier.GetLocation();
 
-                if (name.EndsWith("Entity", Comparison))
+                if (name.EndsWith(Constants.Entity, Comparison))
                 {
-                    yield return Issue(name, location, name.WithoutSuffix("Entity"));
+                    yield return Issue(name, location, name.WithoutSuffix(Constants.Entity));
                 }
                 else if (name.EndsWith("Element", Comparison))
                 {

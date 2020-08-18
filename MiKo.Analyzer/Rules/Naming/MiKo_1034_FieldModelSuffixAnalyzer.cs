@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IFieldSymbol symbol) => FindBetterNameForEntityMarker(symbol);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeEntityMarkers(symbol);
     }
 }

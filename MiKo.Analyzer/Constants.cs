@@ -13,6 +13,13 @@ namespace MiKoSolutions.Analyzers
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string ILog = "ILog";
         internal const string TestsSuffix = "Tests";
+        internal const string Entity = "Entity";
+        internal const string Entities = "Entities";
+
+#pragma warning disable SA1303 // Const field names should begin with upper-case letter
+        internal const string entity = "entity";
+        internal const string entities = "entities";
+#pragma warning restore SA1303 // Const field names should begin with upper-case letter
 
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
         internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
@@ -33,6 +40,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Markers
         {
+            internal const string StaticFieldPrefix = "s_";
+            internal const string MemberFieldPrefix = "_";
+            internal const string AlternativeMemberFieldPrefix = "m_";
+
             internal static readonly string[] BaseClasses = { "Abstract", "Base" };
             internal static readonly string[] Entities = { "Model", "Models", "model", "models" };
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
@@ -44,9 +55,9 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] FieldPrefixes =
                 {
                     string.Empty,
-                    "_",
-                    "m_",
-                    "s_",
+                    MemberFieldPrefix,
+                    AlternativeMemberFieldPrefix,
+                    StaticFieldPrefix,
                 };
 
             internal static readonly string[] OSBitNumbers = { "32", "64" };
@@ -115,7 +126,7 @@ namespace MiKoSolutions.Analyzers
                     "Default-Implementation of ",
                     "Delegate",
                     "Does implement ",
-                    "Entity",
+                    Entity,
                     "Event",
                     "Extension class of",
                     "Extension of",

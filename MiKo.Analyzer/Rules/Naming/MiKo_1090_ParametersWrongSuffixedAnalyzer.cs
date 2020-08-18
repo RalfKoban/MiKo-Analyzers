@@ -39,9 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var symbolName = symbol.Name;
 
-            if (symbolName.EndsWith("Entity", Comparison))
+            if (symbolName.EndsWith(Constants.Entity, Comparison))
             {
-                return new[] { Issue(symbol, symbolName.WithoutSuffix("Entity")) };
+                return new[] { Issue(symbol, symbolName.WithoutSuffix(Constants.Entity)) };
             }
 
             if (symbolName.EndsWith("Element", Comparison))

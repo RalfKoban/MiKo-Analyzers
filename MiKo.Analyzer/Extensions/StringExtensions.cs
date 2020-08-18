@@ -277,13 +277,18 @@ namespace System
         }
 
         /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the first character is lower-case.
+        /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </summary>
-        /// <param name="value">The original text.</param>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
+        /// </param>
         /// <returns>
-        /// An interned copy of the <see cref="string"/> where the first character is lower-case.
+        /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </returns>
-        public static string ToStartingLowerCase(this string value)
+        public static string ToLowerCase(this string value, int index = 0)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -291,18 +296,23 @@ namespace System
             }
 
             var characters = value.ToCharArray();
-            characters[0] = char.ToLower(characters[0]);
+            characters[index] = char.ToLower(characters[index]);
             return string.Intern(new string(characters));
         }
 
         /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the first character is upper-case.
+        /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </summary>
-        /// <param name="value">The original text.</param>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
+        /// </param>
         /// <returns>
-        /// An interned copy of the <see cref="string"/> where the first character is upper-case.
+        /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </returns>
-        public static string ToStartingUpperCase(this string value)
+        public static string ToUpperCase(this string value, int index = 0)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -310,7 +320,7 @@ namespace System
             }
 
             var characters = value.ToCharArray();
-            characters[0] = char.ToUpper(characters[0]);
+            characters[index] = char.ToUpper(characters[index]);
             return string.Intern(new string(characters));
         }
     }
