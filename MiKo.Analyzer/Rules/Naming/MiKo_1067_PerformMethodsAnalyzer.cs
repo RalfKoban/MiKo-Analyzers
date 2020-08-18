@@ -12,21 +12,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1067";
 
+        private const string Phrase = "Perform";
+
         public MiKo_1067_PerformMethodsAnalyzer() : base(Id)
         {
+        }
+
+        internal static string FindBetterName(IMethodSymbol symbol)
+        {
+            var name = symbol.Name.Without(Phrase);
+            return NamesFinder.TryMakeVerb(name, out var result) ? result : name;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
 
-            var found = ContainsPhrase(methodName) && ContainsPhrase(methodName.Without("Performance"));
+            var found = ContainsPhrase(methodName) && ContainsPhrase(methodName.Without("Performance").Without("Performed"));
 
             return found
                        ? new[] { Issue(method) }
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        private static bool ContainsPhrase(string methodName, string phrase = "Perform") => methodName.Contains(phrase, StringComparison.Ordinal);
+        private static bool ContainsPhrase(string methodName) => methodName.Contains(Phrase, StringComparison.Ordinal);
     }
 }

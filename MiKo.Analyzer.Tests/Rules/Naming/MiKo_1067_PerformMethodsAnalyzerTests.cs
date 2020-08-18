@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -21,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 "CheckPerformance",
                 "RunPerformanceTests",
+                "HasPerformed",
             };
 
         [Test]
@@ -47,8 +49,14 @@ public interface TestMe
 }
 ");
 
+        [TestCase("class TestMe { public void PerformAnalysis() { } }", "class TestMe { public void Analyze() { } }")]
+        [TestCase("class TestMe { public void DoPerform() { } }", "class TestMe { public void Do() { } }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1067_PerformMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1067_PerformMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1067_CodeFixProvider();
     }
 }
