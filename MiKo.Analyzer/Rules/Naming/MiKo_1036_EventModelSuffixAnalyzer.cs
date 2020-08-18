@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IEventSymbol symbol) => FindBetterNameForEntityMarker(symbol);
+
         protected override bool ShallAnalyze(IEventSymbol symbol) => symbol.IsInterfaceImplementation() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol) => AnalyzeEntityMarkers(symbol);
