@@ -14,10 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol)
-        {
-            return symbol.Implements("Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder") is false;
-        }
+        internal static string FindBetterName(ITypeSymbol symbol) => FindBetterNameForEntityMarker(symbol);
+
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Implements("Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder") is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeEntityMarkers(symbol);
     }

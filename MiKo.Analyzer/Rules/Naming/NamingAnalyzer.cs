@@ -14,9 +14,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected static string FindBetterNameForEntityMarker(ISymbol symbol)
+        {
+            var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
+
+            if (expected.HasCollectionMarker())
+            {
+                var plural = Pluralizer.GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+
+                // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
+                expected = plural ?? (symbol.Name[0].IsUpperCase() ? "Entities" : "entities");
+            }
+
+            return expected;
+        }
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol) => ShallAnalyze(symbol)
-                                                                                                       ? AnalyzeName(symbol)
-                                                                                                       : Enumerable.Empty<Diagnostic>();
+                                                                                                           ? AnalyzeName(symbol)
+                                                                                                           : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyze(symbol)
                                                                                                   ? AnalyzeName(symbol)
@@ -77,15 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
-
-            if (expected.HasCollectionMarker())
-            {
-                var plural = Pluralizer.GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
-
-                // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
-                expected = plural ?? (symbol.Name[0].IsUpperCase() ? "Entities" : "entities");
-            }
+            var expected = FindBetterNameForEntityMarker(symbol);
 
             return new[] { Issue(symbol, expected) };
         }

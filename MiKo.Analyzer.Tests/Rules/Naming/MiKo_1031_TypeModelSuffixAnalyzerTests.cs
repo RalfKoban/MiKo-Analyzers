@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -44,8 +45,16 @@ public " + type + " " + name + @" : IModelBinder
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            VerifyCSharpFix("class SomethingModel { }", "class Something { }");
+        }
+
         protected override string GetDiagnosticId() => MiKo_1031_TypeModelSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1031_TypeModelSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1031_CodeFixProvider();
     }
 }
