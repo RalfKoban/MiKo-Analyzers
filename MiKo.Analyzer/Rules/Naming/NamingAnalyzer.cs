@@ -219,7 +219,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     }
 
                 default:
+                {
+                    if (symbolName[0].IsUpperCase() && name[0].IsLowerCase())
+                    {
+                        return name.ToStartingUpperCase();
+                    }
+
+                    if (symbolName[0].IsLowerCase() && name[0].IsUpperCase())
+                    {
+                        return name.ToStartingLowerCase();
+                    }
+
                     return name;
+                }
             }
         }
 

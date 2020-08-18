@@ -275,5 +275,43 @@ namespace System
 
             return count > limit;
         }
+
+        /// <summary>
+        /// Gets an interned copy of the <see cref="string"/> where the first character is lower-case.
+        /// </summary>
+        /// <param name="value">The original text.</param>
+        /// <returns>
+        /// An interned copy of the <see cref="string"/> where the first character is lower-case.
+        /// </returns>
+        public static string ToStartingLowerCase(this string value)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return value;
+            }
+
+            var characters = value.ToCharArray();
+            characters[0] = char.ToLower(characters[0]);
+            return string.Intern(new string(characters));
+        }
+
+        /// <summary>
+        /// Gets an interned copy of the <see cref="string"/> where the first character is upper-case.
+        /// </summary>
+        /// <param name="value">The original text.</param>
+        /// <returns>
+        /// An interned copy of the <see cref="string"/> where the first character is upper-case.
+        /// </returns>
+        public static string ToStartingUpperCase(this string value)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return value;
+            }
+
+            var characters = value.ToCharArray();
+            characters[0] = char.ToUpper(characters[0]);
+            return string.Intern(new string(characters));
+        }
     }
 }
