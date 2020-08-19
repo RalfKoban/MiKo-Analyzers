@@ -23,7 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
-            var content = SyntaxFactory.List<XmlNodeSyntax>().Add(SyntaxFactory.XmlText(text[0] + additionalComment));
+            return Comment(comment, text[0], additionalComment);
+        }
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
+        {
+            var content = SyntaxFactory.List<XmlNodeSyntax>().Add(SyntaxFactory.XmlText(text + additionalComment));
 
             return comment
                    .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
