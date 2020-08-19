@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -15,8 +16,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Use <inheritdoc/>";
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Summary, syntaxNodes).FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        {
+            var syntaxNode = GetXmlSyntax(Constants.XmlTag.Summary, syntaxNodes).First();
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
+            return syntaxNode.Parent;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
+            var comment = (DocumentationCommentTriviaSyntax)syntax;
+
+            var inheritdoc = SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
+
+            return comment.WithoutTrivia()
+                          .WithContent(new SyntaxList<XmlNodeSyntax>(inheritdoc.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed)))
+                          .WithLeadingTrivia(SyntaxExtensions.XmlCommentExterior);
+        }
     }
 }

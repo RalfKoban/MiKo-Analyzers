@@ -117,6 +117,36 @@ class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_with_returns_and_param_documentation()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Bla
+/// </summary>
+class TestMe
+{
+    /// <summary>
+    /// <see cref='bla'/>
+    /// </summary>
+    /// <param name=""i"">Some comment</param>
+    /// <returns>Some result</returns>
+    int DoSomething(int i) => i;
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Bla
+/// </summary>
+class TestMe
+{
+    /// <inheritdoc/>
+    int DoSomething(int i) => i;
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2020_InheritdocSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2020_InheritdocSummaryAnalyzer();

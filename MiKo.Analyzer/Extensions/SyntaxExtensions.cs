@@ -12,6 +12,14 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxExtensions
     {
+        internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
+
+        private static readonly SyntaxTrivia[] XmlCommentStart =
+                                                                {
+                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
+                                                                    XmlCommentExterior,
+                                                                };
+
         private static readonly HashSet<string> TypeUnderTestVariableNames = new HashSet<string>
                                                                                  {
                                                                                      "objectUnderTest",
@@ -22,12 +30,6 @@ namespace MiKoSolutions.Analyzers
                                                                                      "testCandidate",
                                                                                      "testObject",
                                                                                  };
-
-        private static readonly SyntaxTrivia[] XmlCommentStart =
-                                                                {
-                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
-                                                                    SyntaxFactory.DocumentationCommentExterior("/// "),
-                                                                };
 
         internal static bool IsSupported(this SyntaxNodeAnalysisContext context, LanguageVersion expectedVersion)
         {
