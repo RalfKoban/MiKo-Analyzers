@@ -289,16 +289,20 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "an array of ").ToArray();
 
+            internal static readonly string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
+
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
-                    "Identifies the <see cref=\"{0}\"/> dependency property.",
-                    "Identifies the <see cref=\"{0}\" /> dependency property.",
+                    string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
+
+            internal static readonly string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
 
             internal static readonly string[] DependencyPropertyFieldValuePhrase =
                 {
-                    "The identifier for the <see cref=\"{0}\"/> dependency property.",
-                    "The identifier for the <see cref=\"{0}\" /> dependency property.",
+                    string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
             internal static readonly string[] RoutedEventFieldSummaryPhrase =

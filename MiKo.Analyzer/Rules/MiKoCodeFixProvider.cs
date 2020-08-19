@@ -31,7 +31,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var diagnostic = context.Diagnostics.First();
             var diagnosticSpan = diagnostic.Location.SourceSpan;
-
             var codeFix = CreateCodeFix(context.Document, root, diagnosticSpan.Start);
             if (codeFix != null)
             {

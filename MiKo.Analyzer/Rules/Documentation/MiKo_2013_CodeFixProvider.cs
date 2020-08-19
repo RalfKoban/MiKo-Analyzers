@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Start documentation with '" + Constants.Comments.EnumStartingPhrase + "'";
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Summary, syntaxNodes).First();
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes, Constants.XmlTag.Summary).First();
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Constants.Comments.EnumStartingPhrase);
 

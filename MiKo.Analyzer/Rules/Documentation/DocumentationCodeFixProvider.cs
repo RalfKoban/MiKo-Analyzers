@@ -9,7 +9,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
-        protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes)
+        protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<DocumentationCommentTriviaSyntax>()).FirstOrDefault();
+        }
+
+        protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes, string startTag)
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
@@ -28,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
         {
-            return Comment(comment, commentStart, Cref(Constants.XmlTag.See, type), commentEnd);
+            return Comment(comment, commentStart, SeeCref(type), commentEnd);
         }
 
         protected static XmlElementSyntax Comment(
@@ -68,6 +73,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithContent(content)
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
+
+        protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, SyntaxFactory.ParseTypeName(typeName));
+
+        protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
+
+        protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, NameSyntax member) => Cref(Constants.XmlTag.See, type, member);
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
         {

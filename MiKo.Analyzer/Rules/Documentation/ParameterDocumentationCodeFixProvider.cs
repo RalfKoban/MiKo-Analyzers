@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameterName = syntaxNodes.OfType<ParameterSyntax>().First().Identifier.Text;
 
             // we are called for each parameter, so we have to find out the correct XML element
-            return GetXmlSyntax(Constants.XmlTag.Param, syntaxNodes.OfType<MethodDeclarationSyntax>()).FirstOrDefault(_ => GetParameterName(_) == parameterName);
+            return GetXmlSyntax(syntaxNodes.OfType<MethodDeclarationSyntax>(), Constants.XmlTag.Param).FirstOrDefault(_ => GetParameterName(_) == parameterName);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
