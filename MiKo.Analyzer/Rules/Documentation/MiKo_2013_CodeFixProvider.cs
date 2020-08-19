@@ -11,13 +11,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2013_CodeFixProvider)), Shared]
-    public sealed class MiKo_2013_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2013_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 
         protected override string Title => "Start documentation with '" + Constants.Comments.EnumStartingPhrase + "'";
-
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes, Constants.XmlTag.Summary).First();
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Constants.Comments.EnumStartingPhrase);
 
