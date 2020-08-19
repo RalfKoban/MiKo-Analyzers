@@ -288,9 +288,9 @@ namespace System
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </returns>
-        public static string ToLowerCase(this string value, int index = 0)
+        public static string ToLowerCaseAt(this string value, int index)
         {
-            if (value.IsNullOrWhiteSpace())
+            if (value.IsNullOrWhiteSpace() || index >= value.Length)
             {
                 return value;
             }
@@ -312,9 +312,9 @@ namespace System
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </returns>
-        public static string ToUpperCase(this string value, int index = 0)
+        public static string ToUpperCaseAt(this string value, int index)
         {
-            if (value.IsNullOrWhiteSpace())
+            if (value.IsNullOrWhiteSpace() || index >= value.Length)
             {
                 return value;
             }

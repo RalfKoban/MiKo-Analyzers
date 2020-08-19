@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return "value";
                 }
 
-                return parameterName.ToLowerCase();
+                return parameterName.ToLowerCaseAt(0);
             }
 
             return "result";

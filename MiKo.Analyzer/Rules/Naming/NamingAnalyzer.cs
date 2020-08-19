@@ -232,12 +232,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     if (symbolName[index].IsUpperCase() && name[index].IsLowerCase())
                     {
-                        return name.ToUpperCase(index);
+                        return name.ToUpperCaseAt(index);
                     }
 
                     if (symbolName[index].IsLowerCase() && name[index].IsUpperCase())
                     {
-                        return name.ToLowerCase(index);
+                        return name.ToLowerCaseAt(index);
                     }
 
                     return name;
