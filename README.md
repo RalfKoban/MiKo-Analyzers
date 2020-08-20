@@ -118,7 +118,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1111|Test methods should be named in a fluent way.|&#x2713;|\-|
 |MiKo_1112|Do not name test data 'arbitrary'.|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently.|&#x2713;|&#x2713;|
-|MiKo_1201|Name exceptions as parameters consistently.|&#x2713;|\-|
+|MiKo_1201|Name exceptions as parameters consistently.|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|&#x2713;|&#x2713;|
 |MiKo_1400|Namespace names should be in plural.|&#x2713;|\-|
 |MiKo_1401|Namespaces should not contain technical language names.|&#x2713;|\-|
