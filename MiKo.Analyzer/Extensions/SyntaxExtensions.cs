@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
                 return parameterSymbol;
 
-                // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently)
+                // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently in v3.3)
                 // var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
             }
 
@@ -273,6 +273,37 @@ namespace MiKoSolutions.Analyzers
             }
 
             return SyntaxFactory.List(contents);
+        }
+
+        internal static XmlTextSyntax WithStartText(this XmlTextSyntax text, string startText)
+        {
+            var textTokens = new List<SyntaxToken>(text.TextTokens);
+
+            for (var i = 0; i < textTokens.Count; i++)
+            {
+                var token = textTokens[i];
+
+                // ignore trivia such as " /// "
+                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                {
+                    var originalText = token.Text;
+
+                    if (originalText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
+
+                    var space = i == 0 ? string.Empty : " ";
+
+                    var modifiedText = space + startText + originalText.Trim().ToLowerCaseAt(0);
+
+                    textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                    break;
+                }
+            }
+
+            var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+            return xmlText;
         }
 
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken token) => token.WithLeadingTrivia(XmlCommentStart);

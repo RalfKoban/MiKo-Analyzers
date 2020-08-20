@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -76,8 +77,138 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_and_upper_case_text_adjusted()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Asynchronously does something.</summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_intended_upper_case_text_adjusted()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>   Does something.</summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Asynchronously does something.</summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_lower_case_text_kept()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>does something.</summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Asynchronously does something.</summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_seeCref_element_moved()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary><see cref=""string""/></summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Asynchronously <see cref=""string""/></summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_upper_case_text_adjusted_when_on_different_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously does something.
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_seeCref_element_moved_when_on_different_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""string""/>
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously <see cref=""string""/>
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2016_AsyncMethodDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2016_AsyncMethodDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2016_CodeFixProvider();
     }
 }
