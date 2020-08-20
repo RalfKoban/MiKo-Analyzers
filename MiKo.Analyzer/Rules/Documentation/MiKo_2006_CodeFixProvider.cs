@@ -10,12 +10,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2017_CodeFixProvider)), Shared]
-    public sealed class MiKo_2017_CodeFixProvider : DocumentationCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2006_CodeFixProvider)), Shared]
+    public sealed class MiKo_2006_CodeFixProvider : DocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2017_DependencyPropertyDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_2006_RoutedEventFieldDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Apply default comment to DependencyProperty";
+        protected override string Title => "Apply default comment to RoutedEvent";
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var fieldDeclaration = comment.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
             var fieldName = fieldDeclaration.Declaration.Variables.First().Identifier.ValueText;
-            var name = fieldName.WithoutSuffix(Constants.DependencyPropertyFieldSuffix);
+            var name = fieldName.WithoutSuffix(Constants.RoutedEventFieldSuffix);
 
             var type = SyntaxFactory.ParseName(name);
 
@@ -35,8 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;
             }
 
-            var summaryText = string.Format(Constants.Comments.DependencyPropertyFieldSummaryPhraseTemplate, "|").Split('|');
-            var valueText = string.Format(Constants.Comments.DependencyPropertyFieldValuePhraseTemplate, "|").Split('|');
+            var summaryText = string.Format(Constants.Comments.RoutedEventFieldSummaryPhraseTemplate, "|").Split('|');
+            var valueText = string.Format(Constants.Comments.RoutedEventFieldValuePhraseTemplate, "|").Split('|');
 
             var summary = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Summary, default), summaryText[0], SeeCref(type), summaryText[1] + readOnlyMarker);
             var field = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Value, default), valueText[0], SeeCref(type), valueText[1]);

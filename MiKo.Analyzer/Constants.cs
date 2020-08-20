@@ -305,16 +305,20 @@ namespace MiKoSolutions.Analyzers
                     string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
+            internal static readonly string RoutedEventFieldSummaryPhraseTemplate = "Identifies the {0} routed event.";
+
             internal static readonly string[] RoutedEventFieldSummaryPhrase =
                 {
-                    "Identifies the <see cref=\"{0}\"/> routed event.",
-                    "Identifies the <see cref=\"{0}\" /> routed event.",
+                    string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
+
+            internal static readonly string RoutedEventFieldValuePhraseTemplate = "The identifier for the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldValuePhrase =
                 {
-                    "The identifier for the <see cref=\"{0}\"/> routed event.",
-                    "The identifier for the <see cref=\"{0}\" /> routed event.",
+                    string.Format(RoutedEventFieldValuePhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(RoutedEventFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
             internal const string SealedClassPhrase = "This class cannot be inherited.";
