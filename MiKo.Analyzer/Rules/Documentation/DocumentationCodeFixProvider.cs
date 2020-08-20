@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                               .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
         }
 
-        protected static SyntaxNode StartCommentWith(XmlElementSyntax comment, string phrase)
+        protected static XmlElementSyntax StartCommentWith(XmlElementSyntax comment, string phrase)
         {
             var content = comment.Content;
 

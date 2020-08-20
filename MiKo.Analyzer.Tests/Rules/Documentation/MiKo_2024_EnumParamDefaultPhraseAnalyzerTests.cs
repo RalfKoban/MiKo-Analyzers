@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -93,8 +94,72 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>Whatever it is.</param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>One of the enumeration members that specifies whatever it is.</param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_on_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// Whatever it is.
+    /// </param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// One of the enumeration members that specifies whatever it is.
+    /// </param>
+    public void DoSomething(StringComparison o) { }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2024_EnumParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2024_EnumParamDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2024_CodeFixProvider();
     }
 }
