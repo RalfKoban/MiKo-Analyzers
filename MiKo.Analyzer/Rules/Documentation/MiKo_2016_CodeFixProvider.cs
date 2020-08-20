@@ -15,6 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Start comment with '" + Phrase + "'";
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => BeginCommentWith((XmlElementSyntax)syntax, Phrase);
+        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => StartCommentWith((XmlElementSyntax)syntax, Phrase);
     }
 }

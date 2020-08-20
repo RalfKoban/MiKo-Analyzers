@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -19,6 +20,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
                               .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
+        }
+
+        protected static SyntaxNode StartCommentWith(XmlElementSyntax comment, string phrase)
+        {
+            var content = comment.Content;
+
+            // when necessary adjust beginning text
+            // Note: when on new line, then the text is not the 1st one but the 2nd one
+            var index = GetIndex(content);
+
+            XmlTextSyntax newText;
+            if (content[index] is XmlTextSyntax text)
+            {
+                // we have to remove the element as otherwise we duplicate the comment
+                content = content.Remove(content[index]);
+                newText = text.WithStartText(phrase);
+            }
+            else
+            {
+                newText = SyntaxFactory.XmlText(phrase);
+            }
+
+            return SyntaxFactory.XmlElement(
+                                            comment.StartTag,
+                                            content.Insert(index, newText),
+                                            comment.EndTag);
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
@@ -85,10 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, NameSyntax member) => Cref(Constants.XmlTag.See, type, member);
 
-        protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
-        {
-            return Cref(tag, SyntaxFactory.TypeCref(type.WithoutTrailingTrivia()));
-        }
+        protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type) => Cref(tag, SyntaxFactory.TypeCref(type.WithoutTrailingTrivia()));
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type, NameSyntax member)
         {
@@ -98,6 +122,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
         {
             return SyntaxFactory.XmlEmptyElement(tag).WithAttributes(new SyntaxList<XmlAttributeSyntax>(SyntaxFactory.XmlCrefAttribute(syntax)));
+        }
+
+        private static int GetIndex(SyntaxList<XmlNodeSyntax> content)
+        {
+            var onlyWhitespaceText = content[0] is XmlTextSyntax t && GetText(t).IsNullOrWhiteSpace();
+            return onlyWhitespaceText ? 1 : 0;
+        }
+
+        private static string GetText(XmlTextSyntax text)
+        {
+            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia()));
         }
     }
 }
