@@ -159,7 +159,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_when_oassigned_to_variable_and_strangely_formatted()
+        public void Code_gets_fixed_when_assigned_to_variable_and_strangely_formatted()
         {
             const string OriginalCode = @"
 using System;
