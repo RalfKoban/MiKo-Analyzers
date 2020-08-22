@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -15,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Replacement = "information";
 
-        private static readonly Dictionary<string, string> Terms = MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.Terms.ToDictionary(_ => _, _ => _.Replace(MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.Term, Replacement));
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
         public override string FixableDiagnosticId => MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.Id;
 
@@ -25,37 +22,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
-            var result = (DocumentationCommentTriviaSyntax)syntax;
+            var comment = (DocumentationCommentTriviaSyntax)syntax;
+            return Comment(comment, MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.Terms, ReplacementMap);
+        }
 
-            foreach (var text in syntax.DescendantNodes().OfType<XmlTextSyntax>())
+        private static Dictionary<string, string> CreateReplacementMap()
+        {
+            var dictionary = new Dictionary<string, string>();
+
+            foreach (var term in MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.Terms)
             {
-                var newText = text;
+                var replacement = term.Replace(MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.Term, Replacement);
+                dictionary.Add(term, replacement);
 
-                // replace token in text
-                foreach (var token in text.TextTokens)
-                {
-                    var originalText = token.Text;
-
-                    if (originalText.ContainsAny(Terms.Keys))
-                    {
-                        var replacedText = originalText;
-
-                        foreach (var term in Terms)
-                        {
-                            replacedText = replacedText.Replace(term.Key, term.Value)
-                                                       .Replace(term.Key.Replace('i', 'I'), term.Value);
-                        }
-
-                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
-
-                        newText = newText.ReplaceToken(token, newToken);
-                    }
-                }
-
-                result = result.ReplaceNode(text, newText);
+                var alternative = term.Replace('i', 'I');
+                dictionary.Add(alternative, replacement);
             }
 
-            return result;
+            return dictionary;
         }
     }
 }

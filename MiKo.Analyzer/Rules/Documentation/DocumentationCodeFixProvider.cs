@@ -106,6 +106,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
 
+        protected static SyntaxNode Comment(DocumentationCommentTriviaSyntax syntax, string[] terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
+        {
+            var result = syntax;
+
+            foreach (var text in syntax.DescendantNodes().OfType<XmlTextSyntax>())
+            {
+                var newText = text;
+
+                // replace token in text
+                foreach (var token in text.TextTokens)
+                {
+                    var originalText = token.Text;
+
+                    if (originalText.ContainsAny(terms))
+                    {
+                        var replacedText = originalText;
+
+                        foreach (var term in replacementMap)
+                        {
+                            replacedText = replacedText.Replace(term.Key, term.Value);
+                        }
+
+                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
+
+                        newText = newText.ReplaceToken(token, newToken);
+                    }
+                }
+
+                result = result.ReplaceNode(text, newText);
+            }
+
+            return result;
+        }
+
         protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, SyntaxFactory.ParseTypeName(typeName));
 
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
