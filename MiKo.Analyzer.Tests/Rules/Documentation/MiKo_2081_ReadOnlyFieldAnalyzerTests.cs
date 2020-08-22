@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -75,8 +76,42 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Some text
+/// </summary>
+public sealed class TestMe
+{
+    /// <summary>
+    /// Bla bla bla.
+    /// </summary>
+    public readonly string m_field;
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Some text
+/// </summary>
+public sealed class TestMe
+{
+    /// <summary>
+    /// Bla bla bla.
+    /// This field is read-only.
+    /// </summary>
+    public readonly string m_field;
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2081_ReadOnlyFieldAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2081_ReadOnlyFieldAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2081_CodeFixProvider();
     }
 }
