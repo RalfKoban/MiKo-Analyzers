@@ -12,13 +12,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2202";
 
-        private static readonly string[] Ids = Constants.Comments.Delimiters.Select(_ => " id" + _).ToArray();
+        internal const string Term = "id";
+
+        internal static readonly string[] Terms = Constants.Comments.Delimiters.Select(_ => " " + Term + _).ToArray();
 
         public MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(Ids, StringComparison.OrdinalIgnoreCase)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(Terms)
                                                                                                             ? new[] { Issue(symbol) }
                                                                                                             : Enumerable.Empty<Diagnostic>();
     }

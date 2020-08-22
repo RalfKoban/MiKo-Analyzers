@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -37,6 +40,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 " Id;",
                 " Id.",
                 " Id:",
+                " ID ",
+                " ID,",
+                " ID;",
+                " ID.",
+                " ID:",
             };
 
         [Test, Combinatorial]
@@ -60,8 +68,25 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongIds))] string wrongText)
+        {
+            const string Template = @"
+/// <summary>
+/// The ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            var correctText = wrongText.Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
+
+            VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2202_CodeFixProvider();
     }
 }

@@ -202,7 +202,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2101|&lt;example&gt; documentation should show code example in &lt;code&gt; tags.|&#x2713;|\-|
 |MiKo_2200|Use a capitalized letter to start the comment.|&#x2713;|\-|
 |MiKo_2201|Use a capitalized letter to start the sentences in the comment.|&#x2713;|\-|
-|MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|&#x2713;|\-|
+|MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|&#x2713;|&#x2713;|
 |MiKo_2203|Documentation should use the term 'unique identifier' instead of 'guid'.|&#x2713;|\-|
 |MiKo_2204|Documentation should use &lt;list&gt; for enumerations.|&#x2713;|\-|
 |MiKo_2205|Documentation should use &lt;note&gt; for important information.|&#x2713;|\-|
