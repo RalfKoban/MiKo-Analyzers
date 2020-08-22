@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                           SyntaxFactory.XmlText(" if both instances are considered equal; otherwise, "),
                                                           SeeLangword("false"),
                                                           SyntaxFactory.XmlText(".").WithTrailingXmlComment())
-                                       .WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed);
+                                       .WithEndOfLine();
 
             return SyntaxFactory.DocumentationComment(summary, param1, param2, returns);
         }

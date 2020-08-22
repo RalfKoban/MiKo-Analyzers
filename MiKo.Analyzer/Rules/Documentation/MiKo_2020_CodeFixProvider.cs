@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var inheritdoc = SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
             return comment.WithoutTrivia()
-                          .WithContent(new SyntaxList<XmlNodeSyntax>(inheritdoc.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed)))
+                          .WithContent(new SyntaxList<XmlNodeSyntax>(inheritdoc.WithEndOfLine()))
                           .WithLeadingTrivia(SyntaxExtensions.XmlCommentExterior);
         }
     }

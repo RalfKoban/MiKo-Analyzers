@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                           .WithContent(SyntaxFactory.List<XmlNodeSyntax>(new[]
                                                                              {
                                                                                  summary.WithTrailingXmlComment(),
-                                                                                 field.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed),
+                                                                                 field.WithEndOfLine(),
                                                                              }))
                           .WithLeadingTrivia(SyntaxExtensions.XmlCommentExterior);
         }
