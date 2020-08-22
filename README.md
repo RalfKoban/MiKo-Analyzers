@@ -144,7 +144,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2011|Unsealed classes should not lie about sealing.|&#x2713;|&#x2713;|
 |MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|&#x2713;|\-|
 |MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|&#x2713;|
-|MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|\-|
+|MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|&#x2713;|\-|
 |MiKo_2016|Documentation for asynchronous methods should start with specific phrase.|&#x2713;|&#x2713;|
 |MiKo_2017|Dependency properties should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
