@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -60,8 +63,25 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongTerms))] string wrongText)
+        {
+            const string Template = @"
+/// <summary>
+/// The ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            var correctText = wrongText.Replace("info", "information", StringComparison.OrdinalIgnoreCase);
+
+            VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2210_CodeFixProvider();
     }
 }
