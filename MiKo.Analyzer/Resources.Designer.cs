@@ -6612,7 +6612,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use Booleans unless you are absolutely sure there will never be a need for more than 2 values..
+        ///   Looks up a localized string similar to Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values..
         /// </summary>
         public static string MiKo_3040_Title {
             get {

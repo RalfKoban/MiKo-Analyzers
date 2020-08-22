@@ -2373,7 +2373,7 @@ Such properties should be methods instead to make it clear that they behave diff
     <value>Use an Enum instead</value>
   </data>
   <data name="MiKo_3040_Title" xml:space="preserve">
-    <value>Do not use Booleans unless you are absolutely sure there will never be a need for more than 2 values.</value>
+    <value>Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values.</value>
   </data>
   <data name="MiKo_3041_Description" xml:space="preserve">
     <value>EventArgs should not use delegates such as 'Action' or 'Func' because the callee needs to know exactly how the delegate behaves.
