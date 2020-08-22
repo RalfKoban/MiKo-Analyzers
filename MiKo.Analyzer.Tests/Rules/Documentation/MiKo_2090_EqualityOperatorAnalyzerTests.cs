@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -130,8 +131,50 @@ public class TestMe
 }
 ", 2);
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Whatever</summary>
+    /// <param name=""left"">A.</param>
+    /// <param name=""right"">B.</param>
+    /// <returns>Result.</returns>
+    public static bool operator ==(TestMe left, TestMe right) => false;
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether the specified <see cref=""TestMe""/> instances are considered equal.
+    /// </summary>
+    /// <param name=""left"">
+    /// The first value to compare.
+    /// </param>
+    /// <param name=""right"">
+    /// The second value to compare.
+    /// </param>
+    /// <returns>
+    /// <see langword=""true""/> if both instances are considered equal; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public static bool operator ==(TestMe left, TestMe right) => false;
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2090_EqualityOperatorAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2090_EqualityOperatorAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2090_CodeFixProvider();
     }
 }

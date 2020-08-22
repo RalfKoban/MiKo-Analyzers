@@ -196,7 +196,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase.|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase.|&#x2713;|\-|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|&#x2713;|&#x2713;|
-|MiKo_2090|Documentation for equality operator shall have default phrase.|&#x2713;|\-|
+|MiKo_2090|Documentation for equality operator shall have default phrase.|&#x2713;|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase.|&#x2713;|\-|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|&#x2713;|\-|
 |MiKo_2101|&lt;example&gt; documentation should show code example in &lt;code&gt; tags.|&#x2713;|\-|

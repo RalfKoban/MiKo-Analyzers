@@ -140,6 +140,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result;
         }
 
+        protected static XmlEmptyElementSyntax SeeLangword(string text)
+        {
+            var token = SyntaxFactory.Token(default, SyntaxKind.StringLiteralToken, text, text, default);
+            var attribute = SyntaxFactory.XmlTextAttribute("langword", token);
+
+            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttributes(new SyntaxList<XmlAttributeSyntax>(attribute));
+        }
+
         protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, SyntaxFactory.ParseTypeName(typeName));
 
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type) => Cref(Constants.XmlTag.See, type);
