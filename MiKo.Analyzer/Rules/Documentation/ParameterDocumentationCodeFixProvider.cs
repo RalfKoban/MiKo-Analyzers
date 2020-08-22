@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameterName = syntaxNodes.OfType<ParameterSyntax>().First().Identifier.Text;
 
             // we are called for each parameter, so we have to find out the correct XML element
-            return GetXmlSyntax(syntaxNodes.OfType<MethodDeclarationSyntax>(), Constants.XmlTag.Param).FirstOrDefault(_ => GetParameterName(_) == parameterName);
+            return GetXmlSyntax(FittingSyntaxNodes(syntaxNodes), Constants.XmlTag.Param).FirstOrDefault(_ => GetParameterName(_) == parameterName);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
@@ -21,8 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
             var parameterName = GetParameterName(parameterCommentSyntax);
 
-            var method = parameterCommentSyntax.Ancestors().OfType<MethodDeclarationSyntax>().First();
-            var parameters = method.ParameterList.Parameters;
+            var parameters = GetParameters(parameterCommentSyntax);
 
             for (var index = 0; index < parameters.Count; index++)
             {
@@ -34,6 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return parameterCommentSyntax;
+        }
+
+        protected virtual IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>();
+
+        protected virtual SeparatedSyntaxList<ParameterSyntax> GetParameters(XmlElementSyntax syntax)
+        {
+            var method = syntax.Ancestors().OfType<MethodDeclarationSyntax>().First();
+            return method.ParameterList.Parameters;
         }
 
         protected abstract XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index);
