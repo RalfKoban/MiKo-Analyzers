@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 
-        protected override string Title => "Start documentation with '" + Constants.Comments.EnumStartingPhrase + "'";
+        protected override string Title => "Start comment with '" + Constants.Comments.EnumStartingPhrase + "'";
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Constants.Comments.EnumStartingPhrase);
 

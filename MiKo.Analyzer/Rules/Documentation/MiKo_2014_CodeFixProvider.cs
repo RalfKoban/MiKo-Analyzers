@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2014_DisposeDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Apply default 'Dispose' documentation";
+        protected override string Title => "Apply default 'Dispose' comment";
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
