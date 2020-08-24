@@ -30,17 +30,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case MethodDeclarationSyntax m:
                     {
                         var template = Constants.Comments.FactoryCreateMethodSummaryStartingPhraseTemplate;
-                        var returnValue = m.ReturnType;
+                        var returnType = m.ReturnType;
 
-                        if (returnValue is GenericNameSyntax g)
+                        if (returnType is GenericNameSyntax g && g.TypeArgumentList.Arguments.Count == 1)
                         {
                             template = Constants.Comments.FactoryCreateCollectionMethodSummaryStartingPhraseTemplate;
-                            returnValue = SyntaxFactory.ParseTypeName(g.Identifier.ValueText);
+                            returnType = g.TypeArgumentList.Arguments[0];
                         }
 
                         var parts = string.Format(template, '|').Split('|');
 
-                        return StartCommentWith(summary, parts[0], SeeCref(returnValue), parts[1]);
+                        return StartCommentWith(summary, parts[0], SeeCref(returnType), parts[1]);
                     }
                 }
             }

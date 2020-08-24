@@ -14,11 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
         {
             var returnType = symbolReturnType.ToString();
+            var returnTypeFullyQualified = symbolReturnType.FullyQualifiedName();
 
             symbolReturnType.TryGetGenericArgumentCount(out var count);
             if (count <= 0)
             {
-                return startingPhrases.Select(_ => string.Format(_, returnType));
+                return Enumerable.Empty<string>()
+                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnType)))
+                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeFullyQualified)));
             }
 
             var ts = symbolReturnType.GetGenericArgumentsAsTs();

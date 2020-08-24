@@ -244,6 +244,38 @@ public class TestMeFactory
             VerifyCSharpFix(OriginalText, FixedText);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_collection_method_summary()
+        {
+            const string OriginalText = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMeFactory
+{
+    /// <summary>
+    /// A result.
+    /// </summary>
+    public IEnumerable<string> Create() => new string[0];
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates a collection of new instances of the <see cref=""string""/> type with a result.
+    /// </summary>
+    public IEnumerable<string> Create() => new string[0];
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2060_FactoryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2060_FactoryAnalyzer();

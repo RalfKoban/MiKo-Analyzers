@@ -675,6 +675,9 @@ namespace MiKoSolutions.Analyzers
                 case IPropertySymbol p:
                     return p.ContainingType.FullyQualifiedName() + "." + p.Name;
 
+                case INamedTypeSymbol t when t.ContainingType is null && t.IsGenericType is false:
+                    return t.ContainingNamespace.FullyQualifiedName() + "." + t.Name;
+
                 default:
                     return symbol.ToDisplayString(FullyQualifiedDisplayFormat);
             }
