@@ -102,6 +102,12 @@ namespace MiKoSolutions.Analyzers
             return text;
         }
 
+        internal static string WithoutFirstWord(this string text)
+        {
+            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+            return text.Substring(firstSpace);
+        }
+
         private static XElement GetCommentElement(string commentXml)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -107,8 +108,226 @@ public class TestMe : IEnumerable
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_non_boolean_property_summary()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Returns something.
+    /// </summary>
+    public object DoSomething => new object();
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    public object DoSomething => new object();
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_boolean_property_summary()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Returns something.
+    /// </summary>
+    public bool DoSomething => true;
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Gets a value indicating whether something.
+    /// </summary>
+    public bool DoSomething => true;
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_boolean_method_summary()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Returns something.
+    /// </summary>
+    public bool DoSomething() => true;
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether something.
+    /// </summary>
+    public bool DoSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_boolean_async_method_summary()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously returns something.
+    /// </summary>
+    public async bool DoSomething() => true;
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously determines whether something.
+    /// </summary>
+    public async bool DoSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_boolean_Task_method_summary()
+        {
+            const string OriginalText = @"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Returns something.
+    /// </summary>
+    public Task<bool> DoSomething() => Task.FromResult(true);
+}
+";
+
+            const string FixedText = @"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously determines whether something.
+    /// </summary>
+    public Task<bool> DoSomething() => Task.FromResult(true);
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_boolean_method_summary()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Returns something.
+    /// </summary>
+    public object DoSomething() => new object();
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    public object DoSomething() => new object();
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_boolean_async_method_summary()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously returns something.
+    /// </summary>
+    public async object DoSomething() => new object();
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously gets something.
+    /// </summary>
+    public async object DoSomething() => new object();
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_boolean_Task_method_summary()
+        {
+            const string OriginalText = @"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Returns something.
+    /// </summary>
+    public Task<object> DoSomething() => new object();
+}
+";
+
+            const string FixedText = @"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously gets something.
+    /// </summary>
+    public Task<object> DoSomething() => new object();
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2070_ReturnsSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2070_ReturnsSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2070_CodeFixProvider();
     }
 }

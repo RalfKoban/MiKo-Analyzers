@@ -185,6 +185,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
 
+        internal static bool IsBoolean(this TypeSyntax syntax)
+        {
+            switch (syntax.ToString())
+            {
+                case "bool":
+                case nameof(Boolean):
+                case nameof(System) + "." + nameof(Boolean):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
         {
             var type = syntax.GetTypeSymbol(semanticModel);
