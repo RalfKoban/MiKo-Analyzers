@@ -129,6 +129,12 @@ namespace MiKoSolutions.Analyzers
                                                                                                           genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
 
+        private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormatWithoutAlias = new SymbolDisplayFormat(
+                                                                                                          globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                          typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                          genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
+
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
             switch (method.MethodKind)
@@ -665,21 +671,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool ContainsExtensionMethods(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
-        internal static string FullyQualifiedName(this ISymbol symbol)
+        internal static string FullyQualifiedName(this ISymbol symbol, bool useAlias = true)
         {
             switch (symbol)
             {
                 case IMethodSymbol m:
-                    return m.ContainingType.FullyQualifiedName() + "." + m.Name;
+                    return m.ContainingType.FullyQualifiedName(useAlias) + "." + m.Name;
 
                 case IPropertySymbol p:
-                    return p.ContainingType.FullyQualifiedName() + "." + p.Name;
+                    return p.ContainingType.FullyQualifiedName(useAlias) + "." + p.Name;
 
-                case INamedTypeSymbol t when t.ContainingType is null && t.IsGenericType is false:
-                    return t.ContainingNamespace.FullyQualifiedName() + "." + t.Name;
+                case INamedTypeSymbol t when useAlias is false:
+                    return t.ToDisplayString(FullyQualifiedDisplayFormatWithoutAlias);
 
                 default:
-                    return symbol.ToDisplayString(FullyQualifiedDisplayFormat);
+                    return symbol.ToDisplayString(FullyQualifiedDisplayFormat); // makes use of aliases for language such as 'int' instead of 'System.Int32'
             }
         }
 

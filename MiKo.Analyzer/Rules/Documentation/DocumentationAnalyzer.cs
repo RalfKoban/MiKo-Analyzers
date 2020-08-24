@@ -14,7 +14,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
         {
             var returnType = symbolReturnType.ToString();
+
             var returnTypeFullyQualified = symbolReturnType.FullyQualifiedName();
+            if (returnTypeFullyQualified.Contains('.') is false)
+            {
+                returnTypeFullyQualified = symbolReturnType.FullyQualifiedName(false);
+            }
 
             symbolReturnType.TryGetGenericArgumentCount(out var count);
             if (count <= 0)
