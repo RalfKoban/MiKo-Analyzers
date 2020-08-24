@@ -21,9 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var property = syntax.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().First();
             var commentParts = GetCommentParts(property);
-            var command = SyntaxFactory.ParseTypeName("ICommand");
 
-            return StartCommentWith(element, commentParts[0], SeeCref(command), commentParts[1]);
+            return StartCommentWith(element, commentParts[0], SeeCref("ICommand"), commentParts[1]);
         }
 
         private static string[] GetCommentParts(PropertyDeclarationSyntax property)
