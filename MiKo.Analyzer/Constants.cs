@@ -404,16 +404,20 @@ namespace MiKoSolutions.Analyzers
 
             internal const string FactorySummaryPhrase = "Provides support for creating ";
 
+            internal static readonly string FactoryCreateMethodSummaryStartingPhraseTemplate = "Creates a new instance of the {0} type with ";
+
             internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =
                 {
-                    "Creates a new instance of the <see cref=\"{0}\"/> type with ",
-                    "Creates a new instance of the <see cref=\"{0}\" /> type with ",
+                    string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
+
+            internal static readonly string FactoryCreateCollectionMethodSummaryStartingPhraseTemplate = "Creates a collection of new instances of the {0} type with ";
 
             internal static readonly string[] FactoryCreateCollectionMethodSummaryStartingPhrase =
                 {
-                    "Creates a collection of new instances of the <see cref=\"{0}\"/> type with ",
-                    "Creates a collection of new instances of the <see cref=\"{0}\" /> type with ",
+                    string.Format(FactoryCreateCollectionMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(FactoryCreateCollectionMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";

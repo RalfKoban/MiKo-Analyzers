@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -191,8 +192,62 @@ public class TestMeFactory
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_class_summary()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Something.
+/// </summary>
+public class TestMeFactory
+{
+    public string Create() => new string();
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Provides support for creating something.
+/// </summary>
+public class TestMeFactory
+{
+    public string Create() => new string();
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_summary()
+        {
+            const string OriginalText = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// A result.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            const string FixedText = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""string""/> type with a result.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2060_FactoryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2060_FactoryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2060_CodeFixProvider();
     }
 }
