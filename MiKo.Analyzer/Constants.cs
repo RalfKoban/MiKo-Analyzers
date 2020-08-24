@@ -488,28 +488,34 @@ namespace MiKoSolutions.Analyzers
 
             internal const string CommandSummaryStartingPhrase = "Represents a command that can ";
 
+            internal static readonly string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
+
             internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =
                 {
-                    @"Gets or sets the <see cref=""ICommand""/> that can ",
-                    @"Gets or sets the <see cref=""ICommand"" /> that can ",
-                    @"Gets or sets the <see cref=""System.Windows.Input.ICommand""/> that can ",
-                    @"Gets or sets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
+
+            internal static readonly string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
                 {
-                    @"Gets the <see cref=""ICommand""/> that can ",
-                    @"Gets the <see cref=""ICommand"" /> that can ",
-                    @"Gets the <see cref=""System.Windows.Input.ICommand""/> that can ",
-                    @"Gets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
+
+            internal static readonly string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
 
             internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
                 {
-                    @"Sets the <see cref=""ICommand""/> that can ",
-                    @"Sets the <see cref=""ICommand"" /> that can ",
-                    @"Sets the <see cref=""System.Windows.Input.ICommand""/> that can ",
-                    @"Sets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
             internal const string FieldIsReadOnly = "This field is read-only.";

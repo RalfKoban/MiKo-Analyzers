@@ -48,6 +48,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             comment.EndTag);
         }
 
+        protected static XmlElementSyntax StartCommentWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
+        {
+            var content = comment.Content;
+
+            // when necessary adjust beginning text
+            // Note: when on new line, then the text is not the 1st one but the 2nd one
+            var index = GetIndex(content);
+
+            var startText = SyntaxFactory.XmlText(commentStart).WithLeadingXmlComment();
+
+            XmlTextSyntax continueText;
+            if (content[index] is XmlTextSyntax text)
+            {
+                // we have to remove the element as otherwise we duplicate the comment
+                content = content.Remove(content[index]);
+
+                // remove first "\r\n" token and remove '  /// ' trivia of second token
+                if (text.TextTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    var newTokens = text.TextTokens.RemoveAt(0);
+                    text = SyntaxFactory.XmlText(newTokens.Replace(newTokens[0], newTokens[0].WithLeadingTrivia()));
+                }
+
+                continueText = text.WithStartText(commentContinue);
+            }
+            else
+            {
+                continueText = SyntaxFactory.XmlText(commentContinue);
+            }
+
+            return SyntaxFactory.XmlElement(
+                                            comment.StartTag,
+                                            content.Insert(index, startText).Insert(index + 1, seeCref).Insert(index + 2, continueText),
+                                            comment.EndTag);
+        }
+
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
             return Comment(comment, text[0], additionalComment);
