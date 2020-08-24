@@ -2441,7 +2441,7 @@ In addition, the correct property names, property types and owing types should b
     <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_3051_MessageFormat" xml:space="preserve">
-    <value>Use {1} instead</value>
+    <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3051_Title" xml:space="preserve">
     <value>DependencyProperty fields should be properly registered.</value>
@@ -2466,7 +2466,7 @@ In addition, the correct property names, property types and owing types should b
     <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
   </data>
   <data name="MiKo_3053_MessageFormat" xml:space="preserve">
-    <value>Use {1} instead</value>
+    <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3053_Title" xml:space="preserve">
     <value>DependencyPropertyKey fields should be properly registered.</value>
