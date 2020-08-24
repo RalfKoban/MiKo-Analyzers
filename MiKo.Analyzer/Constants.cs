@@ -422,10 +422,12 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
 
+            internal static readonly string ExtensionMethodClassStartingPhraseTemplate = "Provides a set of {0} methods for ";
+
             internal static readonly string[] ExtensionMethodClassStartingPhrase =
                 {
-                    "Provides a set of <see langword=\"static\"/> methods for ",
-                    "Provides a set of <see langword=\"static\" /> methods for ",
+                    string.Format(ExtensionMethodClassStartingPhraseTemplate, "<see langword=\"static\"/>"),
+                    string.Format(ExtensionMethodClassStartingPhraseTemplate, "<see langword=\"static\" />"),
                 };
 
             internal static readonly string[] ArgumentNullExceptionStartingPhrase =
