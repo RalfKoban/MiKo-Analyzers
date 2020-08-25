@@ -10,8 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnTypeDocumentationCodeFixProvider : DocumentationCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes, Constants.XmlTag.Returns).FirstOrDefault() // method
-                                                                                                    ?? GetXmlSyntax(syntaxNodes, Constants.XmlTag.Value).FirstOrDefault(); // property
+        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Returns, syntaxNodes).FirstOrDefault() // method
+                                                                                                    ?? GetXmlSyntax(Constants.XmlTag.Value, syntaxNodes).FirstOrDefault(); // property
 
         protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {

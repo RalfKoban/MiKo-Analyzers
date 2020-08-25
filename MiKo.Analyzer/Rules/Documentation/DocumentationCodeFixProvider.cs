@@ -15,7 +15,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<DocumentationCommentTriviaSyntax>()).FirstOrDefault();
         }
 
-        protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes, string startTag)
+        protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            // we have to delve into the trivias to find the XML syntax nodes
+            return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
+                              .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
+        }
+
+        protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, params SyntaxNode[] syntaxNodes)
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
