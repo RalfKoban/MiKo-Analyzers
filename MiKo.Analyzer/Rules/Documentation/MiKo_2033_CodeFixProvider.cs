@@ -13,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Fix return comment";
 
-        protected override SyntaxNode GenericComment(XmlElementSyntax comment)
+        protected override SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
         {
             var parts = string.Format(Constants.Comments.StringTaskReturnTypeStartingPhraseTemplate, "|", "|", "contains").Split('|');
 
             return Comment(comment, parts[0], SeeCrefTaskResult(), parts[1], SeeCref("string"), parts[2] + comment.Content);
         }
 
-        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment)
+        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType)
         {
             var parts = string.Format(Constants.Comments.StringReturnTypeStartingPhraseTemplate, "|", "contains").Split('|');
 

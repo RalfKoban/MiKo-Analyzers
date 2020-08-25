@@ -34,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected abstract XmlElementSyntax NonGenericComment(XmlElementSyntax comment);
+        protected abstract XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType);
 
-        protected abstract SyntaxNode GenericComment(XmlElementSyntax comment);
+        protected abstract SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType);
 
         protected XmlEmptyElementSyntax SeeCrefTaskResult()
         {
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         private SyntaxNode Comment(XmlElementSyntax comment, TypeSyntax returnType) => returnType.IsKind(SyntaxKind.GenericName)
-                                                                                           ? GenericComment(comment)
-                                                                                           : NonGenericComment(comment);
+                                                                                           ? GenericComment(comment, (GenericNameSyntax)returnType)
+                                                                                           : NonGenericComment(comment, returnType);
     }
 }
