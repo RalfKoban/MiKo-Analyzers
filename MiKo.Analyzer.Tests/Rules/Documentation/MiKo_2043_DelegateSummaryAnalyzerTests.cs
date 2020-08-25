@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -60,8 +61,34 @@ public delegate void TestMe();
 
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary>
+/// Does something.
+/// </summary>
+public delegate void TestMe();
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary>
+/// Encapsulates a method that does something.
+/// </summary>
+public delegate void TestMe();
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2043_DelegateSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2043_DelegateSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2043_CodeFixProvider();
     }
 }
