@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (ancestor)
                 {
                     case ClassDeclarationSyntax _:
-                        return StartCommentWith(summary, Constants.Comments.FactorySummaryPhrase);
+                        return CommentStartingWith(summary, Constants.Comments.FactorySummaryPhrase);
 
                     case MethodDeclarationSyntax m:
                     {
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var parts = string.Format(template, '|').Split('|');
 
-                        return StartCommentWith(summary, parts[0], SeeCref(returnType), parts[1]);
+                        return CommentStartingWith(summary, parts[0], SeeCref(returnType), parts[1]);
                     }
                 }
             }

@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                               .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
         }
 
-        protected static XmlElementSyntax StartCommentWith(XmlElementSyntax comment, string phrase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase)
         {
             var content = comment.Content;
 
@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             comment.EndTag);
         }
 
-        protected static XmlElementSyntax StartCommentWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
         {
             var content = comment.Content;
 

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
-            return StartCommentWith(comment, Constants.Comments.EnumParameterStartingPhrase[0]);
+            return CommentStartingWith(comment, Constants.Comments.EnumParameterStartingPhrase[0]);
         }
     }
 }

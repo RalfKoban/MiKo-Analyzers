@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var parts = string.Format(Constants.Comments.ExtensionMethodClassStartingPhraseTemplate, '|').Split('|');
 
-            return StartCommentWith((XmlElementSyntax)syntax, parts[0], SeeLangword("static"), parts[1]);
+            return CommentStartingWith((XmlElementSyntax)syntax, parts[0], SeeLangword("static"), parts[1]);
         }
     }
 }
