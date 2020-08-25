@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -56,8 +57,100 @@ public class TestMe
     private int _field;
 }");
 
+        [Test]
+        public void Code_gets_fixed_for_remarks_only()
+        {
+            const string OriginalCode = @"
+public enum TestMe
+{
+    /// <remarks>
+    /// Some remarks.
+    /// </remarks>
+    None = 0,
+}";
+
+            const string FixedCode = @"
+public enum TestMe
+{
+    /// <summary>
+    /// Some remarks.
+    /// </summary>
+    None = 0,
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_summary_and_remarks()
+        {
+            const string OriginalCode = @"
+public enum TestMe
+{
+    /// <summary>
+    /// Some summary.
+    /// </summary>
+    /// <remarks>
+    /// Some remarks.
+    /// </remarks>
+    None = 0,
+}";
+
+            const string FixedCode = @"
+public enum TestMe
+{
+    /// <summary>
+    /// Some summary.
+    /// <para/>
+    /// Some remarks.
+    /// </summary>
+    None = 0,
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_summary_and_remarks()
+        {
+            const string OriginalCode = @"
+public enum TestMe
+{
+    /// <summary>
+    /// Some summary.
+    /// Some more summary.
+    /// </summary>
+    /// <remarks>
+    /// Some remarks.
+    /// Some more remarks.
+    /// <list type=""bullet"">
+    /// </list>
+    /// </remarks>
+    None = 0,
+}";
+
+            const string FixedCode = @"
+public enum TestMe
+{
+    /// <summary>
+    /// Some summary.
+    /// Some more summary.
+    /// <para/>
+    /// Some remarks.
+    /// Some more remarks.
+    /// <list type=""bullet"">
+    /// </list>
+    /// </summary>
+    None = 0,
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2211_CodeFixProvider();
     }
 }

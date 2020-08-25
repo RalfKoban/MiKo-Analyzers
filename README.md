@@ -211,7 +211,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2208|Documentation should not use the term 'an instance of'.|&#x2713;|\-|
 |MiKo_2209|Do not use double periods in documentation.|&#x2713;|\-|
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'.|&#x2713;|&#x2713;|
-|MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|\-|
+|MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|&#x2713;|
 |MiKo_2212|Documentation should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
