@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -58,8 +59,62 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_tag_([Values("see", "seealso")] string tag)
+        {
+            var originalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something with <" + tag + @" cref=""i"" />.
+    /// </summary>
+    public void DoSomething(int i) { }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something with <paramref name=""i""/>.
+    /// </summary>
+    public void DoSomething(int i) { }
+}
+";
+
+            VerifyCSharpFix(originalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiple_tags_([Values("see", "seealso")] string tag)
+        {
+            var originalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something with <" + tag + @" cref=""i"" /> or <" + tag + @" cref=""j"" />.
+    /// </summary>
+    public void DoSomething(int i, int j) { }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something with <paramref name=""i""/> or <paramref name=""j""/>.
+    /// </summary>
+    public void DoSomething(int i, int j) { }
+}
+";
+
+            VerifyCSharpFix(originalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2044_InvalidSeeParameterInXmlAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2044_InvalidSeeParameterInXmlAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2044_CodeFixProvider();
     }
 }

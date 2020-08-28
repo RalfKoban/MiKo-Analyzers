@@ -22,11 +22,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                               .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
         }
 
+        /// <summary>
+        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the list of syntax nodes.
+        /// </summary>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode, IEnumerable{string})"/>
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, params SyntaxNode[] syntaxNodes)
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
                               .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
+        }
+
+        /// <summary>
+        /// Only gets the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// </summary>
+        /// <seealso cref="GetXmlSyntax(string, SyntaxNode[])"/>
+        protected static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(SyntaxNode syntaxNode, IEnumerable<string> tags)
+        {
+            // we have to delve into the trivias to find the XML syntax nodes
+            return syntaxNode.DescendantNodes(__ => true, true).OfType<XmlEmptyElementSyntax>()
+                             .Where(_ => tags.Contains(_.Name.LocalName.ValueText));
         }
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase)
