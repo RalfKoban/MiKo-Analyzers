@@ -191,7 +191,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2060|Factories should be documented in a uniform way.|&#x2713;|&#x2713;|
 |MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|&#x2713;|&#x2713;|
 |MiKo_2071|&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.|&#x2713;|\-|
-|MiKo_2072|&lt;summary&gt; documentation should not start with 'Try'.|&#x2713;|\-|
+|MiKo_2072|&lt;summary&gt; documentation should not start with 'Try'.|&#x2713;|&#x2713;|
 |MiKo_2073|&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines '.|&#x2713;|\-|
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase.|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase.|&#x2713;|\-|

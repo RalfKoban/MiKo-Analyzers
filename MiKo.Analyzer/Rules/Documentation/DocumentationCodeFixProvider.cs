@@ -164,7 +164,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
 
-        protected static SyntaxNode Comment(DocumentationCommentTriviaSyntax syntax, string[] terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
+        protected static SyntaxNode Comment(SyntaxNode syntax, string[] terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
         {
             var result = syntax;
 
