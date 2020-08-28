@@ -108,6 +108,8 @@ namespace MiKoSolutions.Analyzers
             return text.Substring(firstSpace);
         }
 
+        internal static string SecondWord(this string text) => text.TrimStart().WithoutFirstWord().TrimStart().FirstWord();
+
         private static XElement GetCommentElement(string commentXml)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)

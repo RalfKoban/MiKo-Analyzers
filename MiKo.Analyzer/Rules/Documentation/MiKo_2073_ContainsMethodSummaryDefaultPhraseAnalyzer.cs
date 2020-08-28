@@ -12,24 +12,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2073";
 
-        private const string Phrase = "Determines";
+        internal const string StartingPhrase = "Determines whether";
 
         public MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
+        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase);
+
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.All(StartsWithPhrase)
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, Phrase) };
-
-        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase);
+                                                                                                                        : new[] { Issue(symbol, StartingPhrase) };
 
         private static bool StartsWithPhrase(string summary)
         {
-            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim() // skip over async starting phrase
-                                   .FirstWord();
+            // skip over async starting phrase
+            var withoutAsync = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).TrimStart();
 
-            return firstWord.Equals(Phrase, StringComparison.OrdinalIgnoreCase);
+            var firstWord = withoutAsync.FirstWord();
+
+            if (firstWord.Equals(StartingPhrase.FirstWord(), StringComparison.OrdinalIgnoreCase))
+            {
+                var secondWord = withoutAsync.SecondWord();
+                return secondWord.Equals(StartingPhrase.SecondWord(), StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
         }
     }
 }

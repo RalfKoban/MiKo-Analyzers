@@ -4776,7 +4776,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Try&apos; methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase &apos;Attempts to&apos;..
+        ///   Looks up a localized string similar to &apos;Try&apos; methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase &apos;Attempts to &apos;..
         /// </summary>
         public static string MiKo_2072_Description {
             get {
@@ -4803,7 +4803,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Contain&apos; methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase &apos;Determines &apos;..
+        ///   Looks up a localized string similar to &apos;Contain&apos; methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase &apos;Determines whether &apos;..
         /// </summary>
         public static string MiKo_2073_Description {
             get {
@@ -4821,7 +4821,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of &apos;Contains&apos; methods should start with &apos;Determines &apos;..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of &apos;Contains&apos; methods should start with &apos;Determines whether &apos;..
         /// </summary>
         public static string MiKo_2073_Title {
             get {
