@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -346,8 +347,240 @@ public class TestMe
             }
         });
 
+        [Test]
+        public void Code_gets_fixed_for_test_method()
+        {
+            const string OriginalText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_initialization_method()
+        {
+            const string OriginalText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [SetUp]
+    public void PrepareTest()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [SetUp]
+    public void PrepareTest()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_test_cleanup_method()
+        {
+            const string OriginalText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [TearDown]
+    public void CleanupTest()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [TearDown]
+    public void CleanupTest()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_OneTime_test_initialization_method()
+        {
+            const string OriginalText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [OneTimeSetUp]
+    public void PrepareTestEnvironment()
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeSetUp]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_full_fledged_test()
+        {
+            const string OriginalText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeSetUp]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    [SetUp]
+    public void PrepareTest()
+    {
+    }
+
+    [TearDown]
+    public void CleanupTest()
+    {
+    }
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeSetUp]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [SetUp]
+    public void PrepareTest()
+    {
+    }
+
+    [TearDown]
+    public void CleanupTest()
+    {
+    }
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4104_TestOneTimeTearDownMethodOrderingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4104_TestOneTimeTearDownMethodOrderingAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_4104_CodeFixProvider();
     }
 }
