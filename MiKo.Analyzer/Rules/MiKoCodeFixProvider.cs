@@ -44,9 +44,12 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax)
         {
             var updatedSyntax = GetUpdatedSyntax(syntax);
-            var newDocument = updatedSyntax is null
-                                  ? document
-                                  : document.WithSyntaxRoot(root.ReplaceNode(syntax, updatedSyntax));
+            if (updatedSyntax is null || ReferenceEquals(updatedSyntax, syntax))
+            {
+                return Task.FromResult(document);
+            }
+
+            var newDocument = document.WithSyntaxRoot(root.ReplaceNode(syntax, updatedSyntax));
             return Task.FromResult(newDocument);
         }
 
