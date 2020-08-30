@@ -20,17 +20,6 @@ namespace MiKoSolutions.Analyzers
                                                                     XmlCommentExterior,
                                                                 };
 
-        private static readonly HashSet<string> TypeUnderTestVariableNames = new HashSet<string>
-                                                                                 {
-                                                                                     "objectUnderTest",
-                                                                                     "sut",
-                                                                                     "subjectUnderTest",
-                                                                                     "unitUnderTest",
-                                                                                     "uut",
-                                                                                     "testCandidate",
-                                                                                     "testObject",
-                                                                                 };
-
         internal static bool IsSupported(this SyntaxNodeAnalysisContext context, LanguageVersion expectedVersion)
         {
             var languageVersion = ((CSharpParseOptions)context.Node.SyntaxTree.Options).LanguageVersion;
@@ -39,7 +28,19 @@ namespace MiKoSolutions.Analyzers
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
 
-        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => TypeUnderTestVariableNames.Contains(syntax.GetName());
+        internal static bool IsTestMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
+
+        internal static bool IsTestSetUpMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
+
+        internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
+
+        internal static bool IsTestOneTimeSetUpMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
+
+        internal static bool IsTestOneTimeTearDownMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
+
+        internal static bool IsTypeUnderTestCreationMethod(this MethodDeclarationSyntax method) => Constants.Names.TypeUnderTestMethodNames.Contains(method.GetName());
+
+        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => Constants.Names.TypeUnderTestVariableNames.Contains(syntax.GetName());
 
         internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
         {
@@ -335,6 +336,21 @@ namespace MiKoSolutions.Analyzers
         internal static T WithEndOfLine<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
+
+        internal static TRoot InsertNodeBefore<TRoot>(this TRoot root, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
+        {
+            // method needs to be intended and a CRLF needs to be added
+            var modifiedNode = newNode.WithIntentation().WithEndOfLine();
+
+            return root.InsertNodesBefore(nodeInList, new[] { modifiedNode });
+        }
+
+        internal static TRoot InsertNodeAfter<TRoot>(this TRoot root, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
+        {
+            return root.InsertNodesAfter(nodeInList, new[] { newNode });
+        }
+
+        private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax method) => method.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
 

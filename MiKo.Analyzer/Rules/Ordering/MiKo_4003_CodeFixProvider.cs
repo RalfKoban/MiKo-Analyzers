@@ -30,14 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 // none found, so insert method before first method
                 var method = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().First();
 
-                // method needs to be intended and a CRLF needs to be added
-                var modifiedDisposeMethod = disposeMethod.WithIntentation().WithEndOfLine();
-
-                return modifiedType.InsertNodesBefore(method, new[] { modifiedDisposeMethod });
+                return modifiedType.InsertNodeBefore(method, disposeMethod);
             }
 
             // insert method after found ctor or finalizer
-            return modifiedType.InsertNodesAfter(syntaxNode, new[] { disposeMethod });
+            return modifiedType.InsertNodeAfter(syntaxNode, disposeMethod);
         }
 
         private static MethodDeclarationSyntax GetDisposeMethod(SyntaxNode type)
