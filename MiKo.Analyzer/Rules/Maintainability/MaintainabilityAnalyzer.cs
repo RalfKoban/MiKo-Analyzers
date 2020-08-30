@@ -31,6 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                   ? Analyze(field)
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
+        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => ShallAnalyze(symbol)
+                                                                                                   ? Analyze(symbol)
+                                                                                                   : Enumerable.Empty<Diagnostic>();
+
         protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => true;
 
         protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
@@ -41,6 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
 
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false;
+
         protected virtual IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
@@ -50,5 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected virtual IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual IEnumerable<Diagnostic> Analyze(IEventSymbol symbol) => Enumerable.Empty<Diagnostic>();
     }
 }
