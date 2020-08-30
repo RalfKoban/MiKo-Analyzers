@@ -12,26 +12,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2072";
 
-        private static readonly string[] Phrases = { "Try", "Tries" };
+        internal const string StartingPhrase = "Attempts to";
 
-        public MiKo_2072_TrySummaryAnalyzer() : base(Id, (SymbolKind)(-1))
+        internal static readonly string[] Words = { "Try", "Tries" };
+
+        public MiKo_2072_TrySummaryAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method);
-
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { Issue(symbol, "Attempts to") }
+                                                                                                                        ? new[] { Issue(symbol, StartingPhrase) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
-
-        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.Name.StartsWith("Try", StringComparison.OrdinalIgnoreCase);
 
         private static bool StartsWithPhrase(string summary)
         {
-            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim() // skip over async starting phrase
+            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).TrimStart() // skip over async starting phrase
                                    .FirstWord();
 
-            return firstWord.EqualsAny(Phrases);
+            return firstWord.EqualsAny(Words);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -11,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3049";
 
-        private static readonly string DescriptionAttributeName = typeof(System.ComponentModel.DescriptionAttribute).FullName;
+        private static readonly string DescriptionAttributeName = typeof(DescriptionAttribute).FullName;
 
         public MiKo_3049_EnumMemberHasDescriptionAttributeAnalyzer() : base(Id, SymbolKind.NamedType)
         {

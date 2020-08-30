@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -121,8 +122,86 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_SerializationInfo()
+        {
+            const string OriginalText = @"
+using System;
+using System.Runtime.Serialization;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <param name=""info"">Some object.</param>
+    /// <param name=""context"">The contextual information about the source or destination.</param>
+    public TestMe(SerializationInfo info, StreamingContext context)
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Runtime.Serialization;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <param name=""info"">
+    /// The object that holds the serialized object data.
+    /// </param>
+    /// <param name=""context"">The contextual information about the source or destination.</param>
+    public TestMe(SerializationInfo info, StreamingContext context)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_StreamingContext()
+        {
+            const string OriginalText = @"
+using System;
+using System.Runtime.Serialization;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <param name=""info"">The object that holds the serialized object data.</param>
+    /// <param name=""context"">Some context.</param>
+    public TestMe(SerializationInfo info, StreamingContext context)
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Runtime.Serialization;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <param name=""info"">The object that holds the serialized object data.</param>
+    /// <param name=""context"">
+    /// The contextual information about the source or destination.
+    /// </param>
+    public TestMe(SerializationInfo info, StreamingContext context)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2027_CodeFixProvider();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -150,8 +151,42 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// Some example.
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// The following example demonstrates some example.
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2100_ExampleDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2100_ExampleDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2100_CodeFixProvider();
     }
 }

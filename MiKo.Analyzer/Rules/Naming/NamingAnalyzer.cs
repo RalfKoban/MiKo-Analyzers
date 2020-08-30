@@ -14,9 +14,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected static string FindBetterNameForEntityMarker(ISymbol symbol)
+        {
+            var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
+
+            if (expected.HasCollectionMarker())
+            {
+                var plural = Pluralizer.GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+
+                // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
+                expected = plural ?? (symbol.Name[0].IsUpperCase() ? Constants.Entities : Constants.entities);
+            }
+
+            return expected;
+        }
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol) => ShallAnalyze(symbol)
-                                                                                                       ? AnalyzeName(symbol)
-                                                                                                       : Enumerable.Empty<Diagnostic>();
+                                                                                                           ? AnalyzeName(symbol)
+                                                                                                           : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => ShallAnalyze(symbol)
                                                                                                   ? AnalyzeName(symbol)
@@ -77,15 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
-
-            if (expected.HasCollectionMarker())
-            {
-                var plural = Pluralizer.GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
-
-                // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
-                expected = plural ?? (symbol.Name[0].IsUpperCase() ? "Entities" : "entities");
-            }
+            var expected = FindBetterNameForEntityMarker(symbol);
 
             return new[] { Issue(symbol, expected) };
         }
@@ -193,26 +200,48 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (name.Length)
             {
                 case 0:
-                    return symbolName[0].IsUpperCase() ? "Entity" : "entity";
+                    return symbolName[0].IsUpperCase() ? Constants.Entity : Constants.entity;
 
                 case 1:
-                    switch (name[0])
+                    switch (name)
                     {
-                        case 's': return "entities";
-                        case '_': return "_entity";
+                        case "s": return Constants.entities;
+                        case Constants.Markers.MemberFieldPrefix: return Constants.Markers.MemberFieldPrefix + Constants.entity;
                         default: return name;
                     }
 
                 case 2:
                     switch (name)
                     {
-                        case "s_": return "s_entity";
-                        case "m_": return "m_entity";
+                        case Constants.Markers.StaticFieldPrefix: return Constants.Markers.StaticFieldPrefix + Constants.entity;
+                        case Constants.Markers.AlternativeMemberFieldPrefix: return Constants.Markers.AlternativeMemberFieldPrefix + Constants.entity;
                         default: return name;
                     }
 
                 default:
+                {
+                    var index = 0;
+
+                    foreach (var prefix in Constants.Markers.FieldPrefixes)
+                    {
+                        if (symbolName.StartsWith(prefix, StringComparison.Ordinal))
+                        {
+                           index = prefix.Length;
+                        }
+                    }
+
+                    if (symbolName[index].IsUpperCase() && name[index].IsLowerCase())
+                    {
+                        return name.ToUpperCaseAt(index);
+                    }
+
+                    if (symbolName[index].IsLowerCase() && name[index].IsUpperCase())
+                    {
+                        return name.ToLowerCaseAt(index);
+                    }
+
                     return name;
+                }
             }
         }
 

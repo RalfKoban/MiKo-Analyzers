@@ -115,6 +115,8 @@ public class TestMe
 
         [TestCase("EventArgs args", "EventArgs e")]
         [TestCase("EventArgs args, EventArgs eventArgs", "EventArgs e0, EventArgs e1")]
+        [TestCase("EventArgs args, int i", "EventArgs e, int i")]
+        [TestCase("EventArgs args, int i, EventArgs eventArgs", "EventArgs e0, int i, EventArgs e1")]
         public void Code_gets_fixed_(string expected, string wanted)
         {
             const string Template = "using System; class TestMe { void DoSomething(###) { } }";

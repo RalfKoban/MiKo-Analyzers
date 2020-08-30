@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.ComponentModel;
 using System.Composition;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows.Input;
 
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
 using MiKoSolutions.Analyzers.Rules;
+
+using NUnit.Framework;
+
+using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 namespace TestHelper
 {
@@ -34,13 +39,20 @@ namespace TestHelper
         private static readonly MetadataReference SystemWindowsInputReference = MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location);
         private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
         private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
-        private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(NUnit.Framework.Assert).Assembly.Location);
+        private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(Assert).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
         private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
         private static readonly MetadataReference AttributeTargetsReference = MetadataReference.CreateFromFile(typeof(AttributeTargets).Assembly.Location);
         private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
-        private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder).Assembly.Location);
+        private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
+
+        /// <summary>
+        /// Avoids error CS0012: The type 'MulticastDelegate' is defined in an assembly that is not referenced. You must add a reference to assembly 'netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'.}
+        /// Needed by some tests as the code references types from .NET standard 2.0.
+        /// </summary>
+        private static readonly MetadataReference NetStandardReference = MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location);
+        private static readonly MetadataReference SystemRuntimeNetStandardReference = MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=0.0.0.0").Location);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.
@@ -174,7 +186,9 @@ namespace TestHelper
                 .AddMetadataReference(projectId, CodeAnalysisReference)
                 .AddMetadataReference(projectId, NUnitReference)
                 .AddMetadataReference(projectId, MiKoAnalyzersReference)
-                .AddMetadataReference(projectId, MiKoAnalyzersTestsReference);
+                .AddMetadataReference(projectId, MiKoAnalyzersTestsReference)
+                .AddMetadataReference(projectId, NetStandardReference)
+                .AddMetadataReference(projectId, SystemRuntimeNetStandardReference);
 
             var count = 0;
             foreach (var source in sources)

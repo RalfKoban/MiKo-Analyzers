@@ -11,6 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1091";
 
+        // Ordinal is important here as we want to have only those with a suffix and not all (e.g. we want 'comparisonView' but not 'view')
         private const StringComparison Comparison = StringComparison.Ordinal;
 
         private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>
@@ -25,6 +26,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var name = symbol.Name;
+
+            if (name.EndsWith(Constants.Entity, Comparison))
+            {
+                return name.WithoutSuffix(Constants.Entity);
+            }
+
+            if (name.EndsWith("Element", Comparison))
+            {
+                return name == "frameworkElement"
+                           ? "element"
+                           : name.WithoutSuffix("Element");
+            }
+
+            foreach (var pair in WrongSuffixes)
+            {
+                if (name.EndsWith(pair.Key, Comparison))
+                {
+                    return pair.Value;
+                }
+            }
+
+            return name;
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
         {
             foreach (var identifier in identifiers)
@@ -32,13 +60,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var name = identifier.ValueText;
                 var location = identifier.GetLocation();
 
-                if (name.EndsWith("Entity", Comparison))
+                if (name.EndsWith(Constants.Entity, Comparison))
                 {
-                    yield return Issue(name, location, name.WithoutSuffix("Entity"));
+                    yield return Issue(name, location, name.WithoutSuffix(Constants.Entity));
                 }
                 else if (name.EndsWith("Element", Comparison))
                 {
-                    yield return Issue(name, location, name.WithoutSuffix("Element"));
+                    var proposedAlternative = name == "frameworkElement"
+                                                  ? "element"
+                                                  : name.WithoutSuffix("Element");
+
+                    yield return Issue(name, location, proposedAlternative);
                 }
                 else
                 {

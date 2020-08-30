@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -96,8 +97,50 @@ public interface ITestMe : ICommand
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalText = @"
+using System;
+using System.Windows.Input;
+
+/// <summary>
+/// Do something.
+/// </summary>
+public class TestMe : ICommand
+{
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => true;
+
+    public void Execute(object parameter) { }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Windows.Input;
+
+/// <summary>
+/// Represents a command that can do something.
+/// </summary>
+public class TestMe : ICommand
+{
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => true;
+
+    public void Execute(object parameter) { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2038_CommandTypeSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2038_CommandTypeSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2038_CodeFixProvider();
     }
 }

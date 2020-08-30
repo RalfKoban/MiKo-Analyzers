@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -31,7 +32,7 @@ namespace Bla
 {
     public class TestMe
     {
-        " + visibility + @" static readonly DependencyPropertyKey m_fieldProperty;
+        " + visibility + @" static readonly DependencyPropertyKey m_field;
     }
 }
 ");
@@ -44,7 +45,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public static readonly DependencyPropertyKey m_fieldProperty;
+        public static readonly DependencyPropertyKey m_field;
     }
 }
 ");
@@ -57,7 +58,7 @@ namespace Bla
 {
     public class TestMe
     {
-        internal static DependencyPropertyKey m_fieldProperty;
+        internal static DependencyPropertyKey m_field;
     }
 }
 ");
@@ -70,7 +71,7 @@ namespace Bla
 {
     public class TestMe
     {
-        internal readonly DependencyPropertyKey m_fieldProperty;
+        internal readonly DependencyPropertyKey m_field;
     }
 }
 ");
@@ -83,13 +84,47 @@ namespace Bla
 {
     public class TestMe
     {
-        internal DependencyPropertyKey m_fieldProperty;
+        internal DependencyPropertyKey m_field;
     }
 }
 ");
 
+        [TestCase("public")]
+        [TestCase("static readonly public")]
+        [TestCase("static public")]
+        public void Code_gets_fixed_for_field_with_modifier_(string modifier)
+        {
+            var originalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        " + modifier + @" DependencyPropertyKey m_field;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private static readonly DependencyPropertyKey m_field;
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3052_DependencyPropertyKeyNonPublicStaticReadOnlyFieldAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3052_DependencyPropertyKeyNonPublicStaticReadOnlyFieldAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3052_CodeFixProvider();
     }
 }

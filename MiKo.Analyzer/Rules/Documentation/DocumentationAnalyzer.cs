@@ -15,10 +15,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var returnType = symbolReturnType.ToString();
 
+            var returnTypeFullyQualified = symbolReturnType.FullyQualifiedName();
+            if (returnTypeFullyQualified.Contains('.') is false)
+            {
+                returnTypeFullyQualified = symbolReturnType.FullyQualifiedName(false);
+            }
+
             symbolReturnType.TryGetGenericArgumentCount(out var count);
             if (count <= 0)
             {
-                return startingPhrases.Select(_ => string.Format(_, returnType));
+                return Enumerable.Empty<string>()
+                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnType)))
+                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeFullyQualified)));
             }
 
             var ts = symbolReturnType.GetGenericArgumentsAsTs();

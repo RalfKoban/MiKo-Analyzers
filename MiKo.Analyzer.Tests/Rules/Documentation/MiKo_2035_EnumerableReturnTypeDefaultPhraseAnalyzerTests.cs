@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -177,8 +178,206 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_array_type()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Some integers.
+    /// </returns>
+    public int[] DoSomething { get; set; }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// An array of some integers.
+    /// </returns>
+    public int[] DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_generic_collection()
+        {
+            const string OriginalText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Some integers.
+    /// </returns>
+    public IList DoSomething { get; set; }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A collection of some integers.
+    /// </returns>
+    public IList DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_collection()
+        {
+            const string OriginalText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Some integers.
+    /// </returns>
+    public IEnumerable<int> DoSomething { get; set; }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A collection of some integers.
+    /// </returns>
+    public IEnumerable<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Task_with_generic_collection()
+        {
+            const string OriginalText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Some integers.
+    /// </returns>
+    public Task<IList<int>> DoSomething { get; set; }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of some integers.
+    /// </returns>
+    public Task<IList<int>> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Task_with_array()
+        {
+            const string OriginalText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Some integers.
+    /// </returns>
+    public Task<int[]> DoSomething { get; set; }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains an array of some integers.
+    /// </returns>
+    public Task<int[]> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2035_CodeFixProvider();
     }
 }

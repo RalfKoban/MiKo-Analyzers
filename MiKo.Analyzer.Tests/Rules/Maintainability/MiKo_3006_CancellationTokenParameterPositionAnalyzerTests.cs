@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3006_CancellationTokenParameterPositionAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3006_CancellationTokenParameterPositionAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_method_without_parameters() => No_issue_is_reported_for(@"

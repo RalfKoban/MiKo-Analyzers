@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -22,7 +23,7 @@ public class TestMe
 
         [TestCase("CreateModel")]
         [TestCase("CreateModels")]
-        [TestCase("CreateitemModel")]
+        [TestCase("CreateItemModel")]
         [TestCase("CreateModelItem")]
         public void An_issue_is_reported_for_invalid_event_(string name) => An_issue_is_reported_for(@"
 public class TestMe
@@ -31,8 +32,14 @@ public class TestMe
 }
 ");
 
+        [TestCase("class TestMe { public event EventHandler CreatedModel; }", "class TestMe { public event EventHandler Created; }")]
+        [TestCase("class TestMe { public event EventHandler ModelCreated; }", "class TestMe { public event EventHandler Created; }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1036_EventModelSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1036_EventModelSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1036_CodeFixProvider();
     }
 }

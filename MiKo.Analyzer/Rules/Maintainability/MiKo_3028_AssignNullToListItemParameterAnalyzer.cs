@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     // see also MiKo_3025_ReuseParameterAnalyzer
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_3028_AssignNullToListItemParameterAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3028_AssignNullToListItemParameterAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3028";
 

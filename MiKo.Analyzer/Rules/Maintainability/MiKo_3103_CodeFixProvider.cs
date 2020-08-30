@@ -17,29 +17,57 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override string Title => "Use hard-coded GUID";
 
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().First();
+        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        {
+            var invocation = syntaxNodes.OfType<InvocationExpressionSyntax>().First();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => CreateInvocationSyntax(
-                                                                                                       nameof(Guid),
-                                                                                                       nameof(Guid.Parse),
-                                                                                                       CreateGuid().ToString("D").SurroundedWithDoubleQuote());
+            return IsToStringCall(invocation.Parent)
+                       ? invocation.Parent.Parent
+                       : invocation;
+        }
+
+        protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        {
+            var guid = CreateGuid();
+            var format = "D";
+
+            var isToString = false;
+
+            if (syntax is InvocationExpressionSyntax i && IsToStringCall(i.Expression))
+            {
+                isToString = true;
+
+                var arguments = i.ArgumentList.Arguments;
+                if (arguments.Count == 1)
+                {
+                    format = arguments[0].Expression.ToString().Without(@"""");
+                }
+            }
+
+            var newGuid = guid.ToString(format).SurroundedWithDoubleQuote();
+
+            var literal = CreateStringLiteralExpressionSyntax(newGuid);
+
+            // we only want to have a GUID
+            if (isToString)
+            {
+                // we only want to have a GUID
+                return literal;
+            }
+
+            return CreateInvocationSyntax(nameof(Guid), nameof(Guid.Parse), SyntaxFactory.Argument(literal));
+        }
 
         protected virtual Guid CreateGuid() => Guid.NewGuid();
 
-        private static SyntaxNode CreateInvocationSyntax(string className, string methodName, string argument)
+        private static LiteralExpressionSyntax CreateStringLiteralExpressionSyntax(string value)
         {
-            // that's for the method call
-            var type = SyntaxFactory.IdentifierName(className);
-            var method = SyntaxFactory.IdentifierName(methodName);
-            var member = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
-
-            // that's for the argument
-            var token = SyntaxFactory.Token(default, SyntaxKind.StringLiteralToken, argument, argument, default);
-            var stringLiteral = SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
-            var arguments = SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(stringLiteral) }));
-
-            // combine both to complete call
-            return SyntaxFactory.InvocationExpression(member, arguments);
+            var token = SyntaxFactory.Token(default, SyntaxKind.StringLiteralToken, value, value, default);
+            return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
         }
+
+        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
+                                                            && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                            && m.GetName() == nameof(ToString);
     }
 }

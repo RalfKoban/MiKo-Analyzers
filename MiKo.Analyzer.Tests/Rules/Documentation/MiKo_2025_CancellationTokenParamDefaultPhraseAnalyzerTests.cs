@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -17,7 +20,7 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(System.Object))]
+        [TestCase(nameof(Object))]
         public void No_issue_is_reported_for_method_with_(string type) => No_issue_is_reported_for(@"
 using System;
 
@@ -82,8 +85,74 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='token'>Whatever.</param>
+    public void DoSomething(CancellationToken token) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='token'>
+    /// The token to monitor for cancellation requests.
+    /// </param>
+    public void DoSomething(CancellationToken token) { }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_on_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='token'>
+    /// Whatever.
+    /// </param>
+    public void DoSomething(CancellationToken token) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='token'>
+    /// The token to monitor for cancellation requests.
+    /// </param>
+    public void DoSomething(CancellationToken token) { }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2025_CancellationTokenParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2025_CancellationTokenParamDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2025_CodeFixProvider();
     }
 }

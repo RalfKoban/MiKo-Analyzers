@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -112,8 +113,48 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+public class TestMe
+{
+    public event EventHandler<System.Windows.Input.TouchEventArgs> TouchUp;
+
+    /// <summary>
+    /// My summary.
+    /// </summary>
+    /// <value>
+    /// My value.
+    /// </value>
+    public static readonly System.Windows.RoutedEvent TouchUpEvent;
+}";
+
+            const string FixedCode = @"
+using System.Windows;
+
+public class TestMe
+{
+    public event EventHandler<System.Windows.Input.TouchEventArgs> TouchUp;
+
+    /// <summary>
+    /// Identifies the <see cref=""TouchUp""/> routed event. This field is read-only.
+    /// </summary>
+    /// <value>
+    /// The identifier for the <see cref=""TouchUp""/> routed event.
+    /// </value>
+    public static readonly System.Windows.RoutedEvent TouchUpEvent;
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2006_RoutedEventFieldDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2006_RoutedEventFieldDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2006_CodeFixProvider();
     }
 }

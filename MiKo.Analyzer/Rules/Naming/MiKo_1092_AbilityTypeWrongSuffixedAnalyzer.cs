@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] TypeSuffixes =
             {
                 "Element",
-                "Entity",
+                Constants.Entity,
                 "Item",
                 "Info",
                 "Information",
@@ -25,6 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public MiKo_1092_AbilityTypeWrongSuffixedAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
+
+        internal static string FindBetterName(INamedTypeSymbol symbol) => GetProposedName(symbol.Name);
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(TypeSuffixes, Comparison);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -101,6 +102,14 @@ namespace MiKoSolutions.Analyzers
             return text;
         }
 
+        internal static string WithoutFirstWord(this string text)
+        {
+            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+            return text.Substring(firstSpace);
+        }
+
+        internal static string SecondWord(this string text) => text.TrimStart().WithoutFirstWord().TrimStart().FirstWord();
+
         private static XElement GetCommentElement(string commentXml)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
@@ -110,7 +119,7 @@ namespace MiKoSolutions.Analyzers
             {
                 return XElement.Parse(xml);
             }
-            catch (System.Xml.XmlException)
+            catch (XmlException)
             {
                 // happens in case of an invalid character
                 return null;

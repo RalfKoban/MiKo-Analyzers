@@ -35,9 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return "value";
                 }
 
-                var characters = parameterName.ToCharArray();
-                characters[0] = char.ToLower(characters[0]);
-                return string.Intern(new string(characters));
+                return parameterName.ToLowerCaseAt(0);
             }
 
             return "result";

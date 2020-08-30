@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_correct_usage_inside_property() => No_issue_is_reported_for(@"

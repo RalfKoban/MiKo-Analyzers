@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -57,9 +58,37 @@ public static class TestMeExtensions
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Doing something.
+/// </summary>
+public static class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Provides a set of <see langword=""static""/> methods for doing something.
+/// </summary>
+public static class TestMeExtensions
+{
+    public static void DoSomething(this int value) { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2039_ExtensionMethodsClassSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2039_CodeFixProvider();
 
         private static IEnumerable<string> ValidPhrases() => new[]
                                                                  {

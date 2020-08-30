@@ -50,15 +50,15 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1026|Variable names should be limited in length.|\-|\-|
 |MiKo_1027|Variable names in loops should be limited in length.|\-|\-|
 |MiKo_1030|Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types.|&#x2713;|&#x2713;|
-|MiKo_1031|Entity types should not use a 'Model' suffix.|&#x2713;|\-|
-|MiKo_1032|Methods dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
-|MiKo_1033|Parameters representing entities should not use a 'Model' suffix.|&#x2713;|\-|
-|MiKo_1034|Fields representing entities should not use a 'Model' suffix.|&#x2713;|\-|
-|MiKo_1035|Properties dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
-|MiKo_1036|Events dealing with entities should not use a 'Model' marker.|&#x2713;|\-|
+|MiKo_1031|Entity types should not use a 'Model' suffix.|&#x2713;|&#x2713;|
+|MiKo_1032|Methods dealing with entities should not use a 'Model' marker.|&#x2713;|&#x2713;|
+|MiKo_1033|Parameters representing entities should not use a 'Model' suffix.|&#x2713;|&#x2713;|
+|MiKo_1034|Fields representing entities should not use a 'Model' suffix.|&#x2713;|&#x2713;|
+|MiKo_1035|Properties dealing with entities should not use a 'Model' marker.|&#x2713;|&#x2713;|
+|MiKo_1036|Events dealing with entities should not use a 'Model' marker.|&#x2713;|&#x2713;|
 |MiKo_1037|Types should not be suffixed with 'Enum'.|&#x2713;|&#x2713;|
 |MiKo_1038|Classes that contain extension methods should end with same suffix.|&#x2713;|&#x2713;|
-|MiKo_1039|The 'this' parameter of extension methods should have a default name.|&#x2713;|\-|
+|MiKo_1039|The 'this' parameter of extension methods should have a default name.|&#x2713;|&#x2713;|
 |MiKo_1040|Parameters should not be suffixed with implementation details.|&#x2713;|\-|
 |MiKo_1041|Fields should not be suffixed with implementation details.|&#x2713;|\-|
 |MiKo_1042|'CancellationToken' parameters should have specific name.|&#x2713;|&#x2713;|
@@ -85,7 +85,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1063|Do not use abbreviations in names.|&#x2713;|\-|
 |MiKo_1064|Parameter names reflect their meaning and not their type.|&#x2713;|\-|
 |MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads.|&#x2713;|&#x2713;|
-|MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|\-|
+|MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|\-|
 |MiKo_1069|Property names reflect their meaning and not their type.|&#x2713;|\-|
 |MiKo_1070|Local collection variables shall use plural name.|&#x2713;|\-|
@@ -99,9 +99,9 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1084|Variables should not be suffixed with a number if their types have number suffixes.|&#x2713;|&#x2713;|
 |MiKo_1085|Parameters should not be suffixed with a number.|&#x2713;|&#x2713;|
 |MiKo_1086|Methods should not be named using numbers as slang.|&#x2713;|\-|
-|MiKo_1090|Parameters should not be suffixed with specific types.|&#x2713;|\-|
-|MiKo_1091|Variables should not be suffixed with specific types.|&#x2713;|\-|
-|MiKo_1092|'Ability' Types should not be suffixed with redundant information.|&#x2713;|\-|
+|MiKo_1090|Parameters should not be suffixed with specific types.|&#x2713;|&#x2713;|
+|MiKo_1091|Variables should not be suffixed with specific types.|&#x2713;|&#x2713;|
+|MiKo_1092|'Ability' Types should not be suffixed with redundant information.|&#x2713;|&#x2713;|
 |MiKo_1093|Do not use the suffix 'Object' or 'Struct'.|&#x2713;|&#x2713;|
 |MiKo_1094|Do not suffix types with passive namespace names.|&#x2713;|\-|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|\-|
@@ -118,7 +118,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1111|Test methods should be named in a fluent way.|&#x2713;|\-|
 |MiKo_1112|Do not name test data 'arbitrary'.|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently.|&#x2713;|&#x2713;|
-|MiKo_1201|Name exceptions as parameters consistently.|&#x2713;|\-|
+|MiKo_1201|Name exceptions as parameters consistently.|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'.|&#x2713;|&#x2713;|
 |MiKo_1400|Namespace names should be in plural.|&#x2713;|\-|
 |MiKo_1401|Namespaces should not contain technical language names.|&#x2713;|\-|
@@ -137,48 +137,48 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2001|Events should be documented properly.|&#x2713;|\-|
 |MiKo_2002|EventArgs should be documented properly.|&#x2713;|\-|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|&#x2713;|\-|
+|MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly.|&#x2713;|\-|
-|MiKo_2006|Routed events should be documented as done by the .NET Framework.|&#x2713;|\-|
-|MiKo_2010|Sealed classes should document being sealed.|&#x2713;|\-|
-|MiKo_2011|Unsealed classes should not lie about sealing.|&#x2713;|\-|
+|MiKo_2006|Routed events should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
+|MiKo_2010|Sealed classes should document being sealed.|&#x2713;|&#x2713;|
+|MiKo_2011|Unsealed classes should not lie about sealing.|&#x2713;|&#x2713;|
 |MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|&#x2713;|\-|
-|MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|\-|
+|MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|&#x2713;|\-|
-|MiKo_2016|Documentation for asynchronous methods should start with specific phrase.|&#x2713;|\-|
-|MiKo_2017|Dependency properties should be documented as done by the .NET Framework.|&#x2713;|\-|
+|MiKo_2016|Documentation for asynchronous methods should start with specific phrase.|&#x2713;|&#x2713;|
+|MiKo_2017|Dependency properties should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2018|Documentation should not use the ambiguous term 'Check'.|&#x2713;|\-|
 |MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ").|&#x2713;|\-|
-|MiKo_2020|Inherited documentation should be used with &lt;inheritdoc /&gt; marker.|&#x2713;|\-|
+|MiKo_2020|Inherited documentation should be used with &lt;inheritdoc /&gt; marker.|&#x2713;|&#x2713;|
 |MiKo_2021|Documentation of parameter should have a default starting phrase.|&#x2713;|\-|
 |MiKo_2022|Documentation of [out] parameters should have a default starting phrase.|&#x2713;|\-|
 |MiKo_2023|Documentation of Boolean parameters should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2024|Documentation of Enum parameters should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2025|Documentation of 'CancellationToken' parameters should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2024|Documentation of Enum parameters should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2025|Documentation of 'CancellationToken' parameters should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2026|Used parameters should not be documented to be unused.|&#x2713;|\-|
-|MiKo_2027|Serialization constructor parameters shall be documented with a specific phrase.|&#x2713;|\-|
+|MiKo_2027|Serialization constructor parameters shall be documented with a specific phrase.|&#x2713;|&#x2713;|
 |MiKo_2028|Documentation of parameter should not just contain the name of the parameter.|&#x2713;|\-|
-|MiKo_2029|&lt;inheritdoc&gt; documentation should not use a 'cref' to itself.|&#x2713;|\-|
+|MiKo_2029|&lt;inheritdoc&gt; documentation should not use a 'cref' to itself.|&#x2713;|&#x2713;|
 |MiKo_2030|Documentation of return value should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|&#x2713;|\-|
+|MiKo_2031|Documentation of Task return value should have a specific (starting) phrase.|&#x2713;|&#x2713;|
 |MiKo_2032|Documentation of Boolean return value should have a specific phrase.|&#x2713;|\-|
-|MiKo_2033|Documentation of String return value should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2034|Documentation of Enum return value should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2035|Documentation of collection return value should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2033|Documentation of String return value should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2034|Documentation of Enum return value should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2035|Documentation of collection return value should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2036|Documentation of Boolean or Enum property shall describe the default value.|&#x2713;|\-|
-|MiKo_2037|&lt;summary&gt; documentation of command properties should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2038|&lt;summary&gt; documentation of command should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2039|&lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2037|&lt;summary&gt; documentation of command properties should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2038|&lt;summary&gt; documentation of command should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2039|&lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2040|&lt;see langword="..."/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;.|&#x2713;|\-|
 |MiKo_2041|&lt;summary&gt; documentation should not contain other documentation tags.|&#x2713;|\-|
-|MiKo_2042|Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.|&#x2713;|\-|
-|MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2044|Documentation references method parameters correctly.|&#x2713;|\-|
+|MiKo_2042|Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.|&#x2713;|&#x2713;|
+|MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2044|Documentation references method parameters correctly.|&#x2713;|&#x2713;|
 |MiKo_2045|&lt;summary&gt; documentation should not reference parameters.|&#x2713;|\-|
 |MiKo_2046|Documentation should reference type parameters correctly.|&#x2713;|\-|
 |MiKo_2047|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|&#x2713;|\-|
-|MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|&#x2713;|\-|
+|MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'.|&#x2713;|\-|
 |MiKo_2050|Exceptions should be documented following the .NET Framework.|&#x2713;|\-|
 |MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').|&#x2713;|\-|
@@ -188,33 +188,33 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2055|Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.|&#x2713;|\-|
 |MiKo_2056|Throwing of ObjectDisposedException should be documented using a default ending phrase.|&#x2713;|\-|
 |MiKo_2057|Types that are not disposable shall not throw an ObjectDisposedException.|&#x2713;|\-|
-|MiKo_2060|Factories should be documented in a uniform way.|&#x2713;|\-|
-|MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|&#x2713;|\-|
+|MiKo_2060|Factories should be documented in a uniform way.|&#x2713;|&#x2713;|
+|MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|&#x2713;|&#x2713;|
 |MiKo_2071|&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.|&#x2713;|\-|
-|MiKo_2072|&lt;summary&gt; documentation should not start with 'Try'.|&#x2713;|\-|
-|MiKo_2073|&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines '.|&#x2713;|\-|
+|MiKo_2072|&lt;summary&gt; documentation should not start with 'Try'.|&#x2713;|&#x2713;|
+|MiKo_2073|&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines whether '.|&#x2713;|&#x2713;|
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase.|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|&#x2713;|\-|
-|MiKo_2090|Documentation for equality operator shall have default phrase.|&#x2713;|\-|
-|MiKo_2091|Documentation for inequality operator shall have default phrase.|&#x2713;|\-|
-|MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|&#x2713;|\-|
+|MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|&#x2713;|&#x2713;|
+|MiKo_2090|Documentation for equality operator shall have default phrase.|&#x2713;|&#x2713;|
+|MiKo_2091|Documentation for inequality operator shall have default phrase.|&#x2713;|&#x2713;|
+|MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|&#x2713;|&#x2713;|
 |MiKo_2101|&lt;example&gt; documentation should show code example in &lt;code&gt; tags.|&#x2713;|\-|
 |MiKo_2200|Use a capitalized letter to start the comment.|&#x2713;|\-|
 |MiKo_2201|Use a capitalized letter to start the sentences in the comment.|&#x2713;|\-|
-|MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|&#x2713;|\-|
-|MiKo_2203|Documentation should use the term 'unique identifier' instead of 'guid'.|&#x2713;|\-|
+|MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|&#x2713;|&#x2713;|
+|MiKo_2203|Documentation should use the term 'unique identifier' instead of 'guid'.|&#x2713;|&#x2713;|
 |MiKo_2204|Documentation should use &lt;list&gt; for enumerations.|&#x2713;|\-|
 |MiKo_2205|Documentation should use &lt;note&gt; for important information.|&#x2713;|\-|
 |MiKo_2206|Documentation should not use the term 'flag'.|&#x2713;|\-|
 |MiKo_2207|&lt;summary&gt; documentation shall be short.|&#x2713;|\-|
 |MiKo_2208|Documentation should not use the term 'an instance of'.|&#x2713;|\-|
 |MiKo_2209|Do not use double periods in documentation.|&#x2713;|\-|
-|MiKo_2210|Documentation should use the term 'information' instead of 'info'.|&#x2713;|\-|
-|MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|\-|
+|MiKo_2210|Documentation should use the term 'information' instead of 'info'.|&#x2713;|&#x2713;|
+|MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|&#x2713;|
 |MiKo_2212|Documentation should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
-|MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|\-|
+|MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|
 |MiKo_2303|Do not end comments with a period.|&#x2713;|\-|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
@@ -241,7 +241,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_3013|The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException.|&#x2713;|\-|
 |MiKo_3014|InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message.|&#x2713;|\-|
 |MiKo_3015|Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states.|&#x2713;|\-|
-|MiKo_3020|Use 'Task.CompletedTask' instead of 'Task.FromResult'.|&#x2713;|\-|
+|MiKo_3020|Use 'Task.CompletedTask' instead of 'Task.FromResult'.|&#x2713;|&#x2713;|
 |MiKo_3021|Do not use 'Task.Run' in the implementation.|&#x2713;|\-|
 |MiKo_3022|Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;.|&#x2713;|\-|
 |MiKo_3023|Do not use 'CancellationTokenSource' as parameter.|&#x2713;|\-|
@@ -258,15 +258,15 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors.|&#x2713;|\-|
 |MiKo_3037|Do not use magic numbers for timeouts.|&#x2713;|\-|
 |MiKo_3038|Properties should not use Linq or yield.|&#x2713;|\-|
-|MiKo_3040|Do not use Booleans unless you are absolutely sure there will never be a need for more than 2 values.|&#x2713;|\-|
+|MiKo_3040|Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values.|&#x2713;|\-|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|\-|
 |MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|\-|
 |MiKo_3047|Applied [ContentProperty] attributes shall use 'nameof'.|&#x2713;|\-|
 |MiKo_3048|ValueConverters shall have the [ValueConversion] attribute applied.|&#x2713;|\-|
 |MiKo_3049|Enum members shall have the [Description] attribute applied.|&#x2713;|\-|
-|MiKo_3050|DependencyProperty fields should be 'public static readonly'.|&#x2713;|\-|
+|MiKo_3050|DependencyProperty fields should be 'public static readonly'.|&#x2713;|&#x2713;|
 |MiKo_3051|DependencyProperty fields should be properly registered.|&#x2713;|\-|
-|MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|&#x2713;|\-|
+|MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|&#x2713;|&#x2713;|
 |MiKo_3053|DependencyPropertyKey fields should be properly registered.|&#x2713;|\-|
 |MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|&#x2713;|\-|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|\-|
@@ -290,7 +290,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|\-|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|&#x2713;|&#x2713;|
 |MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|&#x2713;|\-|
-|MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|\-|
+|MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|&#x2713;|
 |MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|\-|
 |MiKo_3107|Moq Mock condition matchers should be used on mocks only.|&#x2713;|\-|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|\-|
@@ -310,8 +310,8 @@ The following tables list all the 281 rules that are currently provided by the a
 ### Performance
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
-|MiKo_5001|'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.|&#x2713;|\-|
-|MiKo_5002|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|\-|
+|MiKo_5001|'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.|&#x2713;|&#x2713;|
+|MiKo_5002|'xxxFormat' methods should be invoked with multiple arguments only.|&#x2713;|&#x2713;|
 |MiKo_5003|Correct Log methods should be invoked for exceptions.|&#x2713;|\-|
 |MiKo_5010|Do not use 'object.Equals()' on value types.|&#x2713;|&#x2713;|
 |MiKo_5011|Do not concatenate strings with += operator.|&#x2713;|\-|

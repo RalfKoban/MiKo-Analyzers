@@ -13,6 +13,13 @@ namespace MiKoSolutions.Analyzers
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string ILog = "ILog";
         internal const string TestsSuffix = "Tests";
+        internal const string Entity = "Entity";
+        internal const string Entities = "Entities";
+
+#pragma warning disable SA1303 // Const field names should begin with upper-case letter
+        internal const string entity = "entity";
+        internal const string entities = "entities";
+#pragma warning restore SA1303 // Const field names should begin with upper-case letter
 
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
         internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
@@ -33,6 +40,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Markers
         {
+            internal const string StaticFieldPrefix = "s_";
+            internal const string MemberFieldPrefix = "_";
+            internal const string AlternativeMemberFieldPrefix = "m_";
+
             internal static readonly string[] BaseClasses = { "Abstract", "Base" };
             internal static readonly string[] Entities = { "Model", "Models", "model", "models" };
             internal static readonly string[] ViewModels = { "ViewModel", "ViewModels", "viewModel", "viewModels" };
@@ -44,9 +55,9 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] FieldPrefixes =
                 {
                     string.Empty,
-                    "_",
-                    "m_",
-                    "s_",
+                    MemberFieldPrefix,
+                    AlternativeMemberFieldPrefix,
+                    StaticFieldPrefix,
                 };
 
             internal static readonly string[] OSBitNumbers = { "32", "64" };
@@ -115,7 +126,7 @@ namespace MiKoSolutions.Analyzers
                     "Default-Implementation of ",
                     "Delegate",
                     "Does implement ",
-                    "Entity",
+                    Entity,
                     "Event",
                     "Extension class of",
                     "Extension of",
@@ -163,22 +174,26 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
 
-            internal static readonly string[] GenericTaskReturnTypeStartingPhrase =
-                {
-                    "A task that represents the asynchronous operation. The value of the <see cref=\"Task{TResult}.Result\" /> parameter contains ", // this is just to have a proposal how to optimize
-                    "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
-                    "A task that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\" /> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\" /> parameter contains ",
-                    "A <see cref=\"System.Threading.Tasks.Task`1\"/> that represents the asynchronous operation. The value of the <see cref=\"System.Threading.Tasks.Task`1.Result\"/> parameter contains ",
-                };
+            internal static readonly string NonGenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation.";
+
+            internal static readonly string GenericTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate + " The value of the {1} parameter contains ";
 
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
-                    "A task that represents the asynchronous operation.",
-                    "A <see cref=\"System.Threading.Tasks.Task\"/> that represents the asynchronous operation.",
-                    "A <see cref=\"System.Threading.Tasks.Task\" /> that represents the asynchronous operation.",
+                    string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "task"),
+                    string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task\"/>"),
+                    string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task\" />"),
+                };
+
+            internal static readonly string[] GenericTaskReturnTypeStartingPhrase =
+                {
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"Task{TResult}.Result\" />"), // this is just to have a proposal how to optimize
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
                 };
 
             internal static readonly string[] BooleanReturnTypeStartingPhrase =
@@ -217,37 +232,45 @@ namespace MiKoSolutions.Analyzers
                     ", otherwise with a result of <see langword=\"false\" />.",
                 };
 
+            internal static readonly string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
+
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
-                    "A <see cref=\"string\"/> that contains ", // this is just to have a proposal how to optimize
-                    "A <see cref=\"string\"/> that consists of ",
-                    "A <see cref=\"string\"/> that represents ",
-                    "A <see cref=\"string\" /> that contains ",
-                    "A <see cref=\"string\" /> that consists of ",
-                    "A <see cref=\"string\" /> that represents ",
-                    "A <see cref=\"System.String\"/> that consists of ",
-                    "A <see cref=\"System.String\"/> that contains ",
-                    "A <see cref=\"System.String\"/> that represents ",
-                    "A <see cref=\"System.String\" /> that consists of ",
-                    "A <see cref=\"System.String\" /> that contains ",
-                    "A <see cref=\"System.String\" /> that represents ",
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "contains"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "contains"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "contains"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "consists of"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "represents"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "represents"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "represents"),
+                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "represents"),
                 };
+
+            internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "task") + " The {0} property on the task object returns a {1} that {2} ";
 
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
                 {
-                    "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that contains ", // this is just to have a proposal how to optimize
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\"/> that contains ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that contains ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that contains ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that contains ",
-                    "A task that represents the asynchronous operation. The <see cref=\"Task{TResult}.Result\" /> property on the task object returns a <see cref=\"string\" /> that consists of ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\"/> that consists of ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\"/> property on the task object returns a <see cref=\"System.String\" /> that consists of ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\"/> that consists of ",
-                    "A task that represents the asynchronous operation. The <see cref=\"System.Threading.Tasks.Task`1.Result\" /> property on the task object returns a <see cref=\"System.String\" /> that consists of ",
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"Task{TResult}.Result\"/>", "<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\"/>", "contains"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\" />", "contains"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\"/>", "contains"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "contains"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"Task{TResult}.Result\"/>", "<see cref=\"string\"/>", "consists of"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\"/>", "consists of"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\" />", "consists of"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\"/>", "consists of"),
+                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "consists of"),
                 };
 
+            internal const string EnumStartingPhrase = "Defines values that specify ";
+
             internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
+
+            internal static readonly string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "the enumerated constant that is the ").ToArray();
 
@@ -266,28 +289,36 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "an array of ").ToArray();
 
+            internal static readonly string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
+
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
-                    "Identifies the <see cref=\"{0}\"/> dependency property.",
-                    "Identifies the <see cref=\"{0}\" /> dependency property.",
+                    string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
+
+            internal static readonly string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
 
             internal static readonly string[] DependencyPropertyFieldValuePhrase =
                 {
-                    "The identifier for the <see cref=\"{0}\"/> dependency property.",
-                    "The identifier for the <see cref=\"{0}\" /> dependency property.",
+                    string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
                 };
+
+            internal static readonly string RoutedEventFieldSummaryPhraseTemplate = "Identifies the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldSummaryPhrase =
                 {
-                    "Identifies the <see cref=\"{0}\"/> routed event.",
-                    "Identifies the <see cref=\"{0}\" /> routed event.",
+                    string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
+
+            internal static readonly string RoutedEventFieldValuePhraseTemplate = "The identifier for the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldValuePhrase =
                 {
-                    "The identifier for the <see cref=\"{0}\"/> routed event.",
-                    "The identifier for the <see cref=\"{0}\" /> routed event.",
+                    string.Format(RoutedEventFieldValuePhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(RoutedEventFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
             internal const string SealedClassPhrase = "This class cannot be inherited.";
@@ -373,16 +404,20 @@ namespace MiKoSolutions.Analyzers
 
             internal const string FactorySummaryPhrase = "Provides support for creating ";
 
+            internal static readonly string FactoryCreateMethodSummaryStartingPhraseTemplate = "Creates a new instance of the {0} type with ";
+
             internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =
                 {
-                    "Creates a new instance of the <see cref=\"{0}\"/> type with ",
-                    "Creates a new instance of the <see cref=\"{0}\" /> type with ",
+                    string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
+
+            internal static readonly string FactoryCreateCollectionMethodSummaryStartingPhraseTemplate = "Creates a collection of new instances of the {0} type with ";
 
             internal static readonly string[] FactoryCreateCollectionMethodSummaryStartingPhrase =
                 {
-                    "Creates a collection of new instances of the <see cref=\"{0}\"/> type with ",
-                    "Creates a collection of new instances of the <see cref=\"{0}\" /> type with ",
+                    string.Format(FactoryCreateCollectionMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(FactoryCreateCollectionMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
@@ -391,10 +426,12 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
 
+            internal static readonly string ExtensionMethodClassStartingPhraseTemplate = "Provides a set of {0} methods for ";
+
             internal static readonly string[] ExtensionMethodClassStartingPhrase =
                 {
-                    "Provides a set of <see langword=\"static\"/> methods for ",
-                    "Provides a set of <see langword=\"static\" /> methods for ",
+                    string.Format(ExtensionMethodClassStartingPhraseTemplate, "<see langword=\"static\"/>"),
+                    string.Format(ExtensionMethodClassStartingPhraseTemplate, "<see langword=\"static\" />"),
                 };
 
             internal static readonly string[] ArgumentNullExceptionStartingPhrase =
@@ -457,28 +494,34 @@ namespace MiKoSolutions.Analyzers
 
             internal const string CommandSummaryStartingPhrase = "Represents a command that can ";
 
+            internal static readonly string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
+
             internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =
                 {
-                    @"Gets or sets the <see cref=""ICommand""/> that can ",
-                    @"Gets or sets the <see cref=""ICommand"" /> that can ",
-                    @"Gets or sets the <see cref=""System.Windows.Input.ICommand""/> that can ",
-                    @"Gets or sets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
+                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
+
+            internal static readonly string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
                 {
-                    @"Gets the <see cref=""ICommand""/> that can ",
-                    @"Gets the <see cref=""ICommand"" /> that can ",
-                    @"Gets the <see cref=""System.Windows.Input.ICommand""/> that can ",
-                    @"Gets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
+                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
+
+            internal static readonly string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
 
             internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
                 {
-                    @"Sets the <see cref=""ICommand""/> that can ",
-                    @"Sets the <see cref=""ICommand"" /> that can ",
-                    @"Sets the <see cref=""System.Windows.Input.ICommand""/> that can ",
-                    @"Sets the <see cref=""System.Windows.Input.ICommand"" /> that can ",
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
+                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
             internal const string FieldIsReadOnly = "This field is read-only.";

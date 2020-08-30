@@ -20,6 +20,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IParameterSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method && IsConversionExtension(method))
+            {
+                return Source;
+            }
+
+            return symbol.Type.IsEnumerable() ? Values : Value;
+        }
+
         protected override bool ShallAnalyze(IMethodSymbol method) => method.IsExtensionMethod;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
@@ -31,13 +41,38 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                    : AnalyzeName(parameter, Value, Values, Source);
         }
 
-        private static bool IsConversionExtension(IMethodSymbol method) => !method.ReturnsVoid
-                                                                        && method.Name.Length > 2
-                                                                        && method.Name[2].IsUpperCase()
-                                                                        && method.Name.StartsWith("To", StringComparison.Ordinal);
+        private static bool IsConversionExtension(IMethodSymbol method)
+        {
+            if (method.ReturnsVoid)
+            {
+                return false;
+            }
+
+            return IsConversionExtension(method, "To") || IsConversionExtension(method, "From");
+        }
+
+        private static bool IsConversionExtension(IMethodSymbol method, string prefix)
+        {
+            var methodName = method.Name;
+
+            if (methodName.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                if (methodName.Length == prefix.Length)
+                {
+                    return true;
+                }
+
+                if (methodName.Length > prefix.Length && methodName[prefix.Length].IsUpperCase())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names) => names.Any(_ => _ == parameter.Name)
-                                                                                                          ? Enumerable.Empty<Diagnostic>()
-                                                                                                          : new[] { Issue(parameter, names.HumanizedConcatenated()) };
+                                                                                                              ? Enumerable.Empty<Diagnostic>()
+                                                                                                              : new[] { Issue(parameter, names.HumanizedConcatenated()) };
     }
 }

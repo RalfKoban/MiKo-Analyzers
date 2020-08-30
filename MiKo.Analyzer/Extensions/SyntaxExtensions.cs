@@ -12,6 +12,14 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxExtensions
     {
+        internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
+
+        private static readonly SyntaxTrivia[] XmlCommentStart =
+                                                                {
+                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
+                                                                    XmlCommentExterior,
+                                                                };
+
         private static readonly HashSet<string> TypeUnderTestVariableNames = new HashSet<string>
                                                                                  {
                                                                                      "objectUnderTest",
@@ -47,7 +55,7 @@ namespace MiKoSolutions.Analyzers
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
                 return parameterSymbol;
 
-                // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently)
+                // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently in v3.3)
                 // var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
             }
 
@@ -177,6 +185,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
 
+        internal static bool IsBoolean(this TypeSyntax syntax)
+        {
+            switch (syntax.ToString())
+            {
+                case "bool":
+                case nameof(Boolean):
+                case nameof(System) + "." + nameof(Boolean):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
         {
             var type = syntax.GetTypeSymbol(semanticModel);
@@ -224,6 +246,89 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.DescendantNodes().OfType<InvocationExpressionSyntax>()
                                                                                                                                                            .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax comment, string text)
+        {
+            var contents = new List<XmlNodeSyntax>(comment.Content);
+
+            for (var index = 0; index < comment.Content.Count; index++)
+            {
+                if (comment.Content[index] is XmlTextSyntax s)
+                {
+                    var originalTextTokens = s.TextTokens;
+                    var textTokens = new List<SyntaxToken>(originalTextTokens);
+
+                    for (var i = 0; i < originalTextTokens.Count; i++)
+                    {
+                        var token = originalTextTokens[i];
+
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
+                        {
+                            var modifiedText = token.Text.Without(text).Replace("  ", " ").TrimEnd();
+                            if (modifiedText.IsNullOrWhiteSpace())
+                            {
+                                textTokens.Remove(token);
+
+                                if (i > 0)
+                                {
+                                    textTokens.Remove(originalTextTokens[i - 1]);
+                                }
+                            }
+                            else
+                            {
+                                textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                            }
+                        }
+                    }
+
+                    var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                    contents[index] = xmlText;
+                }
+            }
+
+            return SyntaxFactory.List(contents);
+        }
+
+        internal static XmlTextSyntax WithStartText(this XmlTextSyntax text, string startText)
+        {
+            var textTokens = new List<SyntaxToken>(text.TextTokens);
+
+            for (var i = 0; i < textTokens.Count; i++)
+            {
+                var token = textTokens[i];
+
+                // ignore trivia such as " /// "
+                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                {
+                    var originalText = token.Text;
+
+                    if (originalText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
+
+                    var space = i == 0 ? string.Empty : " ";
+
+                    var modifiedText = space + startText + originalText.Trim().ToLowerCaseAt(0);
+
+                    textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                    break;
+                }
+            }
+
+            var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+            return xmlText;
+        }
+
+        internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken token) => token.WithLeadingTrivia(XmlCommentStart);
+
+        internal static T WithLeadingXmlComment<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(XmlCommentStart);
+
+        internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken token) => token.WithTrailingTrivia(XmlCommentStart);
+
+        internal static T WithTrailingXmlComment<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(XmlCommentStart);
+
+        internal static T WithEndOfLine<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
 

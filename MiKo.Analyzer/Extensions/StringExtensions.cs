@@ -68,9 +68,13 @@ namespace System
             return false;
         }
 
-        public static bool ContainsAny(this string value, string[] phrases) => ContainsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Contains(_, comparison));
+        public static bool ContainsAny(this string value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => value.ContainsAny((IEnumerable<string>)phrases, comparison);
+
+        public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Contains(_, comparison));
 
         public static bool EqualsAny(this string value, string[] phrases) => string.IsNullOrEmpty(value) is false && EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
@@ -274,6 +278,54 @@ namespace System
             }
 
             return count > limit;
+        }
+
+        /// <summary>
+        /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
+        /// </param>
+        /// <returns>
+        /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
+        /// </returns>
+        public static string ToLowerCaseAt(this string value, int index)
+        {
+            if (value.IsNullOrWhiteSpace() || index >= value.Length)
+            {
+                return value;
+            }
+
+            var characters = value.ToCharArray();
+            characters[index] = char.ToLower(characters[index]);
+            return string.Intern(new string(characters));
+        }
+
+        /// <summary>
+        /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <param name="index">
+        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
+        /// </param>
+        /// <returns>
+        /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
+        /// </returns>
+        public static string ToUpperCaseAt(this string value, int index)
+        {
+            if (value.IsNullOrWhiteSpace() || index >= value.Length)
+            {
+                return value;
+            }
+
+            var characters = value.ToCharArray();
+            characters[index] = char.ToUpper(characters[index]);
+            return string.Intern(new string(characters));
         }
     }
 }

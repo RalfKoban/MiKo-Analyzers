@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2070";
 
-        private static readonly string[] Phrases = { "Return", "Returns" };
+        internal static readonly string[] Phrases = { "Return", "Returns" };
 
         public MiKo_2070_ReturnsSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -48,19 +48,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string GetProposal(ISymbol symbol)
         {
-            switch (symbol)
+            if (symbol is IMethodSymbol m && m.ReturnType.IsBoolean())
             {
-                case IPropertySymbol p when p.GetReturnType()?.IsBoolean() is true:
-                case IMethodSymbol m when m.ReturnType.IsBoolean():
-                {
-                    return "Determines";
-                }
-
-                default:
-                {
-                    return "Gets";
-                }
+                return "Determines whether";
             }
+
+            return "Gets";
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
+
+using NUnit.Framework;
+
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     [TestFixture]
-    public class MiKo_0001_LinesOfCodeAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_0001_LinesOfCodeAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void Valid_files_are_not_reported_as_warnings() => No_issue_is_reported_for(@"
@@ -224,7 +227,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 }
 ");
 
-        protected override Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_0001_LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_0001_LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };
 
         protected override string GetDiagnosticId() => MiKo_0001_LinesOfCodeAnalyzer.Id;
     }

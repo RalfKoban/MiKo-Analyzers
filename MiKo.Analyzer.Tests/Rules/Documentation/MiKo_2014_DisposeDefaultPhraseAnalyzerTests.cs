@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -144,8 +145,74 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_method_without_parameter()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some text.
+    /// </summary>
+    private void Dispose() { }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    private void Dispose() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parameter()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some text.
+    /// </summary>
+    /// <param name='disposing'>Some flag.</param>
+    private void Dispose(bool disposing) { }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    /// <param name=""disposing"">
+    /// Indicates whether unmanaged resources shall be freed.
+    /// </param>
+    private void Dispose(bool disposing) { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2014_DisposeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2014_DisposeDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2014_CodeFixProvider();
     }
 }

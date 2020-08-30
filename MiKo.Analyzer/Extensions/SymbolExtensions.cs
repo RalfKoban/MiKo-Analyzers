@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
@@ -127,6 +128,12 @@ namespace MiKoSolutions.Analyzers
                                                                                                           typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                                                                                                           genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
+
+        private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormatWithoutAlias = new SymbolDisplayFormat(
+                                                                                                          globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                          typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                          genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
         internal static bool IsEventHandler(this IMethodSymbol method)
         {
@@ -563,7 +570,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
 
-        internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(System.Threading.Tasks.Task);
+        internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(Task);
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext context) => FindContainingType(context.ContainingSymbol);
 
@@ -664,18 +671,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool ContainsExtensionMethods(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
-        internal static string FullyQualifiedName(this ISymbol symbol)
+        internal static string FullyQualifiedName(this ISymbol symbol, bool useAlias = true)
         {
             switch (symbol)
             {
                 case IMethodSymbol m:
-                    return m.ContainingType.FullyQualifiedName() + "." + m.Name;
+                    return m.ContainingType.FullyQualifiedName(useAlias) + "." + m.Name;
 
                 case IPropertySymbol p:
-                    return p.ContainingType.FullyQualifiedName() + "." + p.Name;
+                    return p.ContainingType.FullyQualifiedName(useAlias) + "." + p.Name;
+
+                case INamedTypeSymbol t when useAlias is false:
+                    return t.ToDisplayString(FullyQualifiedDisplayFormatWithoutAlias);
 
                 default:
-                    return symbol.ToDisplayString(FullyQualifiedDisplayFormat);
+                    return symbol.ToDisplayString(FullyQualifiedDisplayFormat); // makes use of aliases for language such as 'int' instead of 'System.Int32'
             }
         }
 
@@ -782,7 +792,7 @@ namespace MiKoSolutions.Analyzers
         internal static string MinimalTypeName(this ITypeSymbol symbol) => symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 
         /// <summary>
-        /// Determines if a <see cref="IPropertySymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
+        /// Determines whether a <see cref="IPropertySymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
         /// <param name="symbol">The symbol to inspect.</param>
         /// <returns>
@@ -791,7 +801,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool MatchesProperty(this IParameterSymbol symbol) => symbol.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(symbol.Name, _.Name, StringComparison.OrdinalIgnoreCase));
 
         /// <summary>
-        /// Determines if a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
+        /// Determines whether a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
         /// <param name="symbol">The symbol to inspect.</param>
         /// <returns>

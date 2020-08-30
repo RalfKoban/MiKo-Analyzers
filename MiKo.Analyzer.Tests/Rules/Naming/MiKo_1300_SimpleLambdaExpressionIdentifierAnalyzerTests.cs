@@ -58,12 +58,13 @@ public class TestMe
 }
 ");
 
-        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Where(### => ### == null) { } } }")]
-        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Where(### => ###.Length == 0 || ###.Length == 1) { } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(### => ### == null) { } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(### => ###.Length == 0 || ###.Length == 1) { } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(### => ###.Any(*** => ***.Equals('a'))) { } } }")]
         public void Code_gets_fixed_(string template)
         {
-            var originalCode = template.Replace("###", "item");
-            var fixedCode = template.Replace("###", "_");
+            var originalCode = template.Replace("###", "item").Replace("***", "c");
+            var fixedCode = template.Replace("###", "_").Replace("***", "__");
 
             VerifyCSharpFix(originalCode, fixedCode);
         }

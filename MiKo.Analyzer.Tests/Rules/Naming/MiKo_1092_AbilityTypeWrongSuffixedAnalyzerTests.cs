@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -35,8 +36,18 @@ public class " + name + @"
 }
 ");
 
+        [TestCase("class ComparableItem { }", "class Comparable { }")]
+        [TestCase("class ComparableEntity { }", "class Comparable { }")]
+        [TestCase("class ComparableElement { }", "class Comparable { }")]
+        [TestCase("class ComparableElementInfo { }", "class Comparable { }")]
+        [TestCase("class ComparableInfo { }", "class Comparable { }")]
+        [TestCase("class ComparableInformation { }", "class Comparable { }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1092_AbilityTypeWrongSuffixedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1092_AbilityTypeWrongSuffixedAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1092_CodeFixProvider();
     }
 }

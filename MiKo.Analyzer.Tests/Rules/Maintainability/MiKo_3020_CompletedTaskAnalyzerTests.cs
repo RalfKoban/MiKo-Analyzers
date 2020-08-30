@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -131,8 +132,71 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void Code_gets_fixed_when_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething() => Task.FromResult(42);
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething() => Task.CompletedTask;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_assigned_to_variable_and_strangely_formatted()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething()
+    {
+        var result = Task
+                        .FromResult(42);
+        return result;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething()
+    {
+        var result = Task.CompletedTask;
+        return result;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3020_CompletedTaskAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3020_CompletedTaskAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3020_CodeFixProvider();
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -22,18 +24,18 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 "ulong",
                 "byte",
                 "sbyte",
-                nameof(System.Boolean),
-                nameof(System.Char),
-                nameof(System.Int16),
-                nameof(System.Int32),
-                nameof(System.Int64),
-                nameof(System.UInt16),
-                nameof(System.UInt32),
-                nameof(System.UInt64),
-                nameof(System.Byte),
-                nameof(System.SByte),
-                nameof(System.Guid),
-                nameof(System.AttributeTargets),
+                nameof(Boolean),
+                nameof(Char),
+                nameof(Int16),
+                nameof(Int32),
+                nameof(Int64),
+                nameof(UInt16),
+                nameof(UInt32),
+                nameof(UInt64),
+                nameof(Byte),
+                nameof(SByte),
+                nameof(Guid),
+                nameof(AttributeTargets),
             };
 
         [Test]
@@ -251,6 +253,12 @@ public class TestMe
         [TestCase(
              "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) != true) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x, bool b) { if (Equals(x, Guid.Empty) && b) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x, bool b) { if (x == Guid.Empty && b) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x, bool b) { if (b && Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x, bool b) { if (b && x == Guid.Empty) throw new NotSupportedException(); } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_5010_EqualsAnalyzer.Id;

@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -166,9 +167,131 @@ public sealed class TestMe
 }
 ", 2);
 
+        [Test]
+        public void Code_gets_fixed_for_BR_tag_on_type()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Does something.
+/// <br />
+/// Something more.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Does something.
+/// <para/>
+/// Something more.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_BR_tag_on_method()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <br />
+    /// Something more.
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <para/>
+    /// Something more.
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_P_tag_on_type()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Does something.
+/// <p>
+/// Something more.
+/// </p>
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Does something.
+/// <para>
+/// Something more.
+/// </para>
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_P_tag_on_method()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <p>
+    /// Something more.
+    /// </p>
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <para>
+    /// Something more.
+    /// </para>
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2042_BrParaAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2042_BrParaAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2042_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static string[] CreateWrongItems()

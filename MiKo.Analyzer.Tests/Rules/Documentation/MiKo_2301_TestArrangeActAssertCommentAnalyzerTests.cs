@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -89,13 +90,14 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_test_method_([Values("", " ")] string gap) => Assert.Multiple(() =>
-                                                                                                                                    {
-                                                                                                                                        foreach (var test in Tests)
-                                                                                                                                        {
-                                                                                                                                            foreach (var comment in Comments)
-                                                                                                                                            {
-                                                                                                                                                An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_test_method_([Values("", " ")] string gap)
+            => Assert.Multiple(() =>
+                                    {
+                                        foreach (var test in Tests)
+                                        {
+                                            foreach (var comment in Comments)
+                                            {
+                                                An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -107,18 +109,19 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    });
+                                            }
+                                        }
+                                    });
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_([Values("", " ")] string gap) => Assert.Multiple(() =>
-                                                                                                                                                      {
-                                                                                                                                                          foreach (var fixture in TestFixtures)
-                                                                                                                                                          {
-                                                                                                                                                              foreach (var comment in Comments)
-                                                                                                                                                              {
-                                                                                                                                                                  An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_([Values("", " ")] string gap)
+            => Assert.Multiple(() =>
+                                      {
+                                          foreach (var fixture in TestFixtures)
+                                          {
+                                              foreach (var comment in Comments)
+                                              {
+                                                  An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -130,18 +133,19 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                                              }
-                                                                                                                                                          }
-                                                                                                                                                      });
+                                              }
+                                          }
+                                      });
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_with_visual_separators_([Values("", " ")] string gap) => Assert.Multiple(() =>
-                                                                                                                                                      {
-                                                                                                                                                          foreach (var fixture in TestFixtures)
-                                                                                                                                                          {
-                                                                                                                                                              foreach (var comment in Comments)
-                                                                                                                                                              {
-                                                                                                                                                                  An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_non_test_method_in_test_class_with_visual_separators_([Values("", " ")] string gap)
+            => Assert.Multiple(() =>
+                                      {
+                                          foreach (var fixture in TestFixtures)
+                                          {
+                                              foreach (var comment in Comments)
+                                              {
+                                                  An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -155,12 +159,92 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                                              }
-                                                                                                                                                          }
-                                                                                                                                                      });
+                                              }
+                                          }
+                                      });
+
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        // arrange
+        var i = 1;
+
+        // act
+        var j = 2;
+
+        // assert
+        var k = 3;
+    }
+}
+";
+            const string FixedCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        var i = 1;
+
+        var j = 2;
+
+        var k = 3;
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_visual_separator()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        var i = 1;
+
+        // ---------------------
+        // act
+        // ---------------------
+        var j = 2;
+    }
+}
+";
+            const string FixedCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        var i = 1;
+
+        var j = 2;
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         protected override string GetDiagnosticId() => MiKo_2301_TestArrangeActAssertCommentAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2301_TestArrangeActAssertCommentAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2301_CodeFixProvider();
     }
 }

@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public class MiKo_1019_ClearRemoveMethodsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1019_ClearRemoveMethodsAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_Clear_Remove_method() => No_issue_is_reported_for(@"

@@ -140,7 +140,9 @@ namespace MiKoSolutions.Analyzers.Rules
         [Test]
         public static void CodeFixProviders_use_simplified_name_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
         {
-            Assert.That(provider.GetType().Name, Does.StartWith(provider.FixableDiagnosticIds.First()).And.EndsWith("_CodeFixProvider"));
+            var id = provider.FixableDiagnosticIds.First();
+
+            Assert.That(provider.GetType().Name, Does.StartWith(id).And.EndsWith("_CodeFixProvider"));
         }
 
         [Test, Ignore("Just to find gaps")]

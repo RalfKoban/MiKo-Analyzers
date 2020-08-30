@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -7,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2010_SealedClassSummaryAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2010_SealedClassSummaryAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void Struct_is_not_reported() => No_issue_is_reported_for(@"
@@ -88,8 +89,109 @@ public sealed class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Some documentation
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Some documentation
+/// This class cannot be inherited.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_wrong_placed_sealed_text()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// This class cannot be inherited.
+/// Some documentation.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Some documentation.
+/// This class cannot be inherited.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_wrong_placed_sealed_text_on_single_line()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Some text. This class cannot be inherited.
+/// Some documentation.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Some text.
+/// Some documentation.
+/// This class cannot be inherited.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_wrong_placed_sealed_text_all_on_single_line()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// Some text. This class cannot be inherited. Some documentation.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Some text. Some documentation.
+/// This class cannot be inherited.
+/// </summary>
+public sealed class TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2010_SealedClassSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2010_SealedClassSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2010_CodeFixProvider();
     }
 }

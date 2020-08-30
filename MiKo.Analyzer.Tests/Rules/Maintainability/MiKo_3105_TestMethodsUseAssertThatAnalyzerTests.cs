@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -165,8 +166,78 @@ namespace Bla
 }
 ");
 
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.NotNull(o); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.NotNull(o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotEmpty(o); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Empty); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotEmpty(o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Empty, ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsTrue(b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsTrue(b, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True, ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsFalse(b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsFalse(b, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False, ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreEqual(42, 11); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.EqualTo(42)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreEqual(42, 11, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.EqualTo(42), ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreNotEqual(42, 11); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.Not.EqualTo(42)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreNotEqual(42, 11, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.Not.EqualTo(42), ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Greater(42, 11); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.GreaterThan(11)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Greater(42, 11, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.GreaterThan(11), ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.GreaterOrEqual(42, 11); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.GreaterThanOrEqualTo(11)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.GreaterOrEqual(42, 11, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.GreaterThanOrEqualTo(11), ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Less(42, 11); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.LessThan(11)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Less(42, 11, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.LessThan(11), ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.LessOrEqual(42, 11); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.LessThanOrEqualTo(11)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.LessOrEqual(42, 11, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.LessThanOrEqualTo(11), ""my message""); }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3105_TestMethodsUseAssertThatAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3105_CodeFixProvider();
     }
 }

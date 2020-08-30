@@ -1737,7 +1737,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.</value>
   </data>
   <data name="MiKo_2072_Description" xml:space="preserve">
-    <value>'Try' methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase 'Attempts to'.</value>
+    <value>'Try' methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase 'Attempts to '.</value>
   </data>
   <data name="MiKo_2072_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -1746,13 +1746,13 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;summary&gt; documentation should not start with 'Try'.</value>
   </data>
   <data name="MiKo_2073_Description" xml:space="preserve">
-    <value>'Contain' methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase 'Determines '.</value>
+    <value>'Contain' methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase 'Determines whether '.</value>
   </data>
   <data name="MiKo_2073_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2073_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines '.</value>
+    <value>&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines whether '.</value>
   </data>
   <data name="MiKo_2074_Description" xml:space="preserve">
     <value>'Contain' methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase ' to seek.'.</value>
@@ -2373,7 +2373,7 @@ Such properties should be methods instead to make it clear that they behave diff
     <value>Use an Enum instead</value>
   </data>
   <data name="MiKo_3040_Title" xml:space="preserve">
-    <value>Do not use Booleans unless you are absolutely sure there will never be a need for more than 2 values.</value>
+    <value>Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values.</value>
   </data>
   <data name="MiKo_3041_Description" xml:space="preserve">
     <value>EventArgs should not use delegates such as 'Action' or 'Func' because the callee needs to know exactly how the delegate behaves.
@@ -2441,7 +2441,7 @@ In addition, the correct property names, property types and owing types should b
     <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_3051_MessageFormat" xml:space="preserve">
-    <value>Use {1} instead</value>
+    <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3051_Title" xml:space="preserve">
     <value>DependencyProperty fields should be properly registered.</value>
@@ -2466,7 +2466,7 @@ In addition, the correct property names, property types and owing types should b
     <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
   </data>
   <data name="MiKo_3053_MessageFormat" xml:space="preserve">
-    <value>Use {1} instead</value>
+    <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3053_Title" xml:space="preserve">
     <value>DependencyPropertyKey fields should be properly registered.</value>

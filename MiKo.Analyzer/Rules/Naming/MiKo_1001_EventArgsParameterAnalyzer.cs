@@ -19,12 +19,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var method = symbol.GetEnclosingMethod();
 
-            if (method.Parameters.Length == 1)
+            var applicableParameters = method.Parameters.Where(_ => _.Type.IsEventArgs()).ToList();
+            if (applicableParameters.Count == 1)
             {
-                return method.Name != nameof(Equals) ? "e" : "other";
+                return method.Name == nameof(Equals) ? "other" : "e";
             }
 
-            var i = method.Parameters.IndexOf(symbol);
+            var i = applicableParameters.IndexOf(symbol);
             return "e" + i;
         }
 

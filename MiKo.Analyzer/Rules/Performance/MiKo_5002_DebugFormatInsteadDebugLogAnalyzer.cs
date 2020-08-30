@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public const string Id = "MiKo_5002";
 
-        private const string Format = nameof(Format);
+        internal const string Format = nameof(Format);
         private const string Debug = nameof(Debug);
         private const string Info = nameof(Info);
         private const string Warn = nameof(Warn);

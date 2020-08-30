@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -115,8 +116,130 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_readonly_arrow_Command_property()
+        {
+            const string OriginalText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Something.
+    /// </summary>
+    public ICommand DoSomething => null;
+}
+";
+
+            const string FixedText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets the <see cref=""ICommand""/> that can something.
+    /// </summary>
+    public ICommand DoSomething => null;
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_readonly_Command_property()
+        {
+            const string OriginalText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Something.
+    /// </summary>
+    public ICommand DoSomething { get; }
+}
+";
+
+            const string FixedText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets the <see cref=""ICommand""/> that can something.
+    /// </summary>
+    public ICommand DoSomething { get; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_writeonly_Command_property()
+        {
+            const string OriginalText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Something.
+    /// </summary>
+    public ICommand DoSomething { set; }
+}
+";
+
+            const string FixedText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Sets the <see cref=""ICommand""/> that can something.
+    /// </summary>
+    public ICommand DoSomething { set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_readwrite_Command_property()
+        {
+            const string OriginalText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Something.
+    /// </summary>
+    public ICommand DoSomething { get; set; }
+}
+";
+
+            const string FixedText = @"
+using System.Windows.Input;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets or sets the <see cref=""ICommand""/> that can something.
+    /// </summary>
+    public ICommand DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2037_CommandPropertySummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2037_CommandPropertySummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2037_CodeFixProvider();
     }
 }
