@@ -32,9 +32,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var index = GetExpectedMethodIndex(methods);
 
-            return ReferenceEquals(method, methods[index])
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(method) };
+            var otherMethod = methods[index];
+
+            if (ReferenceEquals(method, otherMethod))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { Issue(method) };
         }
     }
 }
