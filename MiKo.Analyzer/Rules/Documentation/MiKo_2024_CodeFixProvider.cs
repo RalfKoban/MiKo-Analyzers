@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2024_EnumParamDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Fix comment of Enum parameter";
+        protected override string Title => "Fix comment start of Enum parameter";
 
         protected override XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {

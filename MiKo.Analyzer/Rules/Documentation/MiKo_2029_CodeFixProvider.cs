@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2029_InheritdocUsesWrongCrefAnalyzer.Id;
 
-        protected override string Title => "Remove ref value from <inheritdoc/>";
+        protected override string Title => "Remove 'cref' value from <inheritdoc/>";
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 

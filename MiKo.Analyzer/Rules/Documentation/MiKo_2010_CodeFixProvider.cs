@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2010_SealedClassSummaryAnalyzer.Id;
 
-        protected override string Title => "Append sealed text";
+        protected override string Title => "Append sealed text to comment";
 
         protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
