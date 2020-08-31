@@ -356,6 +356,17 @@ namespace MiKoSolutions.Analyzers
             return root.InsertNodesAfter(nodeInList, new[] { newNode });
         }
 
+        internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax syntax, MethodDeclarationSyntax method)
+        {
+            // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
+            var openBraceToken = syntax.OpenBraceToken.WithoutTrivia().WithEndOfLine();
+            var closeBraceToken = syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine().WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia);
+
+            return syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
+                         .WithOpenBraceToken(openBraceToken)
+                         .WithCloseBraceToken(closeBraceToken);
+        }
+
         private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax method) => method.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
