@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var method = syntax.ChildNodes().OfType<MethodDeclarationSyntax>().First(_ => _.IsTestOneTimeSetUpMethod());
 
-            var modifiedType = syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia);
+            var modifiedType = syntax.RemoveNodeAndAdjustOpenCloseBraces(method);
 
             var firstMethod = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().First();
 

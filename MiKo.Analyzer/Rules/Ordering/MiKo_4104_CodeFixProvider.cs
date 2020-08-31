@@ -18,18 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var method = syntax.ChildNodes().OfType<MethodDeclarationSyntax>().First(_ => _.IsTestOneTimeTearDownMethod());
 
-            var modifiedType = syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia);
+            var modifiedType = syntax.RemoveNodeAndAdjustOpenCloseBraces(method);
 
             var firstMethod = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().First();
+
             if (firstMethod.IsTestOneTimeSetUpMethod())
             {
-                // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
-                modifiedType = modifiedType.WithOpenBraceToken(modifiedType.OpenBraceToken.WithoutTrivia().WithEndOfLine());
-
-                // but have to search for the items again
-                firstMethod = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().First();
-
-                // and we have to add the trivia to the method (as the original one belonged to the open brace token which we removed above)
+                // we have to add the trivia to the method (as the original one belonged to the open brace token which we removed above)
                 return modifiedType.InsertNodeAfter(firstMethod, method.WithLeadingEndOfLine());
             }
 
