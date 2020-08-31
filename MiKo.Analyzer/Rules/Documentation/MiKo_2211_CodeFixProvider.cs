@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var para = SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
                 var newSummary = summary.AddContent(para).AddContent(remarks.Content.ToArray());
 
-                return SyntaxFactory.DocumentationComment(newSummary).WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed);
+                return SyntaxFactory.DocumentationComment(newSummary).WithEndOfLine();
             }
         }
     }

@@ -20,17 +20,6 @@ namespace MiKoSolutions.Analyzers
                                                                     XmlCommentExterior,
                                                                 };
 
-        private static readonly HashSet<string> TypeUnderTestVariableNames = new HashSet<string>
-                                                                                 {
-                                                                                     "objectUnderTest",
-                                                                                     "sut",
-                                                                                     "subjectUnderTest",
-                                                                                     "unitUnderTest",
-                                                                                     "uut",
-                                                                                     "testCandidate",
-                                                                                     "testObject",
-                                                                                 };
-
         internal static bool IsSupported(this SyntaxNodeAnalysisContext context, LanguageVersion expectedVersion)
         {
             var languageVersion = ((CSharpParseOptions)context.Node.SyntaxTree.Options).LanguageVersion;
@@ -39,7 +28,19 @@ namespace MiKoSolutions.Analyzers
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
 
-        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => TypeUnderTestVariableNames.Contains(syntax.GetName());
+        internal static bool IsTestMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
+
+        internal static bool IsTestSetUpMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
+
+        internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
+
+        internal static bool IsTestOneTimeSetUpMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
+
+        internal static bool IsTestOneTimeTearDownMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
+
+        internal static bool IsTypeUnderTestCreationMethod(this MethodDeclarationSyntax method) => Constants.Names.TypeUnderTestMethodNames.Contains(method.GetName());
+
+        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => Constants.Names.TypeUnderTestVariableNames.Contains(syntax.GetName());
 
         internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
         {
@@ -213,6 +214,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsVoid(this TypeSyntax type) => type is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
+
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
         internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode node, string methodName)
@@ -328,9 +331,43 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithTrailingXmlComment<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(XmlCommentStart);
 
+        internal static T WithIntentation<T>(this T node) where T : SyntaxNode => node.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
         internal static T WithEndOfLine<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
+        internal static SyntaxToken WithEndOfLine(this SyntaxToken token) => token.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithLeadingEndOfLine<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken token) => token.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
+
+        internal static TRoot InsertNodeBefore<TRoot>(this TRoot root, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
+        {
+            // method needs to be intended and a CRLF needs to be added
+            var modifiedNode = newNode.WithIntentation().WithEndOfLine();
+
+            return root.InsertNodesBefore(nodeInList, new[] { modifiedNode });
+        }
+
+        internal static TRoot InsertNodeAfter<TRoot>(this TRoot root, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
+        {
+            return root.InsertNodesAfter(nodeInList, new[] { newNode });
+        }
+
+        internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax syntax, MethodDeclarationSyntax method)
+        {
+            // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
+            var openBraceToken = syntax.OpenBraceToken.WithoutTrivia().WithEndOfLine();
+            var closeBraceToken = syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine().WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia);
+
+            return syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
+                         .WithOpenBraceToken(openBraceToken)
+                         .WithCloseBraceToken(closeBraceToken);
+        }
+
+        private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax method) => method.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
 

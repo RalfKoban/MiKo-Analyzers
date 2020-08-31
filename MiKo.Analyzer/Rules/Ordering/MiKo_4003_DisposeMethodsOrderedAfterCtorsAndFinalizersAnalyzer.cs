@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var interfaceImplementations = GetMethodsOrderedByLocation(symbol, MethodKind.ExplicitInterfaceImplementation).ToList();
 
             var ordinaryDisposeMethods = ordinaryMethods.Where(_ => _.DeclaredAccessibility == Accessibility.Public && _.Parameters.None() && _.Name == nameof(IDisposable.Dispose)).ToList();
-            var interfaceDisposeMethods = interfaceImplementations.Where(_ => _.Parameters.None() && _.Name == nameof(IDisposable) + "." + nameof(IDisposable.Dispose)).ToList();
+            var interfaceDisposeMethods = interfaceImplementations.Where(_ => _.Parameters.None() && _.Name == nameof(System) + "." + nameof(IDisposable) + "." + nameof(IDisposable.Dispose)).ToList();
 
             var otherMethods = ordinaryMethods.Except(ordinaryDisposeMethods).Concat(interfaceImplementations.Except(interfaceDisposeMethods)).Select(_ => _.GetStartingLine()).ToList();
 

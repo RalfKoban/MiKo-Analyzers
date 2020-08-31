@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -26,7 +27,9 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_method_as_first_method_if_no_ctor_or_finalizer_is_available() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public void Dispose() { }
 }
@@ -34,7 +37,9 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_interface_method_as_first_method_if_no_ctor_or_finalizer_is_available() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     void IDisposable.Dispose() { }
 }
@@ -42,7 +47,9 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_method_as_first_method_after_ctor() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
@@ -52,7 +59,9 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_interface_method_as_first_method_after_ctor() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
@@ -62,9 +71,11 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_method_as_first_method_after_finalizer() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
-    public ~TestMe() { }
+    ~TestMe() { }
 
     public void Dispose() { }
 }
@@ -72,9 +83,11 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_interface_method_as_first_method_after_finalizer() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
-    public ~TestMe() { }
+    ~TestMe() { }
 
     void IDisposable.Dispose() { }
 }
@@ -82,11 +95,13 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_method_before_other_methods() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
-    public ~TestMe() { }
+    ~TestMe() { }
 
     public void Dispose() { }
 
@@ -96,11 +111,13 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_class_with_Dispose_interface_method_before_other_methods() => No_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
-    public ~TestMe() { }
+    ~TestMe() { }
 
     void IDisposable.Dispose() { }
 
@@ -110,7 +127,9 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_class_with_Dispose_method_before_ctor() => An_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public void Dispose() { }
 
@@ -120,7 +139,9 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_class_with_Dispose_interface_method_before_ctor() => An_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     void IDisposable.Dispose() { }
 
@@ -130,35 +151,41 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_class_with_Dispose_method_in_between_ctor_and_finalizer() => An_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
     public void Dispose() { }
 
-    public ~TestMe() { }
+    ~TestMe() { }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_class_with_Dispose_interface_method_in_between_ctor_and_finalizer() => An_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
     void IDisposable.Dispose() { }
 
-    public ~TestMe() { }
+    ~TestMe() { }
 }
 ");
 
         [Test]
         public void An_issue_is_reported_for_class_with_Dispose_method_after_other_methods() => An_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
-    public ~TestMe() { }
+    ~TestMe() { }
 
     public void DoSomething() { }
 
@@ -168,11 +195,13 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_class_with_Dispose_interface_method_after_other_methods() => An_issue_is_reported_for(@"
-public class TestMe
+using System;
+
+public class TestMe : IDisposable
 {
     public TestMe() { }
 
-    public ~TestMe() { }
+    ~TestMe() { }
 
     public void DoSomething() { }
 
@@ -180,10 +209,176 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_interface_implementation_and_ctor_and_finalizer()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    ~TestMe() { }
+
+    public void DoSomething() { }
+
+    void IDisposable.Dispose() { }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    ~TestMe() { }
+
+    void IDisposable.Dispose() { }
+
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ctor_and_finalizer()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    ~TestMe() { }
+
+    public void DoSomething() { }
+
+    public void Dispose() { }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    ~TestMe() { }
+
+    public void Dispose() { }
+
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ctor_only()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public void DoSomething() { }
+
+    public void Dispose() { }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public void Dispose() { }
+
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_finalizer_only()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    public void DoSomething() { }
+
+    public void Dispose() { }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    public void Dispose() { }
+
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_no_ctor_or_finalizer()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void DoSomething() { }
+
+    public void Dispose() { }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         //// TODO RKN: partial parts
 
         protected override string GetDiagnosticId() => MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_4003_CodeFixProvider();
     }
 }

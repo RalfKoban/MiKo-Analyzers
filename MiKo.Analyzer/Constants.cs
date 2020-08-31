@@ -1,6 +1,8 @@
 ﻿#pragma warning disable SA1203 // Constants should appear before fields
 
 using System;
+using System.Collections.Generic;
+using System.Composition;
 using System.Linq;
 
 namespace MiKoSolutions.Analyzers
@@ -581,6 +583,127 @@ namespace MiKoSolutions.Analyzers
             internal const string Default = "_";
             internal const string Fallback = "__";
             internal const string Fallback2 = "___";
+        }
+
+        internal static class Names
+        {
+            internal static readonly IEnumerable<string> TestMethodAttributeNames = new HashSet<string>
+                                                                                        {
+                                                                                            "Test",
+                                                                                            "TestAttribute",
+                                                                                            "TestCase",
+                                                                                            "TestCaseAttribute",
+                                                                                            "TestCaseSource",
+                                                                                            "TestCaseSourceAttribute",
+                                                                                            "Theory",
+                                                                                            "TheoryAttribute",
+                                                                                            "Fact",
+                                                                                            "FactAttribute",
+                                                                                            "TestMethod",
+                                                                                            "TestMethodAttribute",
+                                                                                        };
+
+            internal static readonly IEnumerable<string> TestClassAttributeNames = new HashSet<string>
+                                                                                       {
+                                                                                           "TestFixture",
+                                                                                           "TestFixtureAttribute",
+                                                                                           "TestClass",
+                                                                                           "TestClassAttribute",
+                                                                                       };
+
+            internal static readonly IEnumerable<string> TestSetupAttributeNames = new HashSet<string>
+                                                                                       {
+                                                                                           "SetUp",
+                                                                                           "SetUpAttribute",
+                                                                                           "TestInitialize",
+                                                                                           "TestInitializeAttribute",
+                                                                                       };
+
+            internal static readonly IEnumerable<string> TestTearDownAttributeNames = new HashSet<string>
+                                                                                          {
+                                                                                              "TearDown",
+                                                                                              "TearDownAttribute",
+                                                                                              "TestCleanup",
+                                                                                              "TestCleanupAttribute",
+                                                                                          };
+
+            internal static readonly IEnumerable<string> TestOneTimeSetupAttributeNames = new HashSet<string>
+                                                                                              {
+                                                                                                  "OneTimeSetUp",
+                                                                                                  "OneTimeSetUpAttribute",
+                                                                                                  "TestFixtureSetUp", // deprecated NUnit 2.6
+                                                                                                  "TestFixtureSetUpAttribute", // deprecated NUnit 2.6
+                                                                                              };
+
+            internal static readonly IEnumerable<string> TestOneTimeTearDownAttributeNames = new HashSet<string>
+                                                                                                 {
+                                                                                                     "OneTimeTearDown",
+                                                                                                     "OneTimeTearDownAttribute",
+                                                                                                     "TestFixtureTearDown", // deprecated NUnit 2.6
+                                                                                                     "TestFixtureTearDownAttribute", // deprecated NUnit 2.6
+                                                                                                 };
+
+            internal static readonly IEnumerable<string> ImportAttributeNames = new HashSet<string>
+                                                                                    {
+                                                                                        "Import",
+                                                                                        nameof(ImportAttribute),
+                                                                                        "ImportMany",
+                                                                                        nameof(ImportManyAttribute),
+                                                                                    };
+
+            internal static readonly IEnumerable<string> ImportingConstructorAttributeNames = new HashSet<string>
+                                                                                                  {
+                                                                                                      "ImportingConstructor",
+                                                                                                      nameof(ImportingConstructorAttribute),
+                                                                                                  };
+
+            internal static readonly IEnumerable<string> TypeUnderTestRawFieldNames = new[]
+                                                                                          {
+                                                                                              "ObjectUnderTest",
+                                                                                              "objectUnderTest",
+                                                                                              "SubjectUnderTest",
+                                                                                              "subjectUnderTest",
+                                                                                              "Sut",
+                                                                                              "sut",
+                                                                                              "UnitUnderTest",
+                                                                                              "unitUnderTest",
+                                                                                              "Uut",
+                                                                                              "uut",
+                                                                                              "TestCandidate",
+                                                                                              "TestObject",
+                                                                                              "testCandidate",
+                                                                                              "testObject",
+                                                                                          };
+
+            internal static readonly IEnumerable<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+
+            internal static readonly IEnumerable<string> TypeUnderTestPropertyNames = new HashSet<string>
+                                                                                          {
+                                                                                              "ObjectUnderTest",
+                                                                                              "Sut",
+                                                                                              "SuT",
+                                                                                              "SUT",
+                                                                                              "SubjectUnderTest",
+                                                                                              "UnitUnderTest",
+                                                                                              "Uut",
+                                                                                              "UuT",
+                                                                                              "UUT",
+                                                                                              "TestCandidate",
+                                                                                              "TestObject",
+                                                                                          };
+
+            internal static readonly IEnumerable<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
+
+            internal static readonly IEnumerable<string> TypeUnderTestVariableNames = new HashSet<string>
+                                                                                          {
+                                                                                              "objectUnderTest",
+                                                                                              "sut",
+                                                                                              "subjectUnderTest",
+                                                                                              "unitUnderTest",
+                                                                                              "uut",
+                                                                                              "testCandidate",
+                                                                                              "testObject",
+                                                                                          };
         }
     }
 }

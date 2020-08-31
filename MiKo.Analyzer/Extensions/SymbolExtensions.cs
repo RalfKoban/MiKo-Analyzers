@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -16,123 +15,16 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SymbolExtensions
     {
-        private static readonly HashSet<string> TestMethodAttributeNames = new HashSet<string>
-                                                                               {
-                                                                                   "Test",
-                                                                                   "TestAttribute",
-                                                                                   "TestCase",
-                                                                                   "TestCaseAttribute",
-                                                                                   "TestCaseSource",
-                                                                                   "TestCaseSourceAttribute",
-                                                                                   "Theory",
-                                                                                   "TheoryAttribute",
-                                                                                   "Fact",
-                                                                                   "FactAttribute",
-                                                                                   "TestMethod",
-                                                                                   "TestMethodAttribute",
-                                                                               };
-
-        private static readonly HashSet<string> TestClassAttributeNames = new HashSet<string>
-                                                                              {
-                                                                                  "TestFixture",
-                                                                                  "TestFixtureAttribute",
-                                                                                  "TestClass",
-                                                                                  "TestClassAttribute",
-                                                                              };
-
-        private static readonly HashSet<string> TestSetupAttributeNames = new HashSet<string>
-                                                                              {
-                                                                                  "SetUp",
-                                                                                  "SetUpAttribute",
-                                                                                  "TestInitialize",
-                                                                                  "TestInitializeAttribute",
-                                                                              };
-
-        private static readonly HashSet<string> TestTearDownAttributeNames = new HashSet<string>
-                                                                                 {
-                                                                                     "TearDown",
-                                                                                     "TearDownAttribute",
-                                                                                     "TestCleanup",
-                                                                                     "TestCleanupAttribute",
-                                                                                 };
-
-        private static readonly HashSet<string> TestOneTimeSetupAttributeNames = new HashSet<string>
-                                                                              {
-                                                                                  "OneTimeSetUp",
-                                                                                  "OneTimeSetUpAttribute",
-                                                                                  "TestFixtureSetUp", // deprecated NUnit 2.6
-                                                                                  "TestFixtureSetUpAttribute", // deprecated NUnit 2.6
-                                                                              };
-
-        private static readonly HashSet<string> TestOneTimeTearDownAttributeNames = new HashSet<string>
-                                                                                 {
-                                                                                     "OneTimeTearDown",
-                                                                                     "OneTimeTearDownAttribute",
-                                                                                     "TestFixtureTearDown", // deprecated NUnit 2.6
-                                                                                     "TestFixtureTearDownAttribute", // deprecated NUnit 2.6
-                                                                                 };
-
-        private static readonly HashSet<string> ImportAttributeNames = new HashSet<string>
-                                                                           {
-                                                                               "Import",
-                                                                               nameof(ImportAttribute),
-                                                                               "ImportMany",
-                                                                               nameof(ImportManyAttribute),
-                                                                           };
-
-        private static readonly HashSet<string> ImportingConstructorAttributeNames = new HashSet<string>
-                                                                                         {
-                                                                                             "ImportingConstructor",
-                                                                                             nameof(ImportingConstructorAttribute),
-                                                                                         };
-
-        private static readonly string[] TypeUnderTestRawFieldNames =
-            {
-                "ObjectUnderTest",
-                "objectUnderTest",
-                "SubjectUnderTest",
-                "subjectUnderTest",
-                "Sut",
-                "sut",
-                "UnitUnderTest",
-                "unitUnderTest",
-                "Uut",
-                "uut",
-                "TestCandidate",
-                "TestObject",
-                "testCandidate",
-                "testObject",
-            };
-
-        private static readonly HashSet<string> TypeUnderTestFieldNames = Constants.Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
-
-        private static readonly HashSet<string> TypeUnderTestPropertyNames = new HashSet<string>
-                                                                                  {
-                                                                                      "ObjectUnderTest",
-                                                                                      "Sut",
-                                                                                      "SuT",
-                                                                                      "SUT",
-                                                                                      "SubjectUnderTest",
-                                                                                      "UnitUnderTest",
-                                                                                      "Uut",
-                                                                                      "UuT",
-                                                                                      "UUT",
-                                                                                      "TestCandidate",
-                                                                                      "TestObject",
-                                                                                  };
-
-        private static readonly HashSet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
-
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormat = new SymbolDisplayFormat(
-                                                                                                          globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
 
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormatWithoutAlias = new SymbolDisplayFormat(
-                                                                                                          globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
         internal static bool IsEventHandler(this IMethodSymbol method)
@@ -274,19 +166,19 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasAttributeApplied(this ISymbol symbol, string attributeName) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
 
-        internal static bool IsTestClass(this ITypeSymbol symbol) => symbol?.TypeKind == TypeKind.Class && symbol.GetAttributeNames().Any(TestClassAttributeNames.Contains);
+        internal static bool IsTestClass(this ITypeSymbol symbol) => symbol?.TypeKind == TypeKind.Class && symbol.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
 
-        internal static bool IsTestMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestMethodAttributeNames.Contains);
+        internal static bool IsTestMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
 
-        internal static bool IsTestSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestSetupAttributeNames.Contains);
+        internal static bool IsTestSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
 
-        internal static bool IsTestTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestTearDownAttributeNames.Contains);
+        internal static bool IsTestTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
 
-        internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestOneTimeSetupAttributeNames.Contains);
+        internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
 
-        internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(TestOneTimeTearDownAttributeNames.Contains);
+        internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
 
-        internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol method) => method.ReturnsVoid is false && TypeUnderTestMethodNames.Contains(method.Name);
+        internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol method) => method.ReturnsVoid is false && Constants.Names.TypeUnderTestMethodNames.Contains(method.Name);
 
         internal static bool IsSpecialAccessor(this IMethodSymbol method)
         {
@@ -314,9 +206,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsStreamingContextParameter(this IParameterSymbol parameter) => parameter.Type.Name == nameof(StreamingContext);
 
-        internal static bool IsImportingConstructor(this ISymbol symbol) => symbol.IsConstructor() && symbol.GetAttributeNames().Any(ImportingConstructorAttributeNames.Contains);
+        internal static bool IsImportingConstructor(this ISymbol symbol) => symbol.IsConstructor() && symbol.GetAttributeNames().Any(Constants.Names.ImportingConstructorAttributeNames.Contains);
 
-        internal static bool IsImport(this ISymbol symbol) => symbol.GetAttributeNames().Any(ImportAttributeNames.Contains);
+        internal static bool IsImport(this ISymbol symbol) => symbol.GetAttributeNames().Any(Constants.Names.ImportAttributeNames.Contains);
 
         internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, string.Intern(typeof(T).FullName));
 
@@ -366,7 +258,7 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
-                    {
+                {
                     while (true)
                     {
                         var fullName = string.Intern(symbol.ToString());
@@ -696,8 +588,8 @@ namespace MiKoSolutions.Analyzers
             // TODO: RKN what about base types?
             var members = symbol.GetMembersIncludingInherited<ISymbol>().ToList();
             var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).Select(_ => _.ReturnType);
-            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
-            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
+            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
+            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
         }
