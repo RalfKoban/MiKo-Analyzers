@@ -12,17 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => MiKo_4101_TestSetUpMethodOrderingAnalyzer.Id;
 
-        protected override string Title => "Place test initialization method directly after one-time methods";
+        protected override string Title => Resources.MiKo_4101_MessageFormat;
 
         protected override SyntaxNode GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax syntax)
         {
             var method = syntax.ChildNodes().OfType<MethodDeclarationSyntax>().First(_ => _.IsTestSetUpMethod());
 
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
-            var modifiedType = syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
-                                     .WithOpenBraceToken(syntax.OpenBraceToken.WithoutTrivia().WithEndOfLine())
-                                     .WithCloseBraceToken(syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
-                                                                .WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia));
+            var modifiedType = syntax.RemoveNodeAndAdjustOpenCloseBraces(method);
 
             var otherMethods = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().ToList();
 

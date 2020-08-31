@@ -3,7 +3,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Ordering
@@ -13,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => MiKo_4104_TestOneTimeTearDownMethodOrderingAnalyzer.Id;
 
-        protected override string Title => "Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods";
+        protected override string Title => Resources.MiKo_4104_MessageFormat;
 
         protected override SyntaxNode GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax syntax)
         {

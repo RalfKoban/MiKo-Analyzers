@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => MiKo_4103_TestOneTimeSetUpMethodOrderingAnalyzer.Id;
 
-        protected override string Title => "Place [OneTimeSetUp] method before all other methods";
+        protected override string Title => Resources.MiKo_4103_MessageFormat;
 
         protected override SyntaxNode GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax syntax)
         {
