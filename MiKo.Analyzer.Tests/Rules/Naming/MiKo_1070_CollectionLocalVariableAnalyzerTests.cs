@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -170,8 +171,82 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_variable()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] number = new int[0];
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] numbers = new int[0];
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_variable_declaration_pattern()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        switch (o)
+        {
+            case int[] item: return;
+            default: return;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        switch (o)
+        {
+            case int[] items: return;
+            default: return;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1070_CollectionLocalVariableAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1070_CollectionLocalVariableAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1070_CodeFixProvider();
     }
 }
