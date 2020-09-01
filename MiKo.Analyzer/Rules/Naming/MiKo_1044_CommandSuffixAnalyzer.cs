@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1044";
 
-        private const string Suffix = "Command";
+        internal const string Suffix = "Command";
 
         private static readonly string[] SingleSuffix = { Suffix };
         private static readonly string[] Suffixes = { "_command", Suffix };

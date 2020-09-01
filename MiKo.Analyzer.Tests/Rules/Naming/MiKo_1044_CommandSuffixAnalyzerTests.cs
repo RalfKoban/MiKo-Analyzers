@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -28,7 +29,7 @@ public interface ITestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_command_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_command_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -38,7 +39,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_command_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_command_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -129,8 +130,136 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_field()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    private ICommand m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    private ICommand m_fieldCommand;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    public ICommand Bla { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    public ICommand BlaCommand { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    public ICommand DoSomething() => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    public ICommand DoSomethingCommand() => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_interface()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Windows.Input;
+
+public interface ITestMe : ICommand
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Windows.Input;
+
+public interface ITestMeCommand : ICommand
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMe : ICommand
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1044_CommandSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1044_CommandSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1044_CodeFixProvider();
     }
 }

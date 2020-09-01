@@ -63,7 +63,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1041|Fields should not be suffixed with implementation details.|&#x2713;|\-|
 |MiKo_1042|'CancellationToken' parameters should have specific name.|&#x2713;|&#x2713;|
 |MiKo_1043|'CancellationToken' variables should have specific name.|&#x2713;|&#x2713;|
-|MiKo_1044|Commands should be suffixed with 'Command'.|&#x2713;|\-|
+|MiKo_1044|Commands should be suffixed with 'Command'.|&#x2713;|&#x2713;|
 |MiKo_1045|Methods that are invoked by commands should not be suffixed with 'Command'.|&#x2713;|&#x2713;|
 |MiKo_1046|Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).|&#x2713;|&#x2713;|
 |MiKo_1047|Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.|&#x2713;|&#x2713;|
