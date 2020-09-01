@@ -638,6 +638,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this ITypeSymbol symbol) => symbol.Locations.Length > 1;
 
+        internal static bool IsGeneric(this ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.TypeArguments.Length > 0;
+
         internal static bool TryGetGenericArgumentType(this ITypeSymbol symbol, out ITypeSymbol result, int index = 0)
         {
             result = null;
