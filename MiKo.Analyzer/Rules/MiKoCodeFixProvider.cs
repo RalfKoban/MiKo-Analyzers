@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax);
+            var updatedSyntax = GetUpdatedSyntax(document, syntax);
             if (updatedSyntax is null || ReferenceEquals(updatedSyntax, syntax))
             {
                 return Task.FromResult(document);
@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => null;
 
-        protected virtual SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => null;
+        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => null;
 
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
 

@@ -28,6 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected abstract string GetNewName(ISymbol symbol);
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => throw new NotSupportedException("This code fix provider does not modify the syntax");
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => throw new NotSupportedException("This code fix provider does not modify the syntax");
     }
 }

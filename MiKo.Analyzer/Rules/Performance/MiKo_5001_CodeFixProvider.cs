@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var statement = (ExpressionStatementSyntax)syntax;
             var call = (InvocationExpressionSyntax)statement.Expression;

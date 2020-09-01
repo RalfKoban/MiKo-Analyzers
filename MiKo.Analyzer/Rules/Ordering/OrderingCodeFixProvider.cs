@@ -10,8 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<BaseTypeDeclarationSyntax>().First();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => GetUpdatedTypeSyntax((BaseTypeDeclarationSyntax)syntax);
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => GetUpdatedTypeSyntax(document, (BaseTypeDeclarationSyntax)syntax);
 
-        protected abstract SyntaxNode GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax syntax);
+        protected abstract SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax);
     }
 }

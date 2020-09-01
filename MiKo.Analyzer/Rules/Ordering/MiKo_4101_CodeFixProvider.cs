@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4101_MessageFormat;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax syntax)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax)
         {
             var method = syntax.ChildNodes().OfType<MethodDeclarationSyntax>().First(_ => _.IsTestSetUpMethod());
 

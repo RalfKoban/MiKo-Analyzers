@@ -301,7 +301,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_4001|Methods with same name should be ordered based on the number of their parameters.|&#x2713;|\-|
 |MiKo_4002|Methods with same name and accessibility should be placed side-by-side.|&#x2713;|\-|
 |MiKo_4003|Dispose methods should be placed directly after constructors and finalizers.|&#x2713;|&#x2713;|
-|MiKo_4004|The interface that gives a type its name should be placed directly after the type's declaration.|&#x2713;|\-|
+|MiKo_4004|The interface that gives a type its name should be placed directly after the type's declaration.|&#x2713;|&#x2713;|
 |MiKo_4101|Test initialization methods should be ordered directly after One-Time methods.|&#x2713;|&#x2713;|
 |MiKo_4102|Test cleanup methods should be ordered before test methods.|&#x2713;|&#x2713;|
 |MiKo_4103|One-Time test initialization methods should be ordered before all other methods.|&#x2713;|&#x2713;|

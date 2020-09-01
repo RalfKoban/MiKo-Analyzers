@@ -13,6 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Apply default comment to command";
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => CommentStartingWith((XmlElementSyntax)syntax, Constants.Comments.CommandSummaryStartingPhrase);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentStartingWith((XmlElementSyntax)syntax, Constants.Comments.CommandSummaryStartingPhrase);
     }
 }
