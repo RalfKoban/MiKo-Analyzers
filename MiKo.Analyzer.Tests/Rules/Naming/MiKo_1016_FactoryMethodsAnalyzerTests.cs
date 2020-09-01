@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -116,8 +117,68 @@ public class TestMeFactory : BaseFactory
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_multiTypes_factory()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMeFactory
+{
+    public int Bla() => 42;
+
+    public string Blubb() => string.Empty;
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMeFactory
+{
+    public int CreateInt32() => 42;
+
+    public string CreateString() => string.Empty;
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_single_type_factory()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe
+{
+}
+
+public class TestMeFactory
+{
+    public TestMe Bla() => new TestMe();
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe
+{
+}
+
+public class TestMeFactory
+{
+    public TestMe Create() => new TestMe();
+}
+";
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1016_FactoryMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1016_FactoryMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1016_CodeFixProvider();
     }
 }

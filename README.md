@@ -37,7 +37,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1013|Methods should not be named 'Notify' or 'OnNotify'.|&#x2713;|\-|
 |MiKo_1014|Methods should not be named 'Check'.|&#x2713;|\-|
 |MiKo_1015|Methods should not be named 'Init'.|&#x2713;|&#x2713;|
-|MiKo_1016|Factory methods should be named 'Create'.|&#x2713;|\-|
+|MiKo_1016|Factory methods should be named 'Create'.|&#x2713;|&#x2713;|
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|\-|
 |MiKo_1018|Methods should not be suffixed with noun of a verb.|&#x2713;|\-|
 |MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|&#x2713;|&#x2713;|
