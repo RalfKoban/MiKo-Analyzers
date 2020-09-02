@@ -58,6 +58,62 @@ public class TestMe
 }
 ");
 
+        [TestCase("_command")]
+        [TestCase("m_command")]
+        [TestCase("_myCommand")]
+        [TestCase("m_myCommand")]
+        public void No_issue_is_reported_for_correctly_named_command_field_(string fieldName) => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    private ICommand " + fieldName + @";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_command_method_in_test() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    public ICommand CreateObjectUnderTest() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_command_property_in_test() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    public ICommand ObjectUnderTest { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_command_field_in_test() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    private ICommand ObjectUnderTest;
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_incorrectly_named_command_class() => An_issue_is_reported_for(@"
 using System;
@@ -113,20 +169,6 @@ using System.Windows.Input;
 public class TestMe
 {
     private ICommand m_bla;
-}
-");
-
-        [TestCase("_command")]
-        [TestCase("m_command")]
-        [TestCase("_myCommand")]
-        [TestCase("m_myCommand")]
-        public void No_issue_is_reported_for_correctly_named_command_field_(string fieldName) => No_issue_is_reported_for(@"
-using System;
-using System.Windows.Input;
-
-public class TestMe
-{
-    private ICommand " + fieldName + @";
 }
 ");
 
