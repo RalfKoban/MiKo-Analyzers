@@ -3601,7 +3601,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use ambiguous term &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of ambiguous term &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2018_MessageFormat {
             get {

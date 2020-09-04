@@ -1342,7 +1342,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The term 'Check' is ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines' instead.</value>
   </data>
   <data name="MiKo_2018_MessageFormat" xml:space="preserve">
-    <value>Do not use ambiguous term '{1}'</value>
+    <value>Use '{2}' instead of ambiguous term '{1}'</value>
   </data>
   <data name="MiKo_2018_Title" xml:space="preserve">
     <value>Documentation should not use the ambiguous term 'Check'.</value>

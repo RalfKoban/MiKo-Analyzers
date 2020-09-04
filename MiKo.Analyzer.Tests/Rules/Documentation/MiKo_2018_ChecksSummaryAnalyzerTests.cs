@@ -145,7 +145,7 @@ public class TestMe : ITestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreateAmbiguousPhrases()
         {
-            var phrases = new[] { "Check ", "Checks " };
+            var phrases = new[] { "Check if ", "Checks if ", "Test if ", "Tests if " };
 
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _.ToUpper()));
