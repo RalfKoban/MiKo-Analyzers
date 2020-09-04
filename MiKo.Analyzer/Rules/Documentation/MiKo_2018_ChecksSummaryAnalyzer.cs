@@ -12,7 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2018";
 
-        private static readonly string[] Comments = { "Check ", "Checks ", "Test ", "Tests " };
+        internal const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
+
+        private static readonly string[] Comments = { "Check ", "Checks ", "Test ", "Tests ", "Determines if " };
 
         public MiKo_2018_ChecksSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -30,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var wrongPhrase = summary.Substring(0, summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase));
 
-                return new[] { Issue(symbol, wrongPhrase, Constants.Comments.DeterminesWhetherPhrase) };
+                return new[] { Issue(symbol, wrongPhrase, StartingPhrase) };
             }
 
             return Enumerable.Empty<Diagnostic>();

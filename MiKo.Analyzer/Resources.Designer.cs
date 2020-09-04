@@ -3592,7 +3592,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validates&apos; or &apos;Verifies&apos;. If a check for a specific state is meant, use &apos;Determines&apos; instead..
+        ///   Looks up a localized string similar to The terms &apos;Check&apos; or &apos;Test&apos; are ambiguous. If validation of parameters is meant, use something like &apos;Validates&apos; or &apos;Verifies&apos;. If a check for a specific state is meant, use &apos;Determines&apos; instead..
         /// </summary>
         public static string MiKo_2018_Description {
             get {
@@ -3610,7 +3610,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use the ambiguous term &apos;Check&apos;..
+        ///   Looks up a localized string similar to Documentation should not use the ambiguous terms &apos;Check&apos; or &apos;Test&apos;..
         /// </summary>
         public static string MiKo_2018_Title {
             get {

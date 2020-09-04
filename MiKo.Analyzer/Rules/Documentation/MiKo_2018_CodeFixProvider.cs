@@ -8,16 +8,16 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    /// <seealso cref="MiKo_2018_CodeFixProvider"/>
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2073_CodeFixProvider)), Shared]
-    public sealed class MiKo_2073_CodeFixProvider : SummaryDocumentationCodeFixProvider
+    /// <seealso cref="MiKo_2073_CodeFixProvider"/>
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2018_CodeFixProvider)), Shared]
+    public sealed class MiKo_2018_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private const string StartingPhrase = MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer.StartingPhrase;
+        private const string StartingPhrase = MiKo_2018_ChecksSummaryAnalyzer.StartingPhrase;
         private const string AsyncStartingPhrase = Constants.Comments.AsynchrounouslyStartingPhrase;
 
         private static readonly string FixedAsyncStartingPhrase = AsyncStartingPhrase + StartingPhrase.ToLowerCaseAt(0);
 
-        public override string FixableDiagnosticId => MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_2018_ChecksSummaryAnalyzer.Id;
 
         protected override string Title => "Start summary with '" + StartingPhrase + "'";
 
