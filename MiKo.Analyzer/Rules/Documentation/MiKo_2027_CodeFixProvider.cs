@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return method.ParameterList.Parameters;
         }
 
-        protected override XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
             var phrase = (index == 0)
                              ? Constants.Comments.CtorSerializationInfoParamPhrase

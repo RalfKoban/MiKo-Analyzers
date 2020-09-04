@@ -38,6 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).Result;
+
         protected static async Task<ISymbol> GetSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
         {
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);

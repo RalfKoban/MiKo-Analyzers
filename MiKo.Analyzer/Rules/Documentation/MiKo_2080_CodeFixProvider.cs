@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var fieldDeclaration = comment.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
             var field = fieldDeclaration.Declaration.Variables.First();
 
-            var symbol = (IFieldSymbol)GetSymbolAsync(document, field, CancellationToken.None).Result;
+            var symbol = (IFieldSymbol)GetSymbol(document, field);
             var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
 
             return CommentStartingWith(comment, phrase);

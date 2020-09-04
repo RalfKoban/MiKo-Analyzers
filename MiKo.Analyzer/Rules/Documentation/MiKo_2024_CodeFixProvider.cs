@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Fix comment start of Enum parameter";
 
-        protected override XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
             return CommentStartingWith(comment, Constants.Comments.EnumParameterStartingPhrase[0]);
         }

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var parameter = parameters[index];
                 if (parameter.GetName() == parameterName)
                 {
-                    return Comment(parameterCommentSyntax, parameter, index);
+                    return Comment(document, parameterCommentSyntax, parameter, index);
                 }
             }
 
@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return method.ParameterList.Parameters;
         }
 
-        protected abstract XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index);
+        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index);
 
         private static string GetParameterName(XmlElementSyntax syntax) => syntax.StartTag.Attributes.OfType<XmlNameAttributeSyntax>().First().Identifier.GetName();
     }

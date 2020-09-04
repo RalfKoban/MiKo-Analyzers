@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Fix comment of parameter";
 
-        protected override XmlElementSyntax Comment(XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
             return CommentEndingWith(comment, MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Phrase);
         }
