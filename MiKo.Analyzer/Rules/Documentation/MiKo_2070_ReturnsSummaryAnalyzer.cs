@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (symbol is IMethodSymbol m && m.ReturnType.IsBoolean())
             {
-                return "Determines whether";
+                return Constants.Comments.DeterminesWhetherPhrase;
             }
 
             return "Gets";
