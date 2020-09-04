@@ -38,6 +38,13 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        protected static async Task<ISymbol> GetSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
+        {
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+
+            return semanticModel.GetDeclaredSymbol(syntax, cancellationToken);
+        }
+
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
             => Task.FromResult(document.Project.Solution);
 

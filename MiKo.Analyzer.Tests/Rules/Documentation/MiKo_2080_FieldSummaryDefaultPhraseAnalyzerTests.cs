@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -56,6 +57,19 @@ public class TestMe
     /// Indicates whether something is the data for the field.
     /// </summary>
     private bool m_field;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_Guid_field() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// The unique identifier for something that is the data for the field.
+    /// </summary>
+    private Guid m_field;
 }
 ");
 
@@ -170,7 +184,7 @@ public class TestMe
         [Test, Combinatorial]
         public void An_issue_is_reported_for_incorrectly_commented_constant_boolean_field_(
                                                                                 [Values("Bla bla", "Indicates whether the field", "Contains something.")] string comment,
-                                                                                [Values("bool", "string")] string fieldType)
+                                                                                [Values("bool")] string fieldType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -184,8 +198,170 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_constant_boolean_field()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    private const bool m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// The some comment.
+    /// </summary>
+    private const bool m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_constant_boolean_field()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    private bool m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Indicates whether some comment.
+    /// </summary>
+    private bool m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Guid_field()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    private Guid m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// The unique identifier for some comment.
+    /// </summary>
+    private Guid m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_collection_field()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    private List<string> m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Contains some comment.
+    /// </summary>
+    private List<string> m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_normal_field()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    private object m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// The some comment.
+    /// </summary>
+    private object m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2080_FieldSummaryDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2080_CodeFixProvider();
     }
 }

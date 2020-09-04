@@ -13,9 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
         {
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
-
-            var symbol = semanticModel.GetDeclaredSymbol(syntax, cancellationToken);
+            var symbol = await GetSymbolAsync(document, syntax, cancellationToken);
             var newName = GetNewName(symbol);
 
             // Produce a new solution that has all references to that symbol renamed, including the declaration.
