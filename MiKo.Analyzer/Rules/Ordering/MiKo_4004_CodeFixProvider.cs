@@ -36,11 +36,11 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var baseType = baseList.Types.First();
 
             var semanticModel = document.GetSemanticModelAsync().Result;
-            var info = semanticModel.GetTypeInfo(baseType.Type);
+            var type = baseType.GetTypeSymbol(semanticModel);
 
             var types = new List<BaseTypeSyntax>();
 
-            if (info.Type?.TypeKind == TypeKind.Class)
+            if (type?.TypeKind == TypeKind.Class)
             {
                 // the base type, if any
                 types.Add(baseType);

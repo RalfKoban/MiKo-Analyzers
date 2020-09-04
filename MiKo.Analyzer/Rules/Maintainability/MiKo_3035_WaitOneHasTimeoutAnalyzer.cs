@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 foreach (var argument in i.ArgumentList.Arguments)
                 {
-                    var argumentType = argument.Expression.GetTypeSymbol(semanticModel);
+                    var argumentType = argument.GetTypeSymbol(semanticModel);
 
                     if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TimeSpanFullName)
                     {

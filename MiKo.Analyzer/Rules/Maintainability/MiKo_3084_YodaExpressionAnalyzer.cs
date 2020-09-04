@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
                 {
-                    var type = m.Expression.GetTypeSymbol(context.SemanticModel);
+                    var type = m.GetTypeSymbol(context.SemanticModel);
 
                     // only get the real enum members, no local variables or something
                     return type?.IsEnum() is true;

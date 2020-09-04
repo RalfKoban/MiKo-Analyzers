@@ -71,16 +71,34 @@ namespace MiKoSolutions.Analyzers
             return symbol;
         }
 
+        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax syntax, SemanticModel semanticModel)
+        {
+            var type = syntax.Expression.GetTypeSymbol(semanticModel);
+            return type;
+        }
+
         internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax syntax, SemanticModel semanticModel)
         {
             var typeInfo = semanticModel.GetTypeInfo(syntax);
             return typeInfo.Type;
         }
 
+        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax syntax, SemanticModel semanticModel)
+        {
+            var type = syntax.Expression.GetTypeSymbol(semanticModel);
+            return type;
+        }
+
         internal static ITypeSymbol GetTypeSymbol(this TypeSyntax syntax, SemanticModel semanticModel)
         {
             var typeInfo = semanticModel.GetTypeInfo(syntax);
             return typeInfo.Type;
+        }
+
+        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax syntax, SemanticModel semanticModel)
+        {
+            var type = syntax.Type.GetTypeSymbol(semanticModel);
+            return type;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax syntax, SemanticModel semanticModel)
@@ -203,6 +221,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
         {
             var type = syntax.GetTypeSymbol(semanticModel);
+
             switch (type?.TypeKind)
             {
                 case TypeKind.Struct:

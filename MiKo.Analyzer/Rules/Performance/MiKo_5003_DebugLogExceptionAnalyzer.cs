@@ -24,11 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool IsException(ArgumentSyntax argument, SemanticModel semanticModel)
         {
-            var expression = argument.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
-                                 ? m.Expression
-                                 : argument.Expression;
-
-            var argumentType = expression.GetTypeSymbol(semanticModel);
+            var argumentType = argument.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
+                                   ? m.GetTypeSymbol(semanticModel)
+                                   : argument.GetTypeSymbol(semanticModel);
 
             return argumentType.IsException();
         }
@@ -60,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case Fatal:
                 {
                     // check for correct type (only ILog methods shall be reported)
-                    var type = methodCall.Expression.GetTypeSymbol(semanticModel);
+                    var type = methodCall.GetTypeSymbol(semanticModel);
 
                     if (type.Name == Constants.ILog && IsException(argument, semanticModel))
                     {
