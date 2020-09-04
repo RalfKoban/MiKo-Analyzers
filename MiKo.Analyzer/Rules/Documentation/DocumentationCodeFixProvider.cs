@@ -106,6 +106,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             comment.EndTag);
         }
 
+        protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
+        {
+            var lastNode = comment.Content.Last();
+            if (lastNode is XmlTextSyntax t)
+            {
+                // we have a text at the end, so we have to find the text
+                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+
+                if (lastToken.IsKind(SyntaxKind.None))
+                {
+                    // seems like we have a <see cref/> or something with a CRLF at the end
+                    var token = SyntaxFactory.Token(default, SyntaxKind.XmlTextLiteralToken, ending, ending, default);
+                    return comment.InsertTokensBefore(t.TextTokens.First(), new[] { token });
+                }
+                else
+                {
+                    var valueText = lastToken.ValueText.TrimEnd();
+
+                    // in case there is any, get rid of last dot
+                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
+                    {
+                        valueText = valueText.WithoutSuffix(".");
+                    }
+
+                    var text = valueText + ending;
+                    var token = SyntaxFactory.Token(lastToken.LeadingTrivia, SyntaxKind.XmlTextLiteralToken, text, text, lastToken.TrailingTrivia);
+
+                    return comment.ReplaceToken(lastToken, token);
+                }
+            }
+
+            // we have a <see cref/> or something at the end
+            return comment.InsertNodeAfter(lastNode, SyntaxFactory.XmlText(ending));
+        }
+
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
             return Comment(comment, text[0], additionalComment);

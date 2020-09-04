@@ -12,7 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2074";
 
-        private const string Phrase = " to seek.";
+        internal const string Phrase = " to seek.";
+
+        private static readonly string[] Phrases = { Phrase, " to locate." };
 
         public MiKo_2074_ContainsParameterDefaultPhraseAnalyzer() : base(Id)
         {
@@ -20,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase) && symbol.Parameters.Any();
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => comment.EndsWith(Phrase, StringComparison.Ordinal)
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => comment.EndsWithAny(Phrases, StringComparison.Ordinal)
                                                                                                                    ? Enumerable.Empty<Diagnostic>()
                                                                                                                    : new[] { Issue(parameter, Phrase) };
     }
