@@ -14,15 +14,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        internal static string[] GetStartingPhrase(IParameterSymbol parameter) => parameter.Type.IsBoolean()
+                                                                                      ? Constants.Comments.OutBoolParameterStartingPhrase
+                                                                                      : Constants.Comments.OutParameterStartingPhrase;
+
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind == RefKind.Out;
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
         {
-            var phrase = parameter.Type.IsBoolean()
-                             ? Constants.Comments.OutBoolParameterStartingPhrase
-                             : Constants.Comments.OutParameterStartingPhrase;
+            var phrase = GetStartingPhrase(parameter);
 
             return AnalyzeStartingPhrase(parameter, comment, phrase);
         }
-    }
+   }
 }
