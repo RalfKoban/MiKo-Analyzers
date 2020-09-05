@@ -141,6 +141,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.InsertNodeAfter(lastNode, SyntaxFactory.XmlText(ending));
         }
 
+        protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
+        {
+            var lastNode = comment.Content.Last();
+            if (lastNode is XmlTextSyntax t)
+            {
+                var text = commentStart;
+
+                // we have a text at the end, so we have to find the text
+                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+
+                if (lastToken.IsKind(SyntaxKind.None))
+                {
+                    // seems like we have a <see cref/> or something with a CRLF at the end
+                }
+                else
+                {
+                    var valueText = lastToken.ValueText.TrimEnd();
+
+                    // in case there is any, get rid of last dot
+                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
+                    {
+                        valueText = valueText.WithoutSuffix(".");
+                    }
+
+                    text = valueText + commentStart;
+                }
+
+                return comment.ReplaceNode(t, SyntaxFactory.XmlText(text))
+                              .AddContent(seeCref, SyntaxFactory.XmlText(commentContinue).WithTrailingXmlComment());
+            }
+
+            // we have a <see cref/> or something at the end
+            return comment.InsertNodeAfter(lastNode, SyntaxFactory.XmlText(commentContinue));
+        }
+
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
             return Comment(comment, text[0], additionalComment);
@@ -232,6 +267,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return result;
         }
+
+        protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");
+
+        protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
+
+        protected static XmlEmptyElementSyntax SeeLangword_False() => SeeLangword("false");
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {

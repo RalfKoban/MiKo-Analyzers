@@ -32,9 +32,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var param2 = Comment(SyntaxFactory.XmlParamElement(parameters[1].Identifier.ValueText), "The second value to compare.").WithTrailingXmlComment();
 
             var returns = SyntaxFactory.XmlReturnsElement(
-                                                          SeeLangword("true").WithLeadingXmlComment(),
+                                                          SeeLangword_True().WithLeadingXmlComment(),
                                                           SyntaxFactory.XmlText(" if both instances are considered not equal; otherwise, "),
-                                                          SeeLangword("false"),
+                                                          SeeLangword_False(),
                                                           SyntaxFactory.XmlText(".").WithTrailingXmlComment())
                                        .WithEndOfLine();
 

@@ -331,7 +331,7 @@ namespace MiKoSolutions.Analyzers
 
                     var space = i == 0 ? string.Empty : " ";
 
-                    var modifiedText = space + startText + originalText.Trim().ToLowerCaseAt(0);
+                    var modifiedText = space + startText + originalText.TrimStart().ToLowerCaseAt(0);
 
                     textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
                     break;

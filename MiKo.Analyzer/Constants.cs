@@ -176,9 +176,9 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
 
-            internal static readonly string NonGenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation.";
+            internal const string NonGenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation.";
 
-            internal static readonly string GenericTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate + " The value of the {1} parameter contains ";
+            internal const string GenericTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate + " The value of the {1} parameter contains ";
 
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
@@ -210,16 +210,20 @@ namespace MiKoSolutions.Analyzers
                     "; otherwise, <see langword=\"false\" />.",
                 };
 
+            internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
+
             internal static readonly string[] BooleanParameterStartingPhrase =
                 {
-                    "<see langword=\"true\"/> to ",
-                    "<see langword=\"true\" /> to ",
+                    string.Format(BooleanParameterStartingPhraseTemplate, "<see langword=\"true\"/>"),
+                    string.Format(BooleanParameterStartingPhraseTemplate, "<see langword=\"true\" />"),
                 };
+
+            internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
 
             internal static readonly string[] BooleanParameterEndingPhrase =
                 {
-                    "; otherwise, <see langword=\"false\"/>.",
-                    "; otherwise, <see langword=\"false\" />.",
+                    string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\"/>"),
+                    string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\" />"),
                 };
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
@@ -234,7 +238,7 @@ namespace MiKoSolutions.Analyzers
                     ", otherwise with a result of <see langword=\"false\" />.",
                 };
 
-            internal static readonly string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
+            internal const string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
@@ -272,7 +276,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
 
-            internal static readonly string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
+            internal const string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "the enumerated constant that is the ").ToArray();
 
@@ -291,7 +295,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "an array of ").ToArray();
 
-            internal static readonly string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
+            internal const string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
 
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
@@ -299,7 +303,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
+            internal const string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
 
             internal static readonly string[] DependencyPropertyFieldValuePhrase =
                 {
@@ -307,7 +311,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string RoutedEventFieldSummaryPhraseTemplate = "Identifies the {0} routed event.";
+            internal const string RoutedEventFieldSummaryPhraseTemplate = "Identifies the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldSummaryPhrase =
                 {
@@ -315,7 +319,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string RoutedEventFieldValuePhraseTemplate = "The identifier for the {0} routed event.";
+            internal const string RoutedEventFieldValuePhraseTemplate = "The identifier for the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldValuePhrase =
                 {
@@ -406,7 +410,7 @@ namespace MiKoSolutions.Analyzers
 
             internal const string FactorySummaryPhrase = "Provides support for creating ";
 
-            internal static readonly string FactoryCreateMethodSummaryStartingPhraseTemplate = "Creates a new instance of the {0} type with ";
+            internal const string FactoryCreateMethodSummaryStartingPhraseTemplate = "Creates a new instance of the {0} type with ";
 
             internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =
                 {
@@ -414,7 +418,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string FactoryCreateCollectionMethodSummaryStartingPhraseTemplate = "Creates a collection of new instances of the {0} type with ";
+            internal const string FactoryCreateCollectionMethodSummaryStartingPhraseTemplate = "Creates a collection of new instances of the {0} type with ";
 
             internal static readonly string[] FactoryCreateCollectionMethodSummaryStartingPhrase =
                 {
@@ -428,7 +432,7 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
 
-            internal static readonly string ExtensionMethodClassStartingPhraseTemplate = "Provides a set of {0} methods for ";
+            internal const string ExtensionMethodClassStartingPhraseTemplate = "Provides a set of {0} methods for ";
 
             internal static readonly string[] ExtensionMethodClassStartingPhrase =
                 {
@@ -496,7 +500,7 @@ namespace MiKoSolutions.Analyzers
 
             internal const string CommandSummaryStartingPhrase = "Represents a command that can ";
 
-            internal static readonly string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
+            internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =
                 {
@@ -506,7 +510,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
-            internal static readonly string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
+            internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
                 {
@@ -516,7 +520,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
-            internal static readonly string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
+            internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
 
             internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
                 {
@@ -539,7 +543,7 @@ namespace MiKoSolutions.Analyzers
                     "Marks ",
                 };
 
-            internal static readonly string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
+            internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
 
             internal const string WasNotSuccessfulPhrase = "was not successful";
 
