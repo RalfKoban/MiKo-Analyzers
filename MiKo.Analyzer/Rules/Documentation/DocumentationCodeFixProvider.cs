@@ -234,13 +234,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
 
-        protected static SyntaxNode Comment(SyntaxNode syntax, string[] terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
+        protected static T Comment<T>(T syntax, IEnumerable<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
         {
-            var result = syntax;
+            var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
 
             foreach (var text in syntax.DescendantNodes().OfType<XmlTextSyntax>())
             {
-                var newText = text;
+                var tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
 
                 // replace token in text
                 foreach (var token in text.TextTokens)
@@ -249,23 +249,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (originalText.ContainsAny(terms))
                     {
-                        var replacedText = originalText;
-
-                        foreach (var term in replacementMap)
-                        {
-                            replacedText = replacedText.Replace(term.Key, term.Value);
-                        }
+                        var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
 
                         var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
 
-                        newText = newText.ReplaceToken(token, newToken);
+                        tokenMap.Add(token, newToken);
                     }
                 }
 
-                result = result.ReplaceNode(text, newText);
+                if (tokenMap.Any())
+                {
+                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
+                    textMap.Add(text, newText);
+                }
             }
 
-            return result;
+            if (textMap.Any())
+            {
+                var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
+                return result;
+            }
+
+            return syntax;
         }
 
         protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");

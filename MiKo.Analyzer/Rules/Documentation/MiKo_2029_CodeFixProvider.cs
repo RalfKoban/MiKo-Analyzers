@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var wrongInheritDocs = syntax.DescendantNodes().OfType<XmlEmptyElementSyntax>()
                                          .Where(_ => _.Name.LocalName.ValueText == Constants.XmlTag.Inheritdoc
-                                                  && _.Attributes.Any(__ => __.Name.LocalName.ValueText == "cref"))
+                                                  && _.Attributes.Any(__ => __.Name.LocalName.ValueText == Constants.XmlTag.Attribute.Cref))
                                          .ToList();
 
             return comment.ReplaceNodes(wrongInheritDocs, (_, __) => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc));

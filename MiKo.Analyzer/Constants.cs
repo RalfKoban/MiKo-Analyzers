@@ -552,6 +552,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static class XmlTag
         {
+            internal const string C = "c";
             internal const string Code = "code";
             internal const string Example = "example";
             internal const string Exception = "exception";
@@ -571,6 +572,13 @@ namespace MiKoSolutions.Analyzers
             internal const string TypeParam = "typeparam";
             internal const string TypeParamRef = "typeparamref";
             internal const string Value = "value";
+
+            internal static class Attribute
+            {
+                internal const string Cref = "cref";
+                internal const string Langword = "langword";
+                internal const string Langref = "langref";
+            }
         }
 
         internal static class Invocations

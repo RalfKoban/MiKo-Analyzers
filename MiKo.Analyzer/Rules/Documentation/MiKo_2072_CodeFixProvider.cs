@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            return Comment(comment, ReplacementMap.Keys.ToArray(), ReplacementMap);
+            return Comment(comment, ReplacementMap.Keys, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()
