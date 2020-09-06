@@ -82,21 +82,26 @@ public class TestMe
 }
 ");
 
-        [TestCase("This event is fired for", "Occurs for")]
-        [TestCase("Event is fired when", "Occurs when")]
-        [TestCase("Is fired when", "Occurs when")]
-        [TestCase("Fired when", "Occurs when")]
-        [TestCase("Event is fired before", "Occurs before")]
-        [TestCase("Is fired before", "Occurs before")]
-        [TestCase("Fired before", "Occurs before")]
         [TestCase("Event is fired after", "Occurs after")]
-        [TestCase("Is fired after", "Occurs after")]
+        [TestCase("Event is fired before", "Occurs before")]
+        [TestCase("Event is fired when", "Occurs when")]
+        [TestCase("Event is raised when", "Occurs when")]
+        [TestCase("Event occurs when", "Occurs when")]
         [TestCase("Fired after", "Occurs after")]
+        [TestCase("Fired before", "Occurs before")]
+        [TestCase("Fired when", "Occurs when")]
         [TestCase("Indicates that", "Occurs when")]
-        [TestCase("Raised when", "Occurs when")]
-        [TestCase("Raised if", "Occurs if")]
+        [TestCase("Is fired after", "Occurs after")]
+        [TestCase("Is fired before", "Occurs before")]
+        [TestCase("Is fired when", "Occurs when")]
+        [TestCase("Is raised when", "Occurs when")]
         [TestCase("Raised after", "Occurs after")]
         [TestCase("Raised before", "Occurs before")]
+        [TestCase("Raised if", "Occurs if")]
+        [TestCase("Raised when", "Occurs when")]
+        [TestCase("This event is fired for", "Occurs for")]
+        [TestCase("This event is raised for", "Occurs for")]
+        [TestCase("This event occurs when", "Occurs when")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
             const string Template = @"

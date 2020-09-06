@@ -16,11 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
                                                                                     { "This event is fired ", Phrase },
+                                                                                    { "This event is raised ", Phrase },
+                                                                                    { "This event occurs ", Phrase },
                                                                                     { "Event is fired ", Phrase },
+                                                                                    { "Event is raised ", Phrase },
+                                                                                    { "Event occurs ", Phrase },
                                                                                     { "Is fired ", Phrase },
+                                                                                    { "Is raised ", Phrase },
                                                                                     { "Fired ", Phrase },
-                                                                                    { "Indicates that ", Phrase + "when " },
                                                                                     { "Raised ", Phrase },
+                                                                                    { "Indicates that ", Phrase + "when " },
                                                                                 };
 
         public override string FixableDiagnosticId => MiKo_2001_EventSummaryAnalyzer.Id;
