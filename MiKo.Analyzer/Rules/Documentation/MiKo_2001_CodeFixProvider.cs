@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
+                                                                                    { "This event is fired ", Phrase },
                                                                                     { "Event is fired ", Phrase },
                                                                                     { "Is fired ", Phrase },
                                                                                     { "Fired ", Phrase },

@@ -82,6 +82,7 @@ public class TestMe
 }
 ");
 
+        [TestCase("This event is fired for", "Occurs for")]
         [TestCase("Event is fired when", "Occurs when")]
         [TestCase("Is fired when", "Occurs when")]
         [TestCase("Fired when", "Occurs when")]
