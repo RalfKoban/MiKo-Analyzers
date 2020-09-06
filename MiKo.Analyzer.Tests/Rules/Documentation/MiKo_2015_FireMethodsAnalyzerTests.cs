@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -107,8 +108,58 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_exception()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Fires a new exception. The code is firing or will fire the fired exception.</summary>
+    public void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Throws a new exception. The code is throwing or will throw the thrown exception.</summary>
+    public void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_event()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Fires a new event. The code is firing or will fire the fired event.</summary>
+    public void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Raises a new event. The code is raising or will raise the raised event.</summary>
+    public void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2015_FireMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2015_FireMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2015_CodeFixProvider();
     }
 }
