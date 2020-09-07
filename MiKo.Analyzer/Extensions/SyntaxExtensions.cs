@@ -218,6 +218,20 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsByte(this TypeSyntax syntax)
+        {
+            switch (syntax.ToString())
+            {
+                case "byte":
+                case nameof(Byte):
+                case nameof(System) + "." + nameof(Byte):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
         {
             var type = syntax.GetTypeSymbol(semanticModel);

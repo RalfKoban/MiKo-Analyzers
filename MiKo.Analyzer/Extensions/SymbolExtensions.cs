@@ -499,6 +499,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsBoolean(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Boolean;
 
+        internal static bool IsByte(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Byte;
+
         internal static bool IsGuid(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Guid);
 
         internal static bool IsObject(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Object;

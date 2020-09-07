@@ -22,21 +22,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (returnType.IsEnumerable())
             {
-                var initialPhrases = returnType.Kind == SymbolKind.ArrayType
-                                  ? Constants.Comments.ArrayReturnTypeStartingPhrase
-                                  : Constants.Comments.EnumerableReturnTypeStartingPhrase;
+                var initialPhrases = GetNonGenericInitialPhrases(returnType);
 
                 return GetStartingPhrases(returnType, initialPhrases).ToArray();
             }
 
             if (returnType.TryGetGenericArgumentType(out var argumentType))
             {
-                return argumentType.Kind == SymbolKind.ArrayType
-                           ? Constants.Comments.ArrayTaskReturnTypeStartingPhrase
-                           : Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
+                if (argumentType is IArrayTypeSymbol array)
+                {
+                    return array.ElementType.IsByte()
+                               ? Constants.Comments.ByteArrayTaskReturnTypeStartingPhrase
+                               : Constants.Comments.ArrayTaskReturnTypeStartingPhrase;
+                }
+
+                return Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
             }
 
             return Empty; // should never happen
+        }
+
+        private static string[] GetNonGenericInitialPhrases(ITypeSymbol returnType)
+        {
+            if (returnType is IArrayTypeSymbol arrayType)
+            {
+               return arrayType.ElementType.IsByte()
+                                     ? Constants.Comments.ByteArrayReturnTypeStartingPhrase
+                                     : Constants.Comments.ArrayReturnTypeStartingPhrase;
+            }
+
+            return Constants.Comments.EnumerableReturnTypeStartingPhrase;
         }
     }
 }

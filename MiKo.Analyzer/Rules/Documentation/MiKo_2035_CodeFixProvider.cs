@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,7 +15,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
                                                                                     { "An enumerable of ", string.Empty },
+                                                                                    { "An enumerable with ", string.Empty },
                                                                                     { "A list of ", string.Empty },
+                                                                                    { "A list with ", string.Empty },
+                                                                                    { "The enumerable of ", string.Empty },
+                                                                                    { "The enumerable with ", string.Empty },
+                                                                                    { "The list of ", string.Empty },
+                                                                                    { "The list with ", string.Empty },
+                                                                                    { "The array of ", string.Empty },
+                                                                                    { "The array with ", string.Empty },
+                                                                                    { "The collection of ", string.Empty },
+                                                                                    { "The collection with ", string.Empty },
                                                                                 };
 
         public override string FixableDiagnosticId => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
@@ -33,8 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // it is a task, so inspect the typ argument to check if it is an array type
                 var parts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", '|').Split('|');
 
-                var isArray = returnType.TypeArgumentList.Arguments[0].IsKind(SyntaxKind.ArrayType);
-                var middlePart = isArray ? "an array of " : "a collection of ";
+                var middlePart = GetGenericCommentMiddlePart(returnType);
 
                 return CommentStartingWith(preparedComment, parts[0], SeeCrefTaskResult(), parts[1] + middlePart);
             }
@@ -44,12 +52,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType)
         {
-            var phrases = returnType.IsKind(SyntaxKind.ArrayType)
-                              ? Constants.Comments.ArrayReturnTypeStartingPhrase
-                              : Constants.Comments.EnumerableReturnTypeStartingPhrase;
-
+            var phrases = GetNonGenericCommentPhrases(returnType);
             var preparedComment = PrepareComment(comment);
             return CommentStartingWith(preparedComment, phrases[0]);
+        }
+
+        private static string GetGenericCommentMiddlePart(GenericNameSyntax returnType)
+        {
+            var argument = returnType.TypeArgumentList.Arguments[0];
+
+            if (argument is ArrayTypeSyntax arrayType)
+            {
+                return arrayType.ElementType.IsByte()
+                           ? "a byte array containing "
+                           : "an array of ";
+            }
+
+            return "a collection of ";
+        }
+
+        private static string[] GetNonGenericCommentPhrases(TypeSyntax returnType)
+        {
+            if (returnType is ArrayTypeSyntax arrayType)
+            {
+                return arrayType.ElementType.IsByte()
+                              ? Constants.Comments.ByteArrayReturnTypeStartingPhrase
+                              : Constants.Comments.ArrayReturnTypeStartingPhrase;
+            }
+
+            return Constants.Comments.EnumerableReturnTypeStartingPhrase;
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Select(_ => _.Key).ToList(), ReplacementMap);

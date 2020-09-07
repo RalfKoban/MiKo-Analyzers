@@ -293,7 +293,11 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ArrayReturnTypeStartingPhrase = { "An array of ", "The array of " };
 
+            internal static readonly string[] ByteArrayReturnTypeStartingPhrase = { "A byte array containing ", "The byte array containing " };
+
             internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "an array of ").ToArray();
+
+            internal static readonly string[] ByteArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a byte array containing ").ToArray();
 
             internal const string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
 
