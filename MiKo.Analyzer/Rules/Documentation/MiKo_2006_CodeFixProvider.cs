@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2006_RoutedEventFieldDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Apply default comment to RoutedEvent";
+        protected override string Title => "Apply standard comment to RoutedEvent";
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 

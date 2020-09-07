@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2038_CommandTypeSummaryAnalyzer.Id;
 
-        protected override string Title => "Apply default comment to command";
+        protected override string Title => "Apply standard comment to command";
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentStartingWith((XmlElementSyntax)syntax, Constants.Comments.CommandSummaryStartingPhrase);
     }

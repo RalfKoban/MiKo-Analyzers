@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2017_DependencyPropertyDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Apply default comment to DependencyProperty";
+        protected override string Title => "Apply standard comment to DependencyProperty";
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
