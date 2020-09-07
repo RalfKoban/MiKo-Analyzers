@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var index = GetIndex(content);
 
             XmlTextSyntax newText;
-            if (content[index] is XmlTextSyntax text)
+            if (index >= 0 && content[index] is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
                 content = content.Remove(content[index]);
@@ -64,9 +64,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 newText = SyntaxFactory.XmlText(phrase);
             }
 
+            var newContent = index >= 0 ?
+                                 content.Insert(index, newText)
+                                 : content.Add(newText);
+
             return SyntaxFactory.XmlElement(
                                             comment.StartTag,
-                                            content.Insert(index, newText),
+                                            newContent,
                                             comment.EndTag);
         }
 
@@ -234,6 +238,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
 
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes)
+        {
+            return comment
+                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                   .WithContent(SyntaxFactory.List(nodes))
+                   .WithEndTag(comment.EndTag.WithLeadingXmlComment());
+        }
+
         protected static T Comment<T>(T syntax, IEnumerable<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
         {
             var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
@@ -273,6 +285,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
+        protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
+
+        protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlElement(Constants.XmlTag.Para, nodes);
+
         protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");
 
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
@@ -307,8 +323,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static int GetIndex(SyntaxList<XmlNodeSyntax> content)
         {
+            if (content.Count == 0)
+            {
+                return -1;
+            }
+
             var onlyWhitespaceText = content[0] is XmlTextSyntax t && GetText(t).IsNullOrWhiteSpace();
-            return onlyWhitespaceText ? 1 : 0;
+            return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
         }
 
         private static string GetText(XmlTextSyntax text)

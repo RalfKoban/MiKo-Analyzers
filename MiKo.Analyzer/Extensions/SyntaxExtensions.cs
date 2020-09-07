@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -204,6 +205,45 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
 
+        internal static bool IsString(this TypeSyntax syntax)
+        {
+            switch (syntax.ToString())
+            {
+                case "string":
+                case nameof(String):
+                case nameof(System) + "." + nameof(String):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool IsSerializationInfo(this TypeSyntax syntax)
+        {
+            var s = syntax.ToString();
+            return s == nameof(SerializationInfo) || s == typeof(SerializationInfo).FullName;
+        }
+
+        internal static bool IsStreamingContext(this TypeSyntax syntax)
+        {
+            var s = syntax.ToString();
+            return s == nameof(StreamingContext) || s == typeof(StreamingContext).FullName;
+        }
+
+        internal static bool IsException(this TypeSyntax syntax)
+        {
+            switch (syntax.ToString())
+            {
+                case nameof(Exception):
+                case nameof(System) + "." + nameof(Exception):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsBoolean(this TypeSyntax syntax)
         {
             switch (syntax.ToString())
@@ -329,6 +369,8 @@ namespace MiKoSolutions.Analyzers
         {
             var textTokens = new List<SyntaxToken>(text.TextTokens);
 
+            var replaced = false;
+
             for (var i = 0; i < textTokens.Count; i++)
             {
                 var token = textTokens[i];
@@ -348,12 +390,17 @@ namespace MiKoSolutions.Analyzers
                     var modifiedText = space + startText + originalText.TrimStart().ToLowerCaseAt(0);
 
                     textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                    replaced = true;
                     break;
                 }
             }
 
-            var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
-            return xmlText;
+            if (replaced is false)
+            {
+                return SyntaxFactory.XmlText(startText);
+            }
+
+            return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
         }
 
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken token) => token.WithLeadingTrivia(XmlCommentStart);

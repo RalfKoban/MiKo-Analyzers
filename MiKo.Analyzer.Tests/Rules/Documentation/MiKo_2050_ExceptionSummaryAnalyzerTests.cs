@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -601,8 +602,247 @@ public sealed class BlaBlaException : Exception
     }
 }");
 
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_empty_summary_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary></summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when </summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>
+/// </summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when </summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>Bla.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when bla.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parameterless_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary></summary>
+    public BlaBlaException()
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class.
+    /// </summary>
+    public BlaBlaException()
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_message_only_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary></summary>
+    public BlaBlaException(string message)
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with a specified error message.
+    /// </summary>
+    /// <param name=""message"">
+    /// The error message that explains the reason for the exception.
+    /// </param>
+    public BlaBlaException(string message)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_message_exception_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary></summary>
+    public BlaBlaException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+    /// </summary>
+    /// <param name=""message"">
+    /// The error message that explains the reason for the exception.
+    /// </param>
+    /// <param name=""innerException"">
+    /// The exception that is the cause of the current exception.
+    /// <para/>
+    /// If the <paramref name=""innerException""/> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.
+    /// </param>
+    public BlaBlaException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_serialization_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary></summary>
+    private BlaBlaException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with serialized data.
+    /// </summary>
+    /// <param name=""info"">
+    /// The object that holds the serialized object data.
+    /// </param>
+    /// <param name=""context"">
+    /// The contextual information about the source or destination.
+    /// </param>
+    /// <remarks>
+    /// This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.
+    /// </remarks>
+    private BlaBlaException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2050_ExceptionSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2050_ExceptionSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2050_CodeFixProvider();
     }
 }

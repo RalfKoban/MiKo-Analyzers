@@ -388,10 +388,12 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
 
+            internal const string ExceptionCtorSummaryStartingPhraseTemplate = "Initializes a new instance of the {0} class";
+
             internal static readonly string[] ExceptionCtorSummaryStartingPhrase =
                 {
-                    "Initializes a new instance of the <see cref=\"{0}\"/> class",
-                    "Initializes a new instance of the <see cref=\"{0}\" /> class",
+                    string.Format(ExceptionCtorSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(ExceptionCtorSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
             internal const string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
@@ -404,12 +406,14 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionCtorMessageParamPhrase = { "The error message that explains the reason for the exception." };
 
+            internal const string ExceptionCtorExceptionParamPhraseTemplate = @"The exception that is the cause of the current exception.{0}If the {1} parameter is not {2}, the current exception is raised in a {3} block that handles the inner exception.";
+
             internal static readonly string[] ExceptionCtorExceptionParamPhrase =
                 {
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException""/>", @"<see langword=""null""/>", @"<b>catch</b>"),
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException"" />", @"<see langword=""null"" />", @"<b>catch</b>"),
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException"" />", @"<see langword=""null""/>", @"<b>catch</b>"),
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException""/>", @"<see langword=""null"" />", @"<b>catch</b>"),
                 };
 
             internal const string FactorySummaryPhrase = "Provides support for creating ";

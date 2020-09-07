@@ -26,11 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (node)
                 {
                     case XmlEmptyElementSyntax br when br.Name.LocalName.ValueText == "br":
-                        d = d.ReplaceNode(br, SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para));
+                        d = d.ReplaceNode(br, Para());
                         break;
 
                     case XmlElementSyntax p when p.StartTag.Name.LocalName.ValueText == "p":
-                        d = d.ReplaceNode(p, SyntaxFactory.XmlElement(Constants.XmlTag.Para, p.Content));
+                        d = d.ReplaceNode(p, Para(p.Content));
                         break;
                 }
             }
