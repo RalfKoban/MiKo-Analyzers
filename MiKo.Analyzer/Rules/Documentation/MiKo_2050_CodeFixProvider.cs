@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2050_ExceptionSummaryAnalyzer.Id;
 
-        protected override string Title => "Apply standard comment";
+        protected override string Title => "Apply standard exception comment";
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
