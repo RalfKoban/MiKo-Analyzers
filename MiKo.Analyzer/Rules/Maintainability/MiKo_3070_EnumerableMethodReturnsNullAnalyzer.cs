@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IMethodSymbol method)
         {
             var returnType = method.ReturnType;
+
             switch (returnType.SpecialType)
             {
                 case SpecialType.System_Void:
@@ -25,9 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 default:
                 {
-                    if (returnType.TypeKind == TypeKind.Array)
+                    if (returnType is IArrayTypeSymbol array)
                     {
-                        return returnType is IArrayTypeSymbol r && r.ElementType.SpecialType != SpecialType.System_Byte;
+                        return array.ElementType.IsByte() is false;
                     }
 
                     if (returnType.IsEnumerable())

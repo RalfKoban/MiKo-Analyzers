@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -68,15 +69,18 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => No_issue_is_reported_for(@"
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_correctly_documented_method_(
+                                                                    [Values("Contains", "ContainsKey")] string methodName,
+                                                                    [Values("Something to seek.", "Something to locate.")] string comment)
+            => No_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <param name=""i"">
-    /// Something to seek.
+    /// " + comment + @"
     /// </param>
     public bool " + methodName + @"(int i)
     {
@@ -84,8 +88,150 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_simple_text()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// The item.
+    /// </param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// The item to seek.
+    /// </param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_text_with_seeCref_and_ending_dot()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// The <see cref=""int""/>.
+    /// </param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// The <see cref=""int""/> to seek.
+    /// </param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_text_with_seeCref_without_ending_dot()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// The <see cref=""int""/>
+    /// </param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// The <see cref=""int""/> to seek.
+    /// </param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_text_with_seeCref_on_same_line_without_ending_dot()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">The <see cref=""int""/></param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">The <see cref=""int""/> to seek.</param>
+    public bool Contains(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2074_ContainsParameterDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2074_CodeFixProvider();
     }
 }

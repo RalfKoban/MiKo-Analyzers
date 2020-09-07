@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Replace 'Return' in comment";
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var summary = (XmlElementSyntax)syntax;
 
@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 isBool = g.TypeArgumentList.Arguments.Count > 0 && g.TypeArgumentList.Arguments[0].IsBoolean();
             }
 
-            var startText = isBool ? "Determines whether" : "Gets";
+            var startText = isBool ? Constants.Comments.DeterminesWhetherPhrase : "Gets";
             if (isAsync)
             {
                 return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);

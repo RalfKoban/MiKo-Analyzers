@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Start comment with '" + Constants.Comments.EnumStartingPhrase + "'";
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Constants.Comments.EnumStartingPhrase);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Constants.Comments.EnumStartingPhrase);
 
         private static SyntaxNode CommentWithStartingPhrase(XmlElementSyntax comment, string startingPhrase)
         {

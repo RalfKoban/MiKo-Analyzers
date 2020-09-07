@@ -11,14 +11,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2001_EventSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2001";
-        private const string ExpectedComment = "Occurs ";
+
+        internal const string Phrase = "Occurs ";
 
         public MiKo_2001_EventSummaryAnalyzer() : base(Id, SymbolKind.Event)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.TrimStart().StartsWith(ExpectedComment, StringComparison.Ordinal))
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.TrimStart().StartsWith(Phrase, StringComparison.Ordinal))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, ExpectedComment) };
+                                                                                                                        : new[] { Issue(symbol, Phrase) };
     }
 }

@@ -13,9 +13,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2037_CommandPropertySummaryAnalyzer.Id;
 
-        protected override string Title => "Apply default comment to command property";
+        protected override string Title => "Apply standard comment to command property";
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var element = (XmlElementSyntax)syntax;
 

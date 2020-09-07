@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2073";
 
-        internal const string StartingPhrase = "Determines whether";
+        internal const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
 
         public MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
         {

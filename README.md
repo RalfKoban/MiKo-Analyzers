@@ -37,7 +37,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1013|Methods should not be named 'Notify' or 'OnNotify'.|&#x2713;|\-|
 |MiKo_1014|Methods should not be named 'Check'.|&#x2713;|\-|
 |MiKo_1015|Methods should not be named 'Init'.|&#x2713;|&#x2713;|
-|MiKo_1016|Factory methods should be named 'Create'.|&#x2713;|\-|
+|MiKo_1016|Factory methods should be named 'Create'.|&#x2713;|&#x2713;|
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|\-|
 |MiKo_1018|Methods should not be suffixed with noun of a verb.|&#x2713;|\-|
 |MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|&#x2713;|&#x2713;|
@@ -63,7 +63,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1041|Fields should not be suffixed with implementation details.|&#x2713;|\-|
 |MiKo_1042|'CancellationToken' parameters should have specific name.|&#x2713;|&#x2713;|
 |MiKo_1043|'CancellationToken' variables should have specific name.|&#x2713;|&#x2713;|
-|MiKo_1044|Commands should be suffixed with 'Command'.|&#x2713;|\-|
+|MiKo_1044|Commands should be suffixed with 'Command'.|&#x2713;|&#x2713;|
 |MiKo_1045|Methods that are invoked by commands should not be suffixed with 'Command'.|&#x2713;|&#x2713;|
 |MiKo_1046|Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).|&#x2713;|&#x2713;|
 |MiKo_1047|Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.|&#x2713;|&#x2713;|
@@ -88,7 +88,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1067|Methods should not contain 'Perform' in their names.|&#x2713;|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'.|&#x2713;|\-|
 |MiKo_1069|Property names reflect their meaning and not their type.|&#x2713;|\-|
-|MiKo_1070|Local collection variables shall use plural name.|&#x2713;|\-|
+|MiKo_1070|Local collection variables shall use plural name.|&#x2713;|&#x2713;|
 |MiKo_1071|Local boolean variables should be named as statements and not as questions.|&#x2713;|\-|
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions.|&#x2713;|\-|
 |MiKo_1073|Boolean fields should be named as statements and not as questions.|&#x2713;|\-|
@@ -134,7 +134,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
 |MiKo_2000|Documentation should be valid XML.|&#x2713;|\-|
-|MiKo_2001|Events should be documented properly.|&#x2713;|\-|
+|MiKo_2001|Events should be documented properly.|&#x2713;|&#x2713;|
 |MiKo_2002|EventArgs should be documented properly.|&#x2713;|\-|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase.|&#x2713;|\-|
 |MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
@@ -145,15 +145,15 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|&#x2713;|\-|
 |MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
-|MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|&#x2713;|\-|
+|MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|&#x2713;|&#x2713;|
 |MiKo_2016|Documentation for asynchronous methods should start with specific phrase.|&#x2713;|&#x2713;|
 |MiKo_2017|Dependency properties should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
-|MiKo_2018|Documentation should not use the ambiguous term 'Check'.|&#x2713;|\-|
+|MiKo_2018|Documentation should not use the ambiguous terms 'Check' or 'Test'.|&#x2713;|&#x2713;|
 |MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ").|&#x2713;|\-|
 |MiKo_2020|Inherited documentation should be used with &lt;inheritdoc /&gt; marker.|&#x2713;|&#x2713;|
 |MiKo_2021|Documentation of parameter should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2022|Documentation of [out] parameters should have a default starting phrase.|&#x2713;|\-|
-|MiKo_2023|Documentation of Boolean parameters should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2022|Documentation of [out] parameters should have a default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2023|Documentation of Boolean parameters should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2024|Documentation of Enum parameters should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2025|Documentation of 'CancellationToken' parameters should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2026|Used parameters should not be documented to be unused.|&#x2713;|\-|
@@ -180,7 +180,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2047|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|&#x2713;|\-|
 |MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'.|&#x2713;|\-|
-|MiKo_2050|Exceptions should be documented following the .NET Framework.|&#x2713;|\-|
+|MiKo_2050|Exceptions should be documented following the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').|&#x2713;|\-|
 |MiKo_2052|Throwing of ArgumentNullException should be documented using a default phrase.|&#x2713;|\-|
 |MiKo_2053|Throwing of ArgumentNullException should be documented only for reference type parameters.|&#x2713;|\-|
@@ -193,8 +193,8 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_2071|&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.|&#x2713;|\-|
 |MiKo_2072|&lt;summary&gt; documentation should not start with 'Try'.|&#x2713;|&#x2713;|
 |MiKo_2073|&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines whether '.|&#x2713;|&#x2713;|
-|MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase.|&#x2713;|\-|
-|MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase.|&#x2713;|&#x2713;|
+|MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.|&#x2713;|&#x2713;|
 |MiKo_2090|Documentation for equality operator shall have default phrase.|&#x2713;|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase.|&#x2713;|&#x2713;|
@@ -301,7 +301,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_4001|Methods with same name should be ordered based on the number of their parameters.|&#x2713;|\-|
 |MiKo_4002|Methods with same name and accessibility should be placed side-by-side.|&#x2713;|\-|
 |MiKo_4003|Dispose methods should be placed directly after constructors and finalizers.|&#x2713;|&#x2713;|
-|MiKo_4004|The interface that gives a type its name should be placed directly after the type's declaration.|&#x2713;|\-|
+|MiKo_4004|The interface that gives a type its name should be placed directly after the type's declaration.|&#x2713;|&#x2713;|
 |MiKo_4101|Test initialization methods should be ordered directly after One-Time methods.|&#x2713;|&#x2713;|
 |MiKo_4102|Test cleanup methods should be ordered before test methods.|&#x2713;|&#x2713;|
 |MiKo_4103|One-Time test initialization methods should be ordered before all other methods.|&#x2713;|&#x2713;|

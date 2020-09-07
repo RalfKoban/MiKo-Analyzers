@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 

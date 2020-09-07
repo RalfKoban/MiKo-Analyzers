@@ -29,7 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (node.Parent is InvocationExpressionSyntax s && s.ArgumentList.Arguments.Count == 1 && IsLogManagerGetLoggerCall(node))
             {
                 var argument = s.ArgumentList.Arguments[0];
-                var type = context.SemanticModel.GetTypeInfo(argument.Expression).Type;
+
+                var type = argument.GetTypeSymbol(context.SemanticModel);
 
                 if (type.SpecialType != SpecialType.System_String)
                 {

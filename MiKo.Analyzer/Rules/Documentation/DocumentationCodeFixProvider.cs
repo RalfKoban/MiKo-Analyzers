@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var index = GetIndex(content);
 
             XmlTextSyntax newText;
-            if (content[index] is XmlTextSyntax text)
+            if (index >= 0 && content[index] is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
                 content = content.Remove(content[index]);
@@ -64,9 +64,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 newText = SyntaxFactory.XmlText(phrase);
             }
 
+            var newContent = index >= 0 ?
+                                 content.Insert(index, newText)
+                                 : content.Add(newText);
+
             return SyntaxFactory.XmlElement(
                                             comment.StartTag,
-                                            content.Insert(index, newText),
+                                            newContent,
                                             comment.EndTag);
         }
 
@@ -104,6 +108,76 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             comment.StartTag,
                                             content.Insert(index, startText).Insert(index + 1, seeCref).Insert(index + 2, continueText),
                                             comment.EndTag);
+        }
+
+        protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
+        {
+            var lastNode = comment.Content.Last();
+            if (lastNode is XmlTextSyntax t)
+            {
+                // we have a text at the end, so we have to find the text
+                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+
+                if (lastToken.IsKind(SyntaxKind.None))
+                {
+                    // seems like we have a <see cref/> or something with a CRLF at the end
+                    var token = SyntaxFactory.Token(default, SyntaxKind.XmlTextLiteralToken, ending, ending, default);
+                    return comment.InsertTokensBefore(t.TextTokens.First(), new[] { token });
+                }
+                else
+                {
+                    var valueText = lastToken.ValueText.TrimEnd();
+
+                    // in case there is any, get rid of last dot
+                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
+                    {
+                        valueText = valueText.WithoutSuffix(".");
+                    }
+
+                    var text = valueText + ending;
+                    var token = SyntaxFactory.Token(lastToken.LeadingTrivia, SyntaxKind.XmlTextLiteralToken, text, text, lastToken.TrailingTrivia);
+
+                    return comment.ReplaceToken(lastToken, token);
+                }
+            }
+
+            // we have a <see cref/> or something at the end
+            return comment.InsertNodeAfter(lastNode, SyntaxFactory.XmlText(ending));
+        }
+
+        protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
+        {
+            var lastNode = comment.Content.Last();
+            if (lastNode is XmlTextSyntax t)
+            {
+                var text = commentStart;
+
+                // we have a text at the end, so we have to find the text
+                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+
+                if (lastToken.IsKind(SyntaxKind.None))
+                {
+                    // seems like we have a <see cref/> or something with a CRLF at the end
+                }
+                else
+                {
+                    var valueText = lastToken.ValueText.TrimEnd();
+
+                    // in case there is any, get rid of last dot
+                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
+                    {
+                        valueText = valueText.WithoutSuffix(".");
+                    }
+
+                    text = valueText + commentStart;
+                }
+
+                return comment.ReplaceNode(t, SyntaxFactory.XmlText(text))
+                              .AddContent(seeCref, SyntaxFactory.XmlText(commentContinue).WithTrailingXmlComment());
+            }
+
+            // we have a <see cref/> or something at the end
+            return comment.InsertNodeAfter(lastNode, SyntaxFactory.XmlText(commentContinue));
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
@@ -164,13 +238,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
 
-        protected static SyntaxNode Comment(SyntaxNode syntax, string[] terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes)
         {
-            var result = syntax;
+            return comment
+                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                   .WithContent(SyntaxFactory.List(nodes))
+                   .WithEndTag(comment.EndTag.WithLeadingXmlComment());
+        }
+
+        protected static T Comment<T>(T syntax, IEnumerable<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
+        {
+            var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
 
             foreach (var text in syntax.DescendantNodes().OfType<XmlTextSyntax>())
             {
-                var newText = text;
+                var tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
 
                 // replace token in text
                 foreach (var token in text.TextTokens)
@@ -179,24 +261,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (originalText.ContainsAny(terms))
                     {
-                        var replacedText = originalText;
-
-                        foreach (var term in replacementMap)
-                        {
-                            replacedText = replacedText.Replace(term.Key, term.Value);
-                        }
+                        var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
 
                         var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
 
-                        newText = newText.ReplaceToken(token, newToken);
+                        tokenMap.Add(token, newToken);
                     }
                 }
 
-                result = result.ReplaceNode(text, newText);
+                if (tokenMap.Any())
+                {
+                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
+                    textMap.Add(text, newText);
+                }
             }
 
-            return result;
+            if (textMap.Any())
+            {
+                var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
+                return result;
+            }
+
+            return syntax;
         }
+
+        protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
+
+        protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlElement(Constants.XmlTag.Para, nodes);
+
+        protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");
+
+        protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
+
+        protected static XmlEmptyElementSyntax SeeLangword_False() => SeeLangword("false");
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
@@ -226,8 +323,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static int GetIndex(SyntaxList<XmlNodeSyntax> content)
         {
+            if (content.Count == 0)
+            {
+                return -1;
+            }
+
             var onlyWhitespaceText = content[0] is XmlTextSyntax t && GetText(t).IsNullOrWhiteSpace();
-            return onlyWhitespaceText ? 1 : 0;
+            return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
         }
 
         private static string GetText(XmlTextSyntax text)

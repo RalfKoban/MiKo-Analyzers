@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Composition;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Append read-only text";
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var comment = (XmlElementSyntax)syntax;
 

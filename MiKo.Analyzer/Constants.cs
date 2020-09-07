@@ -176,9 +176,9 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
 
-            internal static readonly string NonGenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation.";
+            internal const string NonGenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation.";
 
-            internal static readonly string GenericTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate + " The value of the {1} parameter contains ";
+            internal const string GenericTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate + " The value of the {1} parameter contains ";
 
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
@@ -210,16 +210,20 @@ namespace MiKoSolutions.Analyzers
                     "; otherwise, <see langword=\"false\" />.",
                 };
 
+            internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
+
             internal static readonly string[] BooleanParameterStartingPhrase =
                 {
-                    "<see langword=\"true\"/> to ",
-                    "<see langword=\"true\" /> to ",
+                    string.Format(BooleanParameterStartingPhraseTemplate, "<see langword=\"true\"/>"),
+                    string.Format(BooleanParameterStartingPhraseTemplate, "<see langword=\"true\" />"),
                 };
+
+            internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
 
             internal static readonly string[] BooleanParameterEndingPhrase =
                 {
-                    "; otherwise, <see langword=\"false\"/>.",
-                    "; otherwise, <see langword=\"false\" />.",
+                    string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\"/>"),
+                    string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\" />"),
                 };
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
@@ -234,7 +238,7 @@ namespace MiKoSolutions.Analyzers
                     ", otherwise with a result of <see langword=\"false\" />.",
                 };
 
-            internal static readonly string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
+            internal const string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
@@ -272,7 +276,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
 
-            internal static readonly string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
+            internal const string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
 
             internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "the enumerated constant that is the ").ToArray();
 
@@ -289,9 +293,13 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ArrayReturnTypeStartingPhrase = { "An array of ", "The array of " };
 
+            internal static readonly string[] ByteArrayReturnTypeStartingPhrase = { "A byte array containing ", "The byte array containing " };
+
             internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "an array of ").ToArray();
 
-            internal static readonly string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
+            internal static readonly string[] ByteArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a byte array containing ").ToArray();
+
+            internal const string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
 
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
@@ -299,7 +307,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
+            internal const string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
 
             internal static readonly string[] DependencyPropertyFieldValuePhrase =
                 {
@@ -307,7 +315,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string RoutedEventFieldSummaryPhraseTemplate = "Identifies the {0} routed event.";
+            internal const string RoutedEventFieldSummaryPhraseTemplate = "Identifies the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldSummaryPhrase =
                 {
@@ -315,7 +323,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string RoutedEventFieldValuePhraseTemplate = "The identifier for the {0} routed event.";
+            internal const string RoutedEventFieldValuePhraseTemplate = "The identifier for the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldValuePhrase =
                 {
@@ -380,10 +388,12 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
 
+            internal const string ExceptionCtorSummaryStartingPhraseTemplate = "Initializes a new instance of the {0} class";
+
             internal static readonly string[] ExceptionCtorSummaryStartingPhrase =
                 {
-                    "Initializes a new instance of the <see cref=\"{0}\"/> class",
-                    "Initializes a new instance of the <see cref=\"{0}\" /> class",
+                    string.Format(ExceptionCtorSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
+                    string.Format(ExceptionCtorSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
             internal const string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
@@ -396,17 +406,19 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionCtorMessageParamPhrase = { "The error message that explains the reason for the exception." };
 
+            internal const string ExceptionCtorExceptionParamPhraseTemplate = @"The exception that is the cause of the current exception.{0}If the {1} parameter is not {2}, the current exception is raised in a {3} block that handles the inner exception.";
+
             internal static readonly string[] ExceptionCtorExceptionParamPhrase =
                 {
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException"" /> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
-                    @"The exception that is the cause of the current exception. If the <paramref name=""innerException""/> parameter is not <see langword=""null"" />, the current exception is raised in a <b>catch</b> block that handles the inner exception.",
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException""/>", @"<see langword=""null""/>", @"<b>catch</b>"),
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException"" />", @"<see langword=""null"" />", @"<b>catch</b>"),
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException"" />", @"<see langword=""null""/>", @"<b>catch</b>"),
+                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException""/>", @"<see langword=""null"" />", @"<b>catch</b>"),
                 };
 
             internal const string FactorySummaryPhrase = "Provides support for creating ";
 
-            internal static readonly string FactoryCreateMethodSummaryStartingPhraseTemplate = "Creates a new instance of the {0} type with ";
+            internal const string FactoryCreateMethodSummaryStartingPhraseTemplate = "Creates a new instance of the {0} type with ";
 
             internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =
                 {
@@ -414,7 +426,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
                 };
 
-            internal static readonly string FactoryCreateCollectionMethodSummaryStartingPhraseTemplate = "Creates a collection of new instances of the {0} type with ";
+            internal const string FactoryCreateCollectionMethodSummaryStartingPhraseTemplate = "Creates a collection of new instances of the {0} type with ";
 
             internal static readonly string[] FactoryCreateCollectionMethodSummaryStartingPhrase =
                 {
@@ -428,7 +440,7 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ParamRefBeginningPhrase = @"<paramref name=""{0}""";
 
-            internal static readonly string ExtensionMethodClassStartingPhraseTemplate = "Provides a set of {0} methods for ";
+            internal const string ExtensionMethodClassStartingPhraseTemplate = "Provides a set of {0} methods for ";
 
             internal static readonly string[] ExtensionMethodClassStartingPhrase =
                 {
@@ -496,7 +508,7 @@ namespace MiKoSolutions.Analyzers
 
             internal const string CommandSummaryStartingPhrase = "Represents a command that can ";
 
-            internal static readonly string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
+            internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =
                 {
@@ -506,7 +518,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
-            internal static readonly string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
+            internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
                 {
@@ -516,7 +528,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
-            internal static readonly string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
+            internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
 
             internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
                 {
@@ -539,13 +551,16 @@ namespace MiKoSolutions.Analyzers
                     "Marks ",
                 };
 
-            internal static readonly string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
+            internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
 
             internal const string WasNotSuccessfulPhrase = "was not successful";
+
+            internal const string DeterminesWhetherPhrase = "Determines whether";
         }
 
         internal static class XmlTag
         {
+            internal const string C = "c";
             internal const string Code = "code";
             internal const string Example = "example";
             internal const string Exception = "exception";
@@ -565,6 +580,13 @@ namespace MiKoSolutions.Analyzers
             internal const string TypeParam = "typeparam";
             internal const string TypeParamRef = "typeparamref";
             internal const string Value = "value";
+
+            internal static class Attribute
+            {
+                internal const string Cref = "cref";
+                internal const string Langword = "langword";
+                internal const string Langref = "langref";
+            }
         }
 
         internal static class Invocations

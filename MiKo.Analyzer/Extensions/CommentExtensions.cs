@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetExceptionComment(string exceptionTypeFullName, string commentXml)
         {
-            return FlattenComment(GetExceptionCommentElements(commentXml).Where(_ => _.Attribute("cref")?.Value == exceptionTypeFullName));
+            return FlattenComment(GetExceptionCommentElements(commentXml).Where(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value == exceptionTypeFullName));
         }
 
         internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).Where(_ => _ != null);

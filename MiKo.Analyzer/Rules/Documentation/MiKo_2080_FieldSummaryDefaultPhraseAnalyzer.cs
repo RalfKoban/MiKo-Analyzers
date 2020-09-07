@@ -15,11 +15,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartingDefaultPhrase = "The ";
         private const string StartingEnumerableDefaultPhrase = "Contains ";
         private const string StartingBooleanDefaultPhrase = "Indicates whether ";
+        private const string StartingGuidDefaultPhrase = "The unique identifier for ";
 
         private const StringComparison Comparison = StringComparison.Ordinal;
 
         public MiKo_2080_FieldSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
         {
+        }
+
+        internal static string GetStartingPhrase(IFieldSymbol symbol)
+        {
+            if (symbol.IsConst)
+            {
+                return StartingDefaultPhrase;
+            }
+
+            var type = symbol.Type;
+
+            if (type.IsBoolean())
+            {
+                return StartingBooleanDefaultPhrase;
+            }
+
+            if (type.IsGuid())
+            {
+                return StartingGuidDefaultPhrase;
+            }
+
+            if (type.IsEnumerable())
+            {
+                return StartingEnumerableDefaultPhrase;
+            }
+
+            return StartingDefaultPhrase;
         }
 
         protected override bool ShallAnalyzeField(IFieldSymbol symbol)
@@ -45,23 +73,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
             var fieldSymbol = (IFieldSymbol)symbol;
-            var type = fieldSymbol.Type;
 
-            var phrase = fieldSymbol.IsConst is false && type.IsBoolean()
-                             ? StartingBooleanDefaultPhrase
-                             : StartingDefaultPhrase;
+            var phrase = GetStartingPhrase(fieldSymbol);
 
             if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            // alternative check
-            if (fieldSymbol.IsConst is false && type.IsEnumerable())
+            // alternative check for enumerables
+            if (fieldSymbol.IsConst is false && fieldSymbol.Type.IsEnumerable())
             {
-                phrase = StartingEnumerableDefaultPhrase;
-
-                if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
+                if (summaries.Any(_ => _.StartsWith(StartingDefaultPhrase, Comparison)))
                 {
                     return Enumerable.Empty<Diagnostic>();
                 }

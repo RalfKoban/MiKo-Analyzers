@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1046_AsyncMethodsSuffixAnalyzer.Id;
 
-        protected override string Title => "Append '" + Constants.AsyncSuffix + "'";
+        protected override string Title => "Append '" + Constants.AsyncSuffix + "' suffix";
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1046_AsyncMethodsSuffixAnalyzer.FindBetterName((IMethodSymbol)symbol);
 

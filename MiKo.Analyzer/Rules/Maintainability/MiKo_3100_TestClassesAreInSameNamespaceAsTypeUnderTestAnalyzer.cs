@@ -83,9 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (methodDeclaration.ExpressionBody?.Expression is ObjectCreationExpressionSyntax oces)
                 {
-                    var typeInfo = semanticModel.GetTypeInfo(oces);
-                    var type = typeInfo.Type;
-
+                    var type = oces.GetTypeSymbol(semanticModel);
                     types.Add(type);
                 }
             }
@@ -98,9 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.GetName() == ins.GetName()) && variable.Initializer.Value is ObjectCreationExpressionSyntax oces)
                     {
-                        var typeInfo = semanticModel.GetTypeInfo(oces);
-                        var type = typeInfo.Type;
-
+                        var type = oces.GetTypeSymbol(semanticModel);
                         types.Add(type);
                     }
                 }

@@ -14,11 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2091_InequalityOperatorAnalyzer.Id;
 
-        protected override string Title => "Apply default comment";
+        protected override string Title => "Apply standard comment";
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 
@@ -32,9 +32,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var param2 = Comment(SyntaxFactory.XmlParamElement(parameters[1].Identifier.ValueText), "The second value to compare.").WithTrailingXmlComment();
 
             var returns = SyntaxFactory.XmlReturnsElement(
-                                                          SeeLangword("true").WithLeadingXmlComment(),
+                                                          SeeLangword_True().WithLeadingXmlComment(),
                                                           SyntaxFactory.XmlText(" if both instances are considered not equal; otherwise, "),
-                                                          SeeLangword("false"),
+                                                          SeeLangword_False(),
                                                           SyntaxFactory.XmlText(".").WithTrailingXmlComment())
                                        .WithEndOfLine();
 

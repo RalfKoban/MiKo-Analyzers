@@ -30,6 +30,14 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
   </ItemGroup>
 
+  <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
+  <ItemGroup Condition="'$(NCrunch)' == '1'">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <ItemGroup Condition="'$(NCrunch)' != '1'">
     <PackageReference Include="Codecov" Version="1.10.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.205">

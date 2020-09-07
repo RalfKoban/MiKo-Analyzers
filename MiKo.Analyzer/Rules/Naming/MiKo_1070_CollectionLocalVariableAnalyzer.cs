@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(ISymbol symbol) => GetPluralName(symbol.Name, out _);
+
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsEnumerable() && symbol.Name != "AssemblyCatalog"; // ignore MEF aggregate catalog
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
@@ -29,12 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var name = originalName.EndsWithNumber() ? originalName.WithoutNumberSuffix() : originalName;
-
-                var pluralName = name.EndsWithAny(Constants.Markers.Collections)
-                                     ? Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections)
-                                     : Pluralizer.GetPluralName(name);
-
+                var pluralName = GetPluralName(originalName, out var name);
                 if (pluralName is null)
                 {
                     continue;
@@ -73,6 +70,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 default:
                     return false;
             }
+        }
+
+        private static string GetPluralName(string originalName, out string name)
+        {
+            name = originalName.EndsWithNumber() ? originalName.WithoutNumberSuffix() : originalName;
+
+            if (name.EndsWithAny(Constants.Markers.Collections))
+            {
+                return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+            }
+
+            return Pluralizer.GetPluralName(name);
         }
     }
 }

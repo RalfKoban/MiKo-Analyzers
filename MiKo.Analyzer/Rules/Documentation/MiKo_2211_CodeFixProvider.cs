@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 
@@ -34,8 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                var para = SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
-                var newSummary = summary.AddContent(para).AddContent(remarks.Content.ToArray());
+                var newSummary = summary.AddContent(Para()).AddContent(remarks.Content.ToArray());
 
                 return SyntaxFactory.DocumentationComment(newSummary).WithEndOfLine();
             }

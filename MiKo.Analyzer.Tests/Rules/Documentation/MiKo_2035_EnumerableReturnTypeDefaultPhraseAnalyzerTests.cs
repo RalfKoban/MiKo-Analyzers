@@ -92,6 +92,23 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_Byte_array_only_method()
+            => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A byte array containing whatever.
+    /// </returns>
+    public byte[] DoSomething(object o) => null;
+}
+");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_(
                                                                                     [Values("returns", "value")] string xmlTag,
@@ -211,49 +228,77 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_collection()
+        public void Code_gets_fixed_for_byte_array_type()
         {
             const string OriginalText = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 public class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some integers.
+    /// Some data.
     /// </returns>
-    public IList DoSomething { get; set; }
+    public byte[] DoSomething { get; set; }
 }
 ";
 
             const string FixedText = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 public class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A collection of some integers.
+    /// A byte array containing some data.
     /// </returns>
-    public IList DoSomething { get; set; }
+    public byte[] DoSomething { get; set; }
 }
 ";
 
             VerifyCSharpFix(OriginalText, FixedText);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_generic_collection()
+        [TestCase("Some integers.", "A collection of some integers.")]
+        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
+        [TestCase("A list of some integers.", "A collection of some integers.")]
+        public void Code_gets_fixed_for_non_generic_collection_(string originalPhrase, string fixedPhrase)
         {
-            const string OriginalText = @"
+            const string Template = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###
+    /// </returns>
+    public IList DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
+        }
+
+        [TestCase("Some integers.", "A collection of some integers.")]
+        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
+        [TestCase("An enumerable with some integers.", "A collection of some integers.")]
+        [TestCase("A list of some integers.", "A collection of some integers.")]
+        [TestCase("A list with some integers.", "A collection of some integers.")]
+        [TestCase("The enumerable of some integers.", "A collection of some integers.")]
+        [TestCase("The enumerable with some integers.", "A collection of some integers.")]
+        [TestCase("The list of some integers.", "A collection of some integers.")]
+        [TestCase("The list with some integers.", "A collection of some integers.")]
+        [TestCase("The collection of some integers.", "A collection of some integers.")]
+        [TestCase("The collection with some integers.", "A collection of some integers.")]
+        [TestCase("The array of some integers.", "A collection of some integers.")]
+        [TestCase("The array with some integers.", "A collection of some integers.")]
+        public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
+        {
+            const string Template = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -264,30 +309,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some integers.
+    /// ###
     /// </returns>
     public IEnumerable<int> DoSomething { get; set; }
 }
 ";
 
-            const string FixedText = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// A collection of some integers.
-    /// </returns>
-    public IEnumerable<int> DoSomething { get; set; }
-}
-";
-
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
         [Test]
@@ -368,6 +396,48 @@ public class TestMe
     /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains an array of some integers.
     /// </returns>
     public Task<int[]> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Task_with_byte_array()
+        {
+            const string OriginalText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Some data.
+    /// </returns>
+    public Task<byte[]> DoSomething { get; set; }
+}
+";
+
+            const string FixedText = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a byte array containing some data.
+    /// </returns>
+    public Task<byte[]> DoSomething { get; set; }
 }
 ";
 

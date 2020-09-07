@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1044";
 
-        private const string Suffix = "Command";
+        internal const string Suffix = "Command";
 
         private static readonly string[] SingleSuffix = { Suffix };
         private static readonly string[] Suffixes = { "_command", Suffix };
@@ -25,11 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCommand();
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => ShallAnalyze(method.ReturnType);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => ShallAnalyze(symbol.ReturnType) && symbol.ContainingType.IsTestClass() is false;
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => ShallAnalyze(symbol.Type);
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => ShallAnalyze(symbol.Type);
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => AnalyzeName(symbol);
 

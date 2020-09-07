@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                        : invocation;
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var guid = CreateGuid();
             var format = "D";

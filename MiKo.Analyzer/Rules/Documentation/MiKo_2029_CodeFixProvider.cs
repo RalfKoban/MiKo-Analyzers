@@ -18,13 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 
             var wrongInheritDocs = syntax.DescendantNodes().OfType<XmlEmptyElementSyntax>()
                                          .Where(_ => _.Name.LocalName.ValueText == Constants.XmlTag.Inheritdoc
-                                                  && _.Attributes.Any(__ => __.Name.LocalName.ValueText == "cref"))
+                                                  && _.Attributes.Any(__ => __.Name.LocalName.ValueText == Constants.XmlTag.Attribute.Cref))
                                          .ToList();
 
             return comment.ReplaceNodes(wrongInheritDocs, (_, __) => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc));

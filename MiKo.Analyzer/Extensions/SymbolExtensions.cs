@@ -499,6 +499,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsBoolean(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Boolean;
 
+        internal static bool IsByte(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Byte;
+
+        internal static bool IsGuid(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Guid);
+
         internal static bool IsObject(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Object;
 
         internal static bool IsRoutedEvent(this ITypeSymbol symbol) => symbol.Name == "RoutedEvent" || symbol.Name == "System.Windows.RoutedEvent";
@@ -637,6 +641,8 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
         internal static bool IsPartial(this ITypeSymbol symbol) => symbol.Locations.Length > 1;
+
+        internal static bool IsGeneric(this ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
         internal static bool TryGetGenericArgumentType(this ITypeSymbol symbol, out ITypeSymbol result, int index = 0)
         {

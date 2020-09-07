@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -97,8 +98,180 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">Some condition</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_comment_with_ending_dot()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">Some condition.</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_different_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// Some condition
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_text_with_ending_seeCref()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// Some condition for <see cref=""TestMe""/>
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition for <see cref=""TestMe""/>; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        // [TestCase(@"If set to <see langword=""true""/> some condition.")]
+        // [TestCase(@"If set to <see langref=""true""/> some condition.")]
+        [TestCase(@"<see langword=""true""/> if some condition. Otherwise <see langword=""false""/>.")]
+        [TestCase(@"<see langword=""true""/> if some condition. <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> if some condition; otherwise <see langword=""false""/>.")]
+        [TestCase(@"<see langword=""true""/> if some condition; <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langref=""true""/> if some condition")]
+        [TestCase(@"<c>true</c> if some condition; <c>false</c> otherwise.")]
+        [TestCase(@"Determines whether some condition.")]
+        [TestCase(@"Indicates whether some condition.")]
+        [TestCase(@"If set to true if some condition.")]
+        [TestCase(@"True if some condition. Otherwise false.")]
+        public void Code_gets_fixed_on_same_line_For_special_phrase_(string phrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">" + phrase + @"</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2023_BooleanParamDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2023_CodeFixProvider();
     }
 }

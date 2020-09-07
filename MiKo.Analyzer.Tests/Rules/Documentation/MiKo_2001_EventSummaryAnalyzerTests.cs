@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -81,8 +82,45 @@ public class TestMe
 }
 ");
 
+        [TestCase("Event is fired after", "Occurs after")]
+        [TestCase("Event is fired before", "Occurs before")]
+        [TestCase("Event is fired when", "Occurs when")]
+        [TestCase("Event is raised when", "Occurs when")]
+        [TestCase("Event occurs when", "Occurs when")]
+        [TestCase("Fired after", "Occurs after")]
+        [TestCase("Fired before", "Occurs before")]
+        [TestCase("Fired when", "Occurs when")]
+        [TestCase("Indicates that", "Occurs when")]
+        [TestCase("Is fired after", "Occurs after")]
+        [TestCase("Is fired before", "Occurs before")]
+        [TestCase("Is fired when", "Occurs when")]
+        [TestCase("Is raised when", "Occurs when")]
+        [TestCase("Raised after", "Occurs after")]
+        [TestCase("Raised before", "Occurs before")]
+        [TestCase("Raised if", "Occurs if")]
+        [TestCase("Raised when", "Occurs when")]
+        [TestCase("This event is fired for", "Occurs for")]
+        [TestCase("This event is raised for", "Occurs for")]
+        [TestCase("This event occurs when", "Occurs when")]
+        public void Code_gets_fixed_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2001_EventSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2001_EventSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2001_CodeFixProvider();
     }
 }

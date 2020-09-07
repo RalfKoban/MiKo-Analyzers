@@ -38,12 +38,21 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).Result;
+
+        protected static async Task<ISymbol> GetSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
+        {
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+
+            return semanticModel.GetDeclaredSymbol(syntax, cancellationToken);
+        }
+
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
             => Task.FromResult(document.Project.Solution);
 
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax)
         {
-            var updatedSyntax = GetUpdatedSyntax(syntax);
+            var updatedSyntax = GetUpdatedSyntax(document, syntax);
             if (updatedSyntax is null || ReferenceEquals(updatedSyntax, syntax))
             {
                 return Task.FromResult(document);
@@ -63,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => null;
 
-        protected virtual SyntaxNode GetUpdatedSyntax(SyntaxNode syntax) => null;
+        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => null;
 
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
 

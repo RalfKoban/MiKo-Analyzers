@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case Fatal + Format:
                 {
                     // check for correct type (only ILog methods shall be reported)
-                    var type = methodCall.Expression.GetTypeSymbol(semanticModel);
+                    var type = methodCall.GetTypeSymbol(semanticModel);
 
                     if (type.Name != Constants.ILog)
                     {

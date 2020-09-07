@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -138,14 +139,42 @@ public class TestMe : ITestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_Checks_if_phrase()
+        {
+            const string OriginalText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Checks if it is there.
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            const string FixedText = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether it is there.
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2018_ChecksSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2018_ChecksSummaryAnalyzer();
 
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2018_CodeFixProvider();
+
         [ExcludeFromCodeCoverage]
         private static string[] CreateAmbiguousPhrases()
         {
-            var phrases = new[] { "Check ", "Checks " };
+            var phrases = new[] { "Check if ", "Checks if ", "Test if ", "Tests if " };
 
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _.ToUpper()));

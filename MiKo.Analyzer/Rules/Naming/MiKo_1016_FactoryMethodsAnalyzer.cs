@@ -12,8 +12,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1016";
 
+        private const string Prefix = "Create";
+
         public MiKo_1016_FactoryMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
+        }
+
+        internal static string FindBetterName(IMethodSymbol symbol)
+        {
+            var returnTypeName = symbol.ReturnType.Name;
+
+            if (symbol.ContainingType.Name == returnTypeName + "Factory")
+            {
+                // we have a factory that has the name of the type to return, so the method shall be 'Create' only
+                return Prefix;
+            }
+
+            if (symbol.ReturnType.IsGeneric())
+            {
+                // we have a generic type, so we do not know an exact name
+                return Prefix;
+            }
+
+            // we have a concrete type but a multiple-types factory
+            return Prefix + returnTypeName;
         }
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsFactory();
@@ -38,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod).ToList();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => method.Name.StartsWith("Create", StringComparison.Ordinal)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => method.Name.StartsWith(Prefix, StringComparison.Ordinal)
                                                                                                       ? Enumerable.Empty<Diagnostic>()
                                                                                                       : new[] { Issue(method) };
     }

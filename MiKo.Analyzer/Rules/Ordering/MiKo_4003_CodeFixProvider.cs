@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -17,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => "Place Dispose method after ctors and finalizers";
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(BaseTypeDeclarationSyntax syntax)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax)
         {
             var disposeMethod = GetDisposeMethod(syntax);
 

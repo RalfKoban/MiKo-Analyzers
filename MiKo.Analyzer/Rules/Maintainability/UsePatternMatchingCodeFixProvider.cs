@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(SyntaxKind.EqualsExpression));
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var binary = (BinaryExpressionSyntax)syntax;
 

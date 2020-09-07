@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => Expressions.ContainsKey(_.Kind()));
 
-        protected override SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var binary = (BinaryExpressionSyntax)syntax;
 
