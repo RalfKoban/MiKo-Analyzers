@@ -1,4 +1,6 @@
-﻿using System.Composition;
+﻿using System.Collections.Generic;
+using System.Composition;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -11,12 +13,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2035_CodeFixProvider)), Shared]
     public sealed class MiKo_2035_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
+        private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
+                                                                                {
+                                                                                    { "An enumerable of ", string.Empty },
+                                                                                    { "A list of ", string.Empty },
+                                                                                };
+
         public override string FixableDiagnosticId => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => "Fix return comment";
 
         protected override SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
         {
+            var preparedComment = PrepareComment(comment);
+
             // it's either a task or a generic collection
             if (returnType.Identifier.ValueText == nameof(Task))
             {
@@ -26,19 +36,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var isArray = returnType.TypeArgumentList.Arguments[0].IsKind(SyntaxKind.ArrayType);
                 var middlePart = isArray ? "an array of " : "a collection of ";
 
-                return CommentStartingWith(comment, parts[0], SeeCrefTaskResult(), parts[1] + middlePart);
+                return CommentStartingWith(preparedComment, parts[0], SeeCrefTaskResult(), parts[1] + middlePart);
             }
 
-            return CommentStartingWith(comment, Constants.Comments.EnumerableReturnTypeStartingPhrase[0]);
+            return CommentStartingWith(preparedComment, Constants.Comments.EnumerableReturnTypeStartingPhrase[0]);
         }
 
         protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType)
         {
             var phrases = returnType.IsKind(SyntaxKind.ArrayType)
-                                ? Constants.Comments.ArrayReturnTypeStartingPhrase
-                                : Constants.Comments.EnumerableReturnTypeStartingPhrase;
+                              ? Constants.Comments.ArrayReturnTypeStartingPhrase
+                              : Constants.Comments.EnumerableReturnTypeStartingPhrase;
 
-            return CommentStartingWith(comment, phrases[0]);
+            var preparedComment = PrepareComment(comment);
+            return CommentStartingWith(preparedComment, phrases[0]);
         }
+
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Select(_ => _.Key).ToList(), ReplacementMap);
     }
 }

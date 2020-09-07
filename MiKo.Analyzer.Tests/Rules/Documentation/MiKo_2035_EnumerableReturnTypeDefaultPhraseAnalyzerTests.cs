@@ -210,13 +210,14 @@ public class TestMe
             VerifyCSharpFix(OriginalText, FixedText);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_non_generic_collection()
+        [TestCase("Some integers.", "A collection of some integers.")]
+        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
+        [TestCase("A list of some integers.", "A collection of some integers.")]
+        public void Code_gets_fixed_for_non_generic_collection_(string originalPhrase, string fixedPhrase)
         {
-            const string OriginalText = @"
+            const string Template = @"
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 public class TestMe
 {
@@ -224,36 +225,21 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some integers.
+    /// ###
     /// </returns>
     public IList DoSomething { get; set; }
 }
 ";
 
-            const string FixedText = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// A collection of some integers.
-    /// </returns>
-    public IList DoSomething { get; set; }
-}
-";
-
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
-        [Test]
-        public void Code_gets_fixed_for_generic_collection()
+        [TestCase("Some integers.", "A collection of some integers.")]
+        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
+        [TestCase("A list of some integers.", "A collection of some integers.")]
+        public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
         {
-            const string OriginalText = @"
+            const string Template = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -264,30 +250,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some integers.
+    /// ###
     /// </returns>
     public IEnumerable<int> DoSomething { get; set; }
 }
 ";
 
-            const string FixedText = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// A collection of some integers.
-    /// </returns>
-    public IEnumerable<int> DoSomething { get; set; }
-}
-";
-
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
         [Test]
