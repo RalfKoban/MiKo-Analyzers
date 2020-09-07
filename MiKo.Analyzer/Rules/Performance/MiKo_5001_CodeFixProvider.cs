@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public override string FixableDiagnosticId => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
-        protected override string Title => "Place inside 'if'";
+        protected override string Title => Resources.MiKo_5001_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
 

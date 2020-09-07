@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                              MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id,
                                                                                              MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer.Id);
 
-        public override string FixableDiagnosticId => MiKo_1056_DependencyPropertyFieldPrefixAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id;
 
-        protected override string Title => "Rename dependency property key";
+        protected override string Title => Resources.MiKo_1057_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer.FindBetterName((IFieldSymbol)symbol);
 

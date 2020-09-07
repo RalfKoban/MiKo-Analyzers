@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Start summary with '" + StartingPhrase + "'";
+        protected override string Title => Resources.MiKo_2073_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {

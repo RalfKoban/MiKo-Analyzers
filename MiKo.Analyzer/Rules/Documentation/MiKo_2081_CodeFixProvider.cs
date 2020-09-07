@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2081_ReadOnlyFieldAnalyzer.Id;
 
-        protected override string Title => "Append read-only text";
+        protected override string Title => Resources.MiKo_2081_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {

@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1050_ReturnValueLocalVariableAnalyzer.Id;
 
-        protected override string Title => "Rename return value";
+        protected override string Title => Resources.MiKo_1050_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1050_ReturnValueLocalVariableAnalyzer.FindBetterName(symbol);
     }

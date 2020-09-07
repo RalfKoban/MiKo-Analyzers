@@ -10,6 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => MiKo_3083_UsePatternMatchingForNullEqualsExpressionAnalyzer.Id;
 
-        protected override string Title => "Apply 'is null' pattern";
+        protected override string Title => Resources.MiKo_3083_CodeFixTitle;
     }
 }

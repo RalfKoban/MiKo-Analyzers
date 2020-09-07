@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1005_EventArgsLocalVariableAnalyzer.Id;
 
-        protected override string Title => "Rename EventArgs variable";
+        protected override string Title => Resources.MiKo_1005_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1005_EventArgsLocalVariableAnalyzer.FindBetterName(symbol);
     }

@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Fix comment start of Boolean parameter";
+        protected override string Title => Resources.MiKo_2023_CodeFixTitle;
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {

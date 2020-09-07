@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer.Id;
 
-        protected override string Title => "Append underscore";
+        protected override string Title => Resources.MiKo_1110_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer.FindBetterName((IMethodSymbol)symbol);
 

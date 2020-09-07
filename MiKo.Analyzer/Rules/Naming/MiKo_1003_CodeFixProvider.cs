@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1003_EventHandlingMethodNamePrefixAnalyzer.Id;
 
-        protected override string Title => "Rename method according to event pattern";
+        protected override string Title => Resources.MiKo_1003_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1003_EventHandlingMethodNamePrefixAnalyzer.FindBetterName((IMethodSymbol)symbol);
 

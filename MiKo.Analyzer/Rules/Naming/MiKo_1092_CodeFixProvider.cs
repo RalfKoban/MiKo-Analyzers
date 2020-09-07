@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1092_AbilityTypeWrongSuffixedAnalyzer.Id;
 
-        protected override string Title => "Remove suffix";
+        protected override string Title => Resources.MiKo_1092_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1092_AbilityTypeWrongSuffixedAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
 

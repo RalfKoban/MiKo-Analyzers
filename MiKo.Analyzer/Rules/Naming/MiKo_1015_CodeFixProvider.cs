@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1015_InitMethodsAnalyzer.Id;
 
-        protected override string Title => "Rename 'Init' to 'Initialize'";
+        protected override string Title => Resources.MiKo_1015_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1015_InitMethodsAnalyzer.FindBetterName((IMethodSymbol)symbol);
 

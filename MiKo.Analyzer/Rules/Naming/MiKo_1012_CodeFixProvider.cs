@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1012_FireMethodsAnalyzer.Id;
 
-        protected override string Title => "Rename 'fire' to 'raise'";
+        protected override string Title => Resources.MiKo_1012_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1012_FireMethodsAnalyzer.FindBetterName((IMethodSymbol)symbol);
 

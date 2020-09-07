@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1019_ClearRemoveMethodsAnalyzer.Id;
 
-        protected override string Title => "Rename 'Clear' and 'Remove'";
+        protected override string Title => Resources.MiKo_1019_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1019_ClearRemoveMethodsAnalyzer.FindBetterName((IMethodSymbol)symbol);
 

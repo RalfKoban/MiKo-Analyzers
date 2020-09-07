@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1016_FactoryMethodsAnalyzer.Id;
 
-        protected override string Title => "Rename factory method";
+        protected override string Title => Resources.MiKo_1016_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First();
 

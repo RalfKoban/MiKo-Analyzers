@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1033_ParameterModelSuffixAnalyzer.Id;
 
-        protected override string Title => "Remove 'Model' indicator";
+        protected override string Title => Resources.MiKo_1033_CodeFixTitle;
 
         protected override string FindBetterName(IParameterSymbol symbol) => MiKo_1033_ParameterModelSuffixAnalyzer.FindBetterName(symbol);
     }

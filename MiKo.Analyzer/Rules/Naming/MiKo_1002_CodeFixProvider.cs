@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1002_EventHandlingMethodParametersAnalyzer.Id;
 
-        protected override string Title => "Rename event argument";
+        protected override string Title => Resources.MiKo_1002_CodeFixTitle;
 
         protected override string FindBetterName(IParameterSymbol symbol) => MiKo_1002_EventHandlingMethodParametersAnalyzer.FindBetterName(symbol);
     }

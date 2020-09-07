@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2025_CancellationTokenParamDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Fix comment start of CancellationToken";
+        protected override string Title => Resources.MiKo_2025_CodeFixTitle;
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {

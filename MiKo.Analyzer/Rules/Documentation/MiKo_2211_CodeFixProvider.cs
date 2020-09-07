@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer.Id;
 
-        protected override string Title => "Move remarks comment into summary";
+        protected override string Title => Resources.MiKo_2211_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 

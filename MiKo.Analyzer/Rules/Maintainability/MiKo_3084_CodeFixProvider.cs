@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         public override string FixableDiagnosticId => MiKo_3084_YodaExpressionAnalyzer.Id;
 
-        protected override string Title => "Place constant on right side";
+        protected override string Title => Resources.MiKo_3084_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => Expressions.ContainsKey(_.Kind()));
 

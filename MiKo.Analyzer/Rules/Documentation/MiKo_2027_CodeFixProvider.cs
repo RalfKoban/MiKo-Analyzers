@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Fix comment start of parameter of serialization ctor";
+        protected override string Title => Resources.MiKo_2027_CodeFixTitle;
 
         protected override IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ConstructorDeclarationSyntax>();
 

@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2301_TestArrangeActAssertCommentAnalyzer.Id;
 
-        protected override string Title => "Remove obvious AAA comment";
+        protected override string Title => Resources.MiKo_2301_CodeFixTitle;
 
         protected override bool IsTrivia => true;
 
