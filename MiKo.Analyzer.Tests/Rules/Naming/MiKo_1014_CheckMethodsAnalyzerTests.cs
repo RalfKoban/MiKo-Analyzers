@@ -42,81 +42,13 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_method_with_non_boolean_return_value()
-        {
-            const string OriginalCode = @"
-public class TestMe
-{
-    public object CheckSomething() => 42;
-}
-";
-
-            const string FixedCode = @"
-public class TestMe
-{
-    public object FindSomething() => 42;
-}
-";
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_method_with_boolean_return_value()
-        {
-            const string OriginalCode = @"
-public class TestMe
-{
-    public bool CheckSomething() => true;
-}
-";
-
-            const string FixedCode = @"
-public class TestMe
-{
-    public bool CanSomething() => true;
-}
-";
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_void_method_without_parameters()
-        {
-            const string OriginalCode = @"
-public class TestMe
-{
-    public void CheckSomething() { }
-}
-";
-
-            const string FixedCode = @"
-public class TestMe
-{
-    public void VerifySomething() { }
-}
-";
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_void_method_with_parameters()
-        {
-            const string OriginalCode = @"
-public class TestMe
-{
-    public void CheckSomething(object o) { }
-}
-";
-
-            const string FixedCode = @"
-public class TestMe
-{
-    public void ValidateSomething(object o) { }
-}
-";
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
+        [TestCase("class TestMe { object CheckSomething() => 42; }", "class TestMe { object FindSomething() => 42; }")]
+        [TestCase("class TestMe { bool CheckSomething() => true; }", "class TestMe { bool CanSomething() => true; }")]
+        [TestCase("class TestMe { bool CheckForSomething() => true; }", "class TestMe { bool HasSomething() => true; }")]
+        [TestCase("class TestMe { bool CheckFormat() => true; }", "class TestMe { bool HasFormat() => true; }")]
+        [TestCase("class TestMe { void CheckSomething() { } }", "class TestMe { void VerifySomething() { } }")]
+        [TestCase("class TestMe { void CheckSomething(object o) { } }", "class TestMe { void ValidateSomething(object o) { } }")]
+        public void Code_gets_fixed_for_method_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1014_CheckMethodsAnalyzer.Id;
 

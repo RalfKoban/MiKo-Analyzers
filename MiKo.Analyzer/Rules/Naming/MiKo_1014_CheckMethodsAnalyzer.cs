@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1014";
 
         private const string Phrase = "Check";
+        private const string HasPhrase = "CheckFor";
+        private const string SpecialHasPhrase = "CheckFormat";
 
         private static readonly string[] StartingPhrases = { "CheckIn", "CheckOut", "CheckAccess" };
 
@@ -22,11 +24,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IMethodSymbol method)
         {
-            var prefix = method.ReturnsVoid
-                             ? method.Parameters.Any() ? "Validate" : "Verify"
-                             : method.ReturnType.IsBoolean() ? "Can" : "Find";
+            var prefix = FindBetterPrefix(method);
 
-            return prefix + method.Name.Substring(Phrase.Length);
+            var phrase = prefix == "Has" && method.Name != SpecialHasPhrase
+                             ? HasPhrase
+                             : Phrase;
+
+            return prefix + method.Name.Substring(phrase.Length);
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
@@ -38,6 +42,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return forbidden
                        ? new[] { Issue(method) }
                        : Enumerable.Empty<Diagnostic>();
+        }
+
+        private static string FindBetterPrefix(IMethodSymbol method)
+        {
+            if (method.ReturnsVoid)
+            {
+                return method.Parameters.Any()
+                           ? "Validate"
+                           : "Verify";
+            }
+
+            if (method.ReturnType.IsBoolean())
+            {
+                var isHasCandidate = method.Name.StartsWith(HasPhrase, StringComparison.Ordinal);
+
+                return isHasCandidate
+                           ? "Has"
+                           : "Can";
+            }
+
+            return "Find";
         }
     }
 }
