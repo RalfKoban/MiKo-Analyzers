@@ -587,6 +587,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;Check&apos;.
+        /// </summary>
+        public static string MiKo_1014_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1014_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The term &apos;Check&apos; is ambiguous. If validation of parameters is meant, use something like &apos;Validate&apos; or &apos;Verify&apos;. If a check for a specific state is meant, use &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos; instead..
         /// </summary>
         public static string MiKo_1014_Description {
