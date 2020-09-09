@@ -559,6 +559,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename &apos;Notify&apos; to &apos;On&apos;.
+        /// </summary>
+        public static string MiKo_1013_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1013_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Many times, the term &apos;Notify&apos; indicates that an event shall be raised. In such case, the prefix &apos;On&apos; should be used instead.
         ///Example: Instead of &apos;NotifyPropertyChanged&apos; use &apos;OnPropertyChanged&apos;..
         /// </summary>
