@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -15,17 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
-                                                                                    { "This event is fired ", Phrase },
-                                                                                    { "This event is raised ", Phrase },
-                                                                                    { "This event occurs ", Phrase },
-                                                                                    { "Event is fired ", Phrase },
-                                                                                    { "Event is raised ", Phrase },
-                                                                                    { "Event occurs ", Phrase },
-                                                                                    { "Is fired ", Phrase },
-                                                                                    { "Is raised ", Phrase },
-                                                                                    { "Fired ", Phrase },
-                                                                                    { "Raised ", Phrase },
-                                                                                    { "Indicates that ", Phrase + "when " },
+                                                                                    { "This event is fired ", string.Empty },
+                                                                                    { "This event is raised ", string.Empty },
+                                                                                    { "This event occurs ", string.Empty },
+                                                                                    { "Event is fired ", string.Empty },
+                                                                                    { "Event is raised ", string.Empty },
+                                                                                    { "Event occurs ", string.Empty },
+                                                                                    { "Is fired ", string.Empty },
+                                                                                    { "Is raised ", string.Empty },
+                                                                                    { "Fired ", string.Empty },
+                                                                                    { "Raised ", string.Empty },
+                                                                                    { "Indicates ", string.Empty },
                                                                                 };
 
         public override string FixableDiagnosticId => MiKo_2001_EventSummaryAnalyzer.Id;
@@ -34,8 +35,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
-            var fixedComment = Comment((XmlElementSyntax)syntax, ReplacementMap.Select(_ => _.Key).ToList(), ReplacementMap);
+            var preparedComment = PrepareComment((XmlElementSyntax)syntax);
+            var fixedComment = CommentStartingWith(preparedComment, Phrase);
+
+            var text = fixedComment.Content[0].WithoutXmlCommentExterior();
+
+            if (text.StartsWith("Occurs that ", StringComparison.Ordinal))
+            {
+                return Comment(
+                               fixedComment,
+                               new[] { "Occurs that " },
+                               new[] { new KeyValuePair<string, string>("Occurs that ", "Occurs when ") });
+            }
+
             return fixedComment;
         }
+
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Select(_ => _.Key).ToList(), ReplacementMap);
     }
 }

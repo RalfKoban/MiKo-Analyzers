@@ -221,7 +221,7 @@ public class TestMeFactory
         {
             const string OriginalCode = @"
 /// <summary>
-/// Something.
+/// Creates something.
 /// </summary>
 public class TestMeFactory
 {
@@ -236,6 +236,30 @@ public class TestMeFactory
 public class TestMeFactory
 {
     public string Create() => new string();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_interface_summary()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// A factory that creates a <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
+/// </summary>
+public interface ITestMeFactory
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Provides support for creating <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
+/// </summary>
+public interface ITestMeFactory
+{
 }
 ";
 
@@ -301,7 +325,7 @@ public class TestMeFactory
         }
 
         [Test] // https://github.com/dotnet/roslyn/issues/47550
-        public void Code_gets_fixed_working_around_Roslyn_bug_47550()
+        public void Code_gets_fixed_working_around_Roslyn_issue_47550()
         {
             const string OriginalCode = @"
 internal interface IFactory
@@ -321,6 +345,32 @@ internal interface IFactory
     /// Creates a new instance of the <see cref=""IXyz""/> type with blah <see cref=""Xyz""/> blah.
     /// </summary>
     /// <returns></returns>
+    IXyz Create();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_specific_method_summary()
+        {
+            const string OriginalCode = @"
+internal interface IFactory
+{
+    /// <summary>
+    /// Creates a <see cref=""Xyz""/> type.
+    /// </summary>
+    IXyz Create();
+}
+";
+
+            const string FixedCode = @"
+internal interface IFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""IXyz""/> type with type.
+    /// </summary>
     IXyz Create();
 }
 ";

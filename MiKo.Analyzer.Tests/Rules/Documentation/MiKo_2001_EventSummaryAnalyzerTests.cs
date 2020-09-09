@@ -102,6 +102,7 @@ public class TestMe
         [TestCase("This event is fired for", "Occurs for")]
         [TestCase("This event is raised for", "Occurs for")]
         [TestCase("This event occurs when", "Occurs when")]
+        [TestCase("When", "Occurs when")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
             const string Template = @"
