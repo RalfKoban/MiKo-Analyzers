@@ -219,7 +219,7 @@ public class TestMeFactory
         [Test]
         public void Code_gets_fixed_for_class_summary()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Something.
 /// </summary>
@@ -229,7 +229,7 @@ public class TestMeFactory
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Provides support for creating something.
 /// </summary>
@@ -239,13 +239,13 @@ public class TestMeFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_method_summary()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMeFactory
 {
     /// <summary>
@@ -255,7 +255,7 @@ public class TestMeFactory
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMeFactory
 {
     /// <summary>
@@ -265,13 +265,13 @@ public class TestMeFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_collection_method_summary()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Collections.Generic;
 
@@ -284,7 +284,7 @@ public class TestMeFactory
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Collections.Generic;
 
@@ -297,7 +297,35 @@ public class TestMeFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test] // https://github.com/dotnet/roslyn/issues/47550
+        public void Code_gets_fixed_working_around_Roslyn_bug_47550()
+        {
+            const string OriginalCode = @"
+internal interface IFactory
+{
+    /// <summary>
+    /// Blah <see cref=""Xyz""/> blah.
+    /// </summary>
+    /// <returns></returns>
+    IXyz Create();
+}
+";
+
+            const string FixedCode = @"
+internal interface IFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""IXyz""/> type with blah <see cref=""Xyz""/> blah.
+    /// </summary>
+    /// <returns></returns>
+    IXyz Create();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2060_FactoryAnalyzer.Id;
