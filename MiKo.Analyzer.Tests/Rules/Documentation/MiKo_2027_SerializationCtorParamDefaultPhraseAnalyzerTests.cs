@@ -125,7 +125,7 @@ namespace Bla
         [Test]
         public void Code_gets_fixed_for_SerializationInfo()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Runtime.Serialization;
 
@@ -140,7 +140,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Runtime.Serialization;
 
@@ -157,13 +157,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_StreamingContext()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Runtime.Serialization;
 
@@ -178,7 +178,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Runtime.Serialization;
 
@@ -195,7 +195,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer.Id;

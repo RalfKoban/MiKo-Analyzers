@@ -170,7 +170,7 @@ public sealed class TestMe
         [Test]
         public void Code_gets_fixed_for_BR_tag_on_type()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Does something.
 /// <br />
@@ -181,7 +181,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Does something.
 /// <para/>
@@ -192,13 +192,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_BR_tag_on_method()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -210,7 +210,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -222,13 +222,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_P_tag_on_type()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Does something.
 /// <p>
@@ -240,7 +240,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Does something.
 /// <para>
@@ -252,13 +252,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_P_tag_on_method()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -271,7 +271,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -284,7 +284,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2042_BrParaAnalyzer.Id;

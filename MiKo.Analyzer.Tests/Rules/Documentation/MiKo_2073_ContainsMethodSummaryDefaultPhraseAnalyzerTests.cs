@@ -88,7 +88,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -98,7 +98,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -108,13 +108,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_async_phrase()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -124,7 +124,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -134,13 +134,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_Determines_if_phrase()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -150,7 +150,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -160,7 +160,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer.Id;

@@ -61,7 +61,7 @@ public static class TestMeExtensions
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Doing something.
 /// </summary>
@@ -71,7 +71,7 @@ public static class TestMeExtensions
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Provides a set of <see langword=""static""/> methods for doing something.
 /// </summary>
@@ -81,7 +81,7 @@ public static class TestMeExtensions
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;

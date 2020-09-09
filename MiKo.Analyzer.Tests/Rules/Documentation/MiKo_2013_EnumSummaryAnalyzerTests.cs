@@ -81,7 +81,7 @@ public enum TestMe
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Something.
 /// </summary>
@@ -90,7 +90,7 @@ public enum TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Defines values that specify Something.
 /// </summary>
@@ -98,20 +98,20 @@ public enum TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_on_single_line()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>Something to do.</summary>
 public enum TestMe
 {
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Defines values that specify Something to do.
 /// </summary>
@@ -119,13 +119,13 @@ public enum TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_with_multiline()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Something
 /// to do.
@@ -135,7 +135,7 @@ public enum TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Defines values that specify Something
 /// to do.
@@ -144,13 +144,13 @@ public enum TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_with_seecref_multiline()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// <see cref=""TestMe""/>
 /// Something
@@ -161,7 +161,7 @@ public enum TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Defines values that specify <see cref=""TestMe""/>
 /// Something
@@ -171,20 +171,20 @@ public enum TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_with_seecref_on_single_line()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary><see cref=""TestMe""/> Something to do.</summary>
 public enum TestMe
 {
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Defines values that specify <see cref=""TestMe""/> Something to do.
 /// </summary>
@@ -192,7 +192,7 @@ public enum TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2013_EnumSummaryAnalyzer.Id;

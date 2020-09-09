@@ -68,7 +68,7 @@ public class TestMe : " + interfaceName + @"
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Windows.Data;
 
@@ -80,7 +80,7 @@ public class TestMe : IValueConverter
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Windows.Data;
 
@@ -92,7 +92,7 @@ public class TestMe : IValueConverter
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer.Id;

@@ -135,7 +135,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe
@@ -148,7 +148,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -169,7 +169,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2091_InequalityOperatorAnalyzer.Id;

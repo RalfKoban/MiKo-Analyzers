@@ -148,7 +148,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_method_without_parameter()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe
@@ -160,7 +160,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -172,13 +172,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_method_with_parameter()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe
@@ -191,7 +191,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -206,7 +206,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2014_DisposeDefaultPhraseAnalyzer.Id;
