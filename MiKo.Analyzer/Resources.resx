@@ -1546,10 +1546,10 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Start summary with 'Determines whether'</value>
   </data>
   <data name="MiKo_2018_Description" xml:space="preserve">
-    <value>The terms 'Check' or 'Test' are ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines' instead.</value>
+    <value>The terms 'Check' or 'Test' are ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines whether' instead.</value>
   </data>
   <data name="MiKo_2018_MessageFormat" xml:space="preserve">
-    <value>Use '{2}' instead of ambiguous term '{1}'</value>
+    <value>Use '{2}' instead of '{1}'</value>
   </data>
   <data name="MiKo_2018_Title" xml:space="preserve">
     <value>Documentation should not use the ambiguous terms 'Check' or 'Test'.</value>
