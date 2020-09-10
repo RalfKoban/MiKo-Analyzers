@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             case "IsNotNull": return FixIsNotNull(args);
                             case "IsNull": return FixIsNull(args);
                             case "IsNullOrEmpty": return FixIsNullOrEmpty(args);
+                            case "IsSubsetOf": return FixIsSubsetOf(args);
                             case "IsTrue": return FixIsTrue(args);
                             case "Less": return FixLess(args);
                             case "LessOrEqual": return FixLessOrEqual(args);
@@ -103,6 +104,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixIsNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null"), 1, args);
 
         private static InvocationExpressionSyntax FixIsNullOrEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null", "Or", "Empty"), 1, args);
+
+        private static InvocationExpressionSyntax FixIsSubsetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SubsetOf", args[0]), 2, args);
 
         private static InvocationExpressionSyntax FixIsTrue(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("True"), 1, args);
 
