@@ -62,6 +62,34 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_methods()
+        {
+            Assert.Multiple(() =>
+                                {
+                                    foreach (var test in Tests)
+                                    {
+                                        No_issue_is_reported_for(@"
+using System;
+using NUnit.Framework;
+
+public class TestMe
+{
+    [" + test + @"]
+    public void Clear(int i)
+    {
+    }
+
+    [" + test + @"]
+    public void Remove()
+    {
+    }
+}
+");
+                                    }
+                                });
+        }
+
+        [Test]
         public void No_issue_is_reported_for_Clears_method_with_parameters() => No_issue_is_reported_for(@"
 using System;
 
