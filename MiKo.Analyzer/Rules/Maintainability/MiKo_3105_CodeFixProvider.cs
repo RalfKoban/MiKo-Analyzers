@@ -25,25 +25,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax i)
             {
                 // for the moment only consider Assert and not StringAssert etc.
-                if (i.GetName() == "Assert")
+                switch (i.GetName())
                 {
-                    switch (maes.GetName())
+                    case "Assert":
+                    case "CollectionAssert":
                     {
-                        case "AreEqual": return FixAssertAreEqual(original.ArgumentList.Arguments);
-                        case "AreNotEqual": return FixAssertAreNotEqual(original.ArgumentList.Arguments);
-                        case "AreSame": return FixAssertAreSame(original.ArgumentList.Arguments);
-                        case "AreNotSame": return FixAssertAreNotSame(original.ArgumentList.Arguments);
-                        case "IsTrue": return FixAssertIsTrue(original.ArgumentList.Arguments);
-                        case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
-                        case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
-                        case "IsNullOrEmpty": return FixAssertIsNullOrEmpty(original.ArgumentList.Arguments);
-                        case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
-                        case "IsNotNull": return FixAssertIsNotNull(original.ArgumentList.Arguments);
-                        case "IsNotEmpty": return FixAssertIsNotEmpty(original.ArgumentList.Arguments);
-                        case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
-                        case "GreaterOrEqual": return FixAssertGreaterOrEqual(original.ArgumentList.Arguments);
-                        case "Less": return FixAssertLess(original.ArgumentList.Arguments);
-                        case "LessOrEqual": return FixAssertLessOrEqual(original.ArgumentList.Arguments);
+                        switch (maes.GetName())
+                        {
+                            case "AreEqual": return FixAssertAreEqual(original.ArgumentList.Arguments);
+                            case "AreEquivalent": return FixCollectionAssertAreEquivalent(original.ArgumentList.Arguments);
+                            case "AreNotEqual": return FixAssertAreNotEqual(original.ArgumentList.Arguments);
+                            case "AreNotEquivalent": return FixCollectionAssertAreNotEquivalent(original.ArgumentList.Arguments);
+                            case "AreNotSame": return FixAssertAreNotSame(original.ArgumentList.Arguments);
+                            case "AreSame": return FixAssertAreSame(original.ArgumentList.Arguments);
+                            case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
+                            case "GreaterOrEqual": return FixAssertGreaterOrEqual(original.ArgumentList.Arguments);
+                            case "IsEmpty": return FixAssertIsEmpty(original.ArgumentList.Arguments);
+                            case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
+                            case "IsNotEmpty": return FixAssertIsNotEmpty(original.ArgumentList.Arguments);
+                            case "IsNotNull": return FixAssertIsNotNull(original.ArgumentList.Arguments);
+                            case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
+                            case "IsNullOrEmpty": return FixAssertIsNullOrEmpty(original.ArgumentList.Arguments);
+                            case "IsTrue": return FixAssertIsTrue(original.ArgumentList.Arguments);
+                            case "Less": return FixAssertLess(original.ArgumentList.Arguments);
+                            case "LessOrEqual": return FixAssertLessOrEqual(original.ArgumentList.Arguments);
+                            case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
+                        }
+
+                        break;
                     }
                 }
             }
@@ -101,6 +110,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(args[0], Is("Not", "Null"), 1, args);
         }
 
+        private static InvocationExpressionSyntax FixAssertIsEmpty(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("Empty"), 1, args);
+        }
+
         private static InvocationExpressionSyntax FixAssertIsNotEmpty(SeparatedSyntaxList<ArgumentSyntax> args)
         {
             return AssertThat(args[0], Is("Not", "Empty"), 1, args);
@@ -124,6 +138,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixAssertLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args)
         {
             return AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixCollectionAssertAreEquivalent(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Is("EquivalentTo", args[0]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixCollectionAssertAreNotEquivalent(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), 2, args);
         }
 
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
