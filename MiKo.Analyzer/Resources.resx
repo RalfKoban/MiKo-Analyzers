@@ -2996,7 +2996,7 @@ This allows easy usage without any arbitrary using directives. It also mimics th
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
   <data name="MiKo_3101_MessageFormat" xml:space="preserve">
-    <value>'{0}' should contain tests</value>
+    <value>Test class '{0}' should contain tests</value>
   </data>
   <data name="MiKo_3101_Title" xml:space="preserve">
     <value>Test classes should contain tests.</value>
