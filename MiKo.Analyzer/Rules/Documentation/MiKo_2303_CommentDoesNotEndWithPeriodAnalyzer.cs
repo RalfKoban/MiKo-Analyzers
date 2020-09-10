@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.EndsWith(".", StringComparison.OrdinalIgnoreCase) && !comment.EndsWith("...", StringComparison.OrdinalIgnoreCase);
+        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.EndsWith(".", StringComparison.OrdinalIgnoreCase)
+                                                                                             && comment.EndsWith("...", StringComparison.OrdinalIgnoreCase) is false
+                                                                                             && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
     }
 }

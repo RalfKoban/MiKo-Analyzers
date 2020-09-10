@@ -84,6 +84,18 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_comment_with_etc_period() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment, etc.
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2303_CommentDoesNotEndWithPeriodAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2303_CommentDoesNotEndWithPeriodAnalyzer();
