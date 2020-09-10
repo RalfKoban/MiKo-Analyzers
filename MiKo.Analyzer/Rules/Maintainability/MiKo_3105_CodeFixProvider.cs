@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
                         case "IsNullOrEmpty": return FixAssertIsNullOrEmpty(original.ArgumentList.Arguments);
                         case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
+                        case "IsNotNull": return FixAssertIsNotNull(original.ArgumentList.Arguments);
                         case "IsNotEmpty": return FixAssertIsNotEmpty(original.ArgumentList.Arguments);
                         case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
                         case "GreaterOrEqual": return FixAssertGreaterOrEqual(original.ArgumentList.Arguments);
@@ -91,6 +92,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static InvocationExpressionSyntax FixAssertNotNull(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("Not", "Null"), 1, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertIsNotNull(SeparatedSyntaxList<ArgumentSyntax> args)
         {
             return AssertThat(args[0], Is("Not", "Null"), 1, args);
         }
