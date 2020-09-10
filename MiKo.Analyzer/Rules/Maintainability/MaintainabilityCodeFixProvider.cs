@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -30,20 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, string methodName1)
+        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, params string[] methodNames)
         {
-            var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName);
-            var method = SyntaxFactory.IdentifierName(methodName1);
+            var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodNames[0]);
 
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, start, method);
-        }
-
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, string methodName1, string methodName2)
-        {
-            var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName, methodName1);
-            var method = SyntaxFactory.IdentifierName(methodName2);
-
-            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, start, method);
+            var result = methodNames.Skip(1)
+                                    .Aggregate(start, (current, name) => SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, current, SyntaxFactory.IdentifierName(name)));
+            return result;
         }
     }
 }

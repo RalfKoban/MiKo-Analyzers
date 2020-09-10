@@ -138,16 +138,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
-        private static ArgumentSyntax Is(string name, string name1) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, name1));
-
-        private static ArgumentSyntax Is(string name, string name1, string name2) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, name1, name2));
-
-        private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
-
-        private static ArgumentSyntax Is(string name, string name1, params ArgumentSyntax[] arguments)
+        private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument)
         {
             var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, name1);
-            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, arguments));
+
+            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
         }
+
+        private static ArgumentSyntax Is(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", names));
+
+        private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
     }
 }
