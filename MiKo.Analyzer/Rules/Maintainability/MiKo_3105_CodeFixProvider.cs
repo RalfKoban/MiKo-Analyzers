@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case "IsTrue": return FixAssertIsTrue(original.ArgumentList.Arguments);
                         case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
                         case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
+                        case "IsNullOrEmpty": return FixAssertIsNullOrEmpty(original.ArgumentList.Arguments);
                         case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
                         case "IsNotEmpty": return FixAssertIsNotEmpty(original.ArgumentList.Arguments);
                         case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
@@ -82,6 +83,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixAssertIsNull(SeparatedSyntaxList<ArgumentSyntax> args)
         {
             return AssertThat(args[0], Is("Null"), 1, args);
+        }
+
+        private static InvocationExpressionSyntax FixAssertIsNullOrEmpty(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[0], Is("Null", "Or", "Empty"), 1, args);
         }
 
         private static InvocationExpressionSyntax FixAssertNotNull(SeparatedSyntaxList<ArgumentSyntax> args)
@@ -132,13 +138,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
-        private static ArgumentSyntax Is(string name, string nextName) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName));
+        private static ArgumentSyntax Is(string name, string name1) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, name1));
+
+        private static ArgumentSyntax Is(string name, string name1, string name2) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, name1, name2));
 
         private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
 
-        private static ArgumentSyntax Is(string name, string nextName, params ArgumentSyntax[] arguments)
+        private static ArgumentSyntax Is(string name, string name1, params ArgumentSyntax[] arguments)
         {
-            var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName);
+            var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, name1);
             return SyntaxFactory.Argument(CreateInvocationSyntax(expression, arguments));
         }
     }

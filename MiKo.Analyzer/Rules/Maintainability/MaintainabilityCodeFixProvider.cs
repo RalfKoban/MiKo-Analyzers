@@ -30,10 +30,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, string nextMethodName)
+        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, string methodName1)
         {
             var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName);
-            var method = SyntaxFactory.IdentifierName(nextMethodName);
+            var method = SyntaxFactory.IdentifierName(methodName1);
+
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, start, method);
+        }
+
+        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, string methodName1, string methodName2)
+        {
+            var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName, methodName1);
+            var method = SyntaxFactory.IdentifierName(methodName2);
 
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, start, method);
         }
