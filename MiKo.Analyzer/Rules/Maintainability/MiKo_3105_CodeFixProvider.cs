@@ -29,27 +29,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case "Assert":
                     case "CollectionAssert":
+                    case "StringAssert":
                     {
+                        var args = original.ArgumentList.Arguments;
+
                         switch (maes.GetName())
                         {
-                            case "AreEqual": return FixAssertAreEqual(original.ArgumentList.Arguments);
-                            case "AreEquivalent": return FixCollectionAssertAreEquivalent(original.ArgumentList.Arguments);
-                            case "AreNotEqual": return FixAssertAreNotEqual(original.ArgumentList.Arguments);
-                            case "AreNotEquivalent": return FixCollectionAssertAreNotEquivalent(original.ArgumentList.Arguments);
-                            case "AreNotSame": return FixAssertAreNotSame(original.ArgumentList.Arguments);
-                            case "AreSame": return FixAssertAreSame(original.ArgumentList.Arguments);
-                            case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
-                            case "GreaterOrEqual": return FixAssertGreaterOrEqual(original.ArgumentList.Arguments);
-                            case "IsEmpty": return FixAssertIsEmpty(original.ArgumentList.Arguments);
-                            case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
-                            case "IsNotEmpty": return FixAssertIsNotEmpty(original.ArgumentList.Arguments);
-                            case "IsNotNull": return FixAssertIsNotNull(original.ArgumentList.Arguments);
-                            case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
-                            case "IsNullOrEmpty": return FixAssertIsNullOrEmpty(original.ArgumentList.Arguments);
-                            case "IsTrue": return FixAssertIsTrue(original.ArgumentList.Arguments);
-                            case "Less": return FixAssertLess(original.ArgumentList.Arguments);
-                            case "LessOrEqual": return FixAssertLessOrEqual(original.ArgumentList.Arguments);
-                            case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
+                            case "AreEqual": return FixAssertAreEqual(args);
+                            case "AreEquivalent": return FixCollectionAssertAreEquivalent(args);
+                            case "AreNotEqual": return FixAssertAreNotEqual(args);
+                            case "AreNotEquivalent": return FixCollectionAssertAreNotEquivalent(args);
+                            case "AreNotSame": return FixAssertAreNotSame(args);
+                            case "AreSame": return FixAssertAreSame(args);
+                            case "Contains": return FixStringAssertContains(args);
+                            case "DoesNotContain": return FixStringAssertDoesNotContain(args);
+                            case "EndsWith": return FixStringAssertEndsWith(args);
+                            case "Greater": return FixAssertGreater(args);
+                            case "GreaterOrEqual": return FixAssertGreaterOrEqual(args);
+                            case "IsEmpty": return FixAssertIsEmpty(args);
+                            case "IsFalse": return FixAssertIsFalse(args);
+                            case "IsNotEmpty": return FixAssertIsNotEmpty(args);
+                            case "IsNotNull": return FixAssertIsNotNull(args);
+                            case "IsNull": return FixAssertIsNull(args);
+                            case "IsNullOrEmpty": return FixAssertIsNullOrEmpty(args);
+                            case "IsTrue": return FixAssertIsTrue(args);
+                            case "Less": return FixAssertLess(args);
+                            case "LessOrEqual": return FixAssertLessOrEqual(args);
+                            case "NotNull": return FixAssertNotNull(args);
+                            case "StartsWith": return FixStringAssertStartsWith(args);
                         }
 
                         break;
@@ -150,6 +157,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), 2, args);
         }
 
+        private static InvocationExpressionSyntax FixStringAssertStartsWith(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Does("StartWith", args[0]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixStringAssertEndsWith(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Does("EndWith", args[0]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixStringAssertDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Does("Not", "Contain", args[0]), 2, args);
+        }
+
+        private static InvocationExpressionSyntax FixStringAssertContains(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            return AssertThat(args[1], Does("Contain", args[0]), 2, args);
+        }
+
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var args = new List<ArgumentSyntax>();
@@ -178,5 +205,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static ArgumentSyntax Is(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", names));
 
         private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
+
+        private static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument)
+        {
+            var expression = CreateSimpleMemberAccessExpressionSyntax("Does", name, name1);
+
+            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
+        }
+
+        private static ArgumentSyntax Does(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Does", names));
+
+        private static ArgumentSyntax Does(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Does", name, arguments));
     }
 }

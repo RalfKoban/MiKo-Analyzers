@@ -248,6 +248,18 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreNotEquivalent(e, a, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.Not.EquivalentTo(e), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.StartsWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.StartWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.EndsWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.EndWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotContain(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.Contain(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.Contains(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Contain(""abc""), ""my message""); }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
