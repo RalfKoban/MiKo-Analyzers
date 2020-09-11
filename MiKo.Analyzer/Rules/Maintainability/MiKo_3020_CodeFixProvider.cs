@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => MiKo_3020_CompletedTaskAnalyzer.Id;
 
-        protected override string Title => "Use '" + nameof(Task) + "." + nameof(Task.CompletedTask) + "'";
+        protected override string Title => Resources.MiKo_3020_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 

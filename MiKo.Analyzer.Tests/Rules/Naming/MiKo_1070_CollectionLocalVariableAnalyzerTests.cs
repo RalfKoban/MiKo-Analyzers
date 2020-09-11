@@ -172,6 +172,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_strange_ref_usage() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(Guid guid1, Guid guid2)
+    {
+        ref var x = (guid1 == Guid.Empty) ? ref guid1 : ref guid2;
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_variable()
         {
             const string OriginalCode = @"

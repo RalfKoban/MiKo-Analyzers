@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2015_FireMethodsAnalyzer.Id;
 
-        protected override string Title => "Replace term 'fire'";
+        protected override string Title => Resources.MiKo_2015_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 

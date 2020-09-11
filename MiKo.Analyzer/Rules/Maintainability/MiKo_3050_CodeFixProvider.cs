@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => MiKo_3050_DependencyPropertyPublicStaticReadOnlyFieldAnalyzer.Id;
 
-        protected override string Title => "Make DependencyProperty 'public static readonly'";
+        protected override string Title => Resources.MiKo_3050_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<FieldDeclarationSyntax>().FirstOrDefault();
 

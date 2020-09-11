@@ -1,6 +1,5 @@
 ﻿using System.Composition;
 using System.Linq;
-using System.Threading;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Start field with default phrase";
+        protected override string Title => Resources.MiKo_2080_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {

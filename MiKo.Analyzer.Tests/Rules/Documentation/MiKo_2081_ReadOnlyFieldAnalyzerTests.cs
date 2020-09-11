@@ -79,7 +79,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Some text
 /// </summary>
@@ -92,7 +92,7 @@ public sealed class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Some text
 /// </summary>
@@ -105,7 +105,7 @@ public sealed class TestMe
     public readonly string m_field;
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2081_ReadOnlyFieldAnalyzer.Id;

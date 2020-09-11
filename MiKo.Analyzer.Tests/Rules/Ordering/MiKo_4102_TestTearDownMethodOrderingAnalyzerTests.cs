@@ -368,7 +368,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_test_method()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -385,7 +385,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -402,13 +402,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_test_initialization_method()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -425,7 +425,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -442,13 +442,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_OneTime_test_initialization_method()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -465,7 +465,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -482,13 +482,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_OneTime_test_cleanup_method()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -505,7 +505,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -522,13 +522,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_full_fledged_test()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -560,7 +560,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using NUnit.Framework;
 
 public class TestMe
@@ -592,7 +592,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_4102_TestTearDownMethodOrderingAnalyzer.Id;

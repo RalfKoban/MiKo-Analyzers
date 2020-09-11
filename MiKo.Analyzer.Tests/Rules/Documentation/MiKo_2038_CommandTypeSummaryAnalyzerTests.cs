@@ -100,7 +100,7 @@ public interface ITestMe : ICommand
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Windows.Input;
 
@@ -117,7 +117,7 @@ public class TestMe : ICommand
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Windows.Input;
 
@@ -134,7 +134,7 @@ public class TestMe : ICommand
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2038_CommandTypeSummaryAnalyzer.Id;

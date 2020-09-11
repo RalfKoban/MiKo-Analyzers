@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2034_EnumReturnTypeDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Fix return comment";
+        protected override string Title => Resources.MiKo_2034_CodeFixTitle;
 
         protected override SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
         {

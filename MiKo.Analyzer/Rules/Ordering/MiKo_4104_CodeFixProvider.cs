@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => MiKo_4104_TestOneTimeTearDownMethodOrderingAnalyzer.Id;
 
-        protected override string Title => Resources.MiKo_4104_MessageFormat;
+        protected override string Title => Resources.MiKo_4104_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax)
         {

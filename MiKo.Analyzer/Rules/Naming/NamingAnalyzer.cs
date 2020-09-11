@@ -116,6 +116,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var semanticModel = context.SemanticModel;
             var type = node.Declaration.GetTypeSymbol(semanticModel);
 
+            if (type is null)
+            {
+                // may happen for a "ref var xyz" value
+                return;
+            }
+
             if (ShallAnalyze(type) is false)
             {
                 return;

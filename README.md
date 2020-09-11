@@ -34,8 +34,8 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names.|&#x2713;|\-|
 |MiKo_1011|Methods should not contain 'Do' in their names.|&#x2713;|\-|
 |MiKo_1012|Methods should not be named 'Fire'.|&#x2713;|&#x2713;|
-|MiKo_1013|Methods should not be named 'Notify' or 'OnNotify'.|&#x2713;|\-|
-|MiKo_1014|Methods should not be named 'Check'.|&#x2713;|\-|
+|MiKo_1013|Methods should not be named 'Notify' or 'OnNotify'.|&#x2713;|&#x2713;|
+|MiKo_1014|Methods should not be named 'Check'.|&#x2713;|&#x2713;|
 |MiKo_1015|Methods should not be named 'Init'.|&#x2713;|&#x2713;|
 |MiKo_1016|Factory methods should be named 'Create'.|&#x2713;|&#x2713;|
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|\-|

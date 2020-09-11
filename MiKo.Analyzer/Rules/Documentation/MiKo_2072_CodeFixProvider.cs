@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2072_TrySummaryAnalyzer.Id;
 
-        protected override string Title => "Start summary with '" + MiKo_2072_TrySummaryAnalyzer.StartingPhrase + "'";
+        protected override string Title => Resources.MiKo_2072_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {

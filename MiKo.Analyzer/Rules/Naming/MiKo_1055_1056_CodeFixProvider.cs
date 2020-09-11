@@ -13,12 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1055_1056_CodeFixProvider : NamingCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(
-                                                                                         MiKo_1055_DependencyPropertyFieldSuffixAnalyzer.Id,
-                                                                                         MiKo_1056_DependencyPropertyFieldPrefixAnalyzer.Id);
+                                                                                             MiKo_1055_DependencyPropertyFieldSuffixAnalyzer.Id,
+                                                                                             MiKo_1056_DependencyPropertyFieldPrefixAnalyzer.Id);
 
-        public override string FixableDiagnosticId => MiKo_1056_DependencyPropertyFieldPrefixAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_1055_DependencyPropertyFieldSuffixAnalyzer.Id;
 
-        protected override string Title => "Rename dependency property";
+        protected override string Title => Resources.MiKo_1055_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1056_DependencyPropertyFieldPrefixAnalyzer.FindBetterName((IFieldSymbol)symbol);
 

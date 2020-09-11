@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1067_PerformMethodsAnalyzer.Id;
 
-        protected override string Title => "Remove 'Perform' from name";
+        protected override string Title => Resources.MiKo_1067_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1067_PerformMethodsAnalyzer.FindBetterName((IMethodSymbol)symbol);
 

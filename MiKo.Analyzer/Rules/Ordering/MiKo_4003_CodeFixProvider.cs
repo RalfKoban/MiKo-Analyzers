@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.Id;
 
-        protected override string Title => "Place Dispose method after ctors and finalizers";
+        protected override string Title => Resources.MiKo_4003_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax)
         {

@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2020_InheritdocSummaryAnalyzer.Id;
 
-        protected override string Title => "Use <inheritdoc/>";
+        protected override string Title => Resources.MiKo_2020_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 

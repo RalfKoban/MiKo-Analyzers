@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1108_MockNamingAnalyzer.Id;
 
-        protected override string Title => "Remove Mock suffix";
+        protected override string Title => Resources.MiKo_1108_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1108_MockNamingAnalyzer.FindBetterName(symbol);
 

@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1082_PropertiesWithNumberSuffixAnalyzer.Id;
 
-        protected override string Title => "Remove number";
+        protected override string Title => Resources.MiKo_1082_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1082_PropertiesWithNumberSuffixAnalyzer.FindBetterName((IPropertySymbol)symbol);
 

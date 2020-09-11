@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1070_CollectionLocalVariableAnalyzer.Id;
 
-        protected override string Title => "Rename variable into plural";
+        protected override string Title => Resources.MiKo_1070_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1070_CollectionLocalVariableAnalyzer.FindBetterName(symbol);
     }

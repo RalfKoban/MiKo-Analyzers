@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("DoSomething")]
         [TestCase("CheckIn")]
         [TestCase("CheckOut")]
+        [TestCase("CheckAccess")]
         public void No_issue_is_reported_for_correctly_named_method_(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -40,8 +42,18 @@ public class TestMe
 }
 ");
 
+        [TestCase("class TestMe { object CheckSomething() => 42; }", "class TestMe { object FindSomething() => 42; }")]
+        [TestCase("class TestMe { bool CheckSomething() => true; }", "class TestMe { bool CanSomething() => true; }")]
+        [TestCase("class TestMe { bool CheckForSomething() => true; }", "class TestMe { bool HasSomething() => true; }")]
+        [TestCase("class TestMe { bool CheckFormat() => true; }", "class TestMe { bool HasFormat() => true; }")]
+        [TestCase("class TestMe { void CheckSomething() { } }", "class TestMe { void VerifySomething() { } }")]
+        [TestCase("class TestMe { void CheckSomething(object o) { } }", "class TestMe { void ValidateSomething(object o) { } }")]
+        public void Code_gets_fixed_for_method_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         protected override string GetDiagnosticId() => MiKo_1014_CheckMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1014_CheckMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1014_CodeFixProvider();
     }
 }

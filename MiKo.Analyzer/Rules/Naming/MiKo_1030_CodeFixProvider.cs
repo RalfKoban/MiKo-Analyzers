@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1030_BaseTypePrefixSuffixAnalyzer.Id;
 
-        protected override string Title => "Remove base type indicator";
+        protected override string Title => Resources.MiKo_1030_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1030_BaseTypePrefixSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
 

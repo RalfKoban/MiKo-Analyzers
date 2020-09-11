@@ -3,7 +3,6 @@ using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -13,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2042_BrParaAnalyzer.Id;
 
-        protected override string Title => "Replace <br/> with <para/>";
+        protected override string Title => Resources.MiKo_2042_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 

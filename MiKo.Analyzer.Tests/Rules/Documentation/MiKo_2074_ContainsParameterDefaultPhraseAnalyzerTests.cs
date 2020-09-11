@@ -91,7 +91,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_simple_text()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -106,7 +106,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -121,13 +121,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_text_with_seeCref_and_ending_dot()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -142,7 +142,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -157,13 +157,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_text_with_seeCref_without_ending_dot()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -178,7 +178,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -193,13 +193,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_text_with_seeCref_on_same_line_without_ending_dot()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -212,7 +212,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -225,7 +225,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Id;

@@ -10,6 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer.Id;
 
-        protected override string Title => "Apply 'is' pattern";
+        protected override string Title => Resources.MiKo_3082_CodeFixTitle;
     }
 }

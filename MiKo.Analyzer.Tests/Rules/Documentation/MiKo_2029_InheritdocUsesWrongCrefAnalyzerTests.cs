@@ -59,7 +59,7 @@ namespace Bla
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 namespace Bla
 {
     public class TestMe
@@ -70,7 +70,7 @@ namespace Bla
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 namespace Bla
 {
     public class TestMe
@@ -81,7 +81,7 @@ namespace Bla
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2029_InheritdocUsesWrongCrefAnalyzer.Id;

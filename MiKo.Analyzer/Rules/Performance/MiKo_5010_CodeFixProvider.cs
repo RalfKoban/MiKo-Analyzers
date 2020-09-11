@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public override string FixableDiagnosticId => MiKo_5010_EqualsAnalyzer.Id;
 
-        protected override string Title => "Replace 'Equals' by '=='";
+        protected override string Title => Resources.MiKo_5010_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {

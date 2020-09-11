@@ -138,11 +138,21 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void CodeFixProviders_use_simplified_name_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
+        public static void CodeFixProvider_uses_simplified_name_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
         {
             var id = provider.FixableDiagnosticIds.First();
 
             Assert.That(provider.GetType().Name, Does.StartWith(id).And.EndsWith("_CodeFixProvider"));
+        }
+
+        [Test]
+        public static void CodeFixProvider_has_a_title_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
+        {
+            var id = provider.FixableDiagnosticIds.First();
+
+            var title = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
+
+            Assert.That(title, Is.EqualTo(Resources.ResourceManager.GetString(id + "_CodeFixTitle")));
         }
 
         [Test, Ignore("Just to find gaps")]

@@ -23,20 +23,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            ? method.Name.Replace(Clear, Remove)
                                                                            : method.Name.Replace(Remove, Clear);
 
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
             var methodName = method.Name;
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            if (methodName.StartsWith(Clear, Comparison) && !methodName.StartsWith(Clear + "s", Comparison))
+            if (methodName.StartsWith(Clear, Comparison) && methodName.StartsWith(Clear + "s", Comparison) is false)
             {
                 return method.Parameters.Any()
                        ? new[] { Issue(method, methodName.Replace(Clear, Remove)) }
                        : Enumerable.Empty<Diagnostic>();
             }
 
-            if (methodName.StartsWith(Remove, Comparison) && !methodName.StartsWith(Remove + "s", Comparison))
+            if (methodName.StartsWith(Remove, Comparison) && methodName.StartsWith(Remove + "s", Comparison) is false)
             {
                 return method.Parameters.Any()
                        ? Enumerable.Empty<Diagnostic>()

@@ -12,14 +12,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1013";
 
-        private static readonly string[] StartingPhrases = { "Notify", "OnNotify" };
+        private const string CorrectStartingPhrase = "On";
+        private const string StartingPhrase = "Notify";
+
+        private static readonly string[] StartingPhrases = { StartingPhrase, CorrectStartingPhrase + StartingPhrase };
 
         public MiKo_1013_NotifyMethodsAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => method.Name.StartsWithAny(StartingPhrases, StringComparison.Ordinal)
-                                                                                            ? new[] { Issue(method) }
-                                                                                            : Enumerable.Empty<Diagnostic>();
+        internal static string FindBetterName(IMethodSymbol method) => method.Name
+                                                                             .Replace(StartingPhrase, CorrectStartingPhrase)
+                                                                             .Replace(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase); // may happen for "OnNotifyXyz"
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        {
+            if (method.Name.StartsWithAny(StartingPhrases))
+            {
+                // avoid situation that method has no name
+                if (method.Name.Without(StartingPhrase).Length != 0)
+                {
+                    return new[] { Issue(method) };
+                }
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => MiKo_4004_ImplementedInterfaceOrderedAfterClassAnalyzer.Id;
 
-        protected override string Title => "Place corresponding interface directly after type declaration";
+        protected override string Title => Resources.MiKo_4004_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax)
         {

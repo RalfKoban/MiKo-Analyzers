@@ -119,7 +119,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_readonly_arrow_Command_property()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -131,7 +131,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -143,13 +143,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_readonly_Command_property()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -161,7 +161,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -173,13 +173,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_writeonly_Command_property()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -191,7 +191,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -203,13 +203,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_readwrite_Command_property()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -221,7 +221,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System.Windows.Input;
 
 public class TestMe
@@ -233,7 +233,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2037_CommandPropertySummaryAnalyzer.Id;

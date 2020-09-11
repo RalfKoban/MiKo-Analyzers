@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1053_DelegateFieldNameSuffixAnalyzer.Id;
 
-        protected override string Title => "Rename delegate field";
+        protected override string Title => Resources.MiKo_1053_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1053_DelegateFieldNameSuffixAnalyzer.FindBetterName((IFieldSymbol)symbol);
 

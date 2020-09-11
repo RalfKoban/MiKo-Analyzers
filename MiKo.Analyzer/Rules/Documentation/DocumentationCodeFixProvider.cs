@@ -101,6 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
+                index = Math.Max(0, index - 1);
                 continueText = SyntaxFactory.XmlText(commentContinue);
             }
 
@@ -309,11 +310,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeCref(TypeSyntax type, NameSyntax member) => Cref(Constants.XmlTag.See, type, member);
 
-        protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type) => Cref(tag, SyntaxFactory.TypeCref(type.WithoutTrailingTrivia()));
+        protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
+        {
+            // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
+            return Cref(tag, SyntaxFactory.TypeCref(type.WithoutTrivia()));
+        }
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type, NameSyntax member)
         {
-            return Cref(tag, SyntaxFactory.QualifiedCref(type, SyntaxFactory.NameMemberCref(member)));
+            // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
+            return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)

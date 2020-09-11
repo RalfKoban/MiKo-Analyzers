@@ -120,7 +120,7 @@ public class TestMeFactory : BaseFactory
         [Test]
         public void Code_gets_fixed_for_multiTypes_factory()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMeFactory
@@ -131,7 +131,7 @@ public class TestMeFactory
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMeFactory
@@ -141,13 +141,13 @@ public class TestMeFactory
     public string CreateString() => string.Empty;
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_single_type_factory()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe
@@ -160,7 +160,7 @@ public class TestMeFactory
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -172,7 +172,7 @@ public class TestMeFactory
     public TestMe Create() => new TestMe();
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_1016_FactoryMethodsAnalyzer.Id;

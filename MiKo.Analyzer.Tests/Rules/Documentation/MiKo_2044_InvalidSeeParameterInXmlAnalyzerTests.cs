@@ -62,7 +62,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_tag_([Values("see", "seealso")] string tag)
         {
-            var originalText = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -72,7 +72,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -82,13 +82,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(originalText, FixedText);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_multiple_tags_([Values("see", "seealso")] string tag)
         {
-            var originalText = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -98,7 +98,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -108,7 +108,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(originalText, FixedText);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2044_InvalidSeeParameterInXmlAnalyzer.Id;

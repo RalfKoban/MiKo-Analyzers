@@ -421,6 +421,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken token) => token.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
+        internal static string WithoutXmlCommentExterior(this SyntaxNode syntaxNode) => syntaxNode.ToString().Replace("///", string.Empty).Trim();
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
 
         internal static TRoot InsertNodeBefore<TRoot>(this TRoot root, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode

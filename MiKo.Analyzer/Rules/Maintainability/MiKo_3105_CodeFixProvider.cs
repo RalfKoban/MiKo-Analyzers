@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
-        protected override string Title => "Use 'Assert.That'";
+        protected override string Title => Resources.MiKo_3105_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
@@ -25,23 +25,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax i)
             {
                 // for the moment only consider Assert and not StringAssert etc.
-                if (i.GetName() == "Assert")
+                switch (i.GetName())
                 {
-                    switch (maes.GetName())
+                    case "Assert":
+                    case "CollectionAssert":
+                    case "StringAssert":
                     {
-                        case "AreEqual": return FixAssertAreEqual(original.ArgumentList.Arguments);
-                        case "AreNotEqual": return FixAssertAreNotEqual(original.ArgumentList.Arguments);
-                        case "AreSame": return FixAssertAreSame(original.ArgumentList.Arguments);
-                        case "AreNotSame": return FixAssertAreNotSame(original.ArgumentList.Arguments);
-                        case "IsTrue": return FixAssertIsTrue(original.ArgumentList.Arguments);
-                        case "IsFalse": return FixAssertIsFalse(original.ArgumentList.Arguments);
-                        case "IsNull": return FixAssertIsNull(original.ArgumentList.Arguments);
-                        case "NotNull": return FixAssertNotNull(original.ArgumentList.Arguments);
-                        case "IsNotEmpty": return FixAssertIsNotEmpty(original.ArgumentList.Arguments);
-                        case "Greater": return FixAssertGreater(original.ArgumentList.Arguments);
-                        case "GreaterOrEqual": return FixAssertGreaterOrEqual(original.ArgumentList.Arguments);
-                        case "Less": return FixAssertLess(original.ArgumentList.Arguments);
-                        case "LessOrEqual": return FixAssertLessOrEqual(original.ArgumentList.Arguments);
+                        var args = original.ArgumentList.Arguments;
+
+                        switch (maes.GetName())
+                        {
+                            case "AreEqual": return FixAreEqual(args);
+                            case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
+                            case "AreEquivalent": return FixAreEquivalent(args);
+                            case "AreNotEqual": return FixAreNotEqual(args);
+                            case "AreNotEquivalent": return FixAreNotEquivalent(args);
+                            case "AreNotSame": return FixAreNotSame(args);
+                            case "AreSame": return FixAreSame(args);
+                            case "Contains": return FixContains(args);
+                            case "DoesNotContain": return FixDoesNotContain(args);
+                            case "EndsWith": return FixEndsWith(args);
+                            case "Greater": return FixGreater(args);
+                            case "GreaterOrEqual": return FixGreaterOrEqual(args);
+                            case "IsEmpty": return FixIsEmpty(args);
+                            case "IsFalse": return FixIsFalse(args);
+                            case "IsNotEmpty": return FixIsNotEmpty(args);
+                            case "IsNotNull": return FixIsNotNull(args);
+                            case "IsNull": return FixIsNull(args);
+                            case "IsNullOrEmpty": return FixIsNullOrEmpty(args);
+                            case "IsSubsetOf": return FixIsSubsetOf(args);
+                            case "IsTrue": return FixIsTrue(args);
+                            case "Less": return FixLess(args);
+                            case "LessOrEqual": return FixLessOrEqual(args);
+                            case "NotNull": return FixNotNull(args);
+                            case "StartsWith": return FixStartsWith(args);
+                        }
+
+                        break;
                     }
                 }
             }
@@ -49,70 +69,53 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        private static InvocationExpressionSyntax FixAssertAreEqual(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[1], Is("EqualTo", args[0]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixAreEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[1], Is("Not", "EqualTo", args[0]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixAreEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0], "IgnoreCase"), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertAreSame(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[1], Is("SameAs", args[0]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixAreEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertAreNotSame(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[1], Is("Not", "SameAs", args[0]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EqualTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertIsTrue(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("True"), 1, args);
-        }
+        private static InvocationExpressionSyntax FixAreNotEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertIsFalse(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("False"), 1, args);
-        }
+        private static InvocationExpressionSyntax FixAreNotSame(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SameAs", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertIsNull(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("Null"), 1, args);
-        }
+        private static InvocationExpressionSyntax FixAreSame(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SameAs", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertNotNull(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("Not", "Null"), 1, args);
-        }
+        private static InvocationExpressionSyntax FixContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Contain", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertIsNotEmpty(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("Not", "Empty"), 1, args);
-        }
+        private static InvocationExpressionSyntax FixDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Contain", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertGreater(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("GreaterThan", args[1]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixEndsWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("EndWith", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertGreaterOrEqual(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("GreaterThanOrEqualTo", args[1]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixGreater(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("GreaterThan", args[1]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertLess(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("LessThan", args[1]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixGreaterOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("GreaterThanOrEqualTo", args[1]), 2, args);
 
-        private static InvocationExpressionSyntax FixAssertLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args)
-        {
-            return AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), 2, args);
-        }
+        private static InvocationExpressionSyntax FixIsEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Empty"), 1, args);
+
+        private static InvocationExpressionSyntax FixIsFalse(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("False"), 1, args);
+
+        private static InvocationExpressionSyntax FixIsNotEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Empty"), 1, args);
+
+        private static InvocationExpressionSyntax FixIsNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), 1, args);
+
+        private static InvocationExpressionSyntax FixIsNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null"), 1, args);
+
+        private static InvocationExpressionSyntax FixIsNullOrEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null", "Or", "Empty"), 1, args);
+
+        private static InvocationExpressionSyntax FixIsSubsetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SubsetOf", args[0]), 2, args);
+
+        private static InvocationExpressionSyntax FixIsTrue(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("True"), 1, args);
+
+        private static InvocationExpressionSyntax FixLess(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThan", args[1]), 2, args);
+
+        private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), 2, args);
+
+        private static InvocationExpressionSyntax FixNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), 1, args);
+
+        private static InvocationExpressionSyntax FixStartsWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("StartWith", args[0]), 2, args);
 
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
@@ -132,14 +135,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
-        private static ArgumentSyntax Is(string name, string nextName) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName));
+        private static ArgumentSyntax Is(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, argument));
 
-        private static ArgumentSyntax Is(string name, params ArgumentSyntax[] arguments) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, arguments));
-
-        private static ArgumentSyntax Is(string name, string nextName, params ArgumentSyntax[] arguments)
+        private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument)
         {
-            var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, nextName);
-            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, arguments));
+            var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, name1);
+
+            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
         }
+
+        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
+        {
+            var expression = CreateInvocationSyntax("Is", name, argument);
+
+            return SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax(expression, name1));
+        }
+
+        private static ArgumentSyntax Is(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", names));
+
+        private static ArgumentSyntax Does(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax("Does", name, argument));
+
+        private static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument)
+        {
+            var expression = CreateSimpleMemberAccessExpressionSyntax("Does", name, name1);
+
+            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
+        }
+
+        private static ArgumentSyntax Does(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Does", names));
     }
 }

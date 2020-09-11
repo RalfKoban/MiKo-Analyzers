@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2050_ExceptionSummaryAnalyzer.Id;
 
-        protected override string Title => "Apply standard exception comment";
+        protected override string Title => Resources.MiKo_2050_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
 
@@ -42,9 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (summary is null)
             {
                 var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();
-
-                var first = comment.Content.First();
-                return comment.InsertNodeAfter(first, newSummary);
+                return comment.InsertNodeAfter(comment.Content[0], newSummary);
             }
             else
             {

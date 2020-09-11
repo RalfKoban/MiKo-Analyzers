@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer.Id;
 
-        protected override string Title => "Apply 'is false' pattern";
+        protected override string Title => Resources.MiKo_3081_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(SyntaxKind.LogicalNotExpression));
 

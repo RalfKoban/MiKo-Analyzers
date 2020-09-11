@@ -155,6 +155,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_0004_Title" xml:space="preserve">
     <value>Methods has too many parameters.</value>
   </data>
+  <data name="MiKo_1001_CodeFixTitle" xml:space="preserve">
+    <value>Rename event argument</value>
+  </data>
   <data name="MiKo_1001_Description" xml:space="preserve">
     <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
   </data>
@@ -166,6 +169,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_1001_Title" xml:space="preserve">
     <value>'System.EventArgs' parameters on methods should be named properly.</value>
+  </data>
+  <data name="MiKo_1002_CodeFixTitle" xml:space="preserve">
+    <value>Rename event argument</value>
   </data>
   <data name="MiKo_1002_Description" xml:space="preserve">
     <value>To follow the .NET Framework Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
@@ -179,6 +185,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1002_Title" xml:space="preserve">
     <value>Parameter names do not follow .NET Framework Guidelines for event handlers.</value>
   </data>
+  <data name="MiKo_1003_CodeFixTitle" xml:space="preserve">
+    <value>Rename method according to event pattern</value>
+  </data>
   <data name="MiKo_1003_Description" xml:space="preserve">
     <value>Event handlers should start with 'On', followed by the name of the event, to indicate that they handle events.</value>
   </data>
@@ -191,6 +200,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_1003_Title" xml:space="preserve">
     <value>Event handling method name does not follow the .NET Framework Best Practices.</value>
   </data>
+  <data name="MiKo_1004_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Event' suffix</value>
+  </data>
   <data name="MiKo_1004_Description" xml:space="preserve">
     <value>'Event' as suffix in event names is noise and should be avoided.</value>
   </data>
@@ -199,6 +211,9 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   </data>
   <data name="MiKo_1004_Title" xml:space="preserve">
     <value>Events should not contain term 'Event' in their names.</value>
+  </data>
+  <data name="MiKo_1005_CodeFixTitle" xml:space="preserve">
+    <value>Rename EventArgs variable</value>
   </data>
   <data name="MiKo_1005_Description" xml:space="preserve">
     <value>To ease maintenance, variables that are of type 'System.EventArgs' (or any inheritors) should be named 'e'.</value>
@@ -228,6 +243,9 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
   <data name="MiKo_1007_Title" xml:space="preserve">
     <value>Events and 'EventArgs' types shall be located in the same namespace.</value>
   </data>
+  <data name="MiKo_1008_CodeFixTitle" xml:space="preserve">
+    <value>Rename DependencyProperty event handler argument</value>
+  </data>
   <data name="MiKo_1008_Description" xml:space="preserve">
     <value>To follow the .NET Framework Guidelines, parameters of DependencyProperty event handlers should be named 'd' and 'e'.</value>
   </data>
@@ -255,6 +273,9 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
   <data name="MiKo_1011_Title" xml:space="preserve">
     <value>Methods should not contain 'Do' in their names.</value>
   </data>
+  <data name="MiKo_1012_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'fire' to 'raise'</value>
+  </data>
   <data name="MiKo_1012_Description" xml:space="preserve">
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events. Events get raised. So use 'Raise' instead.</value>
   </data>
@@ -263,6 +284,9 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
   </data>
   <data name="MiKo_1012_Title" xml:space="preserve">
     <value>Methods should not be named 'Fire'.</value>
+  </data>
+  <data name="MiKo_1013_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'Notify' to 'On'</value>
   </data>
   <data name="MiKo_1013_Description" xml:space="preserve">
     <value>Many times, the term 'Notify' indicates that an event shall be raised. In such case, the prefix 'On' should be used instead.
@@ -274,6 +298,9 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   <data name="MiKo_1013_Title" xml:space="preserve">
     <value>Methods should not be named 'Notify' or 'OnNotify'.</value>
   </data>
+  <data name="MiKo_1014_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'Check'</value>
+  </data>
   <data name="MiKo_1014_Description" xml:space="preserve">
     <value>The term 'Check' is ambiguous. If validation of parameters is meant, use something like 'Validate' or 'Verify'. If a check for a specific state is meant, use 'Is', 'Can' or 'Has' instead.</value>
   </data>
@@ -283,6 +310,9 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   <data name="MiKo_1014_Title" xml:space="preserve">
     <value>Methods should not be named 'Check'.</value>
   </data>
+  <data name="MiKo_1015_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'Init' to 'Initialize'</value>
+  </data>
   <data name="MiKo_1015_Description" xml:space="preserve">
     <value>The term 'Init' is a lazy abbreviation and should not be used. 'Initialize' should be used instead.</value>
   </data>
@@ -291,6 +321,9 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   </data>
   <data name="MiKo_1015_Title" xml:space="preserve">
     <value>Methods should not be named 'Init'.</value>
+  </data>
+  <data name="MiKo_1016_CodeFixTitle" xml:space="preserve">
+    <value>Rename factory method</value>
   </data>
   <data name="MiKo_1016_Description" xml:space="preserve">
     <value>The method belongs to a factory and therefore its name should be started with 'Create'.</value>
@@ -318,6 +351,9 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   </data>
   <data name="MiKo_1018_Title" xml:space="preserve">
     <value>Methods should not be suffixed with noun of a verb.</value>
+  </data>
+  <data name="MiKo_1019_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'Clear' and 'Remove'</value>
   </data>
   <data name="MiKo_1019_Description" xml:space="preserve">
     <value>Methods that are named 'Remove' and have no parameters should be named 'Clear' instead as they do not remove parameters.
@@ -401,6 +437,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1027_Title" xml:space="preserve">
     <value>Variable names in loops should be limited in length.</value>
   </data>
+  <data name="MiKo_1030_CodeFixTitle" xml:space="preserve">
+    <value>Remove base type indicator</value>
+  </data>
   <data name="MiKo_1030_Description" xml:space="preserve">
     <value>Indicating that a type is a base type by putting 'Abstract' or 'Base' in its name does not make sense. Every interface or class that is not sealed can act as a base class.</value>
   </data>
@@ -409,6 +448,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1030_Title" xml:space="preserve">
     <value>Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types.</value>
+  </data>
+  <data name="MiKo_1031_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1031_Description" xml:space="preserve">
     <value>Indicating that a type is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'User' instead of 'UserModel')</value>
@@ -419,6 +461,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1031_Title" xml:space="preserve">
     <value>Entity types should not use a 'Model' suffix.</value>
   </data>
+  <data name="MiKo_1032_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Model' indicator</value>
+  </data>
   <data name="MiKo_1032_Description" xml:space="preserve">
     <value>Indicating that a method deals with an entity by using 'Model' in its name does not make sense.</value>
   </data>
@@ -427,6 +472,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1032_Title" xml:space="preserve">
     <value>Methods dealing with entities should not use a 'Model' marker.</value>
+  </data>
+  <data name="MiKo_1033_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1033_Description" xml:space="preserve">
     <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
@@ -437,6 +485,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1033_Title" xml:space="preserve">
     <value>Parameters representing entities should not use a 'Model' suffix.</value>
   </data>
+  <data name="MiKo_1034_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Model' indicator</value>
+  </data>
   <data name="MiKo_1034_Description" xml:space="preserve">
     <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
   </data>
@@ -445,6 +496,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1034_Title" xml:space="preserve">
     <value>Fields representing entities should not use a 'Model' suffix.</value>
+  </data>
+  <data name="MiKo_1035_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1035_Description" xml:space="preserve">
     <value>Indicating that a property deals with an entity by using 'Model' in its name does not make sense.</value>
@@ -455,6 +509,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1035_Title" xml:space="preserve">
     <value>Properties dealing with entities should not use a 'Model' marker.</value>
   </data>
+  <data name="MiKo_1036_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Model' indicator</value>
+  </data>
   <data name="MiKo_1036_Description" xml:space="preserve">
     <value>Indicating that an event deals with an entity by using 'Model' in its name does not make sense.</value>
   </data>
@@ -463,6 +520,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1036_Title" xml:space="preserve">
     <value>Events dealing with entities should not use a 'Model' marker.</value>
+  </data>
+  <data name="MiKo_1037_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Enum' suffix</value>
   </data>
   <data name="MiKo_1037_Description" xml:space="preserve">
     <value>Indicating that a type is an Enum by using 'Enum' as its suffix does not make sense.</value>
@@ -473,6 +533,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1037_Title" xml:space="preserve">
     <value>Types should not be suffixed with 'Enum'.</value>
   </data>
+  <data name="MiKo_1038_CodeFixTitle" xml:space="preserve">
+    <value>Suffix type with 'Extensions'</value>
+  </data>
   <data name="MiKo_1038_Description" xml:space="preserve">
     <value>To ease maintenance, the names of classes that contain extension methods should end with the same suffix.</value>
   </data>
@@ -481,6 +544,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1038_Title" xml:space="preserve">
     <value>Classes that contain extension methods should end with same suffix.</value>
+  </data>
+  <data name="MiKo_1039_CodeFixTitle" xml:space="preserve">
+    <value>Rename 'this' argument</value>
   </data>
   <data name="MiKo_1039_Description" xml:space="preserve">
     <value>To ease maintenance, the 'this' parameter of extension methods should have a default name.</value>
@@ -509,6 +575,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1041_Title" xml:space="preserve">
     <value>Fields should not be suffixed with implementation details.</value>
   </data>
+  <data name="MiKo_1042_CodeFixTitle" xml:space="preserve">
+    <value>Name it 'cancellationToken'</value>
+  </data>
   <data name="MiKo_1042_Description" xml:space="preserve">
     <value>To ease maintenance, and being consistent with the .NET Framework classes, 'CancellationToken' parameters should have a very specific name.</value>
   </data>
@@ -517,6 +586,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1042_Title" xml:space="preserve">
     <value>'CancellationToken' parameters should have specific name.</value>
+  </data>
+  <data name="MiKo_1043_CodeFixTitle" xml:space="preserve">
+    <value>Name it 'token'</value>
   </data>
   <data name="MiKo_1043_Description" xml:space="preserve">
     <value>To ease maintenance, 'CancellationToken' variables should have a very specific name.</value>
@@ -527,6 +599,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1043_Title" xml:space="preserve">
     <value>'CancellationToken' variables should have specific name.</value>
   </data>
+  <data name="MiKo_1044_CodeFixTitle" xml:space="preserve">
+    <value>Append 'Command' suffix</value>
+  </data>
   <data name="MiKo_1044_Description" xml:space="preserve">
     <value>To ease maintenance, add the suffix 'Command'.</value>
   </data>
@@ -536,6 +611,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1044_Title" xml:space="preserve">
     <value>Commands should be suffixed with 'Command'.</value>
   </data>
+  <data name="MiKo_1045_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Command' suffix</value>
+  </data>
   <data name="MiKo_1045_Description" xml:space="preserve">
     <value>To ease maintenance, remove the suffix 'Command' as the method itself is invoked by a command.</value>
   </data>
@@ -544,6 +622,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1045_Title" xml:space="preserve">
     <value>Methods that are invoked by commands should not be suffixed with 'Command'.</value>
+  </data>
+  <data name="MiKo_1046_CodeFixTitle" xml:space="preserve">
+    <value>Append 'Async' suffix</value>
   </data>
   <data name="MiKo_1046_Description" xml:space="preserve">
     <value>To ease maintenance, methods that follow the Task-based Asynchronous Pattern (TAP) should be suffixed with 'Async'.</value>
@@ -557,6 +638,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1046_Title" xml:space="preserve">
     <value>Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).</value>
   </data>
+  <data name="MiKo_1047_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Async' suffix</value>
+  </data>
   <data name="MiKo_1047_Description" xml:space="preserve">
     <value>To ease maintenance, methods that do not follow the Task-based Asynchronous Pattern (TAP) should not be suffixed with 'Async' as that would indicate that they would follow the pattern.</value>
   </data>
@@ -568,6 +652,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   </data>
   <data name="MiKo_1047_Title" xml:space="preserve">
     <value>Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.</value>
+  </data>
+  <data name="MiKo_1048_CodeFixTitle" xml:space="preserve">
+    <value>Append 'Converter' suffix</value>
   </data>
   <data name="MiKo_1048_Description" xml:space="preserve">
     <value>Classes that are value converters should end with a specific suffix.</value>
@@ -587,6 +674,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1049_Title" xml:space="preserve">
     <value>Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.</value>
   </data>
+  <data name="MiKo_1050_CodeFixTitle" xml:space="preserve">
+    <value>Rename return value</value>
+  </data>
   <data name="MiKo_1050_Description" xml:space="preserve">
     <value>Variables for return values should describe what data they contain and not what they technical are.
 So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</value>
@@ -597,6 +687,9 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
   <data name="MiKo_1050_Title" xml:space="preserve">
     <value>Return values should have descriptive names.</value>
   </data>
+  <data name="MiKo_1051_CodeFixTitle" xml:space="preserve">
+    <value>Name it 'callback'</value>
+  </data>
   <data name="MiKo_1051_Description" xml:space="preserve">
     <value>Suffixing delegate parameters with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
   </data>
@@ -606,6 +699,9 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
   <data name="MiKo_1051_Title" xml:space="preserve">
     <value>Do not suffix parameters with delegate types.</value>
   </data>
+  <data name="MiKo_1052_CodeFixTitle" xml:space="preserve">
+    <value>Name it 'callback'</value>
+  </data>
   <data name="MiKo_1052_Description" xml:space="preserve">
     <value>Suffixing delegate variables with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
   </data>
@@ -614,6 +710,9 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
   </data>
   <data name="MiKo_1052_Title" xml:space="preserve">
     <value>Do not suffix variables with delegate types.</value>
+  </data>
+  <data name="MiKo_1053_CodeFixTitle" xml:space="preserve">
+    <value>Rename delegate field</value>
   </data>
   <data name="MiKo_1053_Description" xml:space="preserve">
     <value>Suffixing delegate fields with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
@@ -633,6 +732,9 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
   </data>
   <data name="MiKo_1054_Title" xml:space="preserve">
     <value>Do not name types 'Helper' or 'Utility'.</value>
+  </data>
+  <data name="MiKo_1055_CodeFixTitle" xml:space="preserve">
+    <value>Rename dependency property</value>
   </data>
   <data name="MiKo_1055_Description" xml:space="preserve">
     <value>To indicate that fields are the containers for specific dependency properties, those fields should be suffixed with 'Property' (similar as in the .NET Framework).</value>
@@ -657,6 +759,9 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
   </data>
   <data name="MiKo_1056_Title" xml:space="preserve">
     <value>Dependency properties should be prefixed with property names (as in the .NET Framework).</value>
+  </data>
+  <data name="MiKo_1057_CodeFixTitle" xml:space="preserve">
+    <value>Rename dependency property key</value>
   </data>
   <data name="MiKo_1057_Description" xml:space="preserve">
     <value>To indicate that fields are the keys for specific dependency properties, those fields should be suffixed with 'Key' (similar as in the .NET Framework).</value>
@@ -707,6 +812,9 @@ The same applies for 'XyzMissingException'. It is probably not missing (which me
   <data name="MiKo_1060_Title" xml:space="preserve">
     <value>Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'.</value>
   </data>
+  <data name="MiKo_1061_CodeFixTitle" xml:space="preserve">
+    <value>Rename out parameter</value>
+  </data>
   <data name="MiKo_1061_Description" xml:space="preserve">
     <value>If a 'TryXyz' method has an [out] parameter, that [out] parameter shall be named specifically because it is the actual result of the method. The method's return value only exists to indicate a success or failure of the operation.
 
@@ -750,6 +858,9 @@ In addition, they distract the reader's attention as they have to translate the 
   <data name="MiKo_1064_Title" xml:space="preserve">
     <value>Parameter names reflect their meaning and not their type.</value>
   </data>
+  <data name="MiKo_1065_CodeFixTitle" xml:space="preserve">
+    <value>Rename operator parameter</value>
+  </data>
   <data name="MiKo_1065_Description" xml:space="preserve">
     <value>Parameters of operator overloads should have default names if there is no meaning to the parameters.
 For binary operator overloads use the names 'left' and 'right', for unary operator overloads use the name 'value'.</value>
@@ -762,6 +873,9 @@ For binary operator overloads use the names 'left' and 'right', for unary operat
   </data>
   <data name="MiKo_1065_Title" xml:space="preserve">
     <value>Parameter names do not follow .NET Framework Guidelines for operator overloads.</value>
+  </data>
+  <data name="MiKo_1067_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Perform' from name</value>
   </data>
   <data name="MiKo_1067_Description" xml:space="preserve">
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'Perform' in their names.</value>
@@ -790,6 +904,9 @@ Hence, their methods should be named 'CanRun' or 'Run' (similar to commands wher
   </data>
   <data name="MiKo_1069_Title" xml:space="preserve">
     <value>Property names reflect their meaning and not their type.</value>
+  </data>
+  <data name="MiKo_1070_CodeFixTitle" xml:space="preserve">
+    <value>Rename variable into plural</value>
   </data>
   <data name="MiKo_1070_Description" xml:space="preserve">
     <value>Local variables for collections (that is any which is an 'IEnumerable') should have names in plural form. Their names should describe the contents of the collection; and not the collection itself.</value>
@@ -860,6 +977,9 @@ Example:
   <data name="MiKo_1080_Title" xml:space="preserve">
     <value>Names should contain numbers instead of their spellings.</value>
   </data>
+  <data name="MiKo_1081_CodeFixTitle" xml:space="preserve">
+    <value>Remove number</value>
+  </data>
   <data name="MiKo_1081_Description" xml:space="preserve">
     <value>Suffixing methods with a number makes it hard for the users of the methods to use them as it is unclear which one is the correct or whether they have to be used in conjunction. So instead of using a number suffix methods should have a proper descriptive name.</value>
   </data>
@@ -868,6 +988,9 @@ Example:
   </data>
   <data name="MiKo_1081_Title" xml:space="preserve">
     <value>Methods should not be suffixed with a number.</value>
+  </data>
+  <data name="MiKo_1082_CodeFixTitle" xml:space="preserve">
+    <value>Remove number</value>
   </data>
   <data name="MiKo_1082_Description" xml:space="preserve">
     <value>Suffixing properties with a number (especially if the type they return have a number as well) makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes them easier to read (and they are to the point).</value>
@@ -878,6 +1001,9 @@ Example:
   <data name="MiKo_1082_Title" xml:space="preserve">
     <value>Properties should not be suffixed with a number if their types have number suffixes.</value>
   </data>
+  <data name="MiKo_1083_CodeFixTitle" xml:space="preserve">
+    <value>Remove number</value>
+  </data>
   <data name="MiKo_1083_Description" xml:space="preserve">
     <value>Suffixing fields with a number (especially if their types have a number as well) makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes them easier to read (and they are to the point).</value>
   </data>
@@ -887,6 +1013,9 @@ Example:
   <data name="MiKo_1083_Title" xml:space="preserve">
     <value>Fields should not be suffixed with a number if their types have number suffixes.</value>
   </data>
+  <data name="MiKo_1084_CodeFixTitle" xml:space="preserve">
+    <value>Remove number</value>
+  </data>
   <data name="MiKo_1084_Description" xml:space="preserve">
     <value>Suffixing variables with a number (especially if their types have a number as well) makes them unnecessary difficult to read. Most times the number can simply be avoided, which in turn makes them easier to read (and they are to the point).</value>
   </data>
@@ -895,6 +1024,9 @@ Example:
   </data>
   <data name="MiKo_1084_Title" xml:space="preserve">
     <value>Variables should not be suffixed with a number if their types have number suffixes.</value>
+  </data>
+  <data name="MiKo_1085_CodeFixTitle" xml:space="preserve">
+    <value>Remove number</value>
   </data>
   <data name="MiKo_1085_Description" xml:space="preserve">
     <value>Suffixing parameters with number provides no benefit. So instead of using a number suffix parameters should have a proper descriptive name.</value>
@@ -914,6 +1046,9 @@ Example:
   <data name="MiKo_1086_Title" xml:space="preserve">
     <value>Methods should not be named using numbers as slang.</value>
   </data>
+  <data name="MiKo_1090_CodeFixTitle" xml:space="preserve">
+    <value>Rename parameter</value>
+  </data>
   <data name="MiKo_1090_Description" xml:space="preserve">
     <value>Instead of suffixing a parameter with a specific type (such as xyzComparer, xyzView, or xyzItem), the parameter should be named so (comparer, view or item).
 
@@ -924,6 +1059,9 @@ The reason is that the type already states what the parameter is - so its name s
   </data>
   <data name="MiKo_1090_Title" xml:space="preserve">
     <value>Parameters should not be suffixed with specific types.</value>
+  </data>
+  <data name="MiKo_1091_CodeFixTitle" xml:space="preserve">
+    <value>Remove variable suffix</value>
   </data>
   <data name="MiKo_1091_Description" xml:space="preserve">
     <value>Instead of suffixing a variable with a specific type (such as xyzComparer, xyzView, or xyzItem), the variable should be named so (comparer, view or item).
@@ -936,6 +1074,9 @@ The reason is that the type already states what the variable is - so its name sh
   <data name="MiKo_1091_Title" xml:space="preserve">
     <value>Variables should not be suffixed with specific types.</value>
   </data>
+  <data name="MiKo_1092_CodeFixTitle" xml:space="preserve">
+    <value>Remove suffix</value>
+  </data>
   <data name="MiKo_1092_Description" xml:space="preserve">
     <value>Instead of suffixing an 'ability' type with redundant information (such as 'ComparableItem'), the redundant information should be left out of the name of the type (such as 'Comparable').</value>
   </data>
@@ -944,6 +1085,9 @@ The reason is that the type already states what the variable is - so its name sh
   </data>
   <data name="MiKo_1092_Title" xml:space="preserve">
     <value>'Ability' Types should not be suffixed with redundant information.</value>
+  </data>
+  <data name="MiKo_1093_CodeFixTitle" xml:space="preserve">
+    <value>Remove suffix 'Object' or 'Struct'</value>
   </data>
   <data name="MiKo_1093_Description" xml:space="preserve">
     <value>Identifiers should not have the term 'Object' or 'Struct' as suffix. Many times, a mcuh better name can be given that avoids the usage of the term 'Object' or 'Struct' at all (such as 'Identifier' instead of 'IdentificationObject').</value>
@@ -974,6 +1118,9 @@ The name should be constructed by having the name of the type under test as pref
   <data name="MiKo_1100_Title" xml:space="preserve">
     <value>Test classes should start with the name of the type under test.</value>
   </data>
+  <data name="MiKo_1101_CodeFixTitle" xml:space="preserve">
+    <value>Append 'Tests' suffix</value>
+  </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
   </data>
@@ -992,6 +1139,9 @@ The name should be constructed by having the name of the type under test as pref
   <data name="MiKo_1102_Title" xml:space="preserve">
     <value>Test methods should not contain 'Test'.</value>
   </data>
+  <data name="MiKo_1103_CodeFixTitle" xml:space="preserve">
+    <value>Rename to 'PrepareTest'</value>
+  </data>
   <data name="MiKo_1103_Description" xml:space="preserve">
     <value>A method that is marked as unit test initialization method should be named 'PrepareTest'.</value>
   </data>
@@ -1000,6 +1150,9 @@ The name should be constructed by having the name of the type under test as pref
   </data>
   <data name="MiKo_1103_Title" xml:space="preserve">
     <value>Test initialization methods should be named 'PrepareTest'.</value>
+  </data>
+  <data name="MiKo_1104_CodeFixTitle" xml:space="preserve">
+    <value>Rename to 'CleanupTest'</value>
   </data>
   <data name="MiKo_1104_Description" xml:space="preserve">
     <value>A method that is marked as unit test cleanup method should be named 'CleanupTest'.</value>
@@ -1010,6 +1163,9 @@ The name should be constructed by having the name of the type under test as pref
   <data name="MiKo_1104_Title" xml:space="preserve">
     <value>Test cleanup methods should be named 'CleanupTest'.</value>
   </data>
+  <data name="MiKo_1105_CodeFixTitle" xml:space="preserve">
+    <value>Rename to 'PrepareTestEnvironment'</value>
+  </data>
   <data name="MiKo_1105_Description" xml:space="preserve">
     <value>A method that is marked as one-time unit test initialization method should be named 'PrepareTestEnvironment'.</value>
   </data>
@@ -1018,6 +1174,9 @@ The name should be constructed by having the name of the type under test as pref
   </data>
   <data name="MiKo_1105_Title" xml:space="preserve">
     <value>One-time test initialization methods should be named 'PrepareTestEnvironment'.</value>
+  </data>
+  <data name="MiKo_1106_CodeFixTitle" xml:space="preserve">
+    <value>Rename to 'CleanupTestEnvironment'</value>
   </data>
   <data name="MiKo_1106_Description" xml:space="preserve">
     <value>A method that is marked as one-time unit test cleanup method should be named 'CleanupTestEnvironment'.</value>
@@ -1038,6 +1197,9 @@ To ease reading, use underscores between the different words instead.</value>
   <data name="MiKo_1107_Title" xml:space="preserve">
     <value>Test methods should not be in Pascal-casing.</value>
   </data>
+  <data name="MiKo_1108_CodeFixTitle" xml:space="preserve">
+    <value>Remove Mock suffix</value>
+  </data>
   <data name="MiKo_1108_Description" xml:space="preserve">
     <value>For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
 Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
@@ -1048,6 +1210,9 @@ Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value an
   <data name="MiKo_1108_Title" xml:space="preserve">
     <value>Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.</value>
   </data>
+  <data name="MiKo_1109_CodeFixTitle" xml:space="preserve">
+    <value>Prefix with 'Testable' instead of suffix 'Ut'</value>
+  </data>
   <data name="MiKo_1109_Description" xml:space="preserve">
     <value>Sometimes types or some of their functionality cannot be tested directly due to wrong visibility. To work around that, a solution is to inherit from such types and use that special type during test. Additionally, additional methods or properties are added to such types to access the orginal, invisible method resp. property.
 Those specifically introduced types should be named as the original type, but prefixed with 'Testable' - they should not be suffixed with the hard-to-understand 'Ut' suffix.</value>
@@ -1057,6 +1222,9 @@ Those specifically introduced types should be named as the original type, but pr
   </data>
   <data name="MiKo_1109_Title" xml:space="preserve">
     <value>Prefix testable types with 'Testable' instead of using the 'Ut' suffix.</value>
+  </data>
+  <data name="MiKo_1110_CodeFixTitle" xml:space="preserve">
+    <value>Append underscore</value>
   </data>
   <data name="MiKo_1110_Description" xml:space="preserve">
     <value>For maintenance reasons, parameterized test methods should be easy to read.
@@ -1081,6 +1249,9 @@ Example:
   <data name="MiKo_1111_Title" xml:space="preserve">
     <value>Test methods should be named in a fluent way.</value>
   </data>
+  <data name="MiKo_1112_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'arbitrary' from name</value>
+  </data>
   <data name="MiKo_1112_Description" xml:space="preserve">
     <value>Tests usually deal with arbitrary test data, hence there is no benefit in naming a field, parameter, variable (etc.) 'arbitrary'. That phrase can be removed without losing any meaning.</value>
   </data>
@@ -1089,6 +1260,9 @@ Example:
   </data>
   <data name="MiKo_1112_Title" xml:space="preserve">
     <value>Do not name test data 'arbitrary'.</value>
+  </data>
+  <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
+    <value>Rename exception</value>
   </data>
   <data name="MiKo_1200_Description" xml:space="preserve">
     <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
@@ -1099,6 +1273,9 @@ Example:
   <data name="MiKo_1200_Title" xml:space="preserve">
     <value>Name exceptions in catch blocks consistently.</value>
   </data>
+  <data name="MiKo_1201_CodeFixTitle" xml:space="preserve">
+    <value>Rename exception</value>
+  </data>
   <data name="MiKo_1201_Description" xml:space="preserve">
     <value>To ease maintenance, exceptions as parameters should be named consistently.</value>
   </data>
@@ -1107,6 +1284,9 @@ Example:
   </data>
   <data name="MiKo_1201_Title" xml:space="preserve">
     <value>Name exceptions as parameters consistently.</value>
+  </data>
+  <data name="MiKo_1300_CodeFixTitle" xml:space="preserve">
+    <value>Name it '_'</value>
   </data>
   <data name="MiKo_1300_Description" xml:space="preserve">
     <value>To ease maintenance and avoid visual noise, unimportant identifiers in lambdas should be consistently named '_'.</value>
@@ -1211,6 +1391,9 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>Documentation should be valid XML.</value>
   </data>
+  <data name="MiKo_2001_CodeFixTitle" xml:space="preserve">
+    <value>Start comment with 'Occurs '</value>
+  </data>
   <data name="MiKo_2001_Description" xml:space="preserve">
     <value>Events should be documented with 'Occurs ...' to indicate that events actually occur.</value>
   </data>
@@ -1238,6 +1421,9 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_2003_Title" xml:space="preserve">
     <value>Documentation of event handlers should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2004_CodeFixTitle" xml:space="preserve">
+    <value>Fix comment of event handler parameter</value>
+  </data>
   <data name="MiKo_2004_Description" xml:space="preserve">
     <value>Event method parameters should define what exactly they are.</value>
   </data>
@@ -1256,6 +1442,9 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_2005_Title" xml:space="preserve">
     <value>Textual references to EventArgs should be documented properly.</value>
   </data>
+  <data name="MiKo_2006_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard comment to RoutedEvent</value>
+  </data>
   <data name="MiKo_2006_Description" xml:space="preserve">
     <value>Routed events should be documented in the same way as they are documented by the .NET Framework.</value>
   </data>
@@ -1265,6 +1454,9 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_2006_Title" xml:space="preserve">
     <value>Routed events should be documented as done by the .NET Framework.</value>
   </data>
+  <data name="MiKo_2010_CodeFixTitle" xml:space="preserve">
+    <value>Append sealed text to comment</value>
+  </data>
   <data name="MiKo_2010_Description" xml:space="preserve">
     <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
   </data>
@@ -1273,6 +1465,9 @@ That allows an easy detection and use via IntelliSense.</value>
   </data>
   <data name="MiKo_2010_Title" xml:space="preserve">
     <value>Sealed classes should document being sealed.</value>
+  </data>
+  <data name="MiKo_2011_CodeFixTitle" xml:space="preserve">
+    <value>Remove sealed text to comment</value>
   </data>
   <data name="MiKo_2011_Description" xml:space="preserve">
     <value>Unsealed classes should not report that they are sealed.</value>
@@ -1293,6 +1488,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2012_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should describe its responsibility.</value>
   </data>
+  <data name="MiKo_2013_CodeFixTitle" xml:space="preserve">
+    <value>Start comment with 'Defines values that specify '</value>
+  </data>
   <data name="MiKo_2013_Description" xml:space="preserve">
     <value>To ease their usage, enums should specify what kind of values they define.</value>
   </data>
@@ -1301,6 +1499,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2013_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of Enums should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2014_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard 'Dispose' comment</value>
   </data>
   <data name="MiKo_2014_Description" xml:space="preserve">
     <value>Dispose methods should be documented in the same way as they are documented by the .NET Framework.</value>
@@ -1311,6 +1512,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2014_Title" xml:space="preserve">
     <value>Dispose methods should be documented as done by the .NET Framework.</value>
   </data>
+  <data name="MiKo_2015_CodeFixTitle" xml:space="preserve">
+    <value>Replace term 'fire'</value>
+  </data>
   <data name="MiKo_2015_Description" xml:space="preserve">
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events or exceptions. Events get raised and exceptions get thrown.</value>
   </data>
@@ -1319,6 +1523,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2015_Title" xml:space="preserve">
     <value>Documentation should use 'raise' or 'throw' instead of 'fire'.</value>
+  </data>
+  <data name="MiKo_2016_CodeFixTitle" xml:space="preserve">
+    <value>Start comment with 'Asynchronously '</value>
   </data>
   <data name="MiKo_2016_Description" xml:space="preserve">
     <value>Documentation for asynchronous methods should indicate that method is run asynchronously.</value>
@@ -1329,6 +1536,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2016_Title" xml:space="preserve">
     <value>Documentation for asynchronous methods should start with specific phrase.</value>
   </data>
+  <data name="MiKo_2017_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard comment to DependencyProperty</value>
+  </data>
   <data name="MiKo_2017_Description" xml:space="preserve">
     <value>Dependency properties should be documented in the same way as they are documented by the .NET Framework.</value>
   </data>
@@ -1338,11 +1548,14 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2017_Title" xml:space="preserve">
     <value>Dependency properties should be documented as done by the .NET Framework.</value>
   </data>
+  <data name="MiKo_2018_CodeFixTitle" xml:space="preserve">
+    <value>Start summary with 'Determines whether'</value>
+  </data>
   <data name="MiKo_2018_Description" xml:space="preserve">
-    <value>The terms 'Check' or 'Test' are ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines' instead.</value>
+    <value>The terms 'Check' or 'Test' are ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines whether' instead.</value>
   </data>
   <data name="MiKo_2018_MessageFormat" xml:space="preserve">
-    <value>Use '{2}' instead of ambiguous term '{1}'</value>
+    <value>Use '{2}' instead of '{1}'</value>
   </data>
   <data name="MiKo_2018_Title" xml:space="preserve">
     <value>Documentation should not use the ambiguous terms 'Check' or 'Test'.</value>
@@ -1355,6 +1568,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2019_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ").</value>
+  </data>
+  <data name="MiKo_2020_CodeFixTitle" xml:space="preserve">
+    <value>Use &lt;inheritdoc/&gt;</value>
   </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
     <value>It does not make sense to use a &lt;summary&gt; documentation that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such a scenario &lt;inheritdoc /&gt; should be used.</value>
@@ -1374,6 +1590,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>Documentation of parameter should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2022_CodeFixTitle" xml:space="preserve">
+    <value>Fix comment start of [out] parameter</value>
+  </data>
   <data name="MiKo_2022_Description" xml:space="preserve">
     <value>The documentation of [out] parameters should start with the success case.</value>
   </data>
@@ -1382,6 +1601,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>Documentation of [out] parameters should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2023_CodeFixTitle" xml:space="preserve">
+    <value>Fix comment start of Boolean parameter</value>
   </data>
   <data name="MiKo_2023_Description" xml:space="preserve">
     <value>The documentation of a Boolean as parameter should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
@@ -1392,6 +1614,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>Documentation of Boolean parameters should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2024_CodeFixTitle" xml:space="preserve">
+    <value>Fix comment start of Enum parameter</value>
+  </data>
   <data name="MiKo_2024_Description" xml:space="preserve">
     <value>The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
   </data>
@@ -1400,6 +1625,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
     <value>Documentation of Enum parameters should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2025_CodeFixTitle" xml:space="preserve">
+    <value>Fix comment start of CancellationToken</value>
   </data>
   <data name="MiKo_2025_Description" xml:space="preserve">
     <value>The documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
@@ -1419,6 +1647,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2026_Title" xml:space="preserve">
     <value>Used parameters should not be documented to be unused.</value>
   </data>
+  <data name="MiKo_2027_CodeFixTitle" xml:space="preserve">
+    <value>Fix comment start of parameter of serialization constructor</value>
+  </data>
   <data name="MiKo_2027_Description" xml:space="preserve">
     <value>To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain.</value>
   </data>
@@ -1436,6 +1667,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2028_Title" xml:space="preserve">
     <value>Documentation of parameter should not just contain the name of the parameter.</value>
+  </data>
+  <data name="MiKo_2029_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'cref' value from &lt;inheritdoc/&gt;</value>
   </data>
   <data name="MiKo_2029_Description" xml:space="preserve">
     <value>Instead of faking an XML documentation by using &lt;inheritdoc&gt; with a 'cref' to itself, a well-written &lt;summary&gt; XML documentation should be used.</value>
@@ -1455,6 +1689,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2030_Title" xml:space="preserve">
     <value>Documentation of return value should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2031_CodeFixTitle" xml:space="preserve">
+    <value>Fix return comment</value>
+  </data>
   <data name="MiKo_2031_Description" xml:space="preserve">
     <value>The documentation of a Task as return value should have a default (starting) phrase.</value>
   </data>
@@ -1473,6 +1710,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2032_Title" xml:space="preserve">
     <value>Documentation of Boolean return value should have a specific phrase.</value>
   </data>
+  <data name="MiKo_2033_CodeFixTitle" xml:space="preserve">
+    <value>Fix return comment</value>
+  </data>
   <data name="MiKo_2033_Description" xml:space="preserve">
     <value>The documentation of a String as return value should have a specific phrase.</value>
   </data>
@@ -1482,6 +1722,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2033_Title" xml:space="preserve">
     <value>Documentation of String return value should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2034_CodeFixTitle" xml:space="preserve">
+    <value>Fix return comment</value>
+  </data>
   <data name="MiKo_2034_Description" xml:space="preserve">
     <value>The documentation of an Enum as return value should have a specific phrase.</value>
   </data>
@@ -1490,6 +1733,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2034_Title" xml:space="preserve">
     <value>Documentation of Enum return value should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2035_CodeFixTitle" xml:space="preserve">
+    <value>Fix return comment</value>
   </data>
   <data name="MiKo_2035_Description" xml:space="preserve">
     <value>The documentation of a collection as return value should have a specific phrase.</value>
@@ -1509,6 +1755,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2036_Title" xml:space="preserve">
     <value>Documentation of Boolean or Enum property shall describe the default value.</value>
   </data>
+  <data name="MiKo_2037_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard comment to command property</value>
+  </data>
   <data name="MiKo_2037_Description" xml:space="preserve">
     <value>The documentation of a property that returns a command should start with a specific phrase that describes what command the property returns.</value>
   </data>
@@ -1518,6 +1767,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2037_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of command properties should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2038_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard comment to command</value>
+  </data>
   <data name="MiKo_2038_Description" xml:space="preserve">
     <value>The documentation of a command should start with a specific phrase that describes what the command does.</value>
   </data>
@@ -1526,6 +1778,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2038_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of command should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2039_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard extension methods comment to class</value>
   </data>
   <data name="MiKo_2039_Description" xml:space="preserve">
     <value>The documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides.</value>
@@ -1557,6 +1812,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2041_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not contain other documentation tags.</value>
   </data>
+  <data name="MiKo_2042_CodeFixTitle" xml:space="preserve">
+    <value>Replace &lt;br/&gt; with &lt;para/&gt;</value>
+  </data>
   <data name="MiKo_2042_Description" xml:space="preserve">
     <value>The documentation should use the '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' or '&lt;p/&gt;' HTML tags.</value>
   </data>
@@ -1569,6 +1827,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2042_Title" xml:space="preserve">
     <value>Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.</value>
   </data>
+  <data name="MiKo_2043_CodeFixTitle" xml:space="preserve">
+    <value>Start summary with 'Encapsulates a method that '</value>
+  </data>
   <data name="MiKo_2043_Description" xml:space="preserve">
     <value>The documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates.</value>
   </data>
@@ -1577,6 +1838,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2043_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of custom delegates should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2044_CodeFixTitle" xml:space="preserve">
+    <value>Use &lt;paramref&gt; tag for parameter</value>
   </data>
   <data name="MiKo_2044_Description" xml:space="preserve">
     <value>Method parameters should be referenced via &lt;paramref name="..."/&gt; inside the documentation.</value>
@@ -1614,6 +1878,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2047_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of Attributes should have a  default starting phrase.</value>
   </data>
+  <data name="MiKo_2048_CodeFixTitle" xml:space="preserve">
+    <value>Start comment with 'Represents a converter that converts '</value>
+  </data>
   <data name="MiKo_2048_Description" xml:space="preserve">
     <value>The documentation of a value converters should start with a specific phrase that describes what they convert.</value>
   </data>
@@ -1631,6 +1898,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2049_Title" xml:space="preserve">
     <value>Documentation should be more explicit and not use 'will be'.</value>
+  </data>
+  <data name="MiKo_2050_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard exception comment</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
     <value>The documentation of exceptions should follow the .NET Framework documentation.</value>
@@ -1708,6 +1978,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2057_Title" xml:space="preserve">
     <value>Types that are not disposable shall not throw an ObjectDisposedException.</value>
   </data>
+  <data name="MiKo_2060_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard comment to factory</value>
+  </data>
   <data name="MiKo_2060_Description" xml:space="preserve">
     <value>The documentation of factories should be uniform and consistent.</value>
   </data>
@@ -1716,6 +1989,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   </data>
   <data name="MiKo_2060_Title" xml:space="preserve">
     <value>Factories should be documented in a uniform way.</value>
+  </data>
+  <data name="MiKo_2070_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Return' in comment</value>
   </data>
   <data name="MiKo_2070_Description" xml:space="preserve">
     <value>If a method comment starts with 'Returns', then it focuses on the return value but not on the purpose (responsibility) of the method.
@@ -1736,23 +2012,32 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2071_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.</value>
   </data>
+  <data name="MiKo_2072_CodeFixTitle" xml:space="preserve">
+    <value>Start summary with 'Attempts to'</value>
+  </data>
   <data name="MiKo_2072_Description" xml:space="preserve">
     <value>'Try' methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase 'Attempts to '.</value>
   </data>
   <data name="MiKo_2072_MessageFormat" xml:space="preserve">
-    <value>Start &lt;summary&gt; with: '{1}'</value>
+    <value>Start &lt;summary&gt; with 'Attempts to '</value>
   </data>
   <data name="MiKo_2072_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not start with 'Try'.</value>
+  </data>
+  <data name="MiKo_2073_CodeFixTitle" xml:space="preserve">
+    <value>Start summary with 'Determines whether'</value>
   </data>
   <data name="MiKo_2073_Description" xml:space="preserve">
     <value>'Contain' methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase 'Determines whether '.</value>
   </data>
   <data name="MiKo_2073_MessageFormat" xml:space="preserve">
-    <value>Start &lt;summary&gt; with: '{1}'</value>
+    <value>Start summary with 'Determines whether'</value>
   </data>
   <data name="MiKo_2073_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines whether '.</value>
+  </data>
+  <data name="MiKo_2074_CodeFixTitle" xml:space="preserve">
+    <value>Fix comment of parameter</value>
   </data>
   <data name="MiKo_2074_Description" xml:space="preserve">
     <value>'Contain' methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase ' to seek.'.</value>
@@ -1763,6 +2048,9 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>Documentation of parameter of 'Contains' method should have a default ending phrase.</value>
   </data>
+  <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
+    <value>Start field with default phrase</value>
+  </data>
   <data name="MiKo_2080_Description" xml:space="preserve">
     <value>The documentation of fields should start with a default phrase.</value>
   </data>
@@ -1771,6 +2059,9 @@ Instead, the documentation should describe what the method is intended to do.</v
   </data>
   <data name="MiKo_2080_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of fields should have a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2081_CodeFixTitle" xml:space="preserve">
+    <value>Append read-only text</value>
   </data>
   <data name="MiKo_2081_Description" xml:space="preserve">
     <value>The documentation of a public-visible read-only field should indicate that it is read-only.</value>
@@ -1781,6 +2072,9 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2081_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.</value>
   </data>
+  <data name="MiKo_2090_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard comment</value>
+  </data>
   <data name="MiKo_2090_Description" xml:space="preserve">
     <value>To ease development and usage, the XML documentation for equality operators shall have a common default phrase.</value>
   </data>
@@ -1790,6 +2084,9 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2090_Title" xml:space="preserve">
     <value>Documentation for equality operator shall have default phrase.</value>
   </data>
+  <data name="MiKo_2091_CodeFixTitle" xml:space="preserve">
+    <value>Apply standard comment</value>
+  </data>
   <data name="MiKo_2091_Description" xml:space="preserve">
     <value>To ease development and usage, the XML documentation for inequality operators shall have a common default phrase.</value>
   </data>
@@ -1798,6 +2095,9 @@ Instead, the documentation should describe what the method is intended to do.</v
   </data>
   <data name="MiKo_2091_Title" xml:space="preserve">
     <value>Documentation for inequality operator shall have default phrase.</value>
+  </data>
+  <data name="MiKo_2100_CodeFixTitle" xml:space="preserve">
+    <value>Start comment with 'The following example demonstrates '</value>
   </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
     <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
@@ -1835,6 +2135,9 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2201_Title" xml:space="preserve">
     <value>Use a capitalized letter to start the sentences in the comment.</value>
   </data>
+  <data name="MiKo_2202_CodeFixTitle" xml:space="preserve">
+    <value>Change 'id' into 'identifier'</value>
+  </data>
   <data name="MiKo_2202_Description" xml:space="preserve">
     <value>The XML documentation should not use the abbreviation 'id'. Instead, it should clearly document that this is an identifier. Hence, it should use the term 'identifier' instead.</value>
   </data>
@@ -1843,6 +2146,9 @@ Instead, the documentation should describe what the method is intended to do.</v
   </data>
   <data name="MiKo_2202_Title" xml:space="preserve">
     <value>Documentation should use the term 'identifier' instead of 'id'.</value>
+  </data>
+  <data name="MiKo_2203_CodeFixTitle" xml:space="preserve">
+    <value>Change 'GUID' into 'unique identifier'</value>
   </data>
   <data name="MiKo_2203_Description" xml:space="preserve">
     <value>The XML documentation should not use the abbreviation 'guid'. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term 'unique identifier' instead.</value>
@@ -1914,6 +2220,9 @@ By having a more concrete description it makes it easier for a developer to unde
   <data name="MiKo_2209_Title" xml:space="preserve">
     <value>Do not use double periods in documentation.</value>
   </data>
+  <data name="MiKo_2210_CodeFixTitle" xml:space="preserve">
+    <value>Change 'info' into 'information'</value>
+  </data>
   <data name="MiKo_2210_Description" xml:space="preserve">
     <value>The XML documentation should not use the abbreviation 'info'. Instead, it should clearly document that this is an information. Hence, it should use the term 'information' instead.</value>
   </data>
@@ -1922,6 +2231,9 @@ By having a more concrete description it makes it easier for a developer to unde
   </data>
   <data name="MiKo_2210_Title" xml:space="preserve">
     <value>Documentation should use the term 'information' instead of 'info'.</value>
+  </data>
+  <data name="MiKo_2211_CodeFixTitle" xml:space="preserve">
+    <value>Move remarks comment into summary</value>
   </data>
   <data name="MiKo_2211_Description" xml:space="preserve">
     <value>Unfortunately, tools such as Sandcastle cannot handle &lt;remarks&gt; sections on enum members. The resulting output (CHM, HTML, ...) does not contain any Remarks section.
@@ -1954,6 +2266,9 @@ They should not describe how it is achieved because that's what the code is for.
   </data>
   <data name="MiKo_2300_Title" xml:space="preserve">
     <value>Comments should explain the 'Why' and not the 'How'.</value>
+  </data>
+  <data name="MiKo_2301_CodeFixTitle" xml:space="preserve">
+    <value>Remove obvious AAA comment</value>
   </data>
   <data name="MiKo_2301_Description" xml:space="preserve">
     <value>Inside tests that follow the Arrange/Act/Assert style, the comments '// arrange', '// act' and '// assert' are obvious and provide no benefit. Therefore, they can be removed.</value>
@@ -2189,6 +2504,9 @@ That is they should return a Boolean and have the last parameter as [out] parame
   <data name="MiKo_3015_Title" xml:space="preserve">
     <value>Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states.</value>
   </data>
+  <data name="MiKo_3020_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Task.CompletedTask'</value>
+  </data>
   <data name="MiKo_3020_Description" xml:space="preserve">
     <value>For performance reasons it's better to use 'Task.CompletedTask' instead of 'Task.FromResult()' as the returned task is internally cached.</value>
   </data>
@@ -2421,6 +2739,9 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3049_Title" xml:space="preserve">
     <value>Enum members shall have the [Description] attribute applied.</value>
   </data>
+  <data name="MiKo_3050_CodeFixTitle" xml:space="preserve">
+    <value>Make DependencyProperty 'public static readonly'</value>
+  </data>
   <data name="MiKo_3050_Description" xml:space="preserve">
     <value>Fields that are the back of a DependencyProperty should be made 'public static readonly' to allow the .NET framework and other clients to find and access those fields.</value>
   </data>
@@ -2445,6 +2766,9 @@ In addition, the correct property names, property types and owing types should b
   </data>
   <data name="MiKo_3051_Title" xml:space="preserve">
     <value>DependencyProperty fields should be properly registered.</value>
+  </data>
+  <data name="MiKo_3052_CodeFixTitle" xml:space="preserve">
+    <value>Make DependencyPropertyKey 'private static readonly'</value>
   </data>
   <data name="MiKo_3052_Description" xml:space="preserve">
     <value>Fields that are the back of a DependencyPropertyKey should be made non-public, 'static readonly' to prevent clients to find and access those fields.</value>
@@ -2553,6 +2877,9 @@ Doing so allows to change the implementation of the return value whenever it's n
   <data name="MiKo_3073_Title" xml:space="preserve">
     <value>Do not leave objects partially initialized.</value>
   </data>
+  <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is false' pattern</value>
+  </data>
   <data name="MiKo_3081_Description" xml:space="preserve">
     <value>Logical NOT conditions are hard to recognize if they are coded using the '!' character. Code that uses 'is false' is much easier to read and understand.</value>
   </data>
@@ -2561,6 +2888,9 @@ Doing so allows to change the implementation of the return value whenever it's n
   </data>
   <data name="MiKo_3081_Title" xml:space="preserve">
     <value>Pattern matching is preferred over a logical NOT condition.</value>
+  </data>
+  <data name="MiKo_3082_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is' pattern</value>
   </data>
   <data name="MiKo_3082_Description" xml:space="preserve">
     <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' operator.</value>
@@ -2571,6 +2901,9 @@ Doing so allows to change the implementation of the return value whenever it's n
   <data name="MiKo_3082_Title" xml:space="preserve">
     <value>Pattern matching is preferred over a logical comparison with 'true' or 'false'.</value>
   </data>
+  <data name="MiKo_3083_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is null' pattern</value>
+  </data>
   <data name="MiKo_3083_Description" xml:space="preserve">
     <value>Null checks using the 'is' pattern matching is more natural and therefore easier to read and understand than using the '==' operator.</value>
   </data>
@@ -2579,6 +2912,9 @@ Doing so allows to change the implementation of the return value whenever it's n
   </data>
   <data name="MiKo_3083_Title" xml:space="preserve">
     <value>Pattern matching is preferred for null checks.</value>
+  </data>
+  <data name="MiKo_3084_CodeFixTitle" xml:space="preserve">
+    <value>Place constant value on right side</value>
   </data>
   <data name="MiKo_3084_Description" xml:space="preserve">
     <value>To increase readability, do not place constants on the left side of an operator. Instead, place it on the right side. This makes the code look more natural.</value>
@@ -2660,7 +2996,7 @@ This allows easy usage without any arbitrary using directives. It also mimics th
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
   <data name="MiKo_3101_MessageFormat" xml:space="preserve">
-    <value>'{0}' should contain tests</value>
+    <value>Test class '{0}' should contain tests</value>
   </data>
   <data name="MiKo_3101_Title" xml:space="preserve">
     <value>Test classes should contain tests.</value>
@@ -2674,6 +3010,9 @@ So having a condition inside a test is a huge code smell.</value>
   </data>
   <data name="MiKo_3102_Title" xml:space="preserve">
     <value>Test methods should not contain conditional statements such as 'if', 'switch', etc.</value>
+  </data>
+  <data name="MiKo_3103_CodeFixTitle" xml:space="preserve">
+    <value>Use hard-coded GUID</value>
   </data>
   <data name="MiKo_3103_Description" xml:space="preserve">
     <value>Tests should be specific to make them reproducible and easy to maintain. A GUID that is generated is not reproducible at all and cannot be easily found in case a test fails.
@@ -2693,6 +3032,9 @@ Therefore, a hard-coded GUID should be used instead.</value>
   </data>
   <data name="MiKo_3104_Title" xml:space="preserve">
     <value>Use NUnit's [Combinatorial] attribute properly.</value>
+  </data>
+  <data name="MiKo_3105_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Assert.That'</value>
   </data>
   <data name="MiKo_3105_Description" xml:space="preserve">
     <value>NUnit's fluent Assert approach is easier to understand. Following that approach, developers will most times not make the common mistake to mix up the 'actual' and 'expected' values.</value>
@@ -2760,6 +3102,9 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4002_Title" xml:space="preserve">
     <value>Methods with same name and accessibility should be placed side-by-side.</value>
   </data>
+  <data name="MiKo_4003_CodeFixTitle" xml:space="preserve">
+    <value>Place Dispose method after constructors and finalizers</value>
+  </data>
   <data name="MiKo_4003_Description" xml:space="preserve">
     <value>Ctors, finalizers and Dispose methods are all directly related to the lifetime of an object. Therefore, they belong together and should be placed side by side.</value>
   </data>
@@ -2768,6 +3113,9 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4003_Title" xml:space="preserve">
     <value>Dispose methods should be placed directly after constructors and finalizers.</value>
+  </data>
+  <data name="MiKo_4004_CodeFixTitle" xml:space="preserve">
+    <value>Place corresponding interface directly after type declaration</value>
   </data>
   <data name="MiKo_4004_Description" xml:space="preserve">
     <value>To ease reading, the interface that gives the type its name should be listed as first interface. All the other implemented interfaces should be placed behind.</value>
@@ -2778,6 +3126,9 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4004_Title" xml:space="preserve">
     <value>The interface that gives a type its name should be placed directly after the type's declaration.</value>
   </data>
+  <data name="MiKo_4101_CodeFixTitle" xml:space="preserve">
+    <value>Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before test cleanup and all other test methods</value>
+  </data>
   <data name="MiKo_4101_Description" xml:space="preserve">
     <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods.</value>
   </data>
@@ -2786,6 +3137,9 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4101_Title" xml:space="preserve">
     <value>Test initialization methods should be ordered directly after One-Time methods.</value>
+  </data>
+  <data name="MiKo_4102_CodeFixTitle" xml:space="preserve">
+    <value>Place test cleanup method after test initialization methods and before all test methods</value>
   </data>
   <data name="MiKo_4102_Description" xml:space="preserve">
     <value>Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods.</value>
@@ -2796,6 +3150,9 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4102_Title" xml:space="preserve">
     <value>Test cleanup methods should be ordered after test initialization methods and before test methods.</value>
   </data>
+  <data name="MiKo_4103_CodeFixTitle" xml:space="preserve">
+    <value>Place [OneTimeSetUp] method before all other methods</value>
+  </data>
   <data name="MiKo_4103_Description" xml:space="preserve">
     <value>One-Time test initialization method define the most common parts that the test environment shall have. So to ease their finding they should be ordered first.</value>
   </data>
@@ -2804,6 +3161,9 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4103_Title" xml:space="preserve">
     <value>One-Time test initialization methods should be ordered before all other methods.</value>
+  </data>
+  <data name="MiKo_4104_CodeFixTitle" xml:space="preserve">
+    <value>Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods</value>
   </data>
   <data name="MiKo_4104_Description" xml:space="preserve">
     <value>One-Time test cleanup methods define the common parts that shall be executed after all tests have been finished, to clean up the test environment. So to ease their finding they should be ordered directly after the One-Time test initialization methods.</value>
@@ -2814,6 +3174,9 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4104_Title" xml:space="preserve">
     <value>One-Time test cleanup methods should be ordered directly after One-Time test initialization methods.</value>
   </data>
+  <data name="MiKo_5001_CodeFixTitle" xml:space="preserve">
+    <value>Place inside 'if'</value>
+  </data>
   <data name="MiKo_5001_Description" xml:space="preserve">
     <value>For performance reasons, 'IsDebugEnabled' should be invoked before the 'Debug' or 'DebugFormat' methods get invoked as those require messages to be created. That creation (and the garbage collection of them as well) is not needed if the 'Debug' log level is not set.</value>
   </data>
@@ -2822,6 +3185,9 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_5001_Title" xml:space="preserve">
     <value>'Debug' and 'DebugFormat' methods should be invoked only after 'IsDebugEnabled'.</value>
+  </data>
+  <data name="MiKo_5002_CodeFixTitle" xml:space="preserve">
+    <value>Replace with non-'Format' method</value>
   </data>
   <data name="MiKo_5002_Description" xml:space="preserve">
     <value>For performance reasons, 'xxxFormat' methods (such as 'DebugFormat') should be invoked only with arguments to format the string. Otherwise, the corresponding non-formatting methods (such as 'Debug') should be invoked.</value>
@@ -2841,6 +3207,9 @@ That allows the Log framework to log not only the name of the exception but also
   </data>
   <data name="MiKo_5003_Title" xml:space="preserve">
     <value>Correct Log methods should be invoked for exceptions.</value>
+  </data>
+  <data name="MiKo_5010_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'Equals' by '=='</value>
   </data>
   <data name="MiKo_5010_Description" xml:space="preserve">
     <value>For performance reasons, it makes no sense to use 'object.Equals()' on value types. Value types get boxed and unboxed when being casted to objects. That puts unnecessary pressure on the garbage collector as temporary objects are created and immediately get garbage collected.

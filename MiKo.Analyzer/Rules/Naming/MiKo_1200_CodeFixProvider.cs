@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1200_ExceptionCatchBlockAnalyzer.Id;
 
-        protected override string Title => "Rename exception";
+        protected override string Title => Resources.MiKo_1200_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1200_ExceptionCatchBlockAnalyzer.ExpectedName;
 

@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1091_VariableWrongSuffixedAnalyzer.Id;
 
-        protected override string Title => "Remove variable suffix";
+        protected override string Title => Resources.MiKo_1091_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol) => MiKo_1091_VariableWrongSuffixedAnalyzer.FindBetterName(symbol);
     }

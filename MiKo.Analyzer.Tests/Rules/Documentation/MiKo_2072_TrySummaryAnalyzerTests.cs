@@ -62,7 +62,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_([Values("Try to", "Tries to")] string startPhrase)
         {
-            var originalText = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -72,7 +72,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -82,13 +82,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(originalText, FixedText);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_Async()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -98,7 +98,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -108,13 +108,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_in_middle()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -124,7 +124,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -134,7 +134,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2072_TrySummaryAnalyzer.Id;

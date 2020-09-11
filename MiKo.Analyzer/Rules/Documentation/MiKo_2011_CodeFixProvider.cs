@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2011_UnsealedClassSummaryAnalyzer.Id;
 
-        protected override string Title => "Remove sealed text to comment";
+        protected override string Title => Resources.MiKo_2011_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {

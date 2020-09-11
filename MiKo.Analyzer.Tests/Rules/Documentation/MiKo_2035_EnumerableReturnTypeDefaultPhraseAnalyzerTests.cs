@@ -198,7 +198,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_array_type()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -211,7 +211,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -224,13 +224,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_byte_array_type()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 public class TestMe
 {
     /// <summary>
@@ -243,7 +243,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 public class TestMe
 {
     /// <summary>
@@ -256,7 +256,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [TestCase("Some integers.", "A collection of some integers.")]
@@ -321,7 +321,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_for_Task_with_generic_collection()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -339,7 +339,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -357,13 +357,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_Task_with_array()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -381,7 +381,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -399,13 +399,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_Task_with_byte_array()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -423,7 +423,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -441,7 +441,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;

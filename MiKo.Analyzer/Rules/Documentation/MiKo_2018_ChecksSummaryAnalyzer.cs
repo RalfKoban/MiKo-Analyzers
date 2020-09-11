@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
 
-        private static readonly string[] Comments = { "Check ", "Checks ", "Test ", "Tests ", "Determines if " };
+        private static readonly string[] WrongPhrases = { "Check ", "Checks ", "Test ", "Tests ", "Determines if " };
 
         public MiKo_2018_ChecksSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -26,16 +26,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
-            foreach (var summary in summaries
-                                        .Select(_ => _.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim())
-                                        .Where(_ => _.StartsWithAny(Comments)))
+            foreach (var summary in summaries.Select(_ => _.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim()))
             {
-                var wrongPhrase = summary.Substring(0, summary.IndexOf(" ", StringComparison.OrdinalIgnoreCase));
-
-                return new[] { Issue(symbol, wrongPhrase, StartingPhrase) };
+                foreach (var wrongPhrase in WrongPhrases.Where(_ => summary.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
+                {
+                    yield return Issue(symbol, wrongPhrase, StartingPhrase);
+                }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

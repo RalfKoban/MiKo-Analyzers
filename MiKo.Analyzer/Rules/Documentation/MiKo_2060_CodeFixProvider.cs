@@ -1,7 +1,11 @@
-﻿using System.Composition;
+﻿using System;
+using System.Collections.Generic;
+using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -9,9 +13,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+        private static readonly Dictionary<string, string> TypeReplacementMap = new Dictionary<string, string>
+                                                                                {
+                                                                                    { "A factory that creates a ", string.Empty },
+                                                                                    { "A factory that creates ", string.Empty },
+                                                                                    { "A factory that ", string.Empty },
+                                                                                    { "Represents a factory that creates a ", string.Empty },
+                                                                                    { "Represents a factory that creates ", string.Empty },
+                                                                                    { "Represents a factory that ", string.Empty },
+                                                                                    { "Creates ", string.Empty },
+                                                                                };
+
+        private static readonly Dictionary<string, string> MethodReplacementMap = new Dictionary<string, string>
+                                                                                {
+                                                                                    { "Creates an instance of ", string.Empty },
+                                                                                    { "Creates an ", string.Empty },
+                                                                                    { "Creates a ", string.Empty },
+                                                                                };
+
         public override string FixableDiagnosticId => MiKo_2060_FactoryAnalyzer.Id;
 
-        protected override string Title => "Apply standard comment to factory";
+        protected override string Title => Resources.MiKo_2060_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
@@ -22,10 +44,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (ancestor)
                 {
                     case ClassDeclarationSyntax _:
-                        return CommentStartingWith(summary, Constants.Comments.FactorySummaryPhrase);
+                    case InterfaceDeclarationSyntax _:
+                    {
+                        var preparedComment = PrepareTypeComment(summary);
+                        return CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
+                    }
 
                     case MethodDeclarationSyntax m:
                     {
+                        var preparedComment = PrepareMethodComment(summary);
+
                         var template = Constants.Comments.FactoryCreateMethodSummaryStartingPhraseTemplate;
                         var returnType = m.ReturnType;
 
@@ -37,12 +65,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var parts = string.Format(template, '|').Split('|');
 
-                        return CommentStartingWith(summary, parts[0], SeeCref(returnType), parts[1]);
+                        return CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
                     }
                 }
             }
 
             return summary;
+        }
+
+        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment)
+        {
+            return Comment(comment, TypeReplacementMap.Select(_ => _.Key).ToList(), TypeReplacementMap);
+        }
+
+        private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
+        {
+            var preparedComment = Comment(comment, MethodReplacementMap.Select(_ => _.Key).ToList(), MethodReplacementMap);
+
+            if (preparedComment.Content.Count > 2)
+            {
+                var content1 = preparedComment.Content[0];
+                var content2 = preparedComment.Content[1];
+                if (content2.IsKind(SyntaxKind.XmlEmptyElement) && content1.WithoutXmlCommentExterior().IsNullOrWhiteSpace())
+                {
+                    return preparedComment.RemoveNodes(new[] { content1, content2 }, SyntaxRemoveOptions.KeepNoTrivia);
+                }
+            }
+
+            return preparedComment;
         }
     }
 }

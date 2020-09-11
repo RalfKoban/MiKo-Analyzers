@@ -105,7 +105,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Some documentation.
 /// This class cannot be inherited.
@@ -115,7 +115,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Some documentation.
 /// </summary>
@@ -123,13 +123,13 @@ public class TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_with_wrong_placed_sealed_text()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// This class cannot be inherited.
 /// Some documentation.
@@ -139,7 +139,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Some documentation.
 /// </summary>
@@ -147,13 +147,13 @@ public class TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_with_wrong_placed_sealed_text_on_single_line()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Some text. This class cannot be inherited.
 /// Some documentation.
@@ -163,7 +163,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Some text.
 /// Some documentation.
@@ -172,13 +172,13 @@ public class TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_with_wrong_placed_sealed_text_all_on_single_line()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 /// <summary>
 /// Some text. This class cannot be inherited. Some documentation.
 /// </summary>
@@ -187,7 +187,7 @@ public class TestMe
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 /// <summary>
 /// Some text. Some documentation.
 /// </summary>
@@ -195,7 +195,7 @@ public class TestMe
 {
 }
 ";
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2011_UnsealedClassSummaryAnalyzer.Id;

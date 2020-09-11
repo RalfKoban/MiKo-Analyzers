@@ -212,7 +212,7 @@ public class TestMe : IDisposable
         [Test]
         public void Code_gets_fixed_for_interface_implementation_and_ctor_and_finalizer()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -227,7 +227,7 @@ public class TestMe : IDisposable
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -242,13 +242,13 @@ public class TestMe : IDisposable
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_ctor_and_finalizer()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -263,7 +263,7 @@ public class TestMe : IDisposable
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -278,13 +278,13 @@ public class TestMe : IDisposable
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_ctor_only()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -297,7 +297,7 @@ public class TestMe : IDisposable
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -310,13 +310,13 @@ public class TestMe : IDisposable
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_finalizer_only()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -329,7 +329,7 @@ public class TestMe : IDisposable
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -342,13 +342,13 @@ public class TestMe : IDisposable
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_no_ctor_or_finalizer()
         {
-            const string OriginalText = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -359,7 +359,7 @@ public class TestMe : IDisposable
 }
 ";
 
-            const string FixedText = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe : IDisposable
@@ -370,7 +370,7 @@ public class TestMe : IDisposable
 }
 ";
 
-            VerifyCSharpFix(OriginalText, FixedText);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         //// TODO RKN: partial parts

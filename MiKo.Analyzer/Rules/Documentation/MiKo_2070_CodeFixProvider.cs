@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2070_ReturnsSummaryAnalyzer.Id;
 
-        protected override string Title => "Replace 'Return' in comment";
+        protected override string Title => Resources.MiKo_2070_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
