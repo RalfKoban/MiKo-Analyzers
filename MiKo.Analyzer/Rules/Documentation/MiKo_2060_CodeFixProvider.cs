@@ -15,10 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Dictionary<string, string> TypeReplacementMap = new Dictionary<string, string>
                                                                                 {
-                                                                                    { "A factory that creates a ", string.Empty },
                                                                                     { "A factory that creates ", string.Empty },
                                                                                     { "A factory that ", string.Empty },
-                                                                                    { "Represents a factory that creates a ", string.Empty },
                                                                                     { "Represents a factory that creates ", string.Empty },
                                                                                     { "Represents a factory that ", string.Empty },
                                                                                     { "Creates ", string.Empty },
@@ -26,9 +24,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Dictionary<string, string> MethodReplacementMap = new Dictionary<string, string>
                                                                                 {
+                                                                                    { "Creates an new instance of ", string.Empty },
                                                                                     { "Creates an instance of ", string.Empty },
                                                                                     { "Creates an ", string.Empty },
                                                                                     { "Creates a ", string.Empty },
+                                                                                };
+
+        private static readonly Dictionary<string, string> CleanupReplacementMap = new Dictionary<string, string>
+                                                                                {
+                                                                                    { " with for ", " with " },
+                                                                                    { " type with type.", " type with default values." },
                                                                                 };
 
         public override string FixableDiagnosticId => MiKo_2060_FactoryAnalyzer.Id;
@@ -65,7 +70,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var parts = string.Format(template, '|').Split('|');
 
-                        return CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
+                        var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
+
+                        var cleanedContent = CleanupMethodComment(fixedComment);
+                        return cleanedContent;
                     }
                 }
             }
@@ -93,6 +101,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return preparedComment;
+        }
+
+        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment)
+        {
+            return Comment(comment, CleanupReplacementMap.Select(_ => _.Key).ToList(), CleanupReplacementMap);
         }
     }
 }

@@ -256,7 +256,7 @@ public interface ITestMeFactory
 
             const string FixedCode = @"
 /// <summary>
-/// Provides support for creating <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
+/// Provides support for creating a <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
 /// </summary>
 public interface ITestMeFactory
 {
@@ -369,7 +369,7 @@ internal interface IFactory
 internal interface IFactory
 {
     /// <summary>
-    /// Creates a new instance of the <see cref=""IXyz""/> type with type.
+    /// Creates a new instance of the <see cref=""IXyz""/> type with default values.
     /// </summary>
     IXyz Create();
 }
