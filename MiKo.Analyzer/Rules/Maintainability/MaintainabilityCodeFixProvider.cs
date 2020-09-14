@@ -24,6 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return CreateInvocationSyntax(member, arguments);
         }
 
+        protected static InvocationExpressionSyntax CreateInvocationSyntax(string typeName, string methodName, params TypeSyntax[] items)
+        {
+            // that's for the method call
+            var member = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName, items);
+
+            return CreateInvocationSyntax(member);
+        }
+
         protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
@@ -45,6 +53,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var result = methodNames.Skip(1).Aggregate(start, CreateSimpleMemberAccessExpressionSyntax);
             return result;
+        }
+
+        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, TypeSyntax[] items)
+        {
+            var type = SyntaxFactory.IdentifierName(typeName);
+            var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
+
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
     }
 }
