@@ -203,8 +203,6 @@ namespace MiKoSolutions.Analyzers
                 && symbol.IsCommand();
         }
 
-        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
-
         internal static bool IsString(this TypeSyntax syntax)
         {
             switch (syntax.ToString())
@@ -218,6 +216,8 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
         }
+
+        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
 
         internal static bool IsSerializationInfo(this TypeSyntax syntax)
         {

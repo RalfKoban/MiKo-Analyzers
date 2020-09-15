@@ -47,20 +47,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, syntax, identifierName);
         }
 
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, params string[] methodNames)
-        {
-            var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodNames[0]);
-
-            var result = methodNames.Skip(1).Aggregate(start, CreateSimpleMemberAccessExpressionSyntax);
-            return result;
-        }
-
         protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, TypeSyntax[] items)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
             var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
 
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
+        }
+
+        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, params string[] methodNames)
+        {
+            var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodNames[0]);
+
+            var result = methodNames.Skip(1).Aggregate(start, CreateSimpleMemberAccessExpressionSyntax);
+            return result;
         }
     }
 }
