@@ -356,6 +356,9 @@ namespace MiKoSolutions.Analyzers
                                                                   && symbol.SpecialType == SpecialType.None
                                                                   && symbol.InheritsFrom<EventArgs>();
 
+        internal static bool IsEventHandler(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate
+                                                                     && symbol.Name == nameof(EventHandler);
+
         internal static bool IsException(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class
                                                                   && symbol.SpecialType == SpecialType.None
                                                                   && symbol.InheritsFrom<Exception>();

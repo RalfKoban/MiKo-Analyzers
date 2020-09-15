@@ -469,6 +469,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name event handler variable &apos;handler&apos;.
+        /// </summary>
+        public static string MiKo_1009_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1009_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EventHandler variables should be named handler, to indicate that they handle events..
+        /// </summary>
+        public static string MiKo_1009_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1009_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;handler&apos;.
+        /// </summary>
+        public static string MiKo_1009_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1009_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;System.EventHandler&apos; variables should be named properly..
+        /// </summary>
+        public static string MiKo_1009_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1009_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
         /// </summary>
         public static string MiKo_1010_Description {
