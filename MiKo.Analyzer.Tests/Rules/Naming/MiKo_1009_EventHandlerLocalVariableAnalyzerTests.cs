@@ -109,6 +109,42 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_method_with_var_PropertyChangingEventHandler_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = new PropertyChangingEventHandler(OnHandleEvent);
+    }
+
+    private void OnHandleEvent(object sender, PropertyChangingEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_var_PropertyChangedEventHandler_variable_with_incorrect_name() => An_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = new PropertyChangedEventHandler(OnHandleEvent);
+    }
+
+    private void OnHandleEvent(object sender, PropertyChangedEventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
                                                          "using System; class TestMe { void DoSomething() { EventHandler x = null; } }",
                                                          "using System; class TestMe { void DoSomething() { EventHandler handler = null; } }");
