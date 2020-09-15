@@ -22,10 +22,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var original = (InvocationExpressionSyntax)syntax;
 
-            if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax i)
+            if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)
             {
                 // for the moment only consider Assert and not StringAssert etc.
-                switch (i.GetName())
+                switch (type.GetName())
                 {
                     case "Assert":
                     case "CollectionAssert":
@@ -49,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             case "GreaterOrEqual": return FixGreaterOrEqual(args);
                             case "IsEmpty": return FixIsEmpty(args);
                             case "IsFalse": return FixIsFalse(args);
+                            case "IsInstanceOf": return FixIsInstanceOf(args, maes.Name);
                             case "IsNotEmpty": return FixIsNotEmpty(args);
                             case "IsNotNull": return FixIsNotNull(args);
                             case "IsNull": return FixIsNull(args);
@@ -97,6 +98,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixIsFalse(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("False"), 1, args);
 
+        private static InvocationExpressionSyntax FixIsInstanceOf(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
+        {
+            if (name is GenericNameSyntax gns)
+            {
+                return AssertThat(args[0], Is("InstanceOf", gns.TypeArgumentList.Arguments.ToArray()), 1, args);
+            }
+
+            if (args[0].Expression is TypeOfExpressionSyntax t)
+            {
+                return AssertThat(args[1], Is("InstanceOf", new[] { t.Type }), 2, args);
+            }
+
+            // TODO: this code is not tested as the case does not exist
+            return AssertThat(args[0], Is("InstanceOf"), 1, args);
+        }
+
         private static InvocationExpressionSyntax FixIsNotEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Empty"), 1, args);
 
         private static InvocationExpressionSyntax FixIsNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), 1, args);
@@ -136,6 +153,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
         private static ArgumentSyntax Is(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, argument));
+
+        private static ArgumentSyntax Is(string name, TypeSyntax[] items) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, items));
 
         private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument)
         {
