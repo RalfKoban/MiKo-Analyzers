@@ -442,7 +442,11 @@ namespace MiKoSolutions.Analyzers
         {
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
             var openBraceToken = syntax.OpenBraceToken.WithoutTrivia().WithEndOfLine();
-            var closeBraceToken = syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine().WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia);
+
+            // avoid lost trivia, such as #endregion
+            var closeBraceToken = syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
+                                                        .WithLeadingTrivia(syntax.CloseBraceToken.LeadingTrivia)
+                                                        .WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia);
 
             return syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
                          .WithOpenBraceToken(openBraceToken)
