@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (token.GetPreviousToken().IsKind(SyntaxKind.OpenBraceToken))
             {
-                // do not er-use the new line, to avoid gap between code and opening brace
+                // do not re-use the new line, to avoid gap between code and opening brace
                 return token.WithLeadingTrivia(trivia[count - 1]);
             }
 
