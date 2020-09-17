@@ -66,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var oldToken = GetToken(trivia);
             var updatedToken = GetUpdatedToken(oldToken);
+
             var newDocument = document.WithSyntaxRoot(root.ReplaceToken(oldToken, updatedToken));
             return Task.FromResult(newDocument);
         }

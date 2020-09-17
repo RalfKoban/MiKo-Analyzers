@@ -203,8 +203,6 @@ namespace MiKoSolutions.Analyzers
                 && symbol.IsCommand();
         }
 
-        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
-
         internal static bool IsString(this TypeSyntax syntax)
         {
             switch (syntax.ToString())
@@ -218,6 +216,8 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
         }
+
+        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
 
         internal static bool IsSerializationInfo(this TypeSyntax syntax)
         {
@@ -442,7 +442,11 @@ namespace MiKoSolutions.Analyzers
         {
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
             var openBraceToken = syntax.OpenBraceToken.WithoutTrivia().WithEndOfLine();
-            var closeBraceToken = syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine().WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia);
+
+            // avoid lost trivia, such as #endregion
+            var closeBraceToken = syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
+                                                        .WithLeadingTrivia(syntax.CloseBraceToken.LeadingTrivia)
+                                                        .WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia);
 
             return syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
                          .WithOpenBraceToken(openBraceToken)

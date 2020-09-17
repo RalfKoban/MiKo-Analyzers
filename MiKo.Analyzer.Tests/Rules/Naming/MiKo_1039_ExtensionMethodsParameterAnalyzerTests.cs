@@ -40,23 +40,23 @@ public static class TestMeExtensions
 }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_(
+            [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
+            [Values("Something", "")] string methodName,
+            [ValueSource(nameof(CorrectConversionParameterNames))] string name)
+            => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    public static int " + prefix + methodName + @"(this int " + name + @") => 42;
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name_([ValueSource(nameof(WrongParameterNames))] string name) => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
     public static void DoSomething(this int " + name + @") { }
-}
-");
-
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_(
-                                                                                    [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
-                                                                                    [Values("Something", "")] string methodName,
-                                                                                    [ValueSource(nameof(CorrectConversionParameterNames))] string name)
-            => No_issue_is_reported_for(@"
-public static class TestMeExtensions
-{
-    public static int " + prefix + methodName + @"(this int " + name + @") => 42;
 }
 ");
 

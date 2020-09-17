@@ -24,7 +24,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)
             {
-                // for the moment only consider Assert and not StringAssert etc.
                 switch (type.GetName())
                 {
                     case "Assert":
@@ -33,33 +32,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var args = original.ArgumentList.Arguments;
 
-                        switch (maes.GetName())
+                        var fixedSyntax = UpdatedSyntax(maes, args);
+                        if (fixedSyntax != null)
                         {
-                            case "AreEqual": return FixAreEqual(args);
-                            case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
-                            case "AreEquivalent": return FixAreEquivalent(args);
-                            case "AreNotEqual": return FixAreNotEqual(args);
-                            case "AreNotEquivalent": return FixAreNotEquivalent(args);
-                            case "AreNotSame": return FixAreNotSame(args);
-                            case "AreSame": return FixAreSame(args);
-                            case "Contains": return FixContains(args);
-                            case "DoesNotContain": return FixDoesNotContain(args);
-                            case "EndsWith": return FixEndsWith(args);
-                            case "Greater": return FixGreater(args);
-                            case "GreaterOrEqual": return FixGreaterOrEqual(args);
-                            case "IsEmpty": return FixIsEmpty(args);
-                            case "IsFalse": return FixIsFalse(args);
-                            case "IsInstanceOf": return FixIsInstanceOf(args, maes.Name);
-                            case "IsNotEmpty": return FixIsNotEmpty(args);
-                            case "IsNotNull": return FixIsNotNull(args);
-                            case "IsNull": return FixIsNull(args);
-                            case "IsNullOrEmpty": return FixIsNullOrEmpty(args);
-                            case "IsSubsetOf": return FixIsSubsetOf(args);
-                            case "IsTrue": return FixIsTrue(args);
-                            case "Less": return FixLess(args);
-                            case "LessOrEqual": return FixLessOrEqual(args);
-                            case "NotNull": return FixNotNull(args);
-                            case "StartsWith": return FixStartsWith(args);
+                            // ensure that we keep leading trivia, such as comments
+                            return fixedSyntax.WithLeadingTrivia(original.GetLeadingTrivia());
                         }
 
                         break;
@@ -68,6 +45,39 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return original;
+        }
+
+        private static ExpressionSyntax UpdatedSyntax(MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            switch (syntax.GetName())
+            {
+                case "AreEqual": return FixAreEqual(args);
+                case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
+                case "AreEquivalent": return FixAreEquivalent(args);
+                case "AreNotEqual": return FixAreNotEqual(args);
+                case "AreNotEquivalent": return FixAreNotEquivalent(args);
+                case "AreNotSame": return FixAreNotSame(args);
+                case "AreSame": return FixAreSame(args);
+                case "Contains": return FixContains(args);
+                case "DoesNotContain": return FixDoesNotContain(args);
+                case "EndsWith": return FixEndsWith(args);
+                case "Greater": return FixGreater(args);
+                case "GreaterOrEqual": return FixGreaterOrEqual(args);
+                case "IsEmpty": return FixIsEmpty(args);
+                case "IsFalse": return FixIsFalse(args);
+                case "IsInstanceOf": return FixIsInstanceOf(args, syntax.Name);
+                case "IsNotEmpty": return FixIsNotEmpty(args);
+                case "IsNotNull": return FixIsNotNull(args);
+                case "IsNull": return FixIsNull(args);
+                case "IsNullOrEmpty": return FixIsNullOrEmpty(args);
+                case "IsSubsetOf": return FixIsSubsetOf(args);
+                case "IsTrue": return FixIsTrue(args);
+                case "Less": return FixLess(args);
+                case "LessOrEqual": return FixLessOrEqual(args);
+                case "NotNull": return FixNotNull(args);
+                case "StartsWith": return FixStartsWith(args);
+                default: return null;
+            }
         }
 
         private static InvocationExpressionSyntax FixAreEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0]), 2, args);

@@ -510,6 +510,88 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_full_fledged_test_with_region_around_field()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [SetUp]
+    public void PrepareTest()
+    {
+    }
+
+    [TearDown]
+    public void CleanupTest()
+    {
+    }
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    [OneTimeSetUp]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    #region Fields
+
+    private int m_field;
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [OneTimeSetUp]
+    public void PrepareTestEnvironment()
+    {
+    }
+
+    [SetUp]
+    public void PrepareTest()
+    {
+    }
+
+    [TearDown]
+    public void CleanupTest()
+    {
+    }
+
+    [Test]
+    public void DoSomething()
+    {
+    }
+
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+    }
+
+    #region Fields
+
+    private int m_field;
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4103_TestOneTimeSetUpMethodOrderingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4103_TestOneTimeSetUpMethodOrderingAnalyzer();

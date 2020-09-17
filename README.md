@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 281 rules that are currently provided by the analyzer.
+The following tables list all the 282 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -31,6 +31,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'.|&#x2713;|\-|
 |MiKo_1007|Events and 'EventArgs' types shall be located in the same namespace.|&#x2713;|\-|
 |MiKo_1008|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.|&#x2713;|&#x2713;|
+|MiKo_1009|'System.EventHandler' variables should be named properly.|&#x2713;|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names.|&#x2713;|\-|
 |MiKo_1011|Methods should not contain 'Do' in their names.|&#x2713;|\-|
 |MiKo_1012|Methods should not be named 'Fire'.|&#x2713;|&#x2713;|
@@ -303,7 +304,7 @@ The following tables list all the 281 rules that are currently provided by the a
 |MiKo_4003|Dispose methods should be placed directly after constructors and finalizers.|&#x2713;|&#x2713;|
 |MiKo_4004|The interface that gives a type its name should be placed directly after the type's declaration.|&#x2713;|&#x2713;|
 |MiKo_4101|Test initialization methods should be ordered directly after One-Time methods.|&#x2713;|&#x2713;|
-|MiKo_4102|Test cleanup methods should be ordered before test methods.|&#x2713;|&#x2713;|
+|MiKo_4102|Test cleanup methods should be ordered after test initialization methods and before test methods.|&#x2713;|&#x2713;|
 |MiKo_4103|One-Time test initialization methods should be ordered before all other methods.|&#x2713;|&#x2713;|
 |MiKo_4104|One-Time test cleanup methods should be ordered directly after One-Time test initialization methods.|&#x2713;|&#x2713;|
 

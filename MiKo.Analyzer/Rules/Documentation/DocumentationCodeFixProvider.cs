@@ -186,6 +186,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
+        protected static T Comment<T>(T syntax, IEnumerable<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
+        {
+            var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
+
+            foreach (var text in syntax.DescendantNodes().OfType<XmlTextSyntax>())
+            {
+                var tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
+
+                // replace token in text
+                foreach (var token in text.TextTokens)
+                {
+                    var originalText = token.Text;
+
+                    if (originalText.ContainsAny(terms))
+                    {
+                        var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
+
+                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
+
+                        tokenMap.Add(token, newToken);
+                    }
+                }
+
+                if (tokenMap.Any())
+                {
+                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
+                    textMap.Add(text, newText);
+                }
+            }
+
+            if (textMap.Any())
+            {
+                var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
+                return result;
+            }
+
+            return syntax;
+        }
+
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
         {
             var content = SyntaxFactory.List<XmlNodeSyntax>().Add(SyntaxFactory.XmlText(text + additionalComment));
@@ -245,45 +284,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
                    .WithContent(SyntaxFactory.List(nodes))
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
-        }
-
-        protected static T Comment<T>(T syntax, IEnumerable<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
-        {
-            var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
-
-            foreach (var text in syntax.DescendantNodes().OfType<XmlTextSyntax>())
-            {
-                var tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
-
-                // replace token in text
-                foreach (var token in text.TextTokens)
-                {
-                    var originalText = token.Text;
-
-                    if (originalText.ContainsAny(terms))
-                    {
-                        var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
-
-                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
-
-                        tokenMap.Add(token, newToken);
-                    }
-                }
-
-                if (tokenMap.Any())
-                {
-                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
-                    textMap.Add(text, newText);
-                }
-            }
-
-            if (textMap.Any())
-            {
-                var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
-                return result;
-            }
-
-            return syntax;
         }
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);

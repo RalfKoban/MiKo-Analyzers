@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -49,6 +50,25 @@ namespace MiKoSolutions.Analyzers
 
                     return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsEventArgs();
                 }
+            }
+        }
+
+        internal static bool IsEventHandler(this ITypeSymbol symbol)
+        {
+            if (symbol.TypeKind != TypeKind.Delegate)
+            {
+                return false;
+            }
+
+            switch (symbol.Name)
+            {
+                case nameof(EventHandler):
+                case nameof(PropertyChangingEventHandler):
+                case nameof(PropertyChangedEventHandler):
+                    return true;
+
+                default:
+                    return false;
             }
         }
 
@@ -357,8 +377,8 @@ namespace MiKoSolutions.Analyzers
                                                                   && symbol.InheritsFrom<EventArgs>();
 
         internal static bool IsException(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class
-                                                                  && symbol.SpecialType == SpecialType.None
-                                                                  && symbol.InheritsFrom<Exception>();
+                                                                     && symbol.SpecialType == SpecialType.None
+                                                                     && symbol.InheritsFrom<Exception>();
 
         internal static bool IsEnumerable(this ITypeSymbol symbol)
         {

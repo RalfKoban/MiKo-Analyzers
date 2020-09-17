@@ -273,6 +273,46 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message""); }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
+        [Test]
+        public void Code_gets_fixed_for_Assert_with_comment()
+        {
+            const string OriginalCode = @"
+using System;
+using NUnit.Framework;
+
+[TestFixture]
+class TestMe
+{
+    [Test]
+    void Do()
+    {
+        var s = string.Empty;
+
+        // some comment
+        Assert.AreEqual(""my message"", s);
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using NUnit.Framework;
+
+[TestFixture]
+class TestMe
+{
+    [Test]
+    void Do()
+    {
+        var s = string.Empty;
+
+        // some comment
+        Assert.That(s, Is.EqualTo(""my message""));
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3105_TestMethodsUseAssertThatAnalyzer();
