@@ -2301,6 +2301,9 @@ As code should be commited in to Source Control Systems, developers can use the 
   <data name="MiKo_2302_Title" xml:space="preserve">
     <value>Do not keep code that is commented out.</value>
   </data>
+  <data name="MiKo_2303_CodeFixTitle" xml:space="preserve">
+    <value>Remove ending period from comment</value>
+  </data>
   <data name="MiKo_2303_Description" xml:space="preserve">
     <value>In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences.
 

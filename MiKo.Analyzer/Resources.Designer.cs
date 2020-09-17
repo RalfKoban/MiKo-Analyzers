@@ -6451,6 +6451,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove ending period from comment.
+        /// </summary>
+        public static string MiKo_2303_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2303_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended to team members. They should contain the important information in a short way, so they should not be complete sentences.
         ///
         ///This rule contradicts rule MiKo_2306..

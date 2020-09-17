@@ -217,7 +217,7 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|
-|MiKo_2303|Do not end comments with a period.|&#x2713;|\-|
+|MiKo_2303|Do not end comments with a period.|&#x2713;|&#x2713;|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|\-|
 |MiKo_2306|Do end comments with a period.|\-|\-|
