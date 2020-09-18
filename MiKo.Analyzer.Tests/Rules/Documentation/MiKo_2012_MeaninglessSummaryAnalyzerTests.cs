@@ -408,6 +408,7 @@ public class TestMe : ITestMe
                                   "Protected ",
                                   "Internal ",
                                   "Private ",
+                                  "Testclass ",
                               };
 
             results.AddRange(types);

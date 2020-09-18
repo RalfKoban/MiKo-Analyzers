@@ -150,6 +150,7 @@ namespace MiKoSolutions.Analyzers
                     "Method",
                     "Model",
                     "Property",
+                    "Testclass ",
                     "That ",
                     "The ",
                     "This ",
