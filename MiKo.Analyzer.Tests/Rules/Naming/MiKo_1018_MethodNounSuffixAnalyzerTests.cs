@@ -73,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "UpdateConfiguration",
                                                                                "ValidateCollection",
                                                                                "VerifyConnection",
+                                                                               "WithInformation",
                                                                                "WrapConnection",
                                                                                "WriteInformation",
                                                                            };

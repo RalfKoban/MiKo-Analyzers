@@ -91,6 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Update",
                                                                    "Validate",
                                                                    "Verify",
+                                                                   "With",
                                                                    "Wrap",
                                                                    "Write",
                                                                }.OrderBy(_ => _.Length)
