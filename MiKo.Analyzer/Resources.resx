@@ -1501,7 +1501,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation should describe its responsibility.</value>
   </data>
   <data name="MiKo_2013_CodeFixTitle" xml:space="preserve">
-    <value>Start comment with 'Defines values that specify '</value>
+    <value>Start comment with '{0}'</value>
   </data>
   <data name="MiKo_2013_Description" xml:space="preserve">
     <value>To ease their usage, enums should specify what kind of values they define.</value>
@@ -1537,7 +1537,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Documentation should use 'raise' or 'throw' instead of 'fire'.</value>
   </data>
   <data name="MiKo_2016_CodeFixTitle" xml:space="preserve">
-    <value>Start comment with 'Asynchronously '</value>
+    <value>Start comment with '{0}'</value>
   </data>
   <data name="MiKo_2016_Description" xml:space="preserve">
     <value>Documentation for asynchronous methods should indicate that method is run asynchronously.</value>
@@ -1561,7 +1561,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>Dependency properties should be documented as done by the .NET Framework.</value>
   </data>
   <data name="MiKo_2018_CodeFixTitle" xml:space="preserve">
-    <value>Start summary with 'Determines whether'</value>
+    <value>Start summary with '{0}'</value>
   </data>
   <data name="MiKo_2018_Description" xml:space="preserve">
     <value>The terms 'Check' or 'Test' are ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines whether' instead.</value>
@@ -1891,7 +1891,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>&lt;summary&gt; documentation of Attributes should have a  default starting phrase.</value>
   </data>
   <data name="MiKo_2048_CodeFixTitle" xml:space="preserve">
-    <value>Start comment with 'Represents a converter that converts '</value>
+    <value>Start comment with '{0}'</value>
   </data>
   <data name="MiKo_2048_Description" xml:space="preserve">
     <value>The documentation of a value converters should start with a specific phrase that describes what they convert.</value>
@@ -2109,7 +2109,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Documentation for inequality operator shall have default phrase.</value>
   </data>
   <data name="MiKo_2100_CodeFixTitle" xml:space="preserve">
-    <value>Start comment with 'The following example demonstrates '</value>
+    <value>Start comment with '{0}'</value>
   </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
     <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
@@ -3130,7 +3130,7 @@ Such namespaces should be flattened.</value>
     <value>Dispose methods should be placed directly after constructors and finalizers.</value>
   </data>
   <data name="MiKo_4004_CodeFixTitle" xml:space="preserve">
-    <value>Place corresponding interface directly after type declaration</value>
+    <value>Place interface directly after type declaration</value>
   </data>
   <data name="MiKo_4004_Description" xml:space="preserve">
     <value>To ease reading, the interface that gives the type its name should be listed as first interface. All the other implemented interfaces should be placed behind.</value>
@@ -3142,7 +3142,7 @@ Such namespaces should be flattened.</value>
     <value>The interface that gives a type its name should be placed directly after the type's declaration.</value>
   </data>
   <data name="MiKo_4101_CodeFixTitle" xml:space="preserve">
-    <value>Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before test cleanup and all other test methods</value>
+    <value>Place method after one-time methods and before test cleanup and all other test methods</value>
   </data>
   <data name="MiKo_4101_Description" xml:space="preserve">
     <value>Test initialization method define the most common parts that tests shall contain. So to ease their finding they should be ordered directly after all one-time methods and before all other methods.</value>
@@ -3154,7 +3154,7 @@ Such namespaces should be flattened.</value>
     <value>Test initialization methods should be ordered directly after One-Time methods.</value>
   </data>
   <data name="MiKo_4102_CodeFixTitle" xml:space="preserve">
-    <value>Place test cleanup method after test initialization methods and before all test methods</value>
+    <value>Place method after test initialization methods and before all test methods</value>
   </data>
   <data name="MiKo_4102_Description" xml:space="preserve">
     <value>Test cleanup methods define the common parts that shall be executed after any test has been finished. So to ease their finding they should be ordered before the test methods.</value>
@@ -3166,7 +3166,7 @@ Such namespaces should be flattened.</value>
     <value>Test cleanup methods should be ordered after test initialization methods and before test methods.</value>
   </data>
   <data name="MiKo_4103_CodeFixTitle" xml:space="preserve">
-    <value>Place [OneTimeSetUp] method before all other methods</value>
+    <value>Place method before all other methods</value>
   </data>
   <data name="MiKo_4103_Description" xml:space="preserve">
     <value>One-Time test initialization method define the most common parts that the test environment shall have. So to ease their finding they should be ordered first.</value>
@@ -3178,7 +3178,7 @@ Such namespaces should be flattened.</value>
     <value>One-Time test initialization methods should be ordered before all other methods.</value>
   </data>
   <data name="MiKo_4104_CodeFixTitle" xml:space="preserve">
-    <value>Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods</value>
+    <value>Place method directly after [OneTimeSetUp] method and before all other methods</value>
   </data>
   <data name="MiKo_4104_Description" xml:space="preserve">
     <value>One-Time test cleanup methods define the common parts that shall be executed after all tests have been finished, to clean up the test environment. So to ease their finding they should be ordered directly after the One-Time test initialization methods.</value>

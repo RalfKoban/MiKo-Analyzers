@@ -13,11 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2013_CodeFixProvider)), Shared]
     public sealed class MiKo_2013_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+        private const string Phrase = Constants.Comments.EnumStartingPhrase;
+
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 
-        protected override string Title => "Start comment with '" + Constants.Comments.EnumStartingPhrase + "'";
+        protected override string Title => string.Format(Resources.MiKo_2013_CodeFixTitle, Phrase);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Constants.Comments.EnumStartingPhrase);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Phrase);
 
         private static SyntaxNode CommentWithStartingPhrase(XmlElementSyntax comment, string startingPhrase)
         {

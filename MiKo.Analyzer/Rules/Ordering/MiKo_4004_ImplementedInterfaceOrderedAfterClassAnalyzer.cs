@@ -24,19 +24,16 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             {
                 var defaultInterfaceName = "I" + symbol.Name;
 
-                foreach (var i in interfaces)
+                if (interfaces.Any(_ => _.Name == defaultInterfaceName && IsAtFirstPosition(symbol, defaultInterfaceName) is false))
                 {
-                    if (i.Name == defaultInterfaceName)
-                    {
-                        if (IsAtFirstPosition(symbol, defaultInterfaceName) is false)
-                        {
-                            yield return Issue(symbol, defaultInterfaceName);
-                        }
+                    var type = symbol.GetSyntax() as BaseTypeDeclarationSyntax;
+                    var syntax = type.BaseList.Types.First(_ => _.Type.GetNameOnlyPart() == defaultInterfaceName);
 
-                        yield break;
-                    }
+                    return new[] { Issue(symbol.Name, syntax, defaultInterfaceName) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool IsAtFirstPosition(INamedTypeSymbol symbol, string defaultInterfaceName)

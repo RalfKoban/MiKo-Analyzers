@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2001_CodeFixProvider)), Shared]
     public sealed class MiKo_2001_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private const string Phrase = MiKo_2001_EventSummaryAnalyzer.Phrase;
-
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
                                                                                     { "This event is fired ", string.Empty },
@@ -31,12 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2001_EventSummaryAnalyzer.Id;
 
-        protected override string Title => "Start comment with '" + Phrase + "'";
+        protected override string Title => Resources.MiKo_2001_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var preparedComment = PrepareComment((XmlElementSyntax)syntax);
-            var fixedComment = CommentStartingWith(preparedComment, Phrase);
+            var fixedComment = CommentStartingWith(preparedComment, MiKo_2001_EventSummaryAnalyzer.Phrase);
 
             var text = fixedComment.Content[0].WithoutXmlCommentExterior();
 

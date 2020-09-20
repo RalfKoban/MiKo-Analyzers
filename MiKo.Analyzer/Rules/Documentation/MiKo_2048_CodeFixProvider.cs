@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => "Start comment with '" + Phrase + "'";
+        protected override string Title => string.Format(Resources.MiKo_2048_CodeFixTitle, Phrase);
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentStartingWith((XmlElementSyntax)syntax, Phrase);
     }

@@ -4078,7 +4078,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start comment with &apos;Defines values that specify &apos;.
+        ///   Looks up a localized string similar to Start comment with &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2013_CodeFixTitle {
             get {
@@ -4186,7 +4186,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start comment with &apos;Asynchronously &apos;.
+        ///   Looks up a localized string similar to Start comment with &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2016_CodeFixTitle {
             get {
@@ -4258,7 +4258,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;Determines whether&apos;.
+        ///   Looks up a localized string similar to Start summary with &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2018_CodeFixTitle {
             get {
@@ -5248,7 +5248,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start comment with &apos;Represents a converter that converts &apos;.
+        ///   Looks up a localized string similar to Start comment with &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2048_CodeFixTitle {
             get {
@@ -5892,7 +5892,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start comment with &apos;The following example demonstrates &apos;.
+        ///   Looks up a localized string similar to Start comment with &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2100_CodeFixTitle {
             get {
@@ -8813,7 +8813,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place corresponding interface directly after type declaration.
+        ///   Looks up a localized string similar to Place interface directly after type declaration.
         /// </summary>
         public static string MiKo_4004_CodeFixTitle {
             get {
@@ -8849,7 +8849,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test initialization method after [OneTimeSetUp] / [OneTimeTearDown] methods and before test cleanup and all other test methods.
+        ///   Looks up a localized string similar to Place method after one-time methods and before test cleanup and all other test methods.
         /// </summary>
         public static string MiKo_4101_CodeFixTitle {
             get {
@@ -8885,7 +8885,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place test cleanup method after test initialization methods and before all test methods.
+        ///   Looks up a localized string similar to Place method after test initialization methods and before all test methods.
         /// </summary>
         public static string MiKo_4102_CodeFixTitle {
             get {
@@ -8921,7 +8921,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place [OneTimeSetUp] method before all other methods.
+        ///   Looks up a localized string similar to Place method before all other methods.
         /// </summary>
         public static string MiKo_4103_CodeFixTitle {
             get {
@@ -8957,7 +8957,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place [OneTimeTearDown] method directly after [OneTimeSetUp] method and before all other methods.
+        ///   Looks up a localized string similar to Place method directly after [OneTimeSetUp] method and before all other methods.
         /// </summary>
         public static string MiKo_4104_CodeFixTitle {
             get {
