@@ -150,9 +150,20 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var id = provider.FixableDiagnosticIds.First();
 
-            var title = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
+            var expectedTitle = Resources.ResourceManager.GetString(id + "_CodeFixTitle");
 
-            Assert.That(title, Is.EqualTo(Resources.ResourceManager.GetString(id + "_CodeFixTitle")));
+            var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
+
+            var parts = string.Format(expectedTitle, '|').Split('|');
+            if (parts.Length <= 1)
+            {
+                Assert.That(codeFixTitle, Is.EqualTo(expectedTitle));
+            }
+            else
+            {
+                Assert.That(codeFixTitle, Is.Not.EqualTo(expectedTitle), "Missing phrase");
+                Assert.That(codeFixTitle, Does.StartWith(parts[0]).And.EndWith(parts[1]));
+            }
         }
 
         [Test, Ignore("Just to find gaps")]

@@ -58,6 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Invert",
                                                                    "Is",
                                                                    "Load",
+                                                                   "Log",
                                                                    "Open",
                                                                    "Parse",
                                                                    "Pop",
@@ -91,6 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Update",
                                                                    "Validate",
                                                                    "Verify",
+                                                                   "With",
                                                                    "Wrap",
                                                                    "Write",
                                                                }.OrderBy(_ => _.Length)

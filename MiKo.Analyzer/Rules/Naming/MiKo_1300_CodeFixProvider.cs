@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1300_SimpleLambdaExpressionIdentifierAnalyzer.Id;
 
-        protected override string Title => "Name it '" + Constants.LambdaIdentifiers.Default + "'";
+        protected override string Title => Resources.MiKo_1300_CodeFixTitle;
 
         protected override string GetNewName(ISymbol symbol)
         {

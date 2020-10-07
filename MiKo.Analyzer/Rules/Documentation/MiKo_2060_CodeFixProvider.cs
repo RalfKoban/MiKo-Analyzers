@@ -20,6 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "Represents a factory that creates ", string.Empty },
                                                                                     { "Represents a factory that ", string.Empty },
                                                                                     { "Creates ", string.Empty },
+                                                                                    { "Used to create ", string.Empty },
+                                                                                    { "Used for creating ", string.Empty },
                                                                                 };
 
         private static readonly Dictionary<string, string> MethodReplacementMap = new Dictionary<string, string>
@@ -28,6 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "Creates an instance of ", string.Empty },
                                                                                     { "Creates an ", string.Empty },
                                                                                     { "Creates a ", string.Empty },
+                                                                                    { "Used to create ", string.Empty },
+                                                                                    { "Used for creating ", string.Empty },
                                                                                 };
 
         private static readonly Dictionary<string, string> CleanupReplacementMap = new Dictionary<string, string>

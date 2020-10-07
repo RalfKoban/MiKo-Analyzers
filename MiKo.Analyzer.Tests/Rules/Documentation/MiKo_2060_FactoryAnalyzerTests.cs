@@ -216,12 +216,16 @@ public class TestMeFactory
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_class_summary()
+        [TestCase("Creates")]
+        [TestCase("A factory that creates")]
+        [TestCase("Represents a factory that creates")]
+        [TestCase("Used to create")]
+        [TestCase("Used for creating")]
+        public void Code_gets_fixed_for_class_summary(string summary)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 /// <summary>
-/// Creates something.
+/// " + summary + @" something.
 /// </summary>
 public class TestMeFactory
 {
@@ -239,15 +243,18 @@ public class TestMeFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_interface_summary()
+        [TestCase("Creates")]
+        [TestCase("A factory that creates")]
+        [TestCase("Represents a factory that creates")]
+        [TestCase("Used for creating")]
+        public void Code_gets_fixed_for_interface_summary(string summary)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 /// <summary>
-/// A factory that creates a <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
+/// " + summary + @" a <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
 /// </summary>
 public interface ITestMeFactory
 {
@@ -263,17 +270,19 @@ public interface ITestMeFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_method_summary()
+        [TestCase("A")]
+        [TestCase("Used to create a")]
+        [TestCase("Used for creating a")]
+        public void Code_gets_fixed_for_method_summary(string summary)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMeFactory
 {
     /// <summary>
-    /// A result.
+    /// " + summary + @" result.
     /// </summary>
     public string Create() => new string();
 }
@@ -289,7 +298,7 @@ public class TestMeFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
