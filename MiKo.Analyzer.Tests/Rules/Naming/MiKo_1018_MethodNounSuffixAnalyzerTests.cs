@@ -40,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "InvertSelection",
                                                                                "LoadConfiguration",
                                                                                "LogException",
+                                                                               "LogInformation",
                                                                                "Manipulate",
                                                                                "OpenConnection",
                                                                                "ParseIdentification",

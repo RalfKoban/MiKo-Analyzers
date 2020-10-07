@@ -58,6 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Invert",
                                                                    "Is",
                                                                    "Load",
+                                                                   "Log",
                                                                    "Open",
                                                                    "Parse",
                                                                    "Pop",
