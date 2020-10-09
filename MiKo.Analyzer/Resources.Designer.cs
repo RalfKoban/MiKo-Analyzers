@@ -6582,6 +6582,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace with &apos;failed&apos;.
+        /// </summary>
+        public static string MiKo_2307_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2307_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To shorten comments - and still be to the point - comments should use the phrase &apos;failed&apos; instead of &apos;was not succesful&apos;..
         /// </summary>
         public static string MiKo_2307_Description {

@@ -221,7 +221,7 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|&#x2713;|
 |MiKo_2306|Do end comments with a period.|\-|\-|
-|MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
+|MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|

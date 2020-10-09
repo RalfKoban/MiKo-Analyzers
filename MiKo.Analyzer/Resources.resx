@@ -2348,6 +2348,9 @@ This rule contradicts rule MiKo_2303.</value>
   <data name="MiKo_2306_Title" xml:space="preserve">
     <value>Do end comments with a period.</value>
   </data>
+  <data name="MiKo_2307_CodeFixTitle" xml:space="preserve">
+    <value>Replace with 'failed'</value>
+  </data>
   <data name="MiKo_2307_Description" xml:space="preserve">
     <value>To shorten comments - and still be to the point - comments should use the phrase 'failed' instead of 'was not succesful'.</value>
   </data>
