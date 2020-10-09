@@ -6517,6 +6517,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;..&apos; from comment.
+        /// </summary>
+        public static string MiKo_2305_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2305_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended for team members. They should contain the important information in a short way, so they should not be complete sentences..
         /// </summary>
         public static string MiKo_2305_Description {
