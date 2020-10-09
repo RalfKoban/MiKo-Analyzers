@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -8,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2305_CodeFixProvider)), Shared]
-    public sealed class MiKo_2305_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2305_CodeFixProvider : SingleLineCommentCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2305_CommentDoesNotContainDoublePeriodAnalyzer.Id;
 
@@ -16,12 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsTrivia => true;
 
-        protected override SyntaxToken GetUpdatedToken(SyntaxToken token)
-        {
-            return token.ReplaceTrivia(token.LeadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia)), ComputeReplacementTrivia);
-        }
-
-        private static SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten)
+        protected override SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten)
         {
             var comment = original.ToString();
 
