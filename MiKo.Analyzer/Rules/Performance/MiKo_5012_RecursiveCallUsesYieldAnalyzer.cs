@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                             if (method.IsExtensionMethod && calledMethod.IsExtensionMethod)
                             {
-                                if (method.ContainingType == calledMethod.ContainingType)
+                                if (method.ContainingType.Equals(calledMethod.ContainingType, SymbolEqualityComparer.IncludeNullability))
                                 {
                                     return true;
                                 }
