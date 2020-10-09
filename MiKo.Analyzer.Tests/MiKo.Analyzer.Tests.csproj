@@ -4,6 +4,9 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>MiKoSolutions.Analyzers.Tests</AssemblyName>
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
+    
+    <!-- needed for ReSharper tests and others, see https://github.com/dotnet/sdk/issues/10506 -->
+	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles> 
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
