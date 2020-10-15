@@ -65,9 +65,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // Fix <see langword> or <c> by replacing them with nothing
             var nodes = Enumerable.Empty<SyntaxNode>()
                                   .Concat(comment.Content.OfType<XmlEmptyElementSyntax>()
-                                                 .Where(_ => _.Name.LocalName.ValueText == Constants.XmlTag.See && Attributes.Contains(_.Attributes.FirstOrDefault()?.Name.LocalName.ValueText)))
+                                                 .Where(_ => _.GetName() == Constants.XmlTag.See && Attributes.Contains(_.Attributes.FirstOrDefault().GetName())))
                                   .Concat(comment.Content.OfType<XmlElementSyntax>()
-                                                 .Where(_ => _.StartTag.Name.LocalName.ValueText == Constants.XmlTag.C && Booleans.Contains(_.Content.ToString())))
+                                                 .Where(_ => _.GetName() == Constants.XmlTag.C && Booleans.Contains(_.Content.ToString())))
                                   .ToList();
 
             return comment.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);

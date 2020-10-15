@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
-                              .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
+                              .Where(_ => _.GetName() == startTag);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
-                              .Where(_ => _.StartTag.Name.LocalName.ValueText == startTag);
+                              .Where(_ => _.GetName() == startTag);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNode.DescendantNodes(__ => true, true).OfType<XmlEmptyElementSyntax>()
-                             .Where(_ => tags.Contains(_.Name.LocalName.ValueText));
+                             .Where(_ => tags.Contains(_.GetName()));
         }
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase)
