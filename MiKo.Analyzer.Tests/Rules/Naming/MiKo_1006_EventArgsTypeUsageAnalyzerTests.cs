@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public sealed class MiKo_1006_EventArgsTypeAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1006_EventArgsTypeUsageAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
@@ -80,8 +80,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_1006_EventArgsTypeAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_1006_EventArgsTypeUsageAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1006_EventArgsTypeAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1006_EventArgsTypeUsageAnalyzer();
     }
 }
