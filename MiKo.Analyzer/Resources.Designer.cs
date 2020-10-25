@@ -3239,7 +3239,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-        ///Hence naming them e.g. &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
+        ///Hence naming them e.g.  &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
         /// </summary>
         public static string MiKo_1108_Description {
             get {
@@ -3248,7 +3248,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos; or &apos;Stub&apos;.
+        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos;.
         /// </summary>
         public static string MiKo_1108_MessageFormat {
             get {
@@ -3257,7 +3257,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos; or &apos;Stub&apos;..
+        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos;..
         /// </summary>
         public static string MiKo_1108_Title {
             get {

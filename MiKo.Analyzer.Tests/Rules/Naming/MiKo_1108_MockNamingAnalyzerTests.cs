@@ -12,14 +12,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] WrongNames =
             {
-                "somethingMock",
+                "childFake",
+                "childMock1",
+                "childShim",
+                "fakeChild1",
                 "mock",
+                "mockChild1",
                 "MockManager",
+                "shimChild",
+                "somethingMock",
                 "somethingStub",
                 "stub",
                 "StubManager",
-                "childMock1",
-                "mockChild1",
             };
 
         [Test]
