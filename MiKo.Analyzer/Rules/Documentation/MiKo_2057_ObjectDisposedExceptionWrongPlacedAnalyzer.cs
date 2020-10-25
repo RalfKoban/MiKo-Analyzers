@@ -18,6 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment) => symbol.FindContainingType().Implements<IDisposable>()
                                                                                                                     ? Enumerable.Empty<Diagnostic>()
-                                                                                                                    : new[] { ReportExceptionIssue(symbol, string.Empty) };
+                                                                                                                    : new[] { ExceptionIssue(symbol, string.Empty) };
     }
 }

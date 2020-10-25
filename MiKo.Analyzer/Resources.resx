@@ -1972,6 +1972,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2055_Title" xml:space="preserve">
     <value>Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.</value>
   </data>
+  <data name="MiKo_2056_CodeFixTitle" xml:space="preserve">
+    <value>Apply default ending comment to documentation of thrown 'ObjectDisposedException'</value>
+  </data>
   <data name="MiKo_2056_Description" xml:space="preserve">
     <value>The documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
   </data>

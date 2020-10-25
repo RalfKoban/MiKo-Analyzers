@@ -187,7 +187,7 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_2053|Throwing of ArgumentNullException should be documented only for reference type parameters.|&#x2713;|\-|
 |MiKo_2054|Throwing of ArgumentException should be documented using a default starting phrase.|&#x2713;|\-|
 |MiKo_2055|Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.|&#x2713;|\-|
-|MiKo_2056|Throwing of ObjectDisposedException should be documented using a default ending phrase.|&#x2713;|\-|
+|MiKo_2056|Throwing of ObjectDisposedException should be documented using a default ending phrase.|&#x2713;|&#x2713;|
 |MiKo_2057|Types that are not disposable shall not throw an ObjectDisposedException.|&#x2713;|\-|
 |MiKo_2060|Factories should be documented in a uniform way.|&#x2713;|&#x2713;|
 |MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|&#x2713;|&#x2713;|

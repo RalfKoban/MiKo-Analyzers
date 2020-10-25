@@ -5486,6 +5486,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply default ending comment to documentation of thrown &apos;ObjectDisposedException&apos;.
+        /// </summary>
+        public static string MiKo_2056_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2056_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
         /// </summary>
         public static string MiKo_2056_Description {

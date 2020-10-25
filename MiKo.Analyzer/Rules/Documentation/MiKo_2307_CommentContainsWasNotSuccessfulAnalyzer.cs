@@ -10,14 +10,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2307";
 
-        private const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
-
         public MiKo_2307_CommentContainsWasNotSuccessfulAnalyzer() : base(Id)
         {
         }
 
         internal static bool CommentHasIssue(string comment)
         {
+            const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
+
             var index = comment.IndexOf(Phrase, StringComparison.Ordinal);
             if (index < 0)
             {

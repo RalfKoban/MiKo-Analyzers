@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 
             var wrongInheritDocs = syntax.DescendantNodes().OfType<XmlEmptyElementSyntax>()
-                                         .Where(_ => _.GetName() == Constants.XmlTag.Inheritdoc && _.Attributes.Any(__ => __.GetName() == Constants.XmlTag.Attribute.Cref))
+                                         .Where(_ => _.GetName() == Constants.XmlTag.Inheritdoc && _.Attributes.OfType<XmlCrefAttributeSyntax>().Any())
                                          .ToList();
 
             return comment.ReplaceNodes(wrongInheritDocs, (_, __) => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc));

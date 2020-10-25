@@ -56,12 +56,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      .Select(_ => _.Trim())
                                      .Where(_ => _.StartsWithAny(phrases, Comparison) is false)
                                      .Where(_ => _.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
-                                     .Select(_ => ReportExceptionIssue(owningSymbol, proposal)));
+                                     .Select(_ => ExceptionIssue(owningSymbol, proposal)));
                 }
             }
             else
             {
-                results.Add(ReportExceptionIssue(owningSymbol, proposal));
+                results.Add(ExceptionIssue(owningSymbol, proposal));
             }
 
             return results;

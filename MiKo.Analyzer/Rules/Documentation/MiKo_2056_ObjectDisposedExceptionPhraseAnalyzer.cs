@@ -18,6 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        internal static string GetEndingPhrase(ISymbol symbol) => HasCloseMethod(symbol)
+                                                                      ? Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase
+                                                                      : Constants.Comments.ObjectDisposedExceptionEndingPhrase;
+
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
         {
             if (exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison))
@@ -31,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return new[] { ReportExceptionIssue(symbol, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
+            return new[] { ExceptionIssue(symbol, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
         }
 
         private static bool HasCloseMethod(ISymbol symbol) => symbol
