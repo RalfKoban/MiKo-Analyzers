@@ -171,6 +171,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Append suffix &apos;EventArgs&apos;.
+        /// </summary>
+        public static string MiKo_1000_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1000_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event argument types should follow the pattern that they inherit from &apos;System.EventArgs&apos; and their names end with &apos;EventArgs&apos;..
+        /// </summary>
+        public static string MiKo_1000_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1000_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1000_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1000_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; types should be suffixed properly..
+        /// </summary>
+        public static string MiKo_1000_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1000_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename event argument.
         /// </summary>
         public static string MiKo_1001_CodeFixTitle {

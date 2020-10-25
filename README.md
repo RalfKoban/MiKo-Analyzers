@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 283 rules that are currently provided by the analyzer.
+The following tables list all the 284 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -23,6 +23,7 @@ The following tables list all the 283 rules that are currently provided by the a
 ### Naming
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
+|MiKo_1000|'System.EventArgs' types should be suffixed properly.|&#x2713;|&#x2713;|
 |MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|&#x2713;|&#x2713;|
 |MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|&#x2713;|&#x2713;|
