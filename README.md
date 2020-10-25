@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 282 rules that are currently provided by the analyzer.
+The following tables list all the 283 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -294,6 +294,7 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|&#x2713;|
 |MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|\-|
 |MiKo_3107|Moq Mock condition matchers should be used on mocks only.|&#x2713;|\-|
+|MiKo_3108|Test methods should use assertions.|&#x2713;|\-|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|\-|
 
 ### Ordering

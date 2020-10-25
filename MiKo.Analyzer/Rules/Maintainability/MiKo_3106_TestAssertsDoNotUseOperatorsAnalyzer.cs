@@ -13,21 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3106";
 
-        private static readonly HashSet<string> AssertionNamespaces = new HashSet<string>
-                                                                          {
-                                                                              "NUnit.Framework",
-                                                                              "NUnit.Framework.Constraints",
-                                                                          };
-
-        private static readonly HashSet<string> AssertionTypes = new HashSet<string>
-                                                                     {
-                                                                         "Assert",
-                                                                         "StringAssert",
-                                                                         "CollectionAssert",
-                                                                         "FileAssert",
-                                                                         "DirectoryAssert",
-                                                                     };
-
         private static readonly HashSet<string> AssertionMethods = new HashSet<string>
                                                                        {
                                                                            "That",
@@ -43,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.GetName())
                                                                                  && node.Expression is IdentifierNameSyntax invokedType
-                                                                                 && AssertionTypes.Contains(invokedType.GetName());
+                                                                                 && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
 
         private static bool IsBinaryMethod(string methodName)
         {
@@ -113,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var type = expression.GetTypeSymbol(context.SemanticModel);
                         var namespaceName = type?.ContainingNamespace.FullyQualifiedName();
 
-                        if (AssertionNamespaces.Contains(namespaceName) is false)
+                        if (Constants.Names.AssertionNamespaces.Contains(namespaceName) is false)
                         {
                             ReportIssue(context, token);
                         }

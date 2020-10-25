@@ -8718,6 +8718,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tests should use assertions to check the behavior of the code for correctness. A missing assertion indicates a test that does not check anything and is therefore not meaningful..
+        /// </summary>
+        public static string MiKo_3108_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3108_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertion missing in &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3108_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3108_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should use assertions..
+        /// </summary>
+        public static string MiKo_3108_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3108_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>

@@ -727,6 +727,21 @@ namespace MiKoSolutions.Analyzers
                                                                                               "testCandidate",
                                                                                               "testObject",
                                                                                           };
+
+            internal static readonly IEnumerable<string> AssertionTypes = new HashSet<string>
+                                                                              {
+                                                                                  "Assert",
+                                                                                  "StringAssert",
+                                                                                  "CollectionAssert",
+                                                                                  "FileAssert",
+                                                                                  "DirectoryAssert",
+                                                                              };
+
+            internal static readonly IEnumerable<string> AssertionNamespaces = new HashSet<string>
+                                                                                   {
+                                                                                       "NUnit.Framework",
+                                                                                       "NUnit.Framework.Constraints",
+                                                                                   };
         }
     }
 }
