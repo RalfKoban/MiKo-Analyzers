@@ -410,6 +410,10 @@ public class TestMe : ITestMe
                                   "Private ",
                                   "Testclass ",
                                   "Proxy ",
+                                  "Wrapper ",
+                                  "Mock ",
+                                  "Fake ",
+                                  "Stub ",
                               };
 
             results.AddRange(types);
