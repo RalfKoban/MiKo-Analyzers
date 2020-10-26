@@ -355,9 +355,7 @@ public class TestMe : ITestMe
                                 "Constructor",
                                 "Ctor",
                                 "Delegate",
-                                "Factory",
                                 "Creator",
-                                "Builder",
                                 "Entity",
                                 "Model",
                                 "View",
@@ -366,6 +364,11 @@ public class TestMe : ITestMe
                                 "Action",
                                 "Func",
                                 "Converter",
+                                "Adapter ",
+                                "Builder",
+                                "Factory",
+                                "Proxy ",
+                                "Wrapper ",
                             };
 
             var phrases = MeaninglessTextPhrases;
@@ -376,6 +379,7 @@ public class TestMe : ITestMe
                                   "ITestMe",
                                   "A ",
                                   "An ",
+                                  "Builder ",
                                   "Called ",
                                   "Does implement ",
                                   "Extension class of ",
@@ -409,8 +413,6 @@ public class TestMe : ITestMe
                                   "Internal ",
                                   "Private ",
                                   "Testclass ",
-                                  "Proxy ",
-                                  "Wrapper ",
                                   "Mock ",
                                   "Fake ",
                                   "Stub ",

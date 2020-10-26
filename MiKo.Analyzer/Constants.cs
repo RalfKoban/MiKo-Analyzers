@@ -111,6 +111,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     "A ",
                     "Action",
+                    "Adapter",
                     "An ",
                     "Base",
                     "Builder",
@@ -169,7 +170,7 @@ namespace MiKoSolutions.Analyzers
                     "View", // includes 'ViewModel'
                     //// "ViewModel",
                     "Which ",
-                    "Wrapper ",
+                    "Wrapper",
                     //// "Represents a component that ", // TODO: RKN is it really meaningless?
                     //// "Represents a component, that ", // TODO: RKN is it really meaningless?
                 };
