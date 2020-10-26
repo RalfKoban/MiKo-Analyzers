@@ -27,8 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var syntax = symbol.GetSyntax();
 
-            foreach (var node in syntax.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression)).OfType<MemberAccessExpressionSyntax>())
+            var nodes = syntax.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression)).OfType<MemberAccessExpressionSyntax>().ToList();
+            foreach (var node in nodes)
             {
+                if (node.GetName() == "Should")
+                {
+                    // we assume that this is an fluent assertion
+                    return true;
+                }
+
                 if (node.Expression is IdentifierNameSyntax invokedClass && Constants.Names.AssertionTypes.Contains(invokedClass.GetName()))
                 {
                     return true;

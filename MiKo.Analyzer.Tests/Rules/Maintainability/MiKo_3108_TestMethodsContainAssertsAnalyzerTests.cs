@@ -76,6 +76,48 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_a_test_method_that_uses_an_fluent_assertion_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace FluentAssertions
+{
+    public static class AssertionExtensions
+    {
+        public static BooleanAssertions Should(this bool actualValue)
+        {
+            return new BooleanAssertions(actualValue);
+        }
+    }
+}
+
+namespace FluentAssertions.Primitives
+{
+    public class BooleanAssertions
+    {
+        public BooleanAssertions(bool? value)
+        {
+        }
+
+        public void BeFalse()
+        {
+        }
+    }
+}
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            bool x = false;
+            x.Should().BeFalse();
+        }
+    }
+}");
+
         protected override string GetDiagnosticId() => MiKo_3108_TestMethodsContainAssertsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3108_TestMethodsContainAssertsAnalyzer();
