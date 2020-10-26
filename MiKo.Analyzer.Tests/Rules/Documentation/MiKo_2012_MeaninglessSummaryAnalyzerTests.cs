@@ -409,6 +409,7 @@ public class TestMe : ITestMe
                                   "Internal ",
                                   "Private ",
                                   "Testclass ",
+                                  "Proxy ",
                               };
 
             results.AddRange(types);

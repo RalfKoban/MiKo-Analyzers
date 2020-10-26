@@ -165,6 +165,7 @@ namespace MiKoSolutions.Analyzers
                     "Protected ",
                     "Internal ",
                     "Private ",
+                    "Proxy ",
                     //// "Represents a component that ", // TODO: RKN is it really meaningless?
                     //// "Represents a component, that ", // TODO: RKN is it really meaningless?
                 };
