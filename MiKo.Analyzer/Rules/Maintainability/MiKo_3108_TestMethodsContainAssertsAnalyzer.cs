@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => (symbol.ReturnsVoid || symbol.ReturnType.IsTask()) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol) => ContainsAssertion(symbol)
                                                                                         ? Enumerable.Empty<Diagnostic>()
@@ -27,13 +27,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var syntax = symbol.GetSyntax();
 
-            var nodes = syntax.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression)).OfType<MemberAccessExpressionSyntax>().ToList();
+            var nodes = syntax.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression)).OfType<MemberAccessExpressionSyntax>();
             foreach (var node in nodes)
             {
-                if (node.GetName() == "Should")
+                switch (node.GetName())
                 {
-                    // we assume that this is an fluent assertion
-                    return true;
+                    case "Should" when node.Parent is InvocationExpressionSyntax i && i.ArgumentList.Arguments.Count == 0:
+                    case "ShouldNotRaise":
+                    case "ShouldRaise":
+                    case "ShouldRaisePropertyChangeFor":
+                    case "ShouldThrow":
+                    {
+                        // we assume that this is an fluent assertion
+                        return true;
+                    }
+
+                    case "Verify" when node.Parent is InvocationExpressionSyntax i && i.ArgumentList.Arguments.Count > 0:
+                    case "VerifyGet" when node.Parent is InvocationExpressionSyntax i1 && i1.ArgumentList.Arguments.Count > 0:
+                    case "VerifySet" when node.Parent is InvocationExpressionSyntax i2 && i2.ArgumentList.Arguments.Count > 0:
+                    case "VerifyAll" when node.Parent is InvocationExpressionSyntax i3 && i3.ArgumentList.Arguments.Count == 0:
+                    {
+                        // we assume that this is a Moq call
+                        return true;
+                    }
                 }
 
                 if (node.Expression is IdentifierNameSyntax invokedClass && Constants.Names.AssertionTypes.Contains(invokedClass.GetName()))
