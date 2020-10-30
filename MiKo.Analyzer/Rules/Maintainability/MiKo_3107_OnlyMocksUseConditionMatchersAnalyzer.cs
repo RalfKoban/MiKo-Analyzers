@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
+    public sealed class MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3107";
 
-        public MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer() : base(Id)
+        public MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer() : base(Id)
         {
         }
 
@@ -73,11 +73,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (node.Parent is SimpleLambdaExpressionSyntax)
+            foreach (var lambda in node.AncestorsAndSelf().OfType<SimpleLambdaExpressionSyntax>())
             {
-                // ignore for now
-                // TODO RKN: find out Verify/Setup calls
-                return Enumerable.Empty<Diagnostic>();
+                if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
+                {
+                    switch (m.GetName())
+                    {
+                        case "Setup":
+                        case "SetupGet":
+                        case "SetupSet":
+                        case "SetupSequence":
+                        case "Verify":
+                        case "VerifyGet":
+                        case "VerifySet":
+                        {
+                            // here we assume that we have a Moq call
+                            return Enumerable.Empty<Diagnostic>();
+                        }
+                    }
+                }
             }
 
             var method = node.GetEnclosingMethod(semanticModel);
