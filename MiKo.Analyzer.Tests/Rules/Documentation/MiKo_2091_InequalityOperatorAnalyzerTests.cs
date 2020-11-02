@@ -88,6 +88,7 @@ namespace Bla
 ");
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_inequality_operator_summary() => An_issue_is_reported_for(@"
 using System;
@@ -103,6 +104,7 @@ public class TestMe
 ", 1);
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_inequality_operator_returnValue() => An_issue_is_reported_for(@"
 using System;
@@ -118,6 +120,7 @@ public class TestMe
 ", 1);
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_inequality_operator_parameter() => An_issue_is_reported_for(@"
 using System;
