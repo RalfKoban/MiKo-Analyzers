@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsEventHandler();
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method, string commentXml) => commentXml.IsNullOrWhiteSpace() || commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => commentXml.IsNullOrWhiteSpace() || commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
                                                                                                                  ? Enumerable.Empty<Diagnostic>()
-                                                                                                                 : VerifyParameterComments(method, commentXml);
+                                                                                                                 : VerifyParameterComments(symbol, commentXml);
 
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
         {

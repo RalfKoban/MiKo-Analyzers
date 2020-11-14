@@ -14,11 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => method.Parameters.Length > 0 && base.ShallAnalyze(method);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Length > 0 && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            foreach (var parameter in method.Parameters)
+            foreach (var parameter in symbol.Parameters)
             {
                 var diagnostic = AnalyzeCollectionSuffix(parameter);
                 if (diagnostic != null)

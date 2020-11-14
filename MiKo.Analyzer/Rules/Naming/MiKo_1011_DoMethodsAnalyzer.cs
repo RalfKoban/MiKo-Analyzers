@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
+            var methodName = symbol.Name;
             var escapedMethod = methodName;
 
             var found = ContainsPhrase(methodName);
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (ContainsPhrase(methodName, DoesPhrase))
                 {
                     escapedMethod = EscapeValidPhrases(methodName.Without(DoesPhrase));
-                    found = !method.IsTestMethod(); // ignore tests
+                    found = !symbol.IsTestMethod(); // ignore tests
                 }
                 else
                 {
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return found
-                   ? new[] { Issue(method, UnescapeValidPhrases(escapedMethod.Without(DoPhrase))) }
+                   ? new[] { Issue(symbol, UnescapeValidPhrases(escapedMethod.Without(DoPhrase))) }
                    : Enumerable.Empty<Diagnostic>();
         }
 

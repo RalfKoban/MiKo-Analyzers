@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IMethodSymbol method) => GetExpectedName(method.Name);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
+            var methodName = symbol.Name;
             if (methodName.StartsWith("Init", StringComparison.Ordinal) is false)
             {
                 return Enumerable.Empty<Diagnostic>();
@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var expectedName = FindBetterName(method);
+            var expectedName = FindBetterName(symbol);
 
-            return new[] { Issue(method, expectedName) };
+            return new[] { Issue(symbol, expectedName) };
         }
 
         private static string GetExpectedName(string methodName)

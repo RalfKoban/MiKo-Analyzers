@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2048_CodeFixProvider)), Shared]
     public sealed class MiKo_2048_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly string Phrase = Constants.Comments.ValueConverterSummaryStartingPhrase;
+        private const string Phrase = Constants.Comments.ValueConverterSummaryStartingPhrase;
 
         public override string FixableDiagnosticId => MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer.Id;
 

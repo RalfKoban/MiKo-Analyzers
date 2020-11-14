@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            foreach (var parameter in method.Parameters)
+            foreach (var parameter in symbol.Parameters)
             {
                 var parameterType = parameter.Type;
                 if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)

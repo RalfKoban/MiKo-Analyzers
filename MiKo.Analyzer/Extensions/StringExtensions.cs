@@ -300,7 +300,7 @@ namespace System
             }
 
             var characters = value.ToCharArray();
-            characters[index] = char.ToLower(characters[index]);
+            characters[index] = char.ToLowerInvariant(characters[index]);
             return string.Intern(new string(characters));
         }
 
@@ -324,7 +324,7 @@ namespace System
             }
 
             var characters = value.ToCharArray();
-            characters[index] = char.ToUpper(characters[index]);
+            characters[index] = char.ToUpperInvariant(characters[index]);
             return string.Intern(new string(characters));
         }
     }

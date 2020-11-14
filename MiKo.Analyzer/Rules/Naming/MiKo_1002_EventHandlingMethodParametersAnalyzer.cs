@@ -21,11 +21,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                               ? Parameter1
                                                                               : Parameter2;
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => method.IsEventHandler();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var parameters = method.Parameters;
+            var parameters = symbol.Parameters;
 
             if (parameters[0].Name != Parameter1)
             {

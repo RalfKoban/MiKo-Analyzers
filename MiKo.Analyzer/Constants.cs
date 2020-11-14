@@ -1,4 +1,5 @@
 ﻿#pragma warning disable SA1203 // Constants should appear before fields
+#pragma warning disable CA1708 // Identifiers should differ by more than case
 
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
 
-        public static class MaxNamingLengths
+        internal static class MaxNamingLengths
         {
             public const int Types = 40;
             public const int Methods = 25;

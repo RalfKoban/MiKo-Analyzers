@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IMethodSymbol symbol) => FindBetterNameForEntityMarker(symbol);
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => !method.IsSpecialAccessor() && base.ShallAnalyze(method);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => !symbol.IsSpecialAccessor() && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeEntityMarkers(symbol);
     }

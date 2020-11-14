@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -58,11 +59,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (node is XElement e)
             {
                 // skip <c> and <code>
+#pragma warning disable CA1304
                 var name = e.Name.ToString().ToLower();
+#pragma warning restore CA1304
+
                 switch (name)
                 {
-                    case "c":
-                    case "code":
+                    case Constants.XmlTag.C:
+                    case Constants.XmlTag.Code:
                         return false;
 
                     default:
@@ -75,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         comment = e.Value.TrimStart();
 
                         // sentence starts lower case
-                        if (name == "para" && comment.Length > 0 && comment[0].IsLowerCaseLetter())
+                        if (name == Constants.XmlTag.Para && comment.Length > 0 && comment[0].IsLowerCaseLetter())
                         {
                             return true;
                         }

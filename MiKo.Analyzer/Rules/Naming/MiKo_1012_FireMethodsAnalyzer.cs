@@ -24,14 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                   .Replace("Firing", "Raising")
                                                                                   .Replace("_firing", "_raising");
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
+            var methodName = symbol.Name;
 
             var forbidden = methodName.ContainsAny(FirePhrases) && methodName.ContainsAny(FirewallPhrases) is false;
 
             return forbidden
-                       ? new[] { Issue(method, FindBetterName(method)) }
+                       ? new[] { Issue(symbol, FindBetterName(symbol)) }
                        : Enumerable.Empty<Diagnostic>();
         }
     }
