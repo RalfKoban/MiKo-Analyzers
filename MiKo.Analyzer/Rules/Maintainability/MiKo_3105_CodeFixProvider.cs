@@ -59,8 +59,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "AreNotEquivalent": return FixAreNotEquivalent(args);
                 case "AreNotSame": return FixAreNotSame(args);
                 case "AreSame": return FixAreSame(args);
-                case "Contains": return typeName == "CollectionAssert" ? FixCollectionAssertContains(args) : FixContains(args);
-                case "DoesNotContain": return typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixDoesNotContain(args);
+                case "Contains": return FixContains(typeName, args);
+                case "DoesNotContain": return FixDoesNotContain(typeName, args);
                 case "EndsWith": return FixEndsWith(args);
                 case "Greater": return FixGreater(args);
                 case "GreaterOrEqual": return FixGreaterOrEqual(args);
@@ -129,13 +129,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreSame(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SameAs", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Contain", args[0]), 2, args);
+        private static InvocationExpressionSyntax FixContains(string typeName, SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
 
-        private static InvocationExpressionSyntax FixDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Contain", args[0]), 2, args);
+        private static InvocationExpressionSyntax FixDoesNotContain(string typeName, SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
 
         private static InvocationExpressionSyntax FixCollectionAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), 2, args);
 
         private static InvocationExpressionSyntax FixCollectionAssertDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Not", "Contain", args[1]), 2, args);
+
+        private static InvocationExpressionSyntax FixStringAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Contain", args[0]), 2, args);
+
+        private static InvocationExpressionSyntax FixStringAssertDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Contain", args[0]), 2, args);
 
         private static InvocationExpressionSyntax FixEndsWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("EndWith", args[0]), 2, args);
 
