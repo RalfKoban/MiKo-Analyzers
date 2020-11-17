@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     SkipWhiteSpaces(comment, last, ref c, ref i);
                     SkipAbbreviations(comment, last, ref c, ref i);
 
-                    if (c.IsLowerCaseLetter() && !IsWellknownFileExtension(comment, i - 1))
+                    if (c.IsLowerCaseLetter() && IsWellknownFileExtension(comment, i - 1) is false)
                     {
                         return true;
                     }

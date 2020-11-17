@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
-            if (!symbol.Type.IsDependencyProperty())
+            if (symbol.Type.IsDependencyProperty() is false)
             {
                 return false;
             }
