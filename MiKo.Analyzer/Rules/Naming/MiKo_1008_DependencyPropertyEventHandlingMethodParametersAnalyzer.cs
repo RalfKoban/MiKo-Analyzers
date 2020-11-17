@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                        : Parameter2;
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => method.IsDependencyPropertyEventHandler();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsDependencyPropertyEventHandler();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {

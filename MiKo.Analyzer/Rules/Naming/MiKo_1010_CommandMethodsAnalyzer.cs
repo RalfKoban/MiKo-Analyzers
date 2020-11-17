@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => base.ShallAnalyze(method) && !method.IsInterfaceImplementationOf<ICommand>() && !method.IsTestMethod();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && !symbol.IsInterfaceImplementationOf<ICommand>() && !symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
         {
