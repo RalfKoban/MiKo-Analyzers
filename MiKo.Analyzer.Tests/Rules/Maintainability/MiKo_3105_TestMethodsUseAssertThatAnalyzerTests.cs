@@ -263,6 +263,12 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotContain(""abc"", s, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.Contain(""abc""), ""my message""); }")]
         [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotStartWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.StartWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotEndWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.EndWith(""abc""), ""my message""); }")]
+        [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.Contains(""abc"", s, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Contain(""abc""), ""my message""); }")]
         [TestCase(
@@ -406,6 +412,9 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.IsNaN(d); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.NaN); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.Negative(i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Negative); }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [Test]

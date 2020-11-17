@@ -64,6 +64,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "AreSame": return FixAreSame(args);
                 case "Contains": return FixContains(typeName, args);
                 case "DoesNotContain": return FixDoesNotContain(typeName, args);
+                case "DoesNotEndWith": return FixDoesNotEndWith(args);
+                case "DoesNotStartWith": return FixDoesNotStartWith(args);
                 case "EndsWith": return FixEndsWith(args);
                 case "Greater": return FixGreater(args);
                 case "GreaterOrEqual": return FixGreaterOrEqual(args);
@@ -83,6 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "IsTrue": return FixIsTrue(args);
                 case "Less": return FixLess(args);
                 case "LessOrEqual": return FixLessOrEqual(args);
+                case "Negative": return FixNegative(args);
                 case "NotNull": return FixNotNull(args);
                 case "NotZero": return FixNotZero(args);
                 case "StartsWith": return FixStartsWith(args);
@@ -156,6 +159,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixContains(string typeName, SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
 
         private static InvocationExpressionSyntax FixDoesNotContain(string typeName, SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
+
+        private static InvocationExpressionSyntax FixDoesNotEndWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "EndWith", args[0]), 2, args);
+
+        private static InvocationExpressionSyntax FixDoesNotStartWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "StartWith", args[0]), 2, args);
 
         private static InvocationExpressionSyntax FixEndsWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("EndWith", args[0]), 2, args);
 
@@ -268,6 +275,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixLess(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThan", args[1]), 2, args);
 
         private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), 2, args);
+
+        private static InvocationExpressionSyntax FixNegative(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Negative"), 1, args);
 
         private static InvocationExpressionSyntax FixNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Not", "Null"), 1, args);
 
