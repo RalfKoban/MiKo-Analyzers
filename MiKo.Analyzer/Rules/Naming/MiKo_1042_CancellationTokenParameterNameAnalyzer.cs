@@ -19,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Length > 0;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            foreach (var parameter in method.Parameters)
+            foreach (var parameter in symbol.Parameters)
             {
                 if (parameter.Type.IsCancellationToken() && parameter.Name != ExpectedName)
                 {

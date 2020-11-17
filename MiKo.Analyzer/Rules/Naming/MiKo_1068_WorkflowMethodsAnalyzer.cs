@@ -18,16 +18,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.DeclaredAccessibility == Accessibility.Public && symbol.ContainingType.Name.EndsWith("Workflow", StringComparison.OrdinalIgnoreCase);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var proposedMethodName = GetProposedMethodName(method);
+            var proposedMethodName = GetProposedMethodName(symbol);
 
-            if (method.Name == proposedMethodName)
+            if (symbol.Name == proposedMethodName)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return new[] { Issue(method, proposedMethodName) };
+            return new[] { Issue(symbol, proposedMethodName) };
         }
 
         private static string GetProposedMethodName(IMethodSymbol method)

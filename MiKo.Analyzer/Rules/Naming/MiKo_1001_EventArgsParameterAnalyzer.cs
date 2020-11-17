@@ -66,15 +66,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var parameters = GetParameters(method);
+            var parameters = GetParameters(symbol);
             switch (parameters.Count)
             {
                 case 0: return Enumerable.Empty<Diagnostic>();
                 case 1:
                     {
-                        var expected = method.Name != nameof(Equals) ? "e" : "other";
+                        var expected = symbol.Name != nameof(Equals) ? "e" : "other";
 
                         var parameter = parameters[0];
                         return parameter.Name != expected

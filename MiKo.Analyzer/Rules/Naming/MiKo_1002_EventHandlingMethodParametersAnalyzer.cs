@@ -23,9 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var parameters = method.Parameters;
+            var parameters = symbol.Parameters;
 
             if (parameters[0].Name != Parameter1)
             {
