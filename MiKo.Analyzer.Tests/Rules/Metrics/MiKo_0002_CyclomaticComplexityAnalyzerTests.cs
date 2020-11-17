@@ -45,6 +45,8 @@ public class TestMe
         [TestCase("int x = 1 && 2;")]
         [TestCase("bool result = true && false;")]
         [TestCase("bool result = true || false;")]
+        [TestCase("bool result = true and false;", Ignore = "Currently not testable")]
+        [TestCase("bool result = true or false;", Ignore = "Currently not testable")]
         [TestCase("try { throw new Exception(); } catch { }")]
         [TestCase("try { throw new Exception(); } catch (Exception ex) when (ex is InvalidOperationException) { }")]
         public void Method_with_too_complex_term_is_reported_(string term) => An_issue_is_reported_for(@"
@@ -54,6 +56,38 @@ public class TestMe
     {
          " + term + @"
     }
+}
+");
+
+        [Test, Ignore("Currently not testable")]
+        public void Method_with_switch_expression_arms_is_reported() => An_issue_is_reported_for(@"
+public enum LifeStage
+{
+    Prenatal,
+    Infant,
+    Toddler,
+    EarlyChild,
+    MiddleChild,
+    Adolescent,
+    EarlyAdult,
+    MiddleAdult,
+    LateAdult,
+}
+
+public class TestMe
+{
+    public static LifeStage LifeStageAtAge(int age) => age switch
+        {
+            < 0 => LifeStage.Prenatal,
+            < 2 => LifeStage.Infant,
+            < 4 => LifeStage.Toddler,
+            < 6 => LifeStage.EarlyChild,
+            < 12 => LifeStage.MiddleChild,
+            < 20 => LifeStage.Adolescent,
+            < 40 => LifeStage.EarlyAdult,
+            < 65 => LifeStage.MiddleAdult,
+            _ => LifeStage.LateAdult,
+        };
 }
 ");
 

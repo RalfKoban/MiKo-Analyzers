@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     internal static class Counter
     {
-        // if | do... while | while | for | foreach | case | continue | goto | && | || | catch | catch when | ternary operator ?: | ?? | ??= | ?.
+        // if | do... while | while | for | foreach | case | switch expression arm | continue | goto | && | and | || | or | catch | catch when | ternary operator ?: | ?? | ??= | ?.
         private static readonly HashSet<int> CCSyntaxKinds = new HashSet<int>
             {
                 (int)SyntaxKind.IfStatement,
@@ -20,10 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 (int)SyntaxKind.ForEachStatement,
                 (int)SyntaxKind.CaseSwitchLabel,
                 (int)SyntaxKind.CasePatternSwitchLabel,
+                (int)SyntaxKind.SwitchExpressionArm,
                 (int)SyntaxKind.ContinueStatement,
                 (int)SyntaxKind.GotoStatement,
                 (int)SyntaxKind.LogicalAndExpression,
+                (int)SyntaxKind.AndPattern,
                 (int)SyntaxKind.LogicalOrExpression,
+                (int)SyntaxKind.OrPattern,
                 (int)SyntaxKind.CatchClause,
                 (int)SyntaxKind.CatchFilterClause,
                 (int)SyntaxKind.ConditionalExpression,

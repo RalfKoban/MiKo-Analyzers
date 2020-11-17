@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2048";
 
-        private static readonly string StartingPhrase = Constants.Comments.ValueConverterSummaryStartingPhrase;
+        private const string StartingPhrase = Constants.Comments.ValueConverterSummaryStartingPhrase;
 
         public MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.NamedType)
         {

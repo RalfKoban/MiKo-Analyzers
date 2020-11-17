@@ -59,7 +59,7 @@
     <Rule Id="CA1059" Action="Error" />
     <Rule Id="CA1060" Action="Error" />
     <Rule Id="CA1061" Action="Error" />
-    <Rule Id="CA1062" Action="Error" />
+    <Rule Id="CA1062" Action="None" />
     <Rule Id="CA1063" Action="Error" />
     <Rule Id="CA1064" Action="Error" />
     <Rule Id="CA1065" Action="Error" />
@@ -68,9 +68,9 @@
     <Rule Id="CA1302" Action="Error" />
     <Rule Id="CA1303" Action="Error" />
     <Rule Id="CA1304" Action="Error" />
-    <Rule Id="CA1305" Action="Error" />
+    <Rule Id="CA1305" Action="None" />
     <Rule Id="CA1306" Action="Error" />
-    <Rule Id="CA1307" Action="Error" />
+    <Rule Id="CA1307" Action="None" />
     <Rule Id="CA1308" Action="Error" />
     <Rule Id="CA1309" Action="Error" />
     <Rule Id="CA1400" Action="Error" />
@@ -102,7 +102,7 @@
     <Rule Id="CA1702" Action="Error" />
     <Rule Id="CA1703" Action="Error" />
     <Rule Id="CA1704" Action="Error" />
-    <Rule Id="CA1707" Action="Error" />
+    <Rule Id="CA1707" Action="None" />
     <Rule Id="CA1708" Action="Error" />
     <Rule Id="CA1709" Action="Error" />
     <Rule Id="CA1710" Action="Error" />
@@ -597,5 +597,11 @@
     <Rule Id="SX1101" Action="Hidden" />
     <Rule Id="SX1309" Action="Hidden" />
     <Rule Id="SX1309S" Action="Hidden" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.NetAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.NetAnalyzers">
+    <Rule Id="CA1707" Action="None" />
+    <Rule Id="CA1062" Action="None" />
+    <Rule Id="CA1305" Action="None" />
+    <Rule Id="CA1307" Action="None" />
   </Rules>
 </RuleSet>
