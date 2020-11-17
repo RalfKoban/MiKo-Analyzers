@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
         {
-            if (!method.Name.StartsWith("Try", StringComparison.Ordinal))
+            if (method.Name.StartsWith("Try", StringComparison.Ordinal) is false)
             {
                 return null;
             }
