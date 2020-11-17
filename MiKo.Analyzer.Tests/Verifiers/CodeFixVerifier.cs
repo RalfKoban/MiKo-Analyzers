@@ -106,7 +106,7 @@ New document:
             // after applying all of the code fixes, compare the resulting string to the inputted one
             var actual = GetStringFromDocument(document);
 
-            Assert.AreEqual(newSource, actual);
+            Assert.That(actual, Is.EqualTo(newSource));
         }
     }
 }
