@@ -54,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (methodName)
             {
                 case "AllItemsAreNotNull": return FixAllItemsAreNotNull(args);
+                case "AllItemsAreUnique": return FixAllItemsAreUnique(args);
                 case "AreEqual": return FixAreEqual(args);
                 case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
                 case "AreEquivalent": return FixAreEquivalent(args);
@@ -74,9 +75,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "IsNotEmpty": return FixIsNotEmpty(args);
                 case "IsNotNull": return FixIsNotNull(args);
                 case "IsNotSubsetOf": return FixIsNotSubsetOf(args);
+                case "IsNotSupersetOf": return FixIsNotSupersetOf(args);
                 case "IsNull": return FixIsNull(args);
                 case "IsNullOrEmpty": return FixIsNullOrEmpty(args);
                 case "IsSubsetOf": return FixIsSubsetOf(args);
+                case "IsSupersetOf": return FixIsSupersetOf(args);
                 case "IsTrue": return FixIsTrue(args);
                 case "Less": return FixLess(args);
                 case "LessOrEqual": return FixLessOrEqual(args);
@@ -89,6 +92,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static InvocationExpressionSyntax FixAllItemsAreNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("All", "Not", "Null"), 1, args);
+
+        private static InvocationExpressionSyntax FixAllItemsAreUnique(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Unique"), 1, args);
 
         private static InvocationExpressionSyntax FixAreEqual(SeparatedSyntaxList<ArgumentSyntax> args)
         {
@@ -219,11 +224,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixIsNotSubsetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SubsetOf", args[0]), 2, args);
 
+        private static InvocationExpressionSyntax FixIsNotSupersetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SupersetOf", args[0]), 2, args);
+
         private static InvocationExpressionSyntax FixIsNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null"), 1, args);
 
         private static InvocationExpressionSyntax FixIsNullOrEmpty(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Null", "Or", "Empty"), 1, args);
 
         private static InvocationExpressionSyntax FixIsSubsetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SubsetOf", args[0]), 2, args);
+
+        private static InvocationExpressionSyntax FixIsSupersetOf(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SupersetOf", args[0]), 2, args);
 
         private static InvocationExpressionSyntax FixIsTrue(SeparatedSyntaxList<ArgumentSyntax> args)
         {
