@@ -19,8 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                      ? Analyze(symbol)
                                                                                                      : Enumerable.Empty<Diagnostic>();
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => ShallAnalyze(method)
-                                                                                                     ? Analyze(method)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyze(symbol)
+                                                                                                     ? Analyze(symbol)
                                                                                                      : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyze(symbol)

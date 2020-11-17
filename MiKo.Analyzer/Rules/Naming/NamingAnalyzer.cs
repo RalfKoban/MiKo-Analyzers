@@ -37,8 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                   ? AnalyzeName(symbol)
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => ShallAnalyze(method)
-                                                                                                 ? AnalyzeName(method)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyze(symbol)
+                                                                                                 ? AnalyzeName(symbol)
                                                                                                  : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyze(symbol)

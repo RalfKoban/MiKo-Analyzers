@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeField(SymbolAnalysisContext context) => ReportDiagnostics<IFieldSymbol>(context, AnalyzeField);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeMethod(SymbolAnalysisContext context) => ReportDiagnostics<IMethodSymbol>(context, AnalyzeMethod);
 
