@@ -180,7 +180,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 var number = thousand + j;
                 var prefix = $"MiKo_{number:####}";
 
-                if (diagnosticIds.All(_ => _.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) is false))
+                if (diagnosticIds.All(_ => !_.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)))
                 {
                     gaps.Add(prefix);
                 }
@@ -258,7 +258,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var baseType = typeof(Analyzer);
 
             var allAnalyzers = baseType.Assembly.GetExportedTypes()
-                                       .Where(_ => _.IsAbstract is false && baseType.IsAssignableFrom(_))
+                                       .Where(_ => !_.IsAbstract && baseType.IsAssignableFrom(_))
                                        .Select(_ => (Analyzer)_.GetConstructor(Type.EmptyTypes).Invoke(null))
                                        .OrderBy(_ => _.DiagnosticId)
                                        .ToArray();
@@ -270,7 +270,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var baseType = typeof(CodeFixProvider);
 
             var allAnalyzers = typeof(Analyzer).Assembly.GetExportedTypes()
-                                               .Where(_ => _.IsAbstract is false && baseType.IsAssignableFrom(_))
+                                               .Where(_ => !_.IsAbstract && baseType.IsAssignableFrom(_))
                                                .Select(_ => (CodeFixProvider)_.GetConstructor(Type.EmptyTypes).Invoke(null))
                                                .OrderBy(_ => _.GetType().Name)
                                                .ToArray();

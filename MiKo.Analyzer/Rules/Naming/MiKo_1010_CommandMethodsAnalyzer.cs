@@ -28,13 +28,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementationOf<ICommand>() is false && symbol.IsTestMethod() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && !symbol.IsInterfaceImplementationOf<ICommand>() && !symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
             List<Diagnostic> diagnostics = null;
 
-            if (VerifyMethodName(nameof(ICommand.CanExecute), symbol, ref diagnostics) is false)
+            if (!VerifyMethodName(nameof(ICommand.CanExecute), symbol, ref diagnostics))
             {
                 // CanExecute is not contained, thus we can check for execute (otherwise 'Execute' would already be part of the method's name)
                 VerifyMethodName(nameof(ICommand.Execute), symbol, ref diagnostics);

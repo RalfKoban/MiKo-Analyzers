@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
              || IsMessageExceptionCtor(symbol)
              || symbol.IsSerializationConstructor())
             {
-                return symbol.GetDocumentationCommentXml().IsNullOrWhiteSpace() is false;
+                return !symbol.GetDocumentationCommentXml().IsNullOrWhiteSpace();
             }
 
             return false; // unknown ctor

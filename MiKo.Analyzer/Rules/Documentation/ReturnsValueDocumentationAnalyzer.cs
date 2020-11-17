@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (ShallAnalyzeReturnType(returnType) is false)
+            if (!ShallAnalyzeReturnType(returnType))
             {
                 return Enumerable.Empty<Diagnostic>();
             }

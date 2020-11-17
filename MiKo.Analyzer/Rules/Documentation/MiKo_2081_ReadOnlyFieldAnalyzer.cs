@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     case Accessibility.Public:
                     case Accessibility.Protected:
-                        return symbol.ContainingType.IsTestClass() is false;
+                        return !symbol.ContainingType.IsTestClass();
                 }
             }
 

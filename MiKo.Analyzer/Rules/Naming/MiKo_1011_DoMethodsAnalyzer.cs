@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (ContainsPhrase(methodName, DoesPhrase))
                 {
                     escapedMethod = EscapeValidPhrases(methodName.Without(DoesPhrase));
-                    found = symbol.IsTestMethod() is false; // ignore tests
+                    found = !symbol.IsTestMethod(); // ignore tests
                 }
                 else
                 {

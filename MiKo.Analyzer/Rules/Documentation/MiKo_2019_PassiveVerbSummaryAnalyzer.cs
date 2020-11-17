@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var firstWord = summary.FirstWord();
 
-            return firstWord.EndsWith("s", Comparison) && firstWord.EndsWithAny(TwoCharacterEndingsWithS, Comparison) is false;
+            return firstWord.EndsWith("s", Comparison) && !firstWord.EndsWithAny(TwoCharacterEndingsWithS, Comparison);
         }
     }
 }
