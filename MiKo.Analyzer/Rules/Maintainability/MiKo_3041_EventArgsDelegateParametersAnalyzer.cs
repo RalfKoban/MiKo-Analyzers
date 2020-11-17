@@ -21,16 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.ContainingType.IsEventArgs();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            switch (method.MethodKind)
+            switch (symbol.MethodKind)
             {
-                case MethodKind.Ordinary when method.IsOverride || method.IsInterfaceImplementation():
+                case MethodKind.Ordinary when symbol.IsOverride || symbol.IsInterfaceImplementation():
                     return Enumerable.Empty<Diagnostic>();
 
                 case MethodKind.Constructor:
                 case MethodKind.Ordinary:
-                    return method.Parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate).Select(_ => Issue(_.Type)).ToList();
+                    return symbol.Parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate).Select(_ => Issue(_.Type)).ToList();
 
                 default:
                     return Enumerable.Empty<Diagnostic>();

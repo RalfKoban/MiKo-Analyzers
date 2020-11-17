@@ -18,21 +18,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.MethodKind == MethodKind.Ordinary && !symbol.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            if (method.IsInterfaceImplementation())
+            if (symbol.IsInterfaceImplementation())
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            switch (method.Parameters.Length)
+            switch (symbol.Parameters.Length)
             {
-                case 1 when method.Name == nameof(IDisposable.Dispose) && method.Parameters[0].Name == "disposing":
-                case 2 when method.HasDependencyObjectParameter():
+                case 1 when symbol.Name == nameof(IDisposable.Dispose) && symbol.Parameters[0].Name == "disposing":
+                case 2 when symbol.HasDependencyObjectParameter():
                     return Enumerable.Empty<Diagnostic>();
             }
 
-            return method.Parameters
+            return symbol.Parameters
                          .Where(_ => _.Type.IsBoolean())
                          .Select(_ => _.GetSyntax())
                          .Select(_ => Issue(_.GetName(), _.Type))

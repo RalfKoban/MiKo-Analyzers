@@ -18,14 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.SpecialType == SpecialType.System_Object;
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            switch (method.Name)
+            switch (symbol.Name)
             {
                 case nameof(ICloneable.Clone):
                 case nameof(ICloneable) + "." + nameof(ICloneable.Clone):
                 case nameof(System) + "." + nameof(ICloneable) + "." + nameof(ICloneable.Clone):
-                    return new[] { Issue(method) };
+                    return new[] { Issue(symbol) };
 
                 default:
                     return Enumerable.Empty<Diagnostic>();

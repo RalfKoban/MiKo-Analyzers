@@ -27,11 +27,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
+            var methodName = symbol.Name;
 
-            var conditions = method.GetSyntax().DescendantTokens()
+            var conditions = symbol.GetSyntax().DescendantTokens()
                                    .Where(_ => ConditionTokens.Contains(_.RawKind))
                                    .Select(_ => Issue(methodName, _))
                                    .ToList();

@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            var methodParameters = method.Parameters;
+            var methodParameters = symbol.Parameters;
             var last = methodParameters.Length - 1;
             for (var i = 0; i < methodParameters.Length; i++)
             {

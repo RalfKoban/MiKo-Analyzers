@@ -23,9 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            var methodCalls = method.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>();
+            var methodCalls = symbol.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>();
 
             List<Diagnostic> diagnostics = null;
             foreach (var methodCall in methodCalls)
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             diagnostics = new List<Diagnostic>(1);
                         }
 
-                        diagnostics.Add(Issue(method.Name, methodCall, call));
+                        diagnostics.Add(Issue(symbol.Name, methodCall, call));
                         break;
                 }
             }

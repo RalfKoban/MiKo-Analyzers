@@ -37,16 +37,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                   ? AnalyzeName(symbol)
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method) => ShallAnalyze(method)
-                                                                                                 ? AnalyzeName(method)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => ShallAnalyze(symbol)
+                                                                                                 ? AnalyzeName(symbol)
                                                                                                  : Enumerable.Empty<Diagnostic>();
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol property) => ShallAnalyze(property)
-                                                                                                       ? AnalyzeName(property)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => ShallAnalyze(symbol)
+                                                                                                       ? AnalyzeName(symbol)
                                                                                                        : Enumerable.Empty<Diagnostic>();
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol field) => ShallAnalyze(field)
-                                                                                              ? AnalyzeName(field)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => ShallAnalyze(symbol)
+                                                                                              ? AnalyzeName(symbol)
                                                                                               : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => ShallAnalyze(symbol)

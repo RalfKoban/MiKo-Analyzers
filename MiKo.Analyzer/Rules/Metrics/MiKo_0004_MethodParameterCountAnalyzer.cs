@@ -20,20 +20,20 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
         {
-            var parameterCount = method.Parameters.Count();
+            var parameterCount = symbol.Parameters.Count();
             if (parameterCount <= MaxParametersCount)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (method.IsExtern || method.IsInterfaceImplementation())
+            if (symbol.IsExtern || symbol.IsInterfaceImplementation())
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return new[] { Issue(method, parameterCount, MaxParametersCount) };
+            return new[] { Issue(symbol, parameterCount, MaxParametersCount) };
         }
 
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;
