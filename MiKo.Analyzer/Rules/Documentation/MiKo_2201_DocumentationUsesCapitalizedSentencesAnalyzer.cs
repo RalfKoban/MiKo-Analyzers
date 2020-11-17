@@ -61,8 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var name = e.Name.ToString().ToLower();
                 switch (name)
                 {
-                    case "c":
-                    case "code":
+                    case Constants.XmlTag.C:
+                    case Constants.XmlTag.Code:
                         return false;
 
                     default:
@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         comment = e.Value.TrimStart();
 
                         // sentence starts lower case
-                        if (name == "para" && comment.Length > 0 && comment[0].IsLowerCaseLetter())
+                        if (name == Constants.XmlTag.Para && comment.Length > 0 && comment[0].IsLowerCaseLetter())
                         {
                             return true;
                         }
