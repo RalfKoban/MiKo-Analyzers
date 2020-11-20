@@ -90,6 +90,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return proposedName + "es";
             }
 
+            if (proposedName.EndsWith("sh", comparison))
+            {
+                return proposedName + "es";
+            }
+
             if (proposedName.EndsWith("ed", comparison))
             {
                 return proposedName;
