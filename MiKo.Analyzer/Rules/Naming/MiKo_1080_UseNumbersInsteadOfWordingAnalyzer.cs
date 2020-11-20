@@ -69,6 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "none",
                                                                          "None",
                                                                          "NONE",
+                                                                         "onE", // 'SetupNonExistentDevice'
                                                                          "OnE",
                                                                          "OneTime",
                                                                          "Ones",
