@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return symbol.GetSyntax()
                          .DescendantNodes()
                          .OfType<ReturnStatementSyntax>()
+                         .Where(_ => _.Ancestors().OfType<ParenthesizedLambdaExpressionSyntax>().None()) // filter callbacks inside constructors
                          .Select(_ => Issue(methodName, _));
         }
     }
