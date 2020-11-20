@@ -59,10 +59,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "map":
                 case "list":
                 case "array":
-                case "buffer":
-                case "result":
                 case "stack":
                 case "queue":
+                case "buffer":
+                case "result":
                 {
                     return true;
                 }
