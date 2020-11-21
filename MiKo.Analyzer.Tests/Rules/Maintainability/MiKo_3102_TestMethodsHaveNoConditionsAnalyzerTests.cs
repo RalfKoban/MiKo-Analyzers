@@ -205,6 +205,26 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_Nullable_object_creation_(
+                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+using System.Threading;
+
+[" + testFixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public void DoSomething()
+    {
+        var token = new CancellationToken?();
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3102_TestMethodsHaveNoConditionsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3102_TestMethodsHaveNoConditionsAnalyzer();

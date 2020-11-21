@@ -3,6 +3,7 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -31,10 +32,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodName = symbol.Name;
 
-            var conditions = symbol.GetSyntax().DescendantTokens()
-                                   .Where(_ => ConditionTokens.Contains(_.RawKind))
-                                   .Select(_ => Issue(methodName, _))
-                                   .ToList();
+            var conditions = new List<Diagnostic>();
+
+            foreach (var token in symbol.GetSyntax().DescendantTokens().Where(_ => ConditionTokens.Contains(_.RawKind)))
+            {
+                if (token.IsKind(SyntaxKind.QuestionToken) && token.Parent is NullableTypeSyntax)
+                {
+                    continue;
+                }
+
+                conditions.Add(Issue(methodName, token));
+            }
+
             return conditions;
         }
     }
