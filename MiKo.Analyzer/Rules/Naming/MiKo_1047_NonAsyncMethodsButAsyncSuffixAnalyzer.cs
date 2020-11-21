@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.WithoutSuffix(Constants.AsyncSuffix);
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => method.IsAsyncTaskBased() is false && base.ShallAnalyze(method);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {

@@ -18,13 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
+            var methodName = symbol.Name;
 
-            return method.GetSyntax()
+            return symbol.GetSyntax()
                          .DescendantNodes()
                          .OfType<ReturnStatementSyntax>()
+                         .Where(_ => _.Ancestors().OfType<ParenthesizedLambdaExpressionSyntax>().None()) // filter callbacks inside constructors
                          .Select(_ => Issue(methodName, _));
         }
     }

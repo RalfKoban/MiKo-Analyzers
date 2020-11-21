@@ -21,10 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
-            var conditions = method.GetSyntax()
+            var methodName = symbol.Name;
+            var conditions = symbol.GetSyntax()
                                    .DescendantNodes().OfType<MemberAccessExpressionSyntax>()
                                    .Where(_ => _.ToCleanedUpString() == Invocation)
                                    .Select(_ => Issue(methodName, _))

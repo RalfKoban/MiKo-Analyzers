@@ -24,14 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return NamesFinder.TryMakeVerb(name, out var result) ? result : name;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
+            var methodName = symbol.Name;
 
             var found = ContainsPhrase(methodName) && ContainsPhrase(methodName.Without("Performance").Without("Performed"));
 
             return found
-                       ? new[] { Issue(method) }
+                       ? new[] { Issue(symbol) }
                        : Enumerable.Empty<Diagnostic>();
         }
 

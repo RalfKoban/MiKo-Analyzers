@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method)
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            var returnType = method.ReturnType;
+            var returnType = symbol.ReturnType;
 
             switch (returnType.SpecialType)
             {

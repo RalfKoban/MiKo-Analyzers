@@ -30,13 +30,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbol.Type.IsEnumerable() ? Values : Value;
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method) => method.IsExtensionMethod;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtensionMethod;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var parameter = method.Parameters[0];
+            var parameter = symbol.Parameters[0];
 
-            return IsConversionExtension(method)
+            return IsConversionExtension(symbol)
                    ? AnalyzeName(parameter, Source)
                    : AnalyzeName(parameter, Value, Values, Source);
         }

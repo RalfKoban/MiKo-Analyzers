@@ -11,6 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] CorrectNames =
             {
+                "_first_",
+                "_one_",
+                "_second_",
+                "_third_",
                 "antimone",
                 "bone",
                 "Bone",
@@ -40,8 +44,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "OnExit",
                 "oxone",
                 "phone",
-                "Seconds",
                 "seconds",
+                "Seconds",
+                "SetupNonExistentDevice",
                 "sone",
                 "Sone",
                 "tone",
@@ -54,10 +59,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "weight",
                 "zone",
                 "Zone",
-                "_one_",
-                "_first_",
-                "_second_",
-                "_third_",
             };
 
         private static readonly string[] WrongNames =

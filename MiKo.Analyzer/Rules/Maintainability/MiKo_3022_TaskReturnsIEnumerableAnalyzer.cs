@@ -17,9 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            var typeArguments = ((INamedTypeSymbol)method.ReturnType).TypeArguments;
+            var typeArguments = ((INamedTypeSymbol)symbol.ReturnType).TypeArguments;
 
             if (typeArguments.Length == 1 && typeArguments[0] is INamedTypeSymbol typeArgument)
             {
@@ -29,13 +29,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case SpecialType.System_Collections_IEnumerable:
                     case SpecialType.System_Collections_Generic_IEnumerable_T:
                     {
-                        return ReportIssue(method);
+                        return ReportIssue(symbol);
                     }
                 }
 
                 if (typeArgument.TypeKind == TypeKind.Interface && typeArgument.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T)
                 {
-                    return ReportIssue(method);
+                    return ReportIssue(symbol);
                 }
             }
 

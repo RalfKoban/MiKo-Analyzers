@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var term in MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Guids)
             {
-                var replacement = term.ToLowerInvariant().Replace("guid", Replacement);
+                var replacement = term.ToUpperInvariant().Replace("GUID", Replacement);
                 dictionary.Add(term, replacement);
             }
 

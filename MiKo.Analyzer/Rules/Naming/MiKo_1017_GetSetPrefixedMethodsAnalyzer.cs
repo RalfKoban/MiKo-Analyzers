@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method) => Prefixes.Any(_ => HasStrangePrefix(method, _))
-                                                                                                  ? new[] { Issue(method, FindBetterName(method.Name)) }
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => Prefixes.Any(_ => HasStrangePrefix(symbol, _))
+                                                                                                  ? new[] { Issue(symbol, FindBetterName(symbol.Name)) }
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
         private static string FindBetterName(string name)
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return methodName.StartsWith(prefix, StringComparison.Ordinal)
                 && methodName.Length > prefix.Length
                 && methodName[prefix.Length].IsUpperCase()
-                && method.HasDependencyObjectParameter() == false;
+                && method.HasDependencyObjectParameter() is false;
         }
     }
 }

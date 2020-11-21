@@ -22,11 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
         {
-            var methodName = method.Name;
+            var methodName = symbol.Name;
 
-            var descendantNodes = method.GetSyntax().DescendantNodes();
+            var descendantNodes = symbol.GetSyntax().DescendantNodes();
 
             foreach (var taskRunExpression in descendantNodes.OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
             {

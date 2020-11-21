@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var knownNamespaces = new HashSet<string>();
 
             return qualifiedName.Split('.')
-                                .Where(_ => !knownNamespaces.Add(_))
+                                .Where(_ => knownNamespaces.Add(_) is false)
                                 .Select(_ => Issue(_, location))
                                 .ToList();
         }

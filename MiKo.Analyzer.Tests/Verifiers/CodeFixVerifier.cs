@@ -65,7 +65,7 @@ namespace TestHelper
                 var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, d) => actions.Add(a), CancellationToken.None);
                 codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
-                if (!actions.Any())
+                if (actions.Any() is false)
                 {
                     break;
                 }
@@ -82,7 +82,7 @@ namespace TestHelper
                 var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
 
                 // check if applying the code fix introduced any new compiler diagnostics
-                if (!allowNewCompilerDiagnostics && newCompilerDiagnostics.Any())
+                if (allowNewCompilerDiagnostics is false && newCompilerDiagnostics.Any())
                 {
                     // Format and get the compiler diagnostics again so that the locations make sense in the output
                     document = document.WithSyntaxRoot(Formatter.Format(document.GetSyntaxRootAsync().Result, Formatter.Annotation, document.Project.Solution.Workspace));
@@ -97,7 +97,7 @@ New document:
                 }
 
                 // check if there are analyzer diagnostics left after the code fix
-                if (!analyzerDiagnostics.Any())
+                if (analyzerDiagnostics.Any() is false)
                 {
                     break;
                 }
@@ -106,7 +106,7 @@ New document:
             // after applying all of the code fixes, compare the resulting string to the inputted one
             var actual = GetStringFromDocument(document);
 
-            Assert.AreEqual(newSource, actual);
+            Assert.That(actual, Is.EqualTo(newSource));
         }
     }
 }

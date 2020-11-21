@@ -130,7 +130,7 @@ namespace TestHelper
         /// <returns>An IEnumerable containing the Diagnostics in order of Location.</returns>
         private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics)
         {
-            return diagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
+            return diagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
         }
 
         /// <summary>

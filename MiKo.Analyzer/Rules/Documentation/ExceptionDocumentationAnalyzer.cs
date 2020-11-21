@@ -36,6 +36,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : AnalyzeException(symbol, comment);
         }
 
-        protected Diagnostic ReportExceptionIssue(ISymbol owningSymbol, string proposal) => Issue(owningSymbol, ExceptionPhrase, proposal);
+        protected Diagnostic ExceptionIssue(ISymbol owningSymbol, string proposal) => Issue(owningSymbol, ExceptionPhrase, proposal);
     }
 }

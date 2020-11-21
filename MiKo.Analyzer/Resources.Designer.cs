@@ -171,6 +171,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Append suffix &apos;EventArgs&apos;.
+        /// </summary>
+        public static string MiKo_1000_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1000_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event argument types should follow the pattern that they inherit from &apos;System.EventArgs&apos; and their names end with &apos;EventArgs&apos;..
+        /// </summary>
+        public static string MiKo_1000_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1000_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1000_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1000_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; types should be suffixed properly..
+        /// </summary>
+        public static string MiKo_1000_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1000_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename event argument.
         /// </summary>
         public static string MiKo_1001_CodeFixTitle {
@@ -3239,7 +3275,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-        ///Hence naming them e.g. &apos;Mock&apos; or &apos;Stub&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
+        ///Hence naming them e.g.  &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
         /// </summary>
         public static string MiKo_1108_Description {
             get {
@@ -3248,7 +3284,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos; or &apos;Stub&apos;.
+        ///   Looks up a localized string similar to Do not name it &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos;.
         /// </summary>
         public static string MiKo_1108_MessageFormat {
             get {
@@ -3257,7 +3293,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos; or &apos;Stub&apos;..
+        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos;..
         /// </summary>
         public static string MiKo_1108_Title {
             get {
@@ -5486,6 +5522,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply default ending comment to documentation of thrown &apos;ObjectDisposedException&apos;.
+        /// </summary>
+        public static string MiKo_2056_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2056_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of an ObjectDisposedException being thrown should have a specific ending phrase..
         /// </summary>
         public static string MiKo_2056_Description {
@@ -6517,6 +6562,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;..&apos; from comment.
+        /// </summary>
+        public static string MiKo_2305_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2305_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In contrast to API documentation inline comments are intended for team members. They should contain the important information in a short way, so they should not be complete sentences..
         /// </summary>
         public static string MiKo_2305_Description {
@@ -6569,6 +6623,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2306_Title {
             get {
                 return ResourceManager.GetString("MiKo_2306_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace with &apos;failed&apos;.
+        /// </summary>
+        public static string MiKo_2307_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2307_CodeFixTitle", resourceCulture);
             }
         }
         
@@ -8687,6 +8750,33 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3107_Title {
             get {
                 return ResourceManager.GetString("MiKo_3107_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tests should use assertions to check the behavior of the code for correctness. A missing assertion indicates a test that does not check anything and is therefore not meaningful..
+        /// </summary>
+        public static string MiKo_3108_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3108_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertion missing in &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3108_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3108_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should use assertions..
+        /// </summary>
+        public static string MiKo_3108_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3108_Title", resourceCulture);
             }
         }
         

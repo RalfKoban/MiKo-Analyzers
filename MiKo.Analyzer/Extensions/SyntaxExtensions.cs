@@ -174,6 +174,12 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static string GetName(this XmlElementSyntax syntax) => syntax?.StartTag.Name.LocalName.ValueText;
+
+        internal static string GetName(this XmlEmptyElementSyntax syntax) => syntax?.Name.LocalName.ValueText;
+
+        internal static string GetName(this XmlAttributeSyntax syntax) => syntax?.Name.LocalName.ValueText;
+
         internal static string GetName(this MemberAccessExpressionSyntax syntax) => syntax?.Name.GetName();
 
         internal static string GetName(this MemberBindingExpressionSyntax syntax) => syntax?.Name.GetName();

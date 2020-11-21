@@ -37,6 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool IsRecursiveYield(YieldStatementSyntax node, SemanticModel semanticModel, IMethodSymbol method)
         {
+            var methodName = method.Name;
+
             foreach (var ancestor in node.Ancestors())
             {
                 switch (ancestor)
@@ -50,10 +52,21 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     {
                         foreach (var invocation in loop.DescendantNodes().OfType<InvocationExpressionSyntax>())
                         {
-                            if (invocation.Expression is IdentifierNameSyntax i && i.GetName() == method.Name)
+                            var calledMethod = DetectCalledMethod(semanticModel, invocation, methodName);
+                            if (calledMethod is null)
                             {
-                                var calledMethod = DetectCalledMethod(semanticModel, i, invocation);
+                                continue;
+                            }
 
+                            if (method.IsExtensionMethod && calledMethod.IsExtensionMethod)
+                            {
+                                if (method.ContainingType.Equals(calledMethod.ContainingType, SymbolEqualityComparer.IncludeNullability))
+                                {
+                                    return true;
+                                }
+                            }
+                            else
+                            {
                                 if (method.Equals(calledMethod, SymbolEqualityComparer.IncludeNullability))
                                 {
                                     return true;
@@ -69,7 +82,22 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return false;
         }
 
-        private static ISymbol DetectCalledMethod(SemanticModel semanticModel, IdentifierNameSyntax identifier, InvocationExpressionSyntax invocation)
+        private static IMethodSymbol DetectCalledMethod(SemanticModel semanticModel, InvocationExpressionSyntax invocation, string methodName)
+        {
+            switch (invocation.Expression)
+            {
+                case IdentifierNameSyntax i when i.GetName() == methodName:
+                    return DetectCalledMethod(semanticModel, invocation, i);
+
+                case MemberAccessExpressionSyntax m when m.Name is IdentifierNameSyntax ins && ins.GetName() == methodName:
+                    return DetectCalledMethod(semanticModel, invocation, ins);
+
+                default:
+                    return null;
+            }
+        }
+
+        private static IMethodSymbol DetectCalledMethod(SemanticModel semanticModel, InvocationExpressionSyntax invocation, IdentifierNameSyntax identifier)
         {
             var symbolInfo = semanticModel.GetSymbolInfo(identifier);
 
@@ -86,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 }
             }
 
-            return symbolInfo.Symbol;
+            return symbolInfo.Symbol as IMethodSymbol;
         }
 
         private static bool ParametersHaveSameTypes(ImmutableArray<IParameterSymbol> candidateParameters, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)

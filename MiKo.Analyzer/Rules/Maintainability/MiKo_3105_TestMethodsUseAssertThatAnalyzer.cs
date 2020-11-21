@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,20 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3105_TestMethodsUseAssertThatAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3105";
-
-        private static readonly HashSet<string> AssertionNamespaces = new HashSet<string>
-                                                                          {
-                                                                              "NUnit.Framework",
-                                                                          };
-
-        private static readonly HashSet<string> AssertionTypes = new HashSet<string>
-                                                                     {
-                                                                         "Assert",
-                                                                         "StringAssert",
-                                                                         "CollectionAssert",
-                                                                         "FileAssert",
-                                                                         "DirectoryAssert",
-                                                                     };
 
         private static readonly HashSet<string> AllowedAssertionMethods = new HashSet<string>
                                                                               {
@@ -55,14 +42,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
                 }
 
-                if (AssertionTypes.Contains(invokedClass.GetName()) is false)
+                if (Constants.Names.AssertionTypes.Contains(invokedClass.GetName()) is false)
                 {
                     return;
                 }
 
                 var testFrameworkNamespace = invokedClass.GetTypeSymbol(context.SemanticModel)?.ContainingNamespace.FullyQualifiedName();
 
-                if (AssertionNamespaces.Contains(testFrameworkNamespace) is false)
+                if (Constants.Names.AssertionNamespaces.Contains(testFrameworkNamespace) is false)
                 {
                     return; // ignore other test frameworks
                 }

@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var phrases = Constants.Comments.CtorSerializationInfoParamPhrase;
 
-                if (!comment.EqualsAny(phrases))
+                if (comment.EqualsAny(phrases) is false)
                 {
                     return new[] { Issue(parameter, phrases[0]) };
                 }
@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var phrases = Constants.Comments.CtorStreamingContextParamPhrase;
 
-                if (!comment.EqualsAny(phrases))
+                if (comment.EqualsAny(phrases) is false)
                 {
                     return new[] { Issue(parameter, phrases[0]) };
                 }

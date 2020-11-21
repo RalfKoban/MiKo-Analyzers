@@ -216,6 +216,45 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_recursive_yield_as_extension() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class Tree<T>
+    {
+        public T Value;
+        public Tree<T> Left;
+        public Tree<T> Right;
+    }
+
+    public static class TestMe
+    {
+        public static IEnumerable<T> PreorderTraversal<T>(this Tree<T> root)
+        {
+            if (root == null)
+            {
+                yield break;
+            }
+
+            yield return root.Value;
+
+            foreach (T item in root.Left.PreorderTraversal())
+            {
+                yield return item;
+            }
+
+            foreach (T item in root.Right.PreorderTraversal())
+            {
+                yield return item;
+            }
+        }
+    }
+}
+");
+
         // TODO: RKN this test is not working as expected - test should simulate 'MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer' source code but does not
         [Test]
         public void No_issue_is_reported_for_non_recursive_yield_due_to_different_parameter_types() => No_issue_is_reported_for(@"

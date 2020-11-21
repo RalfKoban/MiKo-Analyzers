@@ -248,6 +248,12 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreNotEquivalent(e, a, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.Not.EquivalentTo(e), ""my message""); }")]
         [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => CollectionAssert.DoesNotContain(e, o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => Assert.That(e, Does.Not.Contain(o), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => CollectionAssert.Contains(e, o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => Assert.That(e, Does.Contain(o), ""my message""); }")]
+        [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.StartsWith(""abc"", s, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.StartWith(""abc""), ""my message""); }")]
         [TestCase(
@@ -256,6 +262,12 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotContain(""abc"", s, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.Contain(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotStartWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.StartWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotEndWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.EndWith(""abc""), ""my message""); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.Contains(""abc"", s, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Contain(""abc""), ""my message""); }")]
@@ -266,11 +278,29 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsSubsetOf(""abc"", s, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.SubsetOf(""abc""), ""my message""); }")]
         [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsNotSubsetOf(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Not.SubsetOf(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsSupersetOf(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.SupersetOf(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsNotSupersetOf(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Not.SupersetOf(""abc""), ""my message""); }")]
+        [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsInstanceOf(typeof(object), o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message""); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsInstanceOf<object>(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.IsOrdered(e, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.Ordered, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.AllItemsAreNotNull(e, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.All.Not.Null, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.AllItemsAreUnique(e, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.Unique, ""my message""); }")]
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsTrue(a == b); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.EqualTo(b)); }")]
@@ -373,6 +403,18 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i >= 5); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThan(5)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.Zero(i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Zero); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.NotZero(i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.Zero); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.IsNaN(d); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.NaN); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.Negative(i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Negative); }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [Test]

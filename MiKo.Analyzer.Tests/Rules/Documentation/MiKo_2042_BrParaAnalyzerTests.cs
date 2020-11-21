@@ -153,6 +153,7 @@ public sealed class TestMe
 ");
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void Wrong_combined_example_for_documentation_is_reported_on_class() => An_issue_is_reported_for(@"
 /// <summary>

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -12,6 +14,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.Contains(Constants.Comments.WasNotSuccessfulPhrase);
+        internal static bool CommentHasIssue(string comment)
+        {
+            const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
+
+            var index = comment.IndexOf(Phrase, StringComparison.Ordinal);
+            if (index < 0)
+            {
+                return false;
+            }
+
+            var indexAfterPhrase = index + Phrase.Length;
+            if (indexAfterPhrase == comment.Length)
+            {
+                // that's the last phrase
+                return true;
+            }
+
+            return comment.Substring(indexAfterPhrase).StartsWithAny(Constants.Comments.Delimiters);
+        }
+
+        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentHasIssue(comment);
     }
 }

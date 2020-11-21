@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol field) => !field.IsConst;
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsConst is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => Analyze(symbol);
     }

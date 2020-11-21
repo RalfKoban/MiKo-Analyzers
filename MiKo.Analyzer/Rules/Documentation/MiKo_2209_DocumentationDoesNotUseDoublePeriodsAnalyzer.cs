@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.Contains("..", _ => !AllowedChars.Contains(_), StringComparison.OrdinalIgnoreCase)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.OrdinalIgnoreCase)
                                                                                                         ? new[] { Issue(symbol) }
                                                                                                         : Enumerable.Empty<Diagnostic>();
     }

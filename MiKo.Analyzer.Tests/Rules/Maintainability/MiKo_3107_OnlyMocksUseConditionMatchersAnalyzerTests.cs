@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3107_OnlyMocksUseConditionMatchersAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_correct_object_creation_on_field() => No_issue_is_reported_for(@"
@@ -75,22 +75,49 @@ namespace Bla
         void DoSomething(string text);
     }
 
-    public class TestMe : ITestMe
-    {
-        public TestMe(string text) { }
-
-        public void DoSomething(string text) { }
-    }
-
     public class TestMeTests
     {
-        private TestMe ObjectUnderTest { get; set; }
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
 
         public void PrepareTest()
         {
             ObjectUnderTest = new Mock<ITestMe>();
 
+            ObjectUnderTest.Setup(_ => _.DoSomething(It.IsAny<string>()).Returns(true);
             ObjectUnderTest.Verify(_ => _.DoSomething(It.IsAny<string>());
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_chained_mock_method_invocation() => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        bool DoSomething(string text);
+    }
+
+    public interface ITestMe2
+    {
+        ITestMe TestMe { get; }
+    }
+
+    public class TestMeTests
+    {
+        private Mock<ITestMe2> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe2>();
+
+            ObjectUnderTest.Setup(_ => _.TestMe.DoSomething(It.IsAny<string>()).Returns(true);
+            ObjectUnderTest.Verify(_ => _.TestMe.DoSomething(It.IsAny<string>());
         }
     }
 }
@@ -264,8 +291,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3107_CtorsInTestsUseMocksInsteadOfConditionMatchersAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer();
     }
 }

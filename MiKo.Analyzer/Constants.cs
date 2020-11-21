@@ -1,4 +1,5 @@
 ﻿#pragma warning disable SA1203 // Constants should appear before fields
+#pragma warning disable CA1708 // Identifiers should differ by more than case
 
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
 
-        public static class MaxNamingLengths
+        internal static class MaxNamingLengths
         {
             public const int Types = 40;
             public const int Methods = 25;
@@ -111,6 +112,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     "A ",
                     "Action",
+                    "Adapter",
                     "An ",
                     "Base",
                     "Builder",
@@ -133,6 +135,7 @@ namespace MiKoSolutions.Analyzers
                     "Extension class of",
                     "Extension of",
                     "Factory",
+                    "Fake ",
                     "Field",
                     "For ",
                     "Func",
@@ -143,28 +146,32 @@ namespace MiKoSolutions.Analyzers
                     "Implements ",
                     "Interaction logic",
                     "Interface",
+                    "Internal ",
                     "Is ",
                     "It ",
-                    "It's ",
                     "Its ",
+                    "It's ",
                     "Method",
+                    "Mock ",
                     "Model",
+                    "Private ",
                     "Property",
+                    "Protected ",
+                    "Proxy ",
+                    "Public ",
+                    "Stub ",
                     "Testclass ",
                     "That ",
                     "The ",
                     "This ",
                     "To ",
+                    "Use this ",
                     "Used ",
                     "Uses ",
-                    "Use this ",
                     "View", // includes 'ViewModel'
                     //// "ViewModel",
                     "Which ",
-                    "Public ",
-                    "Protected ",
-                    "Internal ",
-                    "Private ",
+                    "Wrapper",
                     //// "Represents a component that ", // TODO: RKN is it really meaningless?
                     //// "Represents a component, that ", // TODO: RKN is it really meaningless?
                 };
@@ -727,6 +734,21 @@ namespace MiKoSolutions.Analyzers
                                                                                               "testCandidate",
                                                                                               "testObject",
                                                                                           };
+
+            internal static readonly IEnumerable<string> AssertionTypes = new HashSet<string>
+                                                                              {
+                                                                                  "Assert",
+                                                                                  "StringAssert",
+                                                                                  "CollectionAssert",
+                                                                                  "FileAssert",
+                                                                                  "DirectoryAssert",
+                                                                              };
+
+            internal static readonly IEnumerable<string> AssertionNamespaces = new HashSet<string>
+                                                                                   {
+                                                                                       "NUnit.Framework",
+                                                                                       "NUnit.Framework.Constraints",
+                                                                                   };
         }
     }
 }

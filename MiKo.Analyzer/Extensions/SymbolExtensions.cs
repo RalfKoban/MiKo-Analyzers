@@ -751,10 +751,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsLinqExtensionMethod(this ISymbol symbol)
         {
-            if (symbol is IMethodSymbol)
+            if (symbol is IMethodSymbol method)
             {
                 // this is an extension method !
-                if (symbol.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                if (method.IsExtensionMethod && method.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

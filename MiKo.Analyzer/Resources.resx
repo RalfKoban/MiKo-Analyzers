@@ -155,6 +155,18 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
   <data name="MiKo_0004_Title" xml:space="preserve">
     <value>Methods has too many parameters.</value>
   </data>
+  <data name="MiKo_1000_CodeFixTitle" xml:space="preserve">
+    <value>Append suffix 'EventArgs'</value>
+  </data>
+  <data name="MiKo_1000_Description" xml:space="preserve">
+    <value>Event argument types should follow the pattern that they inherit from 'System.EventArgs' and their names end with 'EventArgs'.</value>
+  </data>
+  <data name="MiKo_1000_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' instead</value>
+  </data>
+  <data name="MiKo_1000_Title" xml:space="preserve">
+    <value>'System.EventArgs' types should be suffixed properly.</value>
+  </data>
   <data name="MiKo_1001_CodeFixTitle" xml:space="preserve">
     <value>Rename event argument</value>
   </data>
@@ -1214,13 +1226,13 @@ To ease reading, use underscores between the different words instead.</value>
   </data>
   <data name="MiKo_1108_Description" xml:space="preserve">
     <value>For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-Hence naming them e.g. 'Mock' or 'Stub' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
+Hence naming them e.g.  'Mock', 'Stub', 'Fake' or 'Shim' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
   </data>
   <data name="MiKo_1108_MessageFormat" xml:space="preserve">
-    <value>Do not name it 'Mock' or 'Stub'</value>
+    <value>Do not name it 'Mock', 'Stub', 'Fake' or 'Shim'</value>
   </data>
   <data name="MiKo_1108_Title" xml:space="preserve">
-    <value>Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.</value>
+    <value>Do not name variables, parameters, fields and properties 'Mock', 'Stub', 'Fake' or 'Shim'.</value>
   </data>
   <data name="MiKo_1109_CodeFixTitle" xml:space="preserve">
     <value>Prefix with 'Testable' instead of suffix 'Ut'</value>
@@ -1972,6 +1984,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2055_Title" xml:space="preserve">
     <value>Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.</value>
   </data>
+  <data name="MiKo_2056_CodeFixTitle" xml:space="preserve">
+    <value>Apply default ending comment to documentation of thrown 'ObjectDisposedException'</value>
+  </data>
   <data name="MiKo_2056_Description" xml:space="preserve">
     <value>The documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
   </data>
@@ -2325,6 +2340,9 @@ If it question things, then the reasons behind are still unclear. This makes it 
   <data name="MiKo_2304_Title" xml:space="preserve">
     <value>Do not formulate comments as questions.</value>
   </data>
+  <data name="MiKo_2305_CodeFixTitle" xml:space="preserve">
+    <value>Remove '..' from comment</value>
+  </data>
   <data name="MiKo_2305_Description" xml:space="preserve">
     <value>In contrast to API documentation inline comments are intended for team members. They should contain the important information in a short way, so they should not be complete sentences.</value>
   </data>
@@ -2344,6 +2362,9 @@ This rule contradicts rule MiKo_2303.</value>
   </data>
   <data name="MiKo_2306_Title" xml:space="preserve">
     <value>Do end comments with a period.</value>
+  </data>
+  <data name="MiKo_2307_CodeFixTitle" xml:space="preserve">
+    <value>Replace with 'failed'</value>
   </data>
   <data name="MiKo_2307_Description" xml:space="preserve">
     <value>To shorten comments - and still be to the point - comments should use the phrase 'failed' instead of 'was not succesful'.</value>
@@ -3084,6 +3105,15 @@ In contrast, the failure would be much easier to understand if the test would im
   </data>
   <data name="MiKo_3107_Title" xml:space="preserve">
     <value>Moq Mock condition matchers should be used on mocks only.</value>
+  </data>
+  <data name="MiKo_3108_Description" xml:space="preserve">
+    <value>Tests should use assertions to check the behavior of the code for correctness. A missing assertion indicates a test that does not check anything and is therefore not meaningful.</value>
+  </data>
+  <data name="MiKo_3108_MessageFormat" xml:space="preserve">
+    <value>Assertion missing in '{0}'</value>
+  </data>
+  <data name="MiKo_3108_Title" xml:space="preserve">
+    <value>Test methods should use assertions.</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.

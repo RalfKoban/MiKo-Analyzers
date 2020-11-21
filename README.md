@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 282 rules that are currently provided by the analyzer.
+The following tables list all the 284 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -23,6 +23,7 @@ The following tables list all the 282 rules that are currently provided by the a
 ### Naming
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
+|MiKo_1000|'System.EventArgs' types should be suffixed properly.|&#x2713;|&#x2713;|
 |MiKo_1001|'System.EventArgs' parameters on methods should be named properly.|&#x2713;|&#x2713;|
 |MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices.|&#x2713;|&#x2713;|
@@ -113,7 +114,7 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_1105|One-time test initialization methods should be named 'PrepareTestEnvironment'.|&#x2713;|&#x2713;|
 |MiKo_1106|One-time test cleanup methods should be named 'CleanupTestEnvironment'.|&#x2713;|&#x2713;|
 |MiKo_1107|Test methods should not be in Pascal-casing.|&#x2713;|\-|
-|MiKo_1108|Do not name variables, parameters, fields and properties 'Mock' or 'Stub'.|&#x2713;|&#x2713;|
+|MiKo_1108|Do not name variables, parameters, fields and properties  'Mock', 'Stub', 'Fake' or 'Shim'.|&#x2713;|&#x2713;|
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix.|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore.|&#x2713;|&#x2713;|
 |MiKo_1111|Test methods should be named in a fluent way.|&#x2713;|\-|
@@ -187,7 +188,7 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_2053|Throwing of ArgumentNullException should be documented only for reference type parameters.|&#x2713;|\-|
 |MiKo_2054|Throwing of ArgumentException should be documented using a default starting phrase.|&#x2713;|\-|
 |MiKo_2055|Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.|&#x2713;|\-|
-|MiKo_2056|Throwing of ObjectDisposedException should be documented using a default ending phrase.|&#x2713;|\-|
+|MiKo_2056|Throwing of ObjectDisposedException should be documented using a default ending phrase.|&#x2713;|&#x2713;|
 |MiKo_2057|Types that are not disposable shall not throw an ObjectDisposedException.|&#x2713;|\-|
 |MiKo_2060|Factories should be documented in a uniform way.|&#x2713;|&#x2713;|
 |MiKo_2070|&lt;summary&gt; documentation should not start with 'Returns'.|&#x2713;|&#x2713;|
@@ -219,9 +220,9 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|
 |MiKo_2303|Do not end comments with a period.|&#x2713;|&#x2713;|
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
-|MiKo_2305|Do not use double periods in comments.|&#x2713;|\-|
+|MiKo_2305|Do not use double periods in comments.|&#x2713;|&#x2713;|
 |MiKo_2306|Do end comments with a period.|\-|\-|
-|MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
+|MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|
@@ -294,6 +295,7 @@ The following tables list all the 282 rules that are currently provided by the a
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|&#x2713;|
 |MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|\-|
 |MiKo_3107|Moq Mock condition matchers should be used on mocks only.|&#x2713;|\-|
+|MiKo_3108|Test methods should use assertions.|&#x2713;|\-|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|\-|
 
 ### Ordering

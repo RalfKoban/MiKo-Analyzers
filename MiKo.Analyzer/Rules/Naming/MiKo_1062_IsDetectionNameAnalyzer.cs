@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsBoolean();
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsBoolean() == true;
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsBoolean() is true;
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsBoolean();
 

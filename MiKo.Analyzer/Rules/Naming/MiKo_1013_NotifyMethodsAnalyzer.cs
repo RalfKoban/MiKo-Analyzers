@@ -25,14 +25,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                              .Replace(StartingPhrase, CorrectStartingPhrase)
                                                                              .Replace(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase); // may happen for "OnNotifyXyz"
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            if (method.Name.StartsWithAny(StartingPhrases))
+            if (symbol.Name.StartsWithAny(StartingPhrases))
             {
                 // avoid situation that method has no name
-                if (method.Name.Without(StartingPhrase).Length != 0)
+                if (symbol.Name.Without(StartingPhrase).Length != 0)
                 {
-                    return new[] { Issue(method) };
+                    return new[] { Issue(symbol) };
                 }
             }
 

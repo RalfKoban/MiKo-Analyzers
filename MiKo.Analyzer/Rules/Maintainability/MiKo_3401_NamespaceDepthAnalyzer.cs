@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamespaceSymbol symbol) => !symbol.IsGlobalNamespace;
+        protected override bool ShallAnalyze(INamespaceSymbol symbol) => symbol.IsGlobalNamespace is false;
 
         protected override IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol)
         {

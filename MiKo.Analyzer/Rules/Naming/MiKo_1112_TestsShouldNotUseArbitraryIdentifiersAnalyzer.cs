@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var characters = betterName.Without(Phrase).ToCharArray();
             if (characters.Length != 0)
             {
-                characters[i] = char.ToLower(characters[i]);
+                characters[i] = char.ToLowerInvariant(characters[i]);
                 return string.Intern(new string(characters));
             }
 

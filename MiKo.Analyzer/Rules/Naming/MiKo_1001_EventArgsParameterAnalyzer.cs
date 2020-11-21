@@ -36,29 +36,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return GetParameters(method).Contains(parameter) && FindBetterName(parameter) == parameter.Name;
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol method)
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            if (method.IsOverride)
+            if (symbol.IsOverride)
             {
                 return false;
             }
 
-            if (method.MethodKind == MethodKind.PropertySet)
+            if (symbol.MethodKind == MethodKind.PropertySet)
             {
                 return false; // ignore the setter as the name there has to be 'value'
             }
 
-            if (method.IsEventHandler())
+            if (symbol.IsEventHandler())
             {
                 return false; // ignore the method as it is handled by MiKo_1002_EventHandlingMethodParametersAnalyzer
             }
 
-            if (method.IsDependencyPropertyEventHandler())
+            if (symbol.IsDependencyPropertyEventHandler())
             {
                 return false; // ignore the method as it is handled by MiKo_1008_DependencyPropertyEventHandlingMethodParametersAnalyzer
             }
 
-            if (method.IsInterfaceImplementation())
+            if (symbol.IsInterfaceImplementation())
             {
                 return false; // keep names as in interface
             }
@@ -66,15 +66,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol method)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
         {
-            var parameters = GetParameters(method);
+            var parameters = GetParameters(symbol);
             switch (parameters.Count)
             {
                 case 0: return Enumerable.Empty<Diagnostic>();
                 case 1:
                     {
-                        var expected = method.Name != nameof(Equals) ? "e" : "other";
+                        var expected = symbol.Name != nameof(Equals) ? "e" : "other";
 
                         var parameter = parameters[0];
                         return parameter.Name != expected

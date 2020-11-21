@@ -54,8 +54,8 @@ namespace TestHelper
         /// <returns>A list of Diagnostics that only surfaced in the code after the CodeFix was applied.</returns>
         private static IEnumerable<Diagnostic> GetNewDiagnostics(IEnumerable<Diagnostic> diagnostics, IEnumerable<Diagnostic> newDiagnostics)
         {
-            var oldArray = diagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
-            var newArray = newDiagnostics.OrderBy(d => d.Location.SourceSpan.Start).ToArray();
+            var oldArray = diagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
+            var newArray = newDiagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
 
             int oldIndex = 0;
             int newIndex = 0;
