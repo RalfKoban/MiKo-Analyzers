@@ -61,14 +61,17 @@ namespace MiKoSolutions.Analyzers
                 // var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
             }
 
-            var symbols = semanticModel.LookupSymbols(position, name: name);
-            if (symbols.Length > 0)
+            // try to find the node as that may be faster than to look them up
+            var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
+            if (symbol is null)
             {
-                return symbols[0];
+                var symbols = semanticModel.LookupSymbols(position, name: name);
+                if (symbols.Length > 0)
+                {
+                    return symbols[0];
+                }
             }
 
-            // nothing is found, so maybe it is an identifier syntax token within a foreach statement
-            var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
             return symbol;
         }
 

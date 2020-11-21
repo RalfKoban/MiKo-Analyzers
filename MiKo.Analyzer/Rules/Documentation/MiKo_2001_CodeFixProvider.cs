@@ -12,6 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2001_CodeFixProvider)), Shared]
     public sealed class MiKo_2001_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+        private const string SpecialTerm = "Occurs that ";
+        private static readonly string[] SpecialTerms = { SpecialTerm };
+
+        private static readonly KeyValuePair<string, string>[] SpecialTermReplacementMap = { new KeyValuePair<string, string>(SpecialTerm, "Occurs when ") };
+
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
                                                                                     { "This event is fired ", string.Empty },
@@ -34,21 +39,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
         {
             var preparedComment = PrepareComment((XmlElementSyntax)syntax);
+
             var fixedComment = CommentStartingWith(preparedComment, MiKo_2001_EventSummaryAnalyzer.Phrase);
 
             var text = fixedComment.Content[0].WithoutXmlCommentExterior();
-
-            if (text.StartsWith("Occurs that ", StringComparison.Ordinal))
+            if (text.StartsWith(SpecialTerm, StringComparison.Ordinal))
             {
-                return Comment(
-                               fixedComment,
-                               new[] { "Occurs that " },
-                               new[] { new KeyValuePair<string, string>("Occurs that ", "Occurs when ") });
+                return Comment(fixedComment, SpecialTerms, SpecialTermReplacementMap);
             }
 
             return fixedComment;
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Select(_ => _.Key).ToList(), ReplacementMap);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
     }
 }

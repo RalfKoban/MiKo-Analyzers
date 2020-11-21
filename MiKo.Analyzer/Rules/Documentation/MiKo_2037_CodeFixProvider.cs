@@ -11,6 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2037_CodeFixProvider)), Shared]
     public sealed class MiKo_2037_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+        private static readonly string[] GetOnly = string.Format(Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
+        private static readonly string[] SetOnly = string.Format(Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
+        private static readonly string[] GetSet = string.Format(Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate, '|').Split('|');
+
         public override string FixableDiagnosticId => MiKo_2037_CommandPropertySummaryAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2037_CodeFixTitle;
@@ -30,24 +34,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var isArrowGetterOnly = property.ChildNodes().OfType<ArrowExpressionClauseSyntax>().Any();
             if (isArrowGetterOnly)
             {
-                return string.Format(Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
+                return GetOnly;
             }
 
             // try to find a getter
             var getter = (AccessorDeclarationSyntax)property.AccessorList?.ChildNodes().FirstOrDefault(_ => _.IsKind(SyntaxKind.GetAccessorDeclaration));
-            var setter = (AccessorDeclarationSyntax)property.AccessorList?.ChildNodes().FirstOrDefault(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration));
-
             if (getter is null || getter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
-                return string.Format(Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
+                return SetOnly;
             }
 
+            var setter = (AccessorDeclarationSyntax)property.AccessorList?.ChildNodes().FirstOrDefault(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration));
             if (setter is null || setter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
-                return string.Format(Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
+                return GetOnly;
             }
 
-            return string.Format(Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate, '|').Split('|');
+            return GetSet;
         }
     }
 }

@@ -13,6 +13,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2006_CodeFixProvider)), Shared]
     public sealed class MiKo_2006_CodeFixProvider : DocumentationCodeFixProvider
     {
+        private static readonly string[] SummaryText = string.Format(Constants.Comments.RoutedEventFieldSummaryPhraseTemplate, "|").Split('|');
+        private static readonly string[] ValueText = string.Format(Constants.Comments.RoutedEventFieldValuePhraseTemplate, "|").Split('|');
+
         public override string FixableDiagnosticId => MiKo_2006_RoutedEventFieldDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2006_CodeFixTitle;
@@ -35,11 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;
             }
 
-            var summaryText = string.Format(Constants.Comments.RoutedEventFieldSummaryPhraseTemplate, "|").Split('|');
-            var valueText = string.Format(Constants.Comments.RoutedEventFieldValuePhraseTemplate, "|").Split('|');
-
-            var summary = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Summary, default), summaryText[0], SeeCref(type), summaryText[1] + readOnlyMarker);
-            var field = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Value, default), valueText[0], SeeCref(type), valueText[1]);
+            var summary = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Summary, default), SummaryText[0], SeeCref(type), SummaryText[1] + readOnlyMarker);
+            var field = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Value, default), ValueText[0], SeeCref(type), ValueText[1]);
 
             return comment.WithoutTrivia()
                           .WithContent(SyntaxFactory.List<XmlNodeSyntax>(new[]
