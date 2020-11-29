@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (part is XmlElementSyntax e && e.GetName() == Constants.XmlTag.Exception)
                 {
-                    foreach (var attribute in e.StartTag.Attributes.OfType<XmlCrefAttributeSyntax>())
+                    foreach (var attribute in e.GetAttributes<XmlCrefAttributeSyntax>())
                     {
                         switch (attribute.Cref)
                         {
