@@ -687,24 +687,23 @@ namespace MiKoSolutions.Analyzers
             return result > 0;
         }
 
-        internal static string GetGenericArgumentsAsTs(this ITypeSymbol symbol)
-        {
-            if (symbol is INamedTypeSymbol namedType)
-            {
-                var count = namedType.TypeArguments.Length;
-                switch (count)
-                {
-                    case 0: return string.Empty;
-                    case 1: return "T";
-                    case 2: return "T1,T2";
-                    case 3: return "T1,T2,T3";
-                    case 4: return "T1,T2,T3,T4";
-                    case 5: return "T1,T2,T3,T4,T5";
-                    default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
-                }
-            }
+        internal static string GetGenericArgumentsAsTs(this ITypeSymbol symbol) => symbol is INamedTypeSymbol n
+                                                                                       ? n.GetGenericArgumentsAsTs()
+                                                                                       : string.Empty;
 
-            return string.Empty;
+        internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol symbol)
+        {
+            var count = symbol.TypeArguments.Length;
+            switch (count)
+            {
+                case 0: return string.Empty;
+                case 1: return "T";
+                case 2: return "T1,T2";
+                case 3: return "T1,T2,T3";
+                case 4: return "T1,T2,T3,T4";
+                case 5: return "T1,T2,T3,T4,T5";
+                default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
+            }
         }
 
         internal static string MinimalTypeName(this ITypeSymbol symbol) => symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
@@ -727,11 +726,26 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool MatchesField(this IParameterSymbol symbol)
         {
-            var name = symbol.Name;
-            var matchesField = symbol.ContainingType.GetMembersIncludingInherited<IFieldSymbol>()
-                                     .Select(_ => _.Name)
-                                     .Any(_ => Constants.Markers.FieldPrefixes.Select(__ => __ + name).Any(__ => string.Equals(_, __, StringComparison.OrdinalIgnoreCase)));
-            return matchesField;
+            var parameterName = symbol.Name;
+
+            IEnumerable<string> fieldNames = null;
+
+            foreach (var field in symbol.ContainingType.GetMembersIncludingInherited<IFieldSymbol>())
+            {
+                if (fieldNames is null)
+                {
+                    // performance optimization as it is likely that there are more than a single field(s)
+                    fieldNames = Constants.Markers.FieldPrefixes.Select(__ => __ + parameterName).ToList();
+                }
+
+                var fieldName = field.Name;
+                if (fieldNames.Any(__ => string.Equals(fieldName, __, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         internal static int GetStartingLine(this IMethodSymbol method) => method.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
