@@ -416,9 +416,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingXmlComment<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(XmlCommentStart);
 
+        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> nodes) => nodes.Replace(nodes[0], nodes[0].WithoutLeadingTrivia().WithLeadingXmlComment());
+
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken token) => token.WithTrailingTrivia(XmlCommentStart);
 
         internal static T WithTrailingXmlComment<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(XmlCommentStart);
+
+        internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> nodes) => nodes.Replace(nodes.Last(), nodes.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
         internal static T WithIntentation<T>(this T node) where T : SyntaxNode => node.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
@@ -461,6 +465,8 @@ namespace MiKoSolutions.Analyzers
                          .WithOpenBraceToken(openBraceToken)
                          .WithCloseBraceToken(closeBraceToken);
         }
+
+        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax syntax) => syntax?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
 
         private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax method) => method.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 

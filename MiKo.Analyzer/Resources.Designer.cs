@@ -5585,6 +5585,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Consolidate exception documentation.
+        /// </summary>
+        public static string MiKo_2059_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2059_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease reading, thrown exceptions should be documented only once and not multiple times. So the documentation of those exceptions should be consolidated..
+        /// </summary>
+        public static string MiKo_2059_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2059_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consolidate the documentation of &lt;exception cref=&apos;{1}&apos;&gt;.
+        /// </summary>
+        public static string MiKo_2059_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2059_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple documentation of same exception should be consolidated into one..
+        /// </summary>
+        public static string MiKo_2059_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2059_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply standard comment to factory.
         /// </summary>
         public static string MiKo_2060_CodeFixTitle {
