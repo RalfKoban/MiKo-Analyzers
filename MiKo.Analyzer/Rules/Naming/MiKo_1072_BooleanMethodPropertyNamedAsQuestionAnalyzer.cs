@@ -23,6 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 nameof(string.IsNullOrEmpty),
                 nameof(string.IsNullOrWhiteSpace),
+                "IsReadOnly",
+                "IsReadWrite",
+                "IsWriteProtected",
             };
 
         public MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer() : base(Id)
