@@ -156,6 +156,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static T GetEnclosing<T>(this SyntaxToken token) where T : SyntaxNode => token.Parent.GetEnclosing<T>();
+
         internal static SyntaxNode GetEnclosing(this SyntaxNode node, params SyntaxKind[] syntaxKinds)
         {
             while (true)
