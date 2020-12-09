@@ -11,6 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2023_CodeFixProvider)), Shared]
     public sealed class MiKo_2023_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
+        private static readonly HashSet<string> Attributes = new HashSet<string>
+                                                                 {
+                                                                     Constants.XmlTag.Attribute.Langword,
+                                                                     Constants.XmlTag.Attribute.Langref,
+                                                                 };
+
+        private static readonly HashSet<string> Booleans = new HashSet<string>
+                                                                 {
+                                                                     "true",
+                                                                     "false",
+                                                                 };
+
         private static readonly KeyValuePair<string, string>[] ReplacementMap =
             {
                 new KeyValuePair<string, string>("true", string.Empty),
@@ -30,17 +42,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 new KeyValuePair<string, string>(". ", "; "),
             };
 
-        private static readonly HashSet<string> Attributes = new HashSet<string>
-                                                                 {
-                                                                     Constants.XmlTag.Attribute.Langword,
-                                                                     Constants.XmlTag.Attribute.Langref,
-                                                                 };
+        private static readonly IEnumerable<string> ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToList();
 
-        private static readonly HashSet<string> Booleans = new HashSet<string>
-                                                                 {
-                                                                     "true",
-                                                                     "false",
-                                                                 };
+        private static readonly string[] StartPhraseParts = string.Format(Constants.Comments.BooleanParameterStartingPhraseTemplate, '|').Split('|');
+        private static readonly string[] EndPhraseParts = string.Format(Constants.Comments.BooleanParameterEndingPhraseTemplate, '|').Split('|');
 
         public override string FixableDiagnosticId => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
 
@@ -50,13 +55,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var preparedComment = PrepareComment(comment);
 
-            var startPhraseParts = string.Format(Constants.Comments.BooleanParameterStartingPhraseTemplate, '|').Split('|');
-            var endPhraseParts = string.Format(Constants.Comments.BooleanParameterEndingPhraseTemplate, '|').Split('|');
+            var startFixed = CommentStartingWith(preparedComment, StartPhraseParts[0], SeeLangword_True(), StartPhraseParts[1]);
+            var bothFixed = CommentEndingWith(startFixed, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
 
-            var startFixed = CommentStartingWith(preparedComment, startPhraseParts[0], SeeLangword_True(), startPhraseParts[1]);
-            var bothFixed = CommentEndingWith(startFixed, endPhraseParts[0], SeeLangword_False(), endPhraseParts[1]);
-
-            var fixedComment = Comment(bothFixed, ReplacementMap.Select(_ => _.Key).ToList(), ReplacementMap);
+            var fixedComment = Comment(bothFixed, ReplacementMapKeys, ReplacementMap);
             return fixedComment;
         }
 

@@ -26,9 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 default:
                 {
-                    if (returnType is IArrayTypeSymbol array)
+                    if (returnType.IsByteArray())
                     {
-                        return array.ElementType.IsByte() is false;
+                        return false;
                     }
 
                     if (returnType.IsEnumerable())

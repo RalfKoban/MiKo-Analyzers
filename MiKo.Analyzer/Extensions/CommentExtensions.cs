@@ -76,6 +76,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetExceptionComments(string commentXml) => Cleaned(GetExceptionCommentElements(commentXml)).Where(_ => _ != null);
 
+        internal static IEnumerable<string> GetExceptionsOfExceptionComments(string commentXml)
+        {
+            return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).Where(_ => _ != null);
+        }
+
         internal static IEnumerable<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().Select(_ => _.Trim()).ToHashSet();
 
         internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);

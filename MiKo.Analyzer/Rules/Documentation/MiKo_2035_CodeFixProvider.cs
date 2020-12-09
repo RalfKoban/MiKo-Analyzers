@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "The collection with ", string.Empty },
                                                                                 };
 
+        private static readonly string[] TaskParts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", '|').Split('|');
+
         public override string FixableDiagnosticId => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2035_CodeFixTitle;
@@ -40,11 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (returnType.Identifier.ValueText == nameof(Task))
             {
                 // it is a task, so inspect the typ argument to check if it is an array type
-                var parts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", '|').Split('|');
-
                 var middlePart = GetGenericCommentMiddlePart(returnType);
 
-                return CommentStartingWith(preparedComment, parts[0], SeeCrefTaskResult(), parts[1] + middlePart);
+                return CommentStartingWith(preparedComment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1] + middlePart);
             }
 
             return CommentStartingWith(preparedComment, Constants.Comments.EnumerableReturnTypeStartingPhrase[0]);
@@ -83,6 +83,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Constants.Comments.EnumerableReturnTypeStartingPhrase;
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Select(_ => _.Key).ToList(), ReplacementMap);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
     }
 }

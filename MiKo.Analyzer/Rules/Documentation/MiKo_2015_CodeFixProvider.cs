@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var map = GetMap(syntax);
 
-            return Comment(comment, map.Select(_ => _.Key).ToList(), map);
+            return Comment(comment, map.Keys, map);
         }
 
         private static Dictionary<string, string> GetMap(SyntaxNode syntax)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -27,6 +28,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 // skip all short names
                 if (IsShort(originalName))
+                {
+                    continue;
+                }
+
+                if (IsHash(originalName, identifier, semanticModel))
                 {
                     continue;
                 }
@@ -82,6 +88,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return Pluralizer.GetPluralName(name);
+        }
+
+        private static bool IsHash(string originalName, SyntaxToken identifier, SemanticModel semanticModel)
+        {
+            if (originalName.EndsWith("Hash", StringComparison.OrdinalIgnoreCase))
+            {
+                var v = identifier.GetEnclosing<VariableDeclarationSyntax>();
+                if (v != null)
+                {
+                    var type = semanticModel.GetTypeInfo(v.Type).Type;
+                    return type?.IsByteArray() is true;
+                }
+            }
+
+            return false;
         }
     }
 }

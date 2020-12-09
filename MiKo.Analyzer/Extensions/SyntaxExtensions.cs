@@ -61,14 +61,17 @@ namespace MiKoSolutions.Analyzers
                 // var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
             }
 
-            var symbols = semanticModel.LookupSymbols(position, name: name);
-            if (symbols.Length > 0)
+            // try to find the node as that may be faster than to look them up
+            var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
+            if (symbol is null)
             {
-                return symbols[0];
+                var symbols = semanticModel.LookupSymbols(position, name: name);
+                if (symbols.Length > 0)
+                {
+                    return symbols[0];
+                }
             }
 
-            // nothing is found, so maybe it is an identifier syntax token within a foreach statement
-            var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
             return symbol;
         }
 
@@ -152,6 +155,8 @@ namespace MiKoSolutions.Analyzers
                 node = node.Parent;
             }
         }
+
+        internal static T GetEnclosing<T>(this SyntaxToken token) where T : SyntaxNode => token.Parent.GetEnclosing<T>();
 
         internal static SyntaxNode GetEnclosing(this SyntaxNode node, params SyntaxKind[] syntaxKinds)
         {
@@ -413,9 +418,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingXmlComment<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(XmlCommentStart);
 
+        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> nodes) => nodes.Replace(nodes[0], nodes[0].WithoutLeadingTrivia().WithLeadingXmlComment());
+
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken token) => token.WithTrailingTrivia(XmlCommentStart);
 
         internal static T WithTrailingXmlComment<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(XmlCommentStart);
+
+        internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> nodes) => nodes.Replace(nodes.Last(), nodes.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
         internal static T WithIntentation<T>(this T node) where T : SyntaxNode => node.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
@@ -458,6 +467,8 @@ namespace MiKoSolutions.Analyzers
                          .WithOpenBraceToken(openBraceToken)
                          .WithCloseBraceToken(closeBraceToken);
         }
+
+        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax syntax) => syntax?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
 
         private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax method) => method.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -87,12 +86,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment)
         {
-            return Comment(comment, TypeReplacementMap.Select(_ => _.Key).ToList(), TypeReplacementMap);
+            return Comment(comment, TypeReplacementMap.Keys, TypeReplacementMap);
         }
 
         private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
         {
-            var preparedComment = Comment(comment, MethodReplacementMap.Select(_ => _.Key).ToList(), MethodReplacementMap);
+            var preparedComment = Comment(comment, MethodReplacementMap.Keys, MethodReplacementMap);
 
             if (preparedComment.Content.Count > 2)
             {
@@ -109,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment)
         {
-            return Comment(comment, CleanupReplacementMap.Select(_ => _.Key).ToList(), CleanupReplacementMap);
+            return Comment(comment, CleanupReplacementMap.Keys, CleanupReplacementMap);
         }
     }
 }

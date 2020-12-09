@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // 3. If none is found, check for fields or properties that are named ObjectUnderTest
-            return testClass.GetTypeUnderTestTypes();
+            return testClass.GetTypeUnderTestTypes().ToList();
         }
 
         private static IEnumerable<ITypeSymbol> AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var variable in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>().SelectMany(_ => _.Variables))
                 {
-                    if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.GetName() == ins.GetName()) && variable.Initializer.Value is ObjectCreationExpressionSyntax oces)
+                    if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.GetName() == ins.GetName()) && variable.Initializer?.Value is ObjectCreationExpressionSyntax oces)
                     {
                         var type = oces.GetTypeSymbol(semanticModel);
                         types.Add(type);

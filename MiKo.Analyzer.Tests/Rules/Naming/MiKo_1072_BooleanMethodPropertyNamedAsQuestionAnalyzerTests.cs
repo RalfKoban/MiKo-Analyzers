@@ -19,6 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 nameof(string.IsNullOrEmpty),
                 nameof(string.IsNullOrWhiteSpace),
                 "IsSameKey",
+                "IsReadOnly",
+                "IsReadWrite",
+                "IsWriteProtected",
             };
 
         private static readonly string[] WrongNames =

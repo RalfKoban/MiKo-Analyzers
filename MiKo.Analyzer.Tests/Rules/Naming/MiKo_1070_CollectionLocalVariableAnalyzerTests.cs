@@ -93,6 +93,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_byte_array_for_hash() => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        byte[] hash = new byte[0];
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;

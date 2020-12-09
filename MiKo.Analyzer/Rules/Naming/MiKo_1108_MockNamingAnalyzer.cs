@@ -59,12 +59,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from syntaxToken in identifiers
-                                                                                                                                        let name = syntaxToken.ValueText
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from identifier in identifiers
+                                                                                                                                        let name = identifier.ValueText
                                                                                                                                         where name.Length > 3 && name.ContainsAny(MockNames)
-                                                                                                                                        let symbol = syntaxToken.GetSymbol(semanticModel)
+                                                                                                                                        let symbol = identifier.GetSymbol(semanticModel)
                                                                                                                                         select symbol is null
-                                                                                                                                                   ? Issue(syntaxToken)
+                                                                                                                                                   ? Issue(identifier)
                                                                                                                                                    : Issue(symbol);
 
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
