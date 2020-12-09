@@ -7456,6 +7456,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services..
+        /// </summary>
+        public static string MiKo_3030_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3030_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://en.wikipedia.org/wiki/Law_of_Demeter.
+        /// </summary>
+        public static string MiKo_3030_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3030_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Avoid to violate the Law of Demeter.
+        /// </summary>
+        public static string MiKo_3030_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3030_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods should follow the Law of Demeter..
+        /// </summary>
+        public static string MiKo_3030_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3030_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
         ///
         ///As that is not defined, there is no guarantee how it gets implemented, and - because of that - it simply cannot be used as there is a huge difference between a deep and a swallow copy..

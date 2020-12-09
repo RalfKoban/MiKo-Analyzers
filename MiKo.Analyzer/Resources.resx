@@ -2646,6 +2646,18 @@ In most cases this is not wanted. The object reference shall be the same, only t
   <data name="MiKo_3028_Title" xml:space="preserve">
     <value>Do not assign null to lambda parameters.</value>
   </data>
+  <data name="MiKo_3030_Description" xml:space="preserve">
+    <value>To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services.</value>
+  </data>
+  <data name="MiKo_3030_HelpLinkUri" xml:space="preserve">
+    <value>https://en.wikipedia.org/wiki/Law_of_Demeter</value>
+  </data>
+  <data name="MiKo_3030_MessageFormat" xml:space="preserve">
+    <value>Avoid to violate the Law of Demeter</value>
+  </data>
+  <data name="MiKo_3030_Title" xml:space="preserve">
+    <value>Methods should follow the Law of Demeter.</value>
+  </data>
   <data name="MiKo_3031_Description" xml:space="preserve">
     <value>The ICloneable.Clone() method does not define whether a deep or a swallow copy shall be returned.
 

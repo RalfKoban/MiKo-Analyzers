@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 285 rules that are currently provided by the analyzer.
+The following tables list all the 286 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -114,7 +114,7 @@ The following tables list all the 285 rules that are currently provided by the a
 |MiKo_1105|One-time test initialization methods should be named 'PrepareTestEnvironment'.|&#x2713;|&#x2713;|
 |MiKo_1106|One-time test cleanup methods should be named 'CleanupTestEnvironment'.|&#x2713;|&#x2713;|
 |MiKo_1107|Test methods should not be in Pascal-casing.|&#x2713;|\-|
-|MiKo_1108|Do not name variables, parameters, fields and properties  'Mock', 'Stub', 'Fake' or 'Shim'.|&#x2713;|&#x2713;|
+|MiKo_1108|Do not name variables, parameters, fields and properties 'Mock', 'Stub', 'Fake' or 'Shim'.|&#x2713;|&#x2713;|
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix.|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore.|&#x2713;|&#x2713;|
 |MiKo_1111|Test methods should be named in a fluent way.|&#x2713;|\-|
@@ -253,6 +253,7 @@ The following tables list all the 285 rules that are currently provided by the a
 |MiKo_3026|Unused parameters should be removed.|&#x2713;|\-|
 |MiKo_3027|Parameters should not be marked to be reserved for future usage.|&#x2713;|\-|
 |MiKo_3028|Do not assign null to lambda parameters.|&#x2713;|\-|
+|MiKo_3030|Methods should follow the Law of Demeter.|&#x2713;|\-|
 |MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|\-|
 |MiKo_3032|Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.|&#x2713;|\-|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|\-|
