@@ -38,7 +38,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
                 else
                 {
-                    ReportIssue(context, parent);
+                    var symbol = context.SemanticModel.GetSymbolInfo(contextNode).Symbol;
+                    if (symbol is ITypeSymbol)
+                    {
+                        // probably a nested class
+                    }
+                    else
+                    {
+                        ReportIssue(context, parent);
+                    }
                 }
             }
         }

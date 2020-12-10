@@ -111,6 +111,66 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_a_3rd_level_SimpleMemberAccessExpression_inside_a_method_using_nested_classes() => No_issue_is_reported_for(@"
+using System;
+
+public static class A
+{
+    public static class B
+    {
+        public const string C = ""some text""
+    }
+}
+
+public class TestMe
+{
+    public string DoSomething()
+    {
+        return A.B.C;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_4th_level_SimpleMemberAccessExpression_inside_a_method_using_conditionals() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Sub { get; }
+
+    public TestMe DoSomething()
+    {
+        return Sub?.Sub.Sub.Sub;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_4th_level_SimpleMemberAccessExpression_inside_a_method_using_nested_classes() => No_issue_is_reported_for(@"
+using System;
+
+public static class A
+{
+    public static class B
+    {
+        public static class C
+        {
+            public const string D = ""some text""
+        }
+    }
+}
+
+public class TestMe
+{
+    public string DoSomething()
+    {
+        return A.B.C.D;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer();
