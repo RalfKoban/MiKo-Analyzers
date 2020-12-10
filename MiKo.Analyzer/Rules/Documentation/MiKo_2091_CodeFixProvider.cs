@@ -28,8 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax.Identifier.ValueText);
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), "Determines whether the specified ", SeeCref(type), " instances are considered not equal.").WithTrailingXmlComment();
-            var param1 = Comment(SyntaxFactory.XmlParamElement(parameters[0].Identifier.ValueText), "The first value to compare.").WithTrailingXmlComment();
-            var param2 = Comment(SyntaxFactory.XmlParamElement(parameters[1].Identifier.ValueText), "The second value to compare.").WithTrailingXmlComment();
+            var param1 = Comment(SyntaxFactory.XmlParamElement(parameters[0].GetName()), "The first value to compare.").WithTrailingXmlComment();
+            var param2 = Comment(SyntaxFactory.XmlParamElement(parameters[1].GetName()), "The second value to compare.").WithTrailingXmlComment();
 
             var returns = SyntaxFactory.XmlReturnsElement(
                                                           SeeLangword_True().WithLeadingXmlComment(),

@@ -75,8 +75,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), "Determines whether the specified ", SeeCref(type), " instances are considered not equal.").WithTrailingXmlComment();
-            var param1 = Comment(SyntaxFactory.XmlParamElement(parameters[0].Identifier.ValueText), "The first value to compare.").WithTrailingXmlComment();
-            var param2 = Comment(SyntaxFactory.XmlParamElement(parameters[1].Identifier.ValueText), "The second value to compare.").WithTrailingXmlComment();
+            var param1 = Comment(SyntaxFactory.XmlParamElement(parameters[0].GetName()), "The first value to compare.").WithTrailingXmlComment();
+            var param2 = Comment(SyntaxFactory.XmlParamElement(parameters[1].GetName()), "The second value to compare.").WithTrailingXmlComment();
 
             var returns = SyntaxFactory.XmlReturnsElement(
                                                           SeeLangword_True().WithLeadingXmlComment(),
@@ -154,7 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax ExceptionParameterComment(ParameterSyntax exceptionParameter)
         {
-            var parameterName = exceptionParameter.Identifier.ValueText;
+            var parameterName = exceptionParameter.GetName();
 
             var parts = string.Format(Constants.Comments.ExceptionCtorExceptionParamPhraseTemplate, '|', '|', '|', '|').Split('|');
 
@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string[] comments)
         {
-            return Comment(SyntaxFactory.XmlParamElement(parameter.Identifier.ValueText), comments[0]);
+            return Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comments[0]);
         }
     }
 }

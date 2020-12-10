@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 
             var method = comment.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
-            var parameters = method.ParameterList.Parameters.Select(_ => _.Identifier.ValueText).ToHashSet();
+            var parameters = method.ParameterList.Parameters.Select(_ => _.GetName()).ToHashSet();
 
             var map = new Dictionary<XmlEmptyElementSyntax, string>();
 

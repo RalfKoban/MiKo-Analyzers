@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
-            var parameterName = syntaxNodes.OfType<ParameterSyntax>().First().Identifier.Text;
+            var parameterName = syntaxNodes.OfType<ParameterSyntax>().First().GetName();
 
             // we are called for each parameter, so we have to find out the correct XML element
             var fittingSyntaxNodes = FittingSyntaxNodes(syntaxNodes);
