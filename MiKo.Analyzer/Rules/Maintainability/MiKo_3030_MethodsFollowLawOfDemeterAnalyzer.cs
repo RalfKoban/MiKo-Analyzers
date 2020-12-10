@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 SyntaxKind.SimpleMemberAccessExpression,
                 SyntaxKind.ConditionalAccessExpression,
+                SyntaxKind.ElementAccessExpression,
             };
 
         public MiKo_3030_MethodsFollowLawOfDemeterAnalyzer() : base(Id, (SymbolKind)(-1))
@@ -29,7 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var contextNode = context.Node;
             var parent = contextNode.Parent;
 
-            // TODO: what about if/switch
             if (parent != null && SyntaxKinds.Any(_ => _ == parent.Kind()))
             {
                 if (parent.Parent is InvocationExpressionSyntax)

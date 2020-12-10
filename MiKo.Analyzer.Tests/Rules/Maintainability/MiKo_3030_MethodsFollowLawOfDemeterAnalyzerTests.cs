@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_2nd_level_SimpleMemberAccessExpression_inside_a_method_using_conditionals() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_3rd_level_SimpleMemberAccessExpression_inside_a_method() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -61,7 +61,22 @@ public class TestMe
 
     public TestMe DoSomething()
     {
-        return Sub?.Sub;
+        return Sub.Sub.Sub;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_1st_level_SimpleMemberAccessExpression_inside_a_method_invocation() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Sub { get; }
+
+    public string DoSomething()
+    {
+        return Sub.DoSomething();
     }
 }
 ");
@@ -82,7 +97,22 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_3rd_level_SimpleMemberAccessExpression_inside_a_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_3rd_level_SimpleMemberAccessExpression_inside_a_method_invocation() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Sub { get; }
+
+    public string DoSomething()
+    {
+        return Sub.Sub.Sub.DoSomething();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_2nd_level_SimpleMemberAccessExpression_inside_a_method_using_conditionals() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -91,7 +121,7 @@ public class TestMe
 
     public TestMe DoSomething()
     {
-        return Sub.Sub.Sub;
+        return Sub?.Sub;
     }
 }
 ");
@@ -107,6 +137,21 @@ public class TestMe
     public TestMe DoSomething()
     {
         return Sub?.Sub?.Sub;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_4th_level_SimpleMemberAccessExpression_inside_a_method_using_conditionals() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Sub { get; }
+
+    public TestMe DoSomething()
+    {
+        return Sub?.Sub.Sub.Sub;
     }
 }
 ");
@@ -133,21 +178,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_4th_level_SimpleMemberAccessExpression_inside_a_method_using_conditionals() => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    public TestMe Sub { get; }
-
-    public TestMe DoSomething()
-    {
-        return Sub?.Sub.Sub.Sub;
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_a_4th_level_SimpleMemberAccessExpression_inside_a_method_using_nested_classes() => No_issue_is_reported_for(@"
 using System;
 
@@ -167,6 +197,58 @@ public class TestMe
     public string DoSomething()
     {
         return A.B.C.D;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_a_1st_level_ElementAccessExpression_inside_a_method() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<TestMe> Subs { get; }
+
+    public TestMe DoSomething()
+    {
+        return Subs[0];
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_2nd_level_ElementAccessExpression_inside_a_method() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<TestMe> Subs { get; }
+
+    public TestMe Sub { get; }
+
+    public TestMe DoSomething()
+    {
+        return Subs[0].Sub;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_3rd_level_ElementAccessExpression_inside_a_method() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<TestMe> Subs { get; }
+
+    public TestMe Sub { get; }
+
+    public TestMe DoSomething()
+    {
+        return Subs[0].Subs[0].Sub;
     }
 }
 ");
