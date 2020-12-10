@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return SyntaxFactory.DocumentationComment(summary.WithEndOfLine());
             }
 
-            var param = Comment(SyntaxFactory.XmlParamElement(parameters[0].GetName()), MiKo_2014_DisposeDefaultPhraseAnalyzer.ParameterPhrase).WithEndOfLine();
+            var param = ParameterComment(parameters[0], MiKo_2014_DisposeDefaultPhraseAnalyzer.ParameterPhrase).WithEndOfLine();
 
             return SyntaxFactory.DocumentationComment(summary, param);
         }

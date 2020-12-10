@@ -75,8 +75,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), "Determines whether the specified ", SeeCref(type), " instances are considered not equal.").WithTrailingXmlComment();
-            var param1 = Comment(SyntaxFactory.XmlParamElement(parameters[0].GetName()), "The first value to compare.").WithTrailingXmlComment();
-            var param2 = Comment(SyntaxFactory.XmlParamElement(parameters[1].GetName()), "The second value to compare.").WithTrailingXmlComment();
+            var param1 = ParameterComment(parameters[0], "The first value to compare.").WithTrailingXmlComment();
+            var param2 = ParameterComment(parameters[1], "The second value to compare.").WithTrailingXmlComment();
 
             var returns = SyntaxFactory.XmlReturnsElement(
                                                           SeeLangword_True().WithLeadingXmlComment(),
@@ -177,11 +177,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter)
         {
             return ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
-        }
-
-        private static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string[] comments)
-        {
-            return Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comments[0]);
         }
     }
 }
