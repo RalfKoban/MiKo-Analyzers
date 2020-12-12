@@ -71,6 +71,25 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_comment_as_only_statement_in_catch_block_if_Resharper_comment() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+            DoSomething();
+        }
+        catch (Exception ex)
+        {
+//// ReSharper disable once PossibleIntendedRethrow
+            throw ex;
+//// ReSharper restore once PossibleIntendedRethrow
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_comment_after_code() => An_issue_is_reported_for(@"
 public class TestMe
 {

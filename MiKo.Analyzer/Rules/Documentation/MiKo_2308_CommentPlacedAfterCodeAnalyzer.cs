@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -34,6 +36,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (previous.IsKind(SyntaxKind.OpenBraceToken))
                 {
                     // comment is the only comment between opening and closing brace
+                    return false;
+                }
+
+                var comment = trivia.ToString().Trim();
+                if (comment.StartsWith("////", StringComparison.OrdinalIgnoreCase))
+                {
+                    // that's a comment to ignore
                     return false;
                 }
 
