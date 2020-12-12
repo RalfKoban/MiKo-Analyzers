@@ -6699,6 +6699,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Most times, a comment describes something that is related to an operation.
+        ///That&apos;s why the comment should not be placed after the operation, but before. So the reader can easily associate the comment with the operation and does not need to guess if both are related or not..
+        /// </summary>
+        public static string MiKo_2308_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2308_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place comment before code.
+        /// </summary>
+        public static string MiKo_2308_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2308_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not place comment on single line before closing brace but after code..
+        /// </summary>
+        public static string MiKo_2308_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2308_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>

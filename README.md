@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 286 rules that are currently provided by the analyzer.
+The following tables list all the 287 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -224,6 +224,7 @@ The following tables list all the 286 rules that are currently provided by the a
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|&#x2713;|
 |MiKo_2306|Do end comments with a period.|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|&#x2713;|
+|MiKo_2308|Do not place comment on single line before closing brace but after code.|&#x2713;|\-|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|

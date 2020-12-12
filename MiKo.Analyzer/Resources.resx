@@ -2387,6 +2387,16 @@ This rule contradicts rule MiKo_2303.</value>
   <data name="MiKo_2307_Title" xml:space="preserve">
     <value>Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.</value>
   </data>
+  <data name="MiKo_2308_Description" xml:space="preserve">
+    <value>Most times, a comment describes something that is related to an operation.
+That's why the comment should not be placed after the operation, but before. So the reader can easily associate the comment with the operation and does not need to guess if both are related or not.</value>
+  </data>
+  <data name="MiKo_2308_MessageFormat" xml:space="preserve">
+    <value>Place comment before code</value>
+  </data>
+  <data name="MiKo_2308_Title" xml:space="preserve">
+    <value>Do not place comment on single line before closing brace but after code.</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
 Such empty regions solely clutter the code without providing any benefit at all.</value>

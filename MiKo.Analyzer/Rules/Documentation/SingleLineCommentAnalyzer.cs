@@ -18,6 +18,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected abstract bool CommentHasIssue(string comment, SemanticModel semanticModel);
 
+        protected virtual bool CommentHasIssue(SyntaxTrivia trivia, SemanticModel semanticModel)
+        {
+            var comment = trivia.ToFullString()
+                                .Substring(2) // removes the leading '//'
+                                .Trim(); // gets rid of all (leading or trailing) whitespaces to ease comment comparisons
+
+            return CommentHasIssue(comment, semanticModel);
+        }
+
         protected virtual void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
         {
             var issues = AnalyzeSingleLineCommentTrivias(node, context.SemanticModel);
@@ -55,11 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return null; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
             }
 
-            var comment = trivia.ToFullString()
-                                .Substring(2) // removes the leading '//'
-                                .Trim(); // gets rid of all (leading or trailing) whitespaces to ease comment comparisons
-
-            if (CommentHasIssue(comment, semanticModel))
+            if (CommentHasIssue(trivia, semanticModel))
             {
                 return Issue(methodName, trivia);
             }
