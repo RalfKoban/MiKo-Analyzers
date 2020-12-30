@@ -14,7 +14,6 @@ namespace MiKoSolutions.Analyzers
         internal const string DependencyPropertyFieldSuffix = "Property";
         internal const string DependencyPropertyKeyFieldSuffix = "Key";
         internal const string RoutedEventFieldSuffix = "Event";
-        internal const string ILog = "ILog";
         internal const string TestsSuffix = "Tests";
         internal const string Entity = "Entity";
         internal const string Entities = "Entities";
@@ -28,6 +27,25 @@ namespace MiKoSolutions.Analyzers
         internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
 
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
+
+        internal static class ILog
+        {
+            internal const string TypeName = "ILog";
+
+            internal const string Debug = nameof(Debug);
+            internal const string Info = nameof(Info);
+            internal const string Warn = nameof(Warn);
+            internal const string Error = nameof(Error);
+            internal const string Fatal = nameof(Fatal);
+
+            internal const string DebugFormat = nameof(DebugFormat);
+            internal const string InfoFormat = nameof(InfoFormat);
+            internal const string WarnFormat = nameof(WarnFormat);
+            internal const string ErrorFormat = nameof(ErrorFormat);
+            internal const string FatalFormat = nameof(FatalFormat);
+
+            internal const string IsDebugEnabled = nameof(IsDebugEnabled);
+        }
 
         internal static class MaxNamingLengths
         {

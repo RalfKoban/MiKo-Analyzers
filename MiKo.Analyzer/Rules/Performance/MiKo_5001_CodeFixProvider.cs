@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             // create condition
             var identifierName = (IdentifierNameSyntax)((MemberAccessExpressionSyntax)call.Expression).Expression;
             var identifier = SyntaxFactory.IdentifierName(identifierName.GetName());
-            var method = SyntaxFactory.IdentifierName(MiKo_5001_DebugLogIsEnabledAnalyzer.IsDebugEnabled);
+            var method = SyntaxFactory.IdentifierName(Constants.ILog.IsDebugEnabled);
             var condition = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, method);
 
             // nest call in block

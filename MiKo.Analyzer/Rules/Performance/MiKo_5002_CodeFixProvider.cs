@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public override string FixableDiagnosticId => MiKo_5002_DebugFormatInsteadDebugLogAnalyzer.Id;
 
-        protected override string Title => "Replace with non-'" + MiKo_5002_DebugFormatInsteadDebugLogAnalyzer.Format + "' method";
+        protected override string Title => Resources.MiKo_5002_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().First().Name;
 

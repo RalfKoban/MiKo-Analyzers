@@ -10,12 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public const string Id = "MiKo_5003";
 
-        private const string Debug = nameof(Debug);
-        private const string Info = nameof(Info);
-        private const string Warn = nameof(Warn);
-        private const string Error = nameof(Error);
-        private const string Fatal = nameof(Fatal);
-
         public MiKo_5003_DebugLogExceptionAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -51,16 +45,16 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var methodName = methodCall.GetName();
             switch (methodName)
             {
-                case Debug:
-                case Info:
-                case Warn:
-                case Error:
-                case Fatal:
+                case Constants.ILog.Debug:
+                case Constants.ILog.Info:
+                case Constants.ILog.Warn:
+                case Constants.ILog.Error:
+                case Constants.ILog.Fatal:
                 {
                     // check for correct type (only ILog methods shall be reported)
                     var type = methodCall.GetTypeSymbol(semanticModel);
 
-                    if (type.Name == Constants.ILog && IsException(argument, semanticModel))
+                    if (type.Name == Constants.ILog.TypeName && IsException(argument, semanticModel))
                     {
                         var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
                         return Issue(enclosingMethod.Name, methodCall.Name, methodName);

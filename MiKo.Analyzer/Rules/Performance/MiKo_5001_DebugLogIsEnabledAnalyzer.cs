@@ -10,10 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public const string Id = "MiKo_5001";
 
-        internal const string IsDebugEnabled = "IsDebugEnabled";
-        private const string Debug = "Debug";
-        private const string DebugFormat = "DebugFormat";
-
         public MiKo_5001_DebugLogIsEnabledAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -40,11 +36,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var methodName = methodCall.GetName();
             switch (methodName)
             {
-                case Debug:
-                case DebugFormat:
+                case Constants.ILog.Debug:
+                case Constants.ILog.DebugFormat:
                 {
                     // check if inside IsDebugEnabled call for if or block
-                    if (methodCall.IsInsideIfStatementWithCallTo(IsDebugEnabled))
+                    if (methodCall.IsInsideIfStatementWithCallTo(Constants.ILog.IsDebugEnabled))
                     {
                         return null;
                     }
@@ -52,13 +48,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     // check for correct type (only ILog methods shall be reported)
                     var type = methodCall.GetTypeSymbol(semanticModel);
 
-                    if (type.Name != Constants.ILog)
+                    if (type.Name != Constants.ILog.TypeName)
                     {
                         return null;
                     }
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
-                    return Issue(enclosingMethod.Name, methodCall.Parent, methodName, IsDebugEnabled);
+                    return Issue(enclosingMethod.Name, methodCall.Parent, methodName, Constants.ILog.IsDebugEnabled);
                 }
 
                 default:

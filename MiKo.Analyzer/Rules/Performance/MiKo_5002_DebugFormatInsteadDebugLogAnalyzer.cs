@@ -13,11 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         public const string Id = "MiKo_5002";
 
         internal const string Format = nameof(Format);
-        private const string Debug = nameof(Debug);
-        private const string Info = nameof(Info);
-        private const string Warn = nameof(Warn);
-        private const string Error = nameof(Error);
-        private const string Fatal = nameof(Fatal);
 
         public MiKo_5002_DebugFormatInsteadDebugLogAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -45,16 +40,16 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var methodName = methodCall.GetName();
             switch (methodName)
             {
-                case Debug + Format:
-                case Info + Format:
-                case Warn + Format:
-                case Error + Format:
-                case Fatal + Format:
+                case Constants.ILog.DebugFormat:
+                case Constants.ILog.InfoFormat:
+                case Constants.ILog.WarnFormat:
+                case Constants.ILog.ErrorFormat:
+                case Constants.ILog.FatalFormat:
                 {
                     // check for correct type (only ILog methods shall be reported)
                     var type = methodCall.GetTypeSymbol(semanticModel);
 
-                    if (type.Name != Constants.ILog)
+                    if (type.Name != Constants.ILog.TypeName)
                     {
                         return null;
                     }
