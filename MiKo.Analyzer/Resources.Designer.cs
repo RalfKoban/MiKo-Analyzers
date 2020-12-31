@@ -8908,6 +8908,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To separate Assertions visually from the test code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
+        /// </summary>
+        public static string MiKo_3202_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3202_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround assertion statement(s) with blank lines.
+        /// </summary>
+        public static string MiKo_3202_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3202_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertion statements should be preceded and followed by blank lines..
+        /// </summary>
+        public static string MiKo_3202_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3202_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>

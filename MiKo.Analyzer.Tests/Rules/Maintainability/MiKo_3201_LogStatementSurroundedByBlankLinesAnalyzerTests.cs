@@ -33,7 +33,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Log_call_followed_by_block_statement() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Log_call_inside_if_statement_followed_by_block_statement() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -57,7 +57,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Log_call_followed_by_if_block_separated_by_empty_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Log_call_followed_by_if_block_separated_by_blank_line() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -85,7 +85,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Log_call_preceded_by_if_block_separated_by_empty_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Log_call_preceded_by_if_block_separated_by_blank_line() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
