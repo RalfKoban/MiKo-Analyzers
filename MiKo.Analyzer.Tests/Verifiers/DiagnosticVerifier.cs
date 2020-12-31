@@ -38,6 +38,7 @@ namespace TestHelper
                                     var constraint = (violations == 0) ? Is.GreaterThan(violations) : (IResolveConstraint)Is.EqualTo(violations);
 
                                     var results = GetDiagnostics(fileContent);
+
                                     Assert.That(results.Length, constraint, string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
 
                                     foreach (var result in results)
