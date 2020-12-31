@@ -3149,6 +3149,15 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3108_Title" xml:space="preserve">
     <value>Test methods should use assertions.</value>
   </data>
+  <data name="MiKo_3201_Description" xml:space="preserve">
+    <value>To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
+  </data>
+  <data name="MiKo_3201_MessageFormat" xml:space="preserve">
+    <value>Surround log statement(s) with blank lines</value>
+  </data>
+  <data name="MiKo_3201_Title" xml:space="preserve">
+    <value>Log statements should be preceded and followed by blank lines.</value>
+  </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
 Such namespaces should be flattened.</value>
