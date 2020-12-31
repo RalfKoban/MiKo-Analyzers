@@ -108,6 +108,22 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_Attribute() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething([Values(nameof(DoSomething), nameof(TestMe))] string something)
+        {
+            Assert.IsTrue(true);
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3202_AssertStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3202_AssertStatementSurroundedByBlankLinesAnalyzer();

@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var type = call.GetTypeSymbol(semanticModel);
 
-            return IsCall(type);
+            return type != null && IsCall(type);
         }
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)

@@ -14,6 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool IsCall(ITypeSymbol type) => type.Name.EndsWith("Assert", StringComparison.Ordinal);
+        protected override bool IsCall(ITypeSymbol type) => type.Name?.EndsWith("Assert", StringComparison.Ordinal) is true;
     }
 }
