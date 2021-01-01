@@ -25,28 +25,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpression, SyntaxKinds);
 
+        private static bool IsViolation(SyntaxNodeAnalysisContext context, SyntaxNode parent)
+        {
+            if (parent.Parent is InvocationExpressionSyntax)
+            {
+                // skip those as it is probably a method invocation
+                return false;
+            }
+
+            var symbol = context.SemanticModel.GetSymbolInfo(context.Node).Symbol;
+            if (symbol is ITypeSymbol)
+            {
+                // probably a nested class
+                return false;
+            }
+
+            // TODO: here we could check the parent's grand-parent to get a less-restrict LoD violation (such as 'xyz.Arguments.Length' would then be allowed)
+            return true;
+        }
+
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
-            var contextNode = context.Node;
-            var parent = contextNode.Parent;
+            var node = context.Node;
+            var parent = node.Parent;
 
             if (parent != null && SyntaxKinds.Any(_ => _ == parent.Kind()))
             {
-                if (parent.Parent is InvocationExpressionSyntax)
+                if (IsViolation(context, parent))
                 {
-                    // skip those as it is probably a method invocation
-                }
-                else
-                {
-                    var symbol = context.SemanticModel.GetSymbolInfo(contextNode).Symbol;
-                    if (symbol is ITypeSymbol)
-                    {
-                        // probably a nested class
-                    }
-                    else
-                    {
-                        ReportIssue(context, parent);
-                    }
+                    ReportIssue(context, parent);
                 }
             }
         }
