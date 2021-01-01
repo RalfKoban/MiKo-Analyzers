@@ -42,9 +42,9 @@ public static class TestMeExtensions
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_(
-            [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
-            [Values("Something", "")] string methodName,
-            [ValueSource(nameof(CorrectConversionParameterNames))] string name)
+                                                                                    [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
+                                                                                    [Values("Something", "")] string methodName,
+                                                                                    [ValueSource(nameof(CorrectConversionParameterNames))] string name)
             => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
@@ -105,7 +105,7 @@ public static class TestMeExtensions
         }
 
         [Test]
-        public void Code_gets_fixed_for_collection_parameter_()
+        public void Code_gets_fixed_for_collection_parameter()
         {
             const string Template = @"
 using System.Collections.Generic;
@@ -117,6 +117,26 @@ public static class TestMeExtensions
 ";
 
             var originalCode = Template.Replace("#NAME#", "i");
+            var fixedCode = Template.Replace("#NAME#", "values");
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ValueType_parameter_that_is_a_collection()
+        {
+            const string Template = @"
+using System.Collections.Generic;
+
+using using Microsoft.CodeAnalysis;
+
+public static class TestMeExtensions
+{
+    public static int Something(this SyntaxList<XmlNodeSyntax> #NAME#) => 42;
+}
+";
+
+            var originalCode = Template.Replace("#NAME#", "nodes");
             var fixedCode = Template.Replace("#NAME#", "values");
 
             VerifyCSharpFix(originalCode, fixedCode);

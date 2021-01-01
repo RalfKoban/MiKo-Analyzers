@@ -450,7 +450,8 @@ namespace MiKoSolutions.Analyzers
 
                     if (symbol.IsValueType)
                     {
-                        return false;
+                        // value types may also implement the interface
+                        return symbol.Implements<IEnumerable>();
                     }
 
                     if (symbol is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
