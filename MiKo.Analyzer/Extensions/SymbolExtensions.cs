@@ -28,17 +28,17 @@ namespace MiKoSolutions.Analyzers
                                                                                                           SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
-        internal static bool ContainsExtensionMethods(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsStatic && symbol.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
+        internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
-        internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext context) => FindContainingType(context.ContainingSymbol);
+        internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
-        internal static INamedTypeSymbol FindContainingType(this ISymbol symbol) => symbol is INamedTypeSymbol type
+        internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value is INamedTypeSymbol type
                                                                                         ? type
-                                                                                        : symbol?.ContainingType;
+                                                                                        : value?.ContainingType;
 
-        internal static string FullyQualifiedName(this ISymbol symbol, bool useAlias = true)
+        internal static string FullyQualifiedName(this ISymbol value, bool useAlias = true)
         {
-            switch (symbol)
+            switch (value)
             {
                 case IMethodSymbol m:
                     return m.ContainingType.FullyQualifiedName(useAlias) + "." + m.Name;
@@ -50,13 +50,13 @@ namespace MiKoSolutions.Analyzers
                     return t.ToDisplayString(FullyQualifiedDisplayFormatWithoutAlias);
 
                 default:
-                    return symbol.ToDisplayString(FullyQualifiedDisplayFormat); // makes use of aliases for language such as 'int' instead of 'System.Int32'
+                    return value.ToDisplayString(FullyQualifiedDisplayFormat); // makes use of aliases for language such as 'int' instead of 'System.Int32'
             }
         }
 
-        internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol symbol, string invocation)
+        internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol value, string invocation)
         {
-            var field = symbol.GetSyntax();
+            var field = value.GetSyntax();
             if (field is null)
             {
                 return Enumerable.Empty<MemberAccessExpressionSyntax>();
@@ -65,11 +65,11 @@ namespace MiKoSolutions.Analyzers
             return field.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToCleanedUpString() == invocation);
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this ISymbol symbol) => symbol.GetAttributes().Select(_ => _.AttributeClass.Name);
+        internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
 
-        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol symbol)
+        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
         {
-            var method = (MethodDeclarationSyntax)symbol.GetSyntax();
+            var method = (MethodDeclarationSyntax)value.GetSyntax();
             foreach (var createdObject in method.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
             {
                 switch (createdObject.Parent)
@@ -86,35 +86,35 @@ namespace MiKoSolutions.Analyzers
         }
 
         // TODO RKN: find better name
-        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethods(this ITypeSymbol symbol)
+        internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethods(this ITypeSymbol value)
         {
-            return symbol.GetMembers().OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).SelectMany(GetCreatedObjectSyntaxReturnedByMethod);
+            return value.GetMembers().OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).SelectMany(GetCreatedObjectSyntaxReturnedByMethod);
         }
 
-        internal static IMethodSymbol GetEnclosingMethod(this ISymbol symbol)
+        internal static IMethodSymbol GetEnclosingMethod(this ISymbol value)
         {
             while (true)
             {
-                switch (symbol)
+                switch (value)
                 {
                     case null: return null;
                     case IMethodSymbol method: return method;
                     case IPropertySymbol property: return property.IsIndexer ? (property.GetMethod ?? property.SetMethod) : property.SetMethod;
 
                     default:
-                        symbol = symbol.ContainingSymbol;
+                        value = value.ContainingSymbol;
                         break;
                 }
             }
         }
 
-        internal static string GetGenericArgumentsAsTs(this ITypeSymbol symbol) => symbol is INamedTypeSymbol n
+        internal static string GetGenericArgumentsAsTs(this ITypeSymbol value) => value is INamedTypeSymbol n
                                                                                        ? n.GetGenericArgumentsAsTs()
                                                                                        : string.Empty;
 
-        internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol symbol)
+        internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol value)
         {
-            var count = symbol.TypeArguments.Length;
+            var count = value.TypeArguments.Length;
             switch (count)
             {
                 case 0: return string.Empty;
@@ -127,47 +127,47 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol symbol, string invocation) => symbol.GetAssignmentsVia(invocation)
+        internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol value, string invocation) => value.GetAssignmentsVia(invocation)
                                                                                                                                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
                                                                                                                                              .Select(_ => _.ArgumentList)
                                                                                                                                              .Where(_ => _ != null)
                                                                                                                                              .Select(_ => _.Arguments)
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
-        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol symbol) where TSymbol : ISymbol => symbol.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<TSymbol>());
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<TSymbol>());
 
-        internal static string GetMethodSignature(this IMethodSymbol method)
+        internal static string GetMethodSignature(this IMethodSymbol value)
         {
-            var parameters = "(" + method.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";
-            var staticPrefix = method.IsStatic ? "static " : string.Empty;
-            var asyncPrefix = method.IsAsync ? "async " : string.Empty;
+            var parameters = "(" + value.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";
+            var staticPrefix = value.IsStatic ? "static " : string.Empty;
+            var asyncPrefix = value.IsAsync ? "async " : string.Empty;
 
-            var methodName = GetMethodNameForKind(method);
+            var methodName = GetMethodNameForKind(value);
 
             return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
         }
 
-        internal static ITypeSymbol GetReturnType(this IPropertySymbol symbol) => symbol.GetMethod?.ReturnType ?? symbol.SetMethod?.Parameters[0].Type;
+        internal static ITypeSymbol GetReturnType(this IPropertySymbol value) => value.GetMethod?.ReturnType ?? value.SetMethod?.Parameters[0].Type;
 
-        internal static int GetStartingLine(this IMethodSymbol method) => method.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
+        internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
 
-        internal static SyntaxNode GetSyntax(this ITypeSymbol symbol) => symbol.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+        internal static SyntaxNode GetSyntax(this ITypeSymbol value) => value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
 
         // methods could also be constructors so we would get a ConstructorDeclarationSyntax instead of a MethodDeclarationSyntax
-        internal static SyntaxNode GetSyntax(this IMethodSymbol symbol) => symbol.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+        internal static SyntaxNode GetSyntax(this IMethodSymbol value) => value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
 
-        internal static ParameterSyntax GetSyntax(this IParameterSymbol symbol) => symbol.DeclaringSyntaxReferences.Select(_ => (ParameterSyntax)_.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.DeclaringSyntaxReferences.Select(_ => (ParameterSyntax)_.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
 
-        internal static FieldDeclarationSyntax GetSyntax(this IFieldSymbol symbol) => symbol.DeclaringSyntaxReferences
+        internal static FieldDeclarationSyntax GetSyntax(this IFieldSymbol value) => value.DeclaringSyntaxReferences
                                                                                             .Select(_ => _.GetSyntax())
                                                                                             .Where(_ => _.GetLocation().IsInSource)
                                                                                             .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
                                                                                             .FirstOrDefault();
 
-        internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol symbol)
+        internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
-            var members = symbol.GetMembersIncludingInherited<ISymbol>().ToList();
+            var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
             var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).Select(_ => _.ReturnType);
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
@@ -175,27 +175,27 @@ namespace MiKoSolutions.Analyzers
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
         }
 
-        internal static bool HasAttributeApplied(this ISymbol symbol, string attributeName) => symbol.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
+        internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
 
-        internal static bool HasDependencyObjectParameter(this IMethodSymbol method) => method.Parameters.Any(_ => _.Type.IsDependencyObject());
+        internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
 
-        internal static bool Implements<T>(this ITypeSymbol symbol) => Implements(symbol, string.Intern(typeof(T).FullName));
+        internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, string.Intern(typeof(T).FullName));
 
-        internal static bool Implements(this ITypeSymbol symbol, string interfaceType)
+        internal static bool Implements(this ITypeSymbol value, string interfaceType)
         {
-            if (symbol.SpecialType == SpecialType.System_Void)
+            if (value.SpecialType == SpecialType.System_Void)
             {
                 return false;
             }
 
-            var fullName = string.Intern(symbol.ToString());
+            var fullName = string.Intern(value.ToString());
 
             if (fullName == interfaceType)
             {
                 return true;
             }
 
-            foreach (var implementedInterface in symbol.AllInterfaces)
+            foreach (var implementedInterface in value.AllInterfaces)
             {
                 var fullInterfaceName = string.Intern(implementedInterface.ToString());
 
@@ -208,13 +208,13 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool Implements(this ITypeSymbol symbol, string interfaceTypeName, string interfaceTypeFullQualifiedName) => symbol.Implements(interfaceTypeName) || symbol.Implements(interfaceTypeFullQualifiedName);
+        internal static bool Implements(this ITypeSymbol value, string interfaceTypeName, string interfaceTypeFullQualifiedName) => value.Implements(interfaceTypeName) || value.Implements(interfaceTypeFullQualifiedName);
 
-        internal static bool ImplementsPotentialGeneric(this ITypeSymbol symbol, Type interfaceType) => ImplementsPotentialGeneric(symbol, interfaceType.FullName);
+        internal static bool ImplementsPotentialGeneric(this ITypeSymbol value, Type interfaceType) => ImplementsPotentialGeneric(value, interfaceType.FullName);
 
-        internal static bool ImplementsPotentialGeneric(this ITypeSymbol symbol, string interfaceType)
+        internal static bool ImplementsPotentialGeneric(this ITypeSymbol value, string interfaceType)
         {
-            if (symbol.SpecialType == SpecialType.System_Void)
+            if (value.SpecialType == SpecialType.System_Void)
             {
                 return false;
             }
@@ -224,14 +224,14 @@ namespace MiKoSolutions.Analyzers
                                                   ? interfaceType.Substring(0, index)
                                                   : interfaceType;
 
-            var fullName = string.Intern(symbol.ToString());
+            var fullName = string.Intern(value.ToString());
 
             if (fullName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            foreach (var implementedInterface in symbol.AllInterfaces)
+            foreach (var implementedInterface in value.AllInterfaces)
             {
                 var fullInterfaceName = string.Intern(implementedInterface.ToString());
 
@@ -244,20 +244,20 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol symbol)
+        internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
-            var baseTypes = new Queue<ITypeSymbol>(symbol.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
-            baseTypes.Enqueue(symbol);
+            var baseTypes = new Queue<ITypeSymbol>(value.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
+            baseTypes.Enqueue(value);
 
             while (true)
             {
-                var baseType = symbol.BaseType;
+                var baseType = value.BaseType;
                 if (baseType is null)
                 {
                     break;
                 }
 
-                symbol = baseType;
+                value = baseType;
 
                 baseTypes.Enqueue(baseType);
             }
@@ -265,46 +265,46 @@ namespace MiKoSolutions.Analyzers
             return baseTypes;
         }
 
-        internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol symbol)
+        internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol value)
         {
-            var types = new Queue<ITypeSymbol>(symbol.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
-            types.Enqueue(symbol);
+            var types = new Queue<ITypeSymbol>(value.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
+            types.Enqueue(value);
 
-            CollectAllNestedTypes(symbol, types);
+            CollectAllNestedTypes(value, types);
 
             return types;
         }
 
-        internal static bool InheritsFrom<T>(this ITypeSymbol symbol) => InheritsFrom(symbol, string.Intern(typeof(T).FullName));
+        internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, string.Intern(typeof(T).FullName));
 
-        internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClass)
+        internal static bool InheritsFrom(this ITypeSymbol value, string baseClass)
         {
-            if (symbol.SpecialType == SpecialType.System_Void)
+            if (value.SpecialType == SpecialType.System_Void)
             {
                 return false;
             }
 
-            switch (symbol.TypeKind)
+            switch (value.TypeKind)
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                     {
                         while (true)
                         {
-                            var fullName = string.Intern(symbol.ToString());
+                            var fullName = string.Intern(value.ToString());
 
                             if (baseClass == fullName)
                             {
                                 return true;
                             }
 
-                            var baseType = symbol.BaseType;
+                            var baseType = value.BaseType;
                             if (baseType is null)
                             {
                                 return false;
                             }
 
-                            symbol = baseType;
+                            value = baseType;
                         }
                     }
             }
@@ -312,21 +312,21 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool InheritsFrom(this ITypeSymbol symbol, string baseClassName, string baseClassFullQualifiedName)
+        internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName, string baseClassFullQualifiedName)
         {
-            if (symbol.SpecialType == SpecialType.System_Void)
+            if (value.SpecialType == SpecialType.System_Void)
             {
                 return false;
             }
 
-            switch (symbol.TypeKind)
+            switch (value.TypeKind)
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                     {
                         while (true)
                         {
-                            var fullName = string.Intern(symbol.ToString());
+                            var fullName = string.Intern(value.ToString());
 
                             if (baseClassName == fullName)
                             {
@@ -338,13 +338,13 @@ namespace MiKoSolutions.Analyzers
                                 return true;
                             }
 
-                            var baseType = symbol.BaseType;
+                            var baseType = value.BaseType;
                             if (baseType is null)
                             {
                                 return false;
                             }
 
-                            symbol = baseType;
+                            value = baseType;
                         }
                     }
             }
@@ -352,42 +352,42 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsAsyncTaskBased(this IMethodSymbol method) => method.IsAsync || method.ReturnType.IsTask();
+        internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
 
-        internal static bool IsBoolean(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Boolean;
+        internal static bool IsBoolean(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Boolean;
 
-        internal static bool IsByte(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Byte;
+        internal static bool IsByte(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Byte;
 
-        internal static bool IsByteArray(this ITypeSymbol symbol) => symbol is IArrayTypeSymbol array && array.ElementType.IsByte();
+        internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
 
-        internal static bool IsCancellationToken(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Struct && string.Intern(symbol.ToString()) == TypeNames.CancellationToken;
+        internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && string.Intern(value.ToString()) == TypeNames.CancellationToken;
 
-        internal static bool IsCoerceValueCallback(this IMethodSymbol method)
+        internal static bool IsCoerceValueCallback(this IMethodSymbol value)
         {
-            if (method.ReturnType.IsObject())
+            if (value.ReturnType.IsObject())
             {
-                var parameters = method.Parameters;
+                var parameters = value.Parameters;
                 return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsObject();
             }
 
             return false;
         }
 
-        internal static bool IsCommand(this ITypeSymbol symbol) => symbol.Implements<ICommand>();
+        internal static bool IsCommand(this ITypeSymbol value) => value.Implements<ICommand>();
 
-        internal static bool IsConstructor(this ISymbol symbol) => symbol is IMethodSymbol m && m.IsConstructor();
+        internal static bool IsConstructor(this ISymbol value) => value is IMethodSymbol m && m.IsConstructor();
 
-        internal static bool IsConstructor(this IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Constructor;
+        internal static bool IsConstructor(this IMethodSymbol value) => value.MethodKind == MethodKind.Constructor;
 
-        internal static bool IsDependencyObject(this ITypeSymbol symbol) => symbol.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
+        internal static bool IsDependencyObject(this ITypeSymbol value) => value.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
-        internal static bool IsDependencyProperty(this ITypeSymbol symbol) => symbol.Name == "DependencyProperty" || symbol.Name == "System.Windows.DependencyProperty";
+        internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name == "DependencyProperty" || value.Name == "System.Windows.DependencyProperty";
 
-        internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol symbol)
+        internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol value)
         {
-            if (symbol.TypeKind == TypeKind.Struct && symbol.SpecialType == SpecialType.None)
+            if (value.TypeKind == TypeKind.Struct && value.SpecialType == SpecialType.None)
             {
-                switch (symbol.Name)
+                switch (value.Name)
                 {
                     case "DependencyPropertyChangedEventArgs":
                     case "System.Windows.DependencyPropertyChangedEventArgs":
@@ -401,21 +401,21 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol method)
+        internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol value)
         {
-            var parameters = method.Parameters;
+            var parameters = value.Parameters;
             return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
-        internal static bool IsDependencyPropertyKey(this ITypeSymbol symbol) => symbol.Name == "DependencyPropertyKey" || symbol.Name == "System.Windows.DependencyPropertyKey";
+        internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == "DependencyPropertyKey" || value.Name == "System.Windows.DependencyPropertyKey";
 
-        internal static bool IsEnhancedByPostSharpAdvice(this ISymbol symbol) => symbol.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
+        internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
-        internal static bool IsEnum(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Enum;
+        internal static bool IsEnum(this ITypeSymbol value) => value.TypeKind == TypeKind.Enum;
 
-        internal static bool IsEnumerable(this ITypeSymbol symbol)
+        internal static bool IsEnumerable(this ITypeSymbol value)
         {
-            switch (symbol.SpecialType)
+            switch (value.SpecialType)
             {
                 case SpecialType.System_Void:
                 case SpecialType.System_Boolean:
@@ -438,34 +438,34 @@ namespace MiKoSolutions.Analyzers
                     return false;
 
                 default:
-                    if (IsEnumerable(symbol.SpecialType))
+                    if (IsEnumerable(value.SpecialType))
                     {
                         return true;
                     }
 
-                    if (symbol.TypeKind == TypeKind.Array)
+                    if (value.TypeKind == TypeKind.Array)
                     {
                         return true;
                     }
 
-                    if (symbol.IsValueType)
+                    if (value.IsValueType)
                     {
                         // value types may also implement the interface
-                        return symbol.Implements<IEnumerable>();
+                        return value.Implements<IEnumerable>();
                     }
 
-                    if (symbol is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
+                    if (value is INamedTypeSymbol s && IsEnumerable(s.ConstructedFrom.SpecialType))
                     {
                         return true;
                     }
 
-                    return symbol.Implements<IEnumerable>();
+                    return value.Implements<IEnumerable>();
             }
         }
 
-        internal static bool IsEnumerable(this SpecialType specialType)
+        internal static bool IsEnumerable(this SpecialType value)
         {
-            switch (specialType)
+            switch (value)
             {
                 case SpecialType.System_Array:
                 case SpecialType.System_Collections_IEnumerable:
@@ -481,13 +481,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsEventArgs(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class
-                                                                  && symbol.SpecialType == SpecialType.None
-                                                                  && symbol.InheritsFrom<EventArgs>();
+        internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
+                                                                  && value.SpecialType == SpecialType.None
+                                                                  && value.InheritsFrom<EventArgs>();
 
-        internal static bool IsEventHandler(this IMethodSymbol method)
+        internal static bool IsEventHandler(this IMethodSymbol value)
         {
-            switch (method.MethodKind)
+            switch (value.MethodKind)
             {
                 case MethodKind.Constructor:
                 case MethodKind.StaticConstructor:
@@ -503,21 +503,21 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                 {
-                    var parameters = method.Parameters;
+                    var parameters = value.Parameters;
 
                     return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsEventArgs();
                 }
             }
         }
 
-        internal static bool IsEventHandler(this ITypeSymbol symbol)
+        internal static bool IsEventHandler(this ITypeSymbol value)
         {
-            if (symbol.TypeKind != TypeKind.Delegate)
+            if (value.TypeKind != TypeKind.Delegate)
             {
                 return false;
             }
 
-            switch (symbol.Name)
+            switch (value.Name)
             {
                 case nameof(EventHandler):
                 case nameof(PropertyChangingEventHandler):
@@ -529,28 +529,28 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsException(this ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class
-                                                                     && symbol.SpecialType == SpecialType.None
-                                                                     && symbol.InheritsFrom<Exception>();
+        internal static bool IsException(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
+                                                                     && value.SpecialType == SpecialType.None
+                                                                     && value.InheritsFrom<Exception>();
 
-        internal static bool IsFactory(this ITypeSymbol symbol) => symbol.Name.EndsWith("Factory", StringComparison.Ordinal) && symbol.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
+        internal static bool IsFactory(this ITypeSymbol value) => value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
 
-        internal static bool IsGeneric(this ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.TypeArguments.Length > 0;
+        internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
-        internal static bool IsGuid(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Guid);
+        internal static bool IsGuid(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Guid);
 
-        internal static bool IsImport(this ISymbol symbol) => symbol.GetAttributeNames().Any(Constants.Names.ImportAttributeNames.Contains);
+        internal static bool IsImport(this ISymbol value) => value.GetAttributeNames().Any(Constants.Names.ImportAttributeNames.Contains);
 
-        internal static bool IsImportingConstructor(this ISymbol symbol) => symbol.IsConstructor() && symbol.GetAttributeNames().Any(Constants.Names.ImportingConstructorAttributeNames.Contains);
+        internal static bool IsImportingConstructor(this ISymbol value) => value.IsConstructor() && value.GetAttributeNames().Any(Constants.Names.ImportingConstructorAttributeNames.Contains);
 
-        internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol symbol) where TSymbol : ISymbol
+        internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol value) where TSymbol : ISymbol
         {
-            if (symbol.IsStatic)
+            if (value.IsStatic)
             {
                 return false;
             }
 
-            switch (symbol)
+            switch (value)
             {
                 case IFieldSymbol _:
                 case ITypeSymbol _:
@@ -571,17 +571,17 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                     {
-                        var typeSymbol = symbol.ContainingType;
+                        var typeSymbol = value.ContainingType;
 
                         var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>());
-                        return symbols.Any(_ => symbol.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
+                        return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
                     }
             }
         }
 
-        internal static bool IsInterfaceImplementation(this IMethodSymbol method)
+        internal static bool IsInterfaceImplementation(this IMethodSymbol value)
         {
-            switch (method.MethodKind)
+            switch (value.MethodKind)
             {
                 case MethodKind.Constructor:
                 case MethodKind.SharedConstructor:
@@ -592,34 +592,34 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                     {
-                        if (method.IsStatic)
+                        if (value.IsStatic)
                         {
                             return false;
                         }
 
-                        if (method.ExplicitInterfaceImplementations.Any())
+                        if (value.ExplicitInterfaceImplementations.Any())
                         {
                             return true;
                         }
 
-                        var typeSymbol = method.ContainingType;
-                        var methodName = method.Name;
+                        var typeSymbol = value.ContainingType;
+                        var methodName = value.Name;
 
                         var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-                        var result = symbols.Any(_ => ReferenceEquals(method, typeSymbol.FindImplementationForInterfaceMember(_)));
+                        var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
                         return result;
                     }
             }
         }
 
-        internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol method)
+        internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol value)
         {
-            if (method.IsStatic)
+            if (value.IsStatic)
             {
                 return false;
             }
 
-            switch (method.MethodKind)
+            switch (value.MethodKind)
             {
                 case MethodKind.Constructor:
                 case MethodKind.StaticConstructor:
@@ -637,23 +637,23 @@ namespace MiKoSolutions.Analyzers
 
             var interfaceTypeName = typeof(T).FullName;
 
-            var typeSymbol = method.ContainingType;
+            var typeSymbol = value.ContainingType;
             if (typeSymbol.Implements(interfaceTypeName))
             {
-                var methodName = method.Name;
+                var methodName = value.Name;
 
                 var methodSymbols = typeSymbol.AllInterfaces
                                               .Where(_ => _.Name == interfaceTypeName)
                                               .SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-                return methodSymbols.Any(_ => ReferenceEquals(method, typeSymbol.FindImplementationForInterfaceMember(_)));
+                return methodSymbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
             }
 
             return false;
         }
 
-        internal static bool IsLinqExtensionMethod(this ISymbol symbol)
+        internal static bool IsLinqExtensionMethod(this ISymbol value)
         {
-            if (symbol is IMethodSymbol method)
+            if (value is IMethodSymbol method)
             {
                 // this is an extension method !
                 if (method.IsExtensionMethod && method.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
@@ -665,24 +665,24 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsMultiValueConverter(this ITypeSymbol symbol) => symbol.Implements("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter") || symbol.InheritsFrom("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");
+        internal static bool IsMultiValueConverter(this ITypeSymbol value) => value.Implements("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter") || value.InheritsFrom("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");
 
         // ignore special situation for task factory
-        internal static bool IsNullable(this ITypeSymbol symbol) => symbol.IsValueType && symbol.Name == nameof(Nullable);
+        internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Nullable);
 
-        internal static bool IsObject(this ITypeSymbol symbol) => symbol.SpecialType == SpecialType.System_Object;
+        internal static bool IsObject(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Object;
 
-        internal static bool IsPartial(this ITypeSymbol symbol) => symbol.Locations.Length > 1;
+        internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
-        internal static bool IsRoutedEvent(this ITypeSymbol symbol) => symbol.Name == "RoutedEvent" || symbol.Name == "System.Windows.RoutedEvent";
+        internal static bool IsRoutedEvent(this ITypeSymbol value) => value.Name == "RoutedEvent" || value.Name == "System.Windows.RoutedEvent";
 
-        internal static bool IsSerializationConstructor(this IMethodSymbol symbol) => symbol.IsConstructor() && symbol.Parameters.Length == 2 && symbol.Parameters[0].IsSerializationInfoParameter() && symbol.Parameters[1].IsStreamingContextParameter();
+        internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length == 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
 
-        internal static bool IsSerializationInfoParameter(this IParameterSymbol parameter) => parameter.Type.Name == nameof(SerializationInfo);
+        internal static bool IsSerializationInfoParameter(this IParameterSymbol value) => value.Type.Name == nameof(SerializationInfo);
 
-        internal static bool IsSpecialAccessor(this IMethodSymbol method)
+        internal static bool IsSpecialAccessor(this IMethodSymbol value)
         {
-            switch (method.MethodKind)
+            switch (value.MethodKind)
             {
                 case MethodKind.EventAdd:
                 case MethodKind.EventRemove:
@@ -696,51 +696,51 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsStreamingContextParameter(this IParameterSymbol parameter) => parameter.Type.Name == nameof(StreamingContext);
+        internal static bool IsStreamingContextParameter(this IParameterSymbol value) => value.Type.Name == nameof(StreamingContext);
 
-        internal static bool IsTask(this ITypeSymbol symbol) => symbol?.Name == nameof(Task);
+        internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
-        internal static bool IsTestClass(this ITypeSymbol symbol) => symbol?.TypeKind == TypeKind.Class && symbol.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
+        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
 
-        internal static bool IsTestMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
+        internal static bool IsTestMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
 
-        internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
+        internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
 
-        internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
+        internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
 
-        internal static bool IsTestSetUpMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
+        internal static bool IsTestSetUpMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
 
-        internal static bool IsTestTearDownMethod(this IMethodSymbol method) => method.MethodKind == MethodKind.Ordinary && method.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
+        internal static bool IsTestTearDownMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
 
-        internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol method) => method.ReturnsVoid is false && Constants.Names.TypeUnderTestMethodNames.Contains(method.Name);
+        internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol value) => value.ReturnsVoid is false && Constants.Names.TypeUnderTestMethodNames.Contains(value.Name);
 
-        internal static bool IsValidateValueCallback(this IMethodSymbol method)
+        internal static bool IsValidateValueCallback(this IMethodSymbol value)
         {
-            if (method.ReturnType.IsBoolean())
+            if (value.ReturnType.IsBoolean())
             {
-                var parameters = method.Parameters;
+                var parameters = value.Parameters;
                 return parameters.Length == 1 && parameters[0].Type.IsObject();
             }
 
             return false;
         }
 
-        internal static bool IsValueConverter(this ITypeSymbol symbol) => symbol.Implements("IValueConverter", "System.Windows.Data.IValueConverter") || symbol.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
+        internal static bool IsValueConverter(this ITypeSymbol value) => value.Implements("IValueConverter", "System.Windows.Data.IValueConverter") || value.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
 
         /// <summary>
         /// Determines whether a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
-        /// <param name="symbol">The symbol to inspect.</param>
+        /// <param name="value">The symbol to inspect.</param>
         /// <returns>
-        /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IFieldSymbol"/> that matches the name of <paramref name="symbol"/>; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IFieldSymbol"/> that matches the name of <paramref name="value"/>; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool MatchesField(this IParameterSymbol symbol)
+        internal static bool MatchesField(this IParameterSymbol value)
         {
-            var parameterName = symbol.Name;
+            var parameterName = value.Name;
 
             IEnumerable<string> fieldNames = null;
 
-            foreach (var field in symbol.ContainingType.GetMembersIncludingInherited<IFieldSymbol>())
+            foreach (var field in value.ContainingType.GetMembersIncludingInherited<IFieldSymbol>())
             {
                 if (fieldNames is null)
                 {
@@ -761,17 +761,17 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Determines whether a <see cref="IPropertySymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
-        /// <param name="symbol">The symbol to inspect.</param>
+        /// <param name="value">The symbol to inspect.</param>
         /// <returns>
-        /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IPropertySymbol"/> that matches the name of <paramref name="symbol"/>; otherwise, <see langword="false"/>.
+        /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IPropertySymbol"/> that matches the name of <paramref name="value"/>; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool MatchesProperty(this IParameterSymbol symbol) => symbol.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(symbol.Name, _.Name, StringComparison.OrdinalIgnoreCase));
+        internal static bool MatchesProperty(this IParameterSymbol value) => value.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(value.Name, _.Name, StringComparison.OrdinalIgnoreCase));
 
-        internal static string MinimalTypeName(this ITypeSymbol symbol) => symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+        internal static string MinimalTypeName(this ITypeSymbol value) => value.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 
-        internal static bool NameMatchesTypeName(this ISymbol symbol, ITypeSymbol type, ushort minimumUpperCaseLetters = 0)
+        internal static bool NameMatchesTypeName(this ISymbol value, ITypeSymbol type, ushort minimumUpperCaseLetters = 0)
         {
-            var symbolName = symbol.Name;
+            var symbolName = value.Name;
 
             if (string.Equals(symbolName, type.Name, StringComparison.OrdinalIgnoreCase))
             {
@@ -793,10 +793,10 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool TryGetGenericArgumentCount(this ITypeSymbol symbol, out int result)
+        internal static bool TryGetGenericArgumentCount(this ITypeSymbol value, out int result)
         {
             result = 0;
-            if (symbol is INamedTypeSymbol namedType)
+            if (value is INamedTypeSymbol namedType)
             {
                 result = namedType.TypeArguments.Length;
             }
@@ -804,11 +804,11 @@ namespace MiKoSolutions.Analyzers
             return result > 0;
         }
 
-        internal static bool TryGetGenericArgumentType(this ITypeSymbol symbol, out ITypeSymbol result, int index = 0)
+        internal static bool TryGetGenericArgumentType(this ITypeSymbol value, out ITypeSymbol result, int index = 0)
         {
             result = null;
 
-            if (symbol is INamedTypeSymbol namedType && namedType.TypeArguments.Length >= index + 1)
+            if (value is INamedTypeSymbol namedType && namedType.TypeArguments.Length >= index + 1)
             {
                 result = namedType.TypeArguments[index];
             }
@@ -816,11 +816,11 @@ namespace MiKoSolutions.Analyzers
             return result != null;
         }
 
-        private static void CollectAllNestedTypes(this ITypeSymbol symbol, Queue<ITypeSymbol> types)
+        private static void CollectAllNestedTypes(this ITypeSymbol value, Queue<ITypeSymbol> types)
         {
-            types.Enqueue(symbol);
+            types.Enqueue(value);
 
-            foreach (var nestedType in symbol.GetTypeMembers())
+            foreach (var nestedType in value.GetTypeMembers())
             {
                 CollectAllNestedTypes(nestedType, types);
             }
@@ -862,11 +862,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        private static string GetNameWithoutInterfacePrefix(this ITypeSymbol type)
+        private static string GetNameWithoutInterfacePrefix(this ITypeSymbol value)
         {
-            var typeName = type.Name;
+            var typeName = value.Name;
 
-            return type.TypeKind == TypeKind.Interface && typeName.StartsWith("I", StringComparison.Ordinal) && typeName.Length > 1
+            return value.TypeKind == TypeKind.Interface && typeName.StartsWith("I", StringComparison.Ordinal) && typeName.Length > 1
                        ? typeName.Substring(1)
                        : typeName;
         }

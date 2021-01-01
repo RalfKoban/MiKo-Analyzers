@@ -21,33 +21,33 @@ namespace MiKoSolutions.Analyzers
                                                                     XmlCommentExterior,
                                                                 };
 
-        internal static bool IsSupported(this SyntaxNodeAnalysisContext context, LanguageVersion expectedVersion)
+        internal static bool IsSupported(this SyntaxNodeAnalysisContext value, LanguageVersion expectedVersion)
         {
-            var languageVersion = ((CSharpParseOptions)context.Node.SyntaxTree.Options).LanguageVersion;
+            var languageVersion = ((CSharpParseOptions)value.Node.SyntaxTree.Options).LanguageVersion;
 
             // ignore the latest versions (or above)
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
 
-        internal static bool IsTestMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
+        internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
 
-        internal static bool IsTestSetUpMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
+        internal static bool IsTestSetUpMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
 
-        internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
+        internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
 
-        internal static bool IsTestOneTimeSetUpMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
+        internal static bool IsTestOneTimeSetUpMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
 
-        internal static bool IsTestOneTimeTearDownMethod(this MethodDeclarationSyntax method) => method.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
+        internal static bool IsTestOneTimeTearDownMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
 
-        internal static bool IsTypeUnderTestCreationMethod(this MethodDeclarationSyntax method) => Constants.Names.TypeUnderTestMethodNames.Contains(method.GetName());
+        internal static bool IsTypeUnderTestCreationMethod(this MethodDeclarationSyntax value) => Constants.Names.TypeUnderTestMethodNames.Contains(value.GetName());
 
-        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax syntax) => Constants.Names.TypeUnderTestVariableNames.Contains(syntax.GetName());
+        internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax value) => Constants.Names.TypeUnderTestVariableNames.Contains(value.GetName());
 
-        internal static ISymbol GetSymbol(this SyntaxToken token, SemanticModel semanticModel)
+        internal static ISymbol GetSymbol(this SyntaxToken value, SemanticModel semanticModel)
         {
-            var position = token.GetLocation().SourceSpan.Start;
-            var name = token.ValueText;
-            var syntaxNode = token.Parent;
+            var position = value.GetLocation().SourceSpan.Start;
+            var name = value.ValueText;
+            var syntaxNode = value.Parent;
 
             if (syntaxNode is ParameterSyntax node)
             {
@@ -75,53 +75,53 @@ namespace MiKoSolutions.Analyzers
             return symbol;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax syntax, SemanticModel semanticModel)
+        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)
         {
-            var type = syntax.Expression.GetTypeSymbol(semanticModel);
+            var type = value.Expression.GetTypeSymbol(semanticModel);
             return type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax syntax, SemanticModel semanticModel)
+        internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax value, SemanticModel semanticModel)
         {
-            var typeInfo = semanticModel.GetTypeInfo(syntax);
+            var typeInfo = semanticModel.GetTypeInfo(value);
             return typeInfo.Type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax syntax, SemanticModel semanticModel)
+        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, SemanticModel semanticModel)
         {
-            var type = syntax.Expression.GetTypeSymbol(semanticModel);
+            var type = value.Expression.GetTypeSymbol(semanticModel);
             return type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this TypeSyntax syntax, SemanticModel semanticModel)
+        internal static ITypeSymbol GetTypeSymbol(this TypeSyntax value, SemanticModel semanticModel)
         {
-            var typeInfo = semanticModel.GetTypeInfo(syntax);
+            var typeInfo = semanticModel.GetTypeInfo(value);
             return typeInfo.Type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax syntax, SemanticModel semanticModel)
+        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, SemanticModel semanticModel)
         {
-            var type = syntax.Type.GetTypeSymbol(semanticModel);
+            var type = value.Type.GetTypeSymbol(semanticModel);
             return type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax syntax, SemanticModel semanticModel)
+        internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, SemanticModel semanticModel)
         {
-            var symbol = GetSymbol(syntax.Identifier, semanticModel);
+            var symbol = GetSymbol(value.Identifier, semanticModel);
             return symbol as ITypeSymbol;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax syntax, SemanticModel semanticModel) => syntax.Type.GetTypeSymbol(semanticModel);
+        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, SemanticModel semanticModel) => value.Type.GetTypeSymbol(semanticModel);
 
-        internal static ITypeSymbol GetTypeSymbol(this SyntaxNode syntax, SemanticModel semanticModel)
+        internal static ITypeSymbol GetTypeSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
-            var typeInfo = semanticModel.GetTypeInfo(syntax);
+            var typeInfo = semanticModel.GetTypeInfo(value);
             return typeInfo.Type;
         }
 
-        internal static ISymbol GetEnclosingSymbol(this SyntaxNode node, SemanticModel semanticModel)
+        internal static ISymbol GetEnclosingSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
-            switch (node)
+            switch (value)
             {
                 case MethodDeclarationSyntax s:
                     return semanticModel.GetDeclaredSymbol(s);
@@ -134,89 +134,89 @@ namespace MiKoSolutions.Analyzers
                 case EventDeclarationSyntax e:
                     return semanticModel.GetDeclaredSymbol(e);
                 default:
-                    return semanticModel.GetEnclosingSymbol(node.GetLocation().SourceSpan.Start);
+                    return semanticModel.GetEnclosingSymbol(value.GetLocation().SourceSpan.Start);
             }
         }
 
-        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNodeAnalysisContext context) => GetEnclosingMethod(context.Node, context.SemanticModel);
+        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNodeAnalysisContext value) => GetEnclosingMethod(value.Node, value.SemanticModel);
 
-        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode node, SemanticModel semanticModel) => node.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
+        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode value, SemanticModel semanticModel) => value.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
 
-        internal static T GetEnclosing<T>(this SyntaxNode node) where T : SyntaxNode
+        internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode
         {
             while (true)
             {
-                switch (node)
+                switch (value)
                 {
                     case null: return null;
                     case T t: return t;
                 }
 
-                node = node.Parent;
+                value = value.Parent;
             }
         }
 
-        internal static T GetEnclosing<T>(this SyntaxToken token) where T : SyntaxNode => token.Parent.GetEnclosing<T>();
+        internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
-        internal static SyntaxNode GetEnclosing(this SyntaxNode node, params SyntaxKind[] syntaxKinds)
+        internal static SyntaxNode GetEnclosing(this SyntaxNode value, params SyntaxKind[] syntaxKinds)
         {
             while (true)
             {
-                if (node is null)
+                if (value is null)
                 {
                     return null;
                 }
 
                 foreach (var syntaxKind in syntaxKinds)
                 {
-                    if (node.IsKind(syntaxKind))
+                    if (value.IsKind(syntaxKind))
                     {
-                        return node;
+                        return value;
                     }
                 }
 
-                node = node.Parent;
+                value = value.Parent;
             }
         }
 
-        internal static string GetName(this XmlElementSyntax syntax) => syntax?.StartTag.Name.LocalName.ValueText;
+        internal static string GetName(this XmlElementSyntax value) => value?.StartTag.Name.LocalName.ValueText;
 
-        internal static string GetName(this XmlEmptyElementSyntax syntax) => syntax?.Name.LocalName.ValueText;
+        internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.LocalName.ValueText;
 
-        internal static string GetName(this XmlAttributeSyntax syntax) => syntax?.Name.LocalName.ValueText;
+        internal static string GetName(this XmlAttributeSyntax value) => value?.Name.LocalName.ValueText;
 
-        internal static string GetName(this MemberAccessExpressionSyntax syntax) => syntax?.Name.GetName();
+        internal static string GetName(this MemberAccessExpressionSyntax value) => value?.Name.GetName();
 
-        internal static string GetName(this MemberBindingExpressionSyntax syntax) => syntax?.Name.GetName();
+        internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();
 
-        internal static string GetName(this SimpleNameSyntax syntax) => syntax?.Identifier.ValueText;
+        internal static string GetName(this SimpleNameSyntax value) => value?.Identifier.ValueText;
 
-        internal static string GetName(this VariableDeclaratorSyntax syntax) => syntax?.Identifier.ValueText;
+        internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
 
-        internal static string GetName(this MethodDeclarationSyntax syntax) => syntax?.Identifier.ValueText;
+        internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
-        internal static string GetName(this PropertyDeclarationSyntax syntax) => syntax?.Identifier.ValueText;
+        internal static string GetName(this PropertyDeclarationSyntax value) => value?.Identifier.ValueText;
 
-        internal static string GetName(this ConstructorDeclarationSyntax syntax) => syntax?.Identifier.ValueText;
+        internal static string GetName(this ConstructorDeclarationSyntax value) => value?.Identifier.ValueText;
 
-        internal static string GetName(this ParameterSyntax syntax) => syntax?.Identifier.ValueText;
+        internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
 
-        internal static string GetName(this IdentifierNameSyntax syntax) => syntax?.Identifier.ValueText;
+        internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
 
-        internal static string GetNameOnlyPart(this TypeSyntax syntax) => syntax.ToString().GetNameOnlyPart();
+        internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
 
-        internal static bool IsCommand(this TypeSyntax syntax, SemanticModel semanticModel)
+        internal static bool IsCommand(this TypeSyntax value, SemanticModel semanticModel)
         {
-            var name = syntax.ToString();
+            var name = value.ToString();
 
             return name.Contains("Command")
-                && semanticModel.LookupSymbols(syntax.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol
+                && semanticModel.LookupSymbols(value.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol
                 && symbol.IsCommand();
         }
 
-        internal static bool IsString(this TypeSyntax syntax)
+        internal static bool IsString(this TypeSyntax value)
         {
-            switch (syntax.ToString())
+            switch (value.ToString())
             {
                 case "string":
                 case nameof(String):
@@ -228,23 +228,23 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsString(this ExpressionSyntax syntax, SemanticModel semanticModel) => syntax.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
+        internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
 
-        internal static bool IsSerializationInfo(this TypeSyntax syntax)
+        internal static bool IsSerializationInfo(this TypeSyntax value)
         {
-            var s = syntax.ToString();
+            var s = value.ToString();
             return s == nameof(SerializationInfo) || s == typeof(SerializationInfo).FullName;
         }
 
-        internal static bool IsStreamingContext(this TypeSyntax syntax)
+        internal static bool IsStreamingContext(this TypeSyntax value)
         {
-            var s = syntax.ToString();
+            var s = value.ToString();
             return s == nameof(StreamingContext) || s == typeof(StreamingContext).FullName;
         }
 
-        internal static bool IsException(this TypeSyntax syntax)
+        internal static bool IsException(this TypeSyntax value)
         {
-            switch (syntax.ToString())
+            switch (value.ToString())
             {
                 case nameof(Exception):
                 case nameof(System) + "." + nameof(Exception):
@@ -255,9 +255,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsBoolean(this TypeSyntax syntax)
+        internal static bool IsBoolean(this TypeSyntax value)
         {
-            switch (syntax.ToString())
+            switch (value.ToString())
             {
                 case "bool":
                 case nameof(Boolean):
@@ -269,9 +269,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsByte(this TypeSyntax syntax)
+        internal static bool IsByte(this TypeSyntax value)
         {
-            switch (syntax.ToString())
+            switch (value.ToString())
             {
                 case "byte":
                 case nameof(Byte):
@@ -283,9 +283,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsStruct(this ExpressionSyntax syntax, SemanticModel semanticModel)
+        internal static bool IsStruct(this ExpressionSyntax value, SemanticModel semanticModel)
         {
-            var type = syntax.GetTypeSymbol(semanticModel);
+            var type = value.GetTypeSymbol(semanticModel);
 
             switch (type?.TypeKind)
             {
@@ -298,15 +298,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsVoid(this TypeSyntax type) => type is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
+        internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
 
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
-        internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode node, string methodName)
+        internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode value, string methodName)
         {
             while (true)
             {
-                var ifStatement = GetEnclosingIfStatement(node);
+                var ifStatement = GetEnclosingIfStatement(value);
                 if (ifStatement != null)
                 {
                     if (IsIfStatementWithCallTo(ifStatement, methodName))
@@ -315,15 +315,15 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     // maybe a nested one, so check parent
-                    node = ifStatement.Parent;
+                    value = ifStatement.Parent;
                     continue;
                 }
 
                 // maybe an else block
-                var elseStatement = GetEnclosingElseStatement(node);
+                var elseStatement = GetEnclosingElseStatement(value);
                 if (elseStatement != null)
                 {
-                    node = elseStatement.Parent;
+                    value = elseStatement.Parent;
                     continue;
                 }
 
@@ -331,16 +331,16 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.DescendantNodes().OfType<InvocationExpressionSyntax>()
+        internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes().OfType<InvocationExpressionSyntax>()
                                                                                                                                                            .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax comment, string text)
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, string text)
         {
-            var contents = new List<XmlNodeSyntax>(comment.Content);
+            var contents = new List<XmlNodeSyntax>(value.Content);
 
-            for (var index = 0; index < comment.Content.Count; index++)
+            for (var index = 0; index < value.Content.Count; index++)
             {
-                if (comment.Content[index] is XmlTextSyntax s)
+                if (value.Content[index] is XmlTextSyntax s)
                 {
                     var originalTextTokens = s.TextTokens;
                     var textTokens = new List<SyntaxToken>(originalTextTokens);
@@ -376,9 +376,9 @@ namespace MiKoSolutions.Analyzers
             return SyntaxFactory.List(contents);
         }
 
-        internal static XmlTextSyntax WithStartText(this XmlTextSyntax text, string startText)
+        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText)
         {
-            var textTokens = new List<SyntaxToken>(text.TextTokens);
+            var textTokens = new List<SyntaxToken>(value.TextTokens);
 
             var replaced = false;
 
@@ -414,63 +414,63 @@ namespace MiKoSolutions.Analyzers
             return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
         }
 
-        internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken token) => token.WithLeadingTrivia(XmlCommentStart);
+        internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken value) => value.WithLeadingTrivia(XmlCommentStart);
 
-        internal static T WithLeadingXmlComment<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(XmlCommentStart);
+        internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
 
-        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> nodes) => nodes.Replace(nodes[0], nodes[0].WithoutLeadingTrivia().WithLeadingXmlComment());
+        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia().WithLeadingXmlComment());
 
-        internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken token) => token.WithTrailingTrivia(XmlCommentStart);
+        internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken value) => value.WithTrailingTrivia(XmlCommentStart);
 
-        internal static T WithTrailingXmlComment<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(XmlCommentStart);
+        internal static T WithTrailingXmlComment<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(XmlCommentStart);
 
-        internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> nodes) => nodes.Replace(nodes.Last(), nodes.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
+        internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
-        internal static T WithIntentation<T>(this T node) where T : SyntaxNode => node.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+        internal static T WithIntentation<T>(this T value) where T : SyntaxNode => value.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithEndOfLine<T>(this T node) where T : SyntaxNode => node.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static SyntaxToken WithEndOfLine(this SyntaxToken token) => token.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithEndOfLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithLeadingEndOfLine<T>(this T node) where T : SyntaxNode => node.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken token) => token.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static string WithoutXmlCommentExterior(this SyntaxNode syntaxNode) => syntaxNode.ToString().Replace("///", string.Empty).Trim();
+        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => value.ToString().Replace("///", string.Empty).Trim();
 
-        internal static bool HasLinqExtensionMethod(this SyntaxNode syntaxNode, SemanticModel semanticModel) => syntaxNode.LinqExtensionMethods(semanticModel).Any();
+        internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
-        internal static TRoot InsertNodeBefore<TRoot>(this TRoot root, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
+        internal static TRoot InsertNodeBefore<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
         {
             // method needs to be intended and a CRLF needs to be added
             var modifiedNode = newNode.WithIntentation().WithEndOfLine();
 
-            return root.InsertNodesBefore(nodeInList, new[] { modifiedNode });
+            return value.InsertNodesBefore(nodeInList, new[] { modifiedNode });
         }
 
-        internal static TRoot InsertNodeAfter<TRoot>(this TRoot root, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
+        internal static TRoot InsertNodeAfter<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
         {
-            return root.InsertNodesAfter(nodeInList, new[] { newNode });
+            return value.InsertNodesAfter(nodeInList, new[] { newNode });
         }
 
-        internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax syntax, MethodDeclarationSyntax method)
+        internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, MethodDeclarationSyntax method)
         {
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
-            var openBraceToken = syntax.OpenBraceToken.WithoutTrivia().WithEndOfLine();
+            var openBraceToken = value.OpenBraceToken.WithoutTrivia().WithEndOfLine();
 
             // avoid lost trivia, such as #endregion
-            var closeBraceToken = syntax.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
-                                                        .WithLeadingTrivia(syntax.CloseBraceToken.LeadingTrivia)
-                                                        .WithTrailingTrivia(syntax.CloseBraceToken.TrailingTrivia);
+            var closeBraceToken = value.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
+                                                        .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
+                                                        .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
 
-            return syntax.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
+            return value.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
                          .WithOpenBraceToken(openBraceToken)
                          .WithCloseBraceToken(closeBraceToken);
         }
 
-        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax syntax) => syntax?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
+        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) => value?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
 
-        private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax method) => method.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+        private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
 

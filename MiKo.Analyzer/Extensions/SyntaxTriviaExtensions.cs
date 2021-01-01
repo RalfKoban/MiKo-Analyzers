@@ -6,10 +6,10 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions
     {
-        public static bool IsSpanningMultipleLines(this SyntaxTrivia trivia)
+        public static bool IsSpanningMultipleLines(this SyntaxTrivia value)
         {
             var count = 0;
-            foreach (var syntaxTrivia in trivia.Token.LeadingTrivia)
+            foreach (var syntaxTrivia in value.Token.LeadingTrivia)
             {
                 if (syntaxTrivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
                 {
