@@ -253,6 +253,23 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_NUnits_Constraint_approach() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        Assert.That(42, Is.Not.Null.And.Not.Empty);
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer();

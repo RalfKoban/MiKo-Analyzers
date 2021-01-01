@@ -34,14 +34,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var symbol = context.SemanticModel.GetSymbolInfo(context.Node).Symbol;
-            if (symbol is ITypeSymbol)
+            switch (symbol)
             {
-                // probably a nested class
-                return false;
-            }
+                case ITypeSymbol _:
+                {
+                    // probably a nested class
+                    return false;
+                }
 
-            // TODO: here we could check the parent's grand-parent to get a less-restrict LoD violation (such as 'xyz.Arguments.Length' would then be allowed)
-            return true;
+                case IPropertySymbol p when Constants.Names.AssertionNamespaces.Contains(p.ContainingNamespace?.FullyQualifiedName()):
+                {
+                    // skip constraints etc. of NUnit
+                    return false;
+                }
+
+                default:
+                {
+                    // TODO: here we could check the parent's grand-parent to get a less-restrict LoD violation (such as 'xyz.Arguments.Length' would then be allowed)
+                    return true;
+                }
+            }
         }
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
