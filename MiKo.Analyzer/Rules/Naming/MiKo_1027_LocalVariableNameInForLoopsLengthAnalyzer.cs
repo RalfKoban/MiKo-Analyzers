@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    /// <seealso cref="MiKo_1026_LocalVariableNameLengthAnalyzer"/>
+    //// <seealso cref="MiKo_1026_LocalVariableNameLengthAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1027_LocalVariableNameInForLoopsLengthAnalyzer : NamingLengthAnalyzer
     {

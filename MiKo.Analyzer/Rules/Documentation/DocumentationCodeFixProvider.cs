@@ -25,6 +25,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <summary>
         /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the list of syntax nodes.
         /// </summary>
+        /// <param name="startTag">
+        /// The tag of the XML elements to consider.
+        /// </param>
+        /// <param name="syntaxNodes">
+        /// The starting points of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the list of syntax nodes.
+        /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode, IEnumerable{string})"/>
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, params SyntaxNode[] syntaxNodes)
         {
@@ -36,6 +45,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <summary>
         /// Only gets the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
         /// </summary>
+        /// <param name="syntaxNode">
+        /// The starting point of the XML elements to consider.
+        /// </param>
+        /// <param name="tags">
+        /// The tags of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// </returns>
         /// <seealso cref="GetXmlSyntax(string, SyntaxNode[])"/>
         protected static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(SyntaxNode syntaxNode, IEnumerable<string> tags)
         {

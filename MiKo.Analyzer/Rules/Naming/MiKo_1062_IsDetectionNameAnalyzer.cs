@@ -7,8 +7,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    /// <seealso cref="MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer"/>
-    /// <seealso cref="MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer"/>
+    //// <seealso cref="MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer"/>
+    //// <seealso cref="MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_1062_IsDetectionNameAnalyzer : NamingAnalyzer
     {
