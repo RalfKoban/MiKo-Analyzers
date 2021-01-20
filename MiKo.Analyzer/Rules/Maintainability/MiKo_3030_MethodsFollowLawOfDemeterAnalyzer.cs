@@ -36,9 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var symbol = context.SemanticModel.GetSymbolInfo(context.Node).Symbol;
             switch (symbol)
             {
-                case ITypeSymbol _:
+                case INamespaceOrTypeSymbol _:
                 {
-                    // probably a nested class
+                    // probably a nested class or a namespace
                     return false;
                 }
 

@@ -270,6 +270,29 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_full_qualified_enum() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla.Blubb.DiBlubb
+{
+    public enum MyTestEnum
+    {
+        None = 0,
+    }
+
+    public class TestMe
+    {
+        public MyTestEnum Value { get; set; }
+
+        public void DoSomething()
+        {
+            Value = Bla.Blubb.DiBlubb.MyTestEnum.None;
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer();
