@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Rules.Documentation;
+using MiKoSolutions.Analyzers.Rules.Maintainability;
 using MiKoSolutions.Analyzers.Rules.Naming;
 
 using NCrunch.Framework;
@@ -252,6 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules
             // these line are required to allow the tests to run successfully
             NamingLengthAnalyzer.EnabledPerDefault = true;
             MiKo_2306_CommentEndsWithPeriodAnalyzer.EnabledPerDefault = true;
+            MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.EnabledPerDefault = true;
 
             //// TODO: RKN Fix Markdown for those that are enabled
 

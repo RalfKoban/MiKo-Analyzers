@@ -254,7 +254,7 @@ The following tables list all the 289 rules that are currently provided by the a
 |MiKo_3026|Unused parameters should be removed.|&#x2713;|\-|
 |MiKo_3027|Parameters should not be marked to be reserved for future usage.|&#x2713;|\-|
 |MiKo_3028|Do not assign null to lambda parameters.|&#x2713;|\-|
-|MiKo_3030|Methods should follow the Law of Demeter.|&#x2713;|\-|
+|MiKo_3030|Methods should follow the Law of Demeter.|\-|\-|
 |MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|\-|
 |MiKo_3032|Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.|&#x2713;|\-|
 |MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|\-|
