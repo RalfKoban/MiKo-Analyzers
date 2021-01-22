@@ -9,6 +9,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3107_OnlyMocksUseConditionMatchersAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] MethodNames =
+            {
+                "Is",
+                "IsAny",
+                "IsIn",
+                "IsNotIn",
+                "IsInRange",
+                "IsNotNull",
+                "IsRegex",
+            };
+
         [Test]
         public void No_issue_is_reported_for_correct_object_creation_on_field() => No_issue_is_reported_for(@"
 using System;
@@ -63,7 +74,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_mock_method_invocation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_mock_method_invocation_([ValueSource(nameof(MethodNames))] string method) => No_issue_is_reported_for(@"
 using System;
 
 using Moq;
@@ -83,15 +94,15 @@ namespace Bla
         {
             ObjectUnderTest = new Mock<ITestMe>();
 
-            ObjectUnderTest.Setup(_ => _.DoSomething(It.IsAny<string>()).Returns(true);
-            ObjectUnderTest.Verify(_ => _.DoSomething(It.IsAny<string>());
+            ObjectUnderTest.Setup(_ => _.DoSomething(It." + method + @"<string>()).Returns(true);
+            ObjectUnderTest.Verify(_ => _.DoSomething(It." + method + @"<string>());
         }
     }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_chained_mock_method_invocation() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_chained_mock_method_invocation_([ValueSource(nameof(MethodNames))] string method) => No_issue_is_reported_for(@"
 using System;
 
 using Moq;
@@ -116,15 +127,15 @@ namespace Bla
         {
             ObjectUnderTest = new Mock<ITestMe2>();
 
-            ObjectUnderTest.Setup(_ => _.TestMe.DoSomething(It.IsAny<string>()).Returns(true);
-            ObjectUnderTest.Verify(_ => _.TestMe.DoSomething(It.IsAny<string>());
+            ObjectUnderTest.Setup(_ => _.TestMe.DoSomething(It." + method + @"<string>()).Returns(true);
+            ObjectUnderTest.Verify(_ => _.TestMe.DoSomething(It." + method + @"<string>());
         }
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_mock_method_invocation() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_non_mock_method_invocation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
 using System;
 
 using Moq;
@@ -146,14 +157,14 @@ namespace Bla
         {
             ObjectUnderTest = new TestMe(string.Empty);
 
-            ObjectUnderTest.DoSomething(It.IsAny<string>());
+            ObjectUnderTest.DoSomething(It." + method + @"<string>());
         }
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_problem_on_object_creation() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_problem_on_object_creation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
 using System;
 
 using Moq;
@@ -173,7 +184,7 @@ namespace Bla
 
         public void PrepareTest()
         {
-            ObjectUnderTest = new TestMe(It.IsAny<string>());
+            ObjectUnderTest = new TestMe(It." + method + @"<string>());
         }
     }
 }
@@ -209,7 +220,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_body_with_wrong_object_creation() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_body_with_wrong_object_creation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
 using System;
 
 using Moq;
@@ -231,7 +242,7 @@ namespace Bla
 
         public void PrepareTest() => ObjectUnderTest = new TestMe
                                                            {
-                                                               Value = It.IsAny<int>(),
+                                                               Value = It." + method + @"<int>(),
                                                            };
     }
 }

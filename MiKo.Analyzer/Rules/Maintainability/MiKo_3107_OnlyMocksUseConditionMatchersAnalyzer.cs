@@ -47,6 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case "Is":
                     case "IsAny":
+                    case "IsIn":
+                    case "IsInRange":
+                    case "IsNotIn":
+                    case "IsNotNull":
+                    case "IsRegex":
                         return true;
                 }
             }
@@ -68,10 +73,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> AnalyzeNormalInvocationExpression(InvocationExpressionSyntax node, SemanticModel semanticModel)
         {
             var argumentList = node.ArgumentList;
-            if (argumentList is null)
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
 
             foreach (var lambda in node.AncestorsAndSelf().OfType<SimpleLambdaExpressionSyntax>())
             {
