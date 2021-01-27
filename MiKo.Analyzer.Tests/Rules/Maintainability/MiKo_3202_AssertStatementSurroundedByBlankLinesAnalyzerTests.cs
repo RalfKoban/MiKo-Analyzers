@@ -9,8 +9,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3202_AssertStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Assertions =
+            {
+                nameof(Assert),
+                nameof(Assume),
+                nameof(CollectionAssert),
+                nameof(DirectoryAssert),
+                nameof(FileAssert),
+                nameof(StringAssert),
+            };
+
         [Test]
-        public void No_issue_is_reported_for_Assertion_followed_by_another_Assertion() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Assertion_followed_by_another_Assertion_([ValueSource(nameof(Assertions))]string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -19,15 +29,15 @@ namespace Bla
     {
         public void DoSomething()
         {
-            Assert.IsTrue(true);
-            Assert.IsFalse(false);
+            " + assertion + @".IsTrue(true);
+            " + assertion + @".IsFalse(false);
         }
     }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Assertion_followed_by_if_block_separated_by_blank_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Assertion_followed_by_if_block_separated_by_blank_line_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -36,7 +46,7 @@ namespace Bla
     {
         public void DoSomething(bool something)
         {
-            Assert.IsTrue(true);
+            " + assertion + @".IsTrue(true);
 
             if (something)
             {
@@ -48,48 +58,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Assertion_preceded_by_if_block_separated_by_blank_line() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public void DoSomething(bool something)
-        {
-            if (something)
-            {
-                // some comment
-            }
-
-            Assert.IsTrue(true);
-        }
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_Assertion_followed_by_if_block() => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public void DoSomething(bool something)
-        {
-            Assert.IsTrue(true);
-            if (something)
-            {
-                // some comment
-            }
-        }
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_Assertion_preceded_by_if_block() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Assertion_preceded_by_if_block_separated_by_blank_line_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -102,14 +71,55 @@ namespace Bla
             {
                 // some comment
             }
-            Assert.IsTrue(true);
+
+            " + assertion + @".IsTrue(true);
         }
     }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Attribute() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Assertion_followed_by_if_block_([ValueSource(nameof(Assertions))] string assertion) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            " + assertion + @".IsTrue(true);
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Assertion_preceded_by_if_block_([ValueSource(nameof(Assertions))] string assertion) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            " + assertion + @".IsTrue(true);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Attribute_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -118,7 +128,7 @@ namespace Bla
     {
         public void DoSomething([Values(nameof(DoSomething), nameof(TestMe))] string something)
         {
-            Assert.IsTrue(true);
+            " + assertion + @".IsTrue(true);
         }
     }
 }
