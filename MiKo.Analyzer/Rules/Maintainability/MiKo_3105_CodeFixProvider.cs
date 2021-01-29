@@ -108,6 +108,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("False"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg1, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Null"), 2, args);
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is("EqualTo", arg0), 2, args);
             }
 
             switch (arg1.Expression.Kind())
@@ -115,6 +117,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("False"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg0, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Null"), 2, args);
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is("EqualTo", arg1), 2, args);
             }
 
             return AssertThat(arg1, Is("EqualTo", arg0), 2, args);

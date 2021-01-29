@@ -356,6 +356,18 @@ namespace Bla
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(b, false); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
         [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreEqual(i, 42); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(42)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreEqual(42, i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(42)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.AreEqual(s, ""abc""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"")); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.AreEqual(""abc"", s); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"")); }")]
+        [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(true, b); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
         [TestCase(
