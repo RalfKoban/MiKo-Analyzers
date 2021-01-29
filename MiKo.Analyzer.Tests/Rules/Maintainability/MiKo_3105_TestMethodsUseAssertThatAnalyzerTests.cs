@@ -166,24 +166,31 @@ namespace Bla
 }
 ");
 
+        // IsNull
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null, ""my message""); }")]
+
+        // NotNull
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.NotNull(o); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.NotNull(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null, ""my message""); }")]
+
+        // IsNotEmpty
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotEmpty(o); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Empty); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotEmpty(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Empty, ""my message""); }")]
+
+        // IsTrue
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsTrue(b); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
@@ -191,11 +198,81 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsTrue(b, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True, ""my message""); }")]
         [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsTrue(a == b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.EqualTo(b)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsTrue(a != b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.Not.EqualTo(b)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(o == null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(o != null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(null == o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(null != o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i == 1); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(1)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i < 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThan(5)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i <= 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThanOrEqualTo(5)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i > 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThan(5)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i >= 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThanOrEqualTo(5)); }")]
+
+        // IsFalse
+        [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsFalse(b); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.IsFalse(b, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False, ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsFalse(a == b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.Not.EqualTo(b)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsFalse(a != b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.EqualTo(b)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(o == null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(o != null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(null == o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(null != o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i == 1); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.EqualTo(1)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i < 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThanOrEqualTo(5)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i <= 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThan(5)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i > 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThanOrEqualTo(5)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i >= 5); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThan(5)); }")]
+
+        // AreEqual
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreEqual(42, 11); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.EqualTo(42)); }")]
@@ -203,11 +280,69 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreEqual(42, 11, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.EqualTo(42), ""my message""); }")]
         [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(true, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(b, true); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(false, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(b, false); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreEqual(i, 42); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(42)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreEqual(42, i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(42)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.AreEqual(s, ""abc""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"")); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.AreEqual(""abc"", s); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"")); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreEqual(null, o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreEqual(o, null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+
+        // AreNotEqual
+        [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreNotEqual(42, 11); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.Not.EqualTo(42)); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.AreNotEqual(42, 11, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(11, Is.Not.EqualTo(42), ""my message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(true, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(b, true); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(false, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(b, false); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreNotEqual(null, o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreNotEqual(o, null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreNotEqual(i, 42); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.EqualTo(42)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreNotEqual(42, i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.EqualTo(42)); }")]
+
+        // Greater, GreaterOrEqual, Less, LessOrEqual
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Greater(42, 11); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.GreaterThan(11)); }")]
@@ -232,6 +367,7 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.LessOrEqual(42, 11, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.LessThanOrEqualTo(11), ""my message""); }")]
+
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNullOrEmpty(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null.Or.Empty, ""my message""); }")]
@@ -301,120 +437,59 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.AllItemsAreUnique(e, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.Unique, ""my message""); }")]
+
+        // AreSame
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsTrue(a == b); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.EqualTo(b)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsFalse(a == b); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.Not.EqualTo(b)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsTrue(a != b); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.Not.EqualTo(b)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.IsFalse(a != b); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object a, object b) => Assert.That(a, Is.EqualTo(b)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(o == null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreSame(null, o); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(o == null); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(o != null); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(o != null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreSame(o, null); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(null == o); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(null == o); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsTrue(null != o); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsFalse(null != o); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i == 1); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(1)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i == 1); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.EqualTo(1)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(true, b); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(b, true); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(false, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreSame(false, b); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreEqual(b, false); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreSame(b, false); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreEqual(i, 42); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(42)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreEqual(42, i); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.EqualTo(42)); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.AreEqual(s, ""abc""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"")); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.AreEqual(""abc"", s); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"")); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(true, b); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(b, true); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(false, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreSame(b, true); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotEqual(b, false); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreSame(true, b); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreEqual(null, o); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreSame(42, i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.SameAs(42)); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreEqual(o, null); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreSame(i, 42); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.SameAs(42)); }")]
+
+        // AreNotSame
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreNotEqual(null, o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreNotSame(null, o); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreNotEqual(o, null); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreNotSame(o, null); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i < 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThan(5)); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotSame(false, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i <= 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThanOrEqualTo(5)); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotSame(b, false); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.True); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i > 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThan(5)); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotSame(b, true); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsTrue(i >= 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThanOrEqualTo(5)); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.AreNotSame(true, b); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(bool b) => Assert.That(b, Is.False); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i < 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThanOrEqualTo(5)); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreNotSame(42, i); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.SameAs(42)); }")]
         [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i <= 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.GreaterThan(5)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i > 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThanOrEqualTo(5)); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i >= 5); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThan(5)); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.AreNotSame(i, 42); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.SameAs(42)); }")]
+
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.Zero(i); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Zero); }")]

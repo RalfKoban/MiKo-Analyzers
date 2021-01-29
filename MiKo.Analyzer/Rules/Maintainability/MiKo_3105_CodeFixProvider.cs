@@ -98,7 +98,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAllItemsAreUnique(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Unique"), 1, args);
 
-        private static InvocationExpressionSyntax FixAreEqual(SeparatedSyntaxList<ArgumentSyntax> args)
+        private static InvocationExpressionSyntax FixAreEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(args, "EqualTo");
+
+        private static InvocationExpressionSyntax FixAreEqualOrSame(SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -109,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg1, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Null"), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
-                case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is("EqualTo", arg0), 2, args);
+                case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is(call, arg0), 2, args);
             }
 
             switch (arg1.Expression.Kind())
@@ -118,17 +120,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg0, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Null"), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
-                case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is("EqualTo", arg1), 2, args);
+                case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is(call, arg1), 2, args);
             }
 
-            return AssertThat(arg1, Is("EqualTo", arg0), 2, args);
+            return AssertThat(arg1, Is(call, arg0), 2, args);
         }
 
         private static InvocationExpressionSyntax FixAreEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0], "IgnoreCase"), 2, args);
 
         private static InvocationExpressionSyntax FixAreEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args)
+        private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args, "EqualTo");
+
+        private static InvocationExpressionSyntax FixAreNotEqualOrSame(SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -138,6 +142,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("True"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg1, Is("False"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Not", "Null"), 2, args);
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is("Not", call, arg0), 2, args);
             }
 
             switch (arg1.Expression.Kind())
@@ -145,16 +151,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("True"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg0, Is("False"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Not", "Null"), 2, args);
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is("Not", call, arg1), 2, args);
             }
 
-            return AssertThat(arg1, Is("Not", "EqualTo", arg0), 2, args);
+            return AssertThat(arg1, Is("Not", call, arg0), 2, args);
         }
 
         private static InvocationExpressionSyntax FixAreNotEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAreNotSame(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "SameAs", args[0]), 2, args);
+        private static InvocationExpressionSyntax FixAreNotSame(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args, "SameAs");
 
-        private static InvocationExpressionSyntax FixAreSame(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("SameAs", args[0]), 2, args);
+        private static InvocationExpressionSyntax FixAreSame(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(args, "SameAs");
 
         private static InvocationExpressionSyntax FixCollectionAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), 2, args);
 
