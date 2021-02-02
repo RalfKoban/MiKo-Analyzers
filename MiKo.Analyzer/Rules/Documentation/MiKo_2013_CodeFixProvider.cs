@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => string.Format(Resources.MiKo_2013_CodeFixTitle, Phrase);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Phrase);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Phrase);
 
         private static SyntaxNode CommentWithStartingPhrase(XmlElementSyntax comment, string startingPhrase)
         {

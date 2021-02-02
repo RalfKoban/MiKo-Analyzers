@@ -30,8 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
             var diagnostic = context.Diagnostics.First();
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var codeFix = CreateCodeFix(context.Document, root, diagnosticSpan.Start);
+            var codeFix = CreateCodeFix(context.Document, root, diagnostic);
             if (codeFix != null)
             {
                 context.RegisterCodeFix(codeFix, diagnostic);
@@ -47,12 +46,11 @@ namespace MiKoSolutions.Analyzers.Rules
             return semanticModel.GetDeclaredSymbol(syntax, cancellationToken);
         }
 
-        protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
-            => Task.FromResult(document.Project.Solution);
+        protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);
 
-        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax)
+        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var updatedSyntax = GetUpdatedSyntax(document, syntax);
+            var updatedSyntax = GetUpdatedSyntax(document, syntax, diagnostic);
             if (updatedSyntax is null || ReferenceEquals(updatedSyntax, syntax))
             {
                 return Task.FromResult(document);
@@ -62,10 +60,10 @@ namespace MiKoSolutions.Analyzers.Rules
             return Task.FromResult(newDocument);
         }
 
-        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxTrivia trivia)
+        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic diagnostic)
         {
             var oldToken = GetToken(trivia);
-            var updatedToken = GetUpdatedToken(oldToken);
+            var updatedToken = GetUpdatedToken(oldToken, diagnostic);
 
             var newDocument = document.WithSyntaxRoot(root.ReplaceToken(oldToken, updatedToken));
             return Task.FromResult(newDocument);
@@ -73,19 +71,22 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => null;
 
-        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => null;
+        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => null;
 
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
 
-        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token) => token;
+        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic) => token;
 
-        private CodeAction CreateCodeFix(Document document, SyntaxNode root, int startPosition)
+        private CodeAction CreateCodeFix(Document document, SyntaxNode root, Diagnostic diagnostic)
         {
+            var diagnosticSpan = diagnostic.Location.SourceSpan;
+            var startPosition = diagnosticSpan.Start;
+
             if (IsTrivia)
             {
                 var trivia = root.FindTrivia(startPosition);
 
-                return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, trivia), GetType().Name);
+                return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, trivia, diagnostic), GetType().Name);
             }
 
             var syntaxNodes = root.FindToken(startPosition).Parent.AncestorsAndSelf();
@@ -98,10 +99,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (IsSolutionWide)
             {
-                return CodeAction.Create(Title, _ => ApplySolutionCodeFixAsync(document, root, syntax, _), GetType().Name);
+                return CodeAction.Create(Title, _ => ApplySolutionCodeFixAsync(document, root, syntax, diagnostic, _), GetType().Name);
             }
 
-            return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, syntax), GetType().Name);
+            return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(document, root, syntax, diagnostic), GetType().Name);
         }
     }
 }

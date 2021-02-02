@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -166,8 +167,200 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_missing_preceding_line()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            Log.Debug();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+
+            Log.Debug();
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_missing_following_line()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            Log.Debug();
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            Log.Debug();
+
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_missing_leading_and_following_line_for_block()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            Log.Debug();
+            Log.Debug();
+            Log.Debug();
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+
+            Log.Debug();
+            Log.Debug();
+            Log.Debug();
+
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3201_LogStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3201_LogStatementSurroundedByBlankLinesAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3201_CodeFixProvider();
     }
 }

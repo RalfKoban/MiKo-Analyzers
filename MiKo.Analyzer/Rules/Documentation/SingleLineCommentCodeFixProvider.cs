@@ -7,7 +7,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class SingleLineCommentCodeFixProvider : DocumentationCodeFixProvider
     {
-        protected sealed override SyntaxToken GetUpdatedToken(SyntaxToken token)
+        protected sealed override SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic)
         {
             return token.ReplaceTrivia(token.LeadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia)), ComputeReplacementTrivia);
         }

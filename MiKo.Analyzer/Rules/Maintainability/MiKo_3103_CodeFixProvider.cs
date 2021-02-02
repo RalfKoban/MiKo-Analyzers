@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public sealed override string FixableDiagnosticId => MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer.Id;
 
-        protected sealed override string Title => "Use hard-coded GUID";
+        protected sealed override string Title => Resources.MiKo_3103_CodeFixTitle;
 
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                        : invocation;
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var guid = CreateGuid();
             var format = "D";

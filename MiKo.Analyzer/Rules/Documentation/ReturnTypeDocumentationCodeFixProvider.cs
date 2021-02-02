@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Returns, syntaxNodes).FirstOrDefault() // method
                                                                                                        ?? GetXmlSyntax(Constants.XmlTag.Value, syntaxNodes).FirstOrDefault(); // property
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax)
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var comment = (XmlElementSyntax)syntax;
             foreach (var ancestor in comment.Ancestors())

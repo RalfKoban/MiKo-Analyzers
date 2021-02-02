@@ -299,8 +299,8 @@ The following tables list all the 289 rules that are currently provided by the a
 |MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|\-|
 |MiKo_3107|Moq Mock condition matchers should be used on mocks only.|&#x2713;|\-|
 |MiKo_3108|Test methods should use assertions.|&#x2713;|\-|
-|MiKo_3201|Log statements should be preceded and followed by blank lines.|&#x2713;|\-|
-|MiKo_3202|Assertion statements should be preceded and followed by blank lines.|&#x2713;|\-|
+|MiKo_3201|Log statements should be preceded and followed by blank lines.|&#x2713;|&#x2713;|
+|MiKo_3202|Assertion statements should be preceded and followed by blank lines.|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|\-|
 
 ### Ordering

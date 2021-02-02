@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -134,8 +135,158 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_missing_preceding_line()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            Assert.IsTrue(true);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+
+            Assert.IsTrue(true);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_missing_following_line()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            Assert.IsTrue(true);
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            Assert.IsTrue(true);
+
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_missing_leading_and_following_line_for_block()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            Assert.IsTrue(true);
+            Assert.IsTrue(true);
+            Assert.IsTrue(true);
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+
+            Assert.IsTrue(true);
+            Assert.IsTrue(true);
+            Assert.IsTrue(true);
+
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3202_AssertStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3202_AssertStatementSurroundedByBlankLinesAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3202_CodeFixProvider();
     }
 }

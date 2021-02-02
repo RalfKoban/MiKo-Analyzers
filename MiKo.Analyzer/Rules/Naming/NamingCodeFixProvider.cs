@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         protected override bool IsSolutionWide => true;
 
-        protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, CancellationToken cancellationToken)
+        protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)
         {
             var symbol = await GetSymbolAsync(document, syntax, cancellationToken);
             var newName = GetNewName(symbol);
@@ -26,6 +26,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected abstract string GetNewName(ISymbol symbol);
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => throw new NotSupportedException("This code fix provider does not modify the syntax");
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => throw new NotSupportedException("This code fix provider does not modify the syntax");
     }
 }

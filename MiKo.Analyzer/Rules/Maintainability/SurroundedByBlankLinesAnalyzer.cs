@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,6 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class SurroundedByBlankLinesAnalyzer : MaintainabilityAnalyzer
     {
+        internal const string NoLineBefore = "before";
+        internal const string NoLineAfter = "after";
+
         protected SurroundedByBlankLinesAnalyzer(string id) : base(id, (SymbolKind)(-1))
         {
         }
@@ -20,12 +25,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected abstract bool IsCall(ITypeSymbol type);
 
-        private static bool HasNoBlankLines(FileLinePositionSpan callLineSpan, FileLinePositionSpan otherLineSpan)
+        private static bool HasNoBlankLinesBefore(FileLinePositionSpan callLineSpan, FileLinePositionSpan otherLineSpan)
         {
             var differenceBefore = callLineSpan.StartLinePosition.Line - otherLineSpan.EndLinePosition.Line;
+
+            return differenceBefore == 1;
+        }
+
+        private static bool HasNoBlankLinesAfter(FileLinePositionSpan callLineSpan, FileLinePositionSpan otherLineSpan)
+        {
             var differenceAfter = otherLineSpan.StartLinePosition.Line - callLineSpan.EndLinePosition.Line;
 
-            return differenceBefore == 1 || differenceAfter == 1;
+            return differenceAfter == 1;
         }
 
         private bool IsCall(StatementSyntax statement, SemanticModel semanticModel) => statement is ExpressionStatementSyntax e && IsCall(e, semanticModel);
@@ -63,8 +74,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     foreach (var statement in block.Statements)
                     {
+                        var otherLineSpan = statement.GetLocation().GetLineSpan();
+
                         // check for empty lines
-                        if (HasNoBlankLines(callLineSpan, statement.GetLocation().GetLineSpan()))
+                        var noBlankLinesBefore = HasNoBlankLinesBefore(callLineSpan, otherLineSpan);
+                        var noBlankLinesAfter = HasNoBlankLinesAfter(callLineSpan, otherLineSpan);
+
+                        if (noBlankLinesBefore || noBlankLinesAfter)
                         {
                             // no empty lines between, so check for another Log call
                             if (IsCall(statement, semanticModel))
@@ -72,13 +88,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 continue;
                             }
 
-                            return Issue(call);
+                            return Issue(call, noBlankLinesBefore, noBlankLinesAfter);
                         }
                     }
                 }
             }
 
             return null;
+        }
+
+        private Diagnostic Issue(SyntaxNode call, bool noBlankLinesBefore, bool noBlankLinesAfter)
+        {
+            // prepare additional data so that code fix can benefit from information
+            var dictionary = new Dictionary<string, string>();
+            if (noBlankLinesBefore)
+            {
+                dictionary.Add(NoLineBefore, string.Empty);
+            }
+
+            if (noBlankLinesAfter)
+            {
+                dictionary.Add(NoLineAfter, string.Empty);
+            }
+
+            return Issue(call, ImmutableDictionary.CreateRange(dictionary));
         }
     }
 }

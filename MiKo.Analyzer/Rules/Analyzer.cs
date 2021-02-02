@@ -102,6 +102,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(SyntaxToken token) => CreateIssue(token.GetLocation(), token.ValueText);
 
+        protected Diagnostic Issue(SyntaxNode node, ImmutableDictionary<string, string> properties) => CreateIssue(node.GetLocation(), properties, node.ToString());
+
         protected Diagnostic Issue<T>(ISymbol symbol, T arg) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
 
         protected Diagnostic Issue(string name, ISymbol symbol) => CreateIssue(symbol.Locations[0], name);
@@ -157,6 +159,8 @@ namespace MiKoSolutions.Analyzers.Rules
                 context.ReportDiagnostic(diagnostic);
             }
         }
+
+        private Diagnostic CreateIssue(Location location, ImmutableDictionary<string, string> properties, params object[] args) => Diagnostic.Create(Rule, location, properties, args);
 
         private Diagnostic CreateIssue(Location location, params object[] args) => Diagnostic.Create(Rule, location, args);
 

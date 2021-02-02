@@ -15,6 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => string.Format(Resources.MiKo_2016_CodeFixTitle, Phrase);
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax) => CommentStartingWith((XmlElementSyntax)syntax, Phrase);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => CommentStartingWith((XmlElementSyntax)syntax, Phrase);
     }
 }

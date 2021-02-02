@@ -8881,6 +8881,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3201_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3201_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
         /// </summary>
         public static string MiKo_3201_Description {
@@ -8904,6 +8913,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3201_Title {
             get {
                 return ResourceManager.GetString("MiKo_3201_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3202_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3202_CodeFixTitle", resourceCulture);
             }
         }
         
