@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class SurroundedByBlankLinesCodeFixProvider : MaintainabilityCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
             return syntaxNodes.OfType<ExpressionStatementSyntax>().First();
         }

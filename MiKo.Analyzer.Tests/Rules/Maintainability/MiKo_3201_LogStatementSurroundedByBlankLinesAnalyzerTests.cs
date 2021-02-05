@@ -286,7 +286,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_missing_leading_and_following_line_for_block()
+        public void Code_gets_fixed_for_missing_preceding_and_following_line_for_block()
         {
             const string OriginalCode = @"
 namespace Bla

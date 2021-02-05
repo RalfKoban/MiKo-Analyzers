@@ -226,7 +226,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_missing_leading_and_following_line_for_block()
+        public void Code_gets_fixed_for_missing_preceding_and_following_line_for_block()
         {
             const string OriginalCode = @"
 using NUnit.Framework;
@@ -275,6 +275,45 @@ namespace Bla
             {
                 // some comment
             }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_missing_preceding_line_for_variable_declaration()
+        {
+            const string OriginalCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            var x = something;
+            Assert.IsTrue(x);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            var x = something;
+
+            Assert.IsTrue(x);
         }
     }
 }
