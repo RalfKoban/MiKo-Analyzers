@@ -25,15 +25,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected abstract bool IsCall(ITypeSymbol type);
 
-        private static bool HasNoBlankLinesBefore(FileLinePositionSpan callLineSpan, FileLinePositionSpan otherLineSpan)
+        private static bool HasNoBlankLinesBefore(FileLinePositionSpan callLineSpan, StatementSyntax other)
         {
+            var otherLineSpan = other.GetLocation().GetLineSpan();
+
             var differenceBefore = callLineSpan.StartLinePosition.Line - otherLineSpan.EndLinePosition.Line;
 
             return differenceBefore == 1;
         }
 
-        private static bool HasNoBlankLinesAfter(FileLinePositionSpan callLineSpan, FileLinePositionSpan otherLineSpan)
+        private static bool HasNoBlankLinesAfter(FileLinePositionSpan callLineSpan, StatementSyntax other)
         {
+            var otherLineSpan = other.GetLocation().GetLineSpan();
+
             var differenceAfter = otherLineSpan.StartLinePosition.Line - callLineSpan.EndLinePosition.Line;
 
             return differenceAfter == 1;
@@ -72,24 +76,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var callLineSpan = call.GetLocation().GetLineSpan();
 
-                    foreach (var statement in block.Statements)
+                    var noBlankLinesBefore = block.Statements
+                                                  .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                                  .Any(_ => IsCall(_, semanticModel) is false);
+                    var noBlankLinesAfter = block.Statements
+                                                 .Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
+                                                 .Any(_ => IsCall(_, semanticModel) is false);
+
+                    if (noBlankLinesBefore || noBlankLinesAfter)
                     {
-                        var otherLineSpan = statement.GetLocation().GetLineSpan();
-
-                        // check for empty lines
-                        var noBlankLinesBefore = HasNoBlankLinesBefore(callLineSpan, otherLineSpan);
-                        var noBlankLinesAfter = HasNoBlankLinesAfter(callLineSpan, otherLineSpan);
-
-                        if (noBlankLinesBefore || noBlankLinesAfter)
-                        {
-                            // no empty lines between, so check for another Log call
-                            if (IsCall(statement, semanticModel))
-                            {
-                                continue;
-                            }
-
-                            return Issue(call, noBlankLinesBefore, noBlankLinesAfter);
-                        }
+                        return Issue(call, noBlankLinesBefore, noBlankLinesAfter);
                     }
                 }
             }

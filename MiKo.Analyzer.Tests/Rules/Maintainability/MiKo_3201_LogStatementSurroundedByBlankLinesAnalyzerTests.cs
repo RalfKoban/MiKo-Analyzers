@@ -357,6 +357,86 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_multiple_missing_preceding_and_following_line_for_block()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            Log.Debug();
+            var x = 12;
+            Log.Debug();
+            var y = x;
+            Log.Debug();
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+
+            Log.Debug();
+
+            var x = 12;
+
+            Log.Debug();
+
+            var y = x;
+
+            Log.Debug();
+
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3201_LogStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3201_LogStatementSurroundedByBlankLinesAnalyzer();
