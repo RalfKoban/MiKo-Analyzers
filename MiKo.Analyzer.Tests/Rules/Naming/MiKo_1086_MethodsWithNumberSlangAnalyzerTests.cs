@@ -44,6 +44,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_ordering_numbers() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething_after_2nd_or_4th_attempt() { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1086_MethodsWithNumberSlangAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1086_MethodsWithNumberSlangAnalyzer();
