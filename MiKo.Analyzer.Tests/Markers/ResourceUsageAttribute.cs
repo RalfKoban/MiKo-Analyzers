@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 //// ReSharper disable once CheckNamespace
 namespace NCrunch.Framework
@@ -14,7 +13,6 @@ namespace NCrunch.Framework
     {
         protected ResourceUsageAttribute(params string[] resourceNames) => ResourceNames = resourceNames;
 
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Needed by NCrunch.")]
         //// ReSharper disable once MemberCanBePrivate.Global
         //// ReSharper disable once UnusedAutoPropertyAccessor.Global
         public string[] ResourceNames { get; }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 //// ReSharper disable once CheckNamespace
 namespace NCrunch.Framework
@@ -14,7 +13,6 @@ namespace NCrunch.Framework
     /// <para />
     /// This attribute can be applied at assembly level, in which case all tests within the assembly will be run without parallel execution.
     /// </remarks>
-    [SuppressMessage("Microsoft.Design", "CA1018:MarkAttributesWithAttributeUsage", Justification = "As defined by NCrunch.")]
     public class SerialAttribute : Attribute
     {
     }

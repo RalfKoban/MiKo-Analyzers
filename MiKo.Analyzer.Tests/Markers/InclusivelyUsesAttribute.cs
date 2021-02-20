@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 //// ReSharper disable once CheckNamespace
 namespace NCrunch.Framework
@@ -25,7 +24,6 @@ namespace NCrunch.Framework
     /// </note>
     /// </remarks>
     /// <seealso cref="ExclusivelyUsesAttribute"/>
-    [SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "Needed by NCrunch.")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class InclusivelyUsesAttribute : ResourceUsageAttribute
     {

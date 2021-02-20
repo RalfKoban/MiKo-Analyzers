@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 //// ReSharper disable once CheckNamespace
 namespace NCrunch.Framework
@@ -18,12 +17,10 @@ namespace NCrunch.Framework
     /// The test clones are effectively treated as separate tests by the entirety of the NCrunch engine.
     /// Throughout the UI, they are distinctively marked with a suffix describing their required capability.
     /// </remarks>
-    [SuppressMessage("Microsoft.Design", "CA1018:MarkAttributesWithAttributeUsage", Justification = "As defined by NCrunch.")]
     public class DistributeByCapabilitiesAttribute : Attribute
     {
         public DistributeByCapabilitiesAttribute(params string[] capabilities) => Capabilities = capabilities;
 
-        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Needed by NCrunch.")]
         //// ReSharper disable once MemberCanBePrivate.Global
         //// ReSharper disable once UnusedAutoPropertyAccessor.Global
         public string[] Capabilities { get; }
