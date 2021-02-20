@@ -271,6 +271,9 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.IsFalse(i >= 5); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.LessThan(5)); }")]
+        [TestCase(
+             @"using System; using System.IO; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsFalse(File.Exists(""a.txt""); }",
+             @"using System; using System.IO; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(File.Exists(""a.txt""), Is.False); }")]
 
         // AreEqual
         [TestCase(
