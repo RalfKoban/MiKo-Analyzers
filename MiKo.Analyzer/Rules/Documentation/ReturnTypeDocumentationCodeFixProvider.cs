@@ -17,8 +17,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(Constants.XmlTag.See, type, member);
         }
 
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Returns, syntaxNodes).FirstOrDefault() // method
-                                                                                                       ?? GetXmlSyntax(Constants.XmlTag.Value, syntaxNodes).FirstOrDefault(); // property
+        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        {
+            foreach (var syntaxNode in syntaxNodes)
+            {
+                switch (syntaxNode)
+                {
+                    case MethodDeclarationSyntax _:
+                    case PropertyDeclarationSyntax _:
+                    {
+                        var syntax = GetXmlSyntax(Constants.XmlTag.Returns, syntaxNode).FirstOrDefault()
+                                  ?? GetXmlSyntax(Constants.XmlTag.Value, syntaxNode).FirstOrDefault();
+                        return syntax;
+                    }
+                }
+            }
+
+            return null;
+        }
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
