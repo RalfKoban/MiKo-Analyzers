@@ -161,6 +161,36 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_boolean_property_summary_with_see_as_second_word()
+        {
+            const string OriginalCode = @"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Returns <see langword=""true""/> if restarting the application was triggered.
+    /// </summary>
+    public bool IsRestartPending => true;
+}
+";
+
+            const string FixedCode = @"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets a value indicating whether <see langword=""true""/> if restarting the application was triggered.
+    /// </summary>
+    public bool IsRestartPending => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_boolean_method_summary()
         {
             const string OriginalCode = @"

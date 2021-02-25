@@ -110,6 +110,12 @@ namespace MiKoSolutions.Analyzers
         internal static string WithoutFirstWord(this string text)
         {
             var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+            if (firstSpace < 0)
+            {
+                // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space
+                return " ";
+            }
+
             return text.Substring(firstSpace);
         }
 
