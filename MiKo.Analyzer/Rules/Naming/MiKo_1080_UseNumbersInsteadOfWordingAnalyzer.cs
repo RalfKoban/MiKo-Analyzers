@@ -42,6 +42,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "_first_",
                                                                          "_second_",
                                                                          "_third_",
+                                                                         "anyone", // 'anyone'
+                                                                         "Anyone", // 'anyone'
                                                                          "bone",
                                                                          "Bone",
                                                                          "omponent", // 'component'
@@ -52,6 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "Done",
                                                                          "etwork", // 'network'
                                                                          "ETWORK",
+                                                                         "everyone", // 'everyone'
+                                                                         "Everyone", // 'everyone'
                                                                          "gone",
                                                                          "Gone",
                                                                          "height",
@@ -69,6 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "none",
                                                                          "None",
                                                                          "NONE",
+                                                                         "noOne",
+                                                                         "NoOne",
                                                                          "onE", // 'SetupNonExistentDevice'
                                                                          "OnE",
                                                                          "OneTime",
