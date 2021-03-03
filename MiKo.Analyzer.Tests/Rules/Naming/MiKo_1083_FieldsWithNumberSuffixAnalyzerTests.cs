@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -53,6 +55,48 @@ public class TestMe
     public Int32 Field" + number + @";
 }
 ");
+
+        [Test]
+        public void No_issue_is_reported_for_struct_field_in_test_class() => Assert.Multiple(() =>
+                                                                                          {
+                                                                                              foreach (var testFixture in TestFixtures)
+                                                                                              {
+                                                                                                  foreach (var number in Enumerable.Range(0, 10))
+                                                                                                  {
+                                                                                                      No_issue_is_reported_for(@"
+using System;
+
+[" + testFixture + @"]
+public class TestMe
+{
+    public Int32 Field" + number + @";
+}
+");
+                                                                                                  }
+                                                                                              }
+                                                                                          });
+
+        [Test]
+        public void An_issue_is_reported_for_non_struct_field_in_test_class() => Assert.Multiple(() =>
+                                                                                          {
+                                                                                              foreach (var testFixture in TestFixtures)
+                                                                                              {
+                                                                                                  foreach (var number in Enumerable.Range(0, 10))
+                                                                                                  {
+                                                                                                      An_issue_is_reported_for(@"
+public class T123
+{
+}
+
+[" + testFixture + @"]
+public class TestMe
+{
+    public T123 Field" + number + @";
+}
+");
+                                                                                                  }
+                                                                                              }
+                                                                                          });
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(

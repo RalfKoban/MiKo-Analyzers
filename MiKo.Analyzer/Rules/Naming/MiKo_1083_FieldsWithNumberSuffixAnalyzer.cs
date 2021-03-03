@@ -18,7 +18,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IFieldSymbol symbol) => symbol.Name.WithoutNumberSuffix();
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.Name.EndsWithNumber();
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol.Type.Name.EndsWithNumber())
+            {
+                if (symbol.Type.TypeKind == TypeKind.Struct && symbol.ContainingType.IsTestClass())
+                {
+                    // ignore only structs in tests
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => symbol.Name.EndsWithCommonNumber()
                                                                                            ? new[] { Issue(symbol) }
