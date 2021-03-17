@@ -437,6 +437,65 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_missing_preceding_line_for_if_DebugEnabled_block()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = false;
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug();
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = false;
+
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug();
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3201_LogStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3201_LogStatementSurroundedByBlankLinesAnalyzer();
