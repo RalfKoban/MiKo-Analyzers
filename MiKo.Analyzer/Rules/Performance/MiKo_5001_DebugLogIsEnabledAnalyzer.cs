@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -47,9 +49,15 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     // check for correct type (only ILog methods shall be reported)
                     var type = methodCall.GetTypeSymbol(semanticModel);
-
                     if (type.Name != Constants.ILog.TypeName)
                     {
+                        // skip it as it's no matching type
+                        return null;
+                    }
+
+                    if (type.GetMembers(Constants.ILog.IsDebugEnabled).None())
+                    {
+                        // skip it as it has no matching method
                         return null;
                     }
 
@@ -58,7 +66,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 }
 
                 default:
+                {
                     return null;
+                }
             }
         }
     }

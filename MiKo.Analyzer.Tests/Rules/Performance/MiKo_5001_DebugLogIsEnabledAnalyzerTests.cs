@@ -221,6 +221,27 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_call_in_method_body_without_non_existing_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public interface ILog
+    {
+        void " + method + @"();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething()
+        {
+            Log." + method + @"();
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
