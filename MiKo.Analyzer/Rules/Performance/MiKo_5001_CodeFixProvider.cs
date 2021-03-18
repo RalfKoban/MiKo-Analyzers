@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     return SyntaxFactory.IdentifierName(i.GetName());
 
                 case MemberAccessExpressionSyntax m:
-                    return m;
+                    return m.WithoutLeadingTrivia();
 
                 default:
                     return null;
