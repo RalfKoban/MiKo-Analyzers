@@ -395,6 +395,181 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_interpolated_string()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe(bool b)
+        {
+            Log.Debug($""something: {b}"");
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public TestMe(bool b)
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug($""something: {b}"");
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_interpolated_string_on_static_helper()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public static class TestContext
+    {
+        public static ILog Log;
+    }
+
+    public class TestMe
+    {
+        public TestMe(bool b)
+        {
+            TestContext.Log.Debug($""something: {b}"");
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public static class TestContext
+    {
+        public static ILog Log;
+    }
+
+    public class TestMe
+    {
+        public TestMe(bool b)
+        {
+            if (TestContext.Log.IsDebugEnabled)
+            {
+                TestContext.Log.Debug($""something: {b}"");
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_interpolated_string_on_deep_static_helper()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class LogContext
+    {
+        public readonly ILog Log;
+    }
+
+    public static class TestContext
+    {
+        public static readonly LogContext Context;
+    }
+
+    public class TestMe
+    {
+        public TestMe(bool b)
+        {
+            TestContext.Context.Log.Debug($""something: {b}"");
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class LogContext
+    {
+        public readonly ILog Log;
+    }
+
+    public static class TestContext
+    {
+        public static readonly LogContext Context;
+    }
+
+    public class TestMe
+    {
+        public TestMe(bool b)
+        {
+            if (TestContext.Context.Log.IsDebugEnabled)
+            {
+                TestContext.Context.Log.Debug($""something: {b}"");
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5001_DebugLogIsEnabledAnalyzer();

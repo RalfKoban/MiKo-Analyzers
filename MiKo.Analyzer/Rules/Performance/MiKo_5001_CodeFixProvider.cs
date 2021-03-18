@@ -22,17 +22,39 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var statement = (ExpressionStatementSyntax)syntax;
             var call = (InvocationExpressionSyntax)statement.Expression;
+            var expression = (MemberAccessExpressionSyntax)call.Expression;
 
             // create condition
-            var identifierName = (IdentifierNameSyntax)((MemberAccessExpressionSyntax)call.Expression).Expression;
-            var identifier = SyntaxFactory.IdentifierName(identifierName.GetName());
-            var method = SyntaxFactory.IdentifierName(Constants.ILog.IsDebugEnabled);
-            var condition = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, method);
+            var condition = CreateCondition(expression);
 
             // nest call in block
             var block = SyntaxFactory.Block(SyntaxFactory.ExpressionStatement(call));
 
             return SyntaxFactory.IfStatement(condition, block);
+        }
+
+        private static ExpressionSyntax CreateCondition(MemberAccessExpressionSyntax expression)
+        {
+            var identifier = GetIdentifier(expression);
+            var method = SyntaxFactory.IdentifierName(Constants.ILog.IsDebugEnabled);
+            var condition = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, identifier, method);
+
+            return condition;
+        }
+
+        private static ExpressionSyntax GetIdentifier(MemberAccessExpressionSyntax expression)
+        {
+            switch (expression.Expression)
+            {
+                case IdentifierNameSyntax i:
+                    return SyntaxFactory.IdentifierName(i.GetName());
+
+                case MemberAccessExpressionSyntax m:
+                    return m;
+
+                default:
+                    return null;
+            }
         }
     }
 }
