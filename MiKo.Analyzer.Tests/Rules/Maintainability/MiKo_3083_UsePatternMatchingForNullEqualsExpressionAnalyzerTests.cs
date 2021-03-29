@@ -64,6 +64,18 @@ public class TestMe
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_Expression_argument() => No_issue_is_reported_for(@"
+using System;
+using System.Linq.Expressions;
+
+public class TestMe
+{
+    public bool DoSomething(obj o) => DoSomething(_ => _ == null);
+
+    public bool DoSomething(Expression<Func<o, bool>> expression) => expression != null;
+}");
+
         [TestCase("class TestMe { bool Do(object a) { return (a == null); } }", "class TestMe { bool Do(object a) { return (a is null); } }")]
         [TestCase("class TestMe { bool Do(object a) { return (null == a); } }", "class TestMe { bool Do(object a) { return (a is null); } }")]
         [TestCase("class TestMe { bool Do(object a) => a == null; }", "class TestMe { bool Do(object a) => a is null; }")]

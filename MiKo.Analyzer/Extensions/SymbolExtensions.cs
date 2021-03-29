@@ -279,6 +279,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClass)
         {
+            if (value is null)
+            {
+                return false;
+            }
+
             if (value.SpecialType == SpecialType.System_Void)
             {
                 return false;

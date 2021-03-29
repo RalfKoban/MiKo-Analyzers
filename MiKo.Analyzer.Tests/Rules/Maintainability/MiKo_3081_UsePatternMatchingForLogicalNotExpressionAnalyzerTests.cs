@@ -146,6 +146,18 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Expression_argument() => No_issue_is_reported_for(@"
+using System;
+using System.Linq.Expressions;
+
+public class TestMe
+{
+    public bool DoSomething(bool a) => DoSomething(_ => !_);
+
+    public bool DoSomething(Expression<Func<bool, bool>> expression) => expression != null;
+}");
+
+        [Test]
         public void Code_gets_fixed()
         {
             VerifyCSharpFix(

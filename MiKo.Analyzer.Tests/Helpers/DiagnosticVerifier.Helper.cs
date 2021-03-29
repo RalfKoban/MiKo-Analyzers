@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows.Input;
@@ -46,6 +47,7 @@ namespace TestHelper
         private static readonly MetadataReference AttributeTargetsReference = MetadataReference.CreateFromFile(typeof(AttributeTargets).Assembly.Location);
         private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
         private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
+        private static readonly MetadataReference ExpressionsReference = MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location);
 
         /// <summary>
         /// Avoids error CS0012: The type 'MulticastDelegate' is defined in an assembly that is not referenced. You must add a reference to assembly 'netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'.}
@@ -188,7 +190,8 @@ namespace TestHelper
                 .AddMetadataReference(projectId, MiKoAnalyzersReference)
                 .AddMetadataReference(projectId, MiKoAnalyzersTestsReference)
                 .AddMetadataReference(projectId, NetStandardReference)
-                .AddMetadataReference(projectId, SystemRuntimeNetStandardReference);
+                .AddMetadataReference(projectId, SystemRuntimeNetStandardReference)
+                .AddMetadataReference(projectId, ExpressionsReference);
 
             var count = 0;
             foreach (var source in sources)

@@ -85,6 +85,18 @@ public class TestMe
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_Expression_argument([ValueSource(nameof(BooleanValues))] string value) => No_issue_is_reported_for(@"
+using System;
+using System.Linq.Expressions;
+
+public class TestMe
+{
+    public bool DoSomething(bool a) => DoSomething(_ => _ == " + value + @");
+
+    public bool DoSomething(Expression<Func<bool, bool>> expression) => expression != null;
+}");
+
         [TestCase("class TestMe { bool Do(bool a) { return (a == true); } }", "class TestMe { bool Do(bool a) { return (a is true); } }")]
         [TestCase("class TestMe { bool Do(bool a) { return (a == false); } }", "class TestMe { bool Do(bool a) { return (a is false); } }")]
         [TestCase("class TestMe { bool Do(bool a) => a == true; }", "class TestMe { bool Do(bool a) => a is true; }")]

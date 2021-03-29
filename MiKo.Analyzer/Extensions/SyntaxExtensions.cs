@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 
 using Microsoft.CodeAnalysis;
@@ -299,6 +300,17 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
+
+        internal static bool IsExpression(this SyntaxNode node, SemanticModel semanticModel)
+        {
+            if (node.Parent?.Parent is ArgumentSyntax a)
+            {
+                var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
+                return convertedType?.InheritsFrom<Expression>() is true;
+            }
+
+            return false;
+        }
 
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 

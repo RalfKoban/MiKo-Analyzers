@@ -14,6 +14,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (BinaryExpressionSyntax)context.Node;
 
+            if (node.IsExpression(context.SemanticModel))
+            {
+                // ignore expression trees
+                return;
+            }
+
             if (IsResponsibleNode(node.Right) || IsResponsibleNode(node.Left))
             {
                 ReportIssue(context, node.OperatorToken);
