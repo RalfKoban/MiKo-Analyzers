@@ -301,12 +301,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
 
-        internal static bool IsExpression(this SyntaxNode node, SemanticModel semanticModel)
+        internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
         {
-            if (node.Parent?.Parent is ArgumentSyntax a)
+            foreach (var a in value.Ancestors().OfType<ArgumentSyntax>())
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
-                return convertedType?.InheritsFrom<Expression>() is true;
+                var isExpression = convertedType?.InheritsFrom<Expression>() is true;
+                if (isExpression)
+                {
+                    return true;
+                }
             }
 
             return false;
