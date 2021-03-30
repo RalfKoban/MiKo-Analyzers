@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ".bmp",
                 ".cs",
                 ".dll",
+                ".eds",
                 ".gif",
                 ".htm",
                 ".jpeg",
