@@ -31,16 +31,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] WellknownFileExtensions =
             {
-                ".cs",
-                ".xml",
-                ".xaml",
                 ".bmp",
-                ".png",
-                ".jpg",
-                ".jpeg",
-                ".htm",
-                ".html",
+                ".cs",
+                ".dll",
                 ".gif",
+                ".htm",
+                ".jpeg",
+                ".jpg",
+                ".png",
+                ".resx",
+                ".xaml",
+                ".xml",
             };
 
         public MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer() : base(Id)
