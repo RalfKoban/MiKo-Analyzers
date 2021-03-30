@@ -18,16 +18,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (PrefixUnaryExpressionSyntax)context.Node;
 
+            if (node.IsExpression(context.SemanticModel))
+            {
+                // ignore expression trees
+                return;
+            }
+
             var symbol = context.SemanticModel.GetSymbolInfo(node.Operand).Symbol;
             if (symbol is IFieldSymbol f && f.IsConst)
             {
                 // ignore constants
-                return;
-            }
-
-            if (symbol is IParameterSymbol && node.IsExpression(context.SemanticModel))
-            {
-                // ignore expression trees
                 return;
             }
 
