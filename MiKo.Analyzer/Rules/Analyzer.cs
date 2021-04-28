@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(SyntaxToken token) => CreateIssue(token.GetLocation(), token.ValueText);
 
-        protected Diagnostic Issue(SyntaxNode node, ImmutableDictionary<string, string> properties) => CreateIssue(node.GetLocation(), properties, node.ToString());
+        protected Diagnostic Issue(SyntaxNode node, Dictionary<string, string> properties) => CreateIssue(node.GetLocation(), ImmutableDictionary.CreateRange(properties), node.ToString());
 
         protected Diagnostic Issue<T>(ISymbol symbol, T arg) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
 
@@ -116,7 +116,15 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(string name, Location location) => CreateIssue(location, name);
 
-        protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1) => CreateIssue(node.GetLocation(), name, arg1.ToString());
+        protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1, Dictionary<string, string> properties = null)
+        {
+            if (properties is null)
+            {
+                return CreateIssue(node.GetLocation(), name, arg1.ToString());
+            }
+
+            return CreateIssue(node.GetLocation(), ImmutableDictionary.CreateRange(properties), name, arg1.ToString());
+        }
 
         protected Diagnostic Issue<T>(string name, SyntaxToken token, T arg1) => CreateIssue(token.GetLocation(), name, arg1.ToString());
 

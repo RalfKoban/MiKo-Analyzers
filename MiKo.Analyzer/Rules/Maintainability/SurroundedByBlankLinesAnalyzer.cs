@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -107,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 dictionary.Add(NoLineAfter, string.Empty);
             }
 
-            return Issue(call, ImmutableDictionary.CreateRange(dictionary));
+            return Issue(call, dictionary);
         }
     }
 }

@@ -7549,6 +7549,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;PropertyChangedEventArgs&apos; with &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3032_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3032_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Property names that are passed into the  &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This eases refactorings..
         /// </summary>
         public static string MiKo_3032_Description {

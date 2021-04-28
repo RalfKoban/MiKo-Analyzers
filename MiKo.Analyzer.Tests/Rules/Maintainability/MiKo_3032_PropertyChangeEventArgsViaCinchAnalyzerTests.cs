@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -133,8 +134,106 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_Cinch_CreateArgs()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public string Something { get; set; }
+
+        private PropertyChangedEventArgs e = ObservableHelper.CreateArgs<TestMe>(_ => _.Something);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public string Something { get; set; }
+
+        private PropertyChangedEventArgs e = new PropertyChangedEventArgs(nameof(Something));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Cinch_GetPropertyName()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public string Something { get; set; }
+
+        public void DoSomething()
+        {
+            var x = ObservableHelper.GetPropertyName<TestMe>(_ => _.Something);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public string Something { get; set; }
+
+        public void DoSomething()
+        {
+            var x = nameof(Something);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3032_CodeFixProvider();
     }
 }

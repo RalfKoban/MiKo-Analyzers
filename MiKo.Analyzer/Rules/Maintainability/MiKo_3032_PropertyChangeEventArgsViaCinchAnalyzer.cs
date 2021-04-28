@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -13,13 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3032";
 
+        internal const string GetPropertyName = "GetPropertyName"; // use nameof()
+        internal const string CreateArgs = "CreateArgs"; // use new PropertyChanged(nameof())
+
         public MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
-
-        private static string GetPropertyName(SyntaxNode node)
+        internal static string FindPropertyName(SyntaxNode node)
         {
             var lambda = node.DescendantNodes().OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault();
             var property = lambda?.Body as MemberAccessExpressionSyntax;
@@ -27,35 +29,51 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return propertyName;
         }
 
+        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
             if (node.Expression is IdentifierNameSyntax i && i.GetName().EndsWith("ObservableHelper", StringComparison.Ordinal))
             {
-                switch (node.GetName())
+                var name = node.GetName();
+                switch (name)
                 {
-                    case "CreateArgs":
-                        ReportIssue(context, node.Parent, "new PropertyChangedEventArgs(nameof({0}))");
-                        break;
-
-                    case "GetPropertyName":
-                        ReportIssue(context, node.Parent, "nameof({0})");
+                    case GetPropertyName:
+                    case CreateArgs:
+                        ReportIssue(context, node.Parent, name);
                         break;
                 }
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node, string proposalFormat)
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node, string issueInfo)
         {
-            var propertyName = GetPropertyName(node);
+            var propertyName = FindPropertyName(node);
             var symbol = node.GetEnclosingSymbol(context.SemanticModel);
 
-            // TODO: RKN Fix performance issue
-            var format = string.Format(proposalFormat, propertyName);
+            var issue = Issue(symbol?.Name, node, propertyName, issueInfo);
+            if (issue != null)
+            {
+                context.ReportDiagnostic(issue);
+            }
+        }
 
-            var issue = Issue(symbol?.Name, node, format);
-            context.ReportDiagnostic(issue);
+        private Diagnostic Issue(string symbolName, SyntaxNode node, string propertyName, string issueInfo)
+        {
+            // TODO: RKN Fix performance issue on string.Format
+            switch (issueInfo)
+            {
+                case GetPropertyName:
+                    return Issue(symbolName, node, $"nameof({propertyName})", new Dictionary<string, string> { { GetPropertyName, string.Empty } });
+
+                case CreateArgs:
+                    return Issue(symbolName, node, $"new PropertyChangedEventArgs(nameof({propertyName}))", new Dictionary<string, string> { { CreateArgs, string.Empty } });
+
+                default:
+                    return null;
+            }
         }
     }
 }
