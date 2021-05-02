@@ -21,21 +21,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var propertyName = MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.FindPropertyName(syntax);
-
-            if (diagnostic.Properties.ContainsKey(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.CreateArgs))
-            {
-                var argument = SyntaxFactory.Argument(CreateNameofExpression(propertyName));
-                var typeSyntax = SyntaxFactory.ParseTypeName(nameof(PropertyChangedEventArgs));
-                return SyntaxFactory.ObjectCreationExpression(typeSyntax, CreateArgumentList(argument), null);
-            }
+            var expression = CreateNameofExpression(diagnostic);
 
             if (diagnostic.Properties.ContainsKey(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.GetPropertyName))
             {
-                return CreateNameofExpression(propertyName);
+                return expression;
+            }
+
+            if (diagnostic.Properties.ContainsKey(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.CreateArgs))
+            {
+                var argument = SyntaxFactory.Argument(expression);
+                var typeSyntax = SyntaxFactory.ParseTypeName(nameof(PropertyChangedEventArgs));
+
+                return SyntaxFactory.ObjectCreationExpression(typeSyntax, CreateArgumentList(argument), null);
             }
 
             return syntax;
+        }
+
+        private static InvocationExpressionSyntax CreateNameofExpression(Diagnostic diagnostic)
+        {
+            diagnostic.Properties.TryGetValue(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.PropertyName, out var propertyName);
+
+            if (diagnostic.Properties.TryGetValue(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.PropertyTypeName, out var propertyTypeName))
+            {
+                return CreateNameofExpression(propertyTypeName, propertyName);
+            }
+
+            return CreateNameofExpression(propertyName);
         }
     }
 }

@@ -230,6 +230,208 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_Cinch_GetPropertyName_if_name_comes_from_different_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class NameFromMe
+    {
+        public int SomeData { get; set; }
+    }
+
+    public class TestMe
+    {
+        public string Something { get; set; }
+
+        public void DoSomething()
+        {
+            var x = ObservableHelper.GetPropertyName<NameFromMe>(_ => _.SomeData);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class NameFromMe
+    {
+        public int SomeData { get; set; }
+    }
+
+    public class TestMe
+    {
+        public string Something { get; set; }
+
+        public void DoSomething()
+        {
+            var x = nameof(NameFromMe.SomeData);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Cinch_GetPropertyName_if_name_comes_from_base_class()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class NameFromMe
+    {
+        public int SomeData { get; set; }
+    }
+
+    public class TestMe : NameFromMe
+    {
+        public string Something { get; set; }
+
+        public void DoSomething()
+        {
+            var x = ObservableHelper.GetPropertyName<NameFromMe>(_ => _.SomeData);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public class NameFromMe
+    {
+        public int SomeData { get; set; }
+    }
+
+    public class TestMe : NameFromMe
+    {
+        public string Something { get; set; }
+
+        public void DoSomething()
+        {
+            var x = nameof(SomeData);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Cinch_GetPropertyName_if_name_comes_from_implemented_interface()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public interface INameFromMe
+    {
+        int SomeData { get; set; }
+    }
+
+    public class TestMe : INameFromMe
+    {
+        public string Something { get; set; }
+
+        public int SomeData { get; set; }
+
+        public void DoSomething()
+        {
+            var x = ObservableHelper.GetPropertyName<INameFromMe>(_ => _.SomeData);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+using Cinch;
+
+namespace Bla
+{
+    public interface INameFromMe
+    {
+        int SomeData { get; set; }
+    }
+
+    public class TestMe : INameFromMe
+    {
+        public string Something { get; set; }
+
+        public int SomeData { get; set; }
+
+        public void DoSomething()
+        {
+            var x = nameof(SomeData);
+            DoSomething(x);
+        }
+
+        public void DoSomething(string s)
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer();

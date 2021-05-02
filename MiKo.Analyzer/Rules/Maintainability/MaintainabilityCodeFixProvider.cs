@@ -67,11 +67,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static InvocationExpressionSyntax CreateNameofExpression(string identifierName)
         {
+            var syntax = SyntaxFactory.IdentifierName(identifierName);
+
+            return CreateNameofExpression(syntax);
+        }
+
+        protected static InvocationExpressionSyntax CreateNameofExpression(string typeName, string identifierName)
+        {
+            var syntax = CreateSimpleMemberAccessExpressionSyntax(typeName, identifierName);
+
+            return CreateNameofExpression(syntax);
+        }
+
+        private static InvocationExpressionSyntax CreateNameofExpression(ExpressionSyntax syntax)
+        {
             // nameof has a special RawContextualKind, hence we have to create it via its specific SyntaxKind
             // (see https://stackoverflow.com/questions/46259039/constructing-nameof-expression-via-syntaxfactory-roslyn)
-            var nameofIdentifier = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), SyntaxKind.NameOfKeyword, "nameof", "nameof", SyntaxFactory.TriviaList()));
+            var nameofSyntax = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), SyntaxKind.NameOfKeyword, "nameof", "nameof", SyntaxFactory.TriviaList()));
 
-            return SyntaxFactory.InvocationExpression(nameofIdentifier, CreateArgumentList(SyntaxFactory.Argument(SyntaxFactory.IdentifierName(identifierName))));
+            return SyntaxFactory.InvocationExpression(nameofSyntax, CreateArgumentList(SyntaxFactory.Argument(syntax)));
         }
     }
 }

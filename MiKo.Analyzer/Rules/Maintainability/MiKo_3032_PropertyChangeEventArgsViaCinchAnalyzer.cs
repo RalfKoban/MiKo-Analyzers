@@ -16,17 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         internal const string GetPropertyName = "GetPropertyName"; // use nameof()
         internal const string CreateArgs = "CreateArgs"; // use new PropertyChanged(nameof())
+        internal const string PropertyTypeName = "Type";
+        internal const string PropertyName = "PropertyName";
 
         public MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer() : base(Id)
         {
-        }
-
-        internal static string FindPropertyName(SyntaxNode node)
-        {
-            var lambda = node.DescendantNodes().OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault();
-            var property = lambda?.Body as MemberAccessExpressionSyntax;
-            var propertyName = property.GetName() ?? string.Empty;
-            return propertyName;
         }
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
@@ -41,38 +35,47 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (name)
                 {
                     case GetPropertyName:
+                        ReportIssue(context, node.Parent, name, "nameof({0})");
+                        break;
+
                     case CreateArgs:
-                        ReportIssue(context, node.Parent, name);
+                        ReportIssue(context, node.Parent, name, "new PropertyChangedEventArgs(nameof({0}))");
                         break;
                 }
             }
         }
 
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node, string issueInfo)
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node, string issueId, string issueTemplate)
         {
-            var propertyName = FindPropertyName(node);
-            var symbol = node.GetEnclosingSymbol(context.SemanticModel);
+            var descendantNodes = node.DescendantNodes().ToList();
 
-            var issue = Issue(symbol?.Name, node, propertyName, issueInfo);
-            if (issue != null)
+            var lambda = descendantNodes.OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault();
+            if (lambda?.Body is MemberAccessExpressionSyntax property)
             {
+                var propertyName = property.GetName();
+
+                var properties = new Dictionary<string, string>
+                                     {
+                                         { issueId, string.Empty },
+                                         { PropertyName, propertyName },
+                                     };
+
+                var semanticModel = context.SemanticModel;
+
+                var t = descendantNodes.OfType<TypeArgumentListSyntax>().First();
+                var type = t.Arguments.First();
+                var propertyType = type.GetTypeSymbol(semanticModel);
+
+                var symbol = node.GetEnclosingSymbol(semanticModel);
+
+                // TODO: RKN return type as well "A.PropertyName" if the containing type does not inherit from the type or implement the interface
+                if (symbol.ContainingType.IsRelated(propertyType) is false)
+                {
+                    properties.Add(PropertyTypeName, type.GetNameOnlyPart());
+                }
+
+                var issue = Issue(symbol?.Name, node, string.Format(issueTemplate, propertyName), properties);
                 context.ReportDiagnostic(issue);
-            }
-        }
-
-        private Diagnostic Issue(string symbolName, SyntaxNode node, string propertyName, string issueInfo)
-        {
-            // TODO: RKN Fix performance issue on string.Format
-            switch (issueInfo)
-            {
-                case GetPropertyName:
-                    return Issue(symbolName, node, $"nameof({propertyName})", new Dictionary<string, string> { { GetPropertyName, string.Empty } });
-
-                case CreateArgs:
-                    return Issue(symbolName, node, $"new PropertyChangedEventArgs(nameof({propertyName}))", new Dictionary<string, string> { { CreateArgs, string.Empty } });
-
-                default:
-                    return null;
             }
         }
     }

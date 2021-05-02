@@ -357,6 +357,28 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsRelated(this ITypeSymbol value, ITypeSymbol type)
+        {
+            if (type.TypeKind == TypeKind.Interface)
+            {
+                if (value.AllInterfaces.Contains(type))
+                {
+                    // its an interface implementation, so we don't need an extra type
+                    return true;
+                }
+            }
+            else
+            {
+                if (value.IncludingAllBaseTypes().Contains(type))
+                {
+                    // its a base type. sp we don't need an extra type
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
 
         internal static bool IsBoolean(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Boolean;
