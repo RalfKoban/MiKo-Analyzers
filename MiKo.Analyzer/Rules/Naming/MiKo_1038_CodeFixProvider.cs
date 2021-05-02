@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Suffix type with '" + MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Suffix + "'";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<TypeDeclarationSyntax>().FirstOrDefault();
     }

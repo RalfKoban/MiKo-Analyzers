@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1300_CodeFixTitle;
 
-        protected override string GetNewName(ISymbol symbol)
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol)
         {
             // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
             var count = CountArgumentSyntaxes(((IParameterSymbol)symbol).GetSyntax());

@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         protected abstract string FindBetterName(IParameterSymbol symbol);
 
-        protected sealed override string GetNewName(ISymbol symbol) => FindBetterName((IParameterSymbol)symbol);
+        protected sealed override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => FindBetterName((IParameterSymbol)symbol);
 
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().First();
     }

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Rename to '" + MiKo_1105_OneTimeTestSetupMethodsAnalyzer.ExpectedName + "'";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1105_OneTimeTestSetupMethodsAnalyzer.ExpectedName;
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1105_OneTimeTestSetupMethodsAnalyzer.ExpectedName;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>().FirstOrDefault();
     }

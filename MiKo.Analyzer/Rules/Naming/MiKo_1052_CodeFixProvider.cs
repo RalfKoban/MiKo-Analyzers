@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Name it '" + MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer.ExpectedName + "'";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer.ExpectedName;
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer.ExpectedName;
     }
 }

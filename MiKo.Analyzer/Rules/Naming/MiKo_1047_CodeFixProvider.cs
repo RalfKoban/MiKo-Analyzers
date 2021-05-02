@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Remove '" + Constants.AsyncSuffix + "' suffix";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1047_NonAsyncMethodsButAsyncSuffixAnalyzer.FindBetterName((IMethodSymbol)symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1047_NonAsyncMethodsButAsyncSuffixAnalyzer.FindBetterName((IMethodSymbol)symbol);
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>().FirstOrDefault();
     }

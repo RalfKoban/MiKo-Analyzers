@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Remove '" + MiKo_1004_EventNameSuffixAnalyzer.Suffix + "' suffix";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1004_EventNameSuffixAnalyzer.FindBetterName(symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1004_EventNameSuffixAnalyzer.FindBetterName(symbol);
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {

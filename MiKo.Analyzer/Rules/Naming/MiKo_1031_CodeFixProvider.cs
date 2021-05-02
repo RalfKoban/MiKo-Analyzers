@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1031_CodeFixTitle;
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1031_TypeModelSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1031_TypeModelSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<TypeDeclarationSyntax>().FirstOrDefault();
     }

@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1084_CodeFixTitle;
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1084_VariablesWithNumberSuffixAnalyzer.FindBetterName(symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1084_VariablesWithNumberSuffixAnalyzer.FindBetterName(symbol);
     }
 }

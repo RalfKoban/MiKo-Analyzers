@@ -24,9 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 .ConfigureAwait(false);
         }
 
-        protected virtual string GetNewName(ISymbol symbol) => symbol.Name; // TODO: RKN remove this and use method below
-
-        protected virtual string GetNewName(Diagnostic diagnostic, ISymbol symbol) => GetNewName(symbol);
+        protected abstract string GetNewName(Diagnostic diagnostic, ISymbol symbol);
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => throw new NotSupportedException("This code fix provider does not modify the syntax");
     }

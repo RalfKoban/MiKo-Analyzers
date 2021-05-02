@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Append '" + MiKo_1048_ValueConverterSuffixAnalyzer.Suffix + "' suffix";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1048_ValueConverterSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1048_ValueConverterSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<TypeDeclarationSyntax>().FirstOrDefault();
     }

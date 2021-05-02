@@ -16,6 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First();
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1016_FactoryMethodsAnalyzer.FindBetterName((IMethodSymbol)symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1016_FactoryMethodsAnalyzer.FindBetterName((IMethodSymbol)symbol);
     }
 }

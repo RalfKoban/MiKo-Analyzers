@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => "Remove '" + MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.Phrase + "' from name";
 
-        protected override string GetNewName(ISymbol symbol) => MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.FindBetterName(symbol);
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.FindBetterName(symbol);
     }
 }
