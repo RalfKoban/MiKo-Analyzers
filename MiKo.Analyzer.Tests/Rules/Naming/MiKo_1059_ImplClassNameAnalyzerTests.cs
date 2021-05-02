@@ -14,7 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1059_ImplClassNameAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] WrongNames = CreateWrongNames();
+        private static readonly string[] WrongSuffixes =
+            {
+                "Impl",
+                "Implementation",
+            };
+
+        private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
@@ -31,7 +37,7 @@ public class " + name + @"
 ");
 
         [Test]
-        public void Code_gets_fixed_for_wrong_name_([Values("Impl", "Implementation")] string wrongSuffix)
+        public void Code_gets_fixed_for_wrong_name_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
         {
             var originalCode = @"
 public class TestMe" + wrongSuffix + @"
@@ -55,14 +61,8 @@ public class TestMe
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1059_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
-        private static string[] CreateWrongNames()
+        private static string[] CreateWrongNames(string[] names)
         {
-            var names = new[]
-                            {
-                                "Impl",
-                                "Implementation",
-                            };
-
             var allNames = new HashSet<string>(names);
 
             foreach (var n in names)
