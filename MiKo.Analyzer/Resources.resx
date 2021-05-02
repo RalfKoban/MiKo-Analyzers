@@ -747,6 +747,9 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
   <data name="MiKo_1053_Title" xml:space="preserve">
     <value>Do not suffix fields with delegate types.</value>
   </data>
+  <data name="MiKo_1054_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Utility' marker suffix</value>
+  </data>
   <data name="MiKo_1054_Description" xml:space="preserve">
     <value>Terms such as 'helper' or 'utility' are too generic and meaningless.
 Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad.</value>

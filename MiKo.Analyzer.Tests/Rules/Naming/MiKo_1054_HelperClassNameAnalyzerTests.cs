@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -13,7 +14,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1054_HelperClassNameAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] WrongNames = CreateWrongNames();
+        private static readonly string[] WrongSuffixes =
+            {
+                "Helper",
+                "Helpers",
+                "Util",
+                "Utils",
+                "Utility",
+                "Utilities",
+            };
+
+        private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
@@ -29,23 +40,33 @@ public class " + name + @"
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_wrong_name_([ValueSource(nameof(WrongSuffixes))] string wrongSuffix)
+        {
+            var originalCode = @"
+public class TestMe" + wrongSuffix + @"
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1054_HelperClassNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1054_HelperClassNameAnalyzer();
 
-        [ExcludeFromCodeCoverage]
-        private static string[] CreateWrongNames()
-        {
-            var names = new[]
-                            {
-                                "Helper",
-                                "Helpers",
-                                "Util",
-                                "Utils",
-                                "Utility",
-                                "Utilities",
-                            };
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1054_CodeFixProvider();
 
+        [ExcludeFromCodeCoverage]
+        private static string[] CreateWrongNames(string[] names)
+        {
             var allNames = new HashSet<string>(names);
             foreach (var s in names)
             {

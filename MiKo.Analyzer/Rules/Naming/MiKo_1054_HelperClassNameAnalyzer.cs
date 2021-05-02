@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1054";
 
+        internal static readonly string WrongSuffixIndicator = "Indicator";
+
         private static readonly string[] WrongNames = { "Helper", "Util" };
 
         // sorted by intent so that the best match is found until a more generic is found
@@ -27,7 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (symbolName.ContainsAny(WrongNames))
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase));
-                return new[] { Issue(symbol, wrongName) };
+                var issue = Issue(symbol, wrongName, new Dictionary<string, string> { { WrongSuffixIndicator, wrongName } });
+                return new[] { issue };
             }
 
             return Enumerable.Empty<Diagnostic>();

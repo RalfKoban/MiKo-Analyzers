@@ -1939,6 +1939,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Utility&apos; marker suffix.
+        /// </summary>
+        public static string MiKo_1054_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1054_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terms such as &apos;helper&apos; or &apos;utility&apos; are too generic and meaningless.
         ///Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad..
         /// </summary>
