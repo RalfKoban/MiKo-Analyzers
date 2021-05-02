@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,7 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1059";
 
-        private static readonly string[] WrongNames = { "Impl", "Implementation", };
+        internal static readonly string WrongSuffixIndicator = "Indicator";
+        private static readonly string[] WrongSuffixes = { "Impl", "Implementation", };
 
         public MiKo_1059_ImplClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -21,13 +23,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            foreach (var wrongName in WrongNames)
+            foreach (var wrongSuffix in WrongSuffixes)
             {
-                if (symbolName.EndsWith(wrongName, StringComparison.OrdinalIgnoreCase))
+                if (symbolName.EndsWith(wrongSuffix, StringComparison.OrdinalIgnoreCase))
                 {
-                    yield return Issue(symbol, wrongName);
+                    var issue = Issue(symbol, wrongSuffix, new Dictionary<string, string> { { WrongSuffixIndicator, wrongSuffix } });
+                    return new[] { issue };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

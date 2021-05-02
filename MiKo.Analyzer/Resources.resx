@@ -811,6 +811,9 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
   <data name="MiKo_1058_Title" xml:space="preserve">
     <value>Dependency property keys should be prefixed with property names (as in the .NET Framework).</value>
   </data>
+  <data name="MiKo_1059_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Impl' marker suffix</value>
+  </data>
   <data name="MiKo_1059_Description" xml:space="preserve">
     <value>Terms such as 'Impl' or 'Implementation' are meaningless and provide no benefit.
 Types that are named so should be better named directly after the interface they implement, but without any 'Impl' marker.</value>

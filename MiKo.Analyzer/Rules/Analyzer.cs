@@ -104,7 +104,16 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(SyntaxNode node, Dictionary<string, string> properties) => CreateIssue(node.GetLocation(), ImmutableDictionary.CreateRange(properties), node.ToString());
 
-        protected Diagnostic Issue<T>(ISymbol symbol, T arg) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
+        protected Diagnostic Issue<T>(ISymbol symbol, T arg, Dictionary<string, string> properties = null)
+        {
+            // TODO RKN : Consolidate properties check into single method 'CreateIssue' ?
+            if (properties is null)
+            {
+                return CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
+            }
+
+            return CreateIssue(symbol.Locations[0], ImmutableDictionary.CreateRange(properties), GetSymbolName(symbol), arg.ToString());
+        }
 
         protected Diagnostic Issue(string name, ISymbol symbol) => CreateIssue(symbol.Locations[0], name);
 
@@ -118,6 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1, Dictionary<string, string> properties = null)
         {
+            // TODO RKN : Consolidate properties check into single method 'CreateIssue' ?
             if (properties is null)
             {
                 return CreateIssue(node.GetLocation(), name, arg1.ToString());

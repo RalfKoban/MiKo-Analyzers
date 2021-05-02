@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -29,9 +30,29 @@ public class " + name + @"
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_wrong_name_([Values("Impl", "Implementation")] string wrongSuffix)
+        {
+            var originalCode = @"
+public class TestMe" + wrongSuffix + @"
+{
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1059_ImplClassNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1059_ImplClassNameAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1059_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static string[] CreateWrongNames()

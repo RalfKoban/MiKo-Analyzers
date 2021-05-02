@@ -2129,6 +2129,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Impl&apos; marker suffix.
+        /// </summary>
+        public static string MiKo_1059_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1059_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Terms such as &apos;Impl&apos; or &apos;Implementation&apos; are meaningless and provide no benefit.
         ///Types that are named so should be better named directly after the interface they implement, but without any &apos;Impl&apos; marker..
         /// </summary>
