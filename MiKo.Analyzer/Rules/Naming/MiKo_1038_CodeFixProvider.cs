@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Id;
 
-        protected override string Title => "Suffix type with '" + MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.Suffix + "'";
+        protected override string Title => Resources.MiKo_1038_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
 

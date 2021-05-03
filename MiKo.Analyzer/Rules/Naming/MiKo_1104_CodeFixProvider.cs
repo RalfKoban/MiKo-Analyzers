@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1104_TestTeardownMethodsAnalyzer.Id;
 
-        protected override string Title => "Rename to '" + MiKo_1104_TestTeardownMethodsAnalyzer.ExpectedName + "'";
+        protected override string Title => Resources.MiKo_1104_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1104_TestTeardownMethodsAnalyzer.ExpectedName;
 

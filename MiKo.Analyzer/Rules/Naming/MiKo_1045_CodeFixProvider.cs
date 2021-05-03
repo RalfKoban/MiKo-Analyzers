@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1045_CommandInvokeMethodsSuffixAnalyzer.Id;
 
-        protected override string Title => "Remove '" + MiKo_1045_CommandInvokeMethodsSuffixAnalyzer.Suffix + "' suffix";
+        protected override string Title => Resources.MiKo_1045_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1045_CommandInvokeMethodsSuffixAnalyzer.FindBetterName(symbol);
 

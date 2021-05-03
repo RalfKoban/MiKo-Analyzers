@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer.Id;
 
-        protected override string Title => "Name it '" + MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer.ExpectedName + "'";
+        protected override string Title => Resources.MiKo_1052_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer.ExpectedName;
     }

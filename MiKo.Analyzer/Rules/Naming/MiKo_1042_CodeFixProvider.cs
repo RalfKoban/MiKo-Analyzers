@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1042_CancellationTokenParameterNameAnalyzer.Id;
 
-        protected override string Title => "Name it '" + MiKo_1042_CancellationTokenParameterNameAnalyzer.ExpectedName + "'";
+        protected override string Title => Resources.MiKo_1042_CodeFixTitle;
 
         protected override string FindBetterName(IParameterSymbol symbol) => MiKo_1042_CancellationTokenParameterNameAnalyzer.ExpectedName;
     }

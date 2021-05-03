@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1044_CommandSuffixAnalyzer.Id;
 
-        protected override string Title => "Append '" + MiKo_1044_CommandSuffixAnalyzer.Suffix + "' suffix";
+        protected override string Title => Resources.MiKo_1044_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First();
 

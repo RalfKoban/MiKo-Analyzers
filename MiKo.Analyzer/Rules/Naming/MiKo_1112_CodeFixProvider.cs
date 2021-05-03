@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.Id;
 
-        protected override string Title => "Remove '" + MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.Phrase + "' from name";
+        protected override string Title => Resources.MiKo_1112_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.FindBetterName(symbol);
     }

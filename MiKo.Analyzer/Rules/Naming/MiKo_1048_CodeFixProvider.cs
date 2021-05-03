@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1048_ValueConverterSuffixAnalyzer.Id;
 
-        protected override string Title => "Append '" + MiKo_1048_ValueConverterSuffixAnalyzer.Suffix + "' suffix";
+        protected override string Title => Resources.MiKo_1048_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1048_ValueConverterSuffixAnalyzer.FindBetterName((INamedTypeSymbol)symbol);
 

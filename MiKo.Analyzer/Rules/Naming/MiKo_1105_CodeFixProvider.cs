@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1105_OneTimeTestSetupMethodsAnalyzer.Id;
 
-        protected override string Title => "Rename to '" + MiKo_1105_OneTimeTestSetupMethodsAnalyzer.ExpectedName + "'";
+        protected override string Title => Resources.MiKo_1105_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1105_OneTimeTestSetupMethodsAnalyzer.ExpectedName;
 

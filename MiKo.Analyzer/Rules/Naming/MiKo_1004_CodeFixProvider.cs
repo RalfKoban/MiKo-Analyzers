@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1004_EventNameSuffixAnalyzer.Id;
 
-        protected override string Title => "Remove '" + MiKo_1004_EventNameSuffixAnalyzer.Suffix + "' suffix";
+        protected override string Title => Resources.MiKo_1004_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1004_EventNameSuffixAnalyzer.FindBetterName(symbol);
 

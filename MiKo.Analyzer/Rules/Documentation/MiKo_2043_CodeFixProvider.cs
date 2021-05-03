@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => MiKo_2043_DelegateSummaryAnalyzer.Id;
 
-        protected override string Title => "Start summary with '" + Constants.Comments.DelegateSummaryStartingPhrase + "'";
+        protected override string Title => Resources.MiKo_2043_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
