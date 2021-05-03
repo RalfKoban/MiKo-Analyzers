@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(ISymbol symbol) => NamesFinder.TryMakeVerb(symbol.Name, out var betterName) ? betterName : symbol.Name;
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => NamesFinder.TryMakeVerb(symbol.Name, out var betterName)

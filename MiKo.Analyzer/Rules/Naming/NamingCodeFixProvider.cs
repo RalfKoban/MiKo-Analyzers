@@ -13,11 +13,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)
         {
+            // Produce a new solution that has all references to that symbol renamed, including the declaration.
+            var originalSolution = document.Project.Solution;
+
             var symbol = await GetSymbolAsync(document, syntax, cancellationToken);
             var newName = GetNewName(diagnostic, symbol);
 
-            // Produce a new solution that has all references to that symbol renamed, including the declaration.
-            var originalSolution = document.Project.Solution;
+            if (newName.IsNullOrWhiteSpace() || string.Equals(symbol.Name, newName))
+            {
+                // nothing changed
+                return originalSolution;
+            }
 
             // Return the new solution with the new symbol name.
             return await Renamer.RenameSymbolAsync(originalSolution, symbol, newName, originalSolution.Workspace.Options, cancellationToken)

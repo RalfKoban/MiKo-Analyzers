@@ -803,6 +803,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make noun a verb.
+        /// </summary>
+        public static string MiKo_1018_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1018_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods should not be suffixed with a noun form of a verb if the verb would fit perfectly as method name..
         /// </summary>
         public static string MiKo_1018_Description {
