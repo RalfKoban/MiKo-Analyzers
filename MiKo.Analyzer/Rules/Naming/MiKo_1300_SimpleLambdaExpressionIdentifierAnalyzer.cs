@@ -44,6 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case Constants.LambdaIdentifiers.Default: // correct identifier (default one)
                 case Constants.LambdaIdentifiers.Fallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback3: // correct identifier (3rd fallback as there is already another identifier in the parent lambda expression)
                     return null;
 
                 default:

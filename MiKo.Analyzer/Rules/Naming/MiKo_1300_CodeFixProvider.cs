@@ -31,6 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case 3:
                     return Constants.LambdaIdentifiers.Fallback2;
 
+                case 4:
+                    return Constants.LambdaIdentifiers.Fallback3;
+
                 default:
                     return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, count));
             }

@@ -23,6 +23,7 @@ public class TestMe
         [TestCase("_")]
         [TestCase("__")]
         [TestCase("___")]
+        [TestCase("____")]
         public void No_issue_is_reported_correctly_named_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;

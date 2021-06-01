@@ -630,6 +630,7 @@ namespace MiKoSolutions.Analyzers
             internal const string Default = "_";
             internal const string Fallback = "__";
             internal const string Fallback2 = "___";
+            internal const string Fallback3 = "____";
         }
 
         internal static class Names

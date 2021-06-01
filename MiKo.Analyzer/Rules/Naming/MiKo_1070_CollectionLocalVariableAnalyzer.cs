@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case Constants.LambdaIdentifiers.Default:
                 case Constants.LambdaIdentifiers.Fallback:
                 case Constants.LambdaIdentifiers.Fallback2:
+                case Constants.LambdaIdentifiers.Fallback3:
                 case "map":
                 case "list":
                 case "array":
