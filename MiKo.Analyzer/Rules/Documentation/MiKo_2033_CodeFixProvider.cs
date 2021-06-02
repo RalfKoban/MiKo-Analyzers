@@ -18,12 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
         {
-            return Comment(comment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1], SeeCref("string"), TaskParts[2] + comment.Content);
+            return Comment(comment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1], SeeCref("string"), TaskParts[2] + CommentStartingWith(comment.Content, string.Empty));
         }
 
         protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType)
         {
-            return Comment(comment, StringParts[0], SeeCref("string"), StringParts[1] + comment.Content);
+            // we have to replace the XmlText if it is part of the first item of context
+            return Comment(comment, StringParts[0], SeeCref("string"), StringParts[1] + CommentStartingWith(comment.Content, string.Empty));
         }
     }
 }

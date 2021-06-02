@@ -64,8 +64,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase)
         {
-            var content = comment.Content;
+            var content = CommentStartingWith(comment.Content, phrase);
 
+            return SyntaxFactory.XmlElement(comment.StartTag, content, comment.EndTag);
+        }
+
+        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase)
+        {
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one
             var index = GetIndex(content);
@@ -82,14 +87,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 newText = SyntaxFactory.XmlText(phrase);
             }
 
-            var newContent = index >= 0 ?
-                                 content.Insert(index, newText)
-                                 : content.Add(newText);
-
-            return SyntaxFactory.XmlElement(
-                                            comment.StartTag,
-                                            newContent,
-                                            comment.EndTag);
+            return index >= 0
+                       ? content.Insert(index, newText)
+                       : content.Add(newText);
         }
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)

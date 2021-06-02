@@ -350,6 +350,8 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes().OfType<InvocationExpressionSyntax>()
                                                                                                                                                            .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
 
+        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
+
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, string text)
         {
             var contents = new List<XmlNodeSyntax>(value.Content);
@@ -398,6 +400,16 @@ namespace MiKoSolutions.Analyzers
 
             var replaced = false;
 
+            if (startText.IsNullOrWhiteSpace())
+            {
+                // get rid of first new line token as we do not need it anymore
+                if (textTokens.Count > 0 && textTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    textTokens.RemoveAt(0);
+                    replaced = true;
+                }
+            }
+
             for (var i = 0; i < textTokens.Count; i++)
             {
                 var token = textTokens[i];
@@ -422,12 +434,12 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            if (replaced is false)
+            if (replaced)
             {
-                return SyntaxFactory.XmlText(startText);
+                return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
             }
 
-            return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+            return SyntaxFactory.XmlText(startText);
         }
 
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken value) => value.WithLeadingTrivia(XmlCommentStart);

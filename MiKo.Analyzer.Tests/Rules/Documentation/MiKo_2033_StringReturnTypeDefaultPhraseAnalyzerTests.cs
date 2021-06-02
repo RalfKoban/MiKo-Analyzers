@@ -199,7 +199,43 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A <see cref=""string""/> that contains Something.
+    /// A <see cref=""string""/> that contains something.
+    /// </returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_generic_method_with_linebreak()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Something.
+    /// </returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains something.
     /// </returns>
     public string DoSomething(object o) => null;
 }
@@ -235,9 +271,117 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains Something.
+    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains something.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test(Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/366")]
+        public void Code_gets_fixed_for_issue_366()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets the literal ""Foo"".
+    /// </summary>
+    /// <value>
+    /// The Foo.
+    /// </value>
+    public string Foo => ""Foo"";
+
+    /// <summary>
+    /// Gets the literal ""Bar"".
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains the Bar.
+    /// </returns>
+    public string Bar() => ""Bar"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets the literal ""Foo"".
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> that contains the Foo.
+    /// </value>
+    public string Foo => ""Foo"";
+
+    /// <summary>
+    /// Gets the literal ""Bar"".
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains the Bar.
+    /// </returns>
+    public string Bar() => ""Bar"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test(Description = "Reverse-ordered Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/366")]
+        public void Code_gets_fixed_for_issue_366_order_reversed()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets the literal ""Bar"".
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains the Bar.
+    /// </returns>
+    public string Bar() => ""Bar"";
+
+    /// <summary>
+    /// Gets the literal ""Foo"".
+    /// </summary>
+    /// <value>
+    /// The Foo.
+    /// </value>
+    public string Foo => ""Foo"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets the literal ""Bar"".
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains the Bar.
+    /// </returns>
+    public string Bar() => ""Bar"";
+
+    /// <summary>
+    /// Gets the literal ""Foo"".
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> that contains the Foo.
+    /// </value>
+    public string Foo => ""Foo"";
 }
 ";
 
