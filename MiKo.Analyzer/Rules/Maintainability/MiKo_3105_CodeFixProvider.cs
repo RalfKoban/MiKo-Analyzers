@@ -71,6 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "GreaterOrEqual": return FixGreaterOrEqual(args);
                 case "IsEmpty": return FixIsEmpty(args);
                 case "IsFalse": return FixIsFalse(args);
+                case "False": return FixIsFalse(args);
                 case "IsInstanceOf": return FixIsInstanceOf(args, syntax.Name);
                 case "IsOrdered": return FixIsOrdered(args);
                 case "IsNaN": return FixIsNaN(args);
@@ -83,6 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "IsSubsetOf": return FixIsSubsetOf(args);
                 case "IsSupersetOf": return FixIsSupersetOf(args);
                 case "IsTrue": return FixIsTrue(args);
+                case "True": return FixIsTrue(args);
                 case "Less": return FixLess(args);
                 case "LessOrEqual": return FixLessOrEqual(args);
                 case "Negative": return FixNegative(args);
