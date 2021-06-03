@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -112,8 +113,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("False"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg1, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Null"), 2, args);
-                case SyntaxKind.NumericLiteralExpression:
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is(call, arg0), 2, args);
+                case SyntaxKind.NumericLiteralExpression:
+                {
+                    if (args.Count > 2)
+                    {
+                        var arg2 = args[2];
+
+                        if (IsNumeric(arg2))
+                        {
+                            // seems we have a tolerance parameter
+                            return AssertThat(arg1, Is(call, arg0, "Within", arg2), 3, args);
+                        }
+                    }
+
+                    return AssertThat(arg1, Is(call, arg0), 2, args);
+                }
             }
 
             switch (arg1.Expression.Kind())
@@ -121,8 +136,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("False"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg0, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Null"), 2, args);
-                case SyntaxKind.NumericLiteralExpression:
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is(call, arg1), 2, args);
+                case SyntaxKind.NumericLiteralExpression:
+                {
+                    if (args.Count > 2)
+                    {
+                        var arg2 = args[2];
+
+                        if (IsNumeric(arg2))
+                        {
+                            // seems we have a tolerance parameter
+                            return AssertThat(arg0, Is(call, arg1, "Within", arg2), 3, args);
+                        }
+                    }
+
+                    return AssertThat(arg0, Is(call, arg1), 2, args);
+                }
             }
 
             return AssertThat(arg1, Is(call, arg0), 2, args);
@@ -309,7 +338,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var args = new List<ArgumentSyntax>();
+            var args = new List<ArgumentSyntax>(Math.Max(2, 2 + arguments.Count - skip));
             args.Add(argument);
             args.Add(constraint);
 
@@ -325,7 +354,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
-        private static ArgumentSyntax Is(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, argument));
+        private static ArgumentSyntax Is(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(InvocationIs(name, argument));
 
         private static ArgumentSyntax Is(string name, ExpressionSyntax expression) => Is(name, SyntaxFactory.Argument(expression));
 
@@ -333,31 +362,42 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument)
         {
-            var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, name1);
+            return Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, name1), argument);
+        }
 
-            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
+        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1, ArgumentSyntax argument1)
+        {
+            var isCall = InvocationIs(name, argument);
+            var appendixCall = CreateSimpleMemberAccessExpressionSyntax(isCall, name1);
+
+            return Argument(appendixCall, argument1);
         }
 
         private static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, SyntaxFactory.Argument(expression));
 
         private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
         {
-            var expression = CreateInvocationSyntax("Is", name, argument);
+            var expression = InvocationIs(name, argument);
 
             return SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax(expression, name1));
         }
 
         private static ArgumentSyntax Is(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", names));
 
+        private static InvocationExpressionSyntax InvocationIs(string name, ArgumentSyntax argument) => CreateInvocationSyntax("Is", name, argument);
+
         private static ArgumentSyntax Does(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax("Does", name, argument));
 
         private static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument)
         {
-            var expression = CreateSimpleMemberAccessExpressionSyntax("Does", name, name1);
-
-            return SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
+            return Argument(CreateSimpleMemberAccessExpressionSyntax("Does", name, name1), argument);
         }
 
         private static ArgumentSyntax Does(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Does", names));
+
+        private static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
+
+        private static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
+                                                               || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
     }
 }

@@ -322,6 +322,21 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreEqual(o, null); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon)); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon, ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon), ""some message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(8.5d, d, 0.1d, ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(0.1d), ""some message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(d, 8.5d, double.Epsilon, ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon), ""some message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(d, 8.5d, 0.1d, ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(0.1d), ""some message""); }")]
 
         // AreNotEqual
         [TestCase(
