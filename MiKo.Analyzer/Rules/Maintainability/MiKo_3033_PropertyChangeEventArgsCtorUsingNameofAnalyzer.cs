@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case InvocationExpressionSyntax i when i.Expression is IdentifierNameSyntax sa && sa.GetName() == "nameof":
                     return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
 
-                case IdentifierNameSyntax s when IdentifierIsParameter(node, s.GetName(), semanticModel):
+                case IdentifierNameSyntax s when node.EnclosingMethodHasParameter(s.GetName(), semanticModel):
                     return false; // it's a parameter, so don't report an issue
 
                 default:
@@ -91,17 +91,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return true; // report to use nameof instead
-        }
-
-        private static bool IdentifierIsParameter(SyntaxNode node, string propertyName, SemanticModel semanticModel)
-        {
-            var method = node.GetEnclosingMethod(semanticModel);
-            if (method is null)
-            {
-                return false;
-            }
-
-            return method.Parameters.Any(_ => _.Name == propertyName);
         }
     }
 }

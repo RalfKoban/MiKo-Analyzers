@@ -302,6 +302,7 @@ The following tables list all the 289 rules that are currently provided by the a
 |MiKo_3201|Log statements should be preceded and followed by blank lines.|&#x2713;|&#x2713;|
 |MiKo_3202|Assertion statements should be preceded and followed by blank lines.|&#x2713;|&#x2713;|
 |MiKo_3203|Local variable statements should be preceded by blank lines.|&#x2713;|&#x2713;|
+|MiKo_3204|Variable assignment statements should be preceded by blank lines.|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|\-|
 
 ### Ordering

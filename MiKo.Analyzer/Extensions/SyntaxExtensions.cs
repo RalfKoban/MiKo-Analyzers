@@ -347,8 +347,26 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsParameter(this IdentifierNameSyntax node, SemanticModel semanticModel) => node.EnclosingMethodHasParameter(node.GetName(), semanticModel);
+
+        internal static bool EnclosingMethodHasParameter(this SyntaxNode node, string parameterName, SemanticModel semanticModel)
+        {
+            var method = node.GetEnclosingMethod(semanticModel);
+            if (method is null)
+            {
+                return false;
+            }
+
+            return method.Parameters.Any(_ => _.Name == parameterName);
+        }
+
+        internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName)
+        {
+            return value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
+        }
+
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes().OfType<InvocationExpressionSyntax>()
-                                                                                                                                                           .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
+                                                                                                                                                 .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, string text)
         {
@@ -490,6 +508,21 @@ namespace MiKoSolutions.Analyzers
             return value.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
                          .WithOpenBraceToken(openBraceToken)
                          .WithCloseBraceToken(closeBraceToken);
+        }
+
+        internal static HashSet<string> GetAllUsedVariables(this SyntaxNode statementOrExpression, SemanticModel semanticModel)
+        {
+            var dataFlow = semanticModel.AnalyzeDataFlow(statementOrExpression);
+
+            // do not use the declared ones as we are interested in parameters, not unused variables
+            // var variablesDeclared = dataFlow.VariablesDeclared;
+            var variablesRead = dataFlow.ReadInside.Union(dataFlow.ReadOutside);
+
+            // do not include the ones that are written outside as those are the ones that are not used at all
+            var variablesWritten = dataFlow.WrittenInside;
+
+            var used = variablesRead.Union(variablesWritten).Select(_ => _.Name).ToHashSet();
+            return used;
         }
 
         internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) => value?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
