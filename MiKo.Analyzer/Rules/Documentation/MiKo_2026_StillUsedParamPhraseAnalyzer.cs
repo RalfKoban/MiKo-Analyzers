@@ -44,21 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             context.RegisterSyntaxNodeAction(AnalyzeConstructor, SyntaxKind.ConstructorDeclaration);
         }
 
-        private static HashSet<string> GetAllUsedVariables(SyntaxNodeAnalysisContext context, SyntaxNode statementOrExpression)
-        {
-            var dataFlow = context.SemanticModel.AnalyzeDataFlow(statementOrExpression);
-
-            // do not use the declared ones as we are interested in parameters, not unused variables
-            // var variablesDeclared = dataFlow.VariablesDeclared;
-            var variablesRead = dataFlow.ReadInside.Union(dataFlow.ReadOutside);
-
-            // do not include the ones that are written outside as those are the ones that are not used at all
-            var variablesWritten = dataFlow.WrittenInside;
-
-            var used = variablesRead.Union(variablesWritten).Select(_ => _.Name).ToHashSet();
-            return used;
-        }
-
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
             var method = (MethodDeclarationSyntax)context.Node;
@@ -119,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, IMethodSymbol method)
         {
-            var used = GetAllUsedVariables(context, methodBody);
+            var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
             return from parameter in method.Parameters
                    where used.Contains(parameter.Name)
