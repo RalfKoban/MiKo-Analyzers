@@ -8,6 +8,7 @@
       <Value>Resources.Designer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
+    <SlidingBuildDelayInMilliseconds>100</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

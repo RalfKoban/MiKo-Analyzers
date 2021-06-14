@@ -8989,6 +8989,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_3203_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3203_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate local variables visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3203_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3203_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede local variable with a blank line.
+        /// </summary>
+        public static string MiKo_3203_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3203_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variable statements should be preceded by blank lines..
+        /// </summary>
+        public static string MiKo_3203_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3203_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_3204_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3204_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3204_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3204_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede variable assignments with a blank line.
+        /// </summary>
+        public static string MiKo_3204_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3204_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable assignment statements should be preceded by blank lines..
+        /// </summary>
+        public static string MiKo_3204_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3204_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>

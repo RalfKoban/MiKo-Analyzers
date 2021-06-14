@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3202_AssertStatementSurroundedByBlankLinesAnalyzer : SurroundedByBlankLinesAnalyzer
+    public sealed class MiKo_3202_AssertStatementSurroundedByBlankLinesAnalyzer : CallSurroundedByBlankLinesAnalyzer
     {
         public const string Id = "MiKo_3202";
 
