@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -42,6 +43,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssue(IMethodSymbol method) => new[] { Issue(method, method.ReturnType.MinimalTypeName()) };
+        private IEnumerable<Diagnostic> ReportIssue(IMethodSymbol method)
+        {
+            var returnTypeName = method.ReturnType.MinimalTypeName();
+
+            if (method.GetSyntax() is MethodDeclarationSyntax m)
+            {
+                return new[] { Issue(m.GetName(), m.ReturnType, returnTypeName) };
+            }
+
+            return new[] { Issue(method, returnTypeName) };
+        }
     }
 }
