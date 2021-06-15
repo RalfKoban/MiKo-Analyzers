@@ -64,6 +64,27 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_variable_assignment_as_first_statement_after_variable_declaration_and_assignment() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            int x;
+
+            var y = something ? 0 : -1;
+            x = DoSomething(something) + y;
+
+            return x;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_multiple_variable_assignments_as_first_statements_after_variable_declarations() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 

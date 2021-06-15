@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
-            if (statement.IsLocalVariableDeclaration(identifierName))
+            if (statement is LocalDeclarationStatementSyntax)
             {
-                // the statement is a our own variable declaration
+                // the statement is a variable declaration
                 return true;
             }
 
