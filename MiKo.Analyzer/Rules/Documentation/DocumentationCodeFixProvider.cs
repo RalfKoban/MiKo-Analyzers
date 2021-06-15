@@ -74,22 +74,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one
             var index = GetIndex(content);
+            if (index < 0)
+            {
+                return content.Add(SyntaxFactory.XmlText(phrase));
+            }
 
-            XmlTextSyntax newText;
-            if (index >= 0 && content[index] is XmlTextSyntax text)
+            if (content[index] is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
                 content = content.Remove(content[index]);
-                newText = text.WithStartText(phrase);
-            }
-            else
-            {
-                newText = SyntaxFactory.XmlText(phrase);
+
+                if (phrase.IsNullOrWhiteSpace())
+                {
+                    var textTokens = text.TextTokens.Count;
+                    if (textTokens > 2)
+                    {
+                        // TODO: RKN find a better solution this as it is not good code
+
+                        // remove last "\r\n" token and remove '  /// ' trivia of last token
+                        if (text.TextTokens[textTokens - 2].IsKind(SyntaxKind.XmlTextLiteralNewLineToken)
+                         && text.TextTokens[textTokens - 1].ValueText.IsNullOrWhiteSpace())
+                        {
+                            var newTokens = text.TextTokens.Take(textTokens - 2).ToArray();
+                            text = SyntaxFactory.XmlText(newTokens);
+                        }
+                    }
+                }
+
+                var newText = text.WithStartText(phrase);
+
+                return content.Insert(index, newText);
             }
 
-            return index >= 0
-                       ? content.Insert(index, newText)
-                       : content.Add(newText);
+            return content.Insert(index, SyntaxFactory.XmlText(phrase));
         }
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
