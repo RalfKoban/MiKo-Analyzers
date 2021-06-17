@@ -292,7 +292,36 @@ public class TestMe
         [TestCase("[TestFixture] class TestMe { void Do(int myMock) { } }", "[TestFixture] class TestMe { void Do(int my) { } }")]
         [TestCase("[TestFixture] class TestMe { void Do(int mock) { } }", "[TestFixture] class TestMe { void Do(int mock) { } }")]
         [TestCase("[TestFixture] class TestMe { void Do(int mock1) { } }", "[TestFixture] class TestMe { void Do(int mock1) { } }")]
+        [TestCase("[TestFixture] class TestMe { void Do(int mockValue1) { } }", "[TestFixture] class TestMe { void Do(int value1) { } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
+        [Test]
+        public void Code_gets_fixed_for_local_variable()
+        {
+            const string OriginalCode = @"
+[TestFixture]
+public class TestMe
+{
+    void DoSinething()
+    {
+        int mockValue = 1;
+    }
+}
+";
+
+            const string FixedCode = @"
+[TestFixture]
+public class TestMe
+{
+    void DoSinething()
+    {
+        int value = 1;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         protected override string GetDiagnosticId() => MiKo_1108_MockNamingAnalyzer.Id;
 

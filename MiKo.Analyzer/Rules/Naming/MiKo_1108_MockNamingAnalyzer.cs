@@ -29,6 +29,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return symbol.Name;
             }
 
+            if (symbol is ILocalSymbol || symbol is IParameterSymbol)
+            {
+                if (symbol.Name[0].IsLowerCaseLetter())
+                {
+                    return symbolName.ToLowerCaseAt(0);
+                }
+            }
+
             return symbolName;
         }
 
