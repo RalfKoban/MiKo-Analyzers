@@ -24,6 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "somethingStub",
                 "stub",
                 "StubManager",
+                "mockedValue",
+                "fakedValue",
             };
 
         [Test]
@@ -295,32 +297,35 @@ public class TestMe
         [TestCase("[TestFixture] class TestMe { void Do(int mockValue1) { } }", "[TestFixture] class TestMe { void Do(int value1) { } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
-        [Test]
-        public void Code_gets_fixed_for_local_variable()
+        [TestCase("mockValue", "value")]
+        [TestCase("mockedValue", "value")]
+        [TestCase("fakeValue", "value")]
+        [TestCase("fakedValue", "value")]
+        public void Code_gets_fixed_for_local_variable_(string originalName, string fixedName)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 [TestFixture]
 public class TestMe
 {
     void DoSinething()
     {
-        int mockValue = 1;
+        int " + originalName + @" = 1;
     }
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 [TestFixture]
 public class TestMe
 {
     void DoSinething()
     {
-        int value = 1;
+        int " + fixedName + @" = 1;
     }
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_1108_MockNamingAnalyzer.Id;

@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1108";
 
-        internal static readonly string[] MockNames = { "Mock", "mock", "Stub", "stub", "Fake", "fake", "Shim", "shim" };
+        internal static readonly string[] MockNames = { "Mocked", "mocked", "Mock", "mock", "Stub", "stub", "Faked", "Fake", "faked", "fake", "Shim", "shim" };
 
         public MiKo_1108_MockNamingAnalyzer() : base(Id, (SymbolKind)(-1))
         {
