@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_3108_TestMethodsContainAssertsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3108_TestMethodsContainAssertsAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3108";
 
