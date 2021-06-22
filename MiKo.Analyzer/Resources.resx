@@ -2959,6 +2959,16 @@ Doing so allows to change the implementation of the return value whenever it's n
   <data name="MiKo_3073_Title" xml:space="preserve">
     <value>Do not leave objects partially initialized.</value>
   </data>
+  <data name="MiKo_3074_Description" xml:space="preserve">
+    <value>The idea of a constructor is to create an initialized instance of that specific type. Its responsibility is not to create instances of other types.
+So, having 'ref' or 'out' parameters on a constructor contradicts the complete concept of the constructor as these parameters solely exist to provide instances of (other types) out of that constructor in addition to the instance that is created and initialized by the constructor.</value>
+  </data>
+  <data name="MiKo_3074_MessageFormat" xml:space="preserve">
+    <value>Do not use '{1}'</value>
+  </data>
+  <data name="MiKo_3074_Title" xml:space="preserve">
+    <value>Do not define 'ref' or 'out' parameters on constructors.</value>
+  </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
   </data>

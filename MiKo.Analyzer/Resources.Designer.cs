@@ -8331,6 +8331,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The idea of a constructor is to create an initialized instance of that specific type. Its responsibility is not to create instances of other types.
+        ///So, having &apos;ref&apos; or &apos;out&apos; parameters on a constructor contradicts the complete concept of the constructor as these parameters solely exist to provide instances of (other types) out of that constructor in addition to the instance that is created and initialized by the constructor..
+        /// </summary>
+        public static string MiKo_3074_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3074_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_3074_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3074_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not define &apos;ref&apos; or &apos;out&apos; parameters on constructors..
+        /// </summary>
+        public static string MiKo_3074_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3074_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply &apos;is false&apos; pattern.
         /// </summary>
         public static string MiKo_3081_CodeFixTitle {
