@@ -63,18 +63,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (statement.GetAllUsedVariables(semanticModel).Contains(identifierName))
                 {
-                    var block = statement.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
-                    if (block != null)
+                    var callLineSpan = statement.GetLocation().GetLineSpan();
+
+                    foreach (var ancestor in statement.Ancestors())
                     {
-                        var callLineSpan = statement.GetLocation().GetLineSpan();
-
-                        var noBlankLinesBefore = block.Statements
-                                                      .Where(_ => IsAssignmentOrDeclaration(_, statement, identifierName) is false)
-                                                      .Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
-
-                        if (noBlankLinesBefore)
+                        if (ancestor is ParenthesizedLambdaExpressionSyntax)
                         {
-                            return Issue(statement, true, false);
+                            // no issue
+                            break;
+                        }
+
+                        if (ancestor is BlockSyntax block)
+                        {
+                            var noBlankLinesBefore = block.Statements
+                                                          .Where(_ => IsAssignmentOrDeclaration(_, statement, identifierName) is false)
+                                                          .Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
+
+                            if (noBlankLinesBefore)
+                            {
+                                return Issue(statement, true, false);
+                            }
+
+                            break;
+                        }
+  
+                        if (ancestor is MethodDeclarationSyntax || ancestor is ClassDeclarationSyntax)
+                        {
+                            // stop lookup as there is no valid ancestor anymore
+                            break;
                         }
                     }
                 }

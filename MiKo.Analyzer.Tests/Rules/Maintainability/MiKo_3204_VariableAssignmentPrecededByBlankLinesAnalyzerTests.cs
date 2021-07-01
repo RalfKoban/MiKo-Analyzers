@@ -85,6 +85,31 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_variable_assignment_as_first_statement_in_parenthesized_lambda_assignment() => No_issue_is_reported_for(@"
+using System;
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            var y = something ? 0 : -1;
+            int x;
+
+            Callback(() => x = DoSomething(something) + y);
+            Callback(() => y = DoSomething(something) + x);
+
+            return x;
+        }
+
+        private void Callback(Action a) => a();
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_multiple_variable_assignments_as_first_statements_after_variable_declarations() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
