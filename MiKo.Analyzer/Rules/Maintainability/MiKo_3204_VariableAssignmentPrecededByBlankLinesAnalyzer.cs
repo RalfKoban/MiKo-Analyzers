@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                             break;
                         }
-  
+
                         if (ancestor is MethodDeclarationSyntax || ancestor is ClassDeclarationSyntax)
                         {
                             // stop lookup as there is no valid ancestor anymore
