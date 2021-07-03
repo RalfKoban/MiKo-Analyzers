@@ -61,17 +61,44 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)
         {
             var foundNode = TryFindInspectionTarget(query, out var syntaxNode, out var identifier);
+            if (foundNode is false)
+            {
+                return null;
+            }
 
             if (query.HasLinqExtensionMethod(semanticModel))
             {
-                // query itself contains Linq calls, so report an issue
+                // query itself contains Linq calls, so report an issue anyway
                 return Issue(identifier, query);
             }
 
-            var enclosingNode = query.GetEnclosing(SyntaxKind.SimpleMemberAccessExpression);
-            if (enclosingNode is MemberAccessExpressionSyntax m)
+            InvocationExpressionSyntax firstCall = null;
+
+            var calls = 0;
+            foreach (var call in syntaxNode.LinqExtensionMethods(semanticModel))
             {
-                // ignore surrounding "ToList", but only if it is the only call
+                calls++;
+
+                switch (calls)
+                {
+                    case 1:
+                        firstCall = call;
+                        break;
+
+                    case 2:
+                        // no need to look further, found at least one additional call
+                        return Issue(identifier, query);
+                }
+            }
+
+            if (calls == 0)
+            {
+                return null;
+            }
+
+            // ignore "ToList" etc
+            if (firstCall?.Expression is MemberAccessExpressionSyntax m)
+            {
                 switch (m.GetName())
                 {
                     case nameof(Enumerable.ToList):
@@ -79,31 +106,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case nameof(Enumerable.ToDictionary):
                     case nameof(Enumerable.ToLookup):
                     {
-                        var calls = 0;
-
-                        foreach (var unused in syntaxNode.LinqExtensionMethods(semanticModel))
-                        {
-                            calls++;
-
-                            if (calls == 2)
-                            {
-                                // no need to look further, found at least one additional call
-                                return Issue(identifier, query);
-                            }
-                        }
-
-                        // that's the only call which shall be allowed
+                        // that are the only calls which shall be allowed
                         return null;
                     }
                 }
             }
 
-            if (foundNode && syntaxNode.HasLinqExtensionMethod(semanticModel))
-            {
-                return Issue(identifier, query);
-            }
-
-            return null;
+            return Issue(identifier, query);
         }
     }
 }

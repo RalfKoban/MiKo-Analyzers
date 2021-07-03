@@ -141,6 +141,26 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_combination_of_Linq_static_chain_and_query_if_both_are_independent_calls_but_Linq_call_is_ToList() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<char> DoSomething()
+        {
+            var foo = from letter in ""ABCD"" select char.ToLower(letter);
+            var bar = foo.ToList();
+            return bar;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_combination_of_Linq_chain_and_query_in_same_method() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -182,7 +202,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public IEnumerable<string> DoSomething() => Enumerable.ToList((from x in new[] { ""a"" } select x));
+        public string DoSomething() => Enumerable.FirstOrDefault((from x in new[] { ""a"" } select x));
     }
 }
 ");
