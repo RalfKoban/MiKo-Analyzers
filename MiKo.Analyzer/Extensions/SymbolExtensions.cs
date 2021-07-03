@@ -865,8 +865,8 @@ namespace MiKoSolutions.Analyzers
                     {
                         var returnType = method.ReturnType.MinimalTypeName();
 
-                        var suffix = method.IsGenericMethod ?
-                                     string.Concat("<", method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(","), ">")
+                        var suffix = method.IsGenericMethod
+                                     ? string.Concat("<", method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(","), ">")
                                      : string.Empty;
 
                         return string.Concat(returnType, " ", method.Name, suffix);
@@ -893,7 +893,7 @@ namespace MiKoSolutions.Analyzers
         {
             var typeName = value.Name;
 
-            return value.TypeKind == TypeKind.Interface && typeName.StartsWith("I", StringComparison.Ordinal) && typeName.Length > 1
+            return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith("I", StringComparison.Ordinal)
                        ? typeName.Substring(1)
                        : typeName;
         }

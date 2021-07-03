@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers
             if (syntaxNode is ParameterSyntax node)
             {
                 // we might have a ctor here and no method
-                var methodName = node.GetEnclosing<MethodDeclarationSyntax>().GetName() ?? node.GetEnclosing<ConstructorDeclarationSyntax>().GetName();
+                var methodName = GetMethodName(node);
                 var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
                 return parameterSymbol;
@@ -594,6 +594,18 @@ namespace MiKoSolutions.Analyzers
             }
 
             return enclosingNode as ElseClauseSyntax;
+        }
+
+        private static string GetMethodName(ParameterSyntax node)
+        {
+            var enclosingNode = node.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration);
+            switch (enclosingNode)
+            {
+                case MethodDeclarationSyntax m: return m.GetName();
+                case ConstructorDeclarationSyntax c: return c.GetName();
+                default:
+                    return null;
+            }
         }
     }
 }

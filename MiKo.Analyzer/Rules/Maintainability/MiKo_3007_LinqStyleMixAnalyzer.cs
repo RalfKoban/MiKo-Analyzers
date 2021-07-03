@@ -18,35 +18,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode result, out string identifier)
         {
-            var methodDeclarationSyntax = query.GetEnclosing<MethodDeclarationSyntax>();
-            if (methodDeclarationSyntax != null)
+            result = query.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration, SyntaxKind.VariableDeclarator);
+            switch (result)
             {
-                result = methodDeclarationSyntax;
-                identifier = methodDeclarationSyntax.GetName();
-                return true;
-            }
+                case MethodDeclarationSyntax m:
+                    identifier = m.GetName();
+                    return true;
 
-            // we do not find the enclosing method, so we might have a field (for which we need a variable), such as in MiKo_2071_EnumMethodSummaryAnalyzer
-            var variableDeclaratorSyntax = query.GetEnclosing<VariableDeclaratorSyntax>();
-            if (variableDeclaratorSyntax != null)
-            {
-                result = variableDeclaratorSyntax;
-                identifier = variableDeclaratorSyntax.GetName();
-                return true;
-            }
+                // we have a constructor here
+                case ConstructorDeclarationSyntax c:
+                    identifier = c.GetName();
+                    return true;
 
-            // we might have a constructor here
-            var ctorDeclarationSyntax = query.GetEnclosing<ConstructorDeclarationSyntax>();
-            if (ctorDeclarationSyntax != null)
-            {
-                result = ctorDeclarationSyntax;
-                identifier = ctorDeclarationSyntax.GetName();
-                return true;
-            }
+                // we do not find the enclosing method, so we might have a field (for which we need a variable), such as in MiKo_2071_EnumMethodSummaryAnalyzer
+                case VariableDeclaratorSyntax v:
+                    identifier = v.GetName();
+                    return true;
 
-            result = null;
-            identifier = null;
-            return false;
+                // found something else
+                default:
+                    result = null;
+                    identifier = null;
+                    return false;
+            }
         }
 
         private void AnalyzeQueryExpression(SyntaxNodeAnalysisContext context)
