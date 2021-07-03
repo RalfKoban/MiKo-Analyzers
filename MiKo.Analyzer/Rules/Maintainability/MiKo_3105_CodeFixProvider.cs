@@ -68,13 +68,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "DoesNotEndWith": return FixDoesNotEndWith(args);
                 case "DoesNotStartWith": return FixDoesNotStartWith(args);
                 case "EndsWith": return FixEndsWith(args);
+                case "False": return FixIsFalse(args);
                 case "Greater": return FixGreater(args);
                 case "GreaterOrEqual": return FixGreaterOrEqual(args);
                 case "IsEmpty": return FixIsEmpty(args);
                 case "IsFalse": return FixIsFalse(args);
-                case "False": return FixIsFalse(args);
                 case "IsInstanceOf": return FixIsInstanceOf(args, syntax.Name);
-                case "IsOrdered": return FixIsOrdered(args);
                 case "IsNaN": return FixIsNaN(args);
                 case "IsNotEmpty": return FixIsNotEmpty(args);
                 case "IsNotNull": return FixIsNotNull(args);
@@ -82,16 +81,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "IsNotSupersetOf": return FixIsNotSupersetOf(args);
                 case "IsNull": return FixIsNull(args);
                 case "IsNullOrEmpty": return FixIsNullOrEmpty(args);
+                case "IsOrdered": return FixIsOrdered(args);
                 case "IsSubsetOf": return FixIsSubsetOf(args);
                 case "IsSupersetOf": return FixIsSupersetOf(args);
                 case "IsTrue": return FixIsTrue(args);
-                case "True": return FixIsTrue(args);
                 case "Less": return FixLess(args);
                 case "LessOrEqual": return FixLessOrEqual(args);
+                case "Positive": return FixPositive(args);
                 case "Negative": return FixNegative(args);
                 case "NotNull": return FixNotNull(args);
                 case "NotZero": return FixNotZero(args);
                 case "StartsWith": return FixStartsWith(args);
+                case "True": return FixIsTrue(args);
                 case "Zero": return FixZero(args);
                 default: return null;
             }
@@ -318,6 +319,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixLess(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThan", args[1]), 2, args);
 
         private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("LessThanOrEqualTo", args[1]), 2, args);
+
+        private static InvocationExpressionSyntax FixPositive(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Positive"), 1, args);
 
         private static InvocationExpressionSyntax FixNegative(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Negative"), 1, args);
 
