@@ -3141,7 +3141,7 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Test methods should use NUnit's fluent Assert approach.</value>
   </data>
   <data name="MiKo_3106_Description" xml:space="preserve">
-    <value>If assertions such as Assert.That(...) contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; or the Equals() method, then those methods test for booleans.
+    <value>If assertions such as Assert.That(...) contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; or patterns such as 'is true' or type checks via 'is' or the Equals() method, then those methods test for booleans.
 In case the test fails, the failure (e.g. 'true' expected but 'false' received) is hard to understand and needs to be carefully inspected.
 In worst case the test needs to be debugged to see what went wrong. If the test itself is a shaky one, this is even more annoying.
 

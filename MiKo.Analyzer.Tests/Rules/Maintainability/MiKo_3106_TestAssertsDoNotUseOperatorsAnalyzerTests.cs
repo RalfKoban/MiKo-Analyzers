@@ -11,6 +11,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture, Isolated]
     public sealed class MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] AssertionMethods =
+            {
+                "That",
+                "IsTrue",
+                "True",
+                "IsFalse",
+                "False",
+            };
+
         private static readonly string[] Operators =
             {
                 "==",
@@ -95,8 +104,16 @@ namespace Bla
 }
 ");
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_an_operator_in_a_test_method_([ValueSource(nameof(Tests))] string test, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_an_operator_in_a_test_method() => Assert.Multiple(() =>
+                                                                                                   {
+                                                                                                       foreach (var methodName in AssertionMethods)
+                                                                                                       {
+                                                                                                           foreach (var test in Tests)
+                                                                                                           {
+                                                                                                               foreach (var @operator in Operators)
+                                                                                                               {
+                                                                                                                   An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -106,14 +123,26 @@ namespace Bla
         [" + test + @"]
         public void DoSomething()
         {
-            Assert.IsTrue(42 " + @operator + @" 0815);
+            Assert." + methodName + "(42 " + @operator + @" 0815);
         }
     }
 }
 ");
+                                                                                                               }
+                                                                                                           }
+                                                                                                       }
+                                                                                                   });
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture, [ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test() => Assert.Multiple(() =>
+                                                                                                                     {
+                                                                                                                         foreach (var methodName in AssertionMethods)
+                                                                                                                         {
+                                                                                                                             foreach (var testFixture in TestFixtures)
+                                                                                                                             {
+                                                                                                                                 foreach (var @operator in Operators)
+                                                                                                                                 {
+                                                                                                                                     An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -123,11 +152,15 @@ namespace Bla
     {
         public void DoSomething()
         {
-            Assert.IsTrue(42 " + @operator + @" 0815);
+            Assert." + methodName + "(42 " + @operator + @" 0815);
         }
     }
 }
 ");
+                                                                                                                                 }
+                                                                                                                             }
+                                                                                                                         }
+                                                                                                                     });
 
         [Test]
         public void An_issue_is_reported_for_an_operator_in_a_non_test_class_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
@@ -156,6 +189,56 @@ namespace Bla
         public void DoSomething(bool condition)
         {
             Assert.IsTrue(!condition);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_boolean_pattern_in_a_non_test_class_([Values("is true", "is false")] string pattern) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            Assert.That(condition " + pattern + @");
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_null_pattern_in_a_non_test_class() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(object o)
+        {
+            Assert.That(o is null);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_cast_in_a_non_test_class() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(object o)
+        {
+            Assert.That(o is IDisposable);
         }
     }
 }

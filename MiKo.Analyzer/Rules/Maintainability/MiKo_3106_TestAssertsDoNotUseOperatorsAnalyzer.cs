@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            "That",
                                                                            "IsTrue",
                                                                            "IsFalse",
+                                                                           "True",
+                                                                           "False",
                                                                        };
 
         public MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer() : base(Id)
@@ -27,8 +29,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.GetName())
-                                                                                 && node.Expression is IdentifierNameSyntax invokedType
-                                                                                 && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
+                                                                                    && node.Expression is IdentifierNameSyntax invokedType
+                                                                                    && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
+
+        private static bool IsFrameworkAssertion(SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
+        {
+            var type = expression.GetTypeSymbol(context.SemanticModel);
+            var namespaceName = type?.ContainingNamespace.FullyQualifiedName();
+
+            return Constants.Names.AssertionNamespaces.Contains(namespaceName);
+        }
 
         private static bool IsBinaryMethod(string methodName)
         {
@@ -59,6 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.LessThanOrEqualExpression:
                 case SyntaxKind.GreaterThanExpression:
                 case SyntaxKind.GreaterThanOrEqualExpression:
+                case SyntaxKind.IsExpression:
                 {
                     var be = (BinaryExpressionSyntax)expression;
                     token = be.OperatorToken;
@@ -76,6 +87,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     token = mae.Name.Identifier;
                     return IsBinaryMethod(mae.GetName());
+                }
+
+                case SyntaxKind.IsPatternExpression:
+                {
+                    var ipe = (IsPatternExpressionSyntax)expression;
+                    token = ipe.IsKeyword;
+                    return true;
                 }
             }
 
@@ -95,10 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (HasIssue(expression, out var token))
                     {
-                        var type = expression.GetTypeSymbol(context.SemanticModel);
-                        var namespaceName = type?.ContainingNamespace.FullyQualifiedName();
-
-                        if (Constants.Names.AssertionNamespaces.Contains(namespaceName) is false)
+                        if (IsFrameworkAssertion(context, expression) is false)
                         {
                             ReportIssue(context, token);
                         }
