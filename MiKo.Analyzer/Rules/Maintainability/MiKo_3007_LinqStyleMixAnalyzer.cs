@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,9 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeQueryExpression, SyntaxKind.QueryExpression);
 
-        private static bool TryFindSyntaxNode(QueryExpressionSyntax query, out SyntaxNode result, out string identifier)
+        private static bool TryFindInspectionTarget(SyntaxNode query, out SyntaxNode result, out string identifier)
         {
-            result = query.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration, SyntaxKind.VariableDeclarator);
+            result = query.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration, SyntaxKind.FieldDeclaration);
+
             switch (result)
             {
                 case MethodDeclarationSyntax m:
@@ -30,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     identifier = c.GetName();
                     return true;
 
-                // we do not find the enclosing method, so we might have a field (for which we need a variable), such as in MiKo_2071_EnumMethodSummaryAnalyzer
-                case VariableDeclaratorSyntax v:
-                    identifier = v.GetName();
+                // we have a field
+                case FieldDeclarationSyntax f:
+                    identifier = f.Declaration.Variables.First().GetName();
                     return true;
 
                 // found something else
@@ -56,7 +60,45 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)
         {
-            if (TryFindSyntaxNode(query, out var syntaxNode, out var identifier) && syntaxNode.HasLinqExtensionMethod(semanticModel))
+            var foundNode = TryFindInspectionTarget(query, out var syntaxNode, out var identifier);
+
+            if (query.HasLinqExtensionMethod(semanticModel))
+            {
+                // query itself contains Linq calls, so report an issue
+                return Issue(identifier, query);
+            }
+
+            var enclosingNode = query.GetEnclosing(SyntaxKind.SimpleMemberAccessExpression);
+            if (enclosingNode is MemberAccessExpressionSyntax m)
+            {
+                // ignore surrounding "ToList", but only if it is the only call
+                switch (m.GetName())
+                {
+                    case nameof(Enumerable.ToList):
+                    case nameof(Enumerable.ToArray):
+                    case nameof(Enumerable.ToDictionary):
+                    case nameof(Enumerable.ToLookup):
+                    {
+                        var calls = 0;
+
+                        foreach (var unused in syntaxNode.LinqExtensionMethods(semanticModel))
+                        {
+                            calls++;
+
+                            if (calls == 2)
+                            {
+                                // no need to look further, found at least one additional call
+                                return Issue(identifier, query);
+                            }
+                        }
+
+                        // that's the only call which shall be allowed
+                        return null;
+                    }
+                }
+            }
+
+            if (foundNode && syntaxNode.HasLinqExtensionMethod(semanticModel))
             {
                 return Issue(identifier, query);
             }
