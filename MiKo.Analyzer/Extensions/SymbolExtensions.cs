@@ -93,16 +93,18 @@ namespace MiKoSolutions.Analyzers
 
         internal static IMethodSymbol GetEnclosingMethod(this ISymbol value)
         {
+            var symbol = value;
+
             while (true)
             {
-                switch (value)
+                switch (symbol)
                 {
                     case null: return null;
                     case IMethodSymbol method: return method;
                     case IPropertySymbol property: return property.IsIndexer ? (property.GetMethod ?? property.SetMethod) : property.SetMethod;
 
                     default:
-                        value = value.ContainingSymbol;
+                        symbol = symbol.ContainingSymbol;
                         break;
                 }
             }
@@ -246,18 +248,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
-            var baseTypes = new Queue<ITypeSymbol>(value.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
-            baseTypes.Enqueue(value);
+            var symbol = value;
+
+            var baseTypes = new Queue<ITypeSymbol>(symbol.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
+            baseTypes.Enqueue(symbol);
 
             while (true)
             {
-                var baseType = value.BaseType;
+                var baseType = symbol.BaseType;
                 if (baseType is null)
                 {
                     break;
                 }
 
-                value = baseType;
+                symbol = baseType;
 
                 baseTypes.Enqueue(baseType);
             }
@@ -275,6 +279,7 @@ namespace MiKoSolutions.Analyzers
             return types;
         }
 
+        // ReSharper disable once AssignNullToNotNullAttribute
         internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, string.Intern(typeof(T).FullName));
 
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClass)
@@ -289,27 +294,29 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            switch (value.TypeKind)
+            var symbol = value;
+
+            switch (symbol.TypeKind)
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                     {
                         while (true)
                         {
-                            var fullName = string.Intern(value.ToString());
+                            var fullName = string.Intern(symbol.ToString());
 
                             if (baseClass == fullName)
                             {
                                 return true;
                             }
 
-                            var baseType = value.BaseType;
+                            var baseType = symbol.BaseType;
                             if (baseType is null)
                             {
                                 return false;
                             }
 
-                            value = baseType;
+                            symbol = baseType;
                         }
                     }
             }
@@ -324,14 +331,16 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            switch (value.TypeKind)
+            var symbol = value;
+
+            switch (symbol.TypeKind)
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                     {
                         while (true)
                         {
-                            var fullName = string.Intern(value.ToString());
+                            var fullName = string.Intern(symbol.ToString());
 
                             if (baseClassName == fullName)
                             {
@@ -343,13 +352,13 @@ namespace MiKoSolutions.Analyzers
                                 return true;
                             }
 
-                            var baseType = value.BaseType;
+                            var baseType = symbol.BaseType;
                             if (baseType is null)
                             {
                                 return false;
                             }
 
-                            value = baseType;
+                            symbol = baseType;
                         }
                     }
             }
@@ -662,7 +671,8 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            var interfaceTypeName = typeof(T).FullName;
+            // ReSharper disable once AssignNullToNotNullAttribute
+            var interfaceTypeName = string.Intern(typeof(T).FullName);
 
             var typeSymbol = value.ContainingType;
             if (typeSymbol.Implements(interfaceTypeName))

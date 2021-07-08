@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             while (s != null)
             {
                 depth++;
+
                 s = s.ContainingNamespace;
             }
 

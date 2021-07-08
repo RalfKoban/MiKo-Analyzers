@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3035";
 
-        private static readonly string TimeSpanFullName = typeof(TimeSpan).FullName;
-
         public MiKo_3035_WaitOneHasTimeoutAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -33,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var argumentType = argument.GetTypeSymbol(semanticModel);
 
-                    if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TimeSpanFullName)
+                    if (argumentType.SpecialType == SpecialType.System_Int32 || argumentType.FullyQualifiedName() == TypeNames.TimeSpan)
                     {
                         // we use a timeout parameter (int or TimeSpan)
                         return false;

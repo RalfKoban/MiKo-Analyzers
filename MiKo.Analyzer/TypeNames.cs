@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using System.Threading;
 
 // ReSharper disable AssignNullToNotNullAttribute
@@ -24,5 +25,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static readonly string PropertyChangingEventArgs = string.Intern(typeof(PropertyChangingEventArgs).FullName);
         internal static readonly string PropertyChangedEventArgs = string.Intern(typeof(PropertyChangedEventArgs).FullName);
+
+        internal static readonly string SerializationInfo = string.Intern(typeof(SerializationInfo).FullName);
+        internal static readonly string StreamingContext = string.Intern(typeof(StreamingContext).FullName);
+
+        internal static readonly string TimeSpan = typeof(TimeSpan).FullName;
     }
 }

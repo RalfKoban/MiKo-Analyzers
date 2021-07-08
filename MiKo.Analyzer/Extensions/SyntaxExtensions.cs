@@ -145,15 +145,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode
         {
+            var node = value;
+
             while (true)
             {
-                switch (value)
+                switch (node)
                 {
                     case null: return null;
                     case T t: return t;
                 }
 
-                value = value.Parent;
+                node = node.Parent;
             }
         }
 
@@ -161,22 +163,24 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxNode GetEnclosing(this SyntaxNode value, params SyntaxKind[] syntaxKinds)
         {
+            var node = value;
+
             while (true)
             {
-                if (value is null)
+                if (node is null)
                 {
                     return null;
                 }
 
                 foreach (var syntaxKind in syntaxKinds)
                 {
-                    if (value.IsKind(syntaxKind))
+                    if (node.IsKind(syntaxKind))
                     {
-                        return value;
+                        return node;
                     }
                 }
 
-                value = value.Parent;
+                node = node.Parent;
             }
         }
 
@@ -234,13 +238,13 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {
             var s = value.ToString();
-            return s == nameof(SerializationInfo) || s == typeof(SerializationInfo).FullName;
+            return s == nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
         }
 
         internal static bool IsStreamingContext(this TypeSyntax value)
         {
             var s = value.ToString();
-            return s == nameof(StreamingContext) || s == typeof(StreamingContext).FullName;
+            return s == nameof(StreamingContext) || s == TypeNames.StreamingContext;
         }
 
         internal static bool IsException(this TypeSyntax value)
@@ -424,6 +428,7 @@ namespace MiKoSolutions.Analyzers
                 if (textTokens.Count > 0 && textTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     textTokens.RemoveAt(0);
+
                     replaced = true;
                 }
             }
