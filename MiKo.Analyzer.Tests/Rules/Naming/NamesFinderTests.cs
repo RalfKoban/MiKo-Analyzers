@@ -40,6 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("IsRelevantFunc", ExpectedResult = "IsRelevantFunc")]
         [TestCase("Analysis", ExpectedResult = "Analyze")]
         [TestCase("Subtraction", ExpectedResult = "Subtract")]
+        [TestCase("Aquisition", ExpectedResult = "Aquire")]
+        [TestCase("Inquisition", ExpectedResult = "Inquire")]
         public string TryMakeVerb_finds_proper_verb_(string name)
         {
             NamesFinder.TryMakeVerb(name, out var result);

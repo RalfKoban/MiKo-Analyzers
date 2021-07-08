@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 new KeyValuePair<string, string>("llation", "ll"),
                 new KeyValuePair<string, string>("stration", "ster"),
                 new KeyValuePair<string, string>("ration", "re"),
+                new KeyValuePair<string, string>("isition", "ire"),
                 new KeyValuePair<string, string>("isation", "ise"),
                 new KeyValuePair<string, string>("ization", "ize"),
                 new KeyValuePair<string, string>("ation", "ate"),
