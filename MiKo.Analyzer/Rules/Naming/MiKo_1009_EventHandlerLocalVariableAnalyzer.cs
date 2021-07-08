@@ -16,9 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-#pragma warning disable CA1801 // parameter is not needed but might be in future
         internal static string FindBetterName(ISymbol symbol) => Handler;
-#pragma warning restore CA1801
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventHandler() is true;
 

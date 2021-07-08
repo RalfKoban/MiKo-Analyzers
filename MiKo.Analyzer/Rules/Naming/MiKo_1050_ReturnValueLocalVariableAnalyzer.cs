@@ -24,9 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-#pragma warning disable CA1801 // parameter is not needed but might be in future
         internal static string FindBetterName(ISymbol symbol) => "result";
-#pragma warning restore CA1801
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
 

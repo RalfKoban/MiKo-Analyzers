@@ -233,19 +233,16 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(markdown, Is.Empty);
         }
 
-        private static int GetDiagnosticIdStartingNumber(Analyzer analyzer)
-        {
-            switch (analyzer.GetType().Namespace)
-            {
-                case "MiKoSolutions.Analyzers.Rules.Documentation": return 2;
-                case "MiKoSolutions.Analyzers.Rules.Maintainability": return 3;
-                case "MiKoSolutions.Analyzers.Rules.Metrics": return 0;
-                case "MiKoSolutions.Analyzers.Rules.Naming": return 1;
-                case "MiKoSolutions.Analyzers.Rules.Ordering": return 4;
-                case "MiKoSolutions.Analyzers.Rules.Performance": return 5;
-                default: return -1;
-            }
-        }
+        private static int GetDiagnosticIdStartingNumber(Analyzer analyzer) => analyzer.GetType().Namespace switch
+                                                                                                                    {
+                                                                                                                        "MiKoSolutions.Analyzers.Rules.Documentation" => 2,
+                                                                                                                        "MiKoSolutions.Analyzers.Rules.Maintainability" => 3,
+                                                                                                                        "MiKoSolutions.Analyzers.Rules.Metrics" => 0,
+                                                                                                                        "MiKoSolutions.Analyzers.Rules.Naming" => 1,
+                                                                                                                        "MiKoSolutions.Analyzers.Rules.Ordering" => 4,
+                                                                                                                        "MiKoSolutions.Analyzers.Rules.Performance" => 5,
+                                                                                                                        _ => -1,
+                                                                                                                    };
 
         private static Analyzer[] CreateAllAnalyzers()
         {

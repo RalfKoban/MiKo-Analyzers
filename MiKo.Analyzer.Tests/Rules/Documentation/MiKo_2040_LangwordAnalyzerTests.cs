@@ -218,7 +218,7 @@ public sealed class TestMe
             {
                 tokens.Add(token);
                 tokens.Add(token.ToUpperInvariant());
-                tokens.Add(char.ToUpperInvariant(token[0]) + token.Substring(1));
+                tokens.Add(char.ToUpperInvariant(token[0]) + token[1..]);
             }
 
             var results = new HashSet<string>();

@@ -24,7 +24,7 @@ namespace TestHelper
 
             if (char.IsLower(value[0]))
             {
-                return char.ToUpper(value[0]) + value.Substring(1);
+                return char.ToUpper(value[0]) + value[1..];
             }
 
             return value;

@@ -60,10 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (node is XElement e)
             {
                 // skip <c> and <code>
-#pragma warning disable CA1304
                 var name = e.Name.ToString().ToLower();
-#pragma warning restore CA1304
-
                 switch (name)
                 {
                     case Constants.XmlTag.C:
