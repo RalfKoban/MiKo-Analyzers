@@ -121,7 +121,7 @@
     <value>Methods should be short to ease reading and maintenance (SRP, SLoA).</value>
   </data>
   <data name="MiKo_0001_MessageFormat" xml:space="preserve">
-    <value>Too many LoC: {1,4} (max. {2})</value>
+    <value>Too many LoC: {1,4} (max. allowed are {2})</value>
   </data>
   <data name="MiKo_0001_Title" xml:space="preserve">
     <value>Method is too big.</value>
@@ -132,7 +132,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | catch when | ternary operator ?: | ?? | ?.</value>
   </data>
   <data name="MiKo_0002_MessageFormat" xml:space="preserve">
-    <value>Too high CC: {1,4} (max. {2})</value>
+    <value>Too high CC: {1,4} (max. allowed are {2})</value>
   </data>
   <data name="MiKo_0002_Title" xml:space="preserve">
     <value>Method is too complex.</value>
@@ -141,7 +141,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Types should be limited in their size to ease reading and maintenance (SRP).</value>
   </data>
   <data name="MiKo_0003_MessageFormat" xml:space="preserve">
-    <value>Too many LoC: {1,4} (max. {2})</value>
+    <value>Too many LoC: {1,4} (max. allowed are {2})</value>
   </data>
   <data name="MiKo_0003_Title" xml:space="preserve">
     <value>Type is too big.</value>
@@ -150,7 +150,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To follow the SRP, methods should have as few parameters as possible.</value>
   </data>
   <data name="MiKo_0004_MessageFormat" xml:space="preserve">
-    <value>Too many parameters: {1,4} (max. {2})</value>
+    <value>Too many parameters: {1,4} (max. allowed are {2})</value>
   </data>
   <data name="MiKo_0004_Title" xml:space="preserve">
     <value>Methods has too many parameters.</value>
@@ -2432,7 +2432,7 @@ Such empty regions solely clutter the code without providing any benefit at all.
     <value>If a class has too many dependencies, that class is doing too much and does not follow the SRP.</value>
   </data>
   <data name="MiKo_3002_MessageFormat" xml:space="preserve">
-    <value>Too many MEF dependencies: {1,4} (max. {2})</value>
+    <value>Too many MEF dependencies: {1,4} (max. allowed are {2})</value>
   </data>
   <data name="MiKo_3002_Title" xml:space="preserve">
     <value>Classes should not have too many dependencies.</value>
