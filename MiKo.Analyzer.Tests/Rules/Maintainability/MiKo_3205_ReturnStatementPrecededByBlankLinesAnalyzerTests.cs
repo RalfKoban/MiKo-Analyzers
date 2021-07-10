@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         [Test]
         public void No_issue_is_reported_for_void_method_call() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -28,8 +26,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_return_statement_as_first_statement() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -43,9 +39,23 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_return_statement_that_is_preceded_by_blank_line() => No_issue_is_reported_for(@"
-using NUnit.Framework;
+        public void No_issue_is_reported_for_yield_return_statement_as_first_statement() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
 
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool something)
+        {
+            yield return 1;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_return_statement_that_is_preceded_by_blank_line() => No_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -62,8 +72,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_return_statement_inside_if_block_without_brackets() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -82,8 +90,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_return_statement_inside_if_block_without_brackets_but_placed_on_same_line() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -101,8 +107,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_return_statement_inside_else_block_without_brackets_but_placed_on_same_line() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -118,8 +122,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_return_statement_inside_if_block_with_brackets() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -140,8 +142,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_return_statement_as_first_statement_inside_switch_case_block() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -163,7 +163,6 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_return_statement_as_first_statement_in_parenthesized_lambda_assignment() => No_issue_is_reported_for(@"
 using System;
-using NUnit.Framework;
 
 namespace Bla
 {
@@ -187,7 +186,6 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_return_statement_as_first_statement_in_parenthesized_lambda_assignment_if_variable_is_assigned_before_block() => No_issue_is_reported_for(@"
 using System;
-using NUnit.Framework;
 
 namespace Bla
 {
@@ -211,8 +209,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_return_statement_preceded_by_if_block_without_separate_blank_line() => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -231,8 +227,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_return_statement_preceded_by_variable_assignment_inside_if_block_without_separate_blank_line() => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -253,8 +247,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_return_statement_preceded_by_variable_assignment_inside_parenthesized_lambda_assignment_without_separate_blank_line() => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -277,8 +269,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_switch_case_block_without_blank_line_in_between() => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -302,8 +292,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_switch_default_block_without_blank_line_in_between() => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -326,11 +314,27 @@ namespace Bla
 ");
 
         [Test]
-        public void Code_gets_fixed_for_missing_preceding_line()
+        public void An_issue_is_reported_for_yield_return_statement_after_variable_assignment_without_blank_line_in_between() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+
+        public IEnumerable<int> DoSomething()
+        {
+            var x = 0;
+            yield return x;
+        }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_return_statement_and_missing_preceding_line()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -345,8 +349,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -356,6 +358,45 @@ namespace Bla
             int x = 1;
 
             return x;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_yield_return_statement_and_missing_preceding_line()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething()
+        {
+            int x = 1;
+            yield return x;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething()
+        {
+            int x = 1;
+
+            yield return x;
         }
     }
 }

@@ -18,21 +18,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(AnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeReturnStatementSyntax, SyntaxKind.ReturnStatement);
+            context.RegisterSyntaxNodeAction(AnalyzeReturnStatementSyntax, SyntaxKind.ReturnStatement, SyntaxKind.YieldReturnStatement);
         }
 
         private void AnalyzeReturnStatementSyntax(SyntaxNodeAnalysisContext context)
         {
-            var node = (ReturnStatementSyntax)context.Node;
-
-            var diagnostic = AnalyzeReturnStatementSyntax(node);
+            var diagnostic = AnalyzeReturnStatementSyntax(context.Node);
             if (diagnostic != null)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private Diagnostic AnalyzeReturnStatementSyntax(ReturnStatementSyntax statement)
+        private Diagnostic AnalyzeReturnStatementSyntax(SyntaxNode statement)
         {
             foreach (var ancestor in statement.Ancestors())
             {
@@ -57,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private Diagnostic AnalyzeStatements(SyntaxList<StatementSyntax> statements, ReturnStatementSyntax returnStatement)
+        private Diagnostic AnalyzeStatements(SyntaxList<StatementSyntax> statements, SyntaxNode returnStatement)
         {
             var callLineSpan = returnStatement.GetLocation().GetLineSpan();
             var noBlankLinesBefore = statements.Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
