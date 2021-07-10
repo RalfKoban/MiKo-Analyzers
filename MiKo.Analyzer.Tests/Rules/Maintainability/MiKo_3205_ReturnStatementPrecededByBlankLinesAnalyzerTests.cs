@@ -43,6 +43,24 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_return_statement_that_is_preceded_by_blank_line() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            var x = 0;
+
+            return x;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_return_statement_inside_if_block_without_brackets() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -52,10 +70,47 @@ namespace Bla
     {
         public int DoSomething(bool something)
         {
+            var x = 0;
             if (something)
                 return 1;
 
             return 2;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_return_statement_inside_if_block_without_brackets_but_placed_on_same_line() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            var x = 0;
+            if (something) return 1;
+
+            return 2;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_return_statement_inside_else_block_without_brackets_but_placed_on_same_line() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            var x = 0;
+            if (something) return 1; else return 2;
         }
     }
 }
@@ -71,12 +126,35 @@ namespace Bla
     {
         public int DoSomething(bool something)
         {
+            var x = 0;
             if (something)
             {
                 return 1;
             }
 
             return 2;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_return_statement_as_first_statement_inside_switch_case_block() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public bool DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 0: return true;
+                case 1: return true;
+                case 2: return true;
+                default: return false;
+            }
         }
     }
 }
@@ -193,6 +271,56 @@ namespace Bla
         }
 
         private static T Callback<T>(Func<T> a) => a();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_switch_case_block_without_blank_line_in_between() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+
+        public bool DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 0:
+                    var x = true;
+                    return x;
+
+                default:
+                    return false;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_switch_default_block_without_blank_line_in_between() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+
+        public bool DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 0:
+                    return true;
+
+                default:
+                    var result = false;
+                    return result;
+            }
+        }
     }
 }
 ");

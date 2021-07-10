@@ -25,45 +25,44 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (ReturnStatementSyntax)context.Node;
 
-            var diagnostic = AnalyzeReturnStatementSyntax(node, context.SemanticModel);
+            var diagnostic = AnalyzeReturnStatementSyntax(node);
             if (diagnostic != null)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private Diagnostic AnalyzeReturnStatementSyntax(ReturnStatementSyntax statement, SemanticModel semanticModel)
+        private Diagnostic AnalyzeReturnStatementSyntax(ReturnStatementSyntax statement)
         {
-            var callLineSpan = statement.GetLocation().GetLineSpan();
-
             foreach (var ancestor in statement.Ancestors())
             {
-                // if (ancestor is ParenthesizedLambdaExpressionSyntax)
-                // {
-                //     // no issue
-                //     break;
-                // }
-                if (ancestor is BlockSyntax block)
+                switch (ancestor)
                 {
-                    var noBlankLinesBefore = block.Statements
-                                                  .Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
+                    case BlockSyntax block:
+                        return AnalyzeStatements(block.Statements, statement);
 
-                    if (noBlankLinesBefore)
-                    {
-                        return Issue(statement, true, false);
-                    }
+                    case SwitchSectionSyntax section:
+                        return AnalyzeStatements(section.Statements, statement);
 
-                    break;
-                }
+                    case IfStatementSyntax _:
+                    case ElseClauseSyntax _:
+                        return null; // no issue
 
-                if (ancestor is MethodDeclarationSyntax || ancestor is ClassDeclarationSyntax)
-                {
-                    // stop lookup as there is no valid ancestor anymore
-                    break;
+                    case MethodDeclarationSyntax _:
+                    case ClassDeclarationSyntax _:
+                        return null; // stop lookup as there is no valid ancestor anymore
                 }
             }
 
             return null;
+        }
+
+        private Diagnostic AnalyzeStatements(SyntaxList<StatementSyntax> statements, ReturnStatementSyntax returnStatement)
+        {
+            var callLineSpan = returnStatement.GetLocation().GetLineSpan();
+            var noBlankLinesBefore = statements.Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
+
+            return noBlankLinesBefore ? Issue(returnStatement, true, false) : null;
         }
     }
 }
