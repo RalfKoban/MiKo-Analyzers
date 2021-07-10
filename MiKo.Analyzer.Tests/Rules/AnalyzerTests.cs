@@ -261,6 +261,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                        .Select(_ => (Analyzer)_.GetConstructor(Type.EmptyTypes).Invoke(null))
                                        .OrderBy(_ => _.DiagnosticId)
                                        .ToArray();
+
             return allAnalyzers;
         }
 
@@ -273,6 +274,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                .Select(_ => (CodeFixProvider)_.GetConstructor(Type.EmptyTypes).Invoke(null))
                                                .OrderBy(_ => _.GetType().Name)
                                                .ToArray();
+
             return allAnalyzers;
         }
     }

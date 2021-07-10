@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers
         internal static string GetComment(this IParameterSymbol parameter, string commentXml)
         {
             var parameterName = parameter.Name;
+
             return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
         }
 
@@ -57,6 +58,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlTag)
         {
             var element = GetCommentElement(commentXml);
+
             return element is null
                        ? Enumerable.Empty<XElement>() // happens in case of an invalid character
                        : element.Descendants(xmlTag);
@@ -66,6 +68,7 @@ namespace MiKoSolutions.Analyzers
         {
             var comment = commentXml.Without(Constants.Markers.Symbols);
             var commentElements = GetCommentElements(comment, Constants.XmlTag.Exception);
+
             return commentElements;
         }
 
@@ -100,6 +103,7 @@ namespace MiKoSolutions.Analyzers
                 if (c.IsUpperCase())
                 {
                     var firstWord = text.Substring(0, index);
+
                     return firstWord;
                 }
             }
@@ -142,6 +146,7 @@ namespace MiKoSolutions.Analyzers
             if (comments.Any())
             {
                 var comment = Cleaned(comments.Nodes().ConcatenatedWith());
+
                 return comment;
             }
 

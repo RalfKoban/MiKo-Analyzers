@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var falsePattern = SyntaxFactory.ConstantPattern(SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression));
             var pattern = SyntaxFactory.IsPatternExpression(unary.Operand, falsePattern);
+
             return pattern;
         }
     }

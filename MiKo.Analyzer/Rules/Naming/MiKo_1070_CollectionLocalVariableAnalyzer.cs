@@ -99,6 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (v != null)
                 {
                     var type = semanticModel.GetTypeInfo(v.Type).Type;
+
                     return type?.IsByteArray() is true;
                 }
             }

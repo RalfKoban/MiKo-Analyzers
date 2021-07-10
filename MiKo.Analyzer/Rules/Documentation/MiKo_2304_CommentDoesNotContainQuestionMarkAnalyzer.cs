@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var questionMarkWithoutHyperlink = comment.Split(Constants.WhiteSpaces, StringSplitOptions.RemoveEmptyEntries)
                                                       .Where(_ => _.Contains("?"))
                                                       .Any(_ => _.Contains("://") is false);
+
             return questionMarkWithoutHyperlink;
         }
     }

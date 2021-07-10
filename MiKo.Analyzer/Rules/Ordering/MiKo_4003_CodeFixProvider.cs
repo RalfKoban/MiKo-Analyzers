@@ -44,6 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                     .Where(_ => _.ParameterList.Parameters.None())
                                     .Where(_ => _.ReturnType.IsVoid())
                                     .First(_ => _.GetName() == nameof(IDisposable.Dispose));
+
             return disposeMethod;
         }
 

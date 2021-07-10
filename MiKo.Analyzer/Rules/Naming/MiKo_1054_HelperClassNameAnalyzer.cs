@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase));
                 var issue = Issue(symbol, wrongName, new Dictionary<string, string> { { WrongSuffixIndicator, wrongName } });
+
                 return new[] { issue };
             }
 

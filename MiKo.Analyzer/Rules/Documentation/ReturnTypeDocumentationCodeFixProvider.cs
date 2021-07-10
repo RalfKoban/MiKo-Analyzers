@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var type = SyntaxFactory.ParseTypeName("Task<TResult>");
             var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
+
             return Cref(Constants.XmlTag.See, type, member);
         }
 
@@ -28,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var syntax = GetXmlSyntax(Constants.XmlTag.Returns, syntaxNode).FirstOrDefault()
                                   ?? GetXmlSyntax(Constants.XmlTag.Value, syntaxNode).FirstOrDefault();
+
                         return syntax;
                     }
                 }

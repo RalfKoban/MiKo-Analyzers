@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var exceeding = GetExceedingCharacters(symbol.Name);
+
             return exceeding > 0
                        ? new[] { Issue(symbol, exceeding) }
                        : Enumerable.Empty<Diagnostic>();
@@ -34,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected int GetExceedingCharacters(string symbolName)
         {
             var length = symbolName.GetNameOnlyPart().Length;
+
             return length - m_limit;
         }
     }

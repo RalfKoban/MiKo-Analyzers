@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         public static int CountCyclomaticComplexity(BlockSyntax body)
         {
             var count = SyntaxNodeCollector<SyntaxNode>.Collect(body).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
+
             return 1 + count;
         }
 

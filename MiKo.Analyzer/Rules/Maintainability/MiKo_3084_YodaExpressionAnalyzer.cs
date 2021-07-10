@@ -50,6 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var type = context.FindContainingType();
                     var isConst = type.GetMembers(i.GetName()).OfType<IFieldSymbol>().Any(_ => _.IsConst);
+
                     return isConst;
                 }
 

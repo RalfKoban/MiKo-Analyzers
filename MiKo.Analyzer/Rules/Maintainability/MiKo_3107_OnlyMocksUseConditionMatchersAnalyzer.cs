@@ -118,6 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var diagnostics = node.Expressions.OfType<AssignmentExpressionSyntax>()
                                                          .Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
                                                          .SelectMany(_ => AnalyzeExpression(_.Right, symbol.Name, _.GetLocation()));
+
             return diagnostics;
         }
 
@@ -129,6 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var diagnostics = argumentList.Arguments.SelectMany(_ => AnalyzeExpression(_.Expression, method.Name, _.GetLocation()));
+
             return diagnostics;
         }
 

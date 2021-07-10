@@ -154,11 +154,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (expectedNamespace != unitTestNamespace)
                 {
                     result = Issue(testClass, expectedNamespace);
+
                     return true;
                 }
             }
 
             result = null;
+
             return false;
         }
     }

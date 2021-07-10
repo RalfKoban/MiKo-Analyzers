@@ -70,6 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (parameters.Length == 2)
             {
                 yield return AnalyzeParameter(commentXml, parameters[0], "The first value to compare.");
+
                 yield return AnalyzeParameter(commentXml, parameters[1], "The second value to compare.");
             }
         }
@@ -77,6 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private Diagnostic AnalyzeParameter(string commentXml, IParameterSymbol parameter, string phrase)
         {
             var comment = parameter.GetComment(commentXml);
+
             return comment == phrase
                        ? null
                        : Issue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);

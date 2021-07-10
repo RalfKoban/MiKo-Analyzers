@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (firstWord.Equals(StartingPhrase.FirstWord(), StringComparison.OrdinalIgnoreCase))
             {
                 var secondWord = withoutAsync.SecondWord();
+
                 return secondWord.Equals(StartingPhrase.SecondWord(), StringComparison.OrdinalIgnoreCase);
             }
 

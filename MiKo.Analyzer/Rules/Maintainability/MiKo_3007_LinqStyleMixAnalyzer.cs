@@ -27,22 +27,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case MethodDeclarationSyntax m:
                     identifier = m.GetName();
+
                     return true;
 
                 // we have a constructor here
                 case ConstructorDeclarationSyntax c:
                     identifier = c.GetName();
+
                     return true;
 
                 // we have a field
                 case FieldDeclarationSyntax f:
                     identifier = f.Declaration.Variables.First().GetName();
+
                     return true;
 
                 // found something else
                 default:
                     result = null;
                     identifier = null;
+
                     return false;
             }
         }

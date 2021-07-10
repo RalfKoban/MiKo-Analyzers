@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var name = FindBetterName(className);
+
             return new[] { Issue(symbol, name) };
         }
 

@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var isParameter1 = symbol.Equals(parameters[0], SymbolEqualityComparer.Default);
+
             return isParameter1 ? "left" : "right";
         }
 
@@ -55,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 case 2:
                     yield return AnalyzeParameter(parameters[0], "left");
+
                     yield return AnalyzeParameter(parameters[1], "right");
 
                     break;

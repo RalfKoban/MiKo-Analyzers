@@ -42,11 +42,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (summary is null)
             {
                 var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();
+
                 return comment.InsertNodeAfter(comment.Content[0], newSummary);
             }
             else
             {
                 var newSummary = CommentStartingWith(summary, Phrase);
+
                 return comment.ReplaceNode(summary, newSummary);
             }
         }

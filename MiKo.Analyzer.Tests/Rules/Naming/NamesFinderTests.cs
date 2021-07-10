@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public string TryMakeVerb_finds_proper_verb_(string name)
         {
             NamesFinder.TryMakeVerb(name, out var result);
+
             return result;
         }
     }

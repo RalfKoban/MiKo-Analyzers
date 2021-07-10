@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         protected bool TryCreateDiagnostic(ISymbol symbol, int metric, int limit, out Diagnostic result)
         {
             result = metric > limit ? Issue(symbol, metric, limit) : null;
+
             return result != null;
         }
 

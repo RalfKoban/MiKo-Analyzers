@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                           .Where(_ => _.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase))
                           .Select(_ => Issue(symbol))
                           .ToList();
+
             return results;
         }
     }

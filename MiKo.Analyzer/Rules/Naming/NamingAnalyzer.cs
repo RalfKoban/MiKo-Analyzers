@@ -102,6 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol, string suffix, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             var betterName = Pluralizer.GetPluralName(symbol.Name, comparison, suffix);
+
             return betterName.IsNullOrWhiteSpace() ? null : Issue(symbol, betterName);
         }
 

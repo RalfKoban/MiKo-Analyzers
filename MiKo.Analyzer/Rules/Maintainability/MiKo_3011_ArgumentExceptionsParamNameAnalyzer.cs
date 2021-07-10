@@ -57,6 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var parameters = GetParameterNames(node, method);
                 var issue = Issue(type, location, parameters);
+
                 return new[] { issue };
             }
 

@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
         {
             var diagnostic = AnalyzeCollectionSuffix(symbol);
+
             return diagnostic != null
                        ? new[] { diagnostic }
                        : Enumerable.Empty<Diagnostic>();

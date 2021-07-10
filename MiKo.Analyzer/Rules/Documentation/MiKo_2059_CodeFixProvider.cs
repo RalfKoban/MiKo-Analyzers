@@ -76,8 +76,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         (original, rewritten) =>
                                                                             {
                                                                                 var exceptionName = GetReferencedExceptionName(original);
+
                                                                                 return newNodes.TryGetValue(exceptionName, out var replacement) ? replacement : rewritten;
                                                                             });
+
             return finalContent;
         }
 

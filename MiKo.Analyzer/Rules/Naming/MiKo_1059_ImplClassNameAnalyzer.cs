@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (symbolName.EndsWith(wrongSuffix, StringComparison.OrdinalIgnoreCase))
                 {
                     var issue = Issue(symbol, wrongSuffix, new Dictionary<string, string> { { WrongSuffixIndicator, wrongSuffix } });
+
                     return new[] { issue };
                 }
             }

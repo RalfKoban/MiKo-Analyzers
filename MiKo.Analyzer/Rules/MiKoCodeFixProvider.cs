@@ -57,6 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
 
             var newDocument = document.WithSyntaxRoot(root.ReplaceNode(syntax, updatedSyntax));
+
             return Task.FromResult(newDocument);
         }
 
@@ -66,6 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var updatedToken = GetUpdatedToken(oldToken, diagnostic);
 
             var newDocument = document.WithSyntaxRoot(root.ReplaceToken(oldToken, updatedToken));
+
             return Task.FromResult(newDocument);
         }
 

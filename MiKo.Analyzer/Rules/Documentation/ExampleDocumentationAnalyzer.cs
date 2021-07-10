@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var comments = CommentExtensions.GetExamples(commentXml).ToArray();
+
             return AnalyzeExample(symbol, comments);
         }
 

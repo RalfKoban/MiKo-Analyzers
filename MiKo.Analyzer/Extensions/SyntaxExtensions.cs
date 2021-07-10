@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers
                 var methodName = GetMethodName(node);
                 var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
                 var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
+
                 return parameterSymbol;
 
                 // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently in v3.3)
@@ -79,36 +80,42 @@ namespace MiKoSolutions.Analyzers
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)
         {
             var type = value.Expression.GetTypeSymbol(semanticModel);
+
             return type;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax value, SemanticModel semanticModel)
         {
             var typeInfo = semanticModel.GetTypeInfo(value);
+
             return typeInfo.Type;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, SemanticModel semanticModel)
         {
             var type = value.Expression.GetTypeSymbol(semanticModel);
+
             return type;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this TypeSyntax value, SemanticModel semanticModel)
         {
             var typeInfo = semanticModel.GetTypeInfo(value);
+
             return typeInfo.Type;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, SemanticModel semanticModel)
         {
             var type = value.Type.GetTypeSymbol(semanticModel);
+
             return type;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, SemanticModel semanticModel)
         {
             var symbol = GetSymbol(value.Identifier, semanticModel);
+
             return symbol as ITypeSymbol;
         }
 
@@ -117,6 +124,7 @@ namespace MiKoSolutions.Analyzers
         internal static ITypeSymbol GetTypeSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
             var typeInfo = semanticModel.GetTypeInfo(value);
+
             return typeInfo.Type;
         }
 
@@ -238,12 +246,14 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {
             var s = value.ToString();
+
             return s == nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
         }
 
         internal static bool IsStreamingContext(this TypeSyntax value)
         {
             var s = value.ToString();
+
             return s == nameof(StreamingContext) || s == TypeNames.StreamingContext;
         }
 
@@ -539,6 +549,7 @@ namespace MiKoSolutions.Analyzers
             var variablesWritten = dataFlow.WrittenInside;
 
             var used = variablesRead.Union(variablesWritten).Select(_ => _.Name).ToHashSet();
+
             return used;
         }
 

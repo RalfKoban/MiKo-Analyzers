@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var ignore = method.IsInterfaceImplementation();
+
             return ignore;
         }
 
@@ -77,6 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var variablesWritten = dataFlow.WrittenInside;
 
             var used = variablesRead.Union(variablesWritten).Select(_ => _.Name).ToHashSet();
+
             return used;
         }
 

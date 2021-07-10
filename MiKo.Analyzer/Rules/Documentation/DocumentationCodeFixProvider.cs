@@ -158,6 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
                     var token = SyntaxFactory.Token(default, SyntaxKind.XmlTextLiteralToken, ending, ending, default);
+
                     return comment.InsertTokensBefore(t.TextTokens.First(), new[] { token });
                 }
                 else
@@ -254,6 +255,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textMap.Any())
             {
                 var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
+
                 return result;
             }
 
@@ -374,6 +376,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var onlyWhitespaceText = content[0] is XmlTextSyntax t && GetText(t).IsNullOrWhiteSpace();
+
             return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
         }
 

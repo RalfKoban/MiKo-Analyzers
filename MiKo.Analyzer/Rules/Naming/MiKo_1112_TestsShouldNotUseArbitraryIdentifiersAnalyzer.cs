@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (characters.Length != 0)
             {
                 characters[i] = char.ToLowerInvariant(characters[i]);
+
                 return string.Intern(new string(characters));
             }
 

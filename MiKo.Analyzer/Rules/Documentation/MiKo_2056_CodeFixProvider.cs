@@ -55,6 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var phrase = MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.GetEndingPhrase(symbol);
 
                                 var exceptionComment = CommentEndingWith(e, phrase);
+
                                 return comment.ReplaceNode(part, exceptionComment);
                             }
                         }

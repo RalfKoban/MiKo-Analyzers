@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal static string FindBetterName(IMethodSymbol symbol)
         {
             var name = symbol.Name.Without(Phrase);
+
             return NamesFinder.TryMakeVerb(name, out var result) ? result : name;
         }
 

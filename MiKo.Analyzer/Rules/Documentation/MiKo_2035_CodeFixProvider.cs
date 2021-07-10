@@ -54,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetNonGenericCommentPhrases(returnType);
             var preparedComment = PrepareComment(comment);
+
             return CommentStartingWith(preparedComment, phrases[0]);
         }
 

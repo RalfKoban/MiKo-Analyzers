@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var betterName = FindBetterName(symbol);
+
             return new[] { Issue(symbol, betterName) };
         }
     }

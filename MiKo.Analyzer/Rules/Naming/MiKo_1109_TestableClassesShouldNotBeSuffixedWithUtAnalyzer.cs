@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (symbolName.EndsWith(Suffix, StringComparison.Ordinal))
             {
                 var newName = FindBetterName(symbolName);
+
                 yield return Issue(symbol, newName);
             }
         }

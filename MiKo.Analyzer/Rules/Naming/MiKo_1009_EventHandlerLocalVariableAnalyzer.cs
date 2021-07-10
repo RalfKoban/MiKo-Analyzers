@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (name != Handler)
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
+
                     yield return Issue(symbol, Handler);
                 }
             }

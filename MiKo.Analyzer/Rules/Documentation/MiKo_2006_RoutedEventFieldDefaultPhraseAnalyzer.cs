@@ -55,6 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var results = new List<string>(2 * phrases.Length);
             results.AddRange(phrases.Select(_ => string.Format(_, eventName))); // output as message to user
             results.AddRange(phrases.Select(_ => string.Format(_, typeName + "." + eventName)));
+
             return results;
         }
 

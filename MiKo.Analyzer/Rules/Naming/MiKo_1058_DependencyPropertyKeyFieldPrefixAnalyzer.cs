@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal static string FindBetterName(IFieldSymbol symbol)
         {
             var propertyName = FindPropertyNames(symbol).First();
+
             return propertyName + Suffix;
         }
 

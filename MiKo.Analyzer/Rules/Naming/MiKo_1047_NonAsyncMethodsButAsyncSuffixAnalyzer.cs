@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {
                 var betterName = FindBetterName(symbol);
+
                 return new[] { Issue(symbol, betterName) };
             }
 

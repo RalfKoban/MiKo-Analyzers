@@ -150,6 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string HandleKnownParts(string name)
         {
             var finalName = KnownParts.Aggregate(name, (current, part) => current.Replace(part, "#"));
+
             return finalName;
         }
 

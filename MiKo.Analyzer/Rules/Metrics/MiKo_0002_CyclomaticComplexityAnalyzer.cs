@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             var cc = Counter.CountCyclomaticComplexity(body);
             TryCreateDiagnostic(owningSymbol, cc, MaxCyclomaticComplexity, out var diagnostic);
+
             return diagnostic;
         }
     }

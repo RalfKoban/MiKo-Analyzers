@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodNames[0]);
 
             var result = methodNames.Skip(1).Aggregate(start, CreateSimpleMemberAccessExpressionSyntax);
+
             return result;
         }
 

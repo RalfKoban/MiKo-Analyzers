@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var issues = arguments.Where(_ => _.Expression is LambdaExpressionSyntax).Select(Issue).ToList();
+
             return issues;
         }
     }

@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var comment = CommentExtensions.GetExceptionComment(m_exceptionTypeFullName, commentXml);
+
             return comment is null
                        ? Enumerable.Empty<Diagnostic>()
                        : AnalyzeException(symbol, comment);

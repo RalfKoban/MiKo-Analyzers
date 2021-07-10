@@ -59,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
 
             var fixedComment = Comment(bothFixed, ReplacementMapKeys, ReplacementMap);
+
             return fixedComment;
         }
 

@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var phrase = Constants.Comments.EventHandlerSummaryStartingPhrase; // TODO: RKN Constants.Comments.EventHandlerSummaryPhrase[0]
+
             return new[] { Issue(symbol, phrase) };
         }
     }

@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     }
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
+
                     return Issue(enclosingMethod.Name, methodCall.Parent, methodName, Constants.ILog.IsDebugEnabled);
                 }
 

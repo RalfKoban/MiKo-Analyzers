@@ -99,6 +99,7 @@ namespace TestHelper
 
             var results = SortDiagnostics(diagnostics);
             diagnostics.Clear();
+
             return results;
         }
 

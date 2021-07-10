@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static IEnumerable<ExpressionSyntax> GetCandidates(SyntaxNode node, IEnumerable<string> names)
         {
             var descendantNodes = node.DescendantNodes().ToList();
+
             return descendantNodes.SelectMany(_ => GetSpecificCandidates(_, names));
         }
 

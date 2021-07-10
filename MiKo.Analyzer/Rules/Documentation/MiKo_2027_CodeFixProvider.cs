@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override SeparatedSyntaxList<ParameterSyntax> GetParameters(XmlElementSyntax syntax)
         {
             var method = syntax.Ancestors().OfType<ConstructorDeclarationSyntax>().First();
+
             return method.ParameterList.Parameters;
         }
 
@@ -28,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrase = (index == 0)
                              ? Constants.Comments.CtorSerializationInfoParamPhrase
                              : Constants.Comments.CtorStreamingContextParamPhrase;
+
             return Comment(comment, phrase);
         }
     }

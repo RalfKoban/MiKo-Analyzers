@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var correctSuffix = upperCase
                                         ? "Callback"
                                         : "callback";
+
                 return newName + correctSuffix;
             }
 

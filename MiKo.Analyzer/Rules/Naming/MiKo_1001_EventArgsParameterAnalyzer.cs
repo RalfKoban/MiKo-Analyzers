@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var i = applicableParameters.IndexOf(symbol);
+
             return "e" + i;
         }
 
@@ -77,6 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         var expected = symbol.Name != nameof(Equals) ? "e" : "other";
 
                         var parameter = parameters[0];
+
                         return parameter.Name != expected
                                    ? new[] { Issue(parameter, expected) }
                                    : Enumerable.Empty<Diagnostic>();
@@ -106,6 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static List<IParameterSymbol> GetParameters(IMethodSymbol method)
         {
             var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs() || _.Type.IsDependencyPropertyChangedEventArgs()).ToList();
+
             return parameters;
         }
     }

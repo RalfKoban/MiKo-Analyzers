@@ -165,6 +165,7 @@ namespace System
         public static string HumanizedTakeFirst(this string value, int max)
         {
             var index = Math.Min(max, value.Length);
+
             return index <= 0 || index == value.Length
                        ? value
                        : value.Substring(0, index) + "...";
@@ -209,6 +210,7 @@ namespace System
             }
 
             var length = value.Length - suffix.Length;
+
             return length > 0 ? value.Substring(0, length) : string.Empty;
         }
 
@@ -301,6 +303,7 @@ namespace System
 
             var characters = value.ToCharArray();
             characters[index] = char.ToLowerInvariant(characters[index]);
+
             return string.Intern(new string(characters));
         }
 
@@ -325,6 +328,7 @@ namespace System
 
             var characters = value.ToCharArray();
             characters[index] = char.ToUpperInvariant(characters[index]);
+
             return string.Intern(new string(characters));
         }
     }

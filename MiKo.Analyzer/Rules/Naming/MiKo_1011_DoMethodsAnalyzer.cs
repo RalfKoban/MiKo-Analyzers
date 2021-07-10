@@ -60,6 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 .Replace("Double", EscapedPhrase + "uble")
                                 .Replace("Doubt", EscapedPhrase + "ubt")
                                 .Replace("Down", EscapedPhrase + "wn");
+
             return escapedMethod;
         }
 

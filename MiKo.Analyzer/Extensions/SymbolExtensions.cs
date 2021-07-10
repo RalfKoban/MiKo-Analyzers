@@ -403,6 +403,7 @@ namespace MiKoSolutions.Analyzers
             if (value.ReturnType.IsObject())
             {
                 var parameters = value.Parameters;
+
                 return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsObject();
             }
 
@@ -440,6 +441,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol value)
         {
             var parameters = value.Parameters;
+
             return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
@@ -610,6 +612,7 @@ namespace MiKoSolutions.Analyzers
                         var typeSymbol = value.ContainingType;
 
                         var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>());
+
                         return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
                     }
             }
@@ -643,6 +646,7 @@ namespace MiKoSolutions.Analyzers
 
                         var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
                         var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
+
                         return result;
                     }
             }
@@ -682,6 +686,7 @@ namespace MiKoSolutions.Analyzers
                 var methodSymbols = typeSymbol.AllInterfaces
                                               .Where(_ => _.Name == interfaceTypeName)
                                               .SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
+
                 return methodSymbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
             }
 
@@ -756,6 +761,7 @@ namespace MiKoSolutions.Analyzers
             if (value.ReturnType.IsBoolean())
             {
                 var parameters = value.Parameters;
+
                 return parameters.Length == 1 && parameters[0].Type.IsObject();
             }
 
@@ -912,6 +918,7 @@ namespace MiKoSolutions.Analyzers
         {
             var modifier = GetModifierSignature(parameter);
             var parameterType = parameter.Type.MinimalTypeName();
+
             return modifier + parameterType;
         }
     }

@@ -81,6 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
                     var phrase = index > 0 ? summary.Substring(0, index + 2) : Constants.Comments.XmlElementStartingTag;
+
                     return ReportIssueStartingPhrase(symbol, phrase);
                 }
 

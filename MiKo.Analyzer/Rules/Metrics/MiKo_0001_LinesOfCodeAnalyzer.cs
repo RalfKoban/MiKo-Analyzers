@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             var loc = Counter.CountLinesOfCode(body);
             TryCreateDiagnostic(owningSymbol, loc, MaxLinesOfCode, out var diagnostic);
+
             return diagnostic;
         }
     }

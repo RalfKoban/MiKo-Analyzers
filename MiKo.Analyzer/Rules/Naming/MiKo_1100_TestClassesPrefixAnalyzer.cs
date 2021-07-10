@@ -65,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // for generic class or struct constraints there is no constraint type available
             var constraint = typeParameter.ConstraintTypes.FirstOrDefault();
+
             return constraint?.Name;
         }
 

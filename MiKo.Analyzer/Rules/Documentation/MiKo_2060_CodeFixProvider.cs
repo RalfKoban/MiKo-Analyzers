@@ -55,6 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case InterfaceDeclarationSyntax _:
                     {
                         var preparedComment = PrepareTypeComment(summary);
+
                         return CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
                     }
 
@@ -76,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
 
                         var cleanedContent = CleanupMethodComment(fixedComment);
+
                         return cleanedContent;
                     }
                 }

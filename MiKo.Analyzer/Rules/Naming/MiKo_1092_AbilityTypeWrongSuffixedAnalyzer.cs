@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.Contains("able") && name.EndsWithAny(TypeSuffixes, Comparison))
             {
                 var proposedName = GetProposedName(name);
+
                 yield return Issue(symbol, proposedName);
             }
         }

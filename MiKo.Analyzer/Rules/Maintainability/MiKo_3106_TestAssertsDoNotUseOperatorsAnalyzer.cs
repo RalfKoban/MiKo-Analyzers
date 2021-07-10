@@ -73,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var be = (BinaryExpressionSyntax)expression;
                     token = be.OperatorToken;
+
                     return true;
                 }
 
@@ -80,12 +81,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var pue = (PrefixUnaryExpressionSyntax)expression;
                     token = pue.OperatorToken;
+
                     return true;
                 }
 
                 case SyntaxKind.InvocationExpression when ((InvocationExpressionSyntax)expression).Expression is MemberAccessExpressionSyntax mae:
                 {
                     token = mae.Name.Identifier;
+
                     return IsBinaryMethod(mae.GetName());
                 }
 
@@ -93,11 +96,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var ipe = (IsPatternExpressionSyntax)expression;
                     token = ipe.IsKeyword;
+
                     return true;
                 }
             }
 
             token = default;
+
             return false;
         }
 

@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var literal = GetLiteral(binary).WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
 
             var pattern = SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
+
             return pattern;
         }
 

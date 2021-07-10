@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                     SyntaxFactory.Token(SyntaxKind.PublicKeyword),
                                                     SyntaxFactory.Token(SyntaxKind.StaticKeyword),
                                                     SyntaxFactory.Token(SyntaxKind.ReadOnlyKeyword));
+
             return field.WithModifiers(modifiers);
         }
     }

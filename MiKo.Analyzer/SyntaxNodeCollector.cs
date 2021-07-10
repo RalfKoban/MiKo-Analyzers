@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers
         {
             var collector = new SyntaxNodeCollector<T>();
             collector.Visit(node);
+
             return collector.m_nodes;
         }
 

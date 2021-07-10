@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
+
             return useAllPhrases
                        ? new[] { Issue(parameter, phrase.HumanizedConcatenated()) }
                        : new[] { Issue(parameter, phrase[0].SurroundedWithApostrophe()) };

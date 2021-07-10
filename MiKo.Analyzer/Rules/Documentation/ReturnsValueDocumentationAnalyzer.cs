@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, string commentXml)
         {
             var returnType = symbol.GetReturnType();
+
             return returnType != null
                        ? AnalyzeReturnType(symbol, returnType, commentXml)
                        : Enumerable.Empty<Diagnostic>();

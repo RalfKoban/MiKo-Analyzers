@@ -54,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                  return false;
                                          }
                                      });
+
             return found;
         }
 

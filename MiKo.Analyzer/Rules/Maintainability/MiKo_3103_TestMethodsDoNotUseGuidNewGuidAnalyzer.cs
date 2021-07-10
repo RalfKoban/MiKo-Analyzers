@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                    .Where(_ => _.ToCleanedUpString() == Invocation)
                                    .Select(_ => Issue(methodName, _))
                                    .ToList();
+
             return conditions;
         }
     }

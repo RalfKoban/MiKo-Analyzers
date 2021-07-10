@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         private Diagnostic AnalyzeEqualsInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel)
         {
             var arguments = node.ArgumentList.Arguments;
+
             return arguments.Count == 2
                    ? AnalyzeMethod(node, semanticModel, arguments)
                    : null;

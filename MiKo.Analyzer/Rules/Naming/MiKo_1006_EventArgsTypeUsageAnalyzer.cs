@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool IsInherited(SyntaxToken syntax, SemanticModel semanticModel)
         {
             var symbol = syntax.GetSymbol(semanticModel);
+
             return symbol.IsInterfaceImplementation();
         }
 

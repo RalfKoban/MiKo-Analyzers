@@ -47,12 +47,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.Contains("Missing"))
             {
                 var proposal = name.Replace("Missing", "NotFound");
+
                 return Issue(symbol, proposal);
             }
 
             if (name.StartsWith("Get", StringComparison.InvariantCulture) && name.Contains("Failed"))
             {
                 var proposal = name.Substring(4).Replace("Failed", "NotFound");
+
                 return Issue(symbol, proposal);
             }
 
