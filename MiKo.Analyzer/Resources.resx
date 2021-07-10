@@ -3214,10 +3214,22 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
   </data>
   <data name="MiKo_3204_MessageFormat" xml:space="preserve">
-    <value>Precede variable assignments with a blank line</value>
+    <value>Precede variable assignment with a blank line</value>
   </data>
   <data name="MiKo_3204_Title" xml:space="preserve">
     <value>Variable assignment statements should be preceded by blank lines.</value>
+  </data>
+  <data name="MiKo_3205_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_3205_Description" xml:space="preserve">
+    <value>To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3205_MessageFormat" xml:space="preserve">
+    <value>Precede return statement with a blank line</value>
+  </data>
+  <data name="MiKo_3205_Title" xml:space="preserve">
+    <value>Return statements should be preceded by blank lines.</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
