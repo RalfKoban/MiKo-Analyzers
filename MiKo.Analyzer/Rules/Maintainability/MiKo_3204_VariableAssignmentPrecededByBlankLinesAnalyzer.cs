@@ -76,8 +76,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (ancestor is BlockSyntax block)
                         {
                             var noBlankLinesBefore = block.Statements
-                                                          .Where(_ => IsAssignmentOrDeclaration(_, statement, identifierName) is false)
-                                                          .Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
+                                                          .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                                          .Any(_ => IsAssignmentOrDeclaration(_, statement, identifierName) is false);
 
                             if (noBlankLinesBefore)
                             {

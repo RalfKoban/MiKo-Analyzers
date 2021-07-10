@@ -34,7 +34,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public void DoSomething(bool something)
+        public void DoSomething()
         {
             var x = 1;
 
@@ -52,7 +52,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public void DoSomething(bool something)
+        public void DoSomething()
         {
             int x;
             x = 1;
@@ -117,7 +117,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public void DoSomething(bool something)
+        public void DoSomething()
         {
             int x, y;
             x = 1;
@@ -159,7 +159,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public void DoSomething(bool something)
+        public void DoSomething()
         {
             int x;
 
