@@ -9071,7 +9071,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Precede variable assignments with a blank line.
+        ///   Looks up a localized string similar to Precede variable assignment with a blank line.
         /// </summary>
         public static string MiKo_3204_MessageFormat {
             get {
@@ -9085,6 +9085,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3204_Title {
             get {
                 return ResourceManager.GetString("MiKo_3204_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_3205_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3205_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3205_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3205_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede return statement with a blank line.
+        /// </summary>
+        public static string MiKo_3205_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3205_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return statements should be preceded by blank lines..
+        /// </summary>
+        public static string MiKo_3205_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3205_Title", resourceCulture);
             }
         }
         
