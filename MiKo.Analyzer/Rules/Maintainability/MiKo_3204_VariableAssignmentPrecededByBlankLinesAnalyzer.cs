@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeSimpleAssignmentExpression, SyntaxKind.SimpleAssignmentExpression);
         }
 
-        private static bool IsAssignmentOrDeclaration(StatementSyntax statement, AssignmentExpressionSyntax assignment, string identifierName)
+        private static bool IsAssignmentOrDeclaration(StatementSyntax statement, AssignmentExpressionSyntax assignment)
         {
             if (statement.DescendantNodes().Contains(assignment))
             {
@@ -29,19 +29,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
-            if (statement is LocalDeclarationStatementSyntax)
+            switch (statement)
             {
-                // the statement is a variable declaration
-                return true;
-            }
+                case LocalDeclarationStatementSyntax _:
+                    return true; // the statement is a variable declaration
 
-            if (statement is ExpressionStatementSyntax e && e.Expression.IsKind(SyntaxKind.SimpleAssignmentExpression))
-            {
-                // it is another assignment expression
-                return true;
-            }
+                case ExpressionStatementSyntax e when e.Expression.IsKind(SyntaxKind.SimpleAssignmentExpression):
+                    return true; // it is another assignment expression
 
-            return false;
+                default:
+                    return false;
+            }
         }
 
         private void AnalyzeSimpleAssignmentExpression(SyntaxNodeAnalysisContext context)
@@ -63,37 +61,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (statement.GetAllUsedVariables(semanticModel).Contains(identifierName))
                 {
-                    var callLineSpan = statement.GetLocation().GetLineSpan();
-
                     foreach (var ancestor in statement.Ancestors())
                     {
-                        if (ancestor is ParenthesizedLambdaExpressionSyntax)
+                        switch (ancestor)
                         {
-                            // no issue
-                            break;
-                        }
+                            case BlockSyntax block:
+                                return AnalyzeSimpleAssignmentExpression(block.Statements, statement);
 
-                        if (ancestor is BlockSyntax block)
-                        {
-                            var noBlankLinesBefore = block.Statements
-                                                          .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                                          .Any(_ => IsAssignmentOrDeclaration(_, statement, identifierName) is false);
+                            case SwitchSectionSyntax section:
+                                return AnalyzeSimpleAssignmentExpression(section.Statements, statement);
 
-                            if (noBlankLinesBefore)
-                            {
-                                return Issue(statement, true, false);
-                            }
+                            case IfStatementSyntax _:
+                            case ElseClauseSyntax _:
+                            case ParenthesizedLambdaExpressionSyntax _:
+                                return null; // no issue
 
-                            break;
-                        }
-
-                        if (ancestor is MethodDeclarationSyntax || ancestor is ClassDeclarationSyntax)
-                        {
-                            // stop lookup as there is no valid ancestor anymore
-                            break;
+                            case MethodDeclarationSyntax _:
+                            case ClassDeclarationSyntax _:
+                                return null; // stop lookup as there is no valid ancestor anymore
                         }
                     }
                 }
+            }
+
+            return null;
+        }
+
+        private Diagnostic AnalyzeSimpleAssignmentExpression(SyntaxList<StatementSyntax> statements, AssignmentExpressionSyntax statement)
+        {
+            var callLineSpan = statement.GetLocation().GetLineSpan();
+
+            var noBlankLinesBefore = statements
+                                     .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                     .Any(_ => IsAssignmentOrDeclaration(_, statement) is false);
+
+            if (noBlankLinesBefore)
+            {
+                return Issue(statement, true, false);
             }
 
             return null;

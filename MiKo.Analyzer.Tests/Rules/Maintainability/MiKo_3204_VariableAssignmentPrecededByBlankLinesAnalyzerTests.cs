@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         [Test]
         public void No_issue_is_reported_for_method_call() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -28,8 +26,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_variable_assignment_as_first_statement() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -46,8 +42,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_variable_assignment_as_first_statement_after_variable_declaration() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -65,8 +59,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_variable_assignment_as_first_statement_after_variable_declaration_and_assignment() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -87,7 +79,6 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_variable_assignment_as_first_statement_in_parenthesized_lambda_assignment() => No_issue_is_reported_for(@"
 using System;
-using NUnit.Framework;
 
 namespace Bla
 {
@@ -111,8 +102,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_multiple_variable_assignments_as_first_statements_after_variable_declarations() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -130,9 +119,30 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_assignment_preceded_by_if_block() => An_issue_is_reported_for(@"
-using NUnit.Framework;
+        public void No_issue_is_reported_for_multiple_variable_assignments_as_first_statements_inside_switch_section() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int something)
+        {
+            int x, y;
 
+            switch (something)
+            {
+                case 0:
+                    x = 1;
+                    y = 2;
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_assignment_preceded_by_if_block() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -153,8 +163,6 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_variable_assignment_preceded_by_method_call() => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -171,11 +179,32 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_variable_assignment_preceded_by_method_call_inside_switch_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int something)
+        {
+            int x, y;
+
+            switch (something)
+            {
+                case 0:
+                    DoSomething(42);
+                    x = 1;
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_missing_preceding_line_after_if_block()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -194,8 +223,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -221,8 +248,6 @@ namespace Bla
         public void Code_gets_fixed_for_missing_preceding_line_after_method_call()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -239,8 +264,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -264,8 +287,6 @@ namespace Bla
         public void Code_gets_fixed_for_multiple_variables_with_missing_preceding_line()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -284,8 +305,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -311,8 +330,6 @@ namespace Bla
         public void Code_gets_fixed_for_missing_preceding_line()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -328,8 +345,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe

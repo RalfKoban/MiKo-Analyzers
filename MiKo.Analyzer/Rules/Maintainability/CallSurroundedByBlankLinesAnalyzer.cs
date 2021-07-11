@@ -48,23 +48,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (IsCall(call, semanticModel))
             {
-                var block = call.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
-                if (block != null)
+                foreach (var ancestor in call.Ancestors())
                 {
-                    var callLineSpan = call.GetLocation().GetLineSpan();
-
-                    var noBlankLinesBefore = block.Statements
-                                                  .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                                  .Any(_ => IsCall(_, semanticModel) is false);
-                    var noBlankLinesAfter = block.Statements
-                                                 .Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
-                                                 .Any(_ => IsCall(_, semanticModel) is false);
-
-                    if (noBlankLinesBefore || noBlankLinesAfter)
+                    switch (ancestor)
                     {
-                        return Issue(call, noBlankLinesBefore, noBlankLinesAfter);
+                        case BlockSyntax block:
+                            return AnalyzeSimpleMemberAccessExpression(block.Statements, call, semanticModel);
+
+                        case SwitchSectionSyntax section:
+                            return AnalyzeSimpleMemberAccessExpression(section.Statements, call, semanticModel);
+
+                        // case IfStatementSyntax _: required by MiKo_3201
+                        case ElseClauseSyntax _:
+                        case ParenthesizedLambdaExpressionSyntax _:
+                        case MethodDeclarationSyntax _:
+                        case ClassDeclarationSyntax _:
+                            return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }
+            }
+
+            return null;
+        }
+
+        private Diagnostic AnalyzeSimpleMemberAccessExpression(SyntaxList<StatementSyntax> statements, MemberAccessExpressionSyntax call, SemanticModel semanticModel)
+        {
+            var callLineSpan = call.GetLocation().GetLineSpan();
+
+            var noBlankLinesBefore = statements
+                                     .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                     .Any(_ => IsCall(_, semanticModel) is false);
+            var noBlankLinesAfter = statements
+                                    .Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
+                                    .Any(_ => IsCall(_, semanticModel) is false);
+
+            if (noBlankLinesBefore || noBlankLinesAfter)
+            {
+                return Issue(call, noBlankLinesBefore, noBlankLinesAfter);
             }
 
             return null;

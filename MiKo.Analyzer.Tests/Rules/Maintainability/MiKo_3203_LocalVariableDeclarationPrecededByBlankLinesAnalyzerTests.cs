@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         [Test]
         public void No_issue_is_reported_for_method_call() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -28,8 +26,6 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_variable_as_first_statement() => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -45,9 +41,81 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_preceded_by_if_block() => An_issue_is_reported_for(@"
-using NUnit.Framework;
+        public void No_issue_is_reported_for_variable_as_first_statement_inside_if_block() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                var x = 1;
 
+                DoSomething();
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_as_first_statement_inside_if_non_block() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            DoSomething();
+            if (something)
+                var x = 1;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_as_first_statement_inside_else_non_block() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            DoSomething();
+            if (something)
+            {
+            }
+            else
+                var x = 1;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_as_first_statement_inside_switch_section() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 0:
+                    var x = 1;
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_preceded_by_if_block() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -65,9 +133,28 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_variable_preceded_by_method_call() => An_issue_is_reported_for(@"
-using NUnit.Framework;
+        public void An_issue_is_reported_for_variable_preceded_by_code_inside_switch_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 0:
+                    DoSomething(42);
+                    var x = 1;
 
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_preceded_by_method_call() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -85,8 +172,6 @@ namespace Bla
         public void Code_gets_fixed_for_missing_preceding_line_after_if_block()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -104,8 +189,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -130,8 +213,6 @@ namespace Bla
         public void Code_gets_fixed_for_missing_preceding_line_after_method_call()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -147,8 +228,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -171,8 +250,6 @@ namespace Bla
         public void Code_gets_fixed_for_multiple_variables_with_missing_preceding_line()
         {
             const string OriginalCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
@@ -189,8 +266,6 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-using NUnit.Framework;
-
 namespace Bla
 {
     public class TestMe
