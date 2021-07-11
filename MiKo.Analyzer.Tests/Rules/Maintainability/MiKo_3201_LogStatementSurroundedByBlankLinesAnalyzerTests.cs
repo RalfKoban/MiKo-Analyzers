@@ -114,6 +114,63 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Log_call_inside_else_block() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            else
+                Log.Debug();
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Log_call_followed_by_blank_line_in_switch_section() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 0:
+                    Log.Debug();
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Log_call_followed_by_if_block() => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -134,6 +191,34 @@ namespace Bla
             if (something)
             {
                 // some comment
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Log_call_followed_by_code_in_switch_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 0:
+                    Log.Debug();
+                    break;
             }
         }
     }

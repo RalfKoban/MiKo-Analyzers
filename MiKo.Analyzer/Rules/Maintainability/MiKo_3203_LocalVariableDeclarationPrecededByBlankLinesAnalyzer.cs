@@ -21,37 +21,56 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeLocalDeclarationStatement, SyntaxKind.LocalDeclarationStatement);
         }
 
-        private static bool IsDeclaration(StatementSyntax statement, SemanticModel semanticModel) => statement is LocalDeclarationStatementSyntax;
+        private static bool IsDeclaration(StatementSyntax statement) => statement is LocalDeclarationStatementSyntax;
 
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
 
-            var diagnostic = AnalyzeLocalDeclarationStatement(node, context.SemanticModel);
+            var diagnostic = AnalyzeLocalDeclarationStatement(node);
             if (diagnostic != null)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private Diagnostic AnalyzeLocalDeclarationStatement(StatementSyntax declaration, SemanticModel semanticModel)
+        private Diagnostic AnalyzeLocalDeclarationStatement(StatementSyntax declaration)
         {
-            if (IsDeclaration(declaration, semanticModel))
+            if (IsDeclaration(declaration))
             {
-                var block = declaration.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
-                if (block != null)
+                foreach (var ancestor in declaration.Ancestors())
                 {
-                    var callLineSpan = declaration.GetLocation().GetLineSpan();
-
-                    var noBlankLinesBefore = block.Statements
-                                                  .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                                  .Any(_ => IsDeclaration(_, semanticModel) is false);
-
-                    if (noBlankLinesBefore)
+                    switch (ancestor)
                     {
-                        return Issue(declaration, true, false);
+                        case BlockSyntax block:
+                            return AnalyzeLocalDeclarationStatement(block.Statements, declaration);
+
+                        case SwitchSectionSyntax section:
+                            return AnalyzeLocalDeclarationStatement(section.Statements, declaration);
+
+                        case IfStatementSyntax _:
+                        case ElseClauseSyntax _:
+                        case MethodDeclarationSyntax _:
+                        case ClassDeclarationSyntax _:
+                            return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }
+            }
+
+            return null;
+        }
+
+        private Diagnostic AnalyzeLocalDeclarationStatement(SyntaxList<StatementSyntax> statements, CSharpSyntaxNode declaration)
+        {
+            var callLineSpan = declaration.GetLocation().GetLineSpan();
+
+            var noBlankLinesBefore = statements
+                                     .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                     .Any(_ => IsDeclaration(_) is false);
+
+            if (noBlankLinesBefore)
+            {
+                return Issue(declaration, true, false);
             }
 
             return null;
