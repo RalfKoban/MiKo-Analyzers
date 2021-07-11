@@ -21,6 +21,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             };
 
         [Test]
+        public void No_issue_is_reported_for_Attribute_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething([Values(nameof(DoSomething), nameof(TestMe))] string something)
+        {
+            " + assertion + @".IsTrue(true);
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_Assertion_followed_by_another_Assertion_([ValueSource(nameof(Assertions))]string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -100,6 +116,49 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Assertion_inside_switch_section_followed_by_blank_line_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 1:
+                    " + assertion + @".IsTrue(true);
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Assertion_inside_switch_section_followed_by_code_([ValueSource(nameof(Assertions))] string assertion) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int something)
+        {
+            switch (something)
+            {
+                case 1:
+                    " + assertion + @".IsTrue(true);
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Assertion_preceded_by_if_block_([ValueSource(nameof(Assertions))] string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -113,22 +172,6 @@ namespace Bla
             {
                 // some comment
             }
-            " + assertion + @".IsTrue(true);
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_Attribute_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public void DoSomething([Values(nameof(DoSomething), nameof(TestMe))] string something)
-        {
             " + assertion + @".IsTrue(true);
         }
     }
