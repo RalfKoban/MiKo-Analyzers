@@ -3231,6 +3231,18 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3205_Title" xml:space="preserve">
     <value>Return statements should be preceded by blank lines.</value>
   </data>
+  <data name="MiKo_3206_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_3206_Description" xml:space="preserve">
+    <value>To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3206_MessageFormat" xml:space="preserve">
+    <value>Surround awaited statement with a blank line</value>
+  </data>
+  <data name="MiKo_3206_Title" xml:space="preserve">
+    <value>Awaited statements should be surrounded by blank lines.</value>
+  </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
 Such namespaces should be flattened.</value>

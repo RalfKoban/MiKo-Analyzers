@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 293 rules that are currently provided by the analyzer.
+The following tables list all the 294 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -305,6 +305,7 @@ The following tables list all the 293 rules that are currently provided by the a
 |MiKo_3203|Local variable statements should be preceded by blank lines.|&#x2713;|&#x2713;|
 |MiKo_3204|Variable assignment statements should be preceded by blank lines.|&#x2713;|&#x2713;|
 |MiKo_3205|Return statements should be preceded by blank lines.|&#x2713;|&#x2713;|
+|MiKo_3206|Awaited statements should be surrounded by blank lines.|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep.|&#x2713;|\-|
 
 ### Ordering

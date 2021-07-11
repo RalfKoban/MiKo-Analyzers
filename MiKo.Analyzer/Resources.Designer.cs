@@ -9125,6 +9125,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3206_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3206_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3206_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3206_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround awaited statement with a blank line.
+        /// </summary>
+        public static string MiKo_3206_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3206_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Awaited statements should be surrounded by blank lines..
+        /// </summary>
+        public static string MiKo_3206_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3206_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>

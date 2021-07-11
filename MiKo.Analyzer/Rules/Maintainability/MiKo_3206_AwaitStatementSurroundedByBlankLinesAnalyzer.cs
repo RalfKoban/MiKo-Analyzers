@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -19,6 +20,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void InitializeCore(AnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeAwaitExpression, SyntaxKind.AwaitExpression);
+        }
+
+        private static bool HasNonAwaitedExpression(IEnumerable<StatementSyntax> statements)
+        {
+            foreach (var statement in statements)
+            {
+                if (statement is ExpressionStatementSyntax ess && ess.Expression.IsKind(SyntaxKind.AwaitExpression))
+                {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         private void AnalyzeAwaitExpression(SyntaxNodeAnalysisContext context)
@@ -57,12 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var callLineSpan = node.GetLocation().GetLineSpan();
 
-            var noBlankLinesBefore = statements
-                                     .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                     .Any(_ => _.IsKind(SyntaxKind.AwaitExpression) is false);
-            var noBlankLinesAfter = statements
-                                    .Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
-                                    .Any(_ => _.IsKind(SyntaxKind.AwaitExpression) is false);
+            var noBlankLinesBefore = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
+            var noBlankLinesAfter = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
 
             if (noBlankLinesBefore || noBlankLinesAfter)
             {
