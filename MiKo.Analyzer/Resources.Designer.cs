@@ -9545,7 +9545,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; overload with exception instead.
+        ///   Looks up a localized string similar to Invoke &apos;{1}&apos; overload with exception parameter.
         /// </summary>
         public static string MiKo_5003_MessageFormat {
             get {

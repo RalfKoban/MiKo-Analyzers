@@ -3376,7 +3376,7 @@ Such namespaces should be flattened.</value>
 That allows the Log framework to log not only the name of the exception but also additional information (such as it's stack trace).</value>
   </data>
   <data name="MiKo_5003_MessageFormat" xml:space="preserve">
-    <value>Invoke '{1}' overload with exception instead</value>
+    <value>Invoke '{1}' overload with exception parameter</value>
   </data>
   <data name="MiKo_5003_Title" xml:space="preserve">
     <value>Correct Log methods should be invoked for exceptions.</value>

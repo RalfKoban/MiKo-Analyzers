@@ -571,6 +571,15 @@ namespace MiKoSolutions.Analyzers
                                                                      && value.SpecialType == SpecialType.None
                                                                      && value.InheritsFrom<Exception>();
 
+        internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
+        {
+            var argumentType = value.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
+                               ? m.GetTypeSymbol(semanticModel)
+                               : value.GetTypeSymbol(semanticModel);
+
+            return argumentType.IsException();
+        }
+
         internal static bool IsFactory(this ITypeSymbol value) => value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
 
         internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
