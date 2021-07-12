@@ -431,6 +431,104 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_awaited_call_not_preceded_by_blank_line_if_its_result_gets_assigned_to_local_variable()
+        {
+            const string OriginalCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+            var result = await Task.FromResult(true);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+
+            var result = await Task.FromResult(true);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_awaited_call_not_preceded_by_blank_line_if_its_result_gets_assigned_to_field()
+        {
+            const string OriginalCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private bool result;
+
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+            result = await Task.FromResult(true);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private bool result;
+
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+
+            result = await Task.FromResult(true);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3206_AwaitStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3206_AwaitStatementSurroundedByBlankLinesAnalyzer();
