@@ -20,10 +20,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var parameter in symbol.Parameters)
             {
-                var diagnostic = AnalyzeCollectionSuffix(parameter);
-                if (diagnostic != null)
+                var parameterType = parameter.Type;
+
+                if (parameterType.IsString() || parameterType.IsEnumerable())
                 {
-                    yield return diagnostic;
+                    var diagnostic = AnalyzeCollectionSuffix(parameter);
+                    if (diagnostic != null)
+                    {
+                        yield return diagnostic;
+                    }
                 }
             }
         }

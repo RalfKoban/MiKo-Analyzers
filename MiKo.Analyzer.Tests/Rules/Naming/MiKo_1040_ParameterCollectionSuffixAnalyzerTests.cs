@@ -60,6 +60,18 @@ public class TestMe : ITestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_boolean_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe : ITestMe
+{
+    public void DoSomething(bool refreshList)
+    { }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1040_ParameterCollectionSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1040_ParameterCollectionSuffixAnalyzer();

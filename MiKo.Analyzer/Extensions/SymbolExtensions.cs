@@ -740,6 +740,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsStreamingContextParameter(this IParameterSymbol value) => value.Type.Name == nameof(StreamingContext);
 
+        internal static bool IsString(this ITypeSymbol value) => value?.SpecialType == SpecialType.System_String;
+
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
         internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
