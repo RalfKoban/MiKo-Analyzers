@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // no string parameters
-            if (method.Parameters.All(_ => _.Type.SpecialType != SpecialType.System_String))
+            if (method.Parameters.All(_ => _.Type.IsString() is false))
             {
                 return Enumerable.Empty<Diagnostic>();
             }

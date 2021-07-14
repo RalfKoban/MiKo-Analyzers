@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.SpecialType == SpecialType.System_String;
+        protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsString();
 
         protected override string[] GetStartingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
                                                                                      ? Constants.Comments.StringReturnTypeStartingPhrase

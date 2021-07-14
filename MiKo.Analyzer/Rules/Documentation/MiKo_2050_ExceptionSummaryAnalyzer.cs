@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool IsMessageExceptionCtor(IMethodSymbol symbol) => symbol.Parameters.Length == 2 && IsMessageParameter(symbol.Parameters[0]) && IsExceptionParameter(symbol.Parameters[1]);
 
-        private static bool IsMessageParameter(IParameterSymbol parameter) => parameter.Type.SpecialType == SpecialType.System_String;
+        private static bool IsMessageParameter(IParameterSymbol parameter) => parameter.Type.IsString();
 
         private static bool IsExceptionParameter(IParameterSymbol parameter) => parameter.Type.IsException();
 

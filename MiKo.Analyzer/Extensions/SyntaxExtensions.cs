@@ -241,7 +241,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel)?.SpecialType == SpecialType.System_String;
+        internal static bool IsString(this ArgumentSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
+
+        internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
 
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {

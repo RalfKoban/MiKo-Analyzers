@@ -30,9 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var argument = s.ArgumentList.Arguments[0];
 
-                var type = argument.GetTypeSymbol(context.SemanticModel);
-
-                if (type.SpecialType != SpecialType.System_String)
+                if (argument.IsString(context.SemanticModel) is false)
                 {
                     var issue = Issue(context.ContainingSymbol?.Name, argument);
 

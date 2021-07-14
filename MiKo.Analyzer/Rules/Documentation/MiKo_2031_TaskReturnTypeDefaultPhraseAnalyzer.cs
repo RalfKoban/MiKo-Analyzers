@@ -32,6 +32,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool GenericTypeAccepted(ITypeSymbol returnType)
         {
+            if (returnType.IsBoolean())
+            {
+                return false; // checked by MiKo_2032
+            }
+
+            if (returnType.IsString())
+            {
+                return false; // checked by MiKo_2033
+            }
+
             if (returnType.IsEnum())
             {
                 return false; // checked by MiKo_2034
@@ -42,15 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // checked by MiKo_2035
             }
 
-            switch (returnType.SpecialType)
-            {
-                case SpecialType.System_Boolean: // checked by MiKo_2032
-                case SpecialType.System_String: // checked by MiKo_2033
-                    return false;
-
-                default:
-                    return true;
-            }
+            return true;
         }
     }
 }

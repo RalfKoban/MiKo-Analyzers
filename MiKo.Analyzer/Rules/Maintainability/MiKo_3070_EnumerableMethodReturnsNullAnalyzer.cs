@@ -18,27 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var returnType = symbol.ReturnType;
 
-            switch (returnType.SpecialType)
+            if (returnType.SpecialType == SpecialType.System_Void)
             {
-                case SpecialType.System_Void:
-                case SpecialType.System_String:
-                    return false;
-
-                default:
-                {
-                    if (returnType.IsByteArray())
-                    {
-                        return false;
-                    }
-
-                    if (returnType.IsEnumerable())
-                    {
-                        return returnType.InheritsFrom<XmlNode>() is false;
-                    }
-
-                    return false;
-                }
+                return false;
             }
+
+            if (returnType.IsString())
+            {
+                return false;
+            }
+
+            if (returnType.IsByteArray())
+            {
+                return false;
+            }
+
+            if (returnType.IsEnumerable())
+            {
+                return returnType.InheritsFrom<XmlNode>() is false;
+            }
+
+            return false;
         }
     }
 }

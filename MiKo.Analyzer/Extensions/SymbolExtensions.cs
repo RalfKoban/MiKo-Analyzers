@@ -185,9 +185,29 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool Implements(this ITypeSymbol value, string interfaceType)
         {
-            if (value.SpecialType == SpecialType.System_Void)
+            switch (value.SpecialType)
             {
-                return false;
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                {
+                    return false;
+                }
             }
 
             var fullName = string.Intern(value.ToString());
@@ -216,9 +236,29 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool ImplementsPotentialGeneric(this ITypeSymbol value, string interfaceType)
         {
-            if (value.SpecialType == SpecialType.System_Void)
+            switch (value.SpecialType)
             {
-                return false;
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                {
+                    return false;
+                }
             }
 
             var index = interfaceType.IndexOf('`');
@@ -289,9 +329,29 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            if (value.SpecialType == SpecialType.System_Void)
+            switch (value.SpecialType)
             {
-                return false;
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                {
+                    return false;
+                }
             }
 
             var symbol = value;
@@ -326,9 +386,29 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName, string baseClassFullQualifiedName)
         {
-            if (value.SpecialType == SpecialType.System_Void)
+            switch (value.SpecialType)
             {
-                return false;
+                case SpecialType.System_Void:
+                case SpecialType.System_Boolean:
+                case SpecialType.System_Char:
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                case SpecialType.System_String:
+                case SpecialType.System_IntPtr:
+                case SpecialType.System_UIntPtr:
+                case SpecialType.System_DateTime:
+                {
+                    return false;
+                }
             }
 
             var symbol = value;
@@ -789,7 +869,7 @@ namespace MiKoSolutions.Analyzers
             {
                 if (fieldNames is null)
                 {
-                    // performance optimization as it is likely that there are more than a single field(s)
+                    // performance optimization as it is likely that there is more than a single field(s)
                     fieldNames = Constants.Markers.FieldPrefixes.Select(__ => __ + parameterName).ToList();
                 }
 
