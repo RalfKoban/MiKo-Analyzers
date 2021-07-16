@@ -135,6 +135,36 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Mock_Of_method_invocation_([ValueSource(nameof(MethodNames))] string method) => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        bool DoSomething(string text);
+    }
+
+    public interface ITestMe2
+    {
+        ITestMe TestMe { get; }
+    }
+
+    public class TestMeTests
+    {
+        private Mock<ITestMe2> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            Mock.Of<ITestMe>(_ => _.DoSomething(It." + method + @"<string>()) == true)
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_non_mock_method_invocation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
 using System;
 
@@ -276,7 +306,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_property_ith_correct_object_initialization() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_with_correct_object_initialization() => No_issue_is_reported_for(@"
 using System;
 
 using Moq;

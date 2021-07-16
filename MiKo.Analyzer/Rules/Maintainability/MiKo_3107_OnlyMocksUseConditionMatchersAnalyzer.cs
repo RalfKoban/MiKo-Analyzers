@@ -91,6 +91,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             // here we assume that we have a Moq call
                             return Enumerable.Empty<Diagnostic>();
                         }
+
+                        case "Of" when m.Expression is IdentifierNameSyntax ins && ins.GetName() == "Mock":
+                        {
+                            // here we assume that we have a Moq call
+                            return Enumerable.Empty<Diagnostic>();
+                        }
                     }
                 }
             }
