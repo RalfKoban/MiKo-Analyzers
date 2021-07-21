@@ -9161,6 +9161,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3207_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3207_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate test statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3207_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3207_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround test statement with a blank line.
+        /// </summary>
+        public static string MiKo_3207_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3207_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test statements should be surrounded by blank lines..
+        /// </summary>
+        public static string MiKo_3207_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3207_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
