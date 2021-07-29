@@ -65,6 +65,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "weight",
                 "zone",
                 "Zone",
+                "Exponent",
+                "exponential",
             };
 
         private static readonly string[] WrongNames =

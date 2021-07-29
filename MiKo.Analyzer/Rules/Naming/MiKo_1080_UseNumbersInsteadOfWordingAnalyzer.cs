@@ -102,6 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "zone",
                                                                          "Zone",
                                                                          "ZONE",
+                                                                         "xponent",
                                                                      };
 
         public MiKo_1080_UseNumbersInsteadOfWordingAnalyzer() : base(Id)
