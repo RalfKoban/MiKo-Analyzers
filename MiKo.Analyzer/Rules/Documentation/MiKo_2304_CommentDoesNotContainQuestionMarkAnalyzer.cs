@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2304";
 
+        private static readonly string[] TODOs = { "TODO", "TODO:", "TO DO", "TO DO:" };
+
         public MiKo_2304_CommentDoesNotContainQuestionMarkAnalyzer() : base(Id)
         {
         }
@@ -22,7 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            // allow indicators such as http:// or ftp://
+            if (comment.ContainsAny(TODOs))
+            {
+                // allow TODOs
+                return false;
+            }
+
             var questionMarkWithoutHyperlink = comment.Split(Constants.WhiteSpaces, StringSplitOptions.RemoveEmptyEntries)
                                                       .Where(_ => _.Contains("?"))
                                                       .Any(_ => _.Contains("://") is false);

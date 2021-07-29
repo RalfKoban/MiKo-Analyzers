@@ -35,6 +35,18 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_TODO_comment_with_question_mark([Values("TODO:", "ToDo:", "TO DO:", "To Do:", "TODO", "ToDo", "TO DO", "To Do")] string comment) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // " + comment + @" Something missing?
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_comment_with_question_mark_([Values("Wtf?", "??? That's strange", "Wtf? Does not make sense!")] string comment) => An_issue_is_reported_for(@"
 
 public class TestMe
