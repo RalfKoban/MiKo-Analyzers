@@ -147,7 +147,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNodeAnalysisContext value) => GetEnclosingMethod(value.Node, value.SemanticModel);
+        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNodeAnalysisContext value)
+        {
+            if (value.ContainingSymbol is IMethodSymbol m)
+            {
+                return m;
+            }
+
+            return GetEnclosingMethod(value.Node, value.SemanticModel);
+        }
 
         internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode value, SemanticModel semanticModel) => value.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
 

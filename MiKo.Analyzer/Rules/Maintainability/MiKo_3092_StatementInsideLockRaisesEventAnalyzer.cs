@@ -24,17 +24,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var lockStatement = (LockStatementSyntax)context.Node;
 
-            var method = context.GetEnclosingMethod();
-            var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
-
             foreach (var token in lockStatement.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
             {
-                var eventName = token.ValueText;
-
-                if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
+                switch (token.Parent?.Parent?.Kind())
                 {
-                    var issue = Issue(method.Name, token);
-                    context.ReportDiagnostic(issue);
+                    case SyntaxKind.AddAssignmentExpression:
+                    case SyntaxKind.SubtractAssignmentExpression:
+                    {
+                        // we have an event assignment
+                        continue;
+                    }
+
+                    case SyntaxKind.ConditionalAccessExpression: // MyEvent?.Invoke()
+                    case SyntaxKind.InvocationExpression: // MyEvent()
+                    case SyntaxKind.EqualsValueClause: // handler()
+                    {
+                        var eventName = token.ValueText;
+
+                        var method = context.GetEnclosingMethod();
+                        var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
+
+                        if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
+                        {
+                            var issue = Issue(method.Name, token);
+                            context.ReportDiagnostic(issue);
+                        }
+
+                        break;
+                    }
                 }
             }
         }

@@ -54,7 +54,49 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_event_raise_in_lock_statement_of_method() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_registration_in_lock_statement_of_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public bool DoSomething()
+    {
+        lock (this)
+        {
+            MyEvent += OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_event_deregistration_in_lock_statement_of_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public bool DoSomething()
+    {
+        lock (this)
+        {
+            MyEvent -= OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_conditional_access_event_raise_in_lock_statement_of_method() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -66,6 +108,44 @@ public class TestMe
         lock (this)
         {
             MyEvent?.Invoke(this, EventArgs.Empty);
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_handler_event_raise_in_lock_statement_of_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public bool DoSomething()
+    {
+        lock (this)
+        {
+            var handlers = MyEvent;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_direct_event_raise_in_lock_statement_of_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public bool DoSomething()
+    {
+        lock (this)
+        {
+            MyEvent(this, EventArgs.Empty);
         }
     }
 }");
