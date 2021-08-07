@@ -295,7 +295,7 @@ The following tables list all the 294 rules that are currently provided by the a
 |MiKo_3101|Test classes should contain tests.|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements such as 'if', 'switch', etc.|&#x2713;|\-|
 |MiKo_3103|Test methods should not use 'Guid.NewGuid()'.|&#x2713;|&#x2713;|
-|MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|&#x2713;|\-|
+|MiKo_3104|Use NUnit's [Combinatorial] attribute properly.|&#x2713;|&#x2713;|
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach.|&#x2713;|&#x2713;|
 |MiKo_3106|Do not use equality or comparison operators in assertions.|&#x2713;|\-|
 |MiKo_3107|Moq Mock condition matchers should be used on mocks only.|&#x2713;|\-|

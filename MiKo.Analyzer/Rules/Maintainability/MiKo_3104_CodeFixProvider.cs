@@ -1,0 +1,53 @@
+﻿using System.Collections.Generic;
+using System.Composition;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace MiKoSolutions.Analyzers.Rules.Maintainability
+{
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3104_CodeFixProvider)), Shared]
+    public class MiKo_3104_CodeFixProvider : MaintainabilityCodeFixProvider
+    {
+        public sealed override string FixableDiagnosticId => MiKo_3104_CombinatorialTestsAnalyzer.Id;
+
+        protected sealed override string Title => Resources.MiKo_3104_CodeFixTitle;
+
+        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        {
+            return syntaxNodes.OfType<MethodDeclarationSyntax>().First();
+        }
+
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        {
+            var method = (MethodDeclarationSyntax)syntax;
+
+            foreach (var attributeList in method.AttributeLists)
+            {
+                foreach (var attribute in attributeList.Attributes)
+                {
+                    var name = attribute.Name.GetNameOnlyPart();
+                    switch (name)
+                    {
+                        case "Combinatorial":
+                        case "CombinatorialAttribute":
+                        {
+                            var listWithoutAttribute = attributeList.RemoveNode(attribute, SyntaxRemoveOptions.KeepNoTrivia);
+                            if (listWithoutAttribute.Attributes.Count == 0)
+                            {
+                                // we don't need an empty list
+                                return method.RemoveNode(attributeList, SyntaxRemoveOptions.KeepNoTrivia);
+                            }
+
+                            return method.ReplaceNode(attributeList, listWithoutAttribute);
+                        }
+                    }
+                }
+            }
+
+            return method;
+        }
+    }
+}

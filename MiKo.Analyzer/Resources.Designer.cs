@@ -8788,6 +8788,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove [Combinatorial] attribute.
+        /// </summary>
+        public static string MiKo_3104_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3104_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NUnit&apos;s [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute..
         /// </summary>
         public static string MiKo_3104_Description {

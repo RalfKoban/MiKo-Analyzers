@@ -3116,6 +3116,9 @@ Therefore, a hard-coded GUID should be used instead.</value>
   <data name="MiKo_3103_Title" xml:space="preserve">
     <value>Test methods should not use 'Guid.NewGuid()'.</value>
   </data>
+  <data name="MiKo_3104_CodeFixTitle" xml:space="preserve">
+    <value>Remove [Combinatorial] attribute</value>
+  </data>
   <data name="MiKo_3104_Description" xml:space="preserve">
     <value>NUnit's [Combinatorial] attribute shall be used only if there is a test method that has at least 2 parameters to create the combinatorial. Otherwise there is no reason to mark a test with that attribute.</value>
   </data>
