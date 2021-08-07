@@ -8954,6 +8954,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assertions should contain messages that tell the reason(s) why something was expected but failed. This makes it easier to understand why a test failed in particular..
+        /// </summary>
+        public static string MiKo_3109_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3109_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use an assertion message.
+        /// </summary>
+        public static string MiKo_3109_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3109_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple assertions shall use assertion messages..
+        /// </summary>
+        public static string MiKo_3109_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3109_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_3201_CodeFixTitle {
