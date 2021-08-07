@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3104";
 
-        private static readonly string[] ValueSourceAttributeNames = { "ValueSource", "ValueSourceAttribute", "Values", "ValuesAttribute" };
+        private static readonly string[] AttributeNames = { "ValueSource", "ValueSourceAttribute", "Values", "ValuesAttribute", "Range", "RangeAttribute", "Random", "RandomAttribute", };
 
         public MiKo_3104_CombinatorialTestsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -24,26 +24,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var method in symbol.GetMembers().OfType<IMethodSymbol>())
             {
-                var count = CountValueSources(method);
-
-                if (IsCombinatorial(method))
+                if (IsSequential(method))
                 {
+                    // both attributes combined don't make sense
+                    if (IsCombinatorial(method))
+                    {
+                        yield return Issue(method);
+                    }
+                }
+                else if (IsPairwise(method))
+                {
+                    // both attributes combined don't make sense
+                    if (IsCombinatorial(method))
+                    {
+                        yield return Issue(method);
+                    }
+                }
+                else if (IsCombinatorial(method))
+                {
+                    var count = CountApplicableParameters(method);
+
                     // less than 2 ValueSource
                     if (count < 2)
                     {
                         yield return Issue(method);
                     }
                 }
-                else if (IsSequential(method))
-                {
-                    // ignore
-                }
                 else
                 {
-                    if (count > 1)
-                    {
-                        yield return Issue(method);
-                    }
+                    // attribute is optional, considered as default even if not applied, so nothing to report
                 }
             }
         }
@@ -56,6 +65,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case "Combinatorial":
                     case "CombinatorialAttribute":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsPairwise(IMethodSymbol method)
+        {
+            foreach (var name in method.GetAttributeNames())
+            {
+                switch (name)
+                {
+                    case "Pairwise":
+                    case "PairwiseAttribute":
                         return true;
                 }
             }
@@ -78,11 +102,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static int CountValueSources(IMethodSymbol method)
+        private static int CountApplicableParameters(IMethodSymbol method)
         {
             return method.Parameters
                          .SelectMany(_ => _.GetAttributeNames())
-                         .Count(_ => _.EqualsAny(ValueSourceAttributeNames));
+                         .Count(_ => _.EqualsAny(AttributeNames));
         }
     }
 }
