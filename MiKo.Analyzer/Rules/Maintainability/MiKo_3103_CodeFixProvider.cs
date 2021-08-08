@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return literal;
             }
 
-            return CreateInvocationSyntax(nameof(Guid), nameof(Guid.Parse), SyntaxFactory.Argument(literal));
+            return Invocation(nameof(Guid), nameof(Guid.Parse), Argument(literal));
         }
 
         protected virtual Guid CreateGuid() => Guid.NewGuid();
