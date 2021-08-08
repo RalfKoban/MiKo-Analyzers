@@ -34,6 +34,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return CreateInvocationSyntax(member);
         }
 
+        protected static InvocationExpressionSyntax CreateInvocationSyntax(string typeName, string propertyName, string methodName, params TypeSyntax[] items)
+        {
+            // that's for the method call
+            var member = CreateSimpleMemberAccessExpressionSyntax(typeName, propertyName, methodName, items);
+
+            return CreateInvocationSyntax(member);
+        }
+
         protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
@@ -55,6 +63,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
 
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
+        }
+
+        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string middlePart, string methodName, TypeSyntax[] items)
+        {
+            var type = SyntaxFactory.IdentifierName(typeName);
+            var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
+
+            var expression = CreateSimpleMemberAccessExpressionSyntax(type, middlePart);
+
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, method);
         }
 
         protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, params string[] methodNames)

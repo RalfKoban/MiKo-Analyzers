@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -36,7 +37,9 @@ namespace TestHelper
         private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
         private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
         private static readonly MetadataReference SystemCompositionReference = MetadataReference.CreateFromFile(typeof(ImportAttribute).Assembly.Location);
+        private static readonly MetadataReference SystemLinqReference = MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location);
         private static readonly MetadataReference SystemRuntimeReference = MetadataReference.CreateFromFile(typeof(DataContractAttribute).Assembly.Location); // needed also for other attributes
+        private static readonly MetadataReference SystemTextReference = MetadataReference.CreateFromFile(typeof(Regex).Assembly.Location);
         private static readonly MetadataReference SystemWindowsInputReference = MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location);
         private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
         private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
@@ -47,13 +50,13 @@ namespace TestHelper
         private static readonly MetadataReference AttributeTargetsReference = MetadataReference.CreateFromFile(typeof(AttributeTargets).Assembly.Location);
         private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
         private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
-        private static readonly MetadataReference ExpressionsReference = MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location);
 
         /// <summary>
         /// Avoids error CS0012: The type 'MulticastDelegate' is defined in an assembly that is not referenced. You must add a reference to assembly 'netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'.}
         /// Needed by some tests as the code references types from .NET standard 2.0.
         /// </summary>
         private static readonly MetadataReference NetStandardReference = MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location);
+
         private static readonly MetadataReference SystemRuntimeNetStandardReference = MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=0.0.0.0").Location);
 
         /// <summary>
@@ -115,12 +118,12 @@ namespace TestHelper
         }
 
         /// <summary>
-        /// Given classes in the form of strings, their language, and an IDiagnosticAnalyzer to apply to it, return the diagnostics found in the string after converting it to a document.
+        /// Given classes in the form of strings, their language, and an <see cref="DiagnosticAnalyzer"/> to apply to it, return the diagnostics found in the string after converting it to a document.
         /// </summary>
         /// <param name="sources">Classes in the form of strings.</param>
         /// <param name="language">The language the source classes are in.</param>
         /// <param name="analyzer">The analyzer to be run on the sources.</param>
-        /// <returns>An array of Diagnostics that surfaced in the source code, sorted by Location.</returns>
+        /// <returns>An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.</returns>
         private static Diagnostic[] GetSortedDiagnostics(string[] sources, string language, DiagnosticAnalyzer analyzer)
         {
             return GetSortedDiagnosticsFromDocuments(analyzer, GetDocuments(sources, language));
@@ -130,18 +133,18 @@ namespace TestHelper
         /// Sort diagnostics by location in source document.
         /// </summary>
         /// <param name="diagnostics">The list of Diagnostics to be sorted.</param>
-        /// <returns>An IEnumerable containing the Diagnostics in order of Location.</returns>
+        /// <returns>An array of <see cref="Diagnostic"/>s in order of <see cref="Diagnostic.Location"/>.</returns>
         private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics)
         {
             return diagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
         }
 
         /// <summary>
-        /// Given an array of strings as sources and a language, turn them into a project and return the documents and spans of it.
+        /// Given an array of strings as sources and a language, turn them into a project and return the documents.
         /// </summary>
         /// <param name="sources">Classes in the form of strings.</param>
         /// <param name="language">The language the source code is in.</param>
-        /// <returns>A Tuple containing the Documents produced from the sources and their TextSpans if relevant.</returns>
+        /// <returns>The <see cref="Document"/>s produced from the sources.</returns>
         private static Document[] GetDocuments(string[] sources, string language)
         {
             if (language != LanguageNames.CSharp && language != LanguageNames.VisualBasic)
@@ -173,26 +176,26 @@ namespace TestHelper
 
             var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
 
-            var solution = new AdhocWorkspace()
-                .CurrentSolution
-                .AddProject(projectId, TestProjectName, TestProjectName, language)
-                .AddMetadataReference(projectId, CorlibReference)
-                .AddMetadataReference(projectId, SystemCoreReference)
-                .AddMetadataReference(projectId, SystemCompositionReference)
-                .AddMetadataReference(projectId, SystemRuntimeReference)
-                .AddMetadataReference(projectId, SystemWindowsInputReference)
-                .AddMetadataReference(projectId, AttributeReference)
-                .AddMetadataReference(projectId, AttributeTargetsReference)
-                .AddMetadataReference(projectId, DescriptionAttributeReference)
-                .AddMetadataReference(projectId, AspNetCoreMvcAbstractionsReference)
-                .AddMetadataReference(projectId, CSharpSymbolsReference)
-                .AddMetadataReference(projectId, CodeAnalysisReference)
-                .AddMetadataReference(projectId, NUnitReference)
-                .AddMetadataReference(projectId, MiKoAnalyzersReference)
-                .AddMetadataReference(projectId, MiKoAnalyzersTestsReference)
-                .AddMetadataReference(projectId, NetStandardReference)
-                .AddMetadataReference(projectId, SystemRuntimeNetStandardReference)
-                .AddMetadataReference(projectId, ExpressionsReference);
+            var solution = new AdhocWorkspace().CurrentSolution
+                                               .AddProject(projectId, TestProjectName, TestProjectName, language)
+                                               .AddMetadataReference(projectId, CorlibReference)
+                                               .AddMetadataReference(projectId, SystemCoreReference)
+                                               .AddMetadataReference(projectId, SystemCompositionReference)
+                                               .AddMetadataReference(projectId, SystemRuntimeReference)
+                                               .AddMetadataReference(projectId, SystemWindowsInputReference)
+                                               .AddMetadataReference(projectId, AttributeReference)
+                                               .AddMetadataReference(projectId, AttributeTargetsReference)
+                                               .AddMetadataReference(projectId, DescriptionAttributeReference)
+                                               .AddMetadataReference(projectId, AspNetCoreMvcAbstractionsReference)
+                                               .AddMetadataReference(projectId, CSharpSymbolsReference)
+                                               .AddMetadataReference(projectId, CodeAnalysisReference)
+                                               .AddMetadataReference(projectId, NUnitReference)
+                                               .AddMetadataReference(projectId, MiKoAnalyzersReference)
+                                               .AddMetadataReference(projectId, MiKoAnalyzersTestsReference)
+                                               .AddMetadataReference(projectId, NetStandardReference)
+                                               .AddMetadataReference(projectId, SystemRuntimeNetStandardReference)
+                                               .AddMetadataReference(projectId, SystemLinqReference)
+                                               .AddMetadataReference(projectId, SystemTextReference);
 
             var count = 0;
             foreach (var source in sources)

@@ -43,6 +43,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         break;
                     }
+
+                    // TODO RKN
+                    // case "FileAssert":
+                    // case "DirectoryAssert":
                 }
             }
 
@@ -51,6 +55,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ExpressionSyntax UpdatedSyntax(string typeName, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args)
         {
+            // TODO RKN
+            // Assert.DoesNotThrow
+            // Assert.DoesNotThrowAsync
+            // CollectionAssert.AllItemsAreInstancesOfType
+            // FileAssert.Exists
+            // FileAssert.DoesNotExist
+            // DirectoryAssert.Exists
+            // DirectoryAssert.DoesNotExist
             var methodName = syntax.GetName();
             switch (methodName)
             {
@@ -60,22 +72,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
                 case "AreEquivalent": return FixAreEquivalent(args);
                 case "AreNotEqual": return FixAreNotEqual(args);
+                case "AreNotEqualIgnoringCase": return FixAreNotEqualIgnoringCase(args);
                 case "AreNotEquivalent": return FixAreNotEquivalent(args);
                 case "AreNotSame": return FixAreNotSame(args);
                 case "AreSame": return FixAreSame(args);
                 case "Contains": return FixContains(typeName, args);
                 case "DoesNotContain": return FixDoesNotContain(typeName, args);
+                case "DoesNotMatch": return FixStringAssertDoesNotMatch(args);
                 case "DoesNotEndWith": return FixDoesNotEndWith(args);
                 case "DoesNotStartWith": return FixDoesNotStartWith(args);
                 case "EndsWith": return FixEndsWith(args);
                 case "False": return FixIsFalse(args);
                 case "Greater": return FixGreater(args);
                 case "GreaterOrEqual": return FixGreaterOrEqual(args);
+                case "IsAssignableFrom": return FixIsAssignableFrom(args, syntax.Name);
                 case "IsEmpty": return FixIsEmpty(args);
                 case "IsFalse": return FixIsFalse(args);
                 case "IsInstanceOf": return FixIsInstanceOf(args, syntax.Name);
+                case "IsMatch": return FixStringAssertIsMatch(args);
                 case "IsNaN": return FixIsNaN(args);
+                case "IsNotAssignableFrom": return FixIsNotAssignableFrom(args, syntax.Name);
                 case "IsNotEmpty": return FixIsNotEmpty(args);
+                case "IsNotInstanceOf": return FixIsNotInstanceOf(args, syntax.Name);
                 case "IsNotNull": return FixIsNotNull(args);
                 case "IsNotSubsetOf": return FixIsNotSubsetOf(args);
                 case "IsNotSupersetOf": return FixIsNotSupersetOf(args);
@@ -87,10 +105,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "IsTrue": return FixIsTrue(args);
                 case "Less": return FixLess(args);
                 case "LessOrEqual": return FixLessOrEqual(args);
-                case "Positive": return FixPositive(args);
                 case "Negative": return FixNegative(args);
                 case "NotNull": return FixNotNull(args);
                 case "NotZero": return FixNotZero(args);
+                case "Positive": return FixPositive(args);
                 case "StartsWith": return FixStartsWith(args);
                 case "True": return FixIsTrue(args);
                 case "Zero": return FixZero(args);
@@ -163,6 +181,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixAreEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), 2, args);
 
         private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args, "EqualTo");
+
+        private static InvocationExpressionSyntax FixAreNotEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EqualTo", args[0], "IgnoreCase"), 2, args);
 
         private static InvocationExpressionSyntax FixAreNotEqualOrSame(SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
@@ -247,23 +267,53 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(argument, Is("False"), 1, args);
         }
 
-        private static InvocationExpressionSyntax FixIsInstanceOf(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
+        private static InvocationExpressionSyntax FixIsAssignableFrom(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("AssignableFrom", args, name);
+
+        private static InvocationExpressionSyntax FixIsNotAssignableFrom(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIsNot("AssignableFrom", args, name);
+
+        private static InvocationExpressionSyntax FixIsInstanceOf(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("InstanceOf", args, name);
+
+        private static InvocationExpressionSyntax FixIsNotInstanceOf(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIsNot("InstanceOf", args, name);
+
+        private static InvocationExpressionSyntax FixGenericIs(string methodName, SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
         {
             var arg0 = args[0];
 
             if (name is GenericNameSyntax gns)
             {
-                return AssertThat(arg0, Is("InstanceOf", gns.TypeArgumentList.Arguments.ToArray()), 1, args);
+                return AssertThat(arg0, Is(methodName, gns.TypeArgumentList.Arguments.ToArray()), 1, args);
             }
 
             if (arg0.Expression is TypeOfExpressionSyntax t)
             {
-                return AssertThat(args[1], Is("InstanceOf", new[] { t.Type }), 2, args);
+                return AssertThat(args[1], Is(methodName, new[] { t.Type }), 2, args);
             }
 
             // TODO: this code is not tested as the case does not exist
-            return AssertThat(arg0, Is("InstanceOf"), 1, args);
+            return AssertThat(arg0, Is(methodName), 1, args);
         }
+
+        private static InvocationExpressionSyntax FixGenericIsNot(string methodName, SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
+        {
+            var arg0 = args[0];
+
+            if (name is GenericNameSyntax gns)
+            {
+                return AssertThat(arg0, Is("Not", methodName, gns.TypeArgumentList.Arguments.ToArray()), 1, args);
+            }
+
+            if (arg0.Expression is TypeOfExpressionSyntax t)
+            {
+                return AssertThat(args[1], Is("Not", methodName, new[] { t.Type }), 2, args);
+            }
+
+            // TODO: this code is not tested as the case does not exist
+            return AssertThat(arg0, Is("Not", methodName), 1, args);
+        }
+
+        private static InvocationExpressionSyntax FixStringAssertIsMatch(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Match", args[0]), 2, args);
+
+        private static InvocationExpressionSyntax FixStringAssertDoesNotMatch(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "Match", args[0]), 2, args);
 
         private static InvocationExpressionSyntax FixIsOrdered(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Ordered"), 1, args);
 
@@ -337,7 +387,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static InvocationExpressionSyntax FixZero(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Zero"), 1, args);
 
         private static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
-            => AssertThat(SyntaxFactory.Argument(expression), constraint, skip, arguments);
+            => AssertThat(Argument(expression), constraint, skip, arguments);
 
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
@@ -355,17 +405,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => CreateInvocationSyntax("Assert", "That", arguments);
 
-        private static ArgumentSyntax Is(string name) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
+        private static ArgumentSyntax Is(string name) => Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name));
 
-        private static ArgumentSyntax Is(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(InvocationIs(name, argument));
+        private static ArgumentSyntax Is(string name, ArgumentSyntax argument) => Argument(InvocationIs(name, argument));
 
-        private static ArgumentSyntax Is(string name, ExpressionSyntax expression) => Is(name, SyntaxFactory.Argument(expression));
+        private static ArgumentSyntax Is(string name, ExpressionSyntax expression) => Is(name, Argument(expression));
 
-        private static ArgumentSyntax Is(string name, TypeSyntax[] items) => SyntaxFactory.Argument(CreateInvocationSyntax("Is", name, items));
+        private static ArgumentSyntax Is(string name, TypeSyntax[] items) => Argument(CreateInvocationSyntax("Is", name, items));
 
-        private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument)
+        private static ArgumentSyntax Is(string name, string name1, TypeSyntax[] items) => Argument(CreateInvocationSyntax("Is", name, name1, items));
+
+        private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument) => Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, name1), argument);
+
+        private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, string name2)
         {
-            return Argument(CreateSimpleMemberAccessExpressionSyntax("Is", name, name1), argument);
+            var expression = CreateSimpleMemberAccessExpressionSyntax("Is", name, name1);
+            var invocation = CreateInvocationSyntax(expression, argument);
+
+            return Argument(CreateSimpleMemberAccessExpressionSyntax(invocation, name2));
+        }
+
+        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
+        {
+            var expression = InvocationIs(name, argument);
+
+            return Argument(CreateSimpleMemberAccessExpressionSyntax(expression, name1));
         }
 
         private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1, ArgumentSyntax argument1)
@@ -376,29 +440,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Argument(appendixCall, argument1);
         }
 
-        private static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, SyntaxFactory.Argument(expression));
+        private static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, Argument(expression));
 
-        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
-        {
-            var expression = InvocationIs(name, argument);
-
-            return SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax(expression, name1));
-        }
-
-        private static ArgumentSyntax Is(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Is", names));
+        private static ArgumentSyntax Is(params string[] names) => Argument(CreateSimpleMemberAccessExpressionSyntax("Is", names));
 
         private static InvocationExpressionSyntax InvocationIs(string name, ArgumentSyntax argument) => CreateInvocationSyntax("Is", name, argument);
 
-        private static ArgumentSyntax Does(string name, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax("Does", name, argument));
+        private static ArgumentSyntax Does(string name, ArgumentSyntax argument) => Argument(CreateInvocationSyntax("Does", name, argument));
 
         private static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument)
         {
             return Argument(CreateSimpleMemberAccessExpressionSyntax("Does", name, name1), argument);
         }
 
-        private static ArgumentSyntax Does(params string[] names) => SyntaxFactory.Argument(CreateSimpleMemberAccessExpressionSyntax("Does", names));
+        private static ArgumentSyntax Does(params string[] names) => Argument(CreateSimpleMemberAccessExpressionSyntax("Does", names));
 
-        private static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, ArgumentSyntax argument) => SyntaxFactory.Argument(CreateInvocationSyntax(expression, argument));
+        private static ArgumentSyntax Argument(ExpressionSyntax expression) => SyntaxFactory.Argument(expression);
+
+        private static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, ArgumentSyntax argument) => Argument(CreateInvocationSyntax(expression, argument));
 
         private static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
                                                                || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
