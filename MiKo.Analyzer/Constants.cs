@@ -223,16 +223,20 @@ namespace MiKoSolutions.Analyzers
                     string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
                 };
 
+            internal static readonly string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
+
             internal static readonly string[] BooleanReturnTypeStartingPhrase =
                 {
-                    "<see langword=\"true\"/> if ",
-                    "<see langword=\"true\" /> if ",
+                    string.Format(BooleanReturnTypeStartingPhraseTemplate, "<see langword=\"true\"/>"),
+                    string.Format(BooleanReturnTypeStartingPhraseTemplate, "<see langword=\"true\" />"),
                 };
+
+            internal static readonly string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
 
             internal static readonly string[] BooleanReturnTypeEndingPhrase =
                 {
-                    "; otherwise, <see langword=\"false\"/>.",
-                    "; otherwise, <see langword=\"false\" />.",
+                    string.Format(BooleanReturnTypeEndingPhraseTemplate, "<see langword=\"false\"/>"),
+                    string.Format(BooleanReturnTypeEndingPhraseTemplate, "<see langword=\"false\" />"),
                 };
 
             internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
@@ -251,16 +255,20 @@ namespace MiKoSolutions.Analyzers
                     string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\" />"),
                 };
 
+            internal static readonly string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
+
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                 {
-                    "A task that will complete with a result of <see langword=\"true\"/> if ",
-                    "A task that will complete with a result of <see langword=\"true\" /> if ",
+                    string.Format(BooleanTaskReturnTypeStartingPhraseTemplate, "<see langword=\"true\"/>"),
+                    string.Format(BooleanTaskReturnTypeStartingPhraseTemplate, "<see langword=\"true\" />"),
                 };
+
+            internal static readonly string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
 
             internal static readonly string[] BooleanTaskReturnTypeEndingPhrase =
                 {
-                    ", otherwise with a result of <see langword=\"false\"/>.",
-                    ", otherwise with a result of <see langword=\"false\" />.",
+                    string.Format(BooleanTaskReturnTypeEndingPhraseTemplate, "<see langword=\"false\"/>"),
+                    string.Format(BooleanTaskReturnTypeEndingPhraseTemplate, "<see langword=\"false\" />"),
                 };
 
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";

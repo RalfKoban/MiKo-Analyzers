@@ -1734,6 +1734,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2031_Title" xml:space="preserve">
     <value>Documentation of Task return value should have a specific (starting) phrase.</value>
   </data>
+  <data name="MiKo_2032_CodeFixTitle" xml:space="preserve">
+    <value>Fix return comment</value>
+  </data>
   <data name="MiKo_2032_Description" xml:space="preserve">
     <value>The documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
