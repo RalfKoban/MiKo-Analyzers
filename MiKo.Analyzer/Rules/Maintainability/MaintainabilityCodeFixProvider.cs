@@ -7,34 +7,46 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MaintainabilityCodeFixProvider : MiKoCodeFixProvider
     {
-        protected static ArgumentListSyntax CreateArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
+        protected static ArgumentSyntax Argument(ExpressionSyntax expression) => SyntaxFactory.Argument(expression);
 
-        protected static InvocationExpressionSyntax CreateInvocationSyntax(MemberAccessExpressionSyntax member, params ArgumentSyntax[] arguments)
+        protected static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, ArgumentSyntax argument) => Argument(Invocation(expression, argument));
+
+        protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
+
+        protected static InvocationExpressionSyntax Invocation(MemberAccessExpressionSyntax member, params ArgumentSyntax[] arguments)
         {
             // that's for the argument
-            var argumentList = CreateArgumentList(arguments);
+            var argumentList = ArgumentList(arguments);
 
             // combine both to complete call
             return SyntaxFactory.InvocationExpression(member, argumentList);
         }
 
-        protected static InvocationExpressionSyntax CreateInvocationSyntax(string typeName, string methodName, params ArgumentSyntax[] arguments)
+        protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params ArgumentSyntax[] arguments)
         {
             // that's for the method call
-            var member = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName);
+            var member = SimpleMemberAccess(typeName, methodName);
 
-            return CreateInvocationSyntax(member, arguments);
+            return Invocation(member, arguments);
         }
 
-        protected static InvocationExpressionSyntax CreateInvocationSyntax(string typeName, string methodName, params TypeSyntax[] items)
+        protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params TypeSyntax[] items)
         {
             // that's for the method call
-            var member = CreateSimpleMemberAccessExpressionSyntax(typeName, methodName, items);
+            var member = SimpleMemberAccess(typeName, methodName, items);
 
-            return CreateInvocationSyntax(member);
+            return Invocation(member);
         }
 
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName)
+        protected static InvocationExpressionSyntax Invocation(string typeName, string propertyName, string methodName, params TypeSyntax[] items)
+        {
+            // that's for the method call
+            var member = SimpleMemberAccess(typeName, propertyName, methodName, items);
+
+            return Invocation(member);
+        }
+
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
             var method = SyntaxFactory.IdentifierName(methodName);
@@ -42,14 +54,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(ExpressionSyntax syntax, string name)
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax syntax, string name)
         {
             var identifierName = SyntaxFactory.IdentifierName(name);
 
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, syntax, identifierName);
         }
 
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, string methodName, TypeSyntax[] items)
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName, TypeSyntax[] items)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
             var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
@@ -57,36 +69,46 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static MemberAccessExpressionSyntax CreateSimpleMemberAccessExpressionSyntax(string typeName, params string[] methodNames)
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string middlePart, string methodName, TypeSyntax[] items)
         {
-            var start = CreateSimpleMemberAccessExpressionSyntax(typeName, methodNames[0]);
+            var type = SyntaxFactory.IdentifierName(typeName);
+            var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
 
-            var result = methodNames.Skip(1).Aggregate(start, CreateSimpleMemberAccessExpressionSyntax);
+            var expression = SimpleMemberAccess(type, middlePart);
+
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, method);
+        }
+
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, params string[] methodNames)
+        {
+            var start = SimpleMemberAccess(typeName, methodNames[0]);
+
+            var result = methodNames.Skip(1).Aggregate(start, SimpleMemberAccess);
 
             return result;
         }
 
-        protected static InvocationExpressionSyntax CreateNameofExpression(string identifierName)
+        protected static InvocationExpressionSyntax NameOf(string identifierName)
         {
             var syntax = SyntaxFactory.IdentifierName(identifierName);
 
-            return CreateNameofExpression(syntax);
+            return NameOf(syntax);
         }
 
-        protected static InvocationExpressionSyntax CreateNameofExpression(string typeName, string identifierName)
+        protected static InvocationExpressionSyntax NameOf(string typeName, string identifierName)
         {
-            var syntax = CreateSimpleMemberAccessExpressionSyntax(typeName, identifierName);
+            var syntax = SimpleMemberAccess(typeName, identifierName);
 
-            return CreateNameofExpression(syntax);
+            return NameOf(syntax);
         }
 
-        private static InvocationExpressionSyntax CreateNameofExpression(ExpressionSyntax syntax)
+        private static InvocationExpressionSyntax NameOf(ExpressionSyntax syntax)
         {
             // nameof has a special RawContextualKind, hence we have to create it via its specific SyntaxKind
             // (see https://stackoverflow.com/questions/46259039/constructing-nameof-expression-via-syntaxfactory-roslyn)
             var nameofSyntax = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), SyntaxKind.NameOfKeyword, "nameof", "nameof", SyntaxFactory.TriviaList()));
 
-            return SyntaxFactory.InvocationExpression(nameofSyntax, CreateArgumentList(SyntaxFactory.Argument(syntax)));
+            return SyntaxFactory.InvocationExpression(nameofSyntax, ArgumentList(SyntaxFactory.Argument(syntax)));
         }
     }
 }

@@ -396,76 +396,6 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.LessOrEqual(42, 11, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(42, Is.LessThanOrEqualTo(11), ""my message""); }")]
 
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNullOrEmpty(o, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null.Or.Empty, ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotNull(o, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null, ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.IsEmpty(s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Empty, ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreEquivalent(e, a, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.EquivalentTo(e), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreNotEquivalent(e, a, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.Not.EquivalentTo(e), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => CollectionAssert.DoesNotContain(e, o, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => Assert.That(e, Does.Not.Contain(o), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => CollectionAssert.Contains(e, o, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => Assert.That(e, Does.Contain(o), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.StartsWith(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.StartWith(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.EndsWith(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.EndWith(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotContain(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.Contain(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotStartWith(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.StartWith(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotEndWith(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.EndWith(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.Contains(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Contain(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.AreEqualIgnoringCase(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"").IgnoreCase, ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsSubsetOf(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.SubsetOf(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsNotSubsetOf(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Not.SubsetOf(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsSupersetOf(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.SupersetOf(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsNotSupersetOf(""abc"", s, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Not.SupersetOf(""abc""), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsInstanceOf(typeof(object), o, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsInstanceOf<object>(o, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.IsOrdered(e, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.Ordered, ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.AllItemsAreNotNull(e, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.All.Not.Null, ""my message""); }")]
-        [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.AllItemsAreUnique(e, ""my message""); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.Unique, ""my message""); }")]
-
         // AreSame
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreSame(null, o); }",
@@ -519,6 +449,84 @@ namespace Bla
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Not.SameAs(42)); }")]
 
         [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNullOrEmpty(o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null.Or.Empty, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotNull(o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.IsEmpty(s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Empty, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreEquivalent(e, a, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.EquivalentTo(e), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => CollectionAssert.AreNotEquivalent(e, a, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, IEnumerable a) => Assert.That(a, Is.Not.EquivalentTo(e), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => CollectionAssert.DoesNotContain(e, o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => Assert.That(e, Does.Not.Contain(o), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => CollectionAssert.Contains(e, o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e, object o) => Assert.That(e, Does.Contain(o), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.StartsWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.StartWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.EndsWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.EndWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotContain(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.Contain(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotStartWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.StartWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.DoesNotEndWith(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Not.EndWith(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.Contains(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Does.Contain(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.AreEqualIgnoringCase(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.EqualTo(""abc"").IgnoreCase, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => StringAssert.AreNotEqualIgnoringCase(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Not.EqualTo(""abc"").IgnoreCase, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsSubsetOf(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.SubsetOf(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsNotSubsetOf(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Not.SubsetOf(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsSupersetOf(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.SupersetOf(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => CollectionAssert.IsNotSupersetOf(""abc"", s, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(string s) => Assert.That(s, Is.Not.SupersetOf(""abc""), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsInstanceOf(typeof(object), o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsInstanceOf<object>(o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.InstanceOf<object>(), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotInstanceOf(typeof(object), o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.InstanceOf<object>(), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotInstanceOf<object>(o, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.InstanceOf<object>(), ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.IsOrdered(e, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.Ordered, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.AllItemsAreNotNull(e, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.All.Not.Null, ""my message""); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => CollectionAssert.AllItemsAreUnique(e, ""my message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable e) => Assert.That(e, Is.Unique, ""my message""); }")]
+        [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.Zero(i); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Zero); }")]
         [TestCase(
@@ -533,6 +541,47 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.Positive(i); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Positive); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsAssignableFrom(typeof(object), new object()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsAssignableFrom<object>(new object()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsNotAssignableFrom(typeof(object), new object()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsNotAssignableFrom<object>(new object()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => StringAssert.IsMatch(""some pattern"", ""actual""); }",
+             @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(""actual"", Does.Match(""some pattern"")); }")]
+        [TestCase(
+             @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => StringAssert.DoesNotMatch(""some pattern"", ""actual""); }",
+             @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(""actual"", Does.Not.Match(""some pattern"")); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => CollectionAssert.AllItemsAreInstancesOfType(collection, typeof(string)); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => Assert.That(collection, Is.All.InstanceOf<string>()); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrow(() => throw new ArgumentException()); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new ArgumentException(), Throws.Nothing); }")]
+        [TestCase(
+             @"using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrowAsync(async () => await Task.CompletedTask); }",
+             @"using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(async () => await Task.CompletedTask, Throws.Nothing); }")]
+
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => FileAssert.Exists(@""c:\pagefile.sys""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(@""c:\pagefile.sys"", Does.Exist); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => DirectoryAssert.Exists(@""c:\Windows""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(@""c:\Windows"", Does.Exist); }")]
+
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => FileAssert.DoesNotExist(@""c:\pagefile.sys""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(@""c:\pagefile.sys"", Does.Not.Exist); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => DirectoryAssert.DoesNotExist(@""c:\Windows""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(@""c:\Windows"", Does.Not.Exist); }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [Test]

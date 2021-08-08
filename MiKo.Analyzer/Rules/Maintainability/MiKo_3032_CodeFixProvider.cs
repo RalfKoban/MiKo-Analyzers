@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var expression = CreateNameofExpression(diagnostic);
+            var expression = NameOf(diagnostic);
 
             if (diagnostic.Properties.ContainsKey(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.GetPropertyName))
             {
@@ -30,25 +30,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (diagnostic.Properties.ContainsKey(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.CreateArgs))
             {
-                var argument = SyntaxFactory.Argument(expression);
+                var argument = Argument(expression);
                 var typeSyntax = SyntaxFactory.ParseTypeName(nameof(PropertyChangedEventArgs));
 
-                return SyntaxFactory.ObjectCreationExpression(typeSyntax, CreateArgumentList(argument), null);
+                return SyntaxFactory.ObjectCreationExpression(typeSyntax, ArgumentList(argument), null);
             }
 
             return syntax;
         }
 
-        private static InvocationExpressionSyntax CreateNameofExpression(Diagnostic diagnostic)
+        private static InvocationExpressionSyntax NameOf(Diagnostic diagnostic)
         {
             diagnostic.Properties.TryGetValue(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.PropertyName, out var propertyName);
 
             if (diagnostic.Properties.TryGetValue(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.PropertyTypeName, out var propertyTypeName))
             {
-                return CreateNameofExpression(propertyTypeName, propertyName);
+                return NameOf(propertyTypeName, propertyName);
             }
 
-            return CreateNameofExpression(propertyName);
+            return NameOf(propertyName);
         }
     }
 }
