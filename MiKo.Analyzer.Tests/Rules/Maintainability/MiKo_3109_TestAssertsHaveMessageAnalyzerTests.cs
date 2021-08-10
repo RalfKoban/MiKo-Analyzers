@@ -139,6 +139,47 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_a_test_method_that_uses_AssertMultiple_and_1_assertion_with_no_message_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            Assert.Multiple(() =>
+                            {
+                                " + assertion + @";
+                            });
+        }
+    }
+}");
+
+        [Test]
+        public void Exactly_2_issues_are_reported_for_a_test_method_that_uses_AssertMultiple_and_2_assertions_with_no_messages_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => An_issue_is_reported_for(
+@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething()
+        {
+            Assert.Multiple(() =>
+                            {
+                                " + assertion + @";
+                                " + assertion + @";
+                            });
+        }
+    }
+}",
+2); // 1 issue for each assertion
+
         protected override string GetDiagnosticId() => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3109_TestAssertsHaveMessageAnalyzer();

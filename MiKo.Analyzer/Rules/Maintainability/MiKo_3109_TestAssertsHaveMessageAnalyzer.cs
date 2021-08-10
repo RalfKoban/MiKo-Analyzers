@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                                                   .Where(IsAssertionMethod)
                                                                                                                                   .ToList();
 
-        private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => node.Expression is IdentifierNameSyntax invokedType && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
+        private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => node.Expression is IdentifierNameSyntax invokedType && Constants.Names.AssertionTypes.Contains(invokedType.GetName()) && node.GetName() != "Multiple";
 
         private static bool HasMessageParameter(MemberAccessExpressionSyntax assertion) => assertion.Parent is InvocationExpressionSyntax i && HasMessageParameter(i, GetExpectedMessageParameterIndices(assertion.GetName()));
 

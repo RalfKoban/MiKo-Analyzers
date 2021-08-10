@@ -59,14 +59,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (ExpressionStatementSyntax)context.Node;
 
-            var diagnostic = AnalyzeExpressionStatement1(node);
+            var diagnostic = AnalyzeExpressionStatement(node);
             if (diagnostic != null)
             {
                 context.ReportDiagnostic(diagnostic);
             }
         }
 
-        private Diagnostic AnalyzeExpressionStatement1(ExpressionStatementSyntax node)
+        private Diagnostic AnalyzeExpressionStatement(ExpressionStatementSyntax node)
         {
             if (IsInvocationOnObjectUnderTest(node))
             {
@@ -83,10 +83,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (ancestor)
                 {
                     case BlockSyntax block:
-                        return AnalyzeExpressionStatement(block.Statements, node);
+                        return AnalyzeExpressionStatements(block.Statements, node);
 
                     case SwitchSectionSyntax section:
-                        return AnalyzeExpressionStatement(section.Statements, node);
+                        return AnalyzeExpressionStatements(section.Statements, node);
 
                     case MethodDeclarationSyntax _:
                     case ClassDeclarationSyntax _:
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private Diagnostic AnalyzeExpressionStatement(SyntaxList<StatementSyntax> statements, CSharpSyntaxNode node)
+        private Diagnostic AnalyzeExpressionStatements(SyntaxList<StatementSyntax> statements, CSharpSyntaxNode node)
         {
             var callLineSpan = node.GetLocation().GetLineSpan();
 
