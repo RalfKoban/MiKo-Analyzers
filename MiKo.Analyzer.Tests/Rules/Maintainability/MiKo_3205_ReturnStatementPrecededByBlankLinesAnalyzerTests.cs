@@ -55,6 +55,24 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_multiple_yield_return_statements_in_a_row() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething(bool something)
+        {
+            yield return 1;
+            yield return 2;
+            yield return 3;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_return_statement_that_is_preceded_by_blank_line() => No_issue_is_reported_for(@"
 namespace Bla
 {
@@ -397,6 +415,49 @@ namespace Bla
             int x = 1;
 
             yield return x;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiple_yield_return_statements_and_missing_preceding_line()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething()
+        {
+            int x = 1;
+            yield return x;
+            yield return x + 1;
+            yield return x + 2;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<int> DoSomething()
+        {
+            int x = 1;
+
+            yield return x;
+            yield return x + 1;
+            yield return x + 2;
         }
     }
 }
