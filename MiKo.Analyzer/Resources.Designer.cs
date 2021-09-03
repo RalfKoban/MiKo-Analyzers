@@ -8972,7 +8972,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use an assertion message.
+        ///   Looks up a localized string similar to Provide an assertion message.
         /// </summary>
         public static string MiKo_3109_MessageFormat {
             get {
