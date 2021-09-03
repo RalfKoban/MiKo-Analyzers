@@ -436,6 +436,10 @@ namespace MiKoSolutions.Analyzers
             return SyntaxFactory.List(contents);
         }
 
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText) => value.Content[0] is XmlTextSyntax textSyntax
+                                                                                                                  ? value.Content.Replace(textSyntax, textSyntax.WithStartText(startText))
+                                                                                                                  : value.Content.Insert(0, SyntaxFactory.XmlText(startText));
+
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText)
         {
             var textTokens = new List<SyntaxToken>(value.TextTokens);
@@ -485,6 +489,42 @@ namespace MiKoSolutions.Analyzers
             return SyntaxFactory.XmlText(startText);
         }
 
+        internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, char[] characters)
+        {
+            var textTokens = new List<SyntaxToken>(value.TextTokens);
+
+            var replaced = false;
+
+            for (var i = 0; i < textTokens.Count; i++)
+            {
+                var token = textTokens[i];
+
+                // ignore trivia such as " /// "
+                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                {
+                    var originalText = token.Text;
+
+                    if (originalText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
+
+                    var modifiedText = originalText.TrimEnd(characters);
+
+                    textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                    replaced = true;
+                    break;
+                }
+            }
+
+            if (replaced)
+            {
+                return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+            }
+
+            return value;
+        }
+
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken value) => value.WithLeadingTrivia(XmlCommentStart);
 
         internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
@@ -497,7 +537,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
-        internal static T WithIntentation<T>(this T value) where T : SyntaxNode => value.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
@@ -521,8 +561,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static TRoot InsertNodeBefore<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
         {
-            // method needs to be intended and a CRLF needs to be added
-            var modifiedNode = newNode.WithIntentation().WithEndOfLine();
+            // method needs to be indented and a CRLF needs to be added
+            var modifiedNode = newNode.WithIndentation().WithEndOfLine();
 
             return value.InsertNodesBefore(nodeInList, new[] { modifiedNode });
         }

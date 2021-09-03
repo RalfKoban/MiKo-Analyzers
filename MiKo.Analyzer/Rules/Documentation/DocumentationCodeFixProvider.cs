@@ -302,10 +302,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 XmlEmptyElementSyntax seeCref2,
                                                 string commentEnd)
         {
+            return Comment(comment, commentStart, seeCref1, new[] { SyntaxFactory.XmlText(commentMiddle) }, seeCref2, commentEnd);
+        }
+
+        protected static XmlElementSyntax Comment(
+                                                XmlElementSyntax comment,
+                                                string commentStart,
+                                                XmlEmptyElementSyntax seeCref1,
+                                                IEnumerable<XmlNodeSyntax> commentMiddle,
+                                                XmlEmptyElementSyntax seeCref2,
+                                                string commentEnd)
+        {
             var content = SyntaxFactory.List<XmlNodeSyntax>()
                                        .Add(SyntaxFactory.XmlText(commentStart))
                                        .Add(seeCref1)
-                                       .Add(SyntaxFactory.XmlText(commentMiddle))
+                                       .AddRange(commentMiddle)
                                        .Add(seeCref2)
                                        .Add(SyntaxFactory.XmlText(commentEnd));
 

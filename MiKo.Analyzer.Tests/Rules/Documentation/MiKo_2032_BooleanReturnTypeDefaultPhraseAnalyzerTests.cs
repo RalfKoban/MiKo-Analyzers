@@ -187,7 +187,7 @@ using System;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>Something.</returns>
+    /// <returns> Something . </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -218,7 +218,7 @@ using System.Threading.Tasks;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>Something.</returns>
+    /// <returns> Something . </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -232,7 +232,6 @@ public class TestMe
     /// <summary>Does something.</summary>
     /// <returns>
     /// A task that will complete with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
-
     /// </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
