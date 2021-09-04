@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System.Collections.Generic;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -20,18 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
-        protected override SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType) => Comment(comment, GenericStartParts, GenericEndParts);
+
+        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType) => Comment(comment, NonGenericStartParts, NonGenericEndParts);
+
+        private static XmlElementSyntax Comment(XmlElementSyntax comment, IReadOnlyList<string> startParts, IReadOnlyList<string> endParts)
         {
-            var middlePart = CreateMiddlePart(comment, GenericStartParts[1], GenericEndParts[0]);
+            // TODO RKN: Comment already starting or ending with correct phrase
+            var middlePart = CreateMiddlePart(comment, startParts[1], endParts[0]);
 
-            return Comment(comment, GenericStartParts[0], SeeLangword_True(), middlePart, SeeLangword_False(), GenericEndParts[1]);
-        }
-
-        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType)
-        {
-            var middlePart = CreateMiddlePart(comment, NonGenericStartParts[1], NonGenericEndParts[0]);
-
-            return Comment(comment, NonGenericStartParts[0], SeeLangword_True(), middlePart, SeeLangword_False(), NonGenericEndParts[1]);
+            return Comment(comment, startParts[0], SeeLangword_True(), middlePart, SeeLangword_False(), endParts[1]);
         }
 
         private static SyntaxList<XmlNodeSyntax> CreateMiddlePart(XmlElementSyntax comment, string startingPhrase, string endingPhrase)
