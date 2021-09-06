@@ -52,8 +52,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var nodes = adjustedComment.WithoutText(" if ")
                                        .WithoutText("A task that will complete with a result of ")
+                                       .WithoutText("a task that will complete with a result of ")
                                        .WithoutText("True")
+                                       .WithoutText("true")
                                        .WithoutText("False")
+                                       .WithoutText("false")
+                                       .WithoutText("Returns")
+                                       .WithoutText("returns")
                                        .WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
 
             // remove last node if it is ending with a dot
