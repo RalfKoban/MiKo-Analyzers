@@ -48,6 +48,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static SyntaxList<XmlNodeSyntax> CreateMiddlePart(XmlElementSyntax comment, string startingPhrase, string endingPhrase)
         {
+            if (comment.Content.Count == 0)
+            {
+                // we have no comment, hence we fake a "..." into the resulting comment
+                return new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText(startingPhrase + "..." + endingPhrase));
+            }
+
             var adjustedComment = RemoveBooleanSeeLangwords(comment);
 
             var nodes = adjustedComment.WithoutText(" if ")
@@ -62,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                        .WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
 
             // remove last node if it is ending with a dot
-            if (nodes.Last() is XmlTextSyntax sentenceEnding)
+            if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
             {
                 var text = sentenceEnding.WithoutTrailingCharacters(TrailingSentenceMarkers)
                                          .WithoutTrailing(" otherwise")
@@ -74,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // remove middle parts before the <see langword=""false""/>
-            if (nodes.Last() is XmlTextSyntax last)
+            if (nodes.LastOrDefault() is XmlTextSyntax last)
             {
                 var replacement = last.WithoutTrailingCharacters(TrailingSentenceMarkers)
                                       .WithoutTrailing(" otherwise")
@@ -88,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     nodes = nodes.Remove(last);
 
                     // remove left-over trailing sentence marker on the middle string
-                    if (nodes.Last() is XmlTextSyntax newLast)
+                    if (nodes.LastOrDefault() is XmlTextSyntax newLast)
                     {
                         nodes = nodes.Replace(newLast, newLast.WithoutTrailingCharacters(TrailingSentenceMarkers));
                     }

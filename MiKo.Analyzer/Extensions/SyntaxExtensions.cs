@@ -593,9 +593,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText) => value.Content.WithStartText(startText);
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this SyntaxList<XmlNodeSyntax> values, string startText) => values[0] is XmlTextSyntax textSyntax
-                                                                                                                               ? values.Replace(textSyntax, textSyntax.WithStartText(startText))
-                                                                                                                               : values.Insert(0, SyntaxFactory.XmlText(startText));
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this SyntaxList<XmlNodeSyntax> values, string startText)
+        {
+            if (values.Count > 0)
+            {
+                return values[0] is XmlTextSyntax textSyntax
+                           ? values.Replace(textSyntax, textSyntax.WithStartText(startText))
+                           : values.Insert(0, SyntaxFactory.XmlText(startText));
+            }
+
+            return new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText(startText));
+        }
 
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText)
         {
