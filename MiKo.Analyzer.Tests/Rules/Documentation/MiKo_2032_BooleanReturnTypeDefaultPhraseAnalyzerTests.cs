@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -177,8 +178,248 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_empty_returns_on_non_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns></returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if ...; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_returns_on_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns></returns>
+    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// A task that will complete with a result of <see langword=""true""/> if ..., otherwise with a result of <see langword=""false""/>.
+    /// </returns>
+    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns> Something . </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns> Something . </returns>
+    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// A task that will complete with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
+    /// </returns>
+    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase(@"<see langword=""true""/> if something; <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> if something; otherwise <see langword=""false""/>.")]
+        [TestCase(@"<see langword=""true""/> if something, otherwise <see langword=""false""/>.")]
+        [TestCase(@"True if something, otherwise False.")]
+        [TestCase(@"True if something, False otherwise.")]
+        [TestCase(@"true if something, false otherwise.")]
+        [TestCase(@"True if something, otherwise returns False.")]
+        [TestCase(@"Returns True if something, otherwise returns False.")]
+        [TestCase(@"Returns True if something, returns otherwise False.")]
+        public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string returnsComment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>" + returnsComment + @"</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, otherwise, <see langword=""false""/>.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; <see langword=""false""/> otherwise.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
+        public void Code_gets_fixed_for_almost_correct_comment_on_generic_method_(string returnsComment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>" + returnsComment + @"</returns>
+    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// A task that will complete with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
+    /// </returns>
+    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_fix_keeps_spaces_before_paramref_tag()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something in the given <paramref name=""o""/>
+    /// is there; <see langword=""false""/> otherwise
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something in the given <paramref name=""o""/>
+    /// is there; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2032_CodeFixProvider();
     }
 }

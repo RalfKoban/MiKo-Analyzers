@@ -4780,6 +4780,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix return comment.
+        /// </summary>
+        public static string MiKo_2032_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2032_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of a Boolean as return value should have a specific phrase that first describes the &apos;true&apos; case and then the &apos;false&apos; case..
         /// </summary>
         public static string MiKo_2032_Description {

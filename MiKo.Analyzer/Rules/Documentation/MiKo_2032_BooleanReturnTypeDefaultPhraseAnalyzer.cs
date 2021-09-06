@@ -23,9 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            return comment.StartsWithAny(startingPhrases, Comparison) && comment.ContainsAny(endingPhrases, Comparison)
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(owningSymbol, xmlTag, startingPhrases[0], endingPhrases[0]) };
+            if (comment.StartsWithAny(startingPhrases, Comparison) && comment.ContainsAny(endingPhrases, Comparison))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { Issue(owningSymbol, xmlTag, startingPhrases[0], endingPhrases[0]) };
         }
 
         // ReSharper disable once RedundantNameQualifier
