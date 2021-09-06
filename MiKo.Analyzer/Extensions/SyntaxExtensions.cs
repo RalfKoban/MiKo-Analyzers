@@ -475,13 +475,16 @@ namespace MiKoSolutions.Analyzers
                     var originalTextTokens = s.TextTokens;
                     var textTokens = new List<SyntaxToken>(originalTextTokens);
 
+                    var modified = false;
+
                     for (var i = 0; i < originalTextTokens.Count; i++)
                     {
                         var token = originalTextTokens[i];
 
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
                         {
-                            var modifiedText = token.Text.Without(text).Replace("  ", " ").TrimEnd();
+                            // do not trim the end as we want to have a space before <param> or other tags
+                            var modifiedText = token.Text.Without(text).Replace("  ", " ");
                             if (modifiedText.IsNullOrWhiteSpace())
                             {
                                 textTokens.Remove(token);
@@ -495,11 +498,16 @@ namespace MiKoSolutions.Analyzers
                             {
                                 textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
                             }
+
+                            modified = true;
                         }
                     }
 
-                    var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
-                    contents[index] = xmlText;
+                    if (modified)
+                    {
+                        var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                        contents[index] = xmlText;
+                    }
                 }
             }
 

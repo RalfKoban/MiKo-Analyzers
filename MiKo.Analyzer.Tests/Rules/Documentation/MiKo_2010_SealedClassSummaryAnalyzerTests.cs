@@ -153,7 +153,7 @@ public sealed class TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Some text.
+/// Some text. 
 /// Some documentation.
 /// This class cannot be inherited.
 /// </summary>

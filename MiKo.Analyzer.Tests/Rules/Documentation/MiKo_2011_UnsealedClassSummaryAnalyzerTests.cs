@@ -165,7 +165,7 @@ public class TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Some text.
+/// Some text. 
 /// Some documentation.
 /// </summary>
 public class TestMe

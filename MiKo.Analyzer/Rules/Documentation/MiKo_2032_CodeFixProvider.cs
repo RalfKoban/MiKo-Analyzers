@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = sentenceEnding.WithoutTrailingCharacters(TrailingSentenceMarkers)
                                          .WithoutTrailing(" otherwise")
-                                         .ToFullString();
+                                         .WithoutXmlCommentExterior();
                 if (text.IsNullOrWhiteSpace())
                 {
                     nodes = nodes.Remove(sentenceEnding);
@@ -73,9 +73,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var replacement = last.WithoutTrailingCharacters(TrailingSentenceMarkers)
                                       .WithoutTrailing(" otherwise")
-                                      .WithoutTrailing("  otherwise with a result of ")
+                                      .WithoutTrailing(" otherwise with a result of ")
                                       .WithoutTrailingCharacters(TrailingSentenceMarkers);
-                var text = replacement.ToFullString();
+
+                var text = replacement.WithoutXmlCommentExterior();
 
                 if (text.IsNullOrWhiteSpace())
                 {
