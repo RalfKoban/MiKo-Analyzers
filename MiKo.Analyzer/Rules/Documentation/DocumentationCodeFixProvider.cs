@@ -148,7 +148,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
         {
-            var lastNode = comment.Content.Last();
+            var lastNode = comment.Content.LastOrDefault();
+            if (lastNode is null)
+            {
+                // we have an empty comment
+                return comment.AddContent(SyntaxFactory.XmlText(ending));
+            }
+
             if (lastNode is XmlTextSyntax t)
             {
                 // we have a text at the end, so we have to find the text
@@ -184,7 +190,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
         {
-            var lastNode = comment.Content.Last();
+            var lastNode = comment.Content.LastOrDefault();
+            if (lastNode is null)
+            {
+                // we have an empty comment
+                return comment.AddContent(SyntaxFactory.XmlText(commentStart), seeCref, SyntaxFactory.XmlText(commentContinue));
+            }
+
             if (lastNode is XmlTextSyntax t)
             {
                 var text = commentStart;
