@@ -86,16 +86,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (phrase.IsNullOrWhiteSpace())
                 {
-                    var textTokens = text.TextTokens.Count;
+                    var tokens = text.TextTokens;
+                    var textTokens = tokens.Count;
                     if (textTokens > 2)
                     {
                         // TODO: RKN find a better solution this as it is not good code
 
                         // remove last "\r\n" token and remove '  /// ' trivia of last token
-                        if (text.TextTokens[textTokens - 2].IsKind(SyntaxKind.XmlTextLiteralNewLineToken)
-                         && text.TextTokens[textTokens - 1].ValueText.IsNullOrWhiteSpace())
+                        if (tokens[textTokens - 2].IsKind(SyntaxKind.XmlTextLiteralNewLineToken)
+                         && tokens[textTokens - 1].ValueText.IsNullOrWhiteSpace())
                         {
-                            var newTokens = text.TextTokens.Take(textTokens - 2).ToArray();
+                            var newTokens = tokens.Take(textTokens - 2).ToArray();
                             text = SyntaxFactory.XmlText(newTokens);
                         }
                     }
@@ -126,9 +127,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 content = content.Remove(content[index]);
 
                 // remove first "\r\n" token and remove '  /// ' trivia of second token
-                if (text.TextTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                var textTokens = text.TextTokens;
+                if (textTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
-                    var newTokens = text.TextTokens.RemoveAt(0);
+                    var newTokens = textTokens.RemoveAt(0);
                     text = SyntaxFactory.XmlText(newTokens.Replace(newTokens[0], newTokens[0].WithLeadingTrivia()));
                 }
 
@@ -158,14 +160,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (lastNode is XmlTextSyntax t)
             {
                 // we have a text at the end, so we have to find the text
-                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+                var textTokens = t.TextTokens;
+                var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
 
                 if (lastToken.IsKind(SyntaxKind.None))
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
                     var token = SyntaxFactory.Token(default, SyntaxKind.XmlTextLiteralToken, ending, ending, default);
 
-                    return comment.InsertTokensBefore(t.TextTokens.First(), new[] { token });
+                    return comment.InsertTokensBefore(textTokens.First(), new[] { token });
                 }
                 else
                 {
