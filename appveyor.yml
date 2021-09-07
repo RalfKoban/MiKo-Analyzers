@@ -37,7 +37,8 @@ skip_commits:
 
 before_build:
 - nuget restore "c:\projects\MiKo.Analyzers\MiKo.Analyzer.sln"
-- nuget install OpenCover -OutputDirectory packages -Version 4.7.1221
+- choco install opencover.portable
+#- nuget install OpenCover -OutputDirectory packages -Version 4.7.1221
 
 # enable patching of project file (.NET Core)
 dotnet_csproj:
