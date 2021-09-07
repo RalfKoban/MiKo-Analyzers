@@ -50,8 +50,8 @@
 
   <ItemGroup Condition="'$(NCrunch)' != '1'">
     <PackageReference Include="Codecov" Version="1.10.0" />
-    <PackageReference Include="OpenCover" Version="4.7.922" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
+    <PackageReference Include="OpenCover" Version="4.7.1221" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
