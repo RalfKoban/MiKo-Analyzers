@@ -54,7 +54,7 @@ build:
   verbosity: minimal
 
 platform:
-  - AnyCPU
+#  - Any CPU
 
 configuration:
 #  - Debug
