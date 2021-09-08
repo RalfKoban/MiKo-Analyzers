@@ -31,6 +31,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                    "false",
                                                                };
 
+        private static readonly string[] Phrases =
+            {
+                " if ",
+                "A task that will complete with a result of ",
+                "a task that will complete with a result of ",
+                "True:",
+                "true:",
+                "True",
+                "true",
+                "False:",
+                "false:",
+                "False",
+                "false",
+                "Returns",
+                "returns",
+            };
+
         public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
@@ -56,16 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var adjustedComment = RemoveBooleanSeeLangwords(comment);
 
-            var nodes = adjustedComment.WithoutText(" if ")
-                                       .WithoutText("A task that will complete with a result of ")
-                                       .WithoutText("a task that will complete with a result of ")
-                                       .WithoutText("True")
-                                       .WithoutText("true")
-                                       .WithoutText("False")
-                                       .WithoutText("false")
-                                       .WithoutText("Returns")
-                                       .WithoutText("returns")
-                                       .WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
+            var nodes = adjustedComment.WithoutText(Phrases).WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
 
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
