@@ -306,12 +306,16 @@ public class TestMe
         [TestCase(@"<see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> if something; otherwise <see langword=""false""/>.")]
         [TestCase(@"<see langword=""true""/> if something, otherwise <see langword=""false""/>.")]
+        [TestCase(@"true if something. Otherwise false.")]
         [TestCase(@"True if something, otherwise False.")]
         [TestCase(@"True if something, False otherwise.")]
         [TestCase(@"true if something, false otherwise.")]
         [TestCase(@"True if something, otherwise returns False.")]
         [TestCase(@"Returns True if something, otherwise returns False.")]
         [TestCase(@"Returns True if something, returns otherwise False.")]
+        [TestCase(@"Returns <see langref=""true""/> if something.")]
+        [TestCase(@"Returns <see langword=""true""/> if something.")]
+        [TestCase(@"true: if something, false: otherwise.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string returnsComment)
         {
             var originalCode = @"

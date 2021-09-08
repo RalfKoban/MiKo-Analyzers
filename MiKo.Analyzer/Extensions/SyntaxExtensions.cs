@@ -514,6 +514,10 @@ namespace MiKoSolutions.Analyzers
             return SyntaxFactory.List(contents);
         }
 
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, params string[] texts) => value.Content.WithoutText(texts);
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts) => texts.Aggregate(values, (current, text) => current.WithoutText(text));
+
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text)
         {
             var textTokens = new List<SyntaxToken>(value.TextTokens);
