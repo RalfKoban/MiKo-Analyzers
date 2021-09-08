@@ -115,8 +115,12 @@ public class TestMe
 
         [TestCase("The object.")]
         [TestCase("out parameter that returns the object.")]
+        [TestCase("Out parameter that returns the object.")]
+        [TestCase("[out] parameter that returns the object.")]
+        [TestCase("[Out] parameter that returns the object.")]
         [TestCase("Returns the object.")]
         [TestCase("Contains the object.")]
+        [TestCase("Indicates the object.")]
         public void Code_gets_fixed_for_out_parameter_(string text)
         {
             var originalCode = @"
