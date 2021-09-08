@@ -113,16 +113,23 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_out_parameter()
+        [TestCase("The object.")]
+        [TestCase("out parameter that returns the object.")]
+        [TestCase("Out parameter that returns the object.")]
+        [TestCase("[out] parameter that returns the object.")]
+        [TestCase("[Out] parameter that returns the object.")]
+        [TestCase("Returns the object.")]
+        [TestCase("Contains the object.")]
+        [TestCase("Indicates the object.")]
+        public void Code_gets_fixed_for_out_parameter_(string text)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System.Windows;
 
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>The object.</param>
+    /// <param name='o'>" + text + @"</param>
     public void DoSomething(out object o) { }
 }";
 
@@ -136,7 +143,7 @@ public class TestMe
     public void DoSomething(out object o) { }
 }";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2022_OutParamDefaultPhraseAnalyzer.Id;
