@@ -284,18 +284,24 @@ public class TestMe
         }
 
         [TestCase("Some integers.", "A collection of some integers.")]
-        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
-        [TestCase("An enumerable with some integers.", "A collection of some integers.")]
         [TestCase("A list of some integers.", "A collection of some integers.")]
         [TestCase("A list with some integers.", "A collection of some integers.")]
+        [TestCase("A readonly collection of some integers.", "A collection of some integers.")]
+        [TestCase("A read-only collection of some integers.", "A collection of some integers.")]
+        [TestCase("A readonly collection with some integers.", "A collection of some integers.")]
+        [TestCase("A read-only collection with some integers.", "A collection of some integers.")]
+        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
+        [TestCase("An enumerable with some integers.", "A collection of some integers.")]
+        [TestCase("The array of some integers.", "A collection of some integers.")]
+        [TestCase("The array with some integers.", "A collection of some integers.")]
+        [TestCase("The collection of some integers.", "A collection of some integers.")]
+        [TestCase("The collection with some integers.", "A collection of some integers.")]
         [TestCase("The enumerable of some integers.", "A collection of some integers.")]
         [TestCase("The enumerable with some integers.", "A collection of some integers.")]
         [TestCase("The list of some integers.", "A collection of some integers.")]
         [TestCase("The list with some integers.", "A collection of some integers.")]
-        [TestCase("The collection of some integers.", "A collection of some integers.")]
-        [TestCase("The collection with some integers.", "A collection of some integers.")]
-        [TestCase("The array of some integers.", "A collection of some integers.")]
-        [TestCase("The array with some integers.", "A collection of some integers.")]
+        [TestCase("The readonly collection of some integers.", "A collection of some integers.")]
+        [TestCase("The readonly collection with some integers.", "A collection of some integers.")]
         public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"

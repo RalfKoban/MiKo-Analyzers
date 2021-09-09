@@ -18,6 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "An enumerable with ", string.Empty },
                                                                                     { "A list of ", string.Empty },
                                                                                     { "A list with ", string.Empty },
+                                                                                    { "A read-only collection of ", string.Empty },
+                                                                                    { "A read-only collection with ", string.Empty },
+                                                                                    { "A readonly collection of ", string.Empty },
+                                                                                    { "A readonly collection with ", string.Empty },
                                                                                     { "The enumerable of ", string.Empty },
                                                                                     { "The enumerable with ", string.Empty },
                                                                                     { "The list of ", string.Empty },
@@ -26,6 +30,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "The array with ", string.Empty },
                                                                                     { "The collection of ", string.Empty },
                                                                                     { "The collection with ", string.Empty },
+                                                                                    { "The read-only collection of ", string.Empty },
+                                                                                    { "The read-only collection with ", string.Empty },
+                                                                                    { "The readonly collection of ", string.Empty },
+                                                                                    { "The readonly collection with ", string.Empty },
                                                                                 };
 
         private static readonly string[] TaskParts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", '|').Split('|');
