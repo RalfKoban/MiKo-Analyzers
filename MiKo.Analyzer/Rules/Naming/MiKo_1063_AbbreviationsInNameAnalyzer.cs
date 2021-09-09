@@ -98,6 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "dopt",
                 "ires",
                 "ixtures",
+                "kept",
                 "rupt",
                 "ures",
                 "wares",

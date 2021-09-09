@@ -117,6 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "firmwares",
                 "firstNumber",
                 "fixtures",
+                "kept",
                 "measures",
                 "mixtures",
                 "number",
