@@ -32,11 +32,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var results = new Dictionary<string, string>();
 
             var items = new[] { "true", "false", "null" };
-            var attributes = new[] { "langref", "langowrd", "langwrod", "langwowd" }; // find typos
+            var attributes = new[] { Constants.XmlTag.Attribute.Langref, "langowrd", "langwrod", "langwowd" }; // find typos
 
             foreach (var item in items)
             {
-                var proposal = $"<see langword=\"{item}\"/>";
+                var proposal = $"<see {Constants.XmlTag.Attribute.Langword}=\"{item}\"/>";
 
                 results.Add($"({item} ", $"({proposal} ");
                 results.Add($"({item})", $"({proposal})");

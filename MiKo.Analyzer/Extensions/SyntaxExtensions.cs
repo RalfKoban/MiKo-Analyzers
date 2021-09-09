@@ -349,6 +349,79 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsParameter(this IdentifierNameSyntax node, SemanticModel semanticModel) => node.EnclosingMethodHasParameter(node.GetName(), semanticModel);
 
+        internal static bool IsSeeLangword(this SyntaxNode value)
+        {
+            if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
+            {
+                var attribute = syntax.Attributes.FirstOrDefault();
+                switch (attribute?.GetName())
+                {
+                    case Constants.XmlTag.Attribute.Langword:
+                    case Constants.XmlTag.Attribute.Langref:
+                        return true;
+
+                    default:
+                        break;
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool IsSeeLangwordBool(this SyntaxNode value)
+        {
+            if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
+            {
+                var attribute = syntax.Attributes.FirstOrDefault();
+                switch (attribute?.GetName())
+                {
+                    case Constants.XmlTag.Attribute.Langword:
+                    case Constants.XmlTag.Attribute.Langref:
+                        {
+                            foreach (var token in attribute.DescendantTokens())
+                            {
+                                if ("true".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    return true;
+                                }
+
+                                if ("false".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    return true;
+                                }
+                            }
+
+                            break;
+                        }
+
+                    default:
+                        break;
+                }
+            }
+
+            return false;
+        }
+
+        internal static bool IsCBool(this SyntaxNode value)
+        {
+            if (value is XmlElementSyntax syntax && syntax.GetName() == Constants.XmlTag.C)
+            {
+                var content = syntax.Content.ToString().Trim();
+
+                if ("true".Equals(content, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                if ("false".Equals(content, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {
             var s = value.ToString();

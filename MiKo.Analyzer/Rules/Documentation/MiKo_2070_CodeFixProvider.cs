@@ -21,19 +21,62 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summary = (XmlElementSyntax)syntax;
 
-            var text = summary.Content.OfType<XmlTextSyntax>().First();
-
-            foreach (var token in text.TextTokens)
+            var contents = summary.Content;
+            if (contents.Count == 0)
             {
-                var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
+                return syntax;
+            }
 
-                if (valueText.StartsWithAny(MiKo_2070_ReturnsSummaryAnalyzer.Phrases))
+            if (contents[0] is XmlTextSyntax text)
+            {
+                foreach (var token in text.TextTokens)
                 {
-                    var startText = GetCorrectStartText(summary);
-                    var newText = " " + startText + valueText.WithoutFirstWord();
-                    var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
+                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
 
-                    return summary.ReplaceToken(token, newToken);
+                    if (valueText.StartsWithAny(MiKo_2070_ReturnsSummaryAnalyzer.Phrases))
+                    {
+                        var startText = GetCorrectStartText(summary);
+                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords("true", "if", "whether");
+
+                        var newText = " " + startText + " " + remainingText;
+
+                        if (contents.Count > 1 && (contents[1] is XmlTextSyntax) is false)
+                        {
+                            // we have another non-text, so add a space
+                            newText = newText.TrimEnd() + " ";
+                        }
+
+                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
+                        summary = summary.ReplaceToken(token, newToken);
+
+                        break;
+                    }
+                }
+            }
+
+            contents = summary.Content;
+            if (contents.Count > 1)
+            {
+                var element = contents[1];
+                if (element.IsSeeLangwordBool() || element.IsCBool())
+                {
+                    // remove the '<see langword="true"/>'
+                    summary = summary.RemoveNode(element, SyntaxRemoveOptions.KeepLeadingTrivia);
+
+                    // remove follow up contents ' if ' or ' whether '
+                    if (summary.Content.Count > 1 && summary.Content[1] is XmlTextSyntax followUpText)
+                    {
+                        foreach (var token in followUpText.TextTokens)
+                        {
+                            var valueText = token.WithoutTrivia().ValueText;
+                            var newText = valueText.WithoutFirstWords("if", "whether");
+
+                            var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
+                            summary = summary.ReplaceToken(token, newToken);
+
+                            break;
+                        }
+                    }
                 }
             }
 
