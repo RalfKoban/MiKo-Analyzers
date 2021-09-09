@@ -123,6 +123,21 @@ namespace MiKoSolutions.Analyzers
             return text.Substring(firstSpace);
         }
 
+        internal static string WithoutFirstWords(this string text, params string[] words)
+        {
+            var remainingText = text.TrimStart();
+
+            foreach (var word in words)
+            {
+                if (word.Equals(remainingText.FirstWord(), StringComparison.OrdinalIgnoreCase))
+                {
+                    remainingText = remainingText.WithoutFirstWord().TrimStart();
+                }
+            }
+
+            return remainingText.TrimStart();
+        }
+
         internal static string SecondWord(this string text) => text.TrimStart().WithoutFirstWord().TrimStart().FirstWord();
 
         private static XElement GetCommentElement(string commentXml)

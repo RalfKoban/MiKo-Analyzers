@@ -19,29 +19,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] GenericEndParts = string.Format(Constants.Comments.BooleanTaskReturnTypeEndingPhraseTemplate, "|").Split('|');
         private static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
 
-        private static readonly HashSet<string> Attributes = new HashSet<string>
-                                                                 {
-                                                                     Constants.XmlTag.Attribute.Langword,
-                                                                     Constants.XmlTag.Attribute.Langref,
-                                                                 };
-
-        private static readonly HashSet<string> Booleans = new HashSet<string>
-                                                               {
-                                                                   "true",
-                                                                   "false",
-                                                               };
-
         private static readonly string[] Phrases =
             {
                 " if ",
                 "A task that will complete with a result of ",
                 "a task that will complete with a result of ",
+                "TRUE:",
                 "True:",
                 "true:",
+                "TRUE",
                 "True",
                 "true",
+                "FALSE:",
                 "False:",
                 "false:",
+                "FALSE",
                 "False",
                 "false",
                 "Returns",
@@ -118,8 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax RemoveBooleanSeeLangwords(XmlElementSyntax comment)
         {
-            var removals = comment.Content.OfType<XmlEmptyElementSyntax>()
-                                  .Where(_ => _.GetName() == Constants.XmlTag.See && _.Attributes.Any(__ => Attributes.Contains(__.GetName()) && __.DescendantTokens().Any(token => Booleans.Contains(token.ValueText))));
+            var removals = comment.Content.Where(_ => _.IsSeeLangwordBool() || _.IsCBool());
 
             return comment.RemoveNodes(removals, SyntaxRemoveOptions.KeepNoTrivia);
         }

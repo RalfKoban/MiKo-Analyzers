@@ -11,18 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2023_CodeFixProvider)), Shared]
     public sealed class MiKo_2023_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
-        private static readonly HashSet<string> Attributes = new HashSet<string>
-                                                                 {
-                                                                     Constants.XmlTag.Attribute.Langword,
-                                                                     Constants.XmlTag.Attribute.Langref,
-                                                                 };
-
-        private static readonly HashSet<string> Booleans = new HashSet<string>
-                                                                 {
-                                                                     "true",
-                                                                     "false",
-                                                                 };
-
         private static readonly KeyValuePair<string, string>[] ReplacementMap =
             {
                 new KeyValuePair<string, string>("true", string.Empty),
@@ -67,10 +55,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // Fix <see langword> or <c> by replacing them with nothing
             var nodes = Enumerable.Empty<SyntaxNode>()
-                                  .Concat(comment.Content.OfType<XmlEmptyElementSyntax>()
-                                                 .Where(_ => _.GetName() == Constants.XmlTag.See && Attributes.Contains(_.Attributes.FirstOrDefault().GetName())))
-                                  .Concat(comment.Content.OfType<XmlElementSyntax>()
-                                                 .Where(_ => _.GetName() == Constants.XmlTag.C && Booleans.Contains(_.Content.ToString())))
+                                  .Concat(comment.Content.Where(_ => _.IsSeeLangwordBool()))
+                                  .Concat(comment.Content.Where(_ => _.IsCBool()))
                                   .ToList();
 
             return comment.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);

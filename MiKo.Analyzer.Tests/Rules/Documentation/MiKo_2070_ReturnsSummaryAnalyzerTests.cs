@@ -134,14 +134,20 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_boolean_property_summary()
+        [TestCase("Return")]
+        [TestCase("Returns")]
+        [TestCase("Returns true if")]
+        [TestCase(@"Returns <see langword=""true""/> if")]
+        [TestCase(@"Returns <see langword=""true""/> whether")]
+        [TestCase(@"Returns <see langref=""true""/> if")]
+        [TestCase(@"Returns <see langref=""true""/> whether")]
+        public void Code_gets_fixed_for_boolean_property_summary_(string startPhrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
-    /// Returns something.
+    /// " + startPhrase + @" something.
     /// </summary>
     public bool DoSomething => true;
 }
@@ -157,47 +163,24 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_boolean_property_summary_with_see_as_second_word()
+        [TestCase("Return")]
+        [TestCase("Returns")]
+        [TestCase(@"Returns true if")]
+        [TestCase(@"Returns true whether")]
+        [TestCase(@"Returns <see langword=""true""/> if")]
+        [TestCase(@"Returns <see langword=""true""/> whether")]
+        [TestCase(@"Returns <see langref=""true""/> if")]
+        [TestCase(@"Returns <see langref=""true""/> whether")]
+        public void Code_gets_fixed_for_boolean_method_summary_(string startPhrase)
         {
-            const string OriginalCode = @"
-using System.Threading.Tasks;
-
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
-    /// Returns <see langword=""true""/> if restarting the application was triggered.
-    /// </summary>
-    public bool IsRestartPending => true;
-}
-";
-
-            const string FixedCode = @"
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    /// <summary>
-    /// Gets a value indicating whether <see langword=""true""/> if restarting the application was triggered.
-    /// </summary>
-    public bool IsRestartPending => true;
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_boolean_method_summary()
-        {
-            const string OriginalCode = @"
-public class TestMe
-{
-    /// <summary>
-    /// Returns something.
+    /// " + startPhrase + @" something.
     /// </summary>
     public bool DoSomething() => true;
 }
@@ -213,17 +196,30 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_boolean_async_method_summary()
+        [TestCase("Asynchronously returns")]
+        [TestCase("Asynchronously returns true if")]
+        [TestCase("Asynchronously returns true whether")]
+        [TestCase(@"Asynchronously returns <see langword=""true""/> if")]
+        [TestCase(@"Asynchronously returns <see langword=""true""/> whether")]
+        [TestCase(@"Asynchronously returns <see langref=""true""/> if")]
+        [TestCase(@"Asynchronously returns <see langref=""true""/> whether")]
+        [TestCase("Returns")]
+        [TestCase(@"Returns true if")]
+        [TestCase(@"Returns true whether")]
+        [TestCase(@"Returns <see langword=""true""/> if")]
+        [TestCase(@"Returns <see langword=""true""/> whether")]
+        [TestCase(@"Returns <see langref=""true""/> if")]
+        [TestCase(@"Returns <see langref=""true""/> whether")]
+        public void Code_gets_fixed_for_boolean_async_method_summary_(string startPhrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
-    /// Asynchronously returns something.
+    /// " + startPhrase + @" something.
     /// </summary>
     public async bool DoSomething() => true;
 }
@@ -239,7 +235,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
