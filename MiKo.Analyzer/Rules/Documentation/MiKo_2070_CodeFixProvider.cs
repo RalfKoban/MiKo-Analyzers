@@ -21,12 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summary = (XmlElementSyntax)syntax;
 
-            if (summary.Content.Count == 0)
+            var contents = summary.Content;
+            if (contents.Count == 0)
             {
                 return syntax;
             }
 
-            if (summary.Content[0] is XmlTextSyntax text)
+            if (contents[0] is XmlTextSyntax text)
             {
                 foreach (var token in text.TextTokens)
                 {
@@ -39,6 +40,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var newText = " " + startText + " " + remainingText;
 
+                        if (contents.Count > 1 && (contents[1] is XmlTextSyntax) is false)
+                        {
+                            // we have another non-text, so add a space
+                            newText = newText.TrimEnd() + " ";
+                        }
+
                         var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
                         summary = summary.ReplaceToken(token, newToken);
 
@@ -47,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var contents = summary.Content;
+            contents = summary.Content;
             if (contents.Count > 1)
             {
                 var element = contents[1];

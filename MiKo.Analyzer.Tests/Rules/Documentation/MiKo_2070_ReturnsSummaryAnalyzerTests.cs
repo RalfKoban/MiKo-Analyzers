@@ -350,6 +350,32 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_and_space_before_link_is_kept()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Returns something is based on <see cref=""TestMe""/> to see if it is working.
+    /// </summary>
+    public bool DoSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether something is based on <see cref=""TestMe""/> to see if it is working.
+    /// </summary>
+    public bool DoSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2070_ReturnsSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2070_ReturnsSummaryAnalyzer();
