@@ -388,6 +388,43 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("", Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
+        [TestCase("some ", Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
+        public void Code_gets_fixed_for_issue_401_(string phrase)
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> containing ###<c>Foo</c>.
+    /// </value>
+    public string Foo => ""Foo"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> that contains ###<c>Foo</c>.
+    /// </value>
+    public string Foo => ""Foo"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("###", phrase), FixedCode.Replace("###", phrase));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer();

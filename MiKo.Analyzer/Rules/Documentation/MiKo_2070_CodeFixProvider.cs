@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Extensions;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2070_CodeFixProvider)), Shared]
@@ -46,8 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             newText = newText.TrimEnd() + " ";
                         }
 
-                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
-                        summary = summary.ReplaceToken(token, newToken);
+                        summary = summary.ReplaceToken(token, token.WithText(newText));
 
                         break;
                     }
@@ -71,8 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var valueText = token.WithoutTrivia().ValueText;
                             var newText = valueText.WithoutFirstWords("if", "whether");
 
-                            var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
-                            summary = summary.ReplaceToken(token, newToken);
+                            summary = summary.ReplaceToken(token, token.WithText(newText));
 
                             break;
                         }

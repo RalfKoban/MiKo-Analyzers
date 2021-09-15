@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Extensions;
+
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {
@@ -366,7 +368,9 @@ namespace MiKoSolutions.Analyzers
                 {
                     case Constants.XmlTag.Attribute.Langword:
                     case Constants.XmlTag.Attribute.Langref:
+                    {
                         return true;
+                    }
                 }
             }
 
@@ -563,7 +567,7 @@ namespace MiKoSolutions.Analyzers
                             }
                             else
                             {
-                                textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                                textTokens[i] = token.WithText(modifiedText);
                             }
 
                             modified = true;
@@ -609,7 +613,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         var modifiedText = originalText.WithoutSuffix(text);
 
-                        textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                        textTokens[i] = token.WithText(modifiedText);
                         replaced = true;
                         break;
                     }
@@ -646,7 +650,7 @@ namespace MiKoSolutions.Analyzers
 
                     var modifiedText = originalText.TrimEnd(characters);
 
-                    textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                    textTokens[i] = token.WithText(modifiedText);
                     replaced = true;
                     break;
                 }
@@ -711,7 +715,7 @@ namespace MiKoSolutions.Analyzers
 
                     var modifiedText = space + startText + originalText.TrimStart().ToLowerCaseAt(0);
 
-                    textTokens[i] = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), modifiedText, modifiedText, token.TrailingTrivia);
+                    textTokens[i] = token.WithText(modifiedText);
                     replaced = true;
                     break;
                 }
@@ -793,7 +797,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private static bool IsEmpty(this SyntaxNode value, string tagName, HashSet<string> attributeNames)
+        private static bool IsEmpty(this SyntaxNode value, string tagName, IEnumerable<string> attributeNames)
         {
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == tagName)
             {
@@ -805,7 +809,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private static bool IsNonEmpty(this SyntaxNode value, string tagName, HashSet<string> attributeNames)
+        private static bool IsNonEmpty(this SyntaxNode value, string tagName, IEnumerable<string> attributeNames)
         {
             if (value is XmlElementSyntax syntax && syntax.GetName() == tagName)
             {

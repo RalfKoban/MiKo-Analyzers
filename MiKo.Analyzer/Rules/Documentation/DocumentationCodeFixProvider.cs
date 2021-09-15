@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Extensions;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
@@ -166,7 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (lastToken.IsKind(SyntaxKind.None))
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
-                    var token = SyntaxFactory.Token(default, SyntaxKind.XmlTextLiteralToken, ending, ending, default);
+                    var token = ending.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken);
 
                     return comment.InsertTokensBefore(textTokens.First(), new[] { token });
                 }
@@ -180,10 +182,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         valueText = valueText.WithoutSuffix(".");
                     }
 
-                    var text = valueText + ending;
-                    var token = SyntaxFactory.Token(lastToken.LeadingTrivia, SyntaxKind.XmlTextLiteralToken, text, text, lastToken.TrailingTrivia);
-
-                    return comment.ReplaceToken(lastToken, token);
+                    return comment.ReplaceToken(lastToken, lastToken.WithText(valueText + ending));
                 }
             }
 
@@ -254,7 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
 
-                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
+                        var newToken = token.WithText(replacedText);
 
                         tokenMap.Add(token, newToken);
                     }
@@ -349,6 +348,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    .WithEndTag(comment.EndTag.WithLeadingXmlComment());
         }
 
+        protected static bool IsSeeCref(SyntaxNode value, string type)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(emptyElement.Attributes, type);
+                }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(element.StartTag.Attributes, type);
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
+        }
+
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
 
         protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlElement(Constants.XmlTag.Para, nodes);
@@ -365,7 +387,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
-            var token = SyntaxFactory.Token(default, SyntaxKind.StringLiteralToken, text, text, default);
+            var token = text.ToSyntaxToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttributes(new SyntaxList<XmlAttributeSyntax>(attribute));

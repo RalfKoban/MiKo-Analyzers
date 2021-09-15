@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Extensions;
+
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3103_CodeFixProvider)), Shared]
@@ -62,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static LiteralExpressionSyntax CreateStringLiteralExpressionSyntax(string value)
         {
-            var token = SyntaxFactory.Token(default, SyntaxKind.StringLiteralToken, value, value, default);
+            var token = value.ToSyntaxToken();
 
             return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
         }
