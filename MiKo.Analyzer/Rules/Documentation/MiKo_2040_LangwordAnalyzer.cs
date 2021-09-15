@@ -12,6 +12,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2040";
 
+        internal static readonly string[] Phrases = { "true", "false", "null" };
+
+        internal static readonly HashSet<string> WrongAttributes = new HashSet<string>
+                                                                       {
+                                                                           Constants.XmlTag.Attribute.Langref,
+                                                                           "langowrd", // find typos
+                                                                           "langwrod", // find typos
+                                                                           "langwowd", // find typos
+                                                                       };
+
         private static readonly KeyValuePair<string, string>[] Items = CreateItems();
 
         public MiKo_2040_LangwordAnalyzer() : base(Id)
@@ -31,33 +41,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var results = new Dictionary<string, string>();
 
-            var items = new[] { "true", "false", "null" };
-            var attributes = new[] { Constants.XmlTag.Attribute.Langref, "langowrd", "langwrod", "langwowd" }; // find typos
-
-            foreach (var item in items)
+            foreach (var phrase in Phrases)
             {
-                var proposal = $"<see {Constants.XmlTag.Attribute.Langword}=\"{item}\"/>";
+                var proposal = $"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase}\"/>";
 
-                results.Add($"({item} ", $"({proposal} ");
-                results.Add($"({item})", $"({proposal})");
-                results.Add($" {item})", $" {proposal})");
-                results.Add($" {item} ", $" {proposal} ");
-                results.Add($" {item}.", $" {proposal}.");
-                results.Add($" {item},", $" {proposal},");
-                results.Add($" {item};", $" {proposal};");
-                results.Add($"<c>{item}</c>", proposal);
-                results.Add($"<value>{item}</value>", proposal);
+                results.Add($"({phrase} ", $"({proposal} ");
+                results.Add($"({phrase})", $"({proposal})");
+                results.Add($" {phrase})", $" {proposal})");
+                results.Add($" {phrase} ", $" {proposal} ");
+                results.Add($" {phrase}.", $" {proposal}.");
+                results.Add($" {phrase}?", $" {proposal}.");
+                results.Add($" {phrase}!", $" {proposal}.");
+                results.Add($" {phrase},", $" {proposal},");
+                results.Add($" {phrase};", $" {proposal};");
+                results.Add($"<c>{phrase}</c>", proposal);
+                results.Add($"<value>{phrase}</value>", proposal);
 
-                foreach (var attribute in attributes)
+                foreach (var attribute in WrongAttributes)
                 {
-                    results.Add($"<see {attribute}=\"{item}\"/>", proposal);
-                    results.Add($"<see {attribute}=\"{item}\" />", proposal);
-                    results.Add($"<see {attribute}=\"{item}\"></see>", proposal);
-                    results.Add($"<see {attribute}=\"{item}\" ></see>", proposal);
-                    results.Add($"<seealso {attribute}=\"{item}\"/>", proposal);
-                    results.Add($"<seealso {attribute}=\"{item}\" />", proposal);
-                    results.Add($"<seealso {attribute}=\"{item}\"></seealso>", proposal);
-                    results.Add($"<seealso {attribute}=\"{item}\" ></seealso>", proposal);
+                    results.Add($"<see {attribute}=\"{phrase}\"/>", proposal);
+                    results.Add($"<see {attribute}=\"{phrase}\" />", proposal);
+                    results.Add($"<see {attribute}=\"{phrase}\"></see>", proposal);
+                    results.Add($"<see {attribute}=\"{phrase}\" ></see>", proposal);
+                    results.Add($"<seealso {attribute}=\"{phrase}\"/>", proposal);
+                    results.Add($"<seealso {attribute}=\"{phrase}\" />", proposal);
+                    results.Add($"<seealso {attribute}=\"{phrase}\"></seealso>", proposal);
+                    results.Add($"<seealso {attribute}=\"{phrase}\" ></seealso>", proposal);
                 }
             }
 

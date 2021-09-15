@@ -11,27 +11,34 @@ namespace System
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        public static bool StartsWithAnyChar(this string value, string characters)
+        public static IEnumerable<int> AllIndexesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.IsNullOrWhiteSpace())
             {
-                return false;
+                return Array.Empty<int>();
             }
 
-            var character = value[0];
+            var indexes = new List<int>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < characters.Length; index++)
+            for (var index = 0; ; index += finding.Length)
             {
-                if (character == characters[index])
+                index = value.IndexOf(finding, index, comparison);
+
+                if (index == -1)
                 {
-                    return true;
+                    // nothing more to find
+                    return indexes;
                 }
-            }
 
-            return false;
+                indexes.Add(index);
+            }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T : class => string.Concat(values.Where(_ => _ != null));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
 
         public static bool Contains(this string value, string finding, StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
 
@@ -76,169 +83,17 @@ namespace System
 
         public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Contains(_, comparison));
 
-        public static bool EqualsAny(this string value, string[] phrases) => string.IsNullOrEmpty(value) is false && EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
-
-        public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Equals(_, comparison));
-
-        public static bool StartsWithAny(this string value, string[] prefixes) => StartsWithAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
-
-        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
-
-        public static bool StartsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[0].IsNumber();
-
         public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
 
-        public static bool EndsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[value.Length - 1].IsNumber();
-
         public static bool EndsWithCommonNumber(this string value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
+        public static bool EndsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[value.Length - 1].IsNumber();
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
+        public static bool EqualsAny(this string value, string[] phrases) => string.IsNullOrEmpty(value) is false && EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsUpperCase(this char value) => char.IsUpper(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsLowerCase(this char value) => char.IsLower(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNumber(this char value) => char.IsNumber(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsLetter(this char value) => char.IsLetter(value);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsLowerCaseLetter(this char value) => value.IsLetter() && value.IsLowerCase();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsSentenceEnding(this char value)
-        {
-            switch (value)
-            {
-                case '.':
-                case '?':
-                case '!':
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T : class => string.Concat(values.Where(_ => _ != null));
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
-
-        public static string HumanizedConcatenated(this IEnumerable<string> values)
-        {
-            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToList();
-
-            const string Separator = ", ";
-            const string SeparatorForLast = " or ";
-
-            var count = items.Count;
-            switch (count)
-            {
-                case 0: return string.Empty;
-                case 1: return items[0];
-                case 2: return items.ConcatenatedWith(SeparatorForLast);
-                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), SeparatorForLast, items[count - 1]);
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithApostrophe(this string value) => string.Concat("\'", value, "\'");
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithDoubleQuote(this string value) => string.Concat("\"", value, "\"");
-
-        public static string HumanizedTakeFirst(this string value, int max)
-        {
-            var index = Math.Min(max, value.Length);
-
-            return index <= 0 || index == value.Length
-                       ? value
-                       : value.Substring(0, index) + "...";
-        }
-
-        public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
-
-        public static bool HasEntityMarker(this string symbolName)
-        {
-            var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
-            if (hasMarker)
-            {
-                if (symbolName.ContainsAny(Constants.Markers.ViewModels))
-                {
-                    return false;
-                }
-
-                if (symbolName.ContainsAny(Constants.Markers.SpecialModels))
-                {
-                    return false;
-                }
-            }
-
-            return hasMarker;
-        }
-
-        public static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
-
-        public static string WithoutParaTags(this string value) => value.Without(Constants.ParaTags);
-
-        public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
-
-        public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
-
-        public static string Without(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Without(s));
-
-        public static string WithoutSuffix(this string value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length > 0 ? value.Substring(0, length) : string.Empty;
-        }
-
-        public static string WithoutNumberSuffix(this string value)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var end = value.Length - 1;
-            while (end >= 0)
-            {
-                if (value[end].IsNumber())
-                {
-                    end--;
-                }
-                else
-                {
-                    end++; // fix last character
-                    break;
-                }
-            }
-
-            return end >= 0 && end <= value.Length - 1
-                       ? value.Substring(0, end)
-                       : value;
-        }
+        public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Equals(_, comparison));
 
         public static string GetNameOnlyPart(this string fullName)
         {
@@ -261,7 +116,26 @@ namespace System
 
         public static string GetPartAfterLastDot(this string value) => value?.Substring(value.LastIndexOf('.') + 1);
 
-        public static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
+        public static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
+
+        public static bool HasEntityMarker(this string symbolName)
+        {
+            var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
+            if (hasMarker)
+            {
+                if (symbolName.ContainsAny(Constants.Markers.ViewModels))
+                {
+                    return false;
+                }
+
+                if (symbolName.ContainsAny(Constants.Markers.SpecialModels))
+                {
+                    return false;
+                }
+            }
+
+            return hasMarker;
+        }
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit)
         {
@@ -281,6 +155,143 @@ namespace System
 
             return count > limit;
         }
+
+        public static string HumanizedConcatenated(this IEnumerable<string> values)
+        {
+            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToList();
+
+            const string Separator = ", ";
+            const string SeparatorForLast = " or ";
+
+            var count = items.Count;
+            switch (count)
+            {
+                case 0: return string.Empty;
+                case 1: return items[0];
+                case 2: return items.ConcatenatedWith(SeparatorForLast);
+                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), SeparatorForLast, items[count - 1]);
+            }
+        }
+
+        public static string HumanizedTakeFirst(this string value, int max)
+        {
+            var index = Math.Min(max, value.Length);
+
+            return index <= 0 || index == value.Length
+                       ? value
+                       : value.Substring(0, index) + "...";
+        }
+
+        public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsLetter(this char value) => char.IsLetter(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsLowerCase(this char value) => char.IsLower(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsLowerCaseLetter(this char value) => value.IsLetter() && value.IsLowerCase();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNumber(this char value) => char.IsNumber(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsSentenceEnding(this char value)
+        {
+            switch (value)
+            {
+                case '.':
+                case '?':
+                case '!':
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsUpperCase(this char value) => char.IsUpper(value);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
+
+        public static IEnumerable<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return Array.Empty<string>();
+            }
+
+            var tuples = findings.SelectMany(finding => value.AllIndexesOf(finding, comparison).Select(index => new Tuple<int, string>(index, finding)))
+                                 .ToList();
+
+            var results = new List<string>((tuples.Count * 2) + 1);
+
+            var remainingString = value;
+
+            // get substrings by tuple indices and remember all parts (in reverse order)
+            foreach (var (index, finding) in tuples.OrderByDescending(_ => _.Item1))
+            {
+                var lastPart = remainingString.Substring(index + finding.Length);
+
+                results.Add(lastPart);
+                results.Add(finding);
+
+                remainingString = remainingString.Substring(0, index);
+            }
+
+            // add first part of string as it would miss otherwise
+            results.Add(remainingString);
+
+            // ensure the correct order as the substrings were added in reverse order
+            results.Reverse();
+
+            return results;
+        }
+
+        public static bool StartsWithAny(this string value, string[] prefixes) => StartsWithAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
+
+        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
+
+        public static bool StartsWithAnyChar(this string value, string characters)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            var character = value[0];
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < characters.Length; index++)
+            {
+                if (character == characters[index])
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool StartsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[0].IsNumber();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string SurroundedWithApostrophe(this string value) => string.Concat("\'", value, "\'");
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string SurroundedWithDoubleQuote(this string value) => string.Concat("\"", value, "\"");
+
+        public static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
 
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
@@ -330,6 +341,52 @@ namespace System
             characters[index] = char.ToUpperInvariant(characters[index]);
 
             return string.Intern(new string(characters));
+        }
+
+        public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
+
+        public static string Without(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Without(s));
+
+        public static string WithoutNumberSuffix(this string value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var end = value.Length - 1;
+            while (end >= 0)
+            {
+                if (value[end].IsNumber())
+                {
+                    end--;
+                }
+                else
+                {
+                    end++; // fix last character
+                    break;
+                }
+            }
+
+            return end >= 0 && end <= value.Length - 1
+                       ? value.Substring(0, end)
+                       : value;
+        }
+
+        public static string WithoutParaTags(this string value) => value.Without(Constants.ParaTags);
+
+        public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
+
+        public static string WithoutSuffix(this string value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var length = value.Length - suffix.Length;
+
+            return length > 0 ? value.Substring(0, length) : string.Empty;
         }
     }
 }
