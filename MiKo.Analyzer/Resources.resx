@@ -1827,6 +1827,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2039_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2040_CodeFixTitle" xml:space="preserve">
+    <value>Use &lt;see langword="..."/&gt;</value>
+  </data>
   <data name="MiKo_2040_Description" xml:space="preserve">
     <value>To support other languages than C#, use '&lt;see langword="..."/&gt;' instead of '&lt;c&gt;...&lt;/c&gt;'.</value>
   </data>

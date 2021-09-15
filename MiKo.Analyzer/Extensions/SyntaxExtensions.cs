@@ -22,6 +22,10 @@ namespace MiKoSolutions.Analyzers
                                                                     XmlCommentExterior,
                                                                 };
 
+        private static readonly string[] Booleans = { "true", "false" };
+
+        private static readonly string[] Nulls = { "null" };
+
         internal static bool EnclosingMethodHasParameter(this SyntaxNode node, string parameterName, SemanticModel semanticModel)
         {
             var method = node.GetEnclosingMethod(semanticModel);
@@ -276,6 +280,10 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsCBool(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Booleans);
+
+        internal static bool IsCNull(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Nulls);
+
         internal static bool IsCommand(this TypeSyntax value, SemanticModel semanticModel)
         {
             var name = value.ToString();
@@ -359,9 +367,6 @@ namespace MiKoSolutions.Analyzers
                     case Constants.XmlTag.Attribute.Langword:
                     case Constants.XmlTag.Attribute.Langref:
                         return true;
-
-                    default:
-                        break;
                 }
             }
 
@@ -393,34 +398,19 @@ namespace MiKoSolutions.Analyzers
 
                             break;
                         }
-
-                    default:
-                        break;
                 }
             }
 
             return false;
         }
 
-        internal static bool IsCBool(this SyntaxNode value)
-        {
-            if (value is XmlElementSyntax syntax && syntax.GetName() == Constants.XmlTag.C)
-            {
-                var content = syntax.Content.ToString().Trim();
+        internal static bool IsEmptySee(this SyntaxNode value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
 
-                if ("true".Equals(content, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
+        internal static bool IsEmptySeeAlso(this SyntaxNode value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
-                if ("false".Equals(content, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
+        internal static bool IsNonEmptySee(this SyntaxNode value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
 
-            return false;
-        }
+        internal static bool IsNonEmptySeeAlso(this SyntaxNode value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {
@@ -490,6 +480,10 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsTypeUnderTestCreationMethod(this MethodDeclarationSyntax value) => Constants.Names.TypeUnderTestMethodNames.Contains(value.GetName());
 
         internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax value) => Constants.Names.TypeUnderTestVariableNames.Contains(value.GetName());
+
+        internal static bool IsValueBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Booleans);
+
+        internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
 
@@ -785,6 +779,42 @@ namespace MiKoSolutions.Analyzers
                 default:
                     return null;
             }
+        }
+
+        private static bool Is(this SyntaxNode value, string tagName, params string[] contents)
+        {
+            if (value is XmlElementSyntax syntax && syntax.GetName() == tagName)
+            {
+                var content = syntax.Content.ToString().Trim();
+
+                return contents.Any(expected => expected.Equals(content, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return false;
+        }
+
+        private static bool IsEmpty(this SyntaxNode value, string tagName, HashSet<string> attributeNames)
+        {
+            if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == tagName)
+            {
+                var attribute = syntax.Attributes.FirstOrDefault();
+
+                return attributeNames.Contains(attribute?.GetName());
+            }
+
+            return false;
+        }
+
+        private static bool IsNonEmpty(this SyntaxNode value, string tagName, HashSet<string> attributeNames)
+        {
+            if (value is XmlElementSyntax syntax && syntax.GetName() == tagName)
+            {
+                var attribute = syntax.StartTag.Attributes.FirstOrDefault();
+
+                return attributeNames.Contains(attribute?.GetName());
+            }
+
+            return false;
         }
 
         private static bool IsIfStatementWithCallTo(IfStatementSyntax ifStatement, string methodName)

@@ -5059,6 +5059,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &lt;see langword=&quot;...&quot;/&gt;.
+        /// </summary>
+        public static string MiKo_2040_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2040_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To support other languages than C#, use &apos;&lt;see langword=&quot;...&quot;/&gt;&apos; instead of &apos;&lt;c&gt;...&lt;/c&gt;&apos;..
         /// </summary>
         public static string MiKo_2040_Description {

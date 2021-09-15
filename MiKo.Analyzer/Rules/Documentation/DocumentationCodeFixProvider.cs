@@ -366,7 +366,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
             var token = SyntaxFactory.Token(default, SyntaxKind.StringLiteralToken, text, text, default);
-            var attribute = SyntaxFactory.XmlTextAttribute("langword", token);
+            var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttributes(new SyntaxList<XmlAttributeSyntax>(attribute));
         }
