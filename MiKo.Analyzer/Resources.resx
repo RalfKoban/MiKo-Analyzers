@@ -1170,7 +1170,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Remove '{1}' from name</value>
   </data>
   <data name="MiKo_1102_Title" xml:space="preserve">
-    <value>Test methods should not contain 'Test'.</value>
+    <value>Test methods should not contain 'Test' in their names.</value>
   </data>
   <data name="MiKo_1103_CodeFixTitle" xml:space="preserve">
     <value>Rename to 'PrepareTest'</value>
@@ -1435,6 +1435,9 @@ That allows an easy detection and use via IntelliSense.</value>
   </data>
   <data name="MiKo_2001_Title" xml:space="preserve">
     <value>Events should be documented properly.</value>
+  </data>
+  <data name="MiKo_2002_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'Provides data for the &lt;see cref="TODO"/&gt; event.' comment.</value>
   </data>
   <data name="MiKo_2002_Description" xml:space="preserve">
     <value>To ease maintenance, classes that inherit from 'System.EventArgs' should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>

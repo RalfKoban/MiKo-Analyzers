@@ -3111,7 +3111,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should not contain &apos;Test&apos;..
+        ///   Looks up a localized string similar to Test methods should not contain &apos;Test&apos; in their names..
         /// </summary>
         public static string MiKo_1102_Title {
             get {
@@ -3884,6 +3884,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2001_Title {
             get {
                 return ResourceManager.GetString("MiKo_2001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;Provides data for the &lt;see cref=&quot;TODO&quot;/&gt; event.&apos; comment..
+        /// </summary>
+        public static string MiKo_2002_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2002_CodeFixTitle", resourceCulture);
             }
         }
         

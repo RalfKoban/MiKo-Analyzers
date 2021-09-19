@@ -108,7 +108,7 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_1094|Do not suffix types with passive namespace names.|&#x2713;|\-|
 |MiKo_1100|Test classes should start with the name of the type under test.|&#x2713;|\-|
 |MiKo_1101|Test classes should end with 'Tests'.|&#x2713;|&#x2713;|
-|MiKo_1102|Test methods should not contain 'Test'.|&#x2713;|\-|
+|MiKo_1102|Test methods should not contain 'Test' in their names.|&#x2713;|\-|
 |MiKo_1103|Test initialization methods should be named 'PrepareTest'.|&#x2713;|&#x2713;|
 |MiKo_1104|Test cleanup methods should be named 'CleanupTest'.|&#x2713;|&#x2713;|
 |MiKo_1105|One-time test initialization methods should be named 'PrepareTestEnvironment'.|&#x2713;|&#x2713;|
@@ -137,7 +137,7 @@ The following tables list all the 296 rules that are currently provided by the a
 |:-|:----|:----------------:|:---------------:|
 |MiKo_2000|Documentation should be valid XML.|&#x2713;|\-|
 |MiKo_2001|Events should be documented properly.|&#x2713;|&#x2713;|
-|MiKo_2002|EventArgs should be documented properly.|&#x2713;|\-|
+|MiKo_2002|EventArgs should be documented properly.|&#x2713;|&#x2713;|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase.|&#x2713;|\-|
 |MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly.|&#x2713;|\-|
