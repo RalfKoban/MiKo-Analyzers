@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -81,8 +82,72 @@ public class MyEventArgs : EventArgs
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary>
+/// Some comment.
+/// </summary>
+public class MyEventArgs : EventArgs
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary>
+/// Provides data for the <see cref=""TODO""/> event.
+/// </summary>
+public class MyEventArgs : EventArgs
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_but_keeps_Remarks()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary>
+/// Some comment.
+/// </summary>
+/// <remarks>
+/// These are some remarks.
+/// </remarks>
+public class MyEventArgs : EventArgs
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary>
+/// Provides data for the <see cref=""TODO""/> event.
+/// </summary>
+/// <remarks>
+/// These are some remarks.
+/// </remarks>
+public class MyEventArgs : EventArgs
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2002_EventArgsSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2002_EventArgsSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2002_CodeFixProvider();
     }
 }
