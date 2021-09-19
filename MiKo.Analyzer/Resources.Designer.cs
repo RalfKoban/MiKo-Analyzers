@@ -3111,7 +3111,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should not contain &apos;Test&apos;..
+        ///   Looks up a localized string similar to Test methods should not contain &apos;Test&apos; in their names..
         /// </summary>
         public static string MiKo_1102_Title {
             get {
