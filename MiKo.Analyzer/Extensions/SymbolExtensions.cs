@@ -476,6 +476,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsByteArray(this ITypeSymbol value) => value is IArrayTypeSymbol array && array.ElementType.IsByte();
 
+        internal static bool IsIGrouping(this ITypeSymbol value)
+        {
+            if (value.TypeKind == TypeKind.Interface)
+            {
+                switch (value.Name)
+                {
+                    case "IGrouping":
+                    case "System.Linq.IGrouping":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && string.Intern(value.ToString()) == TypeNames.CancellationToken;
 
         internal static bool IsCoerceValueCallback(this IMethodSymbol value)
@@ -509,9 +524,6 @@ namespace MiKoSolutions.Analyzers
                     case "DependencyPropertyChangedEventArgs":
                     case "System.Windows.DependencyPropertyChangedEventArgs":
                         return true;
-
-                    default:
-                        return false;
                 }
             }
 

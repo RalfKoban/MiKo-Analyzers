@@ -37,6 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
+                if (IsGrouping(originalName, identifier, semanticModel))
+                {
+                    continue;
+                }
+
                 var pluralName = GetPluralName(originalName, out var name);
                 if (pluralName is null)
                 {
@@ -101,6 +106,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var type = semanticModel.GetTypeInfo(v.Type).Type;
 
                     return type?.IsByteArray() is true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsGrouping(string originalName, SyntaxToken identifier, SemanticModel semanticModel)
+        {
+            switch (originalName)
+            {
+                case "@group":
+                case "group":
+                case "grouping":
+                {
+                    var v = identifier.GetEnclosing<VariableDeclarationSyntax>();
+                    if (v != null)
+                    {
+                        var type = semanticModel.GetTypeInfo(v.Type).Type;
+
+                        return type?.IsIGrouping() is true;
+                    }
+
+                    break;
                 }
             }
 
