@@ -107,6 +107,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_IGrouping() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        IGrouping<string, string> group = null;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
