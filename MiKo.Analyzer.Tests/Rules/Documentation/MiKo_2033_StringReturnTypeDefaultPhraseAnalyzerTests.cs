@@ -390,7 +390,7 @@ public class TestMe
 
         [TestCase("", Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
         [TestCase("some ", Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
-        public void Code_gets_fixed_for_issue_401_(string phrase)
+        public void Code_gets_fixed_for_non_generic_method_and_issue_401_when_phrase_is_almost_correct_(string phrase)
         {
             const string OriginalCode = @"
 using System;
@@ -402,6 +402,7 @@ public class TestMe
     /// </summary>
     /// <value>
     /// A <see cref=""string""/> containing ###<c>Foo</c>.
+    /// <see cref=""TestMe"" /> for more details.
     /// </value>
     public string Foo => ""Foo"";
 }
@@ -417,12 +418,125 @@ public class TestMe
     /// </summary>
     /// <value>
     /// A <see cref=""string""/> that contains ###<c>Foo</c>.
+    /// <see cref=""TestMe"" /> for more details.
     /// </value>
     public string Foo => ""Foo"";
 }
 ";
 
             VerifyCSharpFix(OriginalCode.Replace("###", phrase), FixedCode.Replace("###", phrase));
+        }
+
+        [Test(Description = "Bugfix for https://github.com/RalfKoban/MiKo-Analyzers/issues/401")]
+        public void Code_gets_fixed_for_non_generic_method_and_issue_401_when_complete_phrase_gets_added()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// The <c>Foo</c>.
+    /// <see cref=""TestMe"" /> for more details.
+    /// </value>
+    public string Foo => ""Foo"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> that contains the <c>Foo</c>.
+    /// <see cref=""TestMe"" /> for more details.
+    /// </value>
+    public string Foo => ""Foo"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_method_and_issue_401_when_phrase_is_almost_correct_variant_1()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> containing the <c>Foo</c>.</returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains the <c>Foo</c>.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_generic_method_and_issue_401_when_phrase_is_almost_correct_variant_2()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task representing the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> containing the <c>Foo</c>.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains the <c>Foo</c>.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;

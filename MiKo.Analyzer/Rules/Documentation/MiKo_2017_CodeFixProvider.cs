@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                  summary.WithTrailingXmlComment(),
                                                                                  field.WithEndOfLine(),
                                                                              }))
-                          .WithLeadingTrivia(SyntaxExtensions.XmlCommentExterior);
+                          .WithLeadingXmlCommentExterior();
         }
     }
 }

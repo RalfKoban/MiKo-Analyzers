@@ -8,8 +8,6 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using MiKoSolutions.Analyzers.Extensions;
-
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3103_CodeFixProvider)), Shared]
