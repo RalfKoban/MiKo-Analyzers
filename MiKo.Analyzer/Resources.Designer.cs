@@ -3888,6 +3888,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;Provides data for the &lt;see cref=&quot;TODO&quot;/&gt; event.&apos; comment..
+        /// </summary>
+        public static string MiKo_2002_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2002_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, classes that inherit from &apos;System.EventArgs&apos; should be documented with &apos;Provides data for the &lt;see cref=&quot;XYZ&quot; /&gt; event.&apos; to indicate for which event they are valid..
         /// </summary>
         public static string MiKo_2002_Description {
