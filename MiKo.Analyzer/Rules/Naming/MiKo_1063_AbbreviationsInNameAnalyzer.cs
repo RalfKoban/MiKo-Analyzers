@@ -160,10 +160,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (index <= -1)
                 {
-                    break;
+                    return false;
                 }
 
-                var positionBeforeText = index - 1;
                 var positionAfterCharacter = index + keyLength;
                 if (positionAfterCharacter < symbolNameLength && symbolName[positionAfterCharacter].IsUpperCase())
                 {
@@ -172,6 +171,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return true;
                     }
 
+                    var positionBeforeText = index - 1;
                     if (positionBeforeText >= 0 && symbolName[positionBeforeText].IsUpperCase())
                     {
                         return true;
@@ -180,8 +180,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 index = positionAfterCharacter;
             }
-
-            return false;
         }
 
         private static bool CompleteTermHasIssue(string key, string symbolName) => string.Equals(symbolName, key, StringComparison.Ordinal);

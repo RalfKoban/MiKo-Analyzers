@@ -82,24 +82,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (content[index] is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
-                content = content.Remove(content[index]);
+                content = content.Remove(text);
 
                 if (phrase.IsNullOrWhiteSpace())
                 {
-                    var tokens = text.TextTokens;
-                    var textTokens = tokens.Count;
-                    if (textTokens > 2)
-                    {
-                        // TODO: RKN find a better solution this as it is not good code
-
-                        // remove last "\r\n" token and remove '  /// ' trivia of last token
-                        if (tokens[textTokens - 2].IsKind(SyntaxKind.XmlTextLiteralNewLineToken)
-                         && tokens[textTokens - 1].ValueText.IsNullOrWhiteSpace())
-                        {
-                            var newTokens = tokens.Take(textTokens - 2).ToArray();
-                            text = SyntaxFactory.XmlText(newTokens);
-                        }
-                    }
+                    text = text.WithoutTrailingXmlComment();
                 }
 
                 var newText = text.WithStartText(phrase);
@@ -124,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (content[index] is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
-                content = content.Remove(content[index]);
+                content = content.Remove(text);
 
                 // remove first "\r\n" token and remove '  /// ' trivia of second token
                 var textTokens = text.TextTokens;
@@ -166,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (lastToken.IsKind(SyntaxKind.None))
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
-                    var token = SyntaxFactory.Token(default, SyntaxKind.XmlTextLiteralToken, ending, ending, default);
+                    var token = ending.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken);
 
                     return comment.InsertTokensBefore(textTokens.First(), new[] { token });
                 }
@@ -180,10 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         valueText = valueText.WithoutSuffix(".");
                     }
 
-                    var text = valueText + ending;
-                    var token = SyntaxFactory.Token(lastToken.LeadingTrivia, SyntaxKind.XmlTextLiteralToken, text, text, lastToken.TrailingTrivia);
-
-                    return comment.ReplaceToken(lastToken, token);
+                    return comment.ReplaceToken(lastToken, lastToken.WithText(valueText + ending));
                 }
             }
 
@@ -254,7 +238,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
 
-                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), replacedText, replacedText, token.TrailingTrivia);
+                        var newToken = token.WithText(replacedText);
 
                         tokenMap.Add(token, newToken);
                     }
@@ -279,12 +263,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
         {
-            var content = SyntaxFactory.List<XmlNodeSyntax>().Add(SyntaxFactory.XmlText(text + additionalComment));
-
-            return comment
-                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                   .WithContent(content)
-                   .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+            return Comment(comment, SyntaxFactory.XmlText(text + additionalComment));
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
@@ -296,17 +275,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 XmlElementSyntax comment,
                                                 string commentStart,
                                                 XmlEmptyElementSyntax seeCref,
-                                                string commentEnd)
+                                                string commentEnd,
+                                                params XmlNodeSyntax[] commendEndNodes)
         {
-            var content = SyntaxFactory.List<XmlNodeSyntax>()
-                                       .Add(SyntaxFactory.XmlText(commentStart))
-                                       .Add(seeCref)
-                                       .Add(SyntaxFactory.XmlText(commentEnd));
+            var start = new XmlNodeSyntax[] { SyntaxFactory.XmlText(commentStart), seeCref };
+            var end = CommentEnd(commentEnd, commendEndNodes);
 
-            return comment
-                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                   .WithContent(content)
-                   .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+            return Comment(comment, start.Concat(end));
         }
 
         protected static XmlElementSyntax Comment(
@@ -315,9 +290,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 XmlEmptyElementSyntax seeCref1,
                                                 string commentMiddle,
                                                 XmlEmptyElementSyntax seeCref2,
-                                                string commentEnd)
+                                                string commentEnd,
+                                                params XmlNodeSyntax[] commendEndNodes)
         {
-            return Comment(comment, commentStart, seeCref1, new[] { SyntaxFactory.XmlText(commentMiddle) }, seeCref2, commentEnd);
+            return Comment(comment, commentStart, seeCref1, new[] { SyntaxFactory.XmlText(commentMiddle) }, seeCref2, commentEnd, commendEndNodes);
         }
 
         protected static XmlElementSyntax Comment(
@@ -326,27 +302,123 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 XmlEmptyElementSyntax seeCref1,
                                                 IEnumerable<XmlNodeSyntax> commentMiddle,
                                                 XmlEmptyElementSyntax seeCref2,
-                                                string commentEnd)
+                                                string commentEnd,
+                                                params XmlNodeSyntax[] commendEndNodes)
         {
-            var content = SyntaxFactory.List<XmlNodeSyntax>()
-                                       .Add(SyntaxFactory.XmlText(commentStart))
-                                       .Add(seeCref1)
-                                       .AddRange(commentMiddle)
-                                       .Add(seeCref2)
-                                       .Add(SyntaxFactory.XmlText(commentEnd));
+            var start = new XmlNodeSyntax[] { SyntaxFactory.XmlText(commentStart), seeCref1 };
+            var middle = new[] { seeCref2 };
+            var end = CommentEnd(commentEnd, commendEndNodes);
 
-            return comment
-                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                   .WithContent(content)
-                   .WithEndTag(comment.EndTag.WithLeadingXmlComment());
+            // TODO RKN: Fix XML escaping caused by string conversion
+            return Comment(comment, start.Concat(commentMiddle).Concat(middle).Concat(end));
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
         {
-            return comment
-                   .WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                   .WithContent(SyntaxFactory.List(nodes))
-                   .WithEndTag(comment.EndTag.WithLeadingXmlComment());
+            return comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                          .WithContent(content)
+                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+        }
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, SyntaxFactory.List(nodes));
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
+
+        protected static bool IsSeeCref(SyntaxNode value, string type)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(emptyElement.Attributes, type);
+                }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(element.StartTag.Attributes, type);
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
+        }
+
+        protected static bool IsSeeCref(SyntaxNode value, TypeSyntax type, NameSyntax member)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(emptyElement.Attributes, type, member);
+                }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(element.StartTag.Attributes, type, member);
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, TypeSyntax t, NameSyntax name)
+            {
+                if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
+                {
+                    if (attribute.Cref is QualifiedCrefSyntax q && IsSameGeneric(q.Container, t))
+                    {
+                        if (q.Member is NameMemberCrefSyntax m && IsSameName(m.Name, name))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+
+                bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
+                {
+                    if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
+                    {
+                        if (g1.Identifier.ValueText == g2.Identifier.ValueText)
+                        {
+                            var arguments1 = g1.TypeArgumentList.Arguments;
+                            var arguments2 = g2.TypeArgumentList.Arguments;
+
+                            if (arguments1.Count == arguments2.Count)
+                            {
+                                for (var i = 0; i < arguments1.Count; i++)
+                                {
+                                    if (IsSameName(arguments1[i], arguments2[i]) is false)
+                                    {
+                                        return false;
+                                    }
+                                }
+
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                }
+
+                bool IsSameName(TypeSyntax t1, TypeSyntax t2)
+                {
+                    if (t1 is IdentifierNameSyntax ti && t2 is IdentifierNameSyntax ni)
+                    {
+                        return ti.Identifier.ValueText == ni.Identifier.ValueText;
+                    }
+
+                    return t1.ToString() == t2.ToString();
+                }
+            }
         }
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
@@ -365,7 +437,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
-            var token = SyntaxFactory.Token(default, SyntaxKind.StringLiteralToken, text, text, default);
+            var token = text.ToSyntaxToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttributes(new SyntaxList<XmlAttributeSyntax>(attribute));
@@ -392,6 +464,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
         {
             return SyntaxFactory.XmlEmptyElement(tag).WithAttributes(new SyntaxList<XmlAttributeSyntax>(SyntaxFactory.XmlCrefAttribute(syntax)));
+        }
+
+        private static IEnumerable<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
+        {
+            var skip = 0;
+            XmlTextSyntax textCommentEnd;
+
+            if (commendEndNodes.FirstOrDefault() is XmlTextSyntax text)
+            {
+                skip = 1;
+
+                var textTokens = text.TextTokens.ToList();
+                var textToken = textTokens.First(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken));
+                var removals = textTokens.IndexOf(textToken);
+
+                textTokens.RemoveRange(0, removals + 1);
+
+                var replacementText = commentEnd + textToken.ValueText.TrimStart().ToLowerCaseAt(0);
+                var replacement = replacementText.ToSyntaxToken();
+                textTokens.Insert(0, replacement);
+
+                textCommentEnd = SyntaxFactory.XmlText(new SyntaxTokenList(textTokens).WithoutLastXmlNewLine());
+            }
+            else
+            {
+                textCommentEnd = SyntaxFactory.XmlText(commentEnd);
+            }
+
+            // if there are more than 1 item contained, also remove the new line and /// from the last item
+            if (commendEndNodes.Length > 1)
+            {
+                if (commendEndNodes.Last() is XmlTextSyntax additionalText)
+                {
+                    commendEndNodes[commendEndNodes.Length - 1] = SyntaxFactory.XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
+                }
+            }
+
+            var result = new List<XmlNodeSyntax>(commendEndNodes.Length);
+            result.Add(textCommentEnd);
+            result.AddRange(commendEndNodes.Skip(skip));
+
+            return result;
         }
 
         private static int GetIndex(SyntaxList<XmlNodeSyntax> content)

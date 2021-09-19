@@ -85,6 +85,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.WithTextTokens(SyntaxFactory.TokenList(textTokens));
         }
 
-        private static SyntaxToken XmlTextToken(string text) => SyntaxFactory.Token(default, SyntaxKind.XmlTextLiteralToken, text, text, default).WithLeadingXmlComment();
+        private static SyntaxToken XmlTextToken(string text) => text.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
     }
 }

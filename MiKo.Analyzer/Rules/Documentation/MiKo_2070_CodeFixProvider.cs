@@ -46,8 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             newText = newText.TrimEnd() + " ";
                         }
 
-                        var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
-                        summary = summary.ReplaceToken(token, newToken);
+                        summary = summary.ReplaceToken(token, token.WithText(newText));
 
                         break;
                     }
@@ -71,8 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var valueText = token.WithoutTrivia().ValueText;
                             var newText = valueText.WithoutFirstWords("if", "whether");
 
-                            var newToken = SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), newText, newText, token.TrailingTrivia);
-                            summary = summary.ReplaceToken(token, newToken);
+                            summary = summary.ReplaceToken(token, token.WithText(newText));
 
                             break;
                         }

@@ -55,12 +55,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, startParts[0], SeeLangword_True(), middlePart, SeeLangword_False(), endParts[1]);
         }
 
-        private static SyntaxList<XmlNodeSyntax> CreateMiddlePart(XmlElementSyntax comment, string startingPhrase, string endingPhrase)
+        private static IEnumerable<XmlNodeSyntax> CreateMiddlePart(XmlElementSyntax comment, string startingPhrase, string endingPhrase)
         {
             if (comment.Content.Count == 0)
             {
                 // we have no comment, hence we fake a "..." into the resulting comment
-                return new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText(startingPhrase + "..." + endingPhrase));
+                return new[] { SyntaxFactory.XmlText(startingPhrase + "..." + endingPhrase) };
             }
 
             var adjustedComment = RemoveBooleanSeeLangwords(comment);

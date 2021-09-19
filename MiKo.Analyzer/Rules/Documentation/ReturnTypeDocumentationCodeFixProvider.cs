@@ -18,6 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(Constants.XmlTag.See, type, member);
         }
 
+        protected static bool IsSeeCrefTaskResult(SyntaxNode value)
+        {
+            var type = SyntaxFactory.ParseTypeName("Task<TResult>");
+            var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
+
+            return IsSeeCref(value, type, member);
+        }
+
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
             foreach (var syntaxNode in syntaxNodes)
@@ -63,8 +71,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected abstract SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType);
 
-        private SyntaxNode Comment(XmlElementSyntax comment, TypeSyntax returnType) => returnType.IsKind(SyntaxKind.GenericName)
-                                                                                           ? GenericComment(comment, (GenericNameSyntax)returnType)
+        private SyntaxNode Comment(XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
+                                                                                           ? GenericComment(comment, genericReturnType)
                                                                                            : NonGenericComment(comment, returnType);
     }
 }

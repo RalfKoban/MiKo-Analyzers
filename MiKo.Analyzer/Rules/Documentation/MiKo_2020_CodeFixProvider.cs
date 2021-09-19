@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comment.WithoutTrivia()
                           .WithContent(new SyntaxList<XmlNodeSyntax>(inheritdoc.WithEndOfLine()))
-                          .WithLeadingTrivia(SyntaxExtensions.XmlCommentExterior);
+                          .WithLeadingXmlCommentExterior();
         }
     }
 }
