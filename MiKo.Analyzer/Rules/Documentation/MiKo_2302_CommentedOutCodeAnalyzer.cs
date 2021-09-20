@@ -64,7 +64,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "public ",
                 "internal ",
                 "protected ",
-                "protected ",
                 "private ",
             };
 
