@@ -49,6 +49,9 @@ namespace MiKoSolutions.Analyzers
                 case INamedTypeSymbol t when useAlias is false:
                     return t.ToDisplayString(FullyQualifiedDisplayFormatWithoutAlias);
 
+                case IAssemblySymbol a:
+                    return a.Identity.GetDisplayName(true);
+
                 default:
                     return value.ToDisplayString(FullyQualifiedDisplayFormat); // makes use of aliases for language such as 'int' instead of 'System.Int32'
             }

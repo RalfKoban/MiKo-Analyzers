@@ -13,12 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Comments =
             {
+                "m_variable = new Variable",
                 "var x = 42;",
                 "string s = x.ToString();",
                 "if (i == 42) ",
                 "switch (expression)",
                 "case 0815:",
                 "DoSomething();",
+                "void DoSomething();",
                 "public abstract void DoSomething();",
                 "internal abstract void DoSomething();",
                 "protected abstract void DoSomething();",
@@ -29,6 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "else",
                 "return true || false;",
                 "return true && false;",
+                "int i = 42;",
+                "bool b = false;",
             };
 
         [Test]
@@ -116,14 +120,17 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_framed_comment() => No_issue_is_reported_for(@"
+        [TestCase("///////////////////")]
+        [TestCase("===================")]
+        [TestCase("*******************")]
+        [TestCase("-------------------")]
+        public void No_issue_is_reported_for_framed_comment_(string frame) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
     public void DoSomething()
     {
-        /////////////////////
+        //" + frame + @"
         //                 //
         // Framed comment. //
         //                 //

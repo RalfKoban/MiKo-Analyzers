@@ -14,7 +14,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected bool IgnoreMultipleLines { get; set; }
 
-        protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
+        protected sealed override void InitializeCore(AnalysisContext context)
+        {
+            context.RegisterCompilationStartAction(compilationContext =>
+                                                       {
+                                                           PrepareAnalyzeMethod(compilationContext.Compilation);
+
+                                                           context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
+                                                       });
+        }
+
+        protected virtual void PrepareAnalyzeMethod(Compilation compilation)
+        {
+            // nothing to do here per default
+        }
 
         protected abstract bool CommentHasIssue(string comment, SemanticModel semanticModel);
 
@@ -27,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment, semanticModel);
         }
 
-        protected virtual void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
+        private void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
         {
             var issues = AnalyzeSingleLineCommentTrivias(node, context.SemanticModel);
 
