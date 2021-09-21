@@ -16,11 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override void InitializeCore(AnalysisContext context)
         {
-            context.RegisterCompilationStartAction(compilationContext =>
+            context.RegisterCompilationStartAction(_ =>
                                                        {
-                                                           PrepareAnalyzeMethod(compilationContext.Compilation);
+                                                           PrepareAnalyzeMethod(_.Compilation);
 
                                                            context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
+                                                           context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
                                                        });
         }
 
@@ -40,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment, semanticModel);
         }
 
-        private void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
+        private void AnalyzeMethod(SyntaxNodeAnalysisContext context, BaseMethodDeclarationSyntax node)
         {
             var issues = AnalyzeSingleLineCommentTrivias(node, context.SemanticModel);
 
@@ -52,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
-            var node = (MethodDeclarationSyntax)context.Node;
+            var node = (BaseMethodDeclarationSyntax)context.Node;
 
             if (ShallAnalyzeMethod(context.GetEnclosingMethod()))
             {
@@ -60,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivias(MethodDeclarationSyntax node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivias(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
         {
             var methodName = node.GetName();
 

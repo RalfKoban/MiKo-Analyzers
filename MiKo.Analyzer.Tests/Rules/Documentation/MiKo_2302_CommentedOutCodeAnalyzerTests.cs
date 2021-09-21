@@ -158,6 +158,31 @@ public class TestMe
 }
 ", 2);
 
+        [Test]
+        public void No_issue_is_reported_for_valid_comment_in_ctor() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public TestMe()
+    {
+        // some comment
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_commented_out_code_in_ctor() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe()
+    {
+        // m_hashset = new HashSet<string>();
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2302_CommentedOutCodeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2302_CommentedOutCodeAnalyzer();
