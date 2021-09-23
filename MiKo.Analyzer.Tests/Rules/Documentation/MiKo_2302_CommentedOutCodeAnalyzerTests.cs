@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Comments =
             {
+                "{",
+                "}",
                 "m_variable = new Variable",
                 "var x = 42;",
                 "string s = x.ToString();",

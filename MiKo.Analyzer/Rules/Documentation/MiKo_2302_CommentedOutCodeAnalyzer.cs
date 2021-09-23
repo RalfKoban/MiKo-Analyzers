@@ -86,8 +86,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public MiKo_2302_CommentedOutCodeAnalyzer() : base(Id)
         {
-            // m_knownTypeNames = new HashSet<string>();
-            // m_knownAssemblyNames = new HashSet<string>();
         }
 
         protected override void PrepareAnalyzeMethod(Compilation compilation)
@@ -117,17 +115,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
             }
 
+            if (comment.ContainsAny(CodeBlockMarkers))
+            {
+                return true;
+            }
+
             if (comment.ContainsAny(ReSharperMarkers))
             {
                 return false; // ignore // ReSharper comments
             }
 
             if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
-            {
-                return true;
-            }
-
-            if (comment.ContainsAny(CodeBlockMarkers))
             {
                 return true;
             }
@@ -158,6 +156,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true; // found a string interpolation
             }
 
+            if (comment.Contains(" = new "))
+            {
+                return true;
+            }
+
             if (comment.ContainsAny(FrameMarkers))
             {
                 return false;
@@ -176,11 +179,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 if (comment.ContainsAny(Operators))
-                {
-                    return true;
-                }
-
-                if (comment.Contains(" = new "))
                 {
                     return true;
                 }
