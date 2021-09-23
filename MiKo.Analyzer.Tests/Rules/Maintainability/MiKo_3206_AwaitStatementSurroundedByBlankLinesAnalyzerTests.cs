@@ -80,6 +80,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_awaited_call_as_only_statement_in_ParenthesizedLambdaExpression() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            DoSomethingElse();
+            Callback(async () => await Task.CompletedTask);
+            DoSomethingElse();
+        }
+
+        private void Callback(Func<Task> callback)
+        { }
+
+        private void DoSomethingElse()
+        { }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_awaited_call_preceded_by_blank_line() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
