@@ -60,13 +60,22 @@ namespace TestHelper
         private static readonly MetadataReference SystemRuntimeNetStandardReference = MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=0.0.0.0").Location);
 
         /// <summary>
-        /// Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.
+        /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
         /// The returned diagnostics are then ordered by location in the source document.
         /// </summary>
         /// <param name="analyzer">The analyzer to run on the documents.</param>
-        /// <param name="documents">The Documents that the analyzer will be run on.</param>
+        /// <param name="document">The Document that the analyzers will be run on.</param>
         /// <returns>An array of Diagnostics that surfaced in the source code, sorted by Location.</returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(DiagnosticAnalyzer analyzer, Document[] documents)
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocument(DiagnosticAnalyzer analyzer, Document document) => GetSortedDiagnosticsFromDocuments(new[] { analyzer }, new[] { document });
+
+        /// <summary>
+        /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
+        /// The returned diagnostics are then ordered by location in the source document.
+        /// </summary>
+        /// <param name="analyzers">The analyzers to run on the documents.</param>
+        /// <param name="documents">The Documents that the analyzers will be run on.</param>
+        /// <returns>An array of Diagnostics that surfaced in the source code, sorted by Location.</returns>
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(DiagnosticAnalyzer[] analyzers, Document[] documents)
         {
             var projects = new HashSet<Project>();
             foreach (var document in documents)
@@ -77,7 +86,7 @@ namespace TestHelper
             var diagnostics = new List<Diagnostic>();
             foreach (var project in projects)
             {
-                var compilationWithAnalyzers = project.GetCompilationAsync().Result.WithAnalyzers(ImmutableArray.Create(analyzer));
+                var compilationWithAnalyzers = project.GetCompilationAsync().Result.WithAnalyzers(ImmutableArray.Create(analyzers));
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
                 foreach (var diag in diags)
                 {
@@ -122,11 +131,11 @@ namespace TestHelper
         /// </summary>
         /// <param name="sources">Classes in the form of strings.</param>
         /// <param name="language">The language the source classes are in.</param>
-        /// <param name="analyzer">The analyzer to be run on the sources.</param>
+        /// <param name="analyzers">The analyzers to be run on the sources.</param>
         /// <returns>An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.</returns>
-        private static Diagnostic[] GetSortedDiagnostics(string[] sources, string language, DiagnosticAnalyzer analyzer)
+        private static Diagnostic[] GetSortedDiagnostics(string[] sources, string language, params DiagnosticAnalyzer[] analyzers)
         {
-            return GetSortedDiagnosticsFromDocuments(analyzer, GetDocuments(sources, language));
+            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, language));
         }
 
         /// <summary>

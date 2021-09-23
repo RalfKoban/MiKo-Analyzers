@@ -68,7 +68,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return node.DescendantTrivia()
                        .Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia))
                        .Select(_ => AnalyzeSingleLineComment(_, methodName, semanticModel))
-                       .Where(_ => _ != null);
+                       .Where(_ => _ != null)
+                       .ToList();
         }
 
         private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName, SemanticModel semanticModel)

@@ -15,6 +15,8 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
+        internal static Diagnostic[] GetDiagnostics(string[] sources, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, LanguageNames.CSharp, analyzers);
+
         /// <summary>
         /// Gets the CSharp analyzer being tested - to be implemented in non-abstract class.
         /// </summary>
@@ -79,7 +81,7 @@ namespace TestHelper
 
                                     foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
                                     {
-                                        No_issue_is_reported_for(File.ReadAllText(file));
+                                        No_issue_is_reported_for_file(file);
                                     }
                                 });
         }
