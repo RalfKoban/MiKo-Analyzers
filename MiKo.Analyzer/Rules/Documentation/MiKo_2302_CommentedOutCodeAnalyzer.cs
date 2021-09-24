@@ -81,6 +81,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "***",
             };
 
+        private static readonly string[] LockStatements =
+            {
+                "lock (",
+                "lock(",
+            };
+
         private static readonly HashSet<string> KnownTypeNames = new HashSet<string>();
         private static readonly HashSet<string> KnownAssemblyNames = new HashSet<string>();
 
@@ -94,16 +100,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                              .Select(compilation.GetAssemblyOrModuleSymbol)
                                              .OfType<IAssemblySymbol>();
 
-            // avoid multi-threading issues during add (contains will not have an issue because the contents are always added, never removed)
-            // lock (m_knownAssemblyNames)
+            // to speed up the lookup, add known assemblies and their types only once
+            foreach (var assemblySymbol in assemblySymbols.Where(_ => KnownAssemblyNames.Add(_.FullyQualifiedName())))
             {
-                // to speed up the lookup, add known assemblies and their types only once
-                foreach (var unknown in assemblySymbols.Where(_ => KnownAssemblyNames.Add(_.FullyQualifiedName())))
+                foreach (var typeName in assemblySymbol.TypeNames)
                 {
-                    foreach (var typeName in unknown.TypeNames)
-                    {
-                        KnownTypeNames.Add(typeName);
-                    }
+                    KnownTypeNames.Add(typeName);
                 }
             }
         }
@@ -122,7 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (comment.ContainsAny(ReSharperMarkers))
             {
-                return false; // ignore // ReSharper comments
+                return false; // ignore '// ReSharper' comments
             }
 
             if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
@@ -156,9 +158,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true; // found a string interpolation
             }
 
-            if (comment.Contains(" = new "))
+            if (comment.Contains(" = new"))
             {
-                return true;
+                return true; // found a construction or initialization
             }
 
             if (comment.ContainsAny(FrameMarkers))
@@ -192,6 +194,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             if (comment.Contains("case ") && comment.Contains(":"))
+            {
+                return true;
+            }
+
+            if (comment.ContainsAny(LockStatements))
             {
                 return true;
             }

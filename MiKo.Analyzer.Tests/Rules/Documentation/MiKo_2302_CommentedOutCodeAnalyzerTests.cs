@@ -35,6 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "return true && false;",
                 "int i = 42;",
                 "bool b = false;",
+                "lock(new object())",
+                "lock (new object())",
             };
 
         [Test]
