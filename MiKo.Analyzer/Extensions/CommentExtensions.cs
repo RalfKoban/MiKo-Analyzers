@@ -55,13 +55,34 @@ namespace MiKoSolutions.Analyzers
 
         internal static XElement GetCommentElement(this ISymbol symbol) => GetCommentElement(symbol.GetDocumentationCommentXml());
 
-        internal static IEnumerable<XElement> GetCommentElements(string commentXml, string xmlTag)
+        internal static XElement GetCommentElement(this string commentXml)
+        {
+            // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
+            var xml = "<root>" + commentXml + "</root>";
+
+            try
+            {
+                return XElement.Parse(xml);
+            }
+            catch (XmlException)
+            {
+                // happens in case of an invalid character
+                return null;
+            }
+        }
+
+        internal static IEnumerable<XElement> GetCommentElements(this string commentXml, string xmlTag)
         {
             var element = GetCommentElement(commentXml);
 
-            return element is null
+            return GetCommentElements(element, xmlTag);
+        }
+
+        internal static IEnumerable<XElement> GetCommentElements(this XElement commentXml, string xmlTag)
+        {
+            return commentXml is null
                        ? Enumerable.Empty<XElement>() // happens in case of an invalid character
-                       : element.Descendants(xmlTag);
+                       : commentXml.Descendants(xmlTag);
         }
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
@@ -139,22 +160,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static string SecondWord(this string text) => text.TrimStart().WithoutFirstWord().TrimStart().FirstWord();
-
-        private static XElement GetCommentElement(string commentXml)
-        {
-            // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = "<root>" + commentXml + "</root>";
-
-            try
-            {
-                return XElement.Parse(xml);
-            }
-            catch (XmlException)
-            {
-                // happens in case of an invalid character
-                return null;
-            }
-        }
 
         private static string FlattenComment(IEnumerable<XElement> comments)
         {

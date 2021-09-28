@@ -40,7 +40,21 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
 
-        public static bool Contains(this string value, string finding, StringComparison comparison) => value.IndexOf(finding, comparison) >= 0;
+        public static bool Contains(this string value, string finding, StringComparison comparison)
+        {
+            if (finding.Length > value.Length)
+            {
+                switch (comparison)
+                {
+                    case StringComparison.Ordinal:
+                    case StringComparison.OrdinalIgnoreCase:
+                        // cannot be contained as the item is longer than the string to search in
+                        return false;
+                }
+            }
+
+            return value.IndexOf(finding, comparison) >= 0;
+        }
 
         public static bool Contains(this string value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison)
         {
@@ -48,13 +62,24 @@ namespace System
             var valueLength = value.Length;
             var findingLength = finding.Length;
 
+            if (findingLength > valueLength)
+            {
+                switch (comparison)
+                {
+                    case StringComparison.Ordinal:
+                    case StringComparison.OrdinalIgnoreCase:
+                        // cannot be contained as the item is longer than the string to search in
+                        return false;
+                }
+            }
+
             while (true)
             {
                 index = value.IndexOf(finding, index, comparison);
 
                 if (index <= -1)
                 {
-                    break;
+                    return false;
                 }
 
                 var positionAfterCharacter = index + findingLength;
@@ -71,8 +96,6 @@ namespace System
 
                 index = positionAfterCharacter;
             }
-
-            return false;
         }
 
         public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
@@ -307,7 +330,12 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this string value, int index)
         {
-            if (value.IsNullOrWhiteSpace() || index >= value.Length)
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (index >= value.Length)
             {
                 return value;
             }
@@ -332,7 +360,12 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this string value, int index)
         {
-            if (value.IsNullOrWhiteSpace() || index >= value.Length)
+            if (value is null)
+            {
+                return null;
+            }
+
+            if (index >= value.Length)
             {
                 return value;
             }

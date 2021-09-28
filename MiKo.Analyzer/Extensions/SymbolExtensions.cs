@@ -49,6 +49,9 @@ namespace MiKoSolutions.Analyzers
                 case INamedTypeSymbol t when useAlias is false:
                     return t.ToDisplayString(FullyQualifiedDisplayFormatWithoutAlias);
 
+                case IAssemblySymbol a:
+                    return a.Identity.GetDisplayName(true);
+
                 default:
                     return value.ToDisplayString(FullyQualifiedDisplayFormat); // makes use of aliases for language such as 'int' instead of 'System.Int32'
             }
@@ -673,6 +676,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsFactory(this ITypeSymbol value) => value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
+
+        internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.GetAttributeNames().Any(Constants.Names.GeneratedAttributeNames.Contains);
 
         internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 

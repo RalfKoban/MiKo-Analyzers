@@ -34,13 +34,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
+            var element = commentXml.GetCommentElement();
+
             foreach (var xmlTag in XmlTags)
             {
-                foreach (var unused in CommentExtensions.GetCommentElements(commentXml, xmlTag)
-                                     .Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
-                                     .Select(_ => _.Without(Constants.Comments.SpecialOrPhrase))
-                                     .Where(_ => _.Length > 0)
-                                     .Where(_ => _[0].IsUpperCase() is false && _[0] != Constants.Comments.XmlElementStartingTag[0]))
+                foreach (var unused in element.GetCommentElements(xmlTag)
+                                              .Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
+                                              .Select(_ => _.Without(Constants.Comments.SpecialOrPhrase))
+                                              .Where(_ => _.Length > 0)
+                                              .Where(_ => _[0].IsUpperCase() is false && _[0] != Constants.Comments.XmlElementStartingTag[0]))
                 {
                     yield return Issue(symbol, xmlTag);
                 }

@@ -55,7 +55,7 @@ namespace TestHelper
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
 
             var document = CreateDocument(oldSource, language);
-            var analyzerDiagnostics = GetSortedDiagnosticsFromDocuments(analyzer, new[] { document });
+            var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;
 
@@ -77,7 +77,7 @@ namespace TestHelper
                 }
 
                 document = ApplyFix(document, actions.ElementAt(0));
-                analyzerDiagnostics = GetSortedDiagnosticsFromDocuments(analyzer, new[] { document });
+                analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
 
                 var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
 

@@ -14,7 +14,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected bool IgnoreMultipleLines { get; set; }
 
-        protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
+        protected sealed override void InitializeCore(AnalysisContext context)
+        {
+            context.RegisterCompilationStartAction(_ =>
+                                                       {
+                                                           PrepareAnalyzeMethod(_.Compilation);
+
+                                                           _.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
+                                                           _.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
+                                                       });
+        }
+
+        protected virtual void PrepareAnalyzeMethod(Compilation compilation)
+        {
+            // nothing to do here per default
+        }
 
         protected abstract bool CommentHasIssue(string comment, SemanticModel semanticModel);
 
@@ -27,9 +41,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment, semanticModel);
         }
 
-        protected virtual void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
+        private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
-            var issues = AnalyzeSingleLineCommentTrivias(node, context.SemanticModel);
+            if (ShallAnalyzeMethod(context.GetEnclosingMethod()))
+            {
+                var node = (BaseMethodDeclarationSyntax)context.Node;
+
+                AnalyzeMethod(context, node);
+            }
+        }
+
+        private void AnalyzeMethod(SyntaxNodeAnalysisContext context, BaseMethodDeclarationSyntax node)
+        {
+            var issues = AnalyzeSingleLineCommentTrivia(node, context.SemanticModel);
 
             foreach (var issue in issues)
             {
@@ -37,39 +61,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
+        private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
         {
-            var node = (MethodDeclarationSyntax)context.Node;
-
-            if (ShallAnalyzeMethod(context.GetEnclosingMethod()))
+            foreach (var trivia in node.DescendantTrivia().Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia)))
             {
-                AnalyzeMethod(context, node);
+                var hasIssue = AnalyzeSingleLineComment(trivia, semanticModel);
+
+                if (hasIssue)
+                {
+                    yield return Issue(node.GetName(), trivia);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivias(MethodDeclarationSyntax node, SemanticModel semanticModel)
-        {
-            var methodName = node.GetName();
-
-            return node.DescendantTrivia()
-                       .Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia))
-                       .Select(_ => AnalyzeSingleLineComment(_, methodName, semanticModel))
-                       .Where(_ => _ != null);
-        }
-
-        private Diagnostic AnalyzeSingleLineComment(SyntaxTrivia trivia, string methodName, SemanticModel semanticModel)
+        private bool AnalyzeSingleLineComment(SyntaxTrivia trivia, SemanticModel semanticModel)
         {
             if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
             {
-                return null; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
+                return false; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
             }
 
-            if (CommentHasIssue(trivia, semanticModel))
-            {
-                return Issue(methodName, trivia);
-            }
-
-            return null;
+            return CommentHasIssue(trivia, semanticModel);
         }
     }
 }

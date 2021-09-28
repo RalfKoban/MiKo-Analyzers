@@ -54,6 +54,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (ancestor)
                 {
+                    case ParenthesizedLambdaExpressionSyntax _:
+                        return null; // stop lookup if it is a parameter
+
                     case BlockSyntax block:
                         return AnalyzeAwaitExpression(block.Statements, node);
 

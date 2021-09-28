@@ -13,12 +13,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Comments =
             {
+                "{",
+                "}",
+                "m_variable = new Variable",
                 "var x = 42;",
                 "string s = x.ToString();",
                 "if (i == 42) ",
                 "switch (expression)",
                 "case 0815:",
                 "DoSomething();",
+                "void DoSomething();",
                 "public abstract void DoSomething();",
                 "internal abstract void DoSomething();",
                 "protected abstract void DoSomething();",
@@ -29,6 +33,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "else",
                 "return true || false;",
                 "return true && false;",
+                "int i = 42;",
+                "bool b = false;",
+                "lock(new object())",
+                "lock (new object())",
             };
 
         [Test]
@@ -116,14 +124,17 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_framed_comment() => No_issue_is_reported_for(@"
+        [TestCase("///////////////////")]
+        [TestCase("===================")]
+        [TestCase("*******************")]
+        [TestCase("-------------------")]
+        public void No_issue_is_reported_for_framed_comment_(string frame) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
     public void DoSomething()
     {
-        /////////////////////
+        //" + frame + @"
         //                 //
         // Framed comment. //
         //                 //
@@ -150,6 +161,31 @@ public class TestMe
     public string DoSomething(int index) => string.Empty;
 }
 ", 2);
+
+        [Test]
+        public void No_issue_is_reported_for_valid_comment_in_ctor() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public TestMe()
+    {
+        // some comment
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_commented_out_code_in_ctor() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe()
+    {
+        // m_hashset = new HashSet<string>();
+    }
+}
+");
 
         protected override string GetDiagnosticId() => MiKo_2302_CommentedOutCodeAnalyzer.Id;
 

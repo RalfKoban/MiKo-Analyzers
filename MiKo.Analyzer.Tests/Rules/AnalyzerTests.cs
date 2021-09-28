@@ -18,6 +18,8 @@ using NCrunch.Framework;
 
 using NUnit.Framework;
 
+using TestHelper;
+
 namespace MiKoSolutions.Analyzers.Rules
 {
     [TestFixture, Atomic, Isolated]
@@ -26,6 +28,34 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Resources));
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
+
+        [Ignore("Just for now")]
+        [TestCase("TODO"), Explicit, Timeout(1 * 60 * 60 * 1000)]
+        public static void Performance(string path)
+        {
+            var files = GetDocuments(path).ToList();
+            var sources = files.Select(File.ReadAllText).ToArray();
+
+            var results = DiagnosticVerifier.GetDiagnostics(sources, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray());
+
+            Assert.That(results.Count, Is.EqualTo(0));
+
+            IEnumerable<string> GetDocuments(string path)
+            {
+                foreach (var directory in Directory.EnumerateDirectories(path))
+                {
+                    foreach (var document in GetDocuments(directory))
+                    {
+                        yield return document;
+                    }
+                }
+
+                foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+                {
+                    yield return file;
+                }
+            }
+        }
 
         [Test]
         public static void Resources_contains_texts_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)

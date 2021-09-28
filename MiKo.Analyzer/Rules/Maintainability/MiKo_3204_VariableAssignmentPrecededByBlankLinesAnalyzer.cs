@@ -42,6 +42,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+        private static bool IsLocalSymbol(SimpleNameSyntax syntax, SemanticModel semanticModel)
+        {
+            var symbol = syntax.Identifier.GetSymbol(semanticModel);
+
+            return symbol.Kind == SymbolKind.Local;
+        }
+
         private void AnalyzeSimpleAssignmentExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (AssignmentExpressionSyntax)context.Node;
@@ -57,29 +64,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (statement.Left is IdentifierNameSyntax i)
             {
-                var identifierName = i.GetName();
-
-                if (statement.GetAllUsedVariables(semanticModel).Contains(identifierName))
+                foreach (var ancestor in statement.Ancestors())
                 {
-                    foreach (var ancestor in statement.Ancestors())
+                    switch (ancestor)
                     {
-                        switch (ancestor)
-                        {
-                            case BlockSyntax block:
-                                return AnalyzeSimpleAssignmentExpression(block.Statements, statement);
+                        case BlockSyntax block:
+                            return IsLocalSymbol(i, semanticModel)
+                                       ? AnalyzeSimpleAssignmentExpression(block.Statements, statement)
+                                       : null;
 
-                            case SwitchSectionSyntax section:
-                                return AnalyzeSimpleAssignmentExpression(section.Statements, statement);
+                        case SwitchSectionSyntax section:
+                            return IsLocalSymbol(i, semanticModel)
+                                       ? AnalyzeSimpleAssignmentExpression(section.Statements, statement)
+                                       : null;
 
-                            case IfStatementSyntax _:
-                            case ElseClauseSyntax _:
-                            case ParenthesizedLambdaExpressionSyntax _:
-                                return null; // no issue
+                        case IfStatementSyntax _:
+                        case ElseClauseSyntax _:
+                        case ParenthesizedLambdaExpressionSyntax _:
+                            return null; // no issue
 
-                            case MethodDeclarationSyntax _:
-                            case ClassDeclarationSyntax _:
-                                return null; // stop lookup as there is no valid ancestor anymore
-                        }
+                        case MethodDeclarationSyntax _:
+                        case ClassDeclarationSyntax _:
+                            return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }
             }
