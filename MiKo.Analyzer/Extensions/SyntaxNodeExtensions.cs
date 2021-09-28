@@ -151,6 +151,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
 
+        internal static string GetName(this BaseMethodDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case MethodDeclarationSyntax m: return m.GetName();
+                case ConstructorDeclarationSyntax c: return c.GetName();
+                default:
+                    return string.Empty;
+            }
+        }
+
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this PropertyDeclarationSyntax value) => value?.Identifier.ValueText;

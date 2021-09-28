@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -61,10 +60,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] CodeStartMarkers =
             {
                 "var ",
+                "int ",
+                "bool ",
                 "public ",
+                "private ",
                 "internal ",
                 "protected ",
-                "private ",
             };
 
         private static readonly string[] ReSharperMarkers =
@@ -73,34 +74,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "ReSharper restore ",
             };
 
-        private readonly HashSet<string> m_knownTypeNames;
-        private readonly HashSet<string> m_knownAssemblyNames;
+        private static readonly string[] FrameMarkers =
+            {
+                "===",
+                "---",
+                "***",
+            };
+
+        private static readonly string[] LockStatements =
+            {
+                "lock (",
+                "lock(",
+            };
+
+        private static readonly HashSet<string> KnownTypeNames = new HashSet<string>();
+        private static readonly HashSet<string> KnownAssemblyNames = new HashSet<string>();
 
         public MiKo_2302_CommentedOutCodeAnalyzer() : base(Id)
         {
-            m_knownTypeNames = new HashSet<string>();
-            m_knownAssemblyNames = new HashSet<string>();
         }
 
-        protected override void AnalyzeMethod(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax node)
+        protected override void PrepareAnalyzeMethod(Compilation compilation)
         {
-            // avoid multi-threading issues during add (contains will not have an issue because the contents are always added, never removed)
-            lock (m_knownAssemblyNames)
-            {
-                var compilation = context.SemanticModel.Compilation;
+            var assemblySymbols = compilation.References
+                                             .Select(compilation.GetAssemblyOrModuleSymbol)
+                                             .OfType<IAssemblySymbol>();
 
-                // to speed up the lookup, add known assemblies and their types only once
-                foreach (var typeName in compilation.References
-                                                    .Select(compilation.GetAssemblyOrModuleSymbol)
-                                                    .OfType<IAssemblySymbol>()
-                                                    .Where(_ => m_knownAssemblyNames.Add(_.FullyQualifiedName()))
-                                                    .SelectMany(_ => _.TypeNames))
+            // to speed up the lookup, add known assemblies and their types only once
+            foreach (var assemblySymbol in assemblySymbols.Where(_ => KnownAssemblyNames.Add(_.FullyQualifiedName())))
+            {
+                foreach (var typeName in assemblySymbol.TypeNames)
                 {
-                    m_knownTypeNames.Add(typeName);
+                    KnownTypeNames.Add(typeName);
                 }
             }
-
-            base.AnalyzeMethod(context, node);
         }
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
@@ -110,17 +117,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
             }
 
-            if (comment.ContainsAny(ReSharperMarkers))
-            {
-                return false; // ignore // ReSharper comments
-            }
-
-            if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
+            if (comment.ContainsAny(CodeBlockMarkers))
             {
                 return true;
             }
 
-            if (comment.ContainsAny(CodeBlockMarkers))
+            if (comment.ContainsAny(ReSharperMarkers))
+            {
+                return false; // ignore '// ReSharper' comments
+            }
+
+            if (comment.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
             {
                 return true;
             }
@@ -151,14 +158,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true; // found a string interpolation
             }
 
+            if (comment.Contains(" = new"))
+            {
+                return true; // found a construction or initialization
+            }
+
+            if (comment.ContainsAny(FrameMarkers))
+            {
+                return false;
+            }
+
             if (comment.EndsWith(";", StringComparison.Ordinal) || comment.Contains("="))
             {
                 if (comment.Contains("."))
-                {
-                    return true;
-                }
-
-                if (comment.ContainsAny(Operators))
                 {
                     return true;
                 }
@@ -168,15 +180,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return true;
                 }
 
+                if (comment.ContainsAny(Operators))
+                {
+                    return true;
+                }
+
                 // attempt to find a type because it's likely commented out code if we find some
                 var firstWord = comment.FirstWord();
-                if (m_knownTypeNames.Contains(firstWord))
+                if (KnownTypeNames.Contains(firstWord))
                 {
                     return true;
                 }
             }
 
             if (comment.Contains("case ") && comment.Contains(":"))
+            {
+                return true;
+            }
+
+            if (comment.ContainsAny(LockStatements))
             {
                 return true;
             }

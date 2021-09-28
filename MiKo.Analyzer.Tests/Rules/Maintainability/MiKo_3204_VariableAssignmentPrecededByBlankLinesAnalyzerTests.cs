@@ -142,6 +142,46 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_property_assignment_preceded_by_if_block() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int X { get; set;}
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            X = 1;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_assignment_followed_by_if_block() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int X { get; set;}
+
+        public void DoSomething(bool something)
+        {
+            X = 1;
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_variable_assignment_preceded_by_if_block() => An_issue_is_reported_for(@"
 namespace Bla
 {

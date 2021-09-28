@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -66,22 +62,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return ignore;
         }
 
-        private static HashSet<string> GetAllUsedVariables(SyntaxNodeAnalysisContext context, SyntaxNode statementOrExpression)
-        {
-            var dataFlow = context.SemanticModel.AnalyzeDataFlow(statementOrExpression);
-
-            // do not use the declared ones as we are interested in parameters, not unused variables
-            // var variablesDeclared = dataFlow.VariablesDeclared;
-            var variablesRead = dataFlow.ReadInside.Union(dataFlow.ReadOutside);
-
-            // do not include the ones that are written outside as those are the ones that are not used at all
-            var variablesWritten = dataFlow.WrittenInside;
-
-            var used = variablesRead.Union(variablesWritten).Select(_ => _.Name).ToHashSet();
-
-            return used;
-        }
-
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
             var method = (MethodDeclarationSyntax)context.Node;
@@ -121,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            var used = GetAllUsedVariables(context, methodBody);
+            var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
             foreach (var parameter in parameters)
             {

@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 Constants.XmlTag.Returns,
                 Constants.XmlTag.Value,
                 Constants.XmlTag.Param,
+                Constants.XmlTag.Exception,
                 Constants.XmlTag.TypeParam,
                 Constants.XmlTag.Example,
-                Constants.XmlTag.Exception,
                 Constants.XmlTag.Note,
                 Constants.XmlTag.Overloads,
                 Constants.XmlTag.Para,
@@ -49,9 +49,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => XmlTags.Where(_ => TagCommentHasIssue(commentXml, _)).Select(_ => Issue(symbol, _));
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
+        {
+            var element = commentXml.GetCommentElement();
 
-        private static bool TagCommentHasIssue(string commentXml, string xmlTag) => CommentExtensions.GetCommentElements(commentXml, xmlTag).SelectMany(_ => _.Nodes()).Any(CommentHasIssue);
+            return XmlTags.Where(_ => element.GetCommentElements(_).SelectMany(__ => __.Nodes()).Any(CommentHasIssue)).Select(_ => Issue(symbol, _));
+        }
 
         private static bool CommentHasIssue(XNode node)
         {
