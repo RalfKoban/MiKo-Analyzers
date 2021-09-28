@@ -193,11 +193,11 @@ namespace MiKoSolutions.Analyzers
                     //// "Represents a component, that ", // TODO: RKN is it really meaningless?
                 };
 
-            internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.Concat(new[] { "Contains", "Contain", "Has" }).ToArray();
+            internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.Concat(new[] { "Contains", "Contain", "Has" }).OrderBy(_ => _.Length).ToArray();
 
             internal static readonly string[] MeaninglessPhrase = { "does implement", "implements", "that is called", "that is used", "used for", "used to", "which is called", "which is used", };
 
-            internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).ToArray();
+            internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).OrderBy(_ => _.Length).ToArray();
 
             internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
 
@@ -643,6 +643,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Names
         {
+            internal static readonly IEnumerable<string> GeneratedAttributeNames = new HashSet<string>
+                                                                                       {
+                                                                                           "CompilerGeneratedAttribute",
+                                                                                           "DebuggerNonUserCodeAttribute",
+                                                                                           "GeneratedCodeAttribute",
+                                                                                       };
+
             internal static readonly IEnumerable<string> TestMethodAttributeNames = new HashSet<string>
                                                                                         {
                                                                                             "Test",

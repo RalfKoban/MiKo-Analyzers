@@ -33,6 +33,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         return Enumerable.Empty<Diagnostic>();
                     }
 
+                    if (symbol.IsGenerated())
+                    {
+                        return Enumerable.Empty<Diagnostic>();
+                    }
+
                     var loc = symbol.GetMembers().OfType<IMethodSymbol>()
                                     .Select(_ => _.GetSyntax())
                                     .SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect)
