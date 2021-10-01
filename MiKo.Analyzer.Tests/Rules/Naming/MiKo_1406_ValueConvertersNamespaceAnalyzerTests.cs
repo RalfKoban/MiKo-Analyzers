@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public void No_issue_is_reported_for_non_converter_class() => No_issue_is_reported_for(@"
 using System;
 
-public namespace Bla.Blubb
+namespace Bla.Blubb
 {
     public class TestMe
     {
@@ -33,7 +33,7 @@ public namespace Bla.Blubb
         public void No_issue_is_reported_for_converter_class_in_correct_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => No_issue_is_reported_for(@"
 using System;
 
-public namespace Bla.Blubb.Converters
+namespace Bla.Blubb.Converters
 {
     public class TestMe : " + interfaceName + @"
     {
@@ -45,7 +45,7 @@ public namespace Bla.Blubb.Converters
         public void An_issue_is_reported_for_converter_class_in_wrong_namespace_([ValueSource(nameof(ValidTypes))] string interfaceName) => An_issue_is_reported_for(@"
 using System;
 
-public namespace Bla.Blubb
+namespace Bla.Blubb
 {
     public class TestMe : " + interfaceName + @"
     {

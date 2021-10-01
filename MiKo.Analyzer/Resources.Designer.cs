@@ -9288,6 +9288,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place method side-by-side with overloads.
+        /// </summary>
+        public static string MiKo_4001_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4001_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters..
         /// </summary>
         public static string MiKo_4001_Description {
