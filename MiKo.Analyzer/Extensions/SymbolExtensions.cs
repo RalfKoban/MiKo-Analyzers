@@ -156,10 +156,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
 
-        internal static SyntaxNode GetSyntax(this ITypeSymbol value) => value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
-
-        // methods could also be constructors so we would get a ConstructorDeclarationSyntax instead of a MethodDeclarationSyntax
-        internal static SyntaxNode GetSyntax(this IMethodSymbol value) => value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+        internal static SyntaxNode GetSyntax(this ISymbol value) => value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
 
         internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.DeclaringSyntaxReferences.Select(_ => (ParameterSyntax)_.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
 
