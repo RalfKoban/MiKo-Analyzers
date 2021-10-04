@@ -8184,6 +8184,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Assert call.
+        /// </summary>
+        public static string MiKo_3060_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3060_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
         ///1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
         ///2. You cannot do anything here except to confirm the situation.
