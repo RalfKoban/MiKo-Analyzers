@@ -3287,7 +3287,7 @@ Such namespaces should be flattened.</value>
     <value>Namespace hierarchies should not be too deep.</value>
   </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
-    <value>Place method side-by-side with overloads</value>
+    <value>Place and order method side-by-side with overloads</value>
   </data>
   <data name="MiKo_4001_Description" xml:space="preserve">
     <value>Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters.</value>
@@ -3299,6 +3299,9 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4001_Title" xml:space="preserve">
     <value>Methods with same name should be ordered based on the number of their parameters.</value>
+  </data>
+  <data name="MiKo_4002_CodeFixTitle" xml:space="preserve">
+    <value>Place method side-by-side with overloads</value>
   </data>
   <data name="MiKo_4002_Description" xml:space="preserve">
     <value>Methods that have the same name should be placed side-by-side so that those methods can be easily found together.</value>

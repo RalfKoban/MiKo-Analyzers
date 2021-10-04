@@ -16,6 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
         }
 
+        internal static List<IMethodSymbol> GetMethodsOrderedByStatics(IEnumerable<IMethodSymbol> methods) => methods.OrderByDescending(_ => _.DeclaredAccessibility)
+                                                                                                                     .ThenByDescending(_ => _.IsStatic)
+                                                                                                                     .ToList();
+
+        internal static List<IMethodSymbol> GetMethodsOrderedByStatics(IEnumerable<IMethodSymbol> methods, string methodName) => GetMethodsOrderedByStatics(methods.Where(_ => _.Name == methodName));
+
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
@@ -27,29 +33,29 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeMethodsGroupedByAccessibility(IEnumerable<IMethodSymbol> methods) => methods.GroupBy(_ => _.DeclaredAccessibility)
+        private IEnumerable<Diagnostic> AnalyzeMethodsGroupedByAccessibility(IList<IMethodSymbol> allMethods) => allMethods.GroupBy(_ => _.DeclaredAccessibility)
                                                                                                                            .Where(_ => _.MoreThan(1))
-                                                                                                                           .SelectMany(AnalyzeMethodsGroupedByStatic);
+                                                                                                                           .SelectMany(_ => AnalyzeMethodsGroupedByStatic(allMethods, _));
 
-        private IEnumerable<Diagnostic> AnalyzeMethodsGroupedByStatic(IEnumerable<IMethodSymbol> methods) => methods.GroupBy(_ => _.IsStatic)
-                                                                                                                    .Where(_ => _.MoreThan(1))
-                                                                                                                    .SelectMany(AnalyzeMethods);
+        private IEnumerable<Diagnostic> AnalyzeMethodsGroupedByStatic(IList<IMethodSymbol> allMethods, IEnumerable<IMethodSymbol> methods) => methods.GroupBy(_ => _.IsStatic)
+                                                                                                                                                     .Where(_ => _.MoreThan(1))
+                                                                                                                                                     .SelectMany(_ => AnalyzeMethods(allMethods, _));
 
-        private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)
+        private IEnumerable<Diagnostic> AnalyzeMethods(IList<IMethodSymbol> allMethods, IEnumerable<IMethodSymbol> methods)
         {
             var orderedMethods = methods.OrderBy(_ => _.GetStartingLine()).ToList();
 
             foreach (var methodsWithSameName in orderedMethods.GroupBy(_ => _.Name).Where(_ => _.MoreThan(1)))
             {
                 // we have a more than 1 method with same name, so we have do detect the index, sort the index and then see if the indices differ by more than one
-                var indices = new HashSet<int>(methodsWithSameName.Select(_ => orderedMethods.IndexOf(_)));
+                var indices = new HashSet<int>(methodsWithSameName.Select(_ => allMethods.IndexOf(_)));
 
                 var startIndex = indices.First();
                 foreach (var index in indices)
                 {
                     if (Math.Abs(index - startIndex) > 1)
                     {
-                        var method = orderedMethods[index];
+                        var method = allMethods[index];
 
                         var signatures = methodsWithSameName.Except(new[] { method })
                                                             .Select(_ => "   " + _.GetMethodSignature())
