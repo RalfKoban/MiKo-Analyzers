@@ -9288,7 +9288,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place method side-by-side with overloads.
+        ///   Looks up a localized string similar to Place and order method side-by-side with overloads.
         /// </summary>
         public static string MiKo_4001_CodeFixTitle {
             get {
@@ -9322,6 +9322,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_4001_Title {
             get {
                 return ResourceManager.GetString("MiKo_4001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place method side-by-side with overloads.
+        /// </summary>
+        public static string MiKo_4002_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4002_CodeFixTitle", resourceCulture);
             }
         }
         
