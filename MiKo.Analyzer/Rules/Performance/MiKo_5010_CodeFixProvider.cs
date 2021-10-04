@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var invocation = GetInvocationExpressionSyntax(syntax, out var kind);
             if (invocation is null)
             {
-                return null;
+                return syntax;
             }
 
             var arguments = invocation.ArgumentList.Arguments;
