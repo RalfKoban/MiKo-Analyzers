@@ -8184,6 +8184,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Assert call.
+        /// </summary>
+        public static string MiKo_3060_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3060_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
         ///1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
         ///2. You cannot do anything here except to confirm the situation.
@@ -9288,6 +9297,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place and order method side-by-side with overloads.
+        /// </summary>
+        public static string MiKo_4001_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4001_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters..
         /// </summary>
         public static string MiKo_4001_Description {
@@ -9313,6 +9331,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_4001_Title {
             get {
                 return ResourceManager.GetString("MiKo_4001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place method side-by-side with overloads.
+        /// </summary>
+        public static string MiKo_4002_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4002_CodeFixTitle", resourceCulture);
             }
         }
         

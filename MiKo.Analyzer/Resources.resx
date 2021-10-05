@@ -2900,6 +2900,9 @@ That can be done by exposing the value of 'DependencyPropertyKey.DependencyPrope
   <data name="MiKo_3054_Title" xml:space="preserve">
     <value>A read-only DependencyProperty should have an exposed DependencyProperty identifier.</value>
   </data>
+  <data name="MiKo_3060_CodeFixTitle" xml:space="preserve">
+    <value>Remove Assert call</value>
+  </data>
   <data name="MiKo_3060_Description" xml:space="preserve">
     <value>If you use Debug.Assert() or Trace.Assert(), then you want to ensure something. Nevertheless, this has several drawbacks:
 1. Debug.Assert() does not work in Release mode (whereas Trace.Assert() does).
@@ -3286,6 +3289,9 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_3401_Title" xml:space="preserve">
     <value>Namespace hierarchies should not be too deep.</value>
   </data>
+  <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
+    <value>Place and order method side-by-side with overloads</value>
+  </data>
   <data name="MiKo_4001_Description" xml:space="preserve">
     <value>Methods that have the same name but a different number of parameters should be ordered in a way so that each method with fewer parameters is ordered before a method with more parameters.</value>
   </data>
@@ -3296,6 +3302,9 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4001_Title" xml:space="preserve">
     <value>Methods with same name should be ordered based on the number of their parameters.</value>
+  </data>
+  <data name="MiKo_4002_CodeFixTitle" xml:space="preserve">
+    <value>Place method side-by-side with overloads</value>
   </data>
   <data name="MiKo_4002_Description" xml:space="preserve">
     <value>Methods that have the same name should be placed side-by-side so that those methods can be easily found together.</value>

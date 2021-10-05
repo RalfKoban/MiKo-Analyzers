@@ -274,7 +274,7 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|&#x2713;|&#x2713;|
 |MiKo_3053|DependencyPropertyKey fields should be properly registered.|&#x2713;|\-|
 |MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|&#x2713;|\-|
-|MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|\-|
+|MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|&#x2713;|
 |MiKo_3061|Loggers shall use a proper log category.|&#x2713;|\-|
 |MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|\-|
 |MiKo_3071|Methods that return Task shall never return null.|&#x2713;|\-|
@@ -313,8 +313,8 @@ The following tables list all the 296 rules that are currently provided by the a
 ### Ordering
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
-|MiKo_4001|Methods with same name should be ordered based on the number of their parameters.|&#x2713;|\-|
-|MiKo_4002|Methods with same name and accessibility should be placed side-by-side.|&#x2713;|\-|
+|MiKo_4001|Methods with same name should be ordered based on the number of their parameters.|&#x2713;|&#x2713;|
+|MiKo_4002|Methods with same name and accessibility should be placed side-by-side.|&#x2713;|&#x2713;|
 |MiKo_4003|Dispose methods should be placed directly after constructors and finalizers.|&#x2713;|&#x2713;|
 |MiKo_4004|The interface that gives a type its name should be placed directly after the type's declaration.|&#x2713;|&#x2713;|
 |MiKo_4101|Test initialization methods should be ordered directly after One-Time methods.|&#x2713;|&#x2713;|

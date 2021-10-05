@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4003_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic)
         {
             var disposeMethod = GetDisposeMethod(syntax);
 

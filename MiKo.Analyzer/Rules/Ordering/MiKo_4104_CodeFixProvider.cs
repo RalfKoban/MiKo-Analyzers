@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4104_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic)
         {
             var method = syntax.ChildNodes().OfType<MethodDeclarationSyntax>().First(_ => _.IsTestOneTimeTearDownMethod());
 

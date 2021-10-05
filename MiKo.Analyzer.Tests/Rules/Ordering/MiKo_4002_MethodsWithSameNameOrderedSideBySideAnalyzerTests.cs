@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -73,7 +74,19 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_private_static_and_non_static_methods_sharing_same_name_and_non_static_methods_with_same_names_not_side_by_side() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_private_static_methods_sharing_same_name_and_1_method_in_between() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    private static int A() => 0815;
+
+    private int B() => 4711;
+
+    private static int A(object o) => 0815;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_private_static_and_non_static_methods_sharing_same_name_and_non_static_methods_with_same_names_not_side_by_side_where_static_comes_first() => An_issue_is_reported_for(@"
 public class TestMe
 {
     private static int A() => 0815;
@@ -86,8 +99,114 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_class_with_private_non_static_methods_sharing_same_name_and_not_side_by_side()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    private static int A() => 0815;
+
+    private int B() => 4711;
+
+    private int C(object o) => 1;
+
+    private int B(object o) => 2;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    private static int A() => 0815;
+
+    private int B() => 4711;
+
+    private int B(object o) => 2;
+
+    private int C(object o) => 1;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_private_static_methods_sharing_same_name_and_1_method_in_between()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    private static int A() => 0815;
+
+    private int B() => 4711;
+
+    private static int A(object o) => 0815;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    private static int A() => 0815;
+
+    private static int A(object o) => 0815;
+
+    private int B() => 4711;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_private_static_methods_and_non_static_methods_sharing_same_name_and_other_methods_in_between()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    private static int A() => 1;
+
+    private static int B(object o) => 3;
+
+    private static int A(object o) => 2;
+
+    private int C(object o) => 5;
+
+    private int D() => 7;
+
+    private int C() => 6;
+
+    private static int B() => 4;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    private static int A() => 1;
+
+    private static int A(object o) => 2;
+
+    private static int B(object o) => 3;
+
+    private static int B() => 4;
+
+    private int C(object o) => 5;
+
+    private int C() => 6;
+
+    private int D() => 7;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_4002_CodeFixProvider();
     }
 }

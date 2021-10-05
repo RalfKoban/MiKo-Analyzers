@@ -71,6 +71,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static T GetEnclosing<T>(this Location value, SemanticModel semanticModel) where T : class, ISymbol
+        {
+            var node = value.SourceTree?.GetRoot().FindNode(value.SourceSpan);
+
+            return node.GetEnclosingSymbol(semanticModel) as T;
+        }
+
         internal static SyntaxNode GetEnclosing(this SyntaxNode value, params SyntaxKind[] syntaxKinds)
         {
             var node = value;
@@ -480,7 +487,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes().OfType<InvocationExpressionSyntax>()
                                                                                                                                                  .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
 
-        internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, MethodDeclarationSyntax method)
+        internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, SyntaxNode node)
         {
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
             var openBraceToken = value.OpenBraceToken.WithoutTrivia().WithEndOfLine();
@@ -490,9 +497,24 @@ namespace MiKoSolutions.Analyzers
                                                         .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
                                                         .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
 
-            return value.RemoveNode(method, SyntaxRemoveOptions.KeepNoTrivia)
-                         .WithOpenBraceToken(openBraceToken)
-                         .WithCloseBraceToken(closeBraceToken);
+            return value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia)
+                        .WithOpenBraceToken(openBraceToken)
+                        .WithCloseBraceToken(closeBraceToken);
+        }
+
+        internal static BaseTypeDeclarationSyntax RemoveNodesAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, IEnumerable<SyntaxNode> nodes)
+        {
+            // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
+            var openBraceToken = value.OpenBraceToken.WithoutTrivia().WithEndOfLine();
+
+            // avoid lost trivia, such as #endregion
+            var closeBraceToken = value.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
+                                                        .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
+                                                        .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
+
+            return value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia)
+                        .WithOpenBraceToken(openBraceToken)
+                        .WithCloseBraceToken(closeBraceToken);
         }
 
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
