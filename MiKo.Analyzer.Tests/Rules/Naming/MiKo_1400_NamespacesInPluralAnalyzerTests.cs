@@ -20,10 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly IEnumerable<string> AllowedNamespaceNames = new[]
                                                                                 {
                                                                                     "Activities",
+                                                                                    "Build",
                                                                                     "ComponentModel",
                                                                                     "Composition",
                                                                                     "Converters",
                                                                                     "Data",
+                                                                                    "Design",
                                                                                     "Documentation",
                                                                                     "Extensions",
                                                                                     "Framework",
@@ -35,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "Linq",
                                                                                     "Maintainability",
                                                                                     "Naming",
+                                                                                    "Office",
                                                                                     "Performance",
                                                                                     "Resources",
                                                                                     "Runtime",
@@ -44,8 +47,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "System",
                                                                                     "Threading",
                                                                                     "UserExperience",
+                                                                                    "UI",
                                                                                     "Children",
                                                                                     "MyOwnNumber0815",
+                                                                                    "Web",
                                                                                 };
 
         private static readonly IEnumerable<string> WellKnownCompanyAndFrameworkNames = new[]

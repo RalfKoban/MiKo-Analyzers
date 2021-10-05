@@ -17,9 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "s",
                 "ing",
                 "ren",
+                "Build",
                 "ComponentModel",
                 "Composition",
                 "Data",
+                "Design",
                 "Documentation",
                 "Framework",
                 "Generic",
@@ -37,9 +39,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "System",
                 "Threading",
                 "UserExperience",
+                "UI",
+                "Web",
 
                 // known company / framework names
                 "Microsoft",
+                "Office",
                 "PostSharp",
                 "NDepend",
             };

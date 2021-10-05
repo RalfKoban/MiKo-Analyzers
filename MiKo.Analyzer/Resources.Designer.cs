@@ -3587,6 +3587,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/de-de/dotnet/standard/design-guidelines/names-of-namespaces.
+        /// </summary>
+        public static string MiKo_1400_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1400_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use plural for namespace, such as &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_1400_MessageFormat {

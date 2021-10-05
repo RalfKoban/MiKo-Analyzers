@@ -1333,6 +1333,9 @@ Example:
   <data name="MiKo_1400_Description" xml:space="preserve">
     <value>Namespaces group functionalities, so their names should be in plural.</value>
   </data>
+  <data name="MiKo_1400_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/de-de/dotnet/standard/design-guidelines/names-of-namespaces</value>
+  </data>
   <data name="MiKo_1400_MessageFormat" xml:space="preserve">
     <value>Use plural for namespace, such as '{1}'</value>
   </data>
