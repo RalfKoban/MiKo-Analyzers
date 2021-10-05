@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var fieldDeclaration = comment.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
             var fieldName = fieldDeclaration.Declaration.Variables.First().Identifier.ValueText;
-            var name = fieldName.WithoutSuffix(Constants.DependencyPropertyFieldSuffix);
+            var name = fieldName.WithoutSuffix(Constants.DependencyProperty.FieldSuffix);
 
             var type = SyntaxFactory.ParseName(name);
 

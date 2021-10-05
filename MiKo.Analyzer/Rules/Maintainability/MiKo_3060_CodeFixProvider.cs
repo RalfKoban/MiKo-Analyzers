@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => null; // we want to remove the syntax
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax)
         {
             // remove unused "using System.Diagnostics;"
             return root.DescendantNodes().OfType<UsingDirectiveSyntax>()

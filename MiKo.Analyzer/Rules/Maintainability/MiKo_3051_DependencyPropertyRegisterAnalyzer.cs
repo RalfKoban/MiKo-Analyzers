@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3051";
 
-        public MiKo_3051_DependencyPropertyRegisterAnalyzer() : base(Id, Constants.Invocations.DependencyProperty.Register)
+        public MiKo_3051_DependencyPropertyRegisterAnalyzer() : base(Id, Constants.DependencyProperty.Register)
         {
         }
 

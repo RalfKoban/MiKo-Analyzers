@@ -12,10 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1058";
 
-        private const string Suffix = Constants.DependencyPropertyKeyFieldSuffix;
+        private const string Suffix = Constants.DependencyPropertyKey.FieldSuffix;
 
         // public static System.Windows.DependencyPropertyKey RegisterReadOnly(string name, Type propertyType, Type ownerType, System.Windows.PropertyMetadata typeMetadata);
-        private const string Invocation = Constants.Invocations.DependencyProperty.RegisterReadOnly;
+        private const string Invocation = Constants.DependencyProperty.RegisterReadOnly;
 
         public MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer() : base(Id, SymbolKind.Field)
         {
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyPropertyKey()
-                                                                  && symbol.GetAssignmentsVia(Constants.Invocations.DependencyProperty.RegisterAttachedReadOnly).None();
+                                                                  && symbol.GetAssignmentsVia(Constants.DependencyProperty.RegisterAttachedReadOnly).None();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
         {

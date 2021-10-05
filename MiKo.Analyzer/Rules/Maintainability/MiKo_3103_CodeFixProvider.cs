@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var arguments = i.ArgumentList.Arguments;
                 if (arguments.Count == 1)
                 {
-                    format = arguments[0].Expression.ToString().Without(@"""");
+                    format = arguments[0].Expression.ToString().WithoutQuotes();
                 }
             }
 

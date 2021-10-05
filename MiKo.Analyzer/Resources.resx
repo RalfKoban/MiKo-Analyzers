@@ -2886,6 +2886,9 @@ In addition, the correct property names, property types and owing types should b
   <data name="MiKo_3053_Title" xml:space="preserve">
     <value>DependencyPropertyKey fields should be properly registered.</value>
   </data>
+  <data name="MiKo_3054_CodeFixTitle" xml:space="preserve">
+    <value>Expose DependencyProperty identifier</value>
+  </data>
   <data name="MiKo_3054_Description" xml:space="preserve">
     <value>Read-only dependency properties are defined by 'DependencyPropertyKey' fields and should not be visible to the public.
 To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property.
