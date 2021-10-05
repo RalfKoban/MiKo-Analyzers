@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "ComponentModel",
                                                                                     "Composition",
                                                                                     "Converters",
+                                                                                    "Core",
                                                                                     "Data",
                                                                                     "Design",
                                                                                     "Documentation",
@@ -61,6 +62,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                 "PostSharp",
                                                                                                 "NDepend",
                                                                                             };
+
+        private static readonly IEnumerable<string> Acronyms = new[]
+                                                                   {
+                                                                       "WYSIWYG",
+                                                                   };
+
+        [Test]
+        public void No_issue_is_reported_for_acronym_namespace_name_([ValueSource(nameof(Acronyms))]string ns) => No_issue_is_reported_for(@"
+namespace " + ns + @"
+{
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"

@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Build",
                 "ComponentModel",
                 "Composition",
+                "Core",
                 "Data",
                 "Design",
                 "Documentation",
@@ -58,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var name = qualifiedName.GetNameOnlyPart();
 
             // maybe it's a number, so we have to check for that
-            if (name.EndsWithNumber() || name.EndsWithAny(AllowedSuffixes))
+            if (name.IsAcronym() || name.EndsWithNumber() || name.EndsWithAny(AllowedSuffixes))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
