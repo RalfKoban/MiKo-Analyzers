@@ -273,7 +273,7 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_3051|DependencyProperty fields should be properly registered.|&#x2713;|\-|
 |MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|&#x2713;|&#x2713;|
 |MiKo_3053|DependencyPropertyKey fields should be properly registered.|&#x2713;|\-|
-|MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|&#x2713;|\-|
+|MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|&#x2713;|&#x2713;|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|&#x2713;|
 |MiKo_3061|Loggers shall use a proper log category.|&#x2713;|\-|
 |MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|\-|

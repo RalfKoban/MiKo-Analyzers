@@ -8146,6 +8146,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expose DependencyProperty identifier.
+        /// </summary>
+        public static string MiKo_3054_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3054_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Read-only dependency properties are defined by &apos;DependencyPropertyKey&apos; fields and should not be visible to the public.
         ///To made them available, it is recommended to expose a dependency property identifier for such read-only dependency property.
         ///That can be done by exposing the value of &apos;DependencyPropertyKey.DependencyProperty&apos; as a &apos;public static readonly&apos; field on the specific class..

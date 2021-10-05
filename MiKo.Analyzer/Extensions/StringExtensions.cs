@@ -406,6 +406,8 @@ namespace System
                        : value;
         }
 
+        public static string WithoutQuotes(this string value) => value.Without(@"""");
+
         public static string WithoutParaTags(this string value) => value.Without(Constants.ParaTags);
 
         public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
