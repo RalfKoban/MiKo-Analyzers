@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "Security",
                                                                                     "ServiceModel",
                                                                                     "Serialization",
+                                                                                    "Shared",
                                                                                     "System",
                                                                                     "Threading",
                                                                                     "UserExperience",
