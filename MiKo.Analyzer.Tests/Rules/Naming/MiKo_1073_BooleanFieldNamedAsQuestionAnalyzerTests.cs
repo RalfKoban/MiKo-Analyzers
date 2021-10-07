@@ -24,6 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "AreDevicesConnected",
             };
 
+        private static readonly string[] Prefixes =
+            {
+                "m_",
+                "s_",
+                "t_",
+                "_",
+            };
+
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
 using System;
@@ -34,7 +42,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_non_Boolean_field_([Values("m_", "s_", "_")] string prefix) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Boolean_field_([ValueSource(nameof(Prefixes))] string prefix) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -44,7 +52,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_Boolean_field_with_correct_name_([ValueSource(nameof(CorrectNames))] string name, [Values("m_", "s_", "_")] string prefix) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Boolean_field_with_correct_name_([ValueSource(nameof(CorrectNames))] string name, [ValueSource(nameof(Prefixes))] string prefix) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -55,7 +63,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_Boolean_field_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name, [Values("m_", "s_", "_")] string prefix) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Boolean_field_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name, [ValueSource(nameof(Prefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 

@@ -58,6 +58,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Markers
         {
+            internal const string ThreadStaticFieldPrefix = "t_";
             internal const string StaticFieldPrefix = "s_";
             internal const string MemberFieldPrefix = "_";
             internal const string AlternativeMemberFieldPrefix = "m_";
@@ -76,6 +77,7 @@ namespace MiKoSolutions.Analyzers
                     MemberFieldPrefix,
                     AlternativeMemberFieldPrefix,
                     StaticFieldPrefix,
+                    ThreadStaticFieldPrefix,
                 };
 
             internal static readonly string[] OSBitNumbers = { "32", "64" };
