@@ -16,13 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override void InitializeCore(AnalysisContext context)
         {
-            context.RegisterCompilationStartAction(_ =>
-                                                       {
-                                                           PrepareAnalyzeMethod(_.Compilation);
+            context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
 
-                                                           _.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
-                                                           _.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
-                                                       });
+            context.RegisterCompilationStartAction(_ => PrepareAnalyzeMethod(_.Compilation));
         }
 
         protected virtual void PrepareAnalyzeMethod(Compilation compilation)

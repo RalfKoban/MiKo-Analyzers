@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -87,8 +87,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "lock(",
             };
 
-        private static readonly HashSet<string> KnownTypeNames = new HashSet<string>();
-        private static readonly HashSet<string> KnownAssemblyNames = new HashSet<string>();
+        private static readonly ConcurrentDictionary<string, string> KnownTypeNames = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> KnownAssemblyNames = new ConcurrentDictionary<string, string>();
 
         public MiKo_2302_CommentedOutCodeAnalyzer() : base(Id)
         {
@@ -96,16 +96,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void PrepareAnalyzeMethod(Compilation compilation)
         {
-            var assemblySymbols = compilation.References
+            var assemblySymbols = compilation.GetUsedAssemblyReferences()
                                              .Select(compilation.GetAssemblyOrModuleSymbol)
                                              .OfType<IAssemblySymbol>();
 
             // to speed up the lookup, add known assemblies and their types only once
-            foreach (var assemblySymbol in assemblySymbols.Where(_ => KnownAssemblyNames.Add(_.FullyQualifiedName())))
+            foreach (var assemblySymbol in assemblySymbols)
             {
-                foreach (var typeName in assemblySymbol.TypeNames)
+                var assemblyName = string.Intern(assemblySymbol.FullyQualifiedName());
+
+                if (KnownAssemblyNames.TryAdd(assemblyName, assemblyName))
                 {
-                    KnownTypeNames.Add(typeName);
+                    foreach (var typeName in assemblySymbol.TypeNames)
+                    {
+                        KnownTypeNames.TryAdd(typeName, typeName);
+                    }
                 }
             }
         }
@@ -187,7 +192,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // attempt to find a type because it's likely commented out code if we find some
                 var firstWord = comment.FirstWord();
-                if (KnownTypeNames.Contains(firstWord))
+                if (KnownTypeNames.ContainsKey(firstWord))
                 {
                     return true;
                 }
