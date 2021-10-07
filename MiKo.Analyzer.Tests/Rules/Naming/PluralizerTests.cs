@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("m_sources", ExpectedResult = "m_source")]
         [TestCase("namesToConvert", ExpectedResult = "names")]
         [TestCase("itemsToModel", ExpectedResult = "items")]
+        [TestCase("itemModels", ExpectedResult = "items")]
         public string Creates_correct_plural_name_(string singularName) => Pluralizer.GetPluralName(singularName);
     }
 }
