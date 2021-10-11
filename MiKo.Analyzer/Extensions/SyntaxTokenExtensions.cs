@@ -55,22 +55,38 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxTokenList WithoutFirstXmlNewLine(this SyntaxTokenList textTokens)
         {
-            var token = textTokens.First();
+            var tokens = textTokens;
+
+            if (tokens.Count == 0)
+            {
+                return tokens;
+            }
+
+            var token = tokens[0];
             if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
             {
                 if (token.ValueText.IsNullOrWhiteSpace())
                 {
-                    textTokens = textTokens.Remove(token);
+                    tokens = tokens.Remove(token);
                 }
             }
 
-            token = textTokens.First();
+            token = tokens[0];
             if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
             {
-                textTokens = textTokens.Remove(token);
+                tokens = tokens.Remove(token);
             }
 
-            return textTokens;
+            token = tokens[0];
+            if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+            {
+                if (token.ValueText.IsNullOrWhiteSpace())
+                {
+                    tokens = tokens.Remove(token);
+                }
+            }
+
+            return tokens;
         }
 
         internal static SyntaxTokenList WithoutLastXmlNewLine(this SyntaxTokenList textTokens)

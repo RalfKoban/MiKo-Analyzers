@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules
             if (ReferenceEquals(updatedSyntax, syntax) is false)
             {
                 newRoot = updatedSyntax is null
-                              ? root.RemoveNode(syntax, SyntaxRemoveOptions.KeepNoTrivia)
+                              ? root.Without(syntax)
                               : root.ReplaceNode(syntax, updatedSyntax);
 
                 if (newRoot is null)

@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // remove unused "using System.Diagnostics;"
             return root.DescendantNodes().OfType<UsingDirectiveSyntax>()
                        .Where(_ => _.Name.ToFullString() == "System.Diagnostics")
-                       .Select(_ => root.RemoveNode(_, SyntaxRemoveOptions.KeepNoTrivia))
+                       .Select(root.Without)
                        .FirstOrDefault();
         }
     }

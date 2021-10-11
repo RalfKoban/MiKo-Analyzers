@@ -50,6 +50,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax Comment(XmlElementSyntax comment, IReadOnlyList<string> startParts, IReadOnlyList<string> endParts)
         {
+            comment = comment.WithoutFirstXmlNewLine();
+
+            var contents = comment.Content;
+
+            // handle situation that comment starts with <para>
+            var firstNode = contents.FirstOrDefault();
+            if (firstNode.IsPara())
+            {
+                // get rid of first node (and any empty comment if the 1st node was the only one)
+                comment = comment.Without(firstNode).WithoutWhitespaceOnlyComment();
+
+                if (firstNode is XmlElementSyntax element)
+                {
+                    comment = comment.WithContent(element.WithoutFirstXmlNewLine().Content);
+
+                    // create comment based on remaining text (without <para> tag)
+                    var replacedComment = Comment(comment, startParts, endParts);
+
+                    // re-wrap with <para> tag
+                    var paraTag = element.WithContent(replacedComment.Content.WithLeadingXmlComment().WithTrailingXmlComment());
+
+                    return replacedComment.WithContent(new SyntaxList<XmlNodeSyntax>(paraTag));
+                }
+                else
+                {
+                    // its an empty element, so nothing to do
+                }
+            }
+
             var middlePart = CreateMiddlePart(comment, startParts[1], endParts[0]);
 
             return Comment(comment, startParts[0], SeeLangword_True(), middlePart, SeeLangword_False(), endParts[1]);
@@ -63,7 +92,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { SyntaxFactory.XmlText(startingPhrase + "..." + endingPhrase) };
             }
 
-            var adjustedComment = RemoveBooleanSeeLangwords(comment);
+            // remove boolean <see langword="..."/> and <c>...</c>
+            var adjustedComment = comment.Without(comment.Content.Where(_ => _.IsSeeLangwordBool() || _.IsCBool()));
 
             var nodes = adjustedComment.WithoutText(Phrases).WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
 
@@ -106,13 +136,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return nodes.Add(SyntaxFactory.XmlText(endingPhrase));
-        }
-
-        private static XmlElementSyntax RemoveBooleanSeeLangwords(XmlElementSyntax comment)
-        {
-            var removals = comment.Content.Where(_ => _.IsSeeLangwordBool() || _.IsCBool());
-
-            return comment.RemoveNodes(removals, SyntaxRemoveOptions.KeepNoTrivia);
         }
     }
 }

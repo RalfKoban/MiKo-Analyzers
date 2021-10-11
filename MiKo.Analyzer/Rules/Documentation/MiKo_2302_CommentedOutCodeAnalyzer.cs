@@ -98,7 +98,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var assemblySymbols = compilation.GetUsedAssemblyReferences()
                                              .Select(compilation.GetAssemblyOrModuleSymbol)
-                                             .OfType<IAssemblySymbol>();
+                                             .OfType<IAssemblySymbol>()
+                                             .ToList();
 
             // to speed up the lookup, add known assemblies and their types only once
             foreach (var assemblySymbol in assemblySymbols)
