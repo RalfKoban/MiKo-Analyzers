@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 newNodes.Add(entry.Key, consolidatedException);
             }
 
-            var commentWithoutObsoleteNodes = comment.RemoveNodes(obsoleteNodes, SyntaxRemoveOptions.KeepNoTrivia);
+            var commentWithoutObsoleteNodes = comment.Without(obsoleteNodes);
 
             // find and replace the nodes with the new fixed ones
             var finalContent = commentWithoutObsoleteNodes.ReplaceNodes(

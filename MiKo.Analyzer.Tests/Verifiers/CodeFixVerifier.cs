@@ -106,7 +106,13 @@ New document:
             // after applying all of the code fixes, compare the resulting string to the inputted one
             var actual = GetStringFromDocument(document);
 
-            Assert.That(actual, Is.EqualTo(newSource));
+            var message = @"Fix created unexpected document.
+New document:
+################################################
+" + actual + @"
+################################################";
+
+            Assert.That(actual, Is.EqualTo(newSource), message);
         }
     }
 }

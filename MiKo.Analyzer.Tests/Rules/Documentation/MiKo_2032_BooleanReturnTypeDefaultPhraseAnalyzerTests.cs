@@ -423,6 +423,44 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_fix_places_fix_after_starting_para_tag()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <para>
+    /// if something is there; <see langword=""false""/> otherwise
+    /// </para>
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <para>
+    /// <see langword=""true""/> if something is there; otherwise, <see langword=""false""/>.
+    /// </para>
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer();

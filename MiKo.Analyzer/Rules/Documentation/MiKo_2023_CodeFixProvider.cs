@@ -56,10 +56,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // Fix <see langword> or <c> by replacing them with nothing
             var nodes = Enumerable.Empty<SyntaxNode>()
                                   .Concat(comment.Content.Where(_ => _.IsSeeLangwordBool()))
-                                  .Concat(comment.Content.Where(_ => _.IsCBool()))
-                                  .ToList();
+                                  .Concat(comment.Content.Where(_ => _.IsCBool()));
 
-            return comment.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);
+            return comment.Without(nodes);
         }
     }
 }

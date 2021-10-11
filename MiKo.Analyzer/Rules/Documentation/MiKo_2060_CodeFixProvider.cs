@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var content2 = preparedComment.Content[1];
                 if (content2.IsKind(SyntaxKind.XmlEmptyElement) && content1.WithoutXmlCommentExterior().IsNullOrWhiteSpace())
                 {
-                    return preparedComment.RemoveNodes(new[] { content1, content2 }, SyntaxRemoveOptions.KeepNoTrivia);
+                    return preparedComment.Without(content1, content2);
                 }
             }
 

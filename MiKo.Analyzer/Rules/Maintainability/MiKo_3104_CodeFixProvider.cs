@@ -34,11 +34,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case "Combinatorial":
                         case "CombinatorialAttribute":
                         {
-                            var listWithoutAttribute = attributeList.RemoveNode(attribute, SyntaxRemoveOptions.KeepNoTrivia);
+                            var listWithoutAttribute = attributeList.Without(attribute);
                             if (listWithoutAttribute.Attributes.Count == 0)
                             {
                                 // we don't need an empty list
-                                return method.RemoveNode(attributeList, SyntaxRemoveOptions.KeepNoTrivia);
+                                return method.Without(attributeList);
                             }
 
                             return method.ReplaceNode(attributeList, listWithoutAttribute);
