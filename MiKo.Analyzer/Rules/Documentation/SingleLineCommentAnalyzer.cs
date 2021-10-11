@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
 
-            context.RegisterCompilationStartAction(_ => PrepareAnalyzeMethod(_.Compilation));
+            context.RegisterCompilationAction(_ => PrepareAnalyzeMethod(_.Compilation));
         }
 
         protected virtual void PrepareAnalyzeMethod(Compilation compilation)
