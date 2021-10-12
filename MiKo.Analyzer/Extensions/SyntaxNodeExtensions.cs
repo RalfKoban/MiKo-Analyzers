@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using System.Xml;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -179,6 +178,21 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
+
+        internal static string GetName(this ExpressionSyntax value)
+        {
+            switch (value)
+            {
+                // nameof
+                case InvocationExpressionSyntax i: return i.ArgumentList.Arguments[0].ToString();
+                case LiteralExpressionSyntax l: return l.GetName();
+                default: return string.Empty;
+            }
+        }
+
+        internal static string GetName(this ArgumentSyntax nameArgument) => nameArgument.Expression.GetName();
 
         internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
 

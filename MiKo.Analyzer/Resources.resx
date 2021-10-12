@@ -2851,6 +2851,9 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3050_Title" xml:space="preserve">
     <value>DependencyProperty fields should be 'public static readonly'.</value>
   </data>
+  <data name="MiKo_3051_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
   <data name="MiKo_3051_Description" xml:space="preserve">
     <value>To avoid typos, fields that are the back of a DependencyProperty should be registered via 'DependencyProperty.Register()' and the 'nameof' operator.
 In addition, the correct property names, property types and owing types should be provided.</value>
