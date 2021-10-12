@@ -50,22 +50,23 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var updatedSyntax = GetUpdatedSyntax(document, syntax, diagnostic);
-            if (ReferenceEquals(updatedSyntax, syntax))
-            {
-                return Task.FromResult(document);
-            }
+            var newRoot = root;
 
-            var newRoot = updatedSyntax is null
-                              ? root.RemoveNode(syntax, SyntaxRemoveOptions.KeepNoTrivia)
+            var updatedSyntax = GetUpdatedSyntax(document, syntax, diagnostic);
+
+            if (ReferenceEquals(updatedSyntax, syntax) is false)
+            {
+                newRoot = updatedSyntax is null
+                              ? root.Without(syntax)
                               : root.ReplaceNode(syntax, updatedSyntax);
 
-            if (newRoot is null)
-            {
-                return Task.FromResult(document);
+                if (newRoot is null)
+                {
+                    return Task.FromResult(document);
+                }
             }
 
-            var finalRoot = GetUpdatedSyntaxRoot(newRoot) ?? newRoot;
+            var finalRoot = GetUpdatedSyntaxRoot(newRoot, syntax) ?? newRoot;
             var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
@@ -87,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root) => null;
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax) => null;
 
         protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic) => token;
 

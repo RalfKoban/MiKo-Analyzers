@@ -32,22 +32,42 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (node.GetName())
                 {
+                    // we assume that this is an fluent assertion
                     case "Should" when node.Parent is InvocationExpressionSyntax i && i.ArgumentList.Arguments.Count == 0:
                     case "ShouldNotRaise":
                     case "ShouldRaise":
                     case "ShouldRaisePropertyChangeFor":
                     case "ShouldThrow":
                     {
-                        // we assume that this is an fluent assertion
                         return true;
                     }
 
-                    case "Verify" when node.Parent is InvocationExpressionSyntax i && i.ArgumentList.Arguments.Count > 0:
+                    // we assume that this is a Moq call
+                    case "Verify" when node.Parent is InvocationExpressionSyntax i:
+                    {
+                        var argumentsCount = i.ArgumentList.Arguments.Count;
+                        if (argumentsCount > 0)
+                        {
+                            return true;
+                        }
+
+                        if (node.Expression is IdentifierNameSyntax ins)
+                        {
+                            var mockName = ins.GetName();
+
+                            // no arguments, so check for a 'Verifiable' call on the same mock object
+                            return nodes.Where(_ => _.GetName() == "Verifiable" && _.Parent is InvocationExpressionSyntax)
+                                        .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>())
+                                        .Any(_ => _.Expression is IdentifierNameSyntax e && e.GetName() == mockName);
+                        }
+
+                        return false;
+                    }
+
                     case "VerifyGet" when node.Parent is InvocationExpressionSyntax i1 && i1.ArgumentList.Arguments.Count > 0:
                     case "VerifySet" when node.Parent is InvocationExpressionSyntax i2 && i2.ArgumentList.Arguments.Count > 0:
                     case "VerifyAll" when node.Parent is InvocationExpressionSyntax i3 && i3.ArgumentList.Arguments.Count == 0:
                     {
-                        // we assume that this is a Moq call
                         return true;
                     }
                 }

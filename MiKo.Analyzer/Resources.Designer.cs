@@ -776,6 +776,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove prefix from method.
+        /// </summary>
+        public static string MiKo_1017_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1017_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;. That &apos;Get&apos; or &apos;Set&apos; is just additional noise and should be avoided..
         /// </summary>
         public static string MiKo_1017_Description {
@@ -803,7 +812,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make noun a verb.
+        ///   Looks up a localized string similar to Change noun to verb.
         /// </summary>
         public static string MiKo_1018_CodeFixTitle {
             get {
@@ -3583,6 +3592,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1400_Description {
             get {
                 return ResourceManager.GetString("MiKo_1400_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces.
+        /// </summary>
+        public static string MiKo_1400_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_1400_HelpLinkUri", resourceCulture);
             }
         }
         
@@ -8142,6 +8160,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3053_Title {
             get {
                 return ResourceManager.GetString("MiKo_3053_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expose DependencyProperty identifier.
+        /// </summary>
+        public static string MiKo_3054_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3054_CodeFixTitle", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -58,8 +59,92 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_DependencyPropertyKey_field_that_has_no_corresponding_DependencyProperty_using_nameof()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        public int OtherField { get; set; }
+        
+        private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+
+        public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        public int OtherField { get; set; }
+        
+        private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+        public static readonly DependencyProperty MyFieldProperty = m_fieldKey.DependencyProperty;
+        public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_DependencyPropertyKey_field_that_has_no_corresponding_DependencyProperty_using_string()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        public int OtherField { get; set; }
+        
+        private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(""MyField"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+
+        public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        public int OtherField { get; set; }
+        
+        private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(""MyField"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+        public static readonly DependencyProperty MyFieldProperty = m_fieldKey.DependencyProperty;
+        public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3054_DependencyPropertyKeyUsageOfDependencyPropertyAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3054_DependencyPropertyKeyUsageOfDependencyPropertyAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3054_CodeFixProvider();
     }
 }

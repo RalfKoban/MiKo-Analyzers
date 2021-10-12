@@ -12,10 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1056";
 
-        private const string Suffix = Constants.DependencyPropertyFieldSuffix;
+        private const string Suffix = Constants.DependencyProperty.FieldSuffix;
 
         // public static System.Windows.DependencyProperty Register(string name, Type propertyType, Type ownerType, System.Windows.PropertyMetadata typeMetadata);
-        private const string Invocation = Constants.Invocations.DependencyProperty.Register;
+        private const string Invocation = Constants.DependencyProperty.Register;
 
         public MiKo_1056_DependencyPropertyFieldPrefixAnalyzer() : base(Id, SymbolKind.Field)
         {
@@ -36,14 +36,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // ignore attached properties
-            var attachedProperties = symbol.GetAssignmentsVia(Constants.Invocations.DependencyProperty.RegisterAttached).Any();
+            var attachedProperties = symbol.GetAssignmentsVia(Constants.DependencyProperty.RegisterAttached).Any();
             if (attachedProperties)
             {
                 return false;
             }
 
             // ignore "Key.DependencyProperty" assignments
-            var keys = symbol.ContainingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + ".DependencyProperty").ToHashSet();
+            var keys = symbol.ContainingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + "." + Constants.DependencyPropertyKey.DependencyProperty).ToHashSet();
 
             foreach (var key in keys)
             {

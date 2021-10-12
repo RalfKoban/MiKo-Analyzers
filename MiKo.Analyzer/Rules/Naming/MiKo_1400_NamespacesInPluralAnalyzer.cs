@@ -17,9 +17,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "s",
                 "ing",
                 "ren",
+                "Build",
                 "ComponentModel",
                 "Composition",
+                "Core",
                 "Data",
+                "Design",
                 "Documentation",
                 "Framework",
                 "Generic",
@@ -34,12 +37,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Security",
                 "ServiceModel",
                 "Serialization",
+                "Shared",
                 "System",
                 "Threading",
                 "UserExperience",
+                "UI",
+                "Web",
 
                 // known company / framework names
                 "Microsoft",
+                "Office",
                 "PostSharp",
                 "NDepend",
             };
@@ -53,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var name = qualifiedName.GetNameOnlyPart();
 
             // maybe it's a number, so we have to check for that
-            if (name.EndsWithNumber() || name.EndsWithAny(AllowedSuffixes))
+            if (name.IsAcronym() || name.EndsWithNumber() || name.EndsWithAny(AllowedSuffixes))
             {
                 return Enumerable.Empty<Diagnostic>();
             }

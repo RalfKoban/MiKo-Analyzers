@@ -43,40 +43,6 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_an_empty_test_method_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [" + test + @"]
-        public void DoSomething()
-        {
-        }
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_a_test_method_that_does_not_contain_any_assertion_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
-using NUnit.Framework;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [" + test + @"]
-        public void DoSomething()
-        {
-             var x = 0;
-             var y = x.ToString();
-        }
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_a_test_method_that_uses_an_fluent_assertion_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -136,24 +102,51 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_method_that_returns_a_Task_but_does_not_assert_anything() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_Verify_with_Verifiable() => No_issue_is_reported_for(@"
 using NUnit.Framework;
-using System.Threading.Tasks;
+using Moq;
+using System;
 
 namespace Bla
 {
     public class TestMe
     {
-        [Test]
-        public Task DoSomething()
+        [TestCase]
+        public void DoSomething()
         {
-            return Task.CompletedTask;
+            var mock = new Mock<IDisposable>();
+
+            mock.Setup(_ => _.Dispose()).Verifiable();
+
+            mock.Verify();
         }
     }
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_Verify() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_Verify_with_Verifiable_and_message() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+using Moq;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock = new Mock<IDisposable>();
+
+            mock.Setup(_ => _.Dispose()).Verifiable(""test message"");
+
+            mock.Verify();
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_Verify_call() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using Moq;
 using System;
@@ -238,6 +231,123 @@ namespace Bla
             var mock = new Mock<IDisposable>();
 
             mock.VerifyAll();
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_an_empty_test_method_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_does_not_contain_any_assertion_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+             var x = 0;
+             var y = x.ToString();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_returns_a_Task_but_does_not_assert_anything() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public Task DoSomething()
+        {
+            return Task.CompletedTask;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_invokes_a_Moq_Verify_but_no_Verifiable() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+using Moq;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock = new Mock<IDisposable>();
+
+            mock.Verify();
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_invokes_a_Moq_Verify_on_one_mock_but_sets_Verifiable_on_another_mock() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+using Moq;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock1 = new Mock<IDisposable>();
+            var mock2 = new Mock<IDisposable>();
+
+            mock2.Setup(_ => _.Dispose()).Verifiable();
+
+            mock1.Verify();
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_invokes_a_Moq_Verify_on_one_mock_but_sets_Verifiable_with_message_on_another_mock() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+using Moq;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock1 = new Mock<IDisposable>();
+            var mock2 = new Mock<IDisposable>();
+
+            mock2.Setup(_ => _.Dispose()).Verifiable(""test message"");
+
+            mock1.Verify();
         }
     }
 }");

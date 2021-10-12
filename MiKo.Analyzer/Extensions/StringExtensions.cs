@@ -205,6 +205,8 @@ namespace System
                        : value.Substring(0, index) + "...";
         }
 
+        public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.All(_ => _.IsLowerCaseLetter() is false);
+
         public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -405,6 +407,8 @@ namespace System
                        ? value.Substring(0, end)
                        : value;
         }
+
+        public static string WithoutQuotes(this string value) => value.Without(@"""");
 
         public static string WithoutParaTags(this string value) => value.Without(Constants.ParaTags);
 

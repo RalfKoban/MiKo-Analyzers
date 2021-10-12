@@ -26,12 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var symbolName = symbol.Name;
-            if (symbolName.EndsWith(Constants.DependencyPropertyFieldSuffix, StringComparison.OrdinalIgnoreCase) is false)
+            if (symbolName.EndsWith(Constants.DependencyProperty.FieldSuffix, StringComparison.OrdinalIgnoreCase) is false)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var propertyName = symbolName.WithoutSuffix(Constants.DependencyPropertyFieldSuffix);
+            var propertyName = symbolName.WithoutSuffix(Constants.DependencyProperty.FieldSuffix);
             var containingType = symbol.ContainingType;
             if (containingType.GetMembersIncludingInherited<IPropertySymbol>().All(_ => _.Name != propertyName))
             {

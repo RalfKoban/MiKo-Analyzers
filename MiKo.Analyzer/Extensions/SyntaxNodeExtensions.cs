@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using System.Xml;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -352,6 +353,19 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsParameter(this IdentifierNameSyntax node, SemanticModel semanticModel) => node.EnclosingMethodHasParameter(node.GetName(), semanticModel);
 
+        internal static bool IsPara(this SyntaxNode value)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax xees when xees.GetName() == Constants.XmlTag.Para:
+                case XmlElementSyntax xes when xes.GetName() == Constants.XmlTag.Para:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsSeeLangword(this SyntaxNode value)
         {
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
@@ -497,7 +511,7 @@ namespace MiKoSolutions.Analyzers
                                                         .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
                                                         .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
 
-            return value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia)
+            return value.Without(node)
                         .WithOpenBraceToken(openBraceToken)
                         .WithCloseBraceToken(closeBraceToken);
         }
@@ -512,7 +526,7 @@ namespace MiKoSolutions.Analyzers
                                                         .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
                                                         .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
 
-            return value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia)
+            return value.Without(nodes)
                         .WithOpenBraceToken(openBraceToken)
                         .WithCloseBraceToken(closeBraceToken);
         }
@@ -533,7 +547,59 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingXmlCommentExterior<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentExterior);
 
+        internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+
+        internal static T Without<T>(this T value, IEnumerable<SyntaxNode> nodes) where T : SyntaxNode => value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);
+
+        internal static T Without<T>(this T value, params SyntaxNode[] nodes) where T : SyntaxNode => value.Without((IEnumerable<SyntaxNode>)nodes);
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutFirstXmlNewLine(this SyntaxList<XmlNodeSyntax> list)
+        {
+            if (list.Count > 1 && list[0] is XmlTextSyntax text)
+            {
+                var newText = text.WithoutFirstXmlNewLine();
+
+                return newText.TextTokens.Count != 0
+                           ? list.Replace(text, newText)
+                           : list.Remove(text);
+            }
+
+            return list;
+        }
+
+        internal static XmlElementSyntax WithoutFirstXmlNewLine(this XmlElementSyntax value)
+        {
+            return value.WithContent(value.Content.WithoutFirstXmlNewLine());
+        }
+
+        internal static XmlTextSyntax WithoutFirstXmlNewLine(this XmlTextSyntax value)
+        {
+            return value.WithTextTokens(value.TextTokens.WithoutFirstXmlNewLine()).WithoutLeadingTrivia();
+        }
+
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
+
+        internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)
+        {
+            var tokens = value.TextTokens;
+            var textTokens = tokens.Count;
+            if (textTokens >= 2)
+            {
+                // TODO: RKN find a better solution this as it is not good code
+                var t = tokens.First();
+                if (t.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    var newTokens = tokens.Remove(t);
+
+                    var token = newTokens[0];
+                    newTokens = newTokens.Replace(token, token.WithText(token.Text.TrimStart()));
+
+                    return SyntaxFactory.XmlText(newTokens);
+                }
+            }
+
+            return value;
+        }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, string text) => value.Content.WithoutText(text);
 
@@ -666,27 +732,6 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
-        internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)
-        {
-            var tokens = value.TextTokens;
-            var textTokens = tokens.Count;
-            if (textTokens >= 2)
-            {
-                // TODO: RKN find a better solution this as it is not good code
-                if (tokens.First().IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                {
-                    var newTokens = tokens.Remove(tokens.First());
-
-                    var token = newTokens[0];
-                    newTokens = newTokens.Replace(token, token.WithText(token.Text.TrimStart()));
-
-                    return SyntaxFactory.XmlText(newTokens);
-                }
-            }
-
-            return value;
-        }
-
         internal static XmlTextSyntax WithoutTrailingXmlComment(this XmlTextSyntax value)
         {
             var tokens = value.TextTokens;
@@ -703,6 +748,20 @@ namespace MiKoSolutions.Analyzers
 
                     return SyntaxFactory.XmlText(newTokens);
                 }
+            }
+
+            return value;
+        }
+
+        internal static XmlElementSyntax WithoutWhitespaceOnlyComment(this XmlElementSyntax value)
+        {
+            if (value.Content.Count > 0 && value.Content[0] is XmlTextSyntax t)
+            {
+                var newT = t.WithoutLeadingXmlComment();
+
+                return newT.TextTokens.Count == 1 && newT.TextTokens[0].ValueText.IsNullOrWhiteSpace()
+                           ? value.Without(t)
+                           : value.ReplaceNode(t, newT);
             }
 
             return value;

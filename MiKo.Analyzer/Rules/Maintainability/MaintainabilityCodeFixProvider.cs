@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -87,6 +88,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return result;
         }
+
+        protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(SyntaxFactory.Token));
 
         protected static InvocationExpressionSyntax NameOf(string identifierName)
         {

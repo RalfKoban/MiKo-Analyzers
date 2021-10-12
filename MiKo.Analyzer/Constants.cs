@@ -10,8 +10,6 @@ namespace MiKoSolutions.Analyzers
     public static class Constants
     {
         internal const string AsyncSuffix = "Async";
-        internal const string DependencyPropertyFieldSuffix = "Property";
-        internal const string DependencyPropertyKeyFieldSuffix = "Key";
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string TestsSuffix = "Tests";
         internal const string Entity = "Entity";
@@ -60,6 +58,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Markers
         {
+            internal const string ThreadStaticFieldPrefix = "t_";
             internal const string StaticFieldPrefix = "s_";
             internal const string MemberFieldPrefix = "_";
             internal const string AlternativeMemberFieldPrefix = "m_";
@@ -78,6 +77,7 @@ namespace MiKoSolutions.Analyzers
                     MemberFieldPrefix,
                     AlternativeMemberFieldPrefix,
                     StaticFieldPrefix,
+                    ThreadStaticFieldPrefix,
                 };
 
             internal static readonly string[] OSBitNumbers = { "32", "64" };
@@ -622,15 +622,25 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static class Invocations
+        internal static class DependencyProperty
         {
-            internal static class DependencyProperty
-            {
-                internal const string Register = "DependencyProperty.Register";
-                internal const string RegisterAttached = "DependencyProperty.RegisterAttached";
-                internal const string RegisterReadOnly = "DependencyProperty.RegisterReadOnly";
-                internal const string RegisterAttachedReadOnly = "DependencyProperty.RegisterAttachedReadOnly";
-            }
+            internal const string FieldSuffix = "Property";
+            internal const string TypeName = "DependencyProperty";
+            internal const string FullyQualifiedTypeName = "System.Windows." + TypeName;
+
+            internal const string Register = "DependencyProperty.Register";
+            internal const string RegisterAttached = "DependencyProperty.RegisterAttached";
+            internal const string RegisterReadOnly = "DependencyProperty.RegisterReadOnly";
+            internal const string RegisterAttachedReadOnly = "DependencyProperty.RegisterAttachedReadOnly";
+        }
+
+        internal static class DependencyPropertyKey
+        {
+            internal const string FieldSuffix = "Key";
+            internal const string TypeName = "DependencyPropertyKey";
+            internal const string FullyQualifiedTypeName = "System.Windows." + TypeName;
+
+            internal const string DependencyProperty = "DependencyProperty";
         }
 
         internal static class LambdaIdentifiers

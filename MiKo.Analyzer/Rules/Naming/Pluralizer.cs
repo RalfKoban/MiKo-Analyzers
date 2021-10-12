@@ -149,9 +149,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 pluralName = proposedName.WithoutSuffix("ToModel");
             }
 
-            if (proposedName.HasEntityMarker())
+            if (pluralName.HasEntityMarker())
             {
-                pluralName = proposedName.Without(Constants.Markers.Entities);
+                pluralName = pluralName.Without(Constants.Markers.Entities);
             }
 
             var candidate = pluralName.EndsWith("s", comparison) ? pluralName : pluralName + "s";

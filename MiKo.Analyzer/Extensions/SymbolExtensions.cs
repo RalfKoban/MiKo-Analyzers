@@ -513,7 +513,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyObject(this ITypeSymbol value) => value.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
-        internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name == "DependencyProperty" || value.Name == "System.Windows.DependencyProperty";
+        internal static bool IsDependencyProperty(this ITypeSymbol value) => value.Name == Constants.DependencyProperty.TypeName || value.Name == Constants.DependencyProperty.FullyQualifiedTypeName;
 
         internal static bool IsDependencyPropertyChangedEventArgs(this ITypeSymbol value)
         {
@@ -537,7 +537,7 @@ namespace MiKoSolutions.Analyzers
             return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
-        internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == "DependencyPropertyKey" || value.Name == "System.Windows.DependencyPropertyKey";
+        internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == Constants.DependencyPropertyKey.TypeName || value.Name == Constants.DependencyPropertyKey.FullyQualifiedTypeName;
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 

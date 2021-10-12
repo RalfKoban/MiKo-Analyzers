@@ -21,12 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var field = (FieldDeclarationSyntax)syntax;
-            var modifiers = SyntaxFactory.TokenList(
-                                                    SyntaxFactory.Token(SyntaxKind.PrivateKeyword),
-                                                    SyntaxFactory.Token(SyntaxKind.StaticKeyword),
-                                                    SyntaxFactory.Token(SyntaxKind.ReadOnlyKeyword));
 
-            return field.WithModifiers(modifiers);
+            return field.WithModifiers(TokenList(SyntaxKind.PrivateKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword));
         }
     }
 }

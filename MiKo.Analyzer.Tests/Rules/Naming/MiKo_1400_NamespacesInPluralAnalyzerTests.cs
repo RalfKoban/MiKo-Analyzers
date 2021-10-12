@@ -20,10 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly IEnumerable<string> AllowedNamespaceNames = new[]
                                                                                 {
                                                                                     "Activities",
+                                                                                    "Build",
                                                                                     "ComponentModel",
                                                                                     "Composition",
                                                                                     "Converters",
+                                                                                    "Core",
                                                                                     "Data",
+                                                                                    "Design",
                                                                                     "Documentation",
                                                                                     "Extensions",
                                                                                     "Framework",
@@ -35,17 +38,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "Linq",
                                                                                     "Maintainability",
                                                                                     "Naming",
+                                                                                    "Office",
                                                                                     "Performance",
                                                                                     "Resources",
                                                                                     "Runtime",
                                                                                     "Security",
                                                                                     "ServiceModel",
                                                                                     "Serialization",
+                                                                                    "Shared",
                                                                                     "System",
                                                                                     "Threading",
                                                                                     "UserExperience",
+                                                                                    "UI",
                                                                                     "Children",
                                                                                     "MyOwnNumber0815",
+                                                                                    "Web",
                                                                                 };
 
         private static readonly IEnumerable<string> WellKnownCompanyAndFrameworkNames = new[]
@@ -56,6 +63,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                 "PostSharp",
                                                                                                 "NDepend",
                                                                                             };
+
+        private static readonly IEnumerable<string> Acronyms = new[]
+                                                                   {
+                                                                       "WYSIWYG",
+                                                                   };
+
+        [Test]
+        public void No_issue_is_reported_for_acronym_namespace_name_([ValueSource(nameof(Acronyms))]string ns) => No_issue_is_reported_for(@"
+namespace " + ns + @"
+{
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_known_namespace_name_([ValueSource(nameof(WellKnownCompanyAndFrameworkNames))]string ns) => No_issue_is_reported_for(@"

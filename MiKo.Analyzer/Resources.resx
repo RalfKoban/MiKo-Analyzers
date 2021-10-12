@@ -358,6 +358,9 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   <data name="MiKo_1016_Title" xml:space="preserve">
     <value>Factory methods should be named 'Create'.</value>
   </data>
+  <data name="MiKo_1017_CodeFixTitle" xml:space="preserve">
+    <value>Remove prefix from method</value>
+  </data>
   <data name="MiKo_1017_Description" xml:space="preserve">
     <value>Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'. That 'Get' or 'Set' is just additional noise and should be avoided.</value>
   </data>
@@ -368,7 +371,7 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
     <value>Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.</value>
   </data>
   <data name="MiKo_1018_CodeFixTitle" xml:space="preserve">
-    <value>Make noun a verb</value>
+    <value>Change noun to verb</value>
   </data>
   <data name="MiKo_1018_Description" xml:space="preserve">
     <value>Methods should not be suffixed with a noun form of a verb if the verb would fit perfectly as method name.</value>
@@ -1332,6 +1335,9 @@ Example:
   </data>
   <data name="MiKo_1400_Description" xml:space="preserve">
     <value>Namespaces group functionalities, so their names should be in plural.</value>
+  </data>
+  <data name="MiKo_1400_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces</value>
   </data>
   <data name="MiKo_1400_MessageFormat" xml:space="preserve">
     <value>Use plural for namespace, such as '{1}'</value>
@@ -2885,6 +2891,9 @@ In addition, the correct property names, property types and owing types should b
   </data>
   <data name="MiKo_3053_Title" xml:space="preserve">
     <value>DependencyPropertyKey fields should be properly registered.</value>
+  </data>
+  <data name="MiKo_3054_CodeFixTitle" xml:space="preserve">
+    <value>Expose DependencyProperty identifier</value>
   </data>
   <data name="MiKo_3054_Description" xml:space="preserve">
     <value>Read-only dependency properties are defined by 'DependencyPropertyKey' fields and should not be visible to the public.

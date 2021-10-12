@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol)
         {
-            var invocation = symbol.Name + ".DependencyProperty";
+            var invocation = symbol.Name + "." + Constants.DependencyPropertyKey.DependencyProperty;
 
             // get fields in same class that are of Type "DependencyProperty" and find out if any gets assigned to the "DependencyProperty" of the "DependencyPropertyKey"
             // hint: names should match

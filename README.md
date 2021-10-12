@@ -40,7 +40,7 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_1014|Methods should not be named 'Check'.|&#x2713;|&#x2713;|
 |MiKo_1015|Methods should not be named 'Init'.|&#x2713;|&#x2713;|
 |MiKo_1016|Factory methods should be named 'Create'.|&#x2713;|&#x2713;|
-|MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|\-|
+|MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.|&#x2713;|&#x2713;|
 |MiKo_1018|Methods should not be suffixed with noun of a verb.|&#x2713;|&#x2713;|
 |MiKo_1019|'Clear' and 'Remove' methods should be named based on their number of parameters.|&#x2713;|&#x2713;|
 |MiKo_1020|Type names should be limited in length.|\-|\-|
@@ -273,7 +273,7 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_3051|DependencyProperty fields should be properly registered.|&#x2713;|\-|
 |MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'.|&#x2713;|&#x2713;|
 |MiKo_3053|DependencyPropertyKey fields should be properly registered.|&#x2713;|\-|
-|MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|&#x2713;|\-|
+|MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier.|&#x2713;|&#x2713;|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used.|&#x2713;|&#x2713;|
 |MiKo_3061|Loggers shall use a proper log category.|&#x2713;|\-|
 |MiKo_3070|Methods that return IEnumerable shall never return null.|&#x2713;|\-|

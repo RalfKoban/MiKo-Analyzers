@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var disposeMethod = GetDisposeMethod(syntax);
 
             // remove method so that it can be added again
-            var modifiedType = syntax.RemoveNode(disposeMethod, SyntaxRemoveOptions.KeepNoTrivia);
+            var modifiedType = syntax.Without(disposeMethod);
 
             var syntaxNode = FindLastCtorOrFinalizer(modifiedType);
             if (syntaxNode is null)
