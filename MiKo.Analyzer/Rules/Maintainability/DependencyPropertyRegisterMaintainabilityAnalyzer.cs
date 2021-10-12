@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class DependencyPropertyRegisterMaintainabilityAnalyzer : MaintainabilityAnalyzer
     {
+        internal const string Value = "ParameterValue";
+
         private readonly string m_invocation;
 
         protected DependencyPropertyRegisterMaintainabilityAnalyzer(string diagnosticId, string invocation) : base(diagnosticId, SymbolKind.Field) => m_invocation = invocation;
@@ -37,24 +39,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private static string GetName(ArgumentSyntax nameArgument) // TODO: RKN Move to SyntaxExtensions
-        {
-            switch (nameArgument.Expression)
-            {
-                // nameof
-                case InvocationExpressionSyntax i: return i.ArgumentList.Arguments[0].ToString();
-                case LiteralExpressionSyntax l: return l.Token.ValueText;
-                default: return string.Empty;
-            }
-        }
-
         private void AnalyzeParameterName(IFieldSymbol symbol, ArgumentSyntax nameArgument, ref List<Diagnostic> diagnostics)
         {
             var expression = nameArgument.Expression;
 
             if (expression.IsKind(SyntaxKind.StringLiteralExpression))
             {
-                var name = ((LiteralExpressionSyntax)expression).Token.ValueText; // TODO: RKN Move to SyntaxExtensions
+                var name = ((LiteralExpressionSyntax)expression).GetName();
                 ReportIssue(symbol, nameArgument, "'nameof(" + name + ")'", ref diagnostics);
             }
         }
@@ -64,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (propertyType.Expression is TypeOfExpressionSyntax syntax)
             {
                 // find property and get the type
-                var name = GetName(nameArgument);
+                var name = nameArgument.GetName();
 
                 var owningType = symbol.ContainingType;
                 var property = owningType.GetMembers().OfType<IPropertySymbol>().FirstOrDefault(_ => _.Name == name);
@@ -116,7 +107,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 results = new List<Diagnostic>(1);
             }
 
-            results.Add(Issue(symbol.Name, argument, parameter));
+            var properties = new Dictionary<string, string>
+                                 {
+                                     { Value, parameter },
+                                 };
+
+            results.Add(Issue(symbol.Name, argument, parameter, properties));
         }
     }
 }

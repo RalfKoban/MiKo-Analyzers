@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -57,12 +56,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var args = nameofExpressionSyntax.ArgumentList.Arguments;
                         if (args.Count == 1 && args[0].Expression is IdentifierNameSyntax ins)
                         {
-                            return ins.Identifier.Text;
+                            return ins.GetName();
                         }
                     }
                     else if (arguments[0].Expression is LiteralExpressionSyntax literal)
                     {
-                        return literal.Token.Text.WithoutQuotes();
+                        return literal.GetName();
                     }
                 }
             }

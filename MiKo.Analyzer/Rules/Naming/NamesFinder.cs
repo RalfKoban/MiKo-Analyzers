@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
@@ -146,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // analyze correct name (must match string literal or nameof)
             var registeredName = GetRegisteredName(symbol, invocation);
-            if (registeredName is null)
+            if (registeredName.IsNullOrWhiteSpace())
             {
                 if (propertyNames.Contains(symbolName))
                 {
@@ -187,13 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var arguments = symbol.GetInvocationArgumentsFrom(invocation);
             if (arguments.Count > 0)
             {
-                switch (arguments[0].Expression)
-                {
-                    case LiteralExpressionSyntax s:
-                        return s.Token.ValueText;
-                    case InvocationExpressionSyntax s:
-                        return s.ArgumentList.Arguments.FirstOrDefault()?.ToString();
-                }
+                return arguments[0].Expression.GetName();
             }
 
             return null;
