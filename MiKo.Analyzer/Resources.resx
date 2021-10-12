@@ -358,6 +358,9 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
   <data name="MiKo_1016_Title" xml:space="preserve">
     <value>Factory methods should be named 'Create'.</value>
   </data>
+  <data name="MiKo_1017_CodeFixTitle" xml:space="preserve">
+    <value>Remove prefix from method</value>
+  </data>
   <data name="MiKo_1017_Description" xml:space="preserve">
     <value>Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'. That 'Get' or 'Set' is just additional noise and should be avoided.</value>
   </data>
@@ -368,7 +371,7 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
     <value>Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'.</value>
   </data>
   <data name="MiKo_1018_CodeFixTitle" xml:space="preserve">
-    <value>Make noun a verb</value>
+    <value>Change noun to verb</value>
   </data>
   <data name="MiKo_1018_Description" xml:space="preserve">
     <value>Methods should not be suffixed with a noun form of a verb if the verb would fit perfectly as method name.</value>
