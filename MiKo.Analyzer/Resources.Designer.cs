@@ -776,6 +776,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove prefix from method.
+        /// </summary>
+        public static string MiKo_1017_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1017_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;. That &apos;Get&apos; or &apos;Set&apos; is just additional noise and should be avoided..
         /// </summary>
         public static string MiKo_1017_Description {
@@ -803,7 +812,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make noun a verb.
+        ///   Looks up a localized string similar to Change noun to verb.
         /// </summary>
         public static string MiKo_1018_CodeFixTitle {
             get {

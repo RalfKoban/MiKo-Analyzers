@@ -12,19 +12,41 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1017";
 
-        private static readonly string[] Prefixes = { "GetCan", "GetHas", "GetIs", "SetCan", "SetHas", "SetIs", "CanHas", "CanIs", "HasCan", "HasIs", "IsCan", "IsHas" };
+        private static readonly string[] StrangePrefixes =
+            {
+                "GetCan",
+                "GetHas",
+                "GetIs",
+                "GetExists",
+                "SetCan",
+                "SetHas",
+                "SetIs",
+                "SetExists",
+                "CanHas",
+                "CanIs",
+                "CanExists",
+                "HasCan",
+                "HasIs",
+                "HasExists",
+                "IsCan",
+                "IsHas",
+                "IsExists",
+            };
 
         public MiKo_1017_GetSetPrefixedMethodsAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => Prefixes.Any(_ => HasStrangePrefix(symbol, _))
-                                                                                                  ? new[] { Issue(symbol, FindBetterName(symbol.Name)) }
+        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => StrangePrefixes.Any(_ => HasStrangePrefix(symbol, _))
+                                                                                                  ? new[] { Issue(symbol, FindBetterName(symbol)) }
                                                                                                   : Enumerable.Empty<Diagnostic>();
 
         private static string FindBetterName(string name)
         {
             var startIndex = 1;
+
             while (startIndex < name.Length)
             {
                 if (name[startIndex].IsUpperCase())
@@ -42,10 +64,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = method.Name;
 
-            return methodName.StartsWith(prefix, StringComparison.Ordinal)
-                && methodName.Length > prefix.Length
-                && methodName[prefix.Length].IsUpperCase()
-                && method.HasDependencyObjectParameter() is false;
+            if (methodName.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                if (methodName.Length == prefix.Length || (methodName.Length > prefix.Length && methodName[prefix.Length].IsUpperCase()))
+                {
+                    if (method.HasDependencyObjectParameter() is false)
+                    {
+                        if (methodName.Contains("CanOpen") && method.ContainingNamespace.FullyQualifiedName().Contains("CanOpen"))
+                        {
+                            // it is a special CanOPEN protocol situation
+                            return false;
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
