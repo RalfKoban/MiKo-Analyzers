@@ -113,6 +113,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithTrailingEmptyLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
+        internal static SyntaxToken WithTrailingNewLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
         internal static SyntaxToken ToSyntaxToken(this string text, SyntaxKind kind = SyntaxKind.StringLiteralToken) => SyntaxFactory.Token(default, kind, text, text, default);

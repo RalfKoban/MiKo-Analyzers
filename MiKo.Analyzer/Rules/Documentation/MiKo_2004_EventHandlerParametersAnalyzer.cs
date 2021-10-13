@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2004";
 
+        internal const string IsSender = "IsSender";
+
         public MiKo_2004_EventHandlerParametersAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
@@ -25,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
         {
             List<Diagnostic> diagnostics = null;
-            VerifyParameterComment(ref diagnostics, method, xml, 0, Constants.Comments.EventSourcePhrase);
+            VerifyParameterComment(ref diagnostics, method, xml, true, Constants.Comments.EventSourcePhrase);
 
             var eventArgs = method.Parameters[1].Type;
             var defaultStart = eventArgs.Name.StartsWithAnyChar("AEIOU") ? "An" : "A";
@@ -38,13 +40,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data",
                               }.Concat(Constants.Comments.UnusedPhrase).ToList();
 
-            VerifyParameterComment(ref diagnostics, method, xml, 1, phrases);
+            VerifyParameterComment(ref diagnostics, method, xml, false, phrases);
 
             return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private void VerifyParameterComment(ref List<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, int parameterIndex, IEnumerable<string> allExpected)
+        private void VerifyParameterComment(ref List<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, bool isSender, IEnumerable<string> allExpected)
         {
+            var parameterIndex = isSender ? 0 : 1;
             var parameter = method.Parameters[parameterIndex];
             var comment = parameter.GetComment(commentXml);
             var proposal = allExpected.ElementAt(0);
@@ -55,7 +58,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     diagnostics = new List<Diagnostic>(1);
                 }
 
-                diagnostics.Add(Issue(parameter, parameter.Name, proposal));
+                var properties = new Dictionary<string, string>();
+                if (isSender)
+                {
+                    properties.Add(IsSender, string.Empty);
+                }
+
+                diagnostics.Add(Issue(parameter, parameter.Name, proposal, properties));
             }
         }
     }

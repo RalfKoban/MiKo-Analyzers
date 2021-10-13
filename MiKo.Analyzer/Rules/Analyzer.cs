@@ -96,59 +96,39 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
-        protected Diagnostic Issue(ISymbol symbol) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol));
+        protected Diagnostic Issue(ISymbol symbol, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol));
 
-        protected Diagnostic Issue(SyntaxNode node) => CreateIssue(node.GetLocation(), node.ToString());
+        protected Diagnostic Issue(SyntaxNode node, Dictionary<string, string> properties = null) => CreateIssue(node.GetLocation(), properties, node.ToString());
 
-        protected Diagnostic Issue(SyntaxToken token) => CreateIssue(token.GetLocation(), token.ValueText);
+        protected Diagnostic Issue(SyntaxToken token, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, token.ValueText);
 
-        protected Diagnostic Issue(SyntaxNode node, Dictionary<string, string> properties) => CreateIssue(node.GetLocation(), ImmutableDictionary.CreateRange(properties), node.ToString());
+        protected Diagnostic Issue<T>(ISymbol symbol, T arg, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg.ToString());
 
-        protected Diagnostic Issue<T>(ISymbol symbol, T arg, Dictionary<string, string> properties = null)
-        {
-            // TODO RKN : Consolidate properties check into single method 'CreateIssue' ?
-            if (properties is null)
-            {
-                return CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg.ToString());
-            }
+        protected Diagnostic Issue(string name, ISymbol symbol, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, name);
 
-            return CreateIssue(symbol.Locations[0], ImmutableDictionary.CreateRange(properties), GetSymbolName(symbol), arg.ToString());
-        }
+        protected Diagnostic Issue(string name, SyntaxNode node, Dictionary<string, string> properties = null) => CreateIssue(node.GetLocation(), properties, name);
 
-        protected Diagnostic Issue(string name, ISymbol symbol) => CreateIssue(symbol.Locations[0], name);
+        protected Diagnostic Issue(string name, SyntaxToken token, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, name);
 
-        protected Diagnostic Issue(string name, SyntaxNode node) => CreateIssue(node.GetLocation(), name);
+        protected Diagnostic Issue(string name, SyntaxTrivia trivia, Dictionary<string, string> properties = null) => CreateIssue(trivia.GetLocation(), properties, name);
 
-        protected Diagnostic Issue(string name, SyntaxToken token) => CreateIssue(token.GetLocation(), name);
+        protected Diagnostic Issue(string name, Location location, Dictionary<string, string> properties = null) => CreateIssue(location, properties, name);
 
-        protected Diagnostic Issue(string name, SyntaxTrivia trivia) => CreateIssue(trivia.GetLocation(), name);
+        protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1, Dictionary<string, string> properties = null) => CreateIssue(node.GetLocation(), properties, name, arg1.ToString());
 
-        protected Diagnostic Issue(string name, Location location) => CreateIssue(location, name);
+        protected Diagnostic Issue<T>(string name, SyntaxToken token, T arg1, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString());
 
-        protected Diagnostic Issue<T>(string name, SyntaxNode node, T arg1, Dictionary<string, string> properties = null)
-        {
-            // TODO RKN : Consolidate properties check into single method 'CreateIssue' ?
-            if (properties is null)
-            {
-                return CreateIssue(node.GetLocation(), name, arg1.ToString());
-            }
+        protected Diagnostic Issue<T>(string name, Location location, T arg1, Dictionary<string, string> properties = null) => CreateIssue(location, properties, name, arg1.ToString());
 
-            return CreateIssue(node.GetLocation(), ImmutableDictionary.CreateRange(properties), name, arg1.ToString());
-        }
+        protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
 
-        protected Diagnostic Issue<T>(string name, SyntaxToken token, T arg1) => CreateIssue(token.GetLocation(), name, arg1.ToString());
+        protected Diagnostic Issue<T1, T2>(string name, ISymbol symbol, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, name, arg1.ToString(), arg2.ToString());
 
-        protected Diagnostic Issue<T>(string name, Location location, T arg1) => CreateIssue(location, name, arg1.ToString());
+        protected Diagnostic Issue<T1, T2>(string name, SyntaxNode node, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(node.GetLocation(), properties, name, arg1.ToString(), arg2.ToString());
 
-        protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
+        protected Diagnostic Issue<T1, T2>(string name, SyntaxToken token, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString(), arg2.ToString());
 
-        protected Diagnostic Issue<T1, T2>(string name, ISymbol symbol, T1 arg1, T2 arg2) => CreateIssue(symbol.Locations[0], name, arg1.ToString(), arg2.ToString());
-
-        protected Diagnostic Issue<T1, T2>(string name, SyntaxNode node, T1 arg1, T2 arg2) => CreateIssue(node.GetLocation(), name, arg1.ToString(), arg2.ToString());
-
-        protected Diagnostic Issue<T1, T2>(string name, SyntaxToken token, T1 arg1, T2 arg2) => CreateIssue(token.GetLocation(), name, arg1.ToString(), arg2.ToString());
-
-        protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3) => CreateIssue(symbol.Locations[0], GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
+        protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
         private static string GetSymbolName(ISymbol symbol)
         {
@@ -178,9 +158,14 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        private Diagnostic CreateIssue(Location location, ImmutableDictionary<string, string> properties, params object[] args) => Diagnostic.Create(Rule, location, properties, args);
+        private Diagnostic CreateIssue(Location location, Dictionary<string, string> properties, params object[] args)
+        {
+            var immutableProperties = properties is null
+                        ? ImmutableDictionary<string, string>.Empty
+                        : ImmutableDictionary.CreateRange(properties);
 
-        private Diagnostic CreateIssue(Location location, params object[] args) => Diagnostic.Create(Rule, location, args);
+            return Diagnostic.Create(Rule, location, immutableProperties, args);
+        }
 
         private Action<SymbolAnalysisContext> GetAnalyzeMethod(SymbolKind symbolKind)
         {
