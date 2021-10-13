@@ -242,6 +242,44 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_unrelated_call_in_ctor_expression_body() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public enum TraceLevel
+    {
+        Debug = 0,
+    }
+
+    public class TestMe
+    {
+        private TraceLevel _level;
+
+        public TestMe() : this(TraceLevel.Debug)
+        { }
+
+        public TestMe(TraceLevel level) => _level = level;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_unrelated_method_call() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe()
+        { }
+
+        public void DoSomething() => Debug();
+
+        public void Debug()
+        { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -328,39 +366,56 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_unrelated_call_in_ctor_expression_body() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_method_in_block_in_if_statement_with_OR_condition_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace Bla
 {
-    public enum TraceLevel
+    public interface ILog
     {
-        Debug = 0,
+        bool IsDebugEnabled { get; }
+
+        void " + method + @"();
     }
 
     public class TestMe
     {
-        private TraceLevel _level;
+        private static ILog Log = null;
 
-        public TestMe() : this(TraceLevel.Debug)
-        { }
-
-        public TestMe(TraceLevel level) => _level = level;
+        public void DoSomething(bool flag)
+        {
+            if (flag || Log.IsDebugEnabled)
+            {
+                Log." + method + @"();
+            }
+        }
     }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_unrelated_method_call() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_in_block_in_complex_if_statement_with_interpolated_debug_message_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+using System;
+
 namespace Bla
 {
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void " + method + @"();
+    }
+
     public class TestMe
     {
-        public TestMe()
-        { }
+        private static ILog Log = null;
 
-        public void DoSomething() => Debug();
-
-        public void Debug()
-        { }
+        public void DoSomething(Guid someGuid)
+        {
+            if (Log.IsDebugEnabled && someGuid != Guid.Empty)
+            {
+                var message = $""some message for {someGuid}."";
+                Log." + method + @"(message);
+            }
+        }
     }
 }
 ");
