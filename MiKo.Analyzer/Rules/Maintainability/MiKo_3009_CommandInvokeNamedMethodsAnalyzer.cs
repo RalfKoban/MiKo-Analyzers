@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var issues = arguments.Where(_ => _.Expression is LambdaExpressionSyntax).Select(Issue).ToList();
+            var issues = arguments.Where(_ => _.Expression is LambdaExpressionSyntax).Select(_ => Issue(_, null)).ToList();
 
             return issues;
         }
