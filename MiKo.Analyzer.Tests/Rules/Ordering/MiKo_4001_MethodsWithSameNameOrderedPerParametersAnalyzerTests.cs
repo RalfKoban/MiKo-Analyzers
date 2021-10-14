@@ -39,6 +39,18 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_2_identically_named_methods_with_different_accessibilities() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    internal void DoSomething(int i)
+    { }
+
+    public void DoSomething()
+    { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_identically_named_methods_in_correct_order() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -439,6 +451,94 @@ namespace Bla
         public TestMe(int i, int j)
         { }
     }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_identically_named_methods_in_different_accessibilities_and_mixed_order_and_other_methods_in_between()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(params int[] i)
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public static void DoSomething(int i, object i)
+    { }
+
+    public static void DoSomething()
+    { }
+
+    public void DoAnything()
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+
+    public static void DoSomething(object o)
+    { }
+
+    public void DoAnythingElse()
+    { }
+
+    private void DoAnythingElse(int i)
+    { }
+
+    private void DoSomething(int i, string s)
+    { }
+
+    private static void DoSomething(int i, string s, object o)
+    { }
+
+    private static void DoSomething(string s)
+    { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public static void DoSomething()
+    { }
+
+    public static void DoSomething(object o)
+    { }
+
+    public static void DoSomething(int i, object i)
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+
+    public void DoSomething(params int[] i)
+    { }
+
+    public void DoAnything()
+    { }
+
+    public void DoAnythingElse()
+    { }
+
+    private void DoAnythingElse(int i)
+    { }
+
+    private static void DoSomething(string s)
+    { }
+
+    private static void DoSomething(int i, string s, object o)
+    { }
+
+    private void DoSomething(int i, string s)
+    { }
 }
 ";
 
