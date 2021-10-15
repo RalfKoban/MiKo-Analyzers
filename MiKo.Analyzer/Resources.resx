@@ -2704,7 +2704,7 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>ICloneable.Clone() should not be implemented.</value>
   </data>
   <data name="MiKo_3032_CodeFixTitle" xml:space="preserve">
-    <value>Use 'PropertyChangedEventArgs' with 'nameof'</value>
+    <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3032_Description" xml:space="preserve">
     <value>Property names that are passed into the  'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This eases refactorings.</value>

@@ -7621,7 +7621,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;PropertyChangedEventArgs&apos; with &apos;nameof&apos;.
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
         /// </summary>
         public static string MiKo_3032_CodeFixTitle {
             get {
