@@ -2311,6 +2311,9 @@ Hence, to provide them with all the information they need, the information shoul
   <data name="MiKo_2211_Title" xml:space="preserve">
     <value>Enum members should not have &lt;remarks&gt; sections.</value>
   </data>
+  <data name="MiKo_2212_CodeFixTitle" xml:space="preserve">
+    <value>Use 'failed' instead of 'was not succesful'</value>
+  </data>
   <data name="MiKo_2212_Description" xml:space="preserve">
     <value>To shorten documentation - and still be to the point - the documentation should use the phrase 'failed' instead of 'was not succesful'.</value>
   </data>
