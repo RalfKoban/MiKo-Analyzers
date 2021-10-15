@@ -6512,7 +6512,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the phrase &apos;failed&apos; instead of the phrase &apos;was not sucessful&apos;..
+        ///   Looks up a localized string similar to Documentation should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;..
         /// </summary>
         public static string MiKo_2212_Title {
             get {
@@ -6808,7 +6808,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should use the phrase &apos;failed&apos; instead of the phrase &apos;was not sucessful&apos;..
+        ///   Looks up a localized string similar to Comments should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;..
         /// </summary>
         public static string MiKo_2307_Title {
             get {
@@ -6841,6 +6841,43 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2308_Title {
             get {
                 return ResourceManager.GetString("MiKo_2308_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change &quot;n&apos;t&quot; to &quot; not&quot;.
+        /// </summary>
+        public static string MiKo_2309_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2309_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It may happen to read over and not recognize a contradiction. This then leads to unintentional errors.
+        ///It would therefore be better to clearly highlight the contradiction..
+        /// </summary>
+        public static string MiKo_2309_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2309_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use contradiction &quot;n&apos;t&quot;.
+        /// </summary>
+        public static string MiKo_2309_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2309_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should not use the contradiction &quot;n&apos;t&quot;..
+        /// </summary>
+        public static string MiKo_2309_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2309_Title", resourceCulture);
             }
         }
         
