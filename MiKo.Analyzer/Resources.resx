@@ -2312,7 +2312,7 @@ Hence, to provide them with all the information they need, the information shoul
     <value>Enum members should not have &lt;remarks&gt; sections.</value>
   </data>
   <data name="MiKo_2212_CodeFixTitle" xml:space="preserve">
-    <value>Use 'failed' instead of 'was not succesful'</value>
+    <value>Change 'was not succesful' to 'failed'</value>
   </data>
   <data name="MiKo_2212_Description" xml:space="preserve">
     <value>To shorten documentation - and still be to the point - the documentation should use the phrase 'failed' instead of 'was not succesful'.</value>
@@ -2324,7 +2324,7 @@ Hence, to provide them with all the information they need, the information shoul
     <value>Documentation should use the phrase 'failed' instead of the phrase 'was not sucessful'.</value>
   </data>
   <data name="MiKo_2213_CodeFixTitle" xml:space="preserve">
-    <value>Use "not" instead of "n't"</value>
+    <value>Change "n't" to " not"</value>
   </data>
   <data name="MiKo_2213_Description" xml:space="preserve">
     <value>It may happen to read over and not recognize a contradiction. This then leads to unintentional errors.

@@ -6485,7 +6485,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;failed&apos; instead of &apos;was not succesful&apos;.
+        ///   Looks up a localized string similar to Change &apos;was not succesful&apos; to &apos;failed&apos;.
         /// </summary>
         public static string MiKo_2212_CodeFixTitle {
             get {
@@ -6521,7 +6521,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &quot;not&quot; instead of &quot;n&apos;t&quot;.
+        ///   Looks up a localized string similar to Change &quot;n&apos;t&quot; to &quot; not&quot;.
         /// </summary>
         public static string MiKo_2213_CodeFixTitle {
             get {
