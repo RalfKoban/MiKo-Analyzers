@@ -2756,6 +2756,9 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3033_Title" xml:space="preserve">
     <value>Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.</value>
   </data>
+  <data name="MiKo_3034_CodeFixTitle" xml:space="preserve">
+    <value>Apply [CallerMemberName]</value>
+  </data>
   <data name="MiKo_3034_Description" xml:space="preserve">
     <value>A method that raises the PropertyChanging or PropertyChanged events should use the CallerMemberNameAttribute to specify the name of the property automatically.</value>
   </data>

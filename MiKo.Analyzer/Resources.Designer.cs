@@ -7776,6 +7776,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply [CallerMemberName].
+        /// </summary>
+        public static string MiKo_3034_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3034_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A method that raises the PropertyChanging or PropertyChanged events should use the CallerMemberNameAttribute to specify the name of the property automatically..
         /// </summary>
         public static string MiKo_3034_Description {

@@ -86,9 +86,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => null;
 
-        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
-
         protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax) => null;
+
+        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
 
         protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic) => token;
 
