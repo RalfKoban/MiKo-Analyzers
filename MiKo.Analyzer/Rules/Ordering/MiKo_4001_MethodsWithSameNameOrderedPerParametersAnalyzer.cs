@@ -48,25 +48,34 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     continue;
                 }
 
-                var order = methodsOrderedByParameters.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
-
-                // check for locations
-                var lastLine = methodsOrderedByParameters[0].GetStartingLine();
-
-                foreach (var method in methodsOrderedByParameters)
+                // pre-order for accessibility (public first, private last), then ensure that static methods are first and params methods are at the end
+                foreach (var similarMethods in methodsOrderedByParameters.GroupBy(_ => _.DeclaredAccessibility))
                 {
-                    var nextLine = method.GetStartingLine();
-                    if (lastLine > nextLine)
+                    if (similarMethods.Count() <= 1)
                     {
-                        if (results is null)
-                        {
-                            results = new List<Diagnostic>(1);
-                        }
-
-                        results.Add(Issue(method, order));
+                        continue;
                     }
 
-                    lastLine = nextLine;
+                    var order = similarMethods.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
+
+                    // check for locations
+                    var lastLine = similarMethods.First().GetStartingLine();
+
+                    foreach (var method in similarMethods)
+                    {
+                        var nextLine = method.GetStartingLine();
+                        if (lastLine > nextLine)
+                        {
+                            if (results is null)
+                            {
+                                results = new List<Diagnostic>(1);
+                            }
+
+                            results.Add(Issue(method, order));
+                        }
+
+                        lastLine = nextLine;
+                    }
                 }
             }
 

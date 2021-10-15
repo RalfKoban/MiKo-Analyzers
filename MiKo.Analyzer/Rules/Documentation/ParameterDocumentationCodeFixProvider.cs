@@ -15,11 +15,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // we are called for each parameter, so we have to find out the correct XML element
             var fittingSyntaxNodes = FittingSyntaxNodes(syntaxNodes);
 
-            return GetXmlSyntax(Constants.XmlTag.Param, fittingSyntaxNodes).FirstOrDefault(_ => GetParameterName(_) == parameterName);
+            var parameterSyntax = GetXmlSyntax(Constants.XmlTag.Param, fittingSyntaxNodes).FirstOrDefault(_ => GetParameterName(_) == parameterName);
+            if (parameterSyntax != null)
+            {
+                return parameterSyntax;
+            }
+
+            // we did not find the parameter documentation, hence we have to return the parent documentation to be able to add a value
+            return GetXmlSyntax(fittingSyntaxNodes);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
+            if (syntax is DocumentationCommentTriviaSyntax d)
+            {
+                return Comment(document, d, diagnostic);
+            }
+
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
             var parameterName = GetParameterName(parameterCommentSyntax);
 
@@ -45,6 +57,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return method.ParameterList.Parameters;
         }
+
+        protected abstract DocumentationCommentTriviaSyntax Comment(Document document, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic);
 
         protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index);
 

@@ -8045,6 +8045,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3051_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3051_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To avoid typos, fields that are the back of a DependencyProperty should be registered via &apos;DependencyProperty.Register()&apos; and the &apos;nameof&apos; operator.
         ///In addition, the correct property names, property types and owing types should be provided..
         /// </summary>

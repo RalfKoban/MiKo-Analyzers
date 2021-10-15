@@ -91,6 +91,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(SyntaxFactory.Token));
 
+        protected static InvocationExpressionSyntax NameOf(LiteralExpressionSyntax literal)
+        {
+            var identifierName = literal.GetName();
+
+            return NameOf(identifierName);
+        }
+
         protected static InvocationExpressionSyntax NameOf(string identifierName)
         {
             var syntax = SyntaxFactory.IdentifierName(identifierName);
