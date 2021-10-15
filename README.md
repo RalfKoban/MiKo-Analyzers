@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 296 rules that are currently provided by the analyzer.
+The following tables list all the 298 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -215,7 +215,8 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_2209|Do not use double periods in documentation.|&#x2713;|\-|
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'.|&#x2713;|&#x2713;|
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|&#x2713;|
-|MiKo_2212|Documentation should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|\-|
+|MiKo_2212|Documentation should use the phrase 'failed' instead of 'was not sucessful'.|&#x2713;|&#x2713;|
+|MiKo_2213|Documentation should not use the contradiction "n't".|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|
@@ -223,8 +224,9 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_2304|Do not formulate comments as questions.|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|&#x2713;|
 |MiKo_2306|Do end comments with a period.|\-|\-|
-|MiKo_2307|Comments should use the phrase 'failed' instead of the phrase 'was not sucessful'.|&#x2713;|&#x2713;|
+|MiKo_2307|Comments should use the phrase 'failed' instead of 'was not sucessful'.|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code.|&#x2713;|\-|
+|MiKo_2309|Comments should not use the contradiction "n't".|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|
@@ -257,8 +259,8 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_3030|Methods should follow the Law of Demeter.|\-|\-|
 |MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|\-|
 |MiKo_3032|Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.|&#x2713;|&#x2713;|
-|MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|\-|
-|MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|\-|
+|MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|&#x2713;|
+|MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|&#x2713;|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|\-|
 |MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors.|&#x2713;|\-|
 |MiKo_3037|Do not use magic numbers for timeouts.|&#x2713;|\-|

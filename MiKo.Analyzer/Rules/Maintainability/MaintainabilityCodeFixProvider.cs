@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -90,6 +91,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(SyntaxFactory.Token));
+
+        protected static SyntaxNode WithUsing(SyntaxNode root, string usingNamespace)
+        {
+            var usings = root.DescendantNodes().OfType<UsingDirectiveSyntax>().ToList();
+
+            if (usings.Any(_ => _.Name.ToFullString() == usingNamespace))
+            {
+                // already set
+                return root;
+            }
+
+            var directive = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(usingNamespace));
+
+            if (usings.Count == 0)
+            {
+                return root.InsertNodeBefore(root.ChildNodes().First(), directive);
+            }
+
+            // add using at correct place inside the using block
+            var usingOrientation = usings.FirstOrDefault(_ => string.Compare(_.Name.ToFullString(), usingNamespace, StringComparison.OrdinalIgnoreCase) > 0);
+
+            return usingOrientation != null
+                       ? root.InsertNodeBefore(usingOrientation, directive)
+                       : root.InsertNodeAfter(usings.Last(), directive);
+        }
 
         protected static InvocationExpressionSyntax NameOf(LiteralExpressionSyntax literal)
         {
