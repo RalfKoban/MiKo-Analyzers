@@ -2715,6 +2715,9 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3032_Title" xml:space="preserve">
     <value>Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.</value>
   </data>
+  <data name="MiKo_3033_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
   <data name="MiKo_3033_Description" xml:space="preserve">
     <value>Property names that are passed into the  'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
   </data>

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -202,8 +203,46 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_type_([ValueSource(nameof(TypeNames))] string typeName)
+        {
+            var originalCode = @"
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Something { get; set; }
+
+        private " + typeName + @" e = new " + typeName + @"(""Something"");
+    }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.ComponentModel;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Something { get; set; }
+
+        private " + typeName + @" e = new " + typeName + @"(nameof(Something));
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3033_CodeFixProvider();
     }
 }
