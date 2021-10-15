@@ -257,7 +257,7 @@ The following tables list all the 296 rules that are currently provided by the a
 |MiKo_3030|Methods should follow the Law of Demeter.|\-|\-|
 |MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|\-|
 |MiKo_3032|Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.|&#x2713;|&#x2713;|
-|MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|\-|
+|MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|\-|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|\-|
 |MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors.|&#x2713;|\-|

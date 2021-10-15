@@ -7657,6 +7657,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3033_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3033_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Property names that are passed into the  &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
         /// </summary>
         public static string MiKo_3033_Description {
