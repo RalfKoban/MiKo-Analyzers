@@ -6512,6 +6512,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &quot;not&quot; instead of &quot;n&apos;t&quot;.
+        /// </summary>
+        public static string MiKo_2213_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2213_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It may happen to read over and not recognize a contradiction. This then leads to unintentional errors.
+        ///It would therefore be better to clearly highlight the contradiction..
+        /// </summary>
+        public static string MiKo_2213_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2213_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use contradiction &quot;n&apos;t&quot;.
+        /// </summary>
+        public static string MiKo_2213_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2213_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not use the contradiction &quot;n&apos;t&quot;..
+        /// </summary>
+        public static string MiKo_2213_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2213_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>

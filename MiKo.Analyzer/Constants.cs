@@ -584,6 +584,27 @@ namespace MiKoSolutions.Analyzers
                     "Marks ",
                 };
 
+            internal static readonly string[] NotContradictionPhrase =
+                {
+                    "can't",
+                    "don't",
+                    "won't",
+                    "couldn't",
+                    "shouldn't",
+                    "wouldn't",
+                    "doesn't",
+                    "didn't",
+                    "isn't",
+                    "aren't",
+                    "hasn't",
+                    "haven't",
+                    "hadn't",
+                    "wasn't",
+                    "weren't",
+                    "daren't",
+                    "needn't",
+                };
+
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
 
             internal const string WasNotSuccessfulPhrase = "was not successful";
