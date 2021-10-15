@@ -335,10 +335,10 @@ namespace MiKoSolutions.Analyzers
         {
             while (true)
             {
-                var ifStatement = GetEnclosingIfStatement(value);
+                var ifStatement = value.GetEnclosingIfStatement();
                 if (ifStatement != null)
                 {
-                    if (IsIfStatementWithCallTo(ifStatement, methodName))
+                    if (ifStatement.IsCallTo(methodName))
                     {
                         return true;
                     }
@@ -349,7 +349,7 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 // maybe an else block
-                var elseStatement = GetEnclosingElseStatement(value);
+                var elseStatement = value.GetEnclosingElseStatement();
                 if (elseStatement != null)
                 {
                     value = elseStatement.Parent;
@@ -856,7 +856,7 @@ namespace MiKoSolutions.Analyzers
 
         private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 
-        private static ElseClauseSyntax GetEnclosingElseStatement(SyntaxNode node)
+        private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
         {
             var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.ElseClause);
             if (enclosingNode is BlockSyntax)
@@ -867,7 +867,7 @@ namespace MiKoSolutions.Analyzers
             return enclosingNode as ElseClauseSyntax;
         }
 
-        private static IfStatementSyntax GetEnclosingIfStatement(SyntaxNode node)
+        private static IfStatementSyntax GetEnclosingIfStatement(this SyntaxNode node)
         {
             // consider brackets:
             //                    if (true)
@@ -900,6 +900,51 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        private static bool IsBinaryCallTo(this BinaryExpressionSyntax expression, string methodName)
+        {
+            if (expression?.OperatorToken.Kind() == SyntaxKind.AmpersandAmpersandToken)
+            {
+                if (expression.Left.IsCallTo(methodName) || expression.Right.IsCallTo(methodName))
+                {
+                    return true;
+                }
+
+                // maybe it is a combined one
+                if (expression.Left is BinaryExpressionSyntax left && IsBinaryCallTo(left, methodName))
+                {
+                    return true;
+                }
+
+                // maybe it is a combined one
+                if (expression.Right is BinaryExpressionSyntax right && IsBinaryCallTo(right, methodName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsCallTo(this IfStatementSyntax ifStatement, string methodName)
+        {
+            var ifExpression = ifStatement.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
+
+            if (ifExpression.IsCallTo(methodName))
+            {
+                return true;
+            }
+
+            var binaryExpression = ifStatement.ChildNodes().OfType<BinaryExpressionSyntax>().FirstOrDefault();
+            if (binaryExpression.IsBinaryCallTo(methodName))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsCallTo(this ExpressionSyntax expression, string methodName) => expression is MemberAccessExpressionSyntax m && m.Name.ToString() == methodName;
+
         private static bool IsEmpty(this SyntaxNode value, string tagName, IEnumerable<string> attributeNames)
         {
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == tagName)
@@ -919,27 +964,6 @@ namespace MiKoSolutions.Analyzers
                 var attribute = syntax.StartTag.Attributes.FirstOrDefault();
 
                 return attributeNames.Contains(attribute?.GetName());
-            }
-
-            return false;
-        }
-
-        private static bool IsIfStatementWithCallTo(IfStatementSyntax ifStatement, string methodName)
-        {
-            var ifExpression = ifStatement.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
-            if (ifExpression?.Name.ToString() == methodName)
-            {
-                return true;
-            }
-
-            var binaryExpression = ifStatement.ChildNodes().OfType<BinaryExpressionSyntax>().FirstOrDefault();
-            if (binaryExpression?.OperatorToken.Kind() == SyntaxKind.AmpersandAmpersandToken)
-            {
-                if ((binaryExpression.Left is MemberAccessExpressionSyntax l && l.Name.ToString() == methodName)
-                 || (binaryExpression.Right is MemberAccessExpressionSyntax r && r.Name.ToString() == methodName))
-                {
-                    return true;
-                }
             }
 
             return false;

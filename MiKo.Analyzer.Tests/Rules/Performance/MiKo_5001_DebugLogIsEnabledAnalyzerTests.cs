@@ -171,6 +171,56 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_call_in_method_body_without_non_existing_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public interface ILog
+    {
+        void " + method + @"();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething()
+        {
+            Log." + method + @"();
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_call_in_method_in_block_in_complex_if_statement_with_interpolated_debug_message_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void " + method + @"();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(Guid someGuid, bool flag)
+        {
+            if (Log.IsDebugEnabled && someGuid != Guid.Empty && !flag)
+            {
+                var message = $""some message for {someGuid}."";
+                Log." + method + @"(message);
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_call_in_ctor_in_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace Bla
 {
@@ -215,27 +265,6 @@ namespace Bla
         {
             if (Log.IsDebugEnabled)
                 Log." + method + @"();
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_call_in_method_body_without_non_existing_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
-{
-    public interface ILog
-    {
-        void " + method + @"();
-    }
-
-    public class TestMe
-    {
-        private static ILog Log = null;
-
-        public void DoSomething()
-        {
-            Log." + method + @"();
         }
     }
 }
@@ -385,35 +414,6 @@ namespace Bla
             if (flag || Log.IsDebugEnabled)
             {
                 Log." + method + @"();
-            }
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_call_in_method_in_block_in_complex_if_statement_with_interpolated_debug_message_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public interface ILog
-    {
-        bool IsDebugEnabled { get; }
-
-        void " + method + @"();
-    }
-
-    public class TestMe
-    {
-        private static ILog Log = null;
-
-        public void DoSomething(Guid someGuid)
-        {
-            if (Log.IsDebugEnabled && someGuid != Guid.Empty)
-            {
-                var message = $""some message for {someGuid}."";
-                Log." + method + @"(message);
             }
         }
     }
