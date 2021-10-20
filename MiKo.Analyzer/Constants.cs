@@ -20,6 +20,8 @@ namespace MiKoSolutions.Analyzers
         internal const string entities = "entities";
 #pragma warning restore SA1303 // Const field names should begin with upper-case letter
 
+        internal static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
+
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };
         internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
 
