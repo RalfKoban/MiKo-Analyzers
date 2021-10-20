@@ -21,11 +21,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summary = (XmlElementSyntax)syntax;
 
-            var contents = summary.Content;
-            if (contents.Count == 0)
+            if (summary.Content.Count > 0)
             {
-                return syntax;
+                summary = AdjustBeginning(summary);
+                summary = AdjustMiddle(summary);
+                summary = AdjustEnding(summary);
             }
+
+            return summary;
+        }
+
+        private static XmlElementSyntax AdjustBeginning(XmlElementSyntax summary)
+        {
+            var contents = summary.Content;
 
             if (contents[0] is XmlTextSyntax text)
             {
@@ -40,27 +48,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var newText = " " + startText + " " + remainingText;
 
-                        if (contents.Count > 1 && (contents[1] is XmlTextSyntax) is false)
+                        if (contents.Count > 1 && contents[1].IsKind(SyntaxKind.XmlText) is false)
                         {
                             // we have another non-text, so add a space
                             newText = newText.TrimEnd() + " ";
                         }
 
-                        summary = summary.ReplaceToken(token, token.WithText(newText));
-
-                        break;
+                        return summary.ReplaceToken(token, token.WithText(newText));
                     }
                 }
             }
 
+            return summary;
+        }
+
+        private static XmlElementSyntax AdjustMiddle(XmlElementSyntax summary)
+        {
+            SyntaxList<XmlNodeSyntax> contents;
             contents = summary.Content;
             if (contents.Count > 1)
             {
+                // we might have some '<see langword="xyz"/>' in the summary
                 var element = contents[1];
+
                 if (element.IsSeeLangwordBool() || element.IsCBool())
                 {
                     // remove the '<see langword="true"/>'
-                    summary = summary.RemoveNode(element, SyntaxRemoveOptions.KeepLeadingTrivia);
+                    summary = summary.Without(element);
 
                     // remove follow up contents ' if ' or ' whether '
                     if (summary.Content.Count > 1 && summary.Content[1] is XmlTextSyntax followUpText)
@@ -74,6 +88,72 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             break;
                         }
+                    }
+                }
+
+                // combine texts that have been created due to the removal of the '<see langword="xyz"/>'
+                contents = summary.Content;
+                for (var i = 0; i < contents.Count - 1; i++)
+                {
+                    if (contents[i] is XmlTextSyntax t1 && contents[i + 1] is XmlTextSyntax t2)
+                    {
+                        summary = summary.ReplaceNodes(new[] { t1, t2 }, (original, rewritten) =>
+                                                                             {
+                                                                                 if (original == t1)
+                                                                                 {
+                                                                                     var tokens = t1.TextTokens.Concat(t2.TextTokens).ToList();
+
+                                                                                     for (var index = 0; index < tokens.Count - 1; index++)
+                                                                                     {
+                                                                                         var token1 = tokens[index];
+                                                                                         var token2 = tokens[index + 1];
+
+                                                                                         if (token1.IsKind(SyntaxKind.XmlTextLiteralToken) && token2.IsKind(SyntaxKind.XmlTextLiteralToken))
+                                                                                         {
+                                                                                             var combinedText = token1.ValueText + token2.ValueText;
+                                                                                             tokens[index] = token1.WithText(combinedText);
+                                                                                             tokens.RemoveAt(index + 1);
+                                                                                             index--;
+                                                                                         }
+                                                                                     }
+
+                                                                                     return SyntaxFactory.XmlText(tokens.ToArray());
+                                                                                 }
+
+                                                                                 return default;
+                                                                             });
+                    }
+                }
+            }
+
+            return summary;
+        }
+
+        private static XmlElementSyntax AdjustEnding(XmlElementSyntax summary)
+        {
+            var contents = summary.Content;
+
+            // remove last node if it is ending with a dot
+            if (contents.LastOrDefault() is XmlTextSyntax sentenceEnding)
+            {
+                foreach (var token in sentenceEnding.TextTokens)
+                {
+                    var valueText = token.WithoutTrivia().ValueText;
+                    if (valueText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
+
+                    var newText = valueText.Without("otherwise").Without("false").Replace("; , .", ".");
+                    if (valueText.Length > newText.Length)
+                    {
+                        foreach (var marker in Constants.TrailingSentenceMarkers)
+                        {
+                            newText = newText.Replace($"{marker}.", ".")
+                                             .Replace($"{marker} .", ".");
+                        }
+
+                        summary = summary.ReplaceToken(token, token.WithText(newText));
                     }
                 }
             }

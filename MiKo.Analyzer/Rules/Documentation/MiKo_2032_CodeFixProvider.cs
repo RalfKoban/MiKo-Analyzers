@@ -17,7 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] NonGenericEndParts = string.Format(Constants.Comments.BooleanReturnTypeEndingPhraseTemplate, "|").Split('|');
         private static readonly string[] GenericStartParts = string.Format(Constants.Comments.BooleanTaskReturnTypeStartingPhraseTemplate, "|").Split('|');
         private static readonly string[] GenericEndParts = string.Format(Constants.Comments.BooleanTaskReturnTypeEndingPhraseTemplate, "|").Split('|');
-        private static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
 
         private static readonly string[] Phrases =
             {
@@ -100,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
             {
-                var text = sentenceEnding.WithoutTrailingCharacters(TrailingSentenceMarkers)
+                var text = sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
                                          .WithoutTrailing(" otherwise")
                                          .WithoutXmlCommentExterior();
                 if (text.IsNullOrWhiteSpace())
@@ -112,10 +111,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove middle parts before the <see langword=""false""/>
             if (nodes.LastOrDefault() is XmlTextSyntax last)
             {
-                var replacement = last.WithoutTrailingCharacters(TrailingSentenceMarkers)
+                var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
                                       .WithoutTrailing(" otherwise")
                                       .WithoutTrailing(" otherwise with a result of ")
-                                      .WithoutTrailingCharacters(TrailingSentenceMarkers);
+                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 
                 var text = replacement.WithoutXmlCommentExterior();
 
@@ -126,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // remove left-over trailing sentence marker on the middle string
                     if (nodes.LastOrDefault() is XmlTextSyntax newLast)
                     {
-                        nodes = nodes.Replace(newLast, newLast.WithoutTrailingCharacters(TrailingSentenceMarkers));
+                        nodes = nodes.Replace(newLast, newLast.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers));
                     }
                 }
                 else
