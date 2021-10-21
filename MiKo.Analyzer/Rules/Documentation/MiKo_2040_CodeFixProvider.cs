@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Globalization;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -43,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        var attribute = rewritten.Attributes.First() as XmlTextAttributeSyntax;
                                                        var textToken = attribute?.TextTokens[0];
 
-                                                       return SeeLangword(textToken?.ValueText.ToLower());
+                                                       return SeeLangword(textToken?.ValueText.ToLowerCase());
                                                    });
         }
 
@@ -56,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        var attribute = rewritten.StartTag.Attributes.First() as XmlTextAttributeSyntax;
                                                        var textToken = attribute?.TextTokens[0];
 
-                                                       return SeeLangword(textToken?.ValueText.ToLower());
+                                                       return SeeLangword(textToken?.ValueText.ToLowerCase());
                                                    });
         }
 
@@ -65,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // replace all '<c>true</c>', '<c>false</c>' and '<c>null</c>', but ignore <code>
             var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsCBool() || _.IsCNull()).ToList();
 
-            return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLower()));
+            return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLowerCase()));
         }
 
         private static DocumentationCommentTriviaSyntax ReplaceValue(DocumentationCommentTriviaSyntax comment)
@@ -73,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // replace all '<value>true</value>', '<value>false</value>' and '<value>null</value>'
             var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsValueBool() || _.IsValueNull()).ToList();
 
-            return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLower()));
+            return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLowerCase()));
         }
 
         private static DocumentationCommentTriviaSyntax ReplaceText(DocumentationCommentTriviaSyntax comment)
@@ -155,7 +156,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (Phrases.Any(_ => _.Equals(part, StringComparison.OrdinalIgnoreCase)))
                     {
-                        result.Add(SeeLangword(part.ToLower()));
+                        result.Add(SeeLangword(part.ToLowerCase()));
                     }
                     else
                     {

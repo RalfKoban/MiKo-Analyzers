@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -9,8 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer : ReturnTypeDefaultPhraseAnalyzer
     {
         public const string Id = "MiKo_2035";
-
-        private static readonly string[] Empty = new string[0];
 
         public MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer() : base(Id)
         {
@@ -39,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
             }
 
-            return Empty; // should never happen
+            return Array.Empty<string>(); // should never happen
         }
 
         private static string[] GetNonGenericInitialPhrases(ITypeSymbol returnType)

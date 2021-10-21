@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -317,6 +318,10 @@ namespace System
         public static string SurroundedWithDoubleQuote(this string value) => string.Concat("\"", value, "\"");
 
         public static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
+
+#pragma warning disable CA1308 // Normalize strings to uppercase
+        public static string ToLowerCase(this string value) => value.ToLower(CultureInfo.InvariantCulture);
+#pragma warning restore CA1308 // Normalize strings to uppercase
 
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.

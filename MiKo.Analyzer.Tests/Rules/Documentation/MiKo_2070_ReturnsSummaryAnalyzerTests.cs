@@ -376,6 +376,53 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("; false otherwise")]
+        [TestCase("; otherwise false")]
+        [TestCase("; otherwise; false")]
+        [TestCase("; otherwise, false")]
+        [TestCase(", false otherwise")]
+        [TestCase(", otherwise false")]
+        [TestCase(", otherwise, false")]
+        [TestCase(", otherwise; false")]
+        [TestCase(@"; <see langword=""false""/> otherwise")]
+        [TestCase(@", <see langword=""false""/> otherwise")]
+        [TestCase(@"; otherwise; <see langword=""false""/>")]
+        [TestCase(@"; otherwise, <see langword=""false""/>")]
+        [TestCase(@"; otherwise <see langword=""false""/>")]
+        [TestCase(@", otherwise; <see langword=""false""/>")]
+        [TestCase(@", otherwise, <see langword=""false""/>")]
+        [TestCase(@", otherwise <see langword=""false""/>")]
+        [TestCase(@"; otherwise; <see langref=""false""/>")]
+        [TestCase(@"; otherwise, <see langref=""false""/>")]
+        [TestCase(@"; otherwise <see langref=""false""/>")]
+        [TestCase(@", otherwise; <see langref=""false""/>")]
+        [TestCase(@", otherwise, <see langref=""false""/>")]
+        [TestCase(@", otherwise <see langref=""false""/>")]
+        public void Code_gets_fixed_for_ending_phrase_(string phrase)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Returns something" + phrase + @".
+    /// </summary>
+    public bool DoSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether something.
+    /// </summary>
+    public bool DoSomething() => true;
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2070_ReturnsSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2070_ReturnsSummaryAnalyzer();

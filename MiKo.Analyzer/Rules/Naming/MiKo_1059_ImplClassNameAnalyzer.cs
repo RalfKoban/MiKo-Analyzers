@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1059";
 
-        internal static readonly string WrongSuffixIndicator = "Indicator";
+        internal const string WrongSuffixIndicator = "Indicator";
         private static readonly string[] WrongSuffixes = { "Impl", "Implementation", };
 
         public MiKo_1059_ImplClassNameAnalyzer() : base(Id, SymbolKind.NamedType)

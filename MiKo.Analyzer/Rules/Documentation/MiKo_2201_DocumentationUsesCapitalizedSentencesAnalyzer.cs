@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -63,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (node is XElement e)
             {
                 // skip <c> and <code>
-                var name = e.Name.ToString().ToLower();
+                var name = e.Name.ToString().ToLowerCase();
                 switch (name)
                 {
                     case Constants.XmlTag.C:

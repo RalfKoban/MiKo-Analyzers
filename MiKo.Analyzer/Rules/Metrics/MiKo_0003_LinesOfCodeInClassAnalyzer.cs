@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     var loc = symbol.GetMembers().OfType<IMethodSymbol>()
                                     .Select(_ => _.GetSyntax())
-                                    .SelectMany(SyntaxNodeCollector<BlockSyntax>.Collect)
+                                    .SelectMany(SyntaxNodeCollector.Collect<BlockSyntax>)
                                     .Sum(Counter.CountLinesOfCode);
 
                     return TryCreateDiagnostic(symbol, loc, MaxLinesOfCode, out var diagnostic)

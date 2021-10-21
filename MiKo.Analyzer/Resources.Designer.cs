@@ -2540,7 +2540,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it as statement.
+        ///   Looks up a localized string similar to Rephrase question as statement.
         /// </summary>
         public static string MiKo_1071_MessageFormat {
             get {
@@ -2575,7 +2575,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it as statement.
+        ///   Looks up a localized string similar to Rephrase question as statement.
         /// </summary>
         public static string MiKo_1072_MessageFormat {
             get {
@@ -2610,7 +2610,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name it as statement.
+        ///   Looks up a localized string similar to Rephrase question as statement.
         /// </summary>
         public static string MiKo_1073_MessageFormat {
             get {

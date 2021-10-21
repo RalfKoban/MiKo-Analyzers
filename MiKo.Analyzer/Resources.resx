@@ -965,7 +965,7 @@ Example:
    'if (deviceIsOnline) DoSomething();' is more fluent to read.</value>
   </data>
   <data name="MiKo_1071_MessageFormat" xml:space="preserve">
-    <value>Name it as statement</value>
+    <value>Rephrase question as statement</value>
   </data>
   <data name="MiKo_1071_Title" xml:space="preserve">
     <value>Local boolean variables should be named as statements and not as questions.</value>
@@ -982,7 +982,7 @@ Example:
    'if (DeviceIsOnline) DoSomething();' is more fluent to read.</value>
   </data>
   <data name="MiKo_1072_MessageFormat" xml:space="preserve">
-    <value>Name it as statement</value>
+    <value>Rephrase question as statement</value>
   </data>
   <data name="MiKo_1072_Title" xml:space="preserve">
     <value>Boolean properties or methods should be named as statements and not as questions.</value>
@@ -999,7 +999,7 @@ Example:
    'if (DeviceIsOnline) DoSomething();' is more fluent to read.</value>
   </data>
   <data name="MiKo_1073_MessageFormat" xml:space="preserve">
-    <value>Name it as statement</value>
+    <value>Rephrase question as statement</value>
   </data>
   <data name="MiKo_1073_Title" xml:space="preserve">
     <value>Boolean fields should be named as statements and not as questions.</value>
