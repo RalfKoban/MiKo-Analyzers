@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             Assert.That(results.Count, Is.EqualTo(0));
 
-            IEnumerable<string> GetDocuments(string path)
+            static IEnumerable<string> GetDocuments(string path)
             {
                 foreach (var directory in Directory.EnumerateDirectories(path))
                 {

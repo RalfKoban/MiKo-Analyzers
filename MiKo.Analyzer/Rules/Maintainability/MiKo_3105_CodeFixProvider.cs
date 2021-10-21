@@ -51,9 +51,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
+#pragma warning disable CA1502 // Avoid excessive complexity
         private static ExpressionSyntax UpdatedSyntax(string typeName, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args)
         {
             var methodName = syntax.GetName();
+
             switch (methodName)
             {
                 case "AllItemsAreInstancesOfType": return FixAllItemsAreInstancesOfType(args, syntax.Name);
@@ -110,6 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default: return null;
             }
         }
+#pragma warning restore CA1502
 
         private static InvocationExpressionSyntax FixAllItemsAreInstancesOfType(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
         {

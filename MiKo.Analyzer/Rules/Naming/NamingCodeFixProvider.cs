@@ -17,9 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var originalSolution = document.Project.Solution;
 
             var symbol = await GetSymbolAsync(document, syntax, cancellationToken);
+
             var newName = GetNewName(diagnostic, symbol);
 
-            if (newName.IsNullOrWhiteSpace() || string.Equals(symbol.Name, newName))
+            if (newName.IsNullOrWhiteSpace() || string.Equals(symbol.Name, newName, StringComparison.Ordinal))
             {
                 // nothing changed
                 return originalSolution;

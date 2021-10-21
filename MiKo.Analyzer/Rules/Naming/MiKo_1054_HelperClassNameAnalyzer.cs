@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1054";
 
-        internal static readonly string WrongSuffixIndicator = "Indicator";
+        internal const string WrongSuffixIndicator = "Indicator";
 
         private static readonly string[] WrongNames = { "Helper", "Util" };
 

@@ -1,4 +1,5 @@
 ﻿#pragma warning disable SA1203 // Constants should appear before fields
+#pragma warning disable CA1708 // Identifiers should differ by more than case
 
 using System;
 using System.Collections.Generic;
@@ -225,7 +226,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
                 };
 
-            internal static readonly string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
+            internal const string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
 
             internal static readonly string[] BooleanReturnTypeStartingPhrase =
                 {
@@ -233,7 +234,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(BooleanReturnTypeStartingPhraseTemplate, "<see langword=\"true\" />"),
                 };
 
-            internal static readonly string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
+            internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
 
             internal static readonly string[] BooleanReturnTypeEndingPhrase =
                 {
@@ -257,7 +258,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\" />"),
                 };
 
-            internal static readonly string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
+            internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                 {
@@ -265,7 +266,7 @@ namespace MiKoSolutions.Analyzers
                     string.Format(BooleanTaskReturnTypeStartingPhraseTemplate, "<see langword=\"true\" />"),
                 };
 
-            internal static readonly string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
+            internal const string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
 
             internal static readonly string[] BooleanTaskReturnTypeEndingPhrase =
                 {

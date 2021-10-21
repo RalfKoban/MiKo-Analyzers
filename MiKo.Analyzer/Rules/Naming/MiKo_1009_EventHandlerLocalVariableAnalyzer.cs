@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => Handler;
+        internal static string FindBetterName() => Handler;
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventHandler() is true;
 

@@ -37,14 +37,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         public static int CountCyclomaticComplexity(BlockSyntax body)
         {
-            var count = SyntaxNodeCollector<SyntaxNode>.Collect(body).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
+            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
 
             return 1 + count;
         }
 
         internal static int CountLinesOfCode(SyntaxNode body)
         {
-            var nodes = SyntaxNodeCollector<StatementSyntax>.Collect(body);
+            var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body);
 
             var lines = new HashSet<int>();
             CountLinesOfCode(nodes, lines);

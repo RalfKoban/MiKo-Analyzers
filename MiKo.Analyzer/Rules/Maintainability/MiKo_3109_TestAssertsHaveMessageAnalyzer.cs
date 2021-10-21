@@ -106,6 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+#pragma warning disable CA1502 // Avoid excessive complexity
         private static int[] GetExpectedMessageParameterIndices(string methodName)
         {
             switch (methodName)
@@ -182,5 +183,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return new[] { 0 };
             }
         }
+#pragma warning restore CA1502
     }
 }
