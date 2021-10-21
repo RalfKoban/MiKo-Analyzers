@@ -19,15 +19,6 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_named_after_type_and_some_uppercase_letters() => An_issue_is_reported_for(@"
-public class TestMe
-{
-    public void DoSomething(TestMe testMe)
-    { }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_overridden_method_with_parameter_named_after_type_and_some_uppercase_letters() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -87,6 +78,53 @@ public class TestMe
 }
 ");
 
+        [TestCase("CancellationToken cancellationToken")]
+        [TestCase("IFormatProvider formatProvider")]
+        [TestCase("SemanticModel semanticModel")]
+        [TestCase("ICommand command")]
+        [TestCase("IProject project")]
+        [TestCase("IProgress progress")]
+        [TestCase("ISymbol symbol")]
+        public void No_issue_is_reported_for_known_name_(string parameter) => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+using Microsoft.CodeAnalysis;
+
+public class TestMe
+{
+    public void DoSomething(" + parameter + @")
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Manager() => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public interface ISomethingManager
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(ISomethingManager somethingManager)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_parameter_named_after_type_and_some_uppercase_letters() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(TestMe testMe)
+    { }
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_parameter_named_after_interface_type() => An_issue_is_reported_for(@"
 public interface ITestMe
@@ -115,22 +153,15 @@ public class TestMe
 }
 ");
 
-        [TestCase("CancellationToken cancellationToken")]
-        [TestCase("IFormatProvider formatProvider")]
-        [TestCase("SemanticModel semanticModel")]
-        [TestCase("ICommand command")]
-        [TestCase("IProject project")]
-        [TestCase("IProgress progress")]
-        [TestCase("ISymbol symbol")]
-        public void No_issue_is_reported_for_known_name_(string parameter) => No_issue_is_reported_for(@"
-using System;
-using System.Threading;
-
-using Microsoft.CodeAnalysis;
+        [Test]
+        public void An_issue_is_reported_for_parameter_used_in_ctor_with_Compound_word_and_no_matching_field() => An_issue_is_reported_for(@"
+public enum TestMeSide
+{
+}
 
 public class TestMe
 {
-    public void DoSomething(" + parameter + @")
+    public TestMe(TestMeSide testMeSide)
     {
     }
 }

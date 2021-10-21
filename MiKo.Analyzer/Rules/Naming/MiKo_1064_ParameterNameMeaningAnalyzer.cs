@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -26,10 +27,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => base.ShallAnalyze(symbol) && WellknownNames.Contains(symbol.Name) is false;
+        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        {
+            if (base.ShallAnalyze(symbol))
+            {
+                if (WellknownNames.Contains(symbol.Name))
+                {
+                    // ignore those that we cannot change
+                    return false;
+                }
+
+                if (symbol.Name.EndsWith("anager", StringComparison.OrdinalIgnoreCase))
+                {
+                    // ignore managers as there is probably no better name available
+                    return false;
+                }
+
+                return symbol.NameMatchesTypeName(symbol.Type);
+            }
+
+            return false;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol)
         {
+            // only investigate into more deep analysis if the name matches
             var method = symbol.GetEnclosingMethod();
 
             if (method.MethodKind == MethodKind.Constructor)
@@ -47,9 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return symbol.NameMatchesTypeName(symbol.Type)
-                       ? new[] { Issue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+            return new[] { Issue(symbol) };
         }
     }
 }
