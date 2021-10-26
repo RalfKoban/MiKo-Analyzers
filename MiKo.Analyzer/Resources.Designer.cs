@@ -6558,6 +6558,44 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace empty line with &lt;para/&gt;.
+        /// </summary>
+        public static string MiKo_2214_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2214_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The documentation should not contain empty lines. Developers tend to use them when they write paragraphs.
+        ///However, in the generated documentation (eg. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
+        ///In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&gt; tag is intended to be used to mark paragraphs..
+        /// </summary>
+        public static string MiKo_2214_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2214_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace empty line with &lt;para/&gt;.
+        /// </summary>
+        public static string MiKo_2214_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2214_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not contain empty lines..
+        /// </summary>
+        public static string MiKo_2214_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2214_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>

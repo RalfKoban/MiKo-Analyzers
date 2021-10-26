@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                          }
                                                                                      }
 
-                                                                                     return SyntaxFactory.XmlText(tokens.ToArray());
+                                                                                     return XmlText(tokens.ToArray());
                                                                                  }
 
                                                                                  return default;

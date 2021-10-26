@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var returns = SyntaxFactory.XmlReturnsElement(
                                                           SeeLangword_True().WithLeadingXmlComment(),
-                                                          SyntaxFactory.XmlText(" if both instances are considered not equal; otherwise, "),
+                                                          XmlText(" if both instances are considered not equal; otherwise, "),
                                                           SeeLangword_False(),
-                                                          SyntaxFactory.XmlText(".").WithTrailingXmlComment())
+                                                          XmlText(".").WithTrailingXmlComment())
                                        .WithEndOfLine();
 
             return SyntaxFactory.DocumentationComment(summary, param1, param2, returns);
