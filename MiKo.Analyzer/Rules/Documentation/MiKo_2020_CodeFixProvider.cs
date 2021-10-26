@@ -21,10 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (DocumentationCommentTriviaSyntax)syntax;
 
-            var inheritdoc = SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
-
             return comment.WithoutTrivia()
-                          .WithContent(new SyntaxList<XmlNodeSyntax>(inheritdoc.WithEndOfLine()))
+                          .WithContent(new SyntaxList<XmlNodeSyntax>(Inheritdoc().WithEndOfLine()))
                           .WithLeadingXmlCommentExterior();
         }
     }

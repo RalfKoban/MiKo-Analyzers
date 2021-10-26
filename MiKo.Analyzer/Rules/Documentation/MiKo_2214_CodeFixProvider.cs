@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             replacements.Add(XmlText(tokensForTexts));
 
                             // now add a <para/> tag
-                            replacements.Add(SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para).WithLeadingXmlCommentExterior());
+                            replacements.Add(Para().WithLeadingXmlCommentExterior());
                         }
 
                         tokensForTexts.Clear();
@@ -119,6 +119,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // nothing to replace
                 return new[] { text };
             }
+
+            // get rid of all texts that do not have any contents as they would cause a NullReferenceException inside Roslyn
+            replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count == 0);
 
             return replacements;
         }
