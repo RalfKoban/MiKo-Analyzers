@@ -1,4 +1,7 @@
 ﻿using NUnit.Framework;
 
-// default timeout of 20 seconds
-[assembly: Timeout(20 * 1000)]
+#if NCRUNCH
+[assembly: Timeout(10 * 1000)] // default timeout of 10 seconds
+#else
+[assembly: Timeout(60 * 1000)] // default timeout of 60 seconds
+#endif
