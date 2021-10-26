@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var index = GetIndex(content);
             if (index < 0)
             {
-                return content.Add(SyntaxFactory.XmlText(phrase));
+                return content.Add(XmlText(phrase));
             }
 
             if (content[index] is XmlTextSyntax text)
@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return content.Insert(index, newText);
             }
 
-            return content.Insert(index, SyntaxFactory.XmlText(phrase));
+            return content.Insert(index, XmlText(phrase));
         }
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // Note: when on new line, then the text is not the 1st one but the 2nd one
             var index = GetIndex(content);
 
-            var startText = SyntaxFactory.XmlText(commentStart).WithLeadingXmlComment();
+            var startText = XmlText(commentStart).WithLeadingXmlComment();
 
             XmlTextSyntax continueText;
             if (content[index] is XmlTextSyntax text)
@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (textTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     var newTokens = textTokens.RemoveAt(0);
-                    text = SyntaxFactory.XmlText(newTokens.Replace(newTokens[0], newTokens[0].WithLeadingTrivia()));
+                    text = XmlText(newTokens.Replace(newTokens[0], newTokens[0].WithLeadingTrivia()));
                 }
 
                 continueText = text.WithStartText(commentContinue);
@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             else
             {
                 index = Math.Max(0, index - 1);
-                continueText = SyntaxFactory.XmlText(commentContinue);
+                continueText = XmlText(commentContinue);
             }
 
             return SyntaxFactory.XmlElement(
@@ -141,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (lastNode is null)
             {
                 // we have an empty comment
-                return comment.AddContent(SyntaxFactory.XmlText(ending));
+                return comment.AddContent(XmlText(ending));
             }
 
             if (lastNode is XmlTextSyntax t)
@@ -172,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // we have a <see cref/> or something at the end
-            return comment.InsertNodeAfter(lastNode, SyntaxFactory.XmlText(ending));
+            return comment.InsertNodeAfter(lastNode, XmlText(ending));
         }
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
@@ -181,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (lastNode is null)
             {
                 // we have an empty comment
-                return comment.AddContent(SyntaxFactory.XmlText(commentStart), seeCref, SyntaxFactory.XmlText(commentContinue));
+                return comment.AddContent(XmlText(commentStart), seeCref, XmlText(commentContinue));
             }
 
             if (lastNode is XmlTextSyntax t)
@@ -208,12 +208,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     text = valueText + commentStart;
                 }
 
-                return comment.ReplaceNode(t, SyntaxFactory.XmlText(text))
-                              .AddContent(seeCref, SyntaxFactory.XmlText(commentContinue).WithTrailingXmlComment());
+                return comment.ReplaceNode(t, XmlText(text))
+                              .AddContent(seeCref, XmlText(commentContinue).WithTrailingXmlComment());
             }
 
             // we have a <see cref/> or something at the end
-            return comment.InsertNodeAfter(lastNode, SyntaxFactory.XmlText(commentContinue));
+            return comment.InsertNodeAfter(lastNode, XmlText(commentContinue));
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
@@ -263,7 +263,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
         {
-            return Comment(comment, SyntaxFactory.XmlText(text + additionalComment));
+            return Comment(comment, XmlText(text + additionalComment));
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
@@ -278,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 string commentEnd,
                                                 params XmlNodeSyntax[] commendEndNodes)
         {
-            var start = new XmlNodeSyntax[] { SyntaxFactory.XmlText(commentStart), seeCref };
+            var start = new XmlNodeSyntax[] { XmlText(commentStart), seeCref };
             var end = CommentEnd(commentEnd, commendEndNodes);
 
             return Comment(comment, start.Concat(end));
@@ -293,7 +293,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 string commentEnd,
                                                 params XmlNodeSyntax[] commendEndNodes)
         {
-            return Comment(comment, commentStart, seeCref1, new[] { SyntaxFactory.XmlText(commentMiddle) }, seeCref2, commentEnd, commendEndNodes);
+            return Comment(comment, commentStart, seeCref1, new[] { XmlText(commentMiddle) }, seeCref2, commentEnd, commendEndNodes);
         }
 
         protected static XmlElementSyntax Comment(
@@ -305,7 +305,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 string commentEnd,
                                                 params XmlNodeSyntax[] commendEndNodes)
         {
-            var start = new XmlNodeSyntax[] { SyntaxFactory.XmlText(commentStart), seeCref1 };
+            var start = new XmlNodeSyntax[] { XmlText(commentStart), seeCref1 };
             var middle = new[] { seeCref2 };
             var end = CommentEnd(commentEnd, commendEndNodes);
 
@@ -323,6 +323,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, SyntaxFactory.List(nodes));
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
+
+        protected static XmlEmptyElementSyntax Inheritdoc() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
         protected static bool IsSeeCref(SyntaxNode value, string type)
         {
@@ -429,6 +431,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string comment) => Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comment);
 
+        protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
+
+        protected static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
+
+        protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
+
         protected static XmlEmptyElementSyntax SeeLangword_Null() => SeeLangword("null");
 
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
@@ -485,11 +493,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacement = replacementText.ToSyntaxToken();
                 textTokens.Insert(0, replacement);
 
-                textCommentEnd = SyntaxFactory.XmlText(new SyntaxTokenList(textTokens).WithoutLastXmlNewLine());
+                textCommentEnd = XmlText(new SyntaxTokenList(textTokens).WithoutLastXmlNewLine());
             }
             else
             {
-                textCommentEnd = SyntaxFactory.XmlText(commentEnd);
+                textCommentEnd = XmlText(commentEnd);
             }
 
             // if there are more than 1 item contained, also remove the new line and /// from the last item
@@ -497,7 +505,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (commendEndNodes.Last() is XmlTextSyntax additionalText)
                 {
-                    commendEndNodes[commendEndNodes.Length - 1] = SyntaxFactory.XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
+                    commendEndNodes[commendEndNodes.Length - 1] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
                 }
             }
 

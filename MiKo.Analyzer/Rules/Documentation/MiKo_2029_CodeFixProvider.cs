@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                          .Where(_ => _.GetName() == Constants.XmlTag.Inheritdoc && _.Attributes.OfType<XmlCrefAttributeSyntax>().Any())
                                          .ToList();
 
-            return comment.ReplaceNodes(wrongInheritDocs, (_, __) => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc));
+            return comment.ReplaceNodes(wrongInheritDocs, (_, __) => Inheritdoc());
         }
     }
 }

@@ -545,6 +545,38 @@ namespace MiKoSolutions.Analyzers
                         .WithCloseBraceToken(closeBraceToken);
         }
 
+        internal static T ReplaceNodes<T, TNode>(this T value, IEnumerable<TNode> nodes, Func<TNode, IEnumerable<SyntaxNode>> computeReplacementNodes)
+            where T : SyntaxNode
+            where TNode : SyntaxNode
+        {
+            // replace all nodes by following algorithm:
+            // 1. Create a dictionary with SyntaxAnnotations and replacement nodes for the node to annotate (new SyntaxAnnotation)
+            // 2. Annotate the node to keep track (node.WithAdditionalAnnotations())
+            // 3. Loop over all annotated nodes and replace them with the replacement nodes (document.GetAnnotatedNodes(annotation))
+            var annotation = new SyntaxAnnotation();
+
+            var result = value.ReplaceNodes(nodes, (original, rewritten) => original.WithAdditionalAnnotations(annotation));
+
+            while (true)
+            {
+                var annotatedNodes = result.GetAnnotatedNodes(annotation).OfType<TNode>();
+                var oldNode = annotatedNodes.FirstOrDefault();
+                if (oldNode is null)
+                {
+                    // nothing left
+                    break;
+                }
+
+                // create replacement nodes
+                var replacements = computeReplacementNodes(oldNode);
+
+                // and remove the annotations in case we get the same node back (to avoid endless while loop as we would always get the same node again)
+                result = result.ReplaceNode(oldNode, replacements.Select(_ => _.WithoutAnnotations(annotation)));
+            }
+
+            return result;
+        }
+
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
@@ -608,7 +640,7 @@ namespace MiKoSolutions.Analyzers
                     var token = newTokens[0];
                     newTokens = newTokens.Replace(token, token.WithText(token.Text.TrimStart()));
 
-                    return SyntaxFactory.XmlText(newTokens);
+                    return XmlText(newTokens);
                 }
             }
 
@@ -658,8 +690,7 @@ namespace MiKoSolutions.Analyzers
 
                     if (modified)
                     {
-                        var xmlText = SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
-                        contents[index] = xmlText;
+                        contents[index] = XmlText(textTokens);
                     }
                 }
             }
@@ -704,7 +735,7 @@ namespace MiKoSolutions.Analyzers
 
             if (replaced)
             {
-                return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                return XmlText(textTokens);
             }
 
             return value;
@@ -740,7 +771,7 @@ namespace MiKoSolutions.Analyzers
 
             if (replaced)
             {
-                return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                return XmlText(textTokens);
             }
 
             return value;
@@ -756,11 +787,11 @@ namespace MiKoSolutions.Analyzers
 
                 // remove last "\r\n" token and remove '  /// ' trivia of last token
                 if (tokens[textTokens - 2].IsKind(SyntaxKind.XmlTextLiteralNewLineToken)
-                    && tokens[textTokens - 1].ValueText.IsNullOrWhiteSpace())
+                 && tokens[textTokens - 1].ValueText.IsNullOrWhiteSpace())
                 {
                     var newTokens = tokens.Take(textTokens - 2).ToArray();
 
-                    return SyntaxFactory.XmlText(newTokens);
+                    return XmlText(newTokens);
                 }
             }
 
@@ -791,10 +822,10 @@ namespace MiKoSolutions.Analyzers
             {
                 return values[0] is XmlTextSyntax textSyntax
                            ? values.Replace(textSyntax, textSyntax.WithStartText(startText))
-                           : values.Insert(0, SyntaxFactory.XmlText(startText));
+                           : values.Insert(0, XmlText(startText));
             }
 
-            return new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText(startText));
+            return new SyntaxList<XmlNodeSyntax>(XmlText(startText));
         }
 
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText)
@@ -833,17 +864,19 @@ namespace MiKoSolutions.Analyzers
                     var modifiedText = space + startText + originalText.TrimStart().ToLowerCaseAt(0);
 
                     textTokens[i] = token.WithText(modifiedText);
+
                     replaced = true;
+
                     break;
                 }
             }
 
             if (replaced)
             {
-                return SyntaxFactory.XmlText(SyntaxFactory.TokenList(textTokens));
+                return XmlText(textTokens);
             }
 
-            return SyntaxFactory.XmlText(startText);
+            return XmlText(startText);
         }
 
         internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
@@ -970,5 +1003,11 @@ namespace MiKoSolutions.Analyzers
         }
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+
+        private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
+
+        private static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
+
+        private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
     }
 }

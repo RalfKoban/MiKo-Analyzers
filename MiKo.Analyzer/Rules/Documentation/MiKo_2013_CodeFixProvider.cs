@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // happens if we start e.g. with a <see link
             return SyntaxFactory.XmlElement(
                                             comment.StartTag,
-                                            comment.Content.Insert(0, SyntaxFactory.XmlText(startingPhrase).WithLeadingXmlComment()),
+                                            comment.Content.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
                                             comment.EndTag.WithLeadingXmlComment());
         }
 

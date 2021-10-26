@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return SyntaxFactory.XmlElement(
                                             comment.StartTag,
-                                            comment.WithoutText(Text).Add(SyntaxFactory.XmlText(Text)),
+                                            comment.WithoutText(Text).Add(XmlText(Text)),
                                             comment.EndTag.WithLeadingXmlComment()); // place on new line
         }
     }

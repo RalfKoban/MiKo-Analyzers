@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment.Content.Count == 0)
             {
                 // we have no comment, hence we fake a "..." into the resulting comment
-                return new[] { SyntaxFactory.XmlText(startingPhrase + "..." + endingPhrase) };
+                return new[] { XmlText(startingPhrase + "..." + endingPhrase) };
             }
 
             // remove boolean <see langword="..."/> and <c>...</c>
@@ -134,7 +134,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return nodes.Add(SyntaxFactory.XmlText(endingPhrase));
+            return nodes.Add(XmlText(endingPhrase));
         }
     }
 }
