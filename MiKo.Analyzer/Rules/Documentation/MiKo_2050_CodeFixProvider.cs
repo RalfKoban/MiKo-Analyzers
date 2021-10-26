@@ -82,9 +82,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var returns = SyntaxFactory.XmlReturnsElement(
                                                           SeeLangword_True().WithLeadingXmlComment(),
-                                                          SyntaxFactory.XmlText(" if both instances are considered not equal; otherwise, "),
+                                                          XmlText(" if both instances are considered not equal; otherwise, "),
                                                           SeeLangword_False(),
-                                                          SyntaxFactory.XmlText(".").WithTrailingXmlComment())
+                                                          XmlText(".").WithTrailingXmlComment())
                                        .WithEndOfLine();
 
             return SyntaxFactory.DocumentationComment(summary, param1, param2, returns);
@@ -160,20 +160,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parts = string.Format(Constants.Comments.ExceptionCtorExceptionParamPhraseTemplate, '|', '|', '|', '|').Split('|');
 
-            var catchBlock = SyntaxFactory.XmlElement("b", new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText("catch")));
+            var catchBlock = SyntaxFactory.XmlElement("b", new SyntaxList<XmlNodeSyntax>(XmlText("catch")));
             var paramRef = SyntaxFactory.XmlParamRefElement(parameterName);
 
             return Comment(
                            SyntaxFactory.XmlParamElement(parameterName),
-                           SyntaxFactory.XmlText(parts[0]),
+                           XmlText(parts[0]),
                            Para().WithLeadingXmlComment().WithTrailingXmlComment(),
-                           SyntaxFactory.XmlText(parts[1]),
+                           XmlText(parts[1]),
                            paramRef,
-                           SyntaxFactory.XmlText(parts[2]),
+                           XmlText(parts[2]),
                            SeeLangword_Null(),
-                           SyntaxFactory.XmlText(parts[3]),
+                           XmlText(parts[3]),
                            catchBlock,
-                           SyntaxFactory.XmlText(parts[4]));
+                           XmlText(parts[4]));
         }
 
         private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter)

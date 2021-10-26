@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment.Content.Count == 0)
             {
                 // we do not have a comment
-                return comment.WithContent(new SyntaxList<XmlNodeSyntax>(SyntaxFactory.XmlText("The item" + MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Phrase)));
+                return comment.WithContent(new SyntaxList<XmlNodeSyntax>(XmlText("The item" + MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Phrase)));
             }
 
             return CommentEndingWith(comment, MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Phrase);

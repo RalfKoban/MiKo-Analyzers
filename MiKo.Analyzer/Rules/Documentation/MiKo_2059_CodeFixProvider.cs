@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<XmlElementSyntax> GetExceptionXmls(DocumentationCommentTriviaSyntax comment) => GetXmlSyntax(Constants.XmlTag.Exception, comment);
 
-        private static XmlElementSyntax CreateParaOr() => SyntaxFactory.XmlParaElement(SyntaxFactory.XmlText("-or-"));
+        private static XmlElementSyntax CreateParaOr() => SyntaxFactory.XmlParaElement(XmlText("-or-"));
 
         private static string GetReferencedExceptionName(XmlElementSyntax e) => e.GetAttributes<XmlCrefAttributeSyntax>().Select(__ => __.Cref.ToString()).FirstOrDefault();
     }

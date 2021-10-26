@@ -100,26 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // replace all ' true ', ' true:', ' true,', ' true.', ' true)',  ' true!' or  ' true?' (same for false or null)
-            // by following algorithm:
-            // 1. Create a dictionary with SyntaxAnnotations and replacement nodes for the node to annotate (new SyntaxAnnotation)
-            // 2. Annotate the node to keep track (node.WithAdditionalAnnotations())
-            // 3. Loop over all annotated nodes and replace them with the replacement nodes (document.GetAnnotatedNodes(annotation))
-            var annotation = new SyntaxAnnotation();
-
-            var newComment = comment.ReplaceNodes(nodes, (original, rewritten) => original.WithAdditionalAnnotations(annotation));
-
-            while (true)
-            {
-                var oldNode = newComment.GetAnnotatedNodes(annotation).OfType<XmlTextSyntax>().FirstOrDefault();
-                if (oldNode is null)
-                {
-                    // nothing left
-                    return newComment;
-                }
-
-                // create replacement nodes, based on tokens
-                newComment = newComment.ReplaceNode(oldNode, GetReplacements(oldNode));
-            }
+            return comment.ReplaceNodes(nodes, GetReplacements);
         }
 
         private static IEnumerable<SyntaxNode> GetReplacements(XmlTextSyntax node)
@@ -134,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (textToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     // keep new line
-                    result.Add(SyntaxFactory.XmlText(string.Empty).WithLeadingXmlComment());
+                    result.Add(XmlText(string.Empty).WithLeadingXmlComment());
 
                     // we do not need to inspect further
                     newLineTokenJustSkipped = true;
@@ -160,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                     else
                     {
-                        result.Add(SyntaxFactory.XmlText(part));
+                        result.Add(XmlText(part));
                     }
                 }
             }

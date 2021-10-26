@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 298 rules that are currently provided by the analyzer.
+The following tables list all the 299 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -217,6 +217,7 @@ The following tables list all the 298 rules that are currently provided by the a
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|&#x2713;|
 |MiKo_2212|Documentation should use the phrase 'failed' instead of 'was not sucessful'.|&#x2713;|&#x2713;|
 |MiKo_2213|Documentation should not use the contradiction "n't".|&#x2713;|&#x2713;|
+|MiKo_2214|Documentation should not contain empty lines.|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|
