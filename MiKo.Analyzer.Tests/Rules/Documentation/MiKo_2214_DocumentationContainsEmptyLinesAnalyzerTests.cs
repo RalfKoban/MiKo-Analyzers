@@ -74,6 +74,15 @@ public class TestMe
 }");
 
         [Test]
+        public void An_issue_is_reported_for_non_XML_comment() => An_issue_is_reported_for(@"
+/// Some text.
+/// 
+/// Some more text.
+public class TestMe
+{
+}");
+
+        [Test]
         public void Code_gets_fixed_for_empty_line_comment()
         {
             const string OriginalCode = @"
@@ -191,6 +200,34 @@ public class TestMe
 /// <para/>
 /// Some even more summary.
 /// </summary>
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_for_multiple_empty_lines_in_non_XML_comment()
+        {
+            const string OriginalCode = @"
+/// 
+/// Some summary.
+/// 
+/// Some more summary.
+/// 
+/// Some even more summary.
+/// 
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// Some summary.
+/// <para/>
+/// Some more summary.
+/// <para/>
+/// Some even more summary.
 public class TestMe
 {
 }";
