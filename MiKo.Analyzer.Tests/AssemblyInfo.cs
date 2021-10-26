@@ -1,4 +1,4 @@
 ﻿using NUnit.Framework;
 
-// default timeout of 10 seconds
-[assembly: Timeout(10 * 1000)]
+// default timeout of 15 seconds
+[assembly: Timeout(15 * 1000)]
