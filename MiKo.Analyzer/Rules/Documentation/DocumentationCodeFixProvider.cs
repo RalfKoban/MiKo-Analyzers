@@ -324,6 +324,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
 
+        protected static XmlEmptyElementSyntax Inheritdoc() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
+
         protected static bool IsSeeCref(SyntaxNode value, string type)
         {
             switch (value)

@@ -61,6 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             int i;
             var tokensCount = tokens.Count;
 
+            var noXmlTagOnCommentStart = false;
+
             for (i = 0; i < tokensCount - 1; i++)
             {
                 var token = tokens[i];
@@ -74,13 +76,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         tokensForTexts.Remove(token);
 
-                        if (i == 1)
+                        if (i == 0)
                         {
-                            // skip second line as that shall not be replaced with <para/> tag
+                            // skip first line as that shall not be replaced with a <para/> tag
+                            // (this happens in case the comment does not start with any XML tag)
+                            noXmlTagOnCommentStart = true;
+                        }
+                        else if (i == 1)
+                        {
+                            // skip second line as that shall not be replaced with a <para/> tag
+                            // (this is the next line eg. after a <summary> tag)
                         }
                         else if (i == tokensCount - 3)
                         {
-                            // skip second last empty line as that shall not be replaced with <para/> tag
+                            // skip second last empty line as that shall not be replaced with a <para/> tag
+                            // (this is the line immediately before eg. a </summary> tag)
+                            var last = tokensForTexts.Last();
+                            if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                tokensForTexts.Remove(last);
+                            }
+
+                            replacements.Add(XmlText(tokensForTexts));
+                        }
+                        else if (i == tokensCount - 2 && noXmlTagOnCommentStart)
+                        {
+                            // skip last empty line as that shall not be replaced with a <para/> tag
+                            // (this is the last line if the comment does not start with any XML tag)
                             var last = tokensForTexts.Last();
                             if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                             {
@@ -91,11 +113,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
                         else
                         {
+                            if (noXmlTagOnCommentStart && i == 4)
+                            {
+                                // skip first new line of a normal text as that would remain and lead to an additional empty line
+                                var first = tokensForTexts.First();
+                                if (first.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                                {
+                                    tokensForTexts.Remove(first);
+                                }
+                            }
+
                             // that's an issue, so add the already collected text as a new XML text
                             replacements.Add(XmlText(tokensForTexts));
 
                             // now add a <para/> tag
-                            replacements.Add(SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para).WithLeadingXmlCommentExterior());
+                            replacements.Add(Para().WithLeadingXmlCommentExterior());
                         }
 
                         tokensForTexts.Clear();
@@ -119,6 +151,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // nothing to replace
                 return new[] { text };
             }
+
+            // get rid of all texts that do not have any contents as they would cause a NullReferenceException inside Roslyn
+            replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count == 0);
 
             return replacements;
         }
