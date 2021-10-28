@@ -119,7 +119,7 @@ namespace Bla
 ");
 
         [Test]
-        public void Code_gets_fixed_for_type_with_base_class()
+        public void Code_gets_fixed_for_uncommented_type_with_base_class()
         {
             const string OriginalCode = @"
 using System;
@@ -169,7 +169,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_type_without_base_class()
+        public void Code_gets_fixed_for_uncommented_type_without_base_class()
         {
             const string OriginalCode = @"
 using System;
@@ -198,6 +198,110 @@ namespace Bla
     {
     }
 
+    public class TestMe : ITestMe, IDisposable
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_type_with_base_class()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class Base
+    {
+    }
+
+    public interface ITestMe
+    {
+    }
+
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    public class TestMe : Base, IDisposable, ITestMe
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class Base
+    {
+    }
+
+    public interface ITestMe
+    {
+    }
+
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    public class TestMe : Base, ITestMe, IDisposable
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_type_without_base_class()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+    }
+
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    public class TestMe : IDisposable, ITestMe
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+    }
+
+    /// <summary>
+    /// Some comment.
+    /// </summary>
     public class TestMe : ITestMe, IDisposable
     {
         public void Dispose()
