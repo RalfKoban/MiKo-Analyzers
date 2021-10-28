@@ -373,6 +373,46 @@ public class TestMe : IDisposable
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_commented_method_with_no_ctor_or_finalizer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         //// TODO RKN: partial parts
 
         protected override string GetDiagnosticId() => MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.Id;

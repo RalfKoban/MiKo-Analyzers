@@ -68,9 +68,10 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             for (var i = 0; i < replacements.Count; i++)
             {
                 // remove empty lines that could kept left over
-                if (replacements[i].HasLeadingTrivia)
+                // if (replacements[i].HasLeadingTrivia)
                 {
-                    replacements[i] = replacements[i].WithoutLeadingTrivia().WithLeadingEmptyLine().WithLeadingEndOfLine();
+                    // Attention: leading trivia contains XML comments, so we have to keep them!
+                    replacements[i] = replacements[i].WithLeadingEmptyLine().WithLeadingEndOfLine();
                 }
             }
 
