@@ -545,6 +545,46 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_class_with_2_identically_named_commented_methods_in_wrong_order()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something with integers.
+    /// </summary>
+    public void DoSomething(int i)
+    { }
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething()
+    { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething()
+    { }
+
+    /// <summary>
+    /// Does something with integers.
+    /// </summary>
+    public void DoSomething(int i)
+    { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer();

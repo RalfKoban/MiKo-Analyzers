@@ -203,6 +203,62 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_class_with_private_non_static_commented_methods_sharing_same_name_and_not_side_by_side()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something with A.
+    /// </summary>
+    private static int A() => 0815;
+
+    /// <summary>
+    /// Does something with B.
+    /// </summary>
+    private int B() => 4711;
+
+    /// <summary>
+    /// Does something with C.
+    /// </summary>
+    private int C(object o) => 1;
+
+    /// <summary>
+    /// Does something else with B.
+    /// </summary>
+    private int B(object o) => 2;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something with A.
+    /// </summary>
+    private static int A() => 0815;
+
+    /// <summary>
+    /// Does something with B.
+    /// </summary>
+    private int B() => 4711;
+
+    /// <summary>
+    /// Does something else with B.
+    /// </summary>
+    private int B(object o) => 2;
+
+    /// <summary>
+    /// Does something with C.
+    /// </summary>
+    private int C(object o) => 1;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer();

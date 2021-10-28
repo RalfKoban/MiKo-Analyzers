@@ -581,11 +581,30 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithoutLeadingTrivia().WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+        internal static T WithFirstLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
+        {
+            if (value.HasLeadingTrivia)
+            {
+                // Attention: leading trivia contains XML comments, so we have to keep them!
+                var leadingTrivia = value.GetLeadingTrivia();
 
-        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(value.GetLeadingTrivia().Insert(0, SyntaxFactory.CarriageReturnLineFeed));
+                // remove leading end-of-line as otherwise we would have multiple empty lines left over
+                if (leadingTrivia[0].IsKind(SyntaxKind.EndOfLineTrivia))
+                {
+                    leadingTrivia = leadingTrivia.RemoveAt(0);
+                }
 
-        internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+                return value.WithLeadingTrivia(leadingTrivia.Insert(0, trivia));
+            }
+
+            return value.WithLeadingTrivia(trivia);
+        }
+
+        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+
+        internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
 
