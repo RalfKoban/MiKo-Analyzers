@@ -28,22 +28,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return updatedSyntax;
         }
 
+        private static bool IsEmptyLine(SyntaxToken token, SyntaxToken nextToken) => token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && token.ValueText.IsNullOrWhiteSpace();
+
         private static bool HasIssue(XmlTextSyntax text)
         {
             var tokens = text.TextTokens;
 
             for (var i = 0; i < tokens.Count - 1; i++)
             {
-                var token = tokens[i];
-                var nextToken = tokens[i + 1];
-
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                if (IsEmptyLine(tokens[i], tokens[i + 1]))
                 {
-                    if (token.ValueText.IsNullOrWhiteSpace())
-                    {
-                        // that's an issue, so add the already collected text as a new XML text, then add a <para/> tag
-                        return true;
-                    }
+                    // that's an issue, so add the already collected text as a new XML text, then add a <para/> tag
+                    return true;
                 }
             }
 
@@ -70,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 tokensForTexts.Add(token);
 
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && token.ValueText.IsNullOrWhiteSpace())
+                if (IsEmptyLine(token, nextToken))
                 {
                     tokensForTexts.Remove(token);
 
@@ -158,7 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (replacements[replacements.Count - 3] is XmlTextSyntax textBeforeParaNode)
                     {
-                        replacements[replacements.Count - 3] = textBeforeParaNode.WithoutLastXmlNewLine();
+                        replacements[replacements.Count - 3] = textBeforeParaNode.WithoutTrailingXmlComment();
                     }
 
                     replacements.Remove(e);

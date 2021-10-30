@@ -654,20 +654,18 @@ namespace MiKoSolutions.Analyzers
         internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)
         {
             var tokens = value.TextTokens;
-            var textTokens = tokens.Count;
-            if (textTokens >= 2)
+            if (tokens.Count >= 2)
             {
-                // TODO: RKN find a better solution this as it is not good code
-                var t = tokens.First();
-                if (t.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                var newTokens = tokens.WithoutFirstXmlNewLine();
+
+                if (newTokens.Count > 0)
                 {
-                    var newTokens = tokens.Remove(t);
-
                     var token = newTokens[0];
-                    newTokens = newTokens.Replace(token, token.WithText(token.Text.TrimStart()));
 
-                    return XmlText(newTokens);
+                    newTokens = newTokens.Replace(token, token.WithText(token.Text.TrimStart()));
                 }
+
+                return XmlText(newTokens);
             }
 
             return value;
@@ -805,20 +803,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailingXmlComment(this XmlTextSyntax value)
         {
-            var tokens = value.TextTokens;
-            var textTokens = tokens.Count;
-            if (textTokens > 2)
+            if (value.TextTokens.Count > 2)
             {
-                // TODO: RKN find a better solution this as it is not good code
-
                 // remove last "\r\n" token and remove '  /// ' trivia of last token
-                if (tokens[textTokens - 2].IsKind(SyntaxKind.XmlTextLiteralNewLineToken)
-                 && tokens[textTokens - 1].ValueText.IsNullOrWhiteSpace())
-                {
-                    var newTokens = tokens.Take(textTokens - 2).ToArray();
-
-                    return XmlText(newTokens);
-                }
+                return value.WithoutLastXmlNewLine();
             }
 
             return value;
