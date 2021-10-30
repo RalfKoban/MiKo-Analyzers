@@ -83,6 +83,43 @@ public class TestMe
 }");
 
         [Test]
+        public void An_issue_is_reported_for_multiple_consecutive_empty_lines_at_begin_of_comment() => An_issue_is_reported_for(@"
+/// <summary>
+/// 
+/// 
+/// 
+/// Some summary.
+/// </summary>
+public class TestMe
+{
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_multiple_consecutive_empty_lines_at_middle_of_comment() => An_issue_is_reported_for(@"
+/// <summary>
+/// Some summary.
+/// 
+/// 
+/// 
+/// Some more text.
+/// </summary>
+public class TestMe
+{
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_multiple_consecutive_empty_lines_at_end_of_comment() => An_issue_is_reported_for(@"
+/// <summary>
+/// Some summary.
+/// 
+/// 
+/// 
+/// </summary>
+public class TestMe
+{
+}");
+
+        [Test]
         public void Code_gets_fixed_for_empty_line_comment()
         {
             const string OriginalCode = @"
@@ -127,29 +164,6 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_empty_line_at_end_of_comment()
-        {
-            const string OriginalCode = @"
-/// <summary>
-/// Some summary.
-/// 
-/// </summary>
-public class TestMe
-{
-}";
-
-            const string FixedCode = @"
-/// <summary>
-/// Some summary.
-/// </summary>
-public class TestMe
-{
-}";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
         public void Code_gets_fixed_for_empty_line_at_middle_of_comment()
         {
             const string OriginalCode = @"
@@ -167,6 +181,29 @@ public class TestMe
 /// Some summary.
 /// <para/>
 /// Some more summary.
+/// </summary>
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_line_at_end_of_comment()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Some summary.
+/// 
+/// </summary>
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some summary.
 /// </summary>
 public class TestMe
 {
@@ -228,6 +265,119 @@ public class TestMe
 /// Some more summary.
 /// <para/>
 /// Some even more summary.
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_for_some_more_multiple_empty_lines_in_non_XML_comment()
+        {
+            const string OriginalCode = @"
+/// 
+/// Some summary.
+/// 
+/// Some more summary.
+/// 
+/// Some even more summary.
+/// 
+/// Still some more summary.
+/// 
+/// 
+/// Final summary.
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// Some summary.
+/// <para/>
+/// Some more summary.
+/// <para/>
+/// Some even more summary.
+/// <para/>
+/// Still some more summary.
+/// <para/>
+/// Final summary.
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_for_multiple_consecutive_empty_lines_at_begin_of_comment()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// 
+/// 
+/// 
+/// Some summary.
+/// </summary>
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some summary.
+/// </summary>
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_for_multiple_consecutive_empty_lines_at_middle_of_comment()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Some summary.
+/// 
+/// 
+/// 
+/// Some more text.
+/// </summary>
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some summary.
+/// <para/>
+/// Some more text.
+/// </summary>
+public class TestMe
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_for_multiple_consecutive_empty_lines_at_end_of_comment()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Some summary.
+/// 
+/// 
+/// </summary>
+public class TestMe
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some summary.
+/// </summary>
 public class TestMe
 {
 }";

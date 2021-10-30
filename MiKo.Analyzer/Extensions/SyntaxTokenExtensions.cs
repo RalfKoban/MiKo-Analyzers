@@ -57,33 +57,19 @@ namespace MiKoSolutions.Analyzers
         {
             var tokens = textTokens;
 
-            if (tokens.Count == 0)
+            if (tokens.Count > 0)
             {
-                return tokens;
+                tokens = WithoutEmptyText(tokens, tokens[0]);
             }
 
-            var token = tokens[0];
-            if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+            if (tokens.Count > 0)
             {
-                if (token.ValueText.IsNullOrWhiteSpace())
-                {
-                    tokens = tokens.Remove(token);
-                }
+                tokens = WithoutNewLine(tokens, tokens[0]);
             }
 
-            token = tokens[0];
-            if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+            if (tokens.Count > 0)
             {
-                tokens = tokens.Remove(token);
-            }
-
-            token = tokens[0];
-            if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
-            {
-                if (token.ValueText.IsNullOrWhiteSpace())
-                {
-                    tokens = tokens.Remove(token);
-                }
+                tokens = WithoutEmptyText(tokens, tokens[0]);
             }
 
             return tokens;
@@ -91,22 +77,39 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxTokenList WithoutLastXmlNewLine(this SyntaxTokenList textTokens)
         {
-            var token = textTokens.Last();
-            if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+            var tokens = textTokens;
+
+            if (tokens.Count > 0)
             {
-                if (token.ValueText.IsNullOrWhiteSpace())
-                {
-                    textTokens = textTokens.Remove(token);
-                }
+                tokens = WithoutEmptyText(tokens, tokens[tokens.Count - 1]);
             }
 
-            token = textTokens.Last();
+            if (tokens.Count > 0)
+            {
+                tokens = WithoutNewLine(tokens, tokens[tokens.Count - 1]);
+            }
+
+            return tokens;
+        }
+
+        internal static SyntaxTokenList WithoutEmptyText(this SyntaxTokenList tokens, SyntaxToken token)
+        {
+            if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.ValueText.IsNullOrWhiteSpace())
+            {
+                return tokens.Remove(token);
+            }
+
+            return tokens;
+        }
+
+        internal static SyntaxTokenList WithoutNewLine(this SyntaxTokenList tokens, SyntaxToken token)
+        {
             if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
             {
-                textTokens = textTokens.Remove(token);
+                tokens = tokens.Remove(token);
             }
 
-            return textTokens;
+            return tokens;
         }
 
         internal static SyntaxToken WithText(this SyntaxToken token, string text) => SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), text, text, token.TrailingTrivia);
