@@ -73,7 +73,7 @@ namespace Bla
                                                                                                                  {
                                                                                                                      foreach (var test in Tests)
                                                                                                                      {
-                                                                                                                                 An_issue_is_reported_for(@"
+                                                                                                                          An_issue_is_reported_for(@"
 namespace " + namespaceName + @"
 {
   [" + testFixture + @"]

@@ -10,19 +10,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2059_CodeFixProvider)), Shared]
-    public sealed class MiKo_2059_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2059_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2059_DuplicateExceptionAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2059_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            var exceptionComments = GetExceptionXmls(comment);
+            var exceptionComments = GetExceptionXmls(syntax);
 
             var newNodes = new Dictionary<string, XmlElementSyntax>();
             var obsoleteNodes = new List<SyntaxNode>();
@@ -68,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 newNodes.Add(entry.Key, consolidatedException);
             }
 
-            var commentWithoutObsoleteNodes = comment.Without(obsoleteNodes);
+            var commentWithoutObsoleteNodes = syntax.Without(obsoleteNodes);
 
             // find and replace the nodes with the new fixed ones
             var finalContent = commentWithoutObsoleteNodes.ReplaceNodes(

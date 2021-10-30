@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -9,15 +8,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2212_CodeFixProvider)), Shared]
-    public sealed class MiKo_2212_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2212_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2212_DocumentationContainsWasNotSuccessfulAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2212_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var affectedTokens = syntax.DescendantNodes().OfType<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Where(_ => _.ValueText.Contains(Constants.Comments.WasNotSuccessfulPhrase)).ToList();
 

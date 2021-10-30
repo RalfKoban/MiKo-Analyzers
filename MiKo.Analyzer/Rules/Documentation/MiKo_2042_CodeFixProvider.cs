@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -8,33 +7,27 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2042_CodeFixProvider)), Shared]
-    public sealed class MiKo_2042_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2042_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2042_BrParaAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2042_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var d = (DocumentationCommentTriviaSyntax)syntax;
-
-            foreach (var node in d.DescendantNodes())
+            foreach (var node in syntax.DescendantNodes())
             {
                 switch (node)
                 {
                     case XmlEmptyElementSyntax br when br.GetName() == "br":
-                        d = d.ReplaceNode(br, Para());
-                        break;
+                        return syntax.ReplaceNode(br, Para());
 
                     case XmlElementSyntax p when p.GetName() == "p":
-                        d = d.ReplaceNode(p, Para(p.Content));
-                        break;
+                        return syntax.ReplaceNode(p, Para(p.Content));
                 }
             }
 
-            return d;
+            return syntax;
         }
     }
 }

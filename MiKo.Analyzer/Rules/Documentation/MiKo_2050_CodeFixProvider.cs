@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -10,31 +9,25 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2050_CodeFixProvider)), Shared]
-    public sealed class MiKo_2050_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2050_ExceptionSummaryAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2050_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            var ctor = comment.AncestorsAndSelf().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
+            var ctor = syntax.AncestorsAndSelf().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
             if (ctor != null)
             {
                 return FixCtorComment(ctor);
             }
-            else
-            {
-                // we have only the type
-                return FixTypeSummary(comment);
-            }
+
+            // we have only the type
+            return FixTypeSummary(syntax);
         }
 
-        private static SyntaxNode FixTypeSummary(DocumentationCommentTriviaSyntax comment)
+        private static DocumentationCommentTriviaSyntax FixTypeSummary(DocumentationCommentTriviaSyntax comment)
         {
             const string Phrase = Constants.Comments.ExceptionTypeSummaryStartingPhrase;
 
@@ -53,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static SyntaxNode FixCtorComment(ConstructorDeclarationSyntax ctor)
+        private static DocumentationCommentTriviaSyntax FixCtorComment(ConstructorDeclarationSyntax ctor)
         {
             var typeDeclarationSyntax = ctor.Ancestors().OfType<TypeDeclarationSyntax>().First();
             var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax.Identifier.ValueText);
@@ -90,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.DocumentationComment(summary, param1, param2, returns);
         }
 
-        private static SyntaxNode FixParameterlessCtor(TypeSyntax type)
+        private static DocumentationCommentTriviaSyntax FixParameterlessCtor(TypeSyntax type)
         {
             var parts = string.Format(Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate + ".", '|').Split('|');
 
@@ -99,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.DocumentationComment(summary.WithEndOfLine());
         }
 
-        private static SyntaxNode FixMessageParamCtor(TypeSyntax type, ParameterSyntax messageParameter)
+        private static DocumentationCommentTriviaSyntax FixMessageParamCtor(TypeSyntax type, ParameterSyntax messageParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + ".";
 
@@ -113,7 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                   param.WithEndOfLine());
         }
 
-        private static SyntaxNode FixMessageExceptionParamCtor(TypeSyntax type, ParameterSyntax messageParameter, ParameterSyntax exceptionParameter)
+        private static DocumentationCommentTriviaSyntax FixMessageExceptionParamCtor(TypeSyntax type, ParameterSyntax messageParameter, ParameterSyntax exceptionParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
                                     + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase
@@ -132,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                       param2.WithEndOfLine());
         }
 
-        private static SyntaxNode FixSerializationParamCtor(TypeSyntax type, ParameterSyntax serializationInfoParameter, ParameterSyntax streamingContextParameter)
+        private static DocumentationCommentTriviaSyntax FixSerializationParamCtor(TypeSyntax type, ParameterSyntax serializationInfoParameter, ParameterSyntax streamingContextParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
                                     + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase

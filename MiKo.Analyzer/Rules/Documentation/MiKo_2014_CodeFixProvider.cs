@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -10,19 +9,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2014_CodeFixProvider)), Shared]
-    public sealed class MiKo_2014_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2014_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2014_DisposeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2014_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            var method = comment.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
+            var method = syntax.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), MiKo_2014_DisposeDefaultPhraseAnalyzer.SummaryPhrase).WithTrailingXmlComment();
 

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2203_CodeFixProvider)), Shared]
-    public sealed class MiKo_2203_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2203_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         private const string Replacement = "unique identifier";
 
@@ -18,13 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Change 'GUID' into '" + Replacement + "'";
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            return Comment(comment, MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Guids, ReplacementMap);
+            return Comment(syntax, MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Guids, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()

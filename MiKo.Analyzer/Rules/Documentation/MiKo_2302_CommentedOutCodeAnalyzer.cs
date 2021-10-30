@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -96,10 +97,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void PrepareAnalyzeMethod(Compilation compilation)
         {
-            var assemblySymbols = compilation.GetUsedAssemblyReferences()
+            IEnumerable<IAssemblySymbol> assemblySymbols;
+            try
+            {
+                assemblySymbols = compilation.GetUsedAssemblyReferences()
                                              .Select(compilation.GetAssemblyOrModuleSymbol)
                                              .OfType<IAssemblySymbol>()
                                              .ToList();
+            }
+            catch (InvalidOperationException)
+            {
+                // promise to not enqueue, may happen during multiple test runs
+                assemblySymbols = Enumerable.Empty<IAssemblySymbol>();
+            }
 
             // to speed up the lookup, add known assemblies and their types only once
             foreach (var assemblySymbol in assemblySymbols)

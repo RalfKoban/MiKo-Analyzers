@@ -11,22 +11,20 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2214_CodeFixProvider)), Shared]
-    public sealed class MiKo_2214_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2214_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2214_DocumentationContainsEmptyLinesAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2214_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var textSyntaxes = syntax.DescendantNodes().OfType<XmlTextSyntax>().Where(HasIssue).ToList();
+            var texts = syntax.DescendantNodes().OfType<XmlTextSyntax>().Where(HasIssue);
 
-            var updatedSyntax = syntax.ReplaceNodes(textSyntaxes, GetReplacements);
-
-            return updatedSyntax;
+            return syntax.ReplaceNodes(texts, GetReplacements);
         }
+
+        private static bool IsEmptyLine(SyntaxToken token, SyntaxToken nextToken) => token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && token.ValueText.IsNullOrWhiteSpace();
 
         private static bool HasIssue(XmlTextSyntax text)
         {
@@ -34,16 +32,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var i = 0; i < tokens.Count - 1; i++)
             {
-                var token = tokens[i];
-                var nextToken = tokens[i + 1];
-
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                if (IsEmptyLine(tokens[i], tokens[i + 1]))
                 {
-                    if (token.ValueText.IsNullOrWhiteSpace())
-                    {
-                        // that's an issue, so add the already collected text as a new XML text, then add a <para/> tag
-                        return true;
-                    }
+                    // that's an issue, so add the already collected text as a new XML text, then add a <para/> tag
+                    return true;
                 }
             }
 
@@ -70,68 +62,67 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 tokensForTexts.Add(token);
 
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                if (IsEmptyLine(token, nextToken))
                 {
-                    if (token.ValueText.IsNullOrWhiteSpace())
+                    tokensForTexts.Remove(token);
+
+                    if (i == 0)
                     {
-                        tokensForTexts.Remove(token);
+                        // skip first line as that shall not be replaced with a <para/> tag
+                        // (this happens in case the comment does not start with any XML tag)
+                        noXmlTagOnCommentStart = true;
+                    }
+                    else if (i == 1)
+                    {
+                        // skip second line as that shall not be replaced with a <para/> tag
+                        // (this is the next line eg. after a <summary> tag)
+                    }
+                    else if (i == tokensCount - 3)
+                    {
+                        // skip second last empty line as that shall not be replaced with a <para/> tag
+                        // (this is the line immediately before eg. a </summary> tag)
+                        replacements.Add(XmlTextWithoutLastNewLine(tokensForTexts));
+                    }
+                    else if (i == tokensCount - 2 && noXmlTagOnCommentStart)
+                    {
+                        // skip last empty line as that shall not be replaced with a <para/> tag
+                        // (this is the last line if the comment does not start with any XML tag)
+                        replacements.Add(XmlTextWithoutLastNewLine(tokensForTexts));
+                    }
+                    else
+                    {
+                        var consecutiveLines = false;
 
-                        if (i == 0)
-                        {
-                            // skip first line as that shall not be replaced with a <para/> tag
-                            // (this happens in case the comment does not start with any XML tag)
-                            noXmlTagOnCommentStart = true;
-                        }
-                        else if (i == 1)
-                        {
-                            // skip second line as that shall not be replaced with a <para/> tag
-                            // (this is the next line eg. after a <summary> tag)
-                        }
-                        else if (i == tokensCount - 3)
-                        {
-                            // skip second last empty line as that shall not be replaced with a <para/> tag
-                            // (this is the line immediately before eg. a </summary> tag)
-                            var last = tokensForTexts.Last();
-                            if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                            {
-                                tokensForTexts.Remove(last);
-                            }
+                        // skip first new line of a normal text as that would remain and lead to an additional empty line
+                        var syntaxToken = noXmlTagOnCommentStart
+                                              ? tokensForTexts.First()
+                                              : tokensForTexts.Last();
 
-                            replacements.Add(XmlText(tokensForTexts));
-                        }
-                        else if (i == tokensCount - 2 && noXmlTagOnCommentStart)
-                        {
-                            // skip last empty line as that shall not be replaced with a <para/> tag
-                            // (this is the last line if the comment does not start with any XML tag)
-                            var last = tokensForTexts.Last();
-                            if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                            {
-                                tokensForTexts.Remove(last);
-                            }
-
-                            replacements.Add(XmlText(tokensForTexts));
-                        }
-                        else
+                        if (syntaxToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                         {
                             if (noXmlTagOnCommentStart && i == 4)
                             {
-                                // skip first new line of a normal text as that would remain and lead to an additional empty line
-                                var first = tokensForTexts.First();
-                                if (first.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                                {
-                                    tokensForTexts.Remove(first);
-                                }
+                                tokensForTexts.Remove(syntaxToken);
                             }
 
+                            if (tokensForTexts.Count <= 1)
+                            {
+                                // consecutive <para> tags
+                                consecutiveLines = true;
+                            }
+                        }
+
+                        if (consecutiveLines is false)
+                        {
                             // that's an issue, so add the already collected text as a new XML text
                             replacements.Add(XmlText(tokensForTexts));
 
                             // now add a <para/> tag
                             replacements.Add(Para().WithLeadingXmlCommentExterior());
                         }
-
-                        tokensForTexts.Clear();
                     }
+
+                    tokensForTexts.Clear();
                 }
             }
 
@@ -141,10 +132,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 tokensForTexts.Add(tokens[i]);
             }
 
-            if (tokensForTexts.Any())
-            {
-                replacements.Add(XmlText(tokensForTexts));
-            }
+            replacements.Add(XmlText(tokensForTexts));
+
+            // get rid of all texts that do not have any contents as they would cause a NullReferenceException inside Roslyn
+            replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count == 0);
 
             if (replacements.Count == 0)
             {
@@ -152,10 +143,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { text };
             }
 
-            // get rid of all texts that do not have any contents as they would cause a NullReferenceException inside Roslyn
-            replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count == 0);
+            // Remove the last <para/> tag if it there is no more text available after it
+            if (replacements.Count >= 3)
+            {
+                if (replacements.Last() is XmlTextSyntax t && t.TextTokens.All(_ => _.ValueText.IsNullOrWhiteSpace()) && replacements[replacements.Count - 2] is XmlEmptyElementSyntax e && e.IsPara())
+                {
+                    if (replacements[replacements.Count - 3] is XmlTextSyntax textBeforeParaNode)
+                    {
+                        replacements[replacements.Count - 3] = textBeforeParaNode.WithoutTrailingXmlComment();
+                    }
+
+                    replacements.Remove(e);
+                }
+            }
 
             return replacements;
+        }
+
+        private static XmlTextSyntax XmlTextWithoutLastNewLine(ICollection<SyntaxToken> tokens)
+        {
+            var last = tokens.Last();
+
+            if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+            {
+                tokens.Remove(last);
+            }
+
+            return XmlText(tokens);
         }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2015_CodeFixProvider)), Shared]
-    public sealed class MiKo_2015_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2015_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         private static readonly Dictionary<string, string> EventReplacementMap = new Dictionary<string, string>
                                                                                      {
@@ -38,15 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2015_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
             var map = GetMap(syntax);
 
-            return Comment(comment, map.Keys, map);
+            return Comment(syntax, map.Keys, map);
         }
 
         private static Dictionary<string, string> GetMap(SyntaxNode syntax)
