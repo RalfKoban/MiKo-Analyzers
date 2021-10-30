@@ -89,25 +89,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         // skip second last empty line as that shall not be replaced with a <para/> tag
                         // (this is the line immediately before eg. a </summary> tag)
-                        var last = tokensForTexts.Last();
-                        if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                        {
-                            tokensForTexts.Remove(last);
-                        }
-
-                        replacements.Add(XmlText(tokensForTexts));
+                        replacements.Add(XmlTextWithoutLastNewLine(tokensForTexts));
                     }
                     else if (i == tokensCount - 2 && noXmlTagOnCommentStart)
                     {
                         // skip last empty line as that shall not be replaced with a <para/> tag
                         // (this is the last line if the comment does not start with any XML tag)
-                        var syntaxToken = tokensForTexts.Last();
-                        if (syntaxToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                        {
-                            tokensForTexts.Remove(syntaxToken);
-                        }
-
-                        replacements.Add(XmlText(tokensForTexts));
+                        replacements.Add(XmlTextWithoutLastNewLine(tokensForTexts));
                     }
                     else
                     {
@@ -152,10 +140,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 tokensForTexts.Add(tokens[i]);
             }
 
-            if (tokensForTexts.Any())
-            {
-                replacements.Add(XmlText(tokensForTexts));
-            }
+            replacements.Add(XmlText(tokensForTexts));
 
             // get rid of all texts that do not have any contents as they would cause a NullReferenceException inside Roslyn
             replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count == 0);
@@ -166,8 +151,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { text };
             }
 
-            // TODO RKN Remove duplicate <para> tags
+            // Remove the last <para/> tag if it there is no more text available after it
+            if (replacements.Count >= 3)
+            {
+                if (replacements.Last() is XmlTextSyntax t && t.TextTokens.All(_ => _.ValueText.IsNullOrWhiteSpace()) && replacements[replacements.Count - 2] is XmlEmptyElementSyntax e && e.IsPara())
+                {
+                    if (replacements[replacements.Count - 3] is XmlTextSyntax textBeforeParaNode)
+                    {
+                        replacements[replacements.Count - 3] = textBeforeParaNode.WithoutLastXmlNewLine();
+                    }
+
+                    replacements.Remove(e);
+                }
+            }
+
             return replacements;
+        }
+
+        private static XmlTextSyntax XmlTextWithoutLastNewLine(ICollection<SyntaxToken> tokens)
+        {
+            var last = tokens.Last();
+
+            if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+            {
+                tokens.Remove(last);
+            }
+
+            return XmlText(tokens);
         }
     }
 }

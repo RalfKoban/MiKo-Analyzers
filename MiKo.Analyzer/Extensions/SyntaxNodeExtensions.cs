@@ -642,6 +642,13 @@ namespace MiKoSolutions.Analyzers
             return value.WithTextTokens(value.TextTokens.WithoutFirstXmlNewLine()).WithoutLeadingTrivia();
         }
 
+        internal static XmlTextSyntax WithoutLastXmlNewLine(this XmlTextSyntax syntax)
+        {
+            var textTokens = syntax.TextTokens.WithoutLastXmlNewLine();
+
+            return syntax.WithTextTokens(textTokens);
+        }
+
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
 
         internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)
