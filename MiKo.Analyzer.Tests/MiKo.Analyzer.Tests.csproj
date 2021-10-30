@@ -35,7 +35,7 @@
 
   <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
   <ItemGroup Condition="'$(NCrunch)' == '1'">
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
