@@ -135,7 +135,7 @@ The following tables list all the 299 rules that are currently provided by the a
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
-|MiKo_2000|Documentation should be valid XML.|&#x2713;|\-|
+|MiKo_2000|Documentation should be valid XML.|&#x2713;|&#x2713;|
 |MiKo_2001|Events should be documented properly.|&#x2713;|&#x2713;|
 |MiKo_2002|EventArgs should be documented properly.|&#x2713;|&#x2713;|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase.|&#x2713;|\-|

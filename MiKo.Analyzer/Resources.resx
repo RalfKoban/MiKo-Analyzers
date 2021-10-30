@@ -1421,6 +1421,9 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_1408_Title" xml:space="preserve">
     <value>Extension methods should be placed in same namespace as the extended types.</value>
   </data>
+  <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
+    <value>Fix malformed XML</value>
+  </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
     <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
   </data>

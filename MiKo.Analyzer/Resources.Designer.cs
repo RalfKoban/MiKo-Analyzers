@@ -3843,6 +3843,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix malformed XML.
+        /// </summary>
+        public static string MiKo_2000_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2000_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers..
         /// </summary>
         public static string MiKo_2000_Description {
