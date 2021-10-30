@@ -22,10 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
+            var proposal = useAllPhrases
+                               ? phrase.HumanizedConcatenated()
+                               : phrase[0].SurroundedWithApostrophe();
 
-            return useAllPhrases
-                       ? new[] { Issue(parameter, phrase.HumanizedConcatenated()) }
-                       : new[] { Issue(parameter, phrase[0].SurroundedWithApostrophe()) };
+            return new[] { Issue(parameter, string.Intern(proposal)) };
         }
 
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;

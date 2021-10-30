@@ -4465,7 +4465,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
+        ///   Looks up a localized string similar to Documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2021_MessageFormat {
             get {
@@ -4501,7 +4501,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
+        ///   Looks up a localized string similar to Documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2022_MessageFormat {
             get {
@@ -4537,7 +4537,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to Documentation should follow pattern: &apos;{1} ... {2}&apos;.
         /// </summary>
         public static string MiKo_2023_MessageFormat {
             get {
@@ -4573,7 +4573,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
+        ///   Looks up a localized string similar to Documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2024_MessageFormat {
             get {
@@ -4609,7 +4609,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should start with: {1}.
+        ///   Looks up a localized string similar to Documentation should start with: {1}.
         /// </summary>
         public static string MiKo_2025_MessageFormat {
             get {
@@ -4636,7 +4636,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation lies about it being unused.
+        ///   Looks up a localized string similar to Documentation lies about being unused.
         /// </summary>
         public static string MiKo_2026_MessageFormat {
             get {
@@ -4672,7 +4672,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should be: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Documentation should be: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2027_MessageFormat {
             get {
@@ -4699,7 +4699,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;param name=&quot;{0}&quot;&gt; documentation should contain more than just the parameter name.
+        ///   Looks up a localized string similar to Documentation should contain more than just the parameter name.
         /// </summary>
         public static string MiKo_2028_MessageFormat {
             get {

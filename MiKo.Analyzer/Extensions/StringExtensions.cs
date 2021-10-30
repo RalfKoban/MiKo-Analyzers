@@ -312,10 +312,10 @@ namespace System
         public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithApostrophe(this string value) => string.Concat("\'", value, "\'");
+        public static string SurroundedWithApostrophe(this string value) => value.SurroundedWith("\'");
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithDoubleQuote(this string value) => string.Concat("\"", value, "\"");
+        public static string SurroundedWithDoubleQuote(this string value) => value.SurroundedWith("\"");
 
         public static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
 
