@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -10,19 +9,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2091_CodeFixProvider)), Shared]
-    public sealed class MiKo_2091_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2091_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2091_InequalityOperatorAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2091_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            var method = comment.AncestorsAndSelf().OfType<OperatorDeclarationSyntax>().First();
+            var method = syntax.AncestorsAndSelf().OfType<OperatorDeclarationSyntax>().First();
             var parameters = method.ParameterList.Parameters;
             var typeDeclarationSyntax = method.Ancestors().OfType<TypeDeclarationSyntax>().First();
             var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax.Identifier.ValueText);

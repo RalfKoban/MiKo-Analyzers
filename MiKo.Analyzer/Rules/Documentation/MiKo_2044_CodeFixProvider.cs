@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2044_CodeFixProvider)), Shared]
-    public sealed class MiKo_2044_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2044_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         private static readonly HashSet<string> TagNames = new HashSet<string>
                                                                {
@@ -23,18 +23,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2044_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            var method = comment.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
+            var method = syntax.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
             var parameters = method.ParameterList.Parameters.Select(_ => _.GetName()).ToHashSet();
 
             var map = new Dictionary<XmlEmptyElementSyntax, string>();
 
-            var tags = GetEmptyXmlSyntax(comment, TagNames);
+            var tags = GetEmptyXmlSyntax(syntax, TagNames);
             foreach (var tag in tags)
             {
                 foreach (var parameterName in tag.Attributes
@@ -46,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return comment.ReplaceNodes(map.Keys, (_, __) => SyntaxFactory.XmlParamRefElement(map[_]));
+            return syntax.ReplaceNodes(map.Keys, (_, __) => SyntaxFactory.XmlParamRefElement(map[_]));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -10,27 +9,23 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2211_CodeFixProvider)), Shared]
-    public sealed class MiKo_2211_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2211_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2211_EnumerationMemberDocumentationHasNoRemarksAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2211_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            var remarks = GetXmlSyntax(Constants.XmlTag.Remarks, comment).First();
-            var summary = GetXmlSyntax(Constants.XmlTag.Summary, comment).FirstOrDefault();
+            var remarks = GetXmlSyntax(Constants.XmlTag.Remarks, syntax).First();
+            var summary = GetXmlSyntax(Constants.XmlTag.Summary, syntax).FirstOrDefault();
 
             // add remarks into summary
             if (summary is null)
             {
                 var newSummary = SyntaxFactory.XmlSummaryElement(remarks.Content.ToArray());
 
-                return comment.ReplaceNode(remarks, newSummary);
+                return syntax.ReplaceNode(remarks, newSummary);
             }
             else
             {

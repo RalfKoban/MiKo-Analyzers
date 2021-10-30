@@ -11,21 +11,17 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2214_CodeFixProvider)), Shared]
-    public sealed class MiKo_2214_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2214_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2214_DocumentationContainsEmptyLinesAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2214_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var textSyntaxes = syntax.DescendantNodes().OfType<XmlTextSyntax>().Where(HasIssue).ToList();
+            var texts = syntax.DescendantNodes().OfType<XmlTextSyntax>().Where(HasIssue);
 
-            var updatedSyntax = syntax.ReplaceNodes(textSyntaxes, GetReplacements);
-
-            return updatedSyntax;
+            return syntax.ReplaceNodes(texts, GetReplacements);
         }
 
         private static bool IsEmptyLine(SyntaxToken token, SyntaxToken nextToken) => token.IsKind(SyntaxKind.XmlTextLiteralToken) && nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken) && token.ValueText.IsNullOrWhiteSpace();

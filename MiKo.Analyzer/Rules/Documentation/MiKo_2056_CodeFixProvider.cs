@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -9,19 +8,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2056_CodeFixProvider)), Shared]
-    public sealed class MiKo_2056_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2056_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2056_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
-
-            foreach (var ancestor in comment.AncestorsAndSelf())
+            foreach (var ancestor in syntax.AncestorsAndSelf())
             {
                 switch (ancestor)
                 {
@@ -29,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case PropertyDeclarationSyntax _:
                     case MethodDeclarationSyntax _:
                     {
-                        return FixComment(document, ancestor, comment);
+                        return FixComment(document, ancestor, syntax);
                     }
                 }
             }
@@ -37,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        private static SyntaxNode FixComment(Document document, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
+        private static DocumentationCommentTriviaSyntax FixComment(Document document, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
         {
             foreach (var part in comment.Content)
             {

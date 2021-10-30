@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Globalization;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -12,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2040_CodeFixProvider)), Shared]
-    public sealed class MiKo_2040_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2040_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         private static readonly string[] Phrases = MiKo_2040_LangwordAnalyzer.Phrases;
 
@@ -20,11 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2040_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(syntaxNodes);
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var comment = (DocumentationCommentTriviaSyntax)syntax;
+            var comment = syntax;
 
             comment = ReplaceCode(comment);
             comment = ReplaceValue(comment);
