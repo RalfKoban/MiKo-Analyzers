@@ -8579,6 +8579,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance, internal and private types should be either static or sealed unless derivation from them is required.
+        ///
+        ///As with any implementation detail, they can be easily changed if/when derivation is required in the future..
+        /// </summary>
+        public static string MiKo_3075_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3075_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seal class or make it static.
+        /// </summary>
+        public static string MiKo_3075_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3075_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal and private types should be either static or sealed unless derivation from them is required..
+        /// </summary>
+        public static string MiKo_3075_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3075_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply &apos;is false&apos; pattern.
         /// </summary>
         public static string MiKo_3081_CodeFixTitle {

@@ -3045,6 +3045,17 @@ So, having 'ref' or 'out' parameters on a constructor contradicts the complete c
   <data name="MiKo_3074_Title" xml:space="preserve">
     <value>Do not define 'ref' or 'out' parameters on constructors.</value>
   </data>
+  <data name="MiKo_3075_Description" xml:space="preserve">
+    <value>To ease maintenance, internal and private types should be either static or sealed unless derivation from them is required.
+
+As with any implementation detail, they can be easily changed if/when derivation is required in the future.</value>
+  </data>
+  <data name="MiKo_3075_MessageFormat" xml:space="preserve">
+    <value>Seal class or make it static</value>
+  </data>
+  <data name="MiKo_3075_Title" xml:space="preserve">
+    <value>Internal and private types should be either static or sealed unless derivation from them is required.</value>
+  </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
   </data>
