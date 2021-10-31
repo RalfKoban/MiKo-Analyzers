@@ -1,5 +1,4 @@
-﻿using System;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -65,9 +64,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // this is the event args
-            var name = parameter.Type.GetNameOnlyPart();
+            var startingPhrase = MiKo_2004_EventHandlerParametersAnalyzer.GetEventArgsStartingPhrase(parameter.Type.GetNameOnlyPart());
+            var endingPhrase = MiKo_2004_EventHandlerParametersAnalyzer.GetEventArgsEndingPhrase() + ".";
 
-            return Comment(comment, name.StartsWithAnyChar("AEIOU") ? "An " : "A ", parameter.Type, " that contains the event data.");
+            return Comment(comment, startingPhrase, parameter.Type, endingPhrase);
         }
 
         private static XmlElementSyntax ParamComment(string parameterName)

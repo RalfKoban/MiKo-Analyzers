@@ -18,6 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        internal static string GetEventArgsStartingPhrase(string name) => name.StartsWithAnyChar("AEIOU") ? "An " : "A ";
+
+        internal static string GetEventArgsEndingPhrase() => " that contains the event data";
+
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsEventHandler();
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => commentXml.IsNullOrWhiteSpace() || commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
@@ -30,14 +34,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             VerifyParameterComment(ref diagnostics, method, xml, true, Constants.Comments.EventSourcePhrase);
 
             var eventArgs = method.Parameters[1].Type;
-            var defaultStart = eventArgs.Name.StartsWithAnyChar("AEIOU") ? "An" : "A";
+            var defaultStart = GetEventArgsStartingPhrase(eventArgs.Name);
+            var defaultEnding = GetEventArgsEndingPhrase();
             var phrases = new[]
                               {
-                                  $"{defaultStart} <see cref=\"{eventArgs.Name}\" /> that contains the event data.", // just used for the proposal
-                                  $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data.",
-                                  $"{defaultStart} <see cref=\"{eventArgs}\" /> that contains the event data",
-                                  $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data.",
-                                  $"{defaultStart} <see cref=\"{eventArgs}\"/> that contains the event data",
+                                  $"{defaultStart}<see cref=\"{eventArgs.Name}\" />{defaultEnding}.", // just used for the proposal
+                                  $"{defaultStart}<see cref=\"{eventArgs}\" />{defaultEnding}.",
+                                  $"{defaultStart}<see cref=\"{eventArgs}\" />{defaultEnding}",
+                                  $"{defaultStart}<see cref=\"{eventArgs}\"/>{defaultEnding}.",
+                                  $"{defaultStart}<see cref=\"{eventArgs}\"/>{defaultEnding}",
                               }.Concat(Constants.Comments.UnusedPhrase).ToList();
 
             VerifyParameterComment(ref diagnostics, method, xml, false, phrases);
@@ -51,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameter = method.Parameters[parameterIndex];
             var comment = parameter.GetComment(commentXml);
             var proposal = allExpected.ElementAt(0);
+
             if (allExpected.All(_ => _ != comment))
             {
                 if (diagnostics is null)
