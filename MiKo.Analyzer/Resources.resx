@@ -1630,7 +1630,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
+    <value>Documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>Documentation of parameter should have a default starting phrase.</value>
@@ -1642,7 +1642,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
+    <value>Documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>Documentation of [out] parameters should have a default starting phrase.</value>
@@ -1654,7 +1654,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of a Boolean as parameter should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation should follow pattern: '{1} ... {2}'</value>
+    <value>Documentation should follow pattern: '{1} ... {2}'</value>
   </data>
   <data name="MiKo_2023_Title" xml:space="preserve">
     <value>Documentation of Boolean parameters should have a default starting phrase.</value>
@@ -1666,7 +1666,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
+    <value>Documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
     <value>Documentation of Enum parameters should have a default starting phrase.</value>
@@ -1678,7 +1678,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation should start with: {1}</value>
+    <value>Documentation should start with: {1}</value>
   </data>
   <data name="MiKo_2025_Title" xml:space="preserve">
     <value>Documentation of 'CancellationToken' parameters should have a default starting phrase.</value>
@@ -1687,7 +1687,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation should not state that a parameter is unused although it is still in use.</value>
   </data>
   <data name="MiKo_2026_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation lies about it being unused</value>
+    <value>Documentation lies about being unused</value>
   </data>
   <data name="MiKo_2026_Title" xml:space="preserve">
     <value>Used parameters should not be documented to be unused.</value>
@@ -1699,7 +1699,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain.</value>
   </data>
   <data name="MiKo_2027_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation should be: '{1}'</value>
+    <value>Documentation should be: '{1}'</value>
   </data>
   <data name="MiKo_2027_Title" xml:space="preserve">
     <value>Serialization constructor parameters shall be documented with a specific phrase.</value>
@@ -1708,7 +1708,7 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
     <value>The documentation of parameters should describe what they represent and what they are used for. Only stating the name of the parameter is simply not enough.</value>
   </data>
   <data name="MiKo_2028_MessageFormat" xml:space="preserve">
-    <value>&lt;param name="{0}"&gt; documentation should contain more than just the parameter name</value>
+    <value>Documentation should contain more than just the parameter name</value>
   </data>
   <data name="MiKo_2028_Title" xml:space="preserve">
     <value>Documentation of parameter should not just contain the name of the parameter.</value>
@@ -3164,7 +3164,7 @@ This allows easy usage without any arbitrary using directives. It also mimics th
     <value>A class that is marked as a unit test class should contain unit tests.</value>
   </data>
   <data name="MiKo_3101_MessageFormat" xml:space="preserve">
-    <value>Test class '{0}' should contain tests</value>
+    <value>Test class should contain tests</value>
   </data>
   <data name="MiKo_3101_Title" xml:space="preserve">
     <value>Test classes should contain tests.</value>
@@ -3245,7 +3245,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Tests should use assertions to check the behavior of the code for correctness. A missing assertion indicates a test that does not check anything and is therefore not meaningful.</value>
   </data>
   <data name="MiKo_3108_MessageFormat" xml:space="preserve">
-    <value>Assertion missing in '{0}'</value>
+    <value>Add assertion to test</value>
   </data>
   <data name="MiKo_3108_Title" xml:space="preserve">
     <value>Test methods should use assertions.</value>
