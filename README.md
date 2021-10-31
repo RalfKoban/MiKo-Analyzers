@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 299 rules that are currently provided by the analyzer.
+The following tables list all the 300 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -284,6 +284,7 @@ The following tables list all the 299 rules that are currently provided by the a
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'.|&#x2713;|\-|
 |MiKo_3073|Do not leave objects partially initialized.|&#x2713;|\-|
 |MiKo_3074|Do not define 'ref' or 'out' parameters on constructors.|&#x2713;|\-|
+|MiKo_3075|Internal and private types should be either static or sealed unless derivation from them is required.|&#x2713;|\-|
 |MiKo_3081|Pattern matching is preferred over a logical NOT condition.|&#x2713;|&#x2713;|
 |MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|&#x2713;|
 |MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|&#x2713;|
