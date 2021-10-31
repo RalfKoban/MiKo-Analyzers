@@ -60,7 +60,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   .Concat(comment.Content.Where(_ => _.IsSeeLangwordBool()))
                                   .Concat(comment.Content.Where(_ => _.IsCBool()));
 
-            return comment.Without(nodes);
+            var result = comment.Without(nodes);
+
+            // convert first word in infinite verb (if applicable)
+            return MakeFirstWordInfiniteVerb(result);
         }
     }
 }

@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingAnalyzer : Analyzer

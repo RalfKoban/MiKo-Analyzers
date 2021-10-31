@@ -98,8 +98,9 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_on_same_line()
+        [TestCase("Some", "some")]
+        [TestCase("Tests the", "test the")]
+        public void Code_gets_fixed_on_same_line_(string textToFix, string fixedText)
         {
             const string OriginalCode = @"
 using System;
@@ -108,7 +109,7 @@ public class TestMe
 {
     /// <summary>
     /// </summary>
-    /// <param name=""condition"">Some condition</param>
+    /// <param name=""condition"">### condition</param>
     public void DoSomething(bool condition) { }
 }
 ";
@@ -120,13 +121,13 @@ public class TestMe
     /// <summary>
     /// </summary>
     /// <param name=""condition"">
-    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// <see langword=""true""/> to ### condition; otherwise, <see langword=""false""/>.
     /// </param>
     public void DoSomething(bool condition) { }
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(OriginalCode.Replace("###", textToFix), FixedCode.Replace("###", fixedText));
         }
 
         [Test]

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace MiKoSolutions.Analyzers.Rules.Naming
+namespace MiKoSolutions.Analyzers.Linguistics
 {
     [TestFixture]
     public sealed class PluralizerTests

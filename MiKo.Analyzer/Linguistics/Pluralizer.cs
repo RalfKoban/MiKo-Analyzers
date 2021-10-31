@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace MiKoSolutions.Analyzers.Rules.Naming
+namespace MiKoSolutions.Analyzers.Linguistics
 {
     public static class Pluralizer
     {
@@ -20,29 +20,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "stack",
             };
 
-        public static string GetPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(symbolName, symbolName, comparison);
+        public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 
-        public static string GetPluralName(string symbolName, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => PluralNames.GetOrAdd(symbolName, _ => CreatePluralName(proposedName, comparison));
+        public static string GetPluralName(string name, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => PluralNames.GetOrAdd(name, _ => CreatePluralName(proposedName, comparison));
 
-        public static string GetPluralName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
+        public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
-            if (IsAllowedListName(symbolName, comparison))
+            if (IsAllowedListName(name, comparison))
             {
                 return null;
             }
 
             foreach (var suffix in suffixes)
             {
-                if (symbolName.EndsWith(suffix, comparison))
+                if (name.EndsWith(suffix, comparison))
                 {
-                    var proposedName = symbolName.WithoutSuffix(suffix);
+                    var proposedName = name.WithoutSuffix(suffix);
 
-                    if (symbolName.IsEntityMarker())
+                    if (name.IsEntityMarker())
                     {
                         proposedName = proposedName.Without(Constants.Markers.Entities);
                     }
 
-                    return GetPluralName(symbolName, proposedName, comparison);
+                    return GetPluralName(name, proposedName, comparison);
                 }
             }
 
