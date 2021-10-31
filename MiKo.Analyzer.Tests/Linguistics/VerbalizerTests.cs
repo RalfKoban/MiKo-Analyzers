@@ -1,8 +1,9 @@
 ﻿using NUnit.Framework;
 
-namespace MiKoSolutions.Analyzers.Rules.Naming
+namespace MiKoSolutions.Analyzers.Linguistics
 {
-    public class NamesFinderTests
+    [TestFixture]
+    public static class VerbalizerTests
     {
         [TestCase(null, ExpectedResult = null, Description = "There is no verb available")]
         [TestCase("", ExpectedResult = "", Description = "There is no verb available")]
@@ -42,11 +43,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Subtraction", ExpectedResult = "Subtract")]
         [TestCase("Aquisition", ExpectedResult = "Aquire")]
         [TestCase("Inquisition", ExpectedResult = "Inquire")]
-        public string TryMakeVerb_finds_proper_verb_(string name)
+        public static string TryMakeVerb_finds_proper_verb_(string name)
         {
-            NamesFinder.TryMakeVerb(name, out var result);
+            Verbalizer.TryMakeVerb(name, out var result);
 
             return result;
         }
+
+        [TestCase("tests", ExpectedResult = "test")]
+        [TestCase("does", ExpectedResult = "do")]
+        [TestCase("caches", ExpectedResult = "cache")]
+        [TestCase("hashes", ExpectedResult = "hash")]
+        [TestCase("invites", ExpectedResult = "invite")]
+        [TestCase("adapts", ExpectedResult = "adapt")]
+        [TestCase("adopts", ExpectedResult = "adopt")]
+        [TestCase("informs", ExpectedResult = "inform")]
+        [TestCase("registers", ExpectedResult = "register")]
+        [TestCase("continues", ExpectedResult = "continue")]
+        [TestCase("pops", ExpectedResult = "pop")]
+        public static string MakeInfiniteVerb_finds_proper_infinite_verb_(string name) => Verbalizer.MakeInfiniteVerb(name);
     }
 }

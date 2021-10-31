@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -15,11 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => NamesFinder.TryMakeVerb(symbol.Name, out var betterName) ? betterName : symbol.Name;
+        internal static string FindBetterName(ISymbol symbol) => Verbalizer.TryMakeVerb(symbol.Name, out var betterName) ? betterName : symbol.Name;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => NamesFinder.TryMakeVerb(symbol.Name, out var betterName)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => Verbalizer.TryMakeVerb(symbol.Name, out var betterName)
                                                                                             ? new[] { Issue(symbol, betterName) }
                                                                                             : Enumerable.Empty<Diagnostic>();
     }

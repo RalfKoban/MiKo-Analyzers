@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
@@ -469,6 +471,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
+        protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
+        {
+            if (syntax.Content.FirstOrDefault() is XmlTextSyntax text)
+            {
+                var modifiedText = MakeFirstWordInfiniteVerb(text);
+
+                if (ReferenceEquals(text, modifiedText) is false)
+                {
+                    return syntax.ReplaceNode(text, modifiedText);
+                }
+            }
+
+            return syntax;
+        }
+
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
         {
             return SyntaxFactory.XmlEmptyElement(tag).WithAttributes(new SyntaxList<XmlAttributeSyntax>(SyntaxFactory.XmlCrefAttribute(syntax)));
@@ -531,6 +548,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static string GetText(XmlTextSyntax text)
         {
             return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia()));
+        }
+
+        private static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
+        {
+            foreach (var token in text.TextTokens)
+            {
+                var valueText = token.ValueText;
+
+                if (valueText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                // first word
+                var firstWord = valueText.FirstWord();
+                var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
+
+                if (firstWord != infiniteVerb)
+                {
+                    return text.ReplaceToken(token, token.WithText(infiniteVerb + valueText.WithoutFirstWord()));
+                }
+            }
+
+            return text;
         }
     }
 }

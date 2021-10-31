@@ -45,7 +45,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var preparedComment = PrepareComment(comment);
 
-            // TODO RKN: Fix first word in prepared comment by adding an 's' to it and making it lower case
             var startFixed = CommentStartingWith(preparedComment, StartPhraseParts[0], SeeLangword_True(), StartPhraseParts[1]);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
 
@@ -61,7 +60,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   .Concat(comment.Content.Where(_ => _.IsSeeLangwordBool()))
                                   .Concat(comment.Content.Where(_ => _.IsCBool()));
 
-            return comment.Without(nodes);
+            var result = comment.Without(nodes);
+
+            // convert first word in infinite verb (if applicable)
+            return MakeFirstWordInfiniteVerb(result);
         }
     }
 }
