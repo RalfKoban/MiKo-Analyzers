@@ -19,6 +19,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var symbolName = symbol.Name;
+            var marker = GetTestMarker(symbolName);
+            var phrases = new[]
+                              {
+                                  marker.SurroundedWith("_"),
+                                  "_" + marker,
+                                  marker + "_",
+                                  marker,
+                              };
+
+            return symbolName.Without(phrases);
+        }
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
@@ -27,12 +42,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Contains(TestMarker))
             {
-                var testCase = symbolName.Contains(TestCaseMarker, StringComparison.OrdinalIgnoreCase);
-
-                return new[] { Issue(symbol, testCase ? TestCaseMarker : TestMarker) };
+                return new[] { Issue(symbol, GetTestMarker(symbolName)) };
             }
 
             return Enumerable.Empty<Diagnostic>();
+        }
+
+        private static string GetTestMarker(string symbolName)
+        {
+            var testCase = symbolName.Contains(TestCaseMarker, StringComparison.OrdinalIgnoreCase);
+
+            return testCase ? TestCaseMarker : TestMarker;
         }
     }
 }

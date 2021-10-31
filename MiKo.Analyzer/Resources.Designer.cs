@@ -3102,6 +3102,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove test marker from name.
+        /// </summary>
+        public static string MiKo_1102_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1102_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A method that is marked as a unit test should not additionally indicate that it is a unit test by having &apos;Test&apos; in its name..
         /// </summary>
         public static string MiKo_1102_Description {
