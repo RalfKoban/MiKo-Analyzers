@@ -433,6 +433,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string comment) => Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comment);
 
+        protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);
+
+        protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, new SyntaxList<XmlNodeSyntax>(content));
+
+        protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, new SyntaxList<XmlNodeSyntax>(contents));
+
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
         protected static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);

@@ -6261,6 +6261,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; to list items.
+        /// </summary>
+        public static string MiKo_2204_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2204_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should use the &lt;list&gt; tag if items get enumerated. It should not use terms such as 1.), 2.) etc. directly.
         ///This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted and hard to read..
         /// </summary>

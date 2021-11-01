@@ -619,10 +619,14 @@ namespace MiKoSolutions.Analyzers
         {
             internal const string C = "c";
             internal const string Code = "code";
+            internal const string Description = "description";
             internal const string Example = "example";
             internal const string Exception = "exception";
             internal const string Include = "include";
             internal const string Inheritdoc = "inheritdoc";
+            internal const string Item = "item";
+            internal const string List = "list";
+            internal const string ListHeader = "listheader";
             internal const string Note = "note";
             internal const string Overloads = "overloads";
             internal const string Para = "para";
@@ -634,6 +638,7 @@ namespace MiKoSolutions.Analyzers
             internal const string See = "see";
             internal const string SeeAlso = "seealso";
             internal const string Summary = "summary";
+            internal const string Term = "term";
             internal const string TypeParam = "typeparam";
             internal const string TypeParamRef = "typeparamref";
             internal const string Value = "value";
@@ -643,6 +648,7 @@ namespace MiKoSolutions.Analyzers
                 internal const string Cref = "cref";
                 internal const string Langword = "langword";
                 internal const string Langref = "langref";
+                internal const string Type = "type";
             }
         }
 

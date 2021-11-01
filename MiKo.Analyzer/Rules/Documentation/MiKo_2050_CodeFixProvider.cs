@@ -153,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parts = string.Format(Constants.Comments.ExceptionCtorExceptionParamPhraseTemplate, '|', '|', '|', '|').Split('|');
 
-            var catchBlock = SyntaxFactory.XmlElement("b", new SyntaxList<XmlNodeSyntax>(XmlText("catch")));
+            var catchBlock = XmlElement("b", XmlText("catch"));
             var paramRef = SyntaxFactory.XmlParamRefElement(parameterName);
 
             return Comment(
