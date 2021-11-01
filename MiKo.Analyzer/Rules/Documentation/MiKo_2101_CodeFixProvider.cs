@@ -55,6 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
+                    // skip empty lines in commented out code, but keep normal lines
                     if (commentedOutCode.Count == 0)
                     {
                         normalText.Add(token);
@@ -68,15 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (CodeDetector.IsCommentedOutCodeLine(valueText))
                 {
                     // we already have some text
-                    if (normalText.Any(_ => _.ValueText.IsNullOrWhiteSpace() is false))
-                    {
-                        RemoveNewLineTokenFromEnd(normalText);
-
-                        if (normalText.Count > 0)
-                        {
-                            result.Add(XmlText(normalText));
-                        }
-                    }
+                    AddXmlText(result, normalText);
 
                     normalText.Clear();
 
@@ -84,11 +77,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    if (commentedOutCode.Count > 0)
-                    {
-                        // we found some code
-                        result.Add(GetAsCode(commentedOutCode));
-                    }
+                    // we found some code
+                    AddCode(result, commentedOutCode);
 
                     if (valueText.IsNullOrWhiteSpace() is false)
                     {
@@ -100,22 +90,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            if (commentedOutCode.Count > 0)
-            {
-                // we found some code at the end
-                result.Add(GetAsCode(commentedOutCode));
-            }
+            // we found some code at the end
+            AddCode(result, commentedOutCode);
 
-            if (normalText.Count > 0)
-            {
-                // we found some normal code at the end
-                RemoveNewLineTokenFromEnd(normalText);
-
-                if (normalText.Count > 0)
-                {
-                    result.Add(XmlText(normalText));
-                }
-            }
+            // we found some normal code at the end
+            AddXmlText(result, normalText);
 
             if (result.Count == 0)
             {
@@ -128,12 +107,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result;
         }
 
-        private static void RemoveNewLineTokenFromEnd(ICollection<SyntaxToken> normalText)
+        private static void AddXmlText(ICollection<SyntaxNode> result, ICollection<SyntaxToken> text)
         {
-            var last = normalText.Last();
-            if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+            if (text.Any(_ => _.ValueText.IsNullOrWhiteSpace() is false))
             {
-                normalText.Remove(last);
+                // remove last new line token so that we don't have empty lines
+                var last = text.Last();
+                if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    text.Remove(last);
+                }
+
+                if (text.Count > 0)
+                {
+                    result.Add(XmlText(text));
+                }
+            }
+        }
+
+        private static void AddCode(ICollection<SyntaxNode> result, ICollection<SyntaxToken> commentedOutCode)
+        {
+            if (commentedOutCode.Count > 0)
+            {
+                // we found some code at the end
+                var code = GetAsCode(commentedOutCode);
+
+                result.Add(code);
             }
         }
 
