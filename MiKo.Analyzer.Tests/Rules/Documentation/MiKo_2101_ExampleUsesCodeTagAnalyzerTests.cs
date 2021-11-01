@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -162,8 +163,174 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_single_line_example_code_on_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// var x = 42;
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var x = 42;
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_double_line_example_code_on_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// var x = 42;
+    /// var y = x / 2;
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var x = 42;
+    /// var y = x / 2;
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_starting_text_and_double_line_example_code_on_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// Here some example:
+    /// var x = 42;
+    /// var y = x / 2;
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// Here some example:
+    /// <code>
+    /// var x = 42;
+    /// var y = x / 2;
+    /// </code>
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_surrounding_text_and_double_line_example_code_on_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// Here some example:
+    /// var x = 42;
+    /// var y = x / 2;
+    /// As you can see, there is something.
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <example>
+    /// Here some example:
+    /// <code>
+    /// var x = 42;
+    /// var y = x / 2;
+    /// </code>
+    /// As you can see, there is something.
+    /// </example>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2101_ExampleUsesCodeTagAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2101_ExampleUsesCodeTagAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2101_CodeFixProvider();
     }
 }

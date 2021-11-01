@@ -6099,6 +6099,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround sample code with &apos;&lt;code&gt;&apos;.
+        /// </summary>
+        public static string MiKo_2101_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2101_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease reading, example documentation should place code samples inside &lt;code&gt; tags so that IntelliSense or any XML documentation tool can format them in a special way..
         /// </summary>
         public static string MiKo_2101_Description {
