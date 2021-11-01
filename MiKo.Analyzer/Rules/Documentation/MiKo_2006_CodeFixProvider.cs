@@ -33,8 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;
             }
 
-            var summary = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Summary, default), SummaryText[0], SeeCref(type), SummaryText[1] + readOnlyMarker);
-            var field = Comment(SyntaxFactory.XmlElement(Constants.XmlTag.Value, default), ValueText[0], SeeCref(type), ValueText[1]);
+            var summary = Comment(XmlElement(Constants.XmlTag.Summary), SummaryText[0], SeeCref(type), SummaryText[1] + readOnlyMarker);
+            var field = Comment(XmlElement(Constants.XmlTag.Value), ValueText[0], SeeCref(type), ValueText[1]);
 
             return syntax.WithoutTrivia()
                          .WithContent(SyntaxFactory.List<XmlNodeSyntax>(new[]

@@ -140,9 +140,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = XmlText(commentedOutCode).WithTrailingXmlComment();
 
-            return SyntaxFactory.XmlElement(Constants.XmlTag.Code, new SyntaxList<XmlNodeSyntax>(comment))
-                                .WithLeadingXmlComment()
-                                .WithTrailingNewLine();
+            return XmlElement(Constants.XmlTag.Code, comment)
+                   .WithLeadingXmlComment()
+                   .WithTrailingNewLine();
         }
     }
 }
