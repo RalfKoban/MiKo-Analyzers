@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var nodes = new List<XmlTextSyntax>();
             foreach (var node in comment.DescendantNodes().OfType<XmlTextSyntax>())
             {
-                if (node.Parent is XmlElementSyntax parent && parent.GetName() == Constants.XmlTag.Code)
+                if (node.Parent.IsCode())
                 {
                     // skip <code> samples
                     continue;

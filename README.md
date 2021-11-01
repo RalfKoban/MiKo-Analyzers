@@ -202,7 +202,7 @@ The following tables list all the 300 rules that are currently provided by the a
 |MiKo_2090|Documentation for equality operator shall have default phrase.|&#x2713;|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase.|&#x2713;|&#x2713;|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase.|&#x2713;|&#x2713;|
-|MiKo_2101|&lt;example&gt; documentation should show code example in &lt;code&gt; tags.|&#x2713;|\-|
+|MiKo_2101|&lt;example&gt; documentation should show code example in &lt;code&gt; tags.|&#x2713;|&#x2713;|
 |MiKo_2200|Use a capitalized letter to start the comment.|&#x2713;|\-|
 |MiKo_2201|Use a capitalized letter to start the sentences in the comment.|&#x2713;|\-|
 |MiKo_2202|Documentation should use the term 'identifier' instead of 'id'.|&#x2713;|&#x2713;|
