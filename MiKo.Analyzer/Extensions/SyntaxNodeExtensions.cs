@@ -585,6 +585,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivias) where T : SyntaxNode
+        {
+            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivias));
+        }
+
         internal static T WithFirstLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
         {
             if (value.HasLeadingTrivia)

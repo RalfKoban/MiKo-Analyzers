@@ -74,10 +74,18 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic diagnostic)
         {
+            var newRoot = root;
+
             var oldToken = GetToken(trivia);
             var updatedToken = GetUpdatedToken(oldToken, diagnostic);
 
-            var newDocument = document.WithSyntaxRoot(root.ReplaceToken(oldToken, updatedToken));
+            if (oldToken != updatedToken)
+            {
+                newRoot = root.ReplaceToken(oldToken, updatedToken);
+            }
+
+            var finalRoot = GetUpdatedSyntaxRoot(newRoot, trivia) ?? newRoot;
+            var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
         }
@@ -86,11 +94,13 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => null;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax) => null;
-
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
 
         protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic) => token;
+
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax) => null;
+
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxTrivia trivia) => null;
 
         private CodeAction CreateCodeFix(Document document, SyntaxNode root, Diagnostic diagnostic)
         {

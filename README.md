@@ -226,7 +226,7 @@ The following tables list all the 300 rules that are currently provided by the a
 |MiKo_2305|Do not use double periods in comments.|&#x2713;|&#x2713;|
 |MiKo_2306|Do end comments with a period.|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of 'was not sucessful'.|&#x2713;|&#x2713;|
-|MiKo_2308|Do not place comment on single line before closing brace but after code.|&#x2713;|\-|
+|MiKo_2308|Do not place comment on single line before closing brace but after code.|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't".|&#x2713;|&#x2713;|
 
 ### Maintainability
