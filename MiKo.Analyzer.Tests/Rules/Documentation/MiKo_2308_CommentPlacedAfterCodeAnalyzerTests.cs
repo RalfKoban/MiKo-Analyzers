@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -133,8 +134,78 @@ public class TestMe
     }
 }");
 
+        [Test]
+        public void Code_gets_fixed_for_comment_at_end_of_method()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomething();
+
+        // some comment
+    }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment
+        DoSomething();
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_comment_in_catch_block()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+            DoSomething();
+        }
+        catch (Exception ex)
+        {
+            DoSomething();
+
+            // some comment
+        }
+    }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+            DoSomething();
+        }
+        catch (Exception ex)
+        {
+            // some comment
+            DoSomething();
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2308_CommentPlacedAfterCodeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2308_CommentPlacedAfterCodeAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2308_CodeFixProvider();
     }
 }

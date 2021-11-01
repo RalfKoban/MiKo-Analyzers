@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2303_CodeFixTitle;
 
-        protected override bool IsTrivia => true;
-
         protected override SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten)
         {
             var comment = original.ToString().TrimEnd();
