@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_4004_ImplementedInterfaceOrderedAfterClassAnalyzer : OrderingAnalyzer
+    public sealed class MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer : OrderingAnalyzer
     {
-        public const string Id = "MiKo_4004";
+        public const string Id = "MiKo_4005";
 
-        public MiKo_4004_ImplementedInterfaceOrderedAfterClassAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 

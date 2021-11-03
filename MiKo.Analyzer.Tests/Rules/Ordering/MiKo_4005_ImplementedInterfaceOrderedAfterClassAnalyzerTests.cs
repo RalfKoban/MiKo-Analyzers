@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [TestFixture]
-    public sealed class MiKo_4004_ImplementedInterfaceOrderedAfterClassAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_reported_for_class_without_interface() => No_issue_is_reported_for(@"
@@ -314,10 +314,10 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_4004_ImplementedInterfaceOrderedAfterClassAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4004_ImplementedInterfaceOrderedAfterClassAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_4004_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_4005_CodeFixProvider();
     }
 }

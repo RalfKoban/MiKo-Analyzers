@@ -9660,36 +9660,36 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Place interface directly after type declaration.
         /// </summary>
-        public static string MiKo_4004_CodeFixTitle {
+        public static string MiKo_4005_CodeFixTitle {
             get {
-                return ResourceManager.GetString("MiKo_4004_CodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("MiKo_4005_CodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to To ease reading, the interface that gives the type its name should be listed as first interface. All the other implemented interfaces should be placed behind..
         /// </summary>
-        public static string MiKo_4004_Description {
+        public static string MiKo_4005_Description {
             get {
-                return ResourceManager.GetString("MiKo_4004_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_4005_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Place &apos;{1}&apos; as first interface directly after type declaration.
         /// </summary>
-        public static string MiKo_4004_MessageFormat {
+        public static string MiKo_4005_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_4004_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_4005_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The interface that gives a type its name should be placed directly after the type&apos;s declaration..
         /// </summary>
-        public static string MiKo_4004_Title {
+        public static string MiKo_4005_Title {
             get {
-                return ResourceManager.GetString("MiKo_4004_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_4005_Title", resourceCulture);
             }
         }
         
