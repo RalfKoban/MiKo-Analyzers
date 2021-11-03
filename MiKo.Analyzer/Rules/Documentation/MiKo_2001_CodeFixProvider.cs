@@ -18,17 +18,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
-                                                                                    { "This event is fired ", string.Empty },
-                                                                                    { "This event is raised ", string.Empty },
-                                                                                    { "This event occurs ", string.Empty },
+                                                                                    { "Event fired ", string.Empty },
+                                                                                    { "Event raised ", string.Empty },
                                                                                     { "Event is fired ", string.Empty },
                                                                                     { "Event is raised ", string.Empty },
                                                                                     { "Event occurs ", string.Empty },
+                                                                                    { "Event shall be fired ", string.Empty },
+                                                                                    { "Event shall be raised ", string.Empty },
+                                                                                    { "Event that is fired ", string.Empty },
+                                                                                    { "Event that is raised ", string.Empty },
+                                                                                    { "Event that shall be fired ", string.Empty },
+                                                                                    { "Event that shall be raised ", string.Empty },
+                                                                                    { "Event which is fired ", string.Empty },
+                                                                                    { "Event which is raised ", string.Empty },
+                                                                                    { "Fired ", string.Empty },
+                                                                                    { "Indicates ", string.Empty },
                                                                                     { "Is fired ", string.Empty },
                                                                                     { "Is raised ", string.Empty },
-                                                                                    { "Fired ", string.Empty },
                                                                                     { "Raised ", string.Empty },
-                                                                                    { "Indicates ", string.Empty },
+                                                                                    { "Shall be fired ", string.Empty },
+                                                                                    { "Shall be raised ", string.Empty },
+                                                                                    { "This event is fired ", string.Empty },
+                                                                                    { "This event is raised ", string.Empty },
+                                                                                    { "This event occurs ", string.Empty },
+                                                                                    { "This event shall be fired ", string.Empty },
+                                                                                    { "This event shall be raised ", string.Empty },
                                                                                 };
 
         public override string FixableDiagnosticId => MiKo_2001_EventSummaryAnalyzer.Id;
