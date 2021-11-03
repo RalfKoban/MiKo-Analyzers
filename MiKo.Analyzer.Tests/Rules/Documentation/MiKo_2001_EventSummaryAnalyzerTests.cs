@@ -82,11 +82,21 @@ public class TestMe
 }
 ");
 
+        [TestCase("Event fired after", "Occurs after")]
+        [TestCase("Event raised after", "Occurs after")]
         [TestCase("Event is fired after", "Occurs after")]
         [TestCase("Event is fired before", "Occurs before")]
         [TestCase("Event is fired when", "Occurs when")]
         [TestCase("Event is raised when", "Occurs when")]
         [TestCase("Event occurs when", "Occurs when")]
+        [TestCase("Event shall be fired when", "Occurs when")]
+        [TestCase("Event shall be raised when", "Occurs when")]
+        [TestCase("Event that is fired when", "Occurs when")]
+        [TestCase("Event that is raised when", "Occurs when")]
+        [TestCase("Event that shall be fired when", "Occurs when")]
+        [TestCase("Event that shall be raised when", "Occurs when")]
+        [TestCase("Event which is fired when", "Occurs when")]
+        [TestCase("Event which is raised when", "Occurs when")]
         [TestCase("Fired after", "Occurs after")]
         [TestCase("Fired before", "Occurs before")]
         [TestCase("Fired when", "Occurs when")]
@@ -99,9 +109,13 @@ public class TestMe
         [TestCase("Raised before", "Occurs before")]
         [TestCase("Raised if", "Occurs if")]
         [TestCase("Raised when", "Occurs when")]
+        [TestCase("Shall be fired when", "Occurs when")]
+        [TestCase("Shall be raised when", "Occurs when")]
         [TestCase("This event is fired for", "Occurs for")]
         [TestCase("This event is raised for", "Occurs for")]
         [TestCase("This event occurs when", "Occurs when")]
+        [TestCase("This event shall be fired when", "Occurs when")]
+        [TestCase("This event shall be raised when", "Occurs when")]
         [TestCase("When", "Occurs when")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
