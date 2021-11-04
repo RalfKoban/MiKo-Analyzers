@@ -9658,6 +9658,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place &apos;Dispose&apos; method first.
+        /// </summary>
+        public static string MiKo_4004_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4004_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dispose methods are all directly related to the lifetime of an object. Therefore, they should be placed before all other methods of the same accessibility..
+        /// </summary>
+        public static string MiKo_4004_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4004_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;Dispose&apos; method first.
+        /// </summary>
+        public static string MiKo_4004_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4004_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dispose methods should be placed before all other methods of the same accessibility..
+        /// </summary>
+        public static string MiKo_4004_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4004_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place interface directly after type declaration.
         /// </summary>
         public static string MiKo_4005_CodeFixTitle {

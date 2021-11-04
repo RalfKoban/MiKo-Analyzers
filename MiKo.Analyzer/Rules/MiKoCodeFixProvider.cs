@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
             }
 
-            var finalRoot = GetUpdatedSyntaxRoot(newRoot, syntax) ?? newRoot;
+            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, updatedSyntax, diagnostic) ?? newRoot;
             var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 newRoot = root.ReplaceToken(oldToken, updatedToken);
             }
 
-            var finalRoot = GetUpdatedSyntaxRoot(newRoot, trivia) ?? newRoot;
+            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, trivia, diagnostic) ?? newRoot;
             var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
@@ -92,15 +92,15 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => null;
 
-        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => null;
-
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
+
+        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => null;
 
         protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic) => token;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax) => null;
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic) => null;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxTrivia trivia) => null;
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic diagnostic) => null;
 
         private CodeAction CreateCodeFix(Document document, SyntaxNode root, Diagnostic diagnostic)
         {

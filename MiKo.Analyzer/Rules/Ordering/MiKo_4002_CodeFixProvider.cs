@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4002_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var semanticModel = document.GetSemanticModelAsync().Result;
 
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var replacements = CreateReplacements(methodNodes);
 
             // fix tree
-            var modifiedType = syntax.RemoveNodesAndAdjustOpenCloseBraces(methodNodes);
+            var modifiedType = typeSyntax.RemoveNodesAndAdjustOpenCloseBraces(methodNodes);
             var node = modifiedType.ChildNodes().First(_ => _.IsEquivalentTo(orientationNode));
 
             return modifiedType.InsertNodesAfter(node, replacements);

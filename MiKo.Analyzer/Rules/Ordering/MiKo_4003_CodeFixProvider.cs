@@ -1,10 +1,8 @@
-﻿using System;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Ordering
@@ -16,12 +14,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4003_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var disposeMethod = GetDisposeMethod(syntax);
+            var disposeMethod = (MethodDeclarationSyntax)syntax;
 
             // remove method so that it can be added again
-            var modifiedType = syntax.Without(disposeMethod);
+            var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(disposeMethod);
 
             var syntaxNode = FindLastCtorOrFinalizer(modifiedType);
             if (syntaxNode is null)
@@ -34,18 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             // insert method after found ctor or finalizer
             return modifiedType.InsertNodeAfter(syntaxNode, disposeMethod);
-        }
-
-        private static MethodDeclarationSyntax GetDisposeMethod(SyntaxNode type)
-        {
-            var disposeMethod = type.ChildNodes()
-                                    .OfType<MethodDeclarationSyntax>()
-                                    .Where(_ => _.Modifiers.Any(__ => __.IsKind(SyntaxKind.PublicKeyword)) || _.ExplicitInterfaceSpecifier != null)
-                                    .Where(_ => _.ParameterList.Parameters.None())
-                                    .Where(_ => _.ReturnType.IsVoid())
-                                    .First(_ => _.GetName() == nameof(IDisposable.Dispose));
-
-            return disposeMethod;
         }
 
         private static SyntaxNode FindLastCtorOrFinalizer(SyntaxNode modifiedType)

@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => syntax;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var declarator = (VariableDeclaratorSyntax)syntax;
 

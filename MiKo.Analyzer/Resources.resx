@@ -3416,6 +3416,18 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4003_Title" xml:space="preserve">
     <value>Dispose methods should be placed directly after constructors and finalizers.</value>
   </data>
+  <data name="MiKo_4004_CodeFixTitle" xml:space="preserve">
+    <value>Place 'Dispose' method first</value>
+  </data>
+  <data name="MiKo_4004_Description" xml:space="preserve">
+    <value>Dispose methods are all directly related to the lifetime of an object. Therefore, they should be placed before all other methods of the same accessibility.</value>
+  </data>
+  <data name="MiKo_4004_MessageFormat" xml:space="preserve">
+    <value>Place 'Dispose' method first</value>
+  </data>
+  <data name="MiKo_4004_Title" xml:space="preserve">
+    <value>Dispose methods should be placed before all other methods of the same accessibility.</value>
+  </data>
   <data name="MiKo_4005_CodeFixTitle" xml:space="preserve">
     <value>Place interface directly after type declaration</value>
   </data>

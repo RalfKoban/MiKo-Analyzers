@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten) => original;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxTrivia trivia)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic diagnostic)
         {
             if (trivia.Token.Parent is BlockSyntax block)
             {

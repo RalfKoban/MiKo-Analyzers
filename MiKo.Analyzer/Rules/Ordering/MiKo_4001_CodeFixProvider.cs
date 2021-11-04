@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4001_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var semanticModel = document.GetSemanticModelAsync().Result;
 
@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var methodsOrderedByParameters = MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.GetMethodsOrderedByParameters(methods, methodName);
 
-            var modifiedType = syntax;
+            var modifiedType = typeSyntax;
 
             // handle each accessibility separately, to avoid situations such as that private methods suddenly get sorted before other public methods
             foreach (var nodes in methodsOrderedByParameters.GroupBy(_ => _.DeclaredAccessibility))
