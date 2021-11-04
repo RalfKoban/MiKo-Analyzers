@@ -14,11 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4102_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var method = syntax.ChildNodes().OfType<MethodDeclarationSyntax>().First(_ => _.IsTestTearDownMethod());
+            var method = (MethodDeclarationSyntax)syntax;
 
-            var modifiedType = syntax.RemoveNodeAndAdjustOpenCloseBraces(method);
+            var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(method);
 
             var otherMethods = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().ToList();
 

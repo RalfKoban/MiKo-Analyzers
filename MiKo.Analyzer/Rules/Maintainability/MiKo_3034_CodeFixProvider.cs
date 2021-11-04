@@ -30,6 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)));
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(SyntaxNode root, SyntaxNode syntax) => WithUsing(root, "System.Runtime.CompilerServices");
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic) => WithUsing(root, "System.Runtime.CompilerServices");
     }
 }

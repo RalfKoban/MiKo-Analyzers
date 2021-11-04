@@ -555,16 +555,15 @@ namespace MiKoSolutions.Analyzers
         {
             // replace all nodes by following algorithm:
             // 1. Create a dictionary with SyntaxAnnotations and replacement nodes for the node to annotate (new SyntaxAnnotation)
-            // 2. Annotate the node to keep track (node.WithAdditionalAnnotations())
+            // 2. Annotate the node to keep track (node.WithAnnotation())
             // 3. Loop over all annotated nodes and replace them with the replacement nodes (document.GetAnnotatedNodes(annotation))
             var annotation = new SyntaxAnnotation();
 
-            var result = value.ReplaceNodes(nodes, (original, rewritten) => original.WithAdditionalAnnotations(annotation));
+            var result = value.ReplaceNodes(nodes, (original, rewritten) => original.WithAnnotation(annotation));
 
             while (true)
             {
-                var annotatedNodes = result.GetAnnotatedNodes(annotation).OfType<TNode>();
-                var oldNode = annotatedNodes.FirstOrDefault();
+                var oldNode = result.GetAnnotatedNodes(annotation).OfType<TNode>().FirstOrDefault();
                 if (oldNode is null)
                 {
                     // nothing left
@@ -582,6 +581,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
+
+        internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 

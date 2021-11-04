@@ -8,10 +8,19 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     public abstract class OrderingCodeFixProvider : MiKoCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<BaseTypeDeclarationSyntax>().First();
+        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => GetUpdatedTypeSyntax(document, (BaseTypeDeclarationSyntax)syntax, diagnostic);
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => syntax;
 
-        protected abstract SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic);
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic)
+        {
+            var typeSyntax = syntax.AncestorsAndSelf().OfType<BaseTypeDeclarationSyntax>().First();
+
+            var updatedTypeSyntax = GetUpdatedTypeSyntax(document, typeSyntax, syntax, diagnostic);
+
+            return root.ReplaceNode(typeSyntax, updatedTypeSyntax);
+        }
+
+        protected abstract SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic);
     }
 }

@@ -17,15 +17,15 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4005_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            switch (syntax)
+            switch (typeSyntax)
             {
                 case ClassDeclarationSyntax c: return c.WithBaseList(UpdatedBaseList(document, c.BaseList, c.Identifier));
                 case StructDeclarationSyntax s: return s.WithBaseList(UpdatedBaseList(document, s.BaseList, s.Identifier));
 
                 default:
-                    return syntax;
+                    return typeSyntax;
             }
         }
 
