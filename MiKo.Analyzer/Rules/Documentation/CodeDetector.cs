@@ -89,18 +89,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public static void RefreshKnownTypes(Compilation compilation)
         {
-            IEnumerable<IAssemblySymbol> assemblySymbols;
+            var assemblySymbols = new List<IAssemblySymbol>
+                                      {
+                                          compilation.Assembly,
+                                      };
             try
             {
-                assemblySymbols = compilation.GetUsedAssemblyReferences()
-                                             .Select(compilation.GetAssemblyOrModuleSymbol)
-                                             .OfType<IAssemblySymbol>()
-                                             .ToList();
+                var assemblies = compilation.GetUsedAssemblyReferences()
+                                            .Select(compilation.GetAssemblyOrModuleSymbol)
+                                            .OfType<IAssemblySymbol>();
+                assemblySymbols.AddRange(assemblies);
             }
             catch (InvalidOperationException)
             {
                 // promise to not enqueue, may happen during multiple test runs
-                return;
             }
 
             // to speed up the lookup, add known assemblies and their types only once
@@ -112,6 +114,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var typeName in assemblySymbol.TypeNames)
                     {
+                        if (typeName[0] == '<')
+                        {
+                            continue;
+                        }
+
                         KnownTypeNames.TryAdd(typeName, typeName);
                     }
                 }

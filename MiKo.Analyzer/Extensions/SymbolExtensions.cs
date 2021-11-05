@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers
                     return t.ToDisplayString(FullyQualifiedDisplayFormatWithoutAlias);
 
                 case IAssemblySymbol a:
-                    return a.Identity.GetDisplayName(true);
+                    return a.Identity.GetDisplayName(); // use short display name
 
                 default:
                     return value.ToDisplayString(FullyQualifiedDisplayFormat); // makes use of aliases for language such as 'int' instead of 'System.Int32'

@@ -187,6 +187,20 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_commented_out_type_in_ctor() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe()
+    {
+        // TestMe value;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2302_CommentedOutCodeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2302_CommentedOutCodeAnalyzer();
