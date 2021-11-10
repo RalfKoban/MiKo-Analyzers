@@ -9,18 +9,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public static class CodeDetector
     {
-        private static readonly string[] CodeBlockMarkers =
+        private static readonly char[] CodeBlockMarkers =
             {
-                "{",
-                "}",
+                '{',
+                '}',
             };
 
-        private static readonly string[] ArgumentBlockMarkers =
+        private static readonly char[] ArgumentBlockMarkers =
             {
-                "(",
-                ")",
-                "[",
-                "]",
+                '(',
+                ')',
+                '[',
+                ']',
             };
 
         private static readonly string[] CodeConditionMarkers =
@@ -142,11 +142,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
             }
 
-            if (line.ContainsAny(ReSharperMarkers))
-            {
-                return false; // ignore '// ReSharper' comments
-            }
-
             if (line.StartsWithAny(CodeStartMarkers, StringComparison.Ordinal))
             {
                 return true;
@@ -170,6 +165,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return false; // ignore all framed comments
                 }
 
+                if (line.ContainsAny(ReSharperMarkers))
+                {
+                    return false; // ignore '// ReSharper' comments
+                }
+
                 return true;
             }
 
@@ -188,14 +188,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            if (line.EndsWith(";", StringComparison.Ordinal) || line.Contains("="))
+            if (line.EndsWith(';') || line.Contains('='))
             {
-                if (line.Contains("."))
+                if (line.Contains('.'))
                 {
                     return true;
                 }
 
-                if (line.ContainsAny(ArgumentBlockMarkers, StringComparison.Ordinal))
+                if (line.ContainsAny(ArgumentBlockMarkers))
                 {
                     return true;
                 }
@@ -213,7 +213,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            if (line.Contains("case ") && line.Contains(":"))
+            if (line.Contains(':') && line.Contains("case "))
             {
                 return true;
             }

@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers
         internal static XElement GetCommentElement(this string commentXml)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = "<root>" + commentXml + "</root>";
+            var xml = string.Concat("<root>", commentXml, "</root>");
 
             try
             {

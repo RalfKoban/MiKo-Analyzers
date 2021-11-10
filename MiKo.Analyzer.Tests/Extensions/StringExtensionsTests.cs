@@ -84,5 +84,19 @@ namespace MiKoSolutions.Analyzers.Extensions
                                                         " is contained multiple times.",
                                                     }));
         }
+
+        [Test]
+        public static void HumanizedConcatenated_concatenates_correctly()
+        {
+            Assert.Multiple(() =>
+                                {
+                                    Assert.That(Array.Empty<string>().HumanizedConcatenated(), Is.EqualTo(string.Empty), "0 value");
+                                    Assert.That(new[] { "a" }.HumanizedConcatenated(), Is.EqualTo("'a'"), "1 value");
+                                    Assert.That(new[] { "a", "b" }.HumanizedConcatenated(), Is.EqualTo("'a' or 'b'"), "2 values");
+                                    Assert.That(new[] { "a", "b", "c" }.HumanizedConcatenated(), Is.EqualTo("'a', 'b' or 'c'"), "3 values");
+                                    Assert.That(new[] { "a", "b", "c", "d" }.HumanizedConcatenated(), Is.EqualTo("'a', 'b', 'c' or 'd'"), "4 values");
+                                    Assert.That(new[] { "a", "b", "c", "d", "e" }.HumanizedConcatenated(), Is.EqualTo("'a', 'b', 'c', 'd' or 'e'"), "5 values");
+                                });
+        }
     }
 }

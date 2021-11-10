@@ -99,6 +99,8 @@ namespace System
             }
         }
 
+        public static bool ContainsAny(this string value, char[] characters) => value?.IndexOfAny(characters) >= 0;
+
         public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
         public static bool ContainsAny(this string value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
@@ -106,6 +108,8 @@ namespace System
         public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => value.ContainsAny((IEnumerable<string>)phrases, comparison);
 
         public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Contains(_, comparison));
+
+        public static bool EndsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[value.Length - 1] == character;
 
         public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
 
@@ -166,7 +170,7 @@ namespace System
             var count = 0;
             for (var index = 0; index < value.Length; index++)
             {
-                if (char.IsUpper(value[index]))
+                if (value[index].IsUpperCase())
                 {
                     if (count == limit)
                     {
@@ -192,7 +196,9 @@ namespace System
             {
                 case 0: return string.Empty;
                 case 1: return items[0];
-                case 2: return items.ConcatenatedWith(SeparatorForLast);
+                case 2: return string.Concat(items[0], SeparatorForLast, items[1]);
+                case 3: return string.Concat(string.Concat(items[0], Separator, items[1]), SeparatorForLast, items[2]);
+                case 4: return string.Concat(string.Concat(items[0], Separator, items[1]), string.Concat(Separator, items[2], SeparatorForLast, items[3]));
                 default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), SeparatorForLast, items[count - 1]);
             }
         }

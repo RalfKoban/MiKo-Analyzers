@@ -417,9 +417,9 @@ namespace MiKoSolutions.Analyzers
                 };
 
             internal static readonly string[] InvalidSummaryCrefPhrases = Enumerable.Empty<string>()
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => XmlElementStartingTag + _ + " "))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => XmlElementStartingTag + _ + "/"))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => XmlElementStartingTag + _ + ">"))
+                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, " ")))
+                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, "/")))
+                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, ">")))
                                                                                     .ToArray();
 
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
