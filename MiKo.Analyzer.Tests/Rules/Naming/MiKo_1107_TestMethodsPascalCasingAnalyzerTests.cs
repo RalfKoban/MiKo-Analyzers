@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -60,8 +61,30 @@ public class TestMe
 }
 ");
 
+        [TestCase("DoSomethingDoesSomething", "Do_something_does_something")]
+        [TestCase("doSomethingDoesSomething", "do_something_does_something")]
+        [TestCase("DoSomethingX", "Do_something_X")]
+        [TestCase("DoSomethingWithHTML", "Do_something_with_HTML")]
+        [TestCase("DoSomethingWithHTMLandMore", "Do_something_with_HTML_and_more")]
+        [TestCase("HTMLdoSomething", "HTML_do_something")]
+        public void Code_gets_fixed_(string original, string fix)
+        {
+            const string Template = @"
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void ###() { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", original), Template.Replace("###", fix));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1107_TestMethodsPascalCasingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1107_TestMethodsPascalCasingAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1107_CodeFixProvider();
     }
 }

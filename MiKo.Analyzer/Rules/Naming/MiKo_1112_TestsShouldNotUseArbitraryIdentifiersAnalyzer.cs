@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal static string FindBetterName(ISymbol symbol)
         {
             var betterName = symbol.Name.Without("Arbitrary");
-            var i = betterName.IndexOf(Phrase, StringComparison.Ordinal);
-            if (i < 0)
+            var index = betterName.IndexOf(Phrase, StringComparison.Ordinal);
+            if (index < 0)
             {
                 return betterName;
             }
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var characters = betterName.Without(Phrase).ToCharArray();
             if (characters.Length != 0)
             {
-                characters[i] = char.ToLowerInvariant(characters[i]);
+                characters[index] = characters[index].ToLowerCase();
 
                 return string.Intern(new string(characters));
             }

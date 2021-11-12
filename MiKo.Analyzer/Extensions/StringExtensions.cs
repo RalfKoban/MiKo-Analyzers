@@ -329,6 +329,8 @@ namespace System
         public static string ToLowerCase(this string value) => value.ToLower(CultureInfo.InvariantCulture);
 #pragma warning restore CA1308 // Normalize strings to uppercase
 
+        public static char ToLowerCase(this char value) => char.ToLowerInvariant(value);
+
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </summary>
@@ -354,10 +356,12 @@ namespace System
             }
 
             var characters = value.ToCharArray();
-            characters[index] = char.ToLowerInvariant(characters[index]);
+            characters[index] = characters[index].ToLowerCase();
 
             return string.Intern(new string(characters));
         }
+
+        public static char ToUpperCase(this char value) => char.ToUpperInvariant(value);
 
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
@@ -384,7 +388,7 @@ namespace System
             }
 
             var characters = value.ToCharArray();
-            characters[index] = char.ToUpperInvariant(characters[index]);
+            characters[index] = characters[index].ToUpperCase();
 
             return string.Intern(new string(characters));
         }

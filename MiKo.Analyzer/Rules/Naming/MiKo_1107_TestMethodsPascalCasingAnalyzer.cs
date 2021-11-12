@@ -19,6 +19,62 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var symbolName = symbol.Name;
+            if (symbolName.Length < 2)
+            {
+                return symbolName;
+            }
+
+            var caseAlreadyFlipped = false;
+
+            var characters = new List<char>(symbolName);
+            for (var index = 1; index < characters.Count; index++)
+            {
+                var c = characters[index];
+
+                if (c.IsUpperCase())
+                {
+                    if (index == 1)
+                    {
+                        // multiple upper cases in a line at beginning of the name, so do not flip
+                        caseAlreadyFlipped = true;
+                    }
+
+                    if (caseAlreadyFlipped is false)
+                    {
+                        var nextC = c.ToLowerCase();
+
+                        var nextIndex = index + 1;
+                        if (nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase()))
+                        {
+                            // multiple upper cases in a line, so do not flip
+                            nextC = c;
+                        }
+
+                        characters[index++] = '_';
+                        characters.Insert(index, nextC);
+                    }
+
+                    caseAlreadyFlipped = true;
+                }
+                else
+                {
+                    if (caseAlreadyFlipped && characters[index - 1].IsUpperCase())
+                    {
+                        // we are behind multiple upper cases in a line, so add an underline
+                        characters[index++] = '_';
+                        characters.Insert(index, c);
+                    }
+
+                    caseAlreadyFlipped = false;
+                }
+            }
+
+            return string.Intern(new string(characters.ToArray()));
+        }
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
