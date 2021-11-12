@@ -3282,6 +3282,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use underscores instead of Pascal-casing.
+        /// </summary>
+        public static string MiKo_1107_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1107_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
         ///To ease reading, use underscores between the different words instead..
         /// </summary>

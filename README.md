@@ -114,7 +114,7 @@ The following tables list all the 301 rules that are currently provided by the a
 |MiKo_1104|Test cleanup methods should be named 'CleanupTest'.|&#x2713;|&#x2713;|
 |MiKo_1105|One-time test initialization methods should be named 'PrepareTestEnvironment'.|&#x2713;|&#x2713;|
 |MiKo_1106|One-time test cleanup methods should be named 'CleanupTestEnvironment'.|&#x2713;|&#x2713;|
-|MiKo_1107|Test methods should not be in Pascal-casing.|&#x2713;|\-|
+|MiKo_1107|Test methods should not be in Pascal-casing.|&#x2713;|&#x2713;|
 |MiKo_1108|Do not name variables, parameters, fields and properties 'Mock', 'Stub', 'Fake' or 'Shim'.|&#x2713;|&#x2713;|
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix.|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore.|&#x2713;|&#x2713;|

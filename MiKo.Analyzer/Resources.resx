@@ -1226,6 +1226,9 @@ The name should be constructed by having the name of the type under test as pref
   <data name="MiKo_1106_Title" xml:space="preserve">
     <value>One-time test cleanup methods should be named 'CleanupTestEnvironment'.</value>
   </data>
+  <data name="MiKo_1107_CodeFixTitle" xml:space="preserve">
+    <value>Use underscores instead of Pascal-casing</value>
+  </data>
   <data name="MiKo_1107_Description" xml:space="preserve">
     <value>For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
 To ease reading, use underscores between the different words instead.</value>
