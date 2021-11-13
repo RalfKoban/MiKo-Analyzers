@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2033_CodeFixTitle;
 
-        protected override XmlElementSyntax GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
         {
             if (comment.Content.Count > 5)
             {
@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1], SeeCref("string"), TaskParts[2], comment.Content.ToArray());
         }
 
-        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType)
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
         {
             var commentStart = StringParts[0];
             var commentEnd = StringParts[1];

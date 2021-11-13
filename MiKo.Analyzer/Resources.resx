@@ -1806,6 +1806,9 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2036_CodeFixTitle_DefaultTrue" xml:space="preserve">
     <value>Fix comment for default value 'true'</value>
   </data>
+  <data name="MiKo_2036_CodeFixTitle_Enum" xml:space="preserve">
+    <value>Fix comment for enum default value</value>
+  </data>
   <data name="MiKo_2036_CodeFixTitle_NoDefault" xml:space="preserve">
     <value>Fix comment for no default value</value>
   </data>
