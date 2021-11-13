@@ -42,21 +42,39 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual bool IsEnabledByDefault => true;
 
+        protected virtual bool CanRunConcurrently => true;
+
+        protected virtual bool IsUnitTestAnalyzer => false;
+
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
         public sealed override void Initialize(AnalysisContext context)
         {
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
-            // TODO: RKN remove this if that's not possible
-            context.EnableConcurrentExecution();
+            if (CanRunConcurrently)
+            {
+                context.EnableConcurrentExecution();
+            }
 
-            InitializeCore(context);
+            context.RegisterCompilationStartAction(compilationContext =>
+                                                       {
+                                                           if (IsUnitTestAnalyzer)
+                                                           {
+                                                               if (ReferencesTestAssemblies(compilationContext.Compilation) is false)
+                                                               {
+                                                                   // don't run analyzer if there are no tests contained
+                                                                   return;
+                                                               }
+                                                           }
+
+                                                           InitializeCore(compilationContext);
+                                                       });
         }
 
-        protected virtual void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind);
+        protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
 
-        protected void InitializeCore(AnalysisContext context, params SymbolKind[] symbolKinds)
+        protected void InitializeCore(CompilationStartAnalysisContext context, params SymbolKind[] symbolKinds)
         {
             foreach (var symbolKind in symbolKinds)
             {
@@ -129,6 +147,26 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue<T1, T2>(string name, SyntaxToken token, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString(), arg2.ToString());
 
         protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
+
+        private static bool ReferencesTestAssemblies(Compilation compilation)
+        {
+            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestAttribute") != null)
+            {
+                return true;
+            }
+
+            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestCaseAttribute") != null)
+            {
+                return true;
+            }
+
+            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod") != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         private static string GetSymbolName(ISymbol symbol)
         {

@@ -19,6 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         internal static string FindBetterName(ISymbol symbol)
         {
             var symbolName = symbol.Name;

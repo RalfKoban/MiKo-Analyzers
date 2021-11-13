@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         internal static string FindBetterName(ITypeSymbol symbol) => FindBetterName(symbol.Name);
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass();

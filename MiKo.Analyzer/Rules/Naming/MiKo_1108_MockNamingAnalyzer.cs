@@ -20,6 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         internal static string FindBetterName(ISymbol symbol)
         {
             var symbolName = symbol.Name.Without(MockNames);
@@ -40,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbolName;
         }
 
-        protected override void InitializeCore(AnalysisContext context)
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeParameter, SyntaxKind.Parameter);
             context.RegisterSyntaxNodeAction(AnalyzePropertyDeclaration, SyntaxKind.PropertyDeclaration);

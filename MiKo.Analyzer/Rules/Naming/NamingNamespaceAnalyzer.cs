@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNamespaceDeclaration, SyntaxKind.NamespaceDeclaration);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNamespaceDeclaration, SyntaxKind.NamespaceDeclaration);
 
         protected abstract IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location);
 

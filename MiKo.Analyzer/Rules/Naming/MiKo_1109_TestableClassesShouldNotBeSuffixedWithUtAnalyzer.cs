@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         internal static string FindBetterName(INamedTypeSymbol symbol) => FindBetterName(symbol.Name);
 
         internal static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix)

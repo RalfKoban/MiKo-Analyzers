@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         protected override IMethodSymbol GetMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
                                                                                      .OfType<IMethodSymbol>()
                                                                                      .Where(_ => _.MethodKind == MethodKind.Ordinary)

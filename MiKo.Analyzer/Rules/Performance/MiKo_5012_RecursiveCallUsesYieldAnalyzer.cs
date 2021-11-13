@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethodDeclarationSyntax, SyntaxKind.MethodDeclaration);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMethodDeclarationSyntax, SyntaxKind.MethodDeclaration);
 
         private static bool ReturnsEnumerable(MethodDeclarationSyntax method)
         {

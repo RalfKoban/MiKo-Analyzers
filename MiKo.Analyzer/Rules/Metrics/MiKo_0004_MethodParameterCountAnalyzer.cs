@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method);
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
         {

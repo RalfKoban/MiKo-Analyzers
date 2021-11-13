@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected UsePatternMatchingForExpressionAnalyzer(string diagnosticId, SyntaxKind syntaxKind) : base(diagnosticId, (SymbolKind)(-1)) => m_syntaxKind = syntaxKind;
 
-        protected sealed override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionLanguageAware, m_syntaxKind);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionLanguageAware, m_syntaxKind);
 
         protected abstract void AnalyzeExpression(SyntaxNodeAnalysisContext context);
 

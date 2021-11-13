@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
