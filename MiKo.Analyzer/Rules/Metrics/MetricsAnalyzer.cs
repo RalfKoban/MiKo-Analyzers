@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterCodeBlockAction(AnalyzeCodeBlock);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterCodeBlockAction(AnalyzeCodeBlock);
 
         protected abstract Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol);
 

@@ -196,7 +196,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 Assert.That(codeFixTitle, Does.StartWith(parts[0]).And.EndWith(parts[1]));
             }
 
-            string CreateResourceKey(CodeFixProvider codeFixProvider)
+            static string CreateResourceKey(CodeFixProvider codeFixProvider)
             {
                 var resourceKey = codeFixProvider.GetType().Name.Replace("_CodeFixProvider", string.Empty);
 

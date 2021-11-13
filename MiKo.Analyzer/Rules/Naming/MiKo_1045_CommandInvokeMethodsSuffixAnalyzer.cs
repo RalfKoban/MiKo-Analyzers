@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(ISymbol symbol) => symbol.Name.WithoutSuffix(Suffix);
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
 
         private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
         {

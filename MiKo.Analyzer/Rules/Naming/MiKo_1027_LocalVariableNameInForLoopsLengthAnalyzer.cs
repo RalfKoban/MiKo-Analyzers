@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context)
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             // normal local variables are covered in MiKo_1026
             context.RegisterSyntaxNodeAction(AnalyzeForEachStatement, SyntaxKind.ForEachStatement);

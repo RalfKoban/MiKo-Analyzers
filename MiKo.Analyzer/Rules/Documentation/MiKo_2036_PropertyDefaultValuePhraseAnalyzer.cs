@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Property);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Property);
 
         protected override bool ShallAnalyzeProperty(IPropertySymbol symbol)
         {

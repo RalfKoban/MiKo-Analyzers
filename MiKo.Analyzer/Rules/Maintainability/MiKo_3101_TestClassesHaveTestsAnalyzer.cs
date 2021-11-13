@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsPartial() is false && symbol.IsTestClass();
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => GetTestMethods(symbol).Any()

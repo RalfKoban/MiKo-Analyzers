@@ -19,6 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)

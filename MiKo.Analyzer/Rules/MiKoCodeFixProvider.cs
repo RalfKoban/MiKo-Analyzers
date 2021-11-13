@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (syntax is TypeSyntax typeSyntax)
             {
-               return semanticModel?.GetTypeInfo(typeSyntax).Type;
+               return semanticModel?.GetTypeInfo(typeSyntax, cancellationToken).Type;
             }
 
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);

@@ -17,7 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context)
+        protected override bool IsUnitTestAnalyzer => true;
+
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             base.InitializeCore(context);
 

@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case Constants.ILog.ErrorFormat:
                 case Constants.ILog.FatalFormat:
                 {
-                    // check for correct type (only ILog methods shall be reported)
+                    // only ILog methods shall be reported
                     var type = methodCall.GetTypeSymbol(semanticModel);
 
                     if (type.Name != Constants.ILog.TypeName)

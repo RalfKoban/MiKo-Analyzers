@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context)
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeCatchBlock, SyntaxKind.CatchClause);
         }

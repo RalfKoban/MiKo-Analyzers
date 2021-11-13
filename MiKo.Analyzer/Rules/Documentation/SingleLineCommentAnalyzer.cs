@@ -14,12 +14,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected bool IgnoreMultipleLines { get; set; }
 
-        protected sealed override void InitializeCore(AnalysisContext context)
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
 
-            context.RegisterCompilationStartAction(_ => PrepareAnalyzeMethod(_.Compilation));
+            PrepareAnalyzeMethod(context.Compilation);
         }
 
         protected virtual void PrepareAnalyzeMethod(Compilation compilation)

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected string ExceptionPhrase => string.Format(Constants.Comments.ExceptionPhrase, m_exceptionTypeFullName.GetNameOnlyPart());
 
-        protected sealed override void InitializeCore(AnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment) => Enumerable.Empty<Diagnostic>();
 

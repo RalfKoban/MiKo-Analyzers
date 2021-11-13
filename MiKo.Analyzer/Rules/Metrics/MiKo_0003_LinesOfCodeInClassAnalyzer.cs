@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         public int MaxLinesOfCode { get; set; } = 220;
 
-        protected override void InitializeCore(AnalysisContext context) => context.RegisterSymbolAction(AnalyzeType, SymbolKind.NamedType);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSymbolAction(AnalyzeType, SymbolKind.NamedType);
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
         {

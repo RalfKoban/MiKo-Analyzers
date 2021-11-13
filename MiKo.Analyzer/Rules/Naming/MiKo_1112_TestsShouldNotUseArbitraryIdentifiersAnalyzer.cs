@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         internal static string FindBetterName(ISymbol symbol)
         {
             var betterName = symbol.Name.Without("Arbitrary");
@@ -39,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Phrase;
         }
 
-        protected override void InitializeCore(AnalysisContext context)
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             base.InitializeCore(context);
 

@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override void InitializeCore(AnalysisContext context)
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeConstructor, SyntaxKind.ConstructorDeclaration);

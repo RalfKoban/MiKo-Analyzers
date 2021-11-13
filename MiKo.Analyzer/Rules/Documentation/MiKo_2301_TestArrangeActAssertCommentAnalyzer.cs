@@ -32,6 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected override bool IsUnitTestAnalyzer => true;
+
         internal static bool CommentContainsArrangeActAssert(string comment) => comment.StartsWithAny(Phrases, StringComparison.OrdinalIgnoreCase);
 
         protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();

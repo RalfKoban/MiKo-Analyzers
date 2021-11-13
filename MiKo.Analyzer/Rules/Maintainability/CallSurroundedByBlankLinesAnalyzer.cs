@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected sealed override void InitializeCore(AnalysisContext context)
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
         }
