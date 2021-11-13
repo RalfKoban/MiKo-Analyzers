@@ -377,22 +377,23 @@ namespace MiKoSolutions.Analyzers
                     EventHandlerSummaryStartingPhrase + "<see cref=\"{0}\" /> event",
                 };
 
-            internal const string DefaultCrefPhrase = "The default is <see cref=\"{0}\"/>.";
+            internal const string DefaultStartingPhrase = "The default is ";
+            internal const string DefaultCrefPhrase = DefaultStartingPhrase + "<see cref=\"{0}\"/>.";
 
             internal static readonly string[] DefaultCrefPhrases =
                 {
                     DefaultCrefPhrase,
-                    "The default is <see cref=\"{0}\" />.",
+                    DefaultStartingPhrase + "<see cref=\"{0}\" />.",
                 };
 
-            internal const string DefaultLangwordPhrase = "The default is <see langword=\"{0}\"/>.";
+            internal const string DefaultLangwordPhrase = DefaultStartingPhrase + "<see langword=\"{0}\"/>.";
 
             internal static readonly string[] DefaultBooleanLangwordPhrases =
                 {
-                    "The default is <see langword=\"true\"/>.",
-                    "The default is <see langword=\"false\"/>.",
-                    "The default is <see langword=\"true\" />.",
-                    "The default is <see langword=\"false\" />.",
+                    DefaultStartingPhrase + "<see langword=\"true\"/>.",
+                    DefaultStartingPhrase + "<see langword=\"false\"/>.",
+                    DefaultStartingPhrase + "<see langword=\"true\" />.",
+                    DefaultStartingPhrase + "<see langword=\"false\" />.",
                 };
 
             internal const string NoDefaultPhrase = "This property has no default value.";

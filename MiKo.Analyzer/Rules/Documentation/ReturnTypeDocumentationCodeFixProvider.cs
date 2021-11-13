@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected abstract XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType);
 
-        protected abstract SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType);
+        protected abstract XmlElementSyntax GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType);
 
         private SyntaxNode Comment(XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
                                                                                            ? GenericComment(comment, genericReturnType)

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2034_CodeFixTitle;
 
-        protected override SyntaxNode GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override XmlElementSyntax GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType)
         {
             return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1] + comment.Content);
         }

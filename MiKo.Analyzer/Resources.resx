@@ -1800,6 +1800,15 @@ It should not start with or contain a meaningless phrase like 'Used to'. Instead
   <data name="MiKo_2035_Title" xml:space="preserve">
     <value>Documentation of collection return value should have a default starting phrase.</value>
   </data>
+  <data name="MiKo_2036_CodeFixTitle_DefaultFalse" xml:space="preserve">
+    <value>Apply 'false' default value comment.</value>
+  </data>
+  <data name="MiKo_2036_CodeFixTitle_DefaultTrue" xml:space="preserve">
+    <value>Apply 'true' default value comment.</value>
+  </data>
+  <data name="MiKo_2036_CodeFixTitle_NoDefault" xml:space="preserve">
+    <value>Apply 'no' default value comment.</value>
+  </data>
   <data name="MiKo_2036_Description" xml:space="preserve">
     <value>The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
   </data>

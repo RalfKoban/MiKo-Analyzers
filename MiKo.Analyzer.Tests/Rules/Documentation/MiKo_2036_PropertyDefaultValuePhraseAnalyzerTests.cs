@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -220,8 +221,47 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_boolean_default_value()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// <see langword=""true""/> if something happens; otherwise, <see langword=""false""/>.
+    /// </value>
+    public bool DoSomething { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// <see langword=""true""/> if something happens; otherwise, <see langword=""false""/>.
+    /// This property has no default value.
+    /// </value>
+    public bool DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2036_PropertyDefaultValuePhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2036_NoDefault_CodeFixProvider();
     }
 }

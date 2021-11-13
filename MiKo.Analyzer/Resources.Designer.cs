@@ -4978,6 +4978,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;false&apos; default value comment..
+        /// </summary>
+        public static string MiKo_2036_CodeFixTitle_DefaultFalse {
+            get {
+                return ResourceManager.GetString("MiKo_2036_CodeFixTitle_DefaultFalse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;true&apos; default value comment..
+        /// </summary>
+        public static string MiKo_2036_CodeFixTitle_DefaultTrue {
+            get {
+                return ResourceManager.GetString("MiKo_2036_CodeFixTitle_DefaultTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;no&apos; default value comment..
+        /// </summary>
+        public static string MiKo_2036_CodeFixTitle_NoDefault {
+            get {
+                return ResourceManager.GetString("MiKo_2036_CodeFixTitle_NoDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
         /// </summary>
         public static string MiKo_2036_Description {
