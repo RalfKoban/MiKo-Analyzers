@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "System.Boolean",
             };
 
+        private CodeFixProvider CurrentCodeFixProvider { get; set; }
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_commented_method_([ValueSource(nameof(BooleanReturnValues))] string returnType, [Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 public class TestMe
@@ -222,8 +224,10 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_boolean_default_value()
+        public void Code_gets_fixed_for_boolean_having_no_default_value()
         {
+            CurrentCodeFixProvider = new MiKo_2036_NoDefault_CodeFixProvider();
+
             const string OriginalCode = @"
 using System;
 
@@ -258,10 +262,88 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_boolean_having_false_as_default_value()
+        {
+            CurrentCodeFixProvider = new MiKo_2036_DefaultFalse_CodeFixProvider();
+
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// <see langword=""true""/> if something happens; otherwise, <see langword=""false""/>.
+    /// </value>
+    public bool DoSomething { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// <see langword=""true""/> if something happens; otherwise, <see langword=""false""/>.
+    /// The default is <see langword=""false""/>.
+    /// </value>
+    public bool DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_boolean_having_true_as_default_value()
+        {
+            CurrentCodeFixProvider = new MiKo_2036_DefaultTrue_CodeFixProvider();
+
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// <see langword=""true""/> if something happens; otherwise, <see langword=""false""/>.
+    /// </value>
+    public bool DoSomething { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// <see langword=""true""/> if something happens; otherwise, <see langword=""false""/>.
+    /// The default is <see langword=""true""/>.
+    /// </value>
+    public bool DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2036_PropertyDefaultValuePhraseAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2036_NoDefault_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => CurrentCodeFixProvider;
     }
 }

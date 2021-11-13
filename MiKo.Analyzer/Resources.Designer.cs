@@ -4978,7 +4978,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply &apos;false&apos; default value comment..
+        ///   Looks up a localized string similar to Fix comment for default value &apos;false&apos;.
         /// </summary>
         public static string MiKo_2036_CodeFixTitle_DefaultFalse {
             get {
@@ -4987,7 +4987,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply &apos;true&apos; default value comment..
+        ///   Looks up a localized string similar to Fix comment for default value &apos;true&apos;.
         /// </summary>
         public static string MiKo_2036_CodeFixTitle_DefaultTrue {
             get {
@@ -4996,7 +4996,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply &apos;no&apos; default value comment..
+        ///   Looks up a localized string similar to Fix comment for no default value.
         /// </summary>
         public static string MiKo_2036_CodeFixTitle_NoDefault {
             get {
@@ -5014,7 +5014,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End &lt;{1}&gt; with: &apos;{2}&apos;    Or with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to End &lt;{1}&gt; with: &apos;{2}&apos;
+        ///Or with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2036_MessageFormat {
             get {

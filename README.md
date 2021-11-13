@@ -169,7 +169,7 @@ The following tables list all the 301 rules that are currently provided by the a
 |MiKo_2033|Documentation of String return value should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2034|Documentation of Enum return value should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2035|Documentation of collection return value should have a default starting phrase.|&#x2713;|&#x2713;|
-|MiKo_2036|Documentation of Boolean or Enum property shall describe the default value.|&#x2713;|\-|
+|MiKo_2036|Documentation of Boolean or Enum property shall describe the default value.|&#x2713;|&#x2713;|
 |MiKo_2037|&lt;summary&gt; documentation of command properties should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2038|&lt;summary&gt; documentation of command should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2039|&lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase.|&#x2713;|&#x2713;|

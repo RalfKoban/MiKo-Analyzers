@@ -14,6 +14,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected abstract IEnumerable<XmlNodeSyntax> GetDefaultComment();
 
-        private XmlElementSyntax WithDefaultComment(XmlElementSyntax comment) => comment.WithContent(comment.Content.AddRange(GetDefaultComment()));
+        private XmlElementSyntax WithDefaultComment(XmlElementSyntax comment)
+        {
+            var texts = GetDefaultComment();
+
+            var newContent = comment.Content
+                                    .AddRange(texts)
+                                    .Add(XmlText(string.Empty).WithLeadingXmlComment());
+
+            return comment.WithContent(newContent);
+        }
     }
 }

@@ -3,7 +3,6 @@ using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -15,7 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<XmlNodeSyntax> GetDefaultComment()
         {
-            yield return SyntaxFactory.XmlText(Constants.Comments.DefaultStartingPhrase);
+            yield return XmlText(Constants.Comments.DefaultStartingPhrase);
+            yield return SeeLangword_True();
+            yield return XmlText(".");
         }
     }
 }
