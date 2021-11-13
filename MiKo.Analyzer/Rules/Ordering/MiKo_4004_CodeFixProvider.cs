@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                                return original;
                                                            });
 
-            // remove dispose method from modified type
+            // remove dispose method from modified type to place it at correct location
             var annotatedDisposeMethod = modifiedType.GetAnnotatedNodes(disposeAnnotation).OfType<MethodDeclarationSyntax>().First();
             modifiedType = modifiedType.RemoveNodeAndAdjustOpenCloseBraces(annotatedDisposeMethod);
 

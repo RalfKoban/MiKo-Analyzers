@@ -24,7 +24,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var call = (InvocationExpressionSyntax)statement.Expression;
             var expression = (MemberAccessExpressionSyntax)call.Expression;
 
-            // create condition
             var condition = CreateCondition(expression);
 
             // nest call in block

@@ -41,13 +41,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case Constants.ILog.Debug:
                 case Constants.ILog.DebugFormat:
                 {
-                    // check if inside IsDebugEnabled call for if or block
                     if (methodCall.IsInsideIfStatementWithCallTo(Constants.ILog.IsDebugEnabled))
                     {
+                        // skip call if inside IsDebugEnabled call for if or block
                         return null;
                     }
 
-                    // check for correct type (only ILog methods shall be reported)
+                    // only ILog methods shall be reported
                     var type = methodCall.GetTypeSymbol(semanticModel);
                     if (type.Name != Constants.ILog.TypeName)
                     {

@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private Diagnostic AnalyzeNonFormatCall(MemberAccessExpressionSyntax methodCall, ArgumentSyntax argument, SemanticModel semanticModel, string proposedMethodName)
         {
-            // check for correct type (only ILog methods shall be reported)
+            // only ILog methods shall be reported
             var type = methodCall.GetTypeSymbol(semanticModel);
 
             if (type.Name == Constants.ILog.TypeName && argument.IsException(semanticModel))
@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private Diagnostic AnalyzeFormatCall(MemberAccessExpressionSyntax methodCall, IEnumerable<ArgumentSyntax> arguments, SemanticModel semanticModel, string proposedMethodName)
         {
-            // check for correct type (only ILog methods shall be reported)
+            // only ILog methods shall be reported
             var type = methodCall.GetTypeSymbol(semanticModel);
 
             if (type.Name == Constants.ILog.TypeName && arguments.Any(_ => _.IsException(semanticModel)))
