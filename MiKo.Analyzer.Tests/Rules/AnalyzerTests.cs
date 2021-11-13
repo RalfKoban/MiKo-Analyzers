@@ -179,9 +179,9 @@ namespace MiKoSolutions.Analyzers.Rules
         [Test]
         public static void CodeFixProvider_has_a_title_([ValueSource(nameof(AllCodeFixProviders))] CodeFixProvider provider)
         {
-            var id = provider.FixableDiagnosticIds.First();
+            var resourceKey = CreateResourceKey(provider);
 
-            var expectedTitle = Resources.ResourceManager.GetString(id + "_CodeFixTitle");
+            var expectedTitle = Resources.ResourceManager.GetString(resourceKey);
 
             var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
 
@@ -194,6 +194,21 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 Assert.That(codeFixTitle, Is.Not.EqualTo(expectedTitle), "Missing phrase");
                 Assert.That(codeFixTitle, Does.StartWith(parts[0]).And.EndWith(parts[1]));
+            }
+
+            string CreateResourceKey(CodeFixProvider codeFixProvider)
+            {
+                var resourceKey = codeFixProvider.GetType().Name.Replace("_CodeFixProvider", string.Empty);
+
+                foreach (var x in codeFixProvider.FixableDiagnosticIds)
+                {
+                    var number = x.Replace("MiKo", string.Empty);
+                    resourceKey = resourceKey.Replace(number, string.Empty);
+                }
+
+                var id = codeFixProvider.FixableDiagnosticIds.First();
+
+                return id + "_CodeFixTitle" + resourceKey.Replace("MiKo", string.Empty);
             }
         }
 

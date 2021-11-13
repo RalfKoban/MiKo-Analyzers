@@ -4978,6 +4978,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix comment for default value &apos;false&apos;.
+        /// </summary>
+        public static string MiKo_2036_CodeFixTitle_DefaultFalse {
+            get {
+                return ResourceManager.GetString("MiKo_2036_CodeFixTitle_DefaultFalse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix comment for default value &apos;true&apos;.
+        /// </summary>
+        public static string MiKo_2036_CodeFixTitle_DefaultTrue {
+            get {
+                return ResourceManager.GetString("MiKo_2036_CodeFixTitle_DefaultTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix comment for no default value.
+        /// </summary>
+        public static string MiKo_2036_CodeFixTitle_NoDefault {
+            get {
+                return ResourceManager.GetString("MiKo_2036_CodeFixTitle_NoDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default..
         /// </summary>
         public static string MiKo_2036_Description {
@@ -4987,7 +5014,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End &lt;{1}&gt; with: &apos;{2}&apos;    Or with: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to End &lt;{1}&gt; with: &apos;{2}&apos;
+        ///Or with: &apos;{3}&apos;.
         /// </summary>
         public static string MiKo_2036_MessageFormat {
             get {
