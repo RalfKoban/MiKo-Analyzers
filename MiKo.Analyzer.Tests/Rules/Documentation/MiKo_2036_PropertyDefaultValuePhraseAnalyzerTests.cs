@@ -200,7 +200,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_commented_Enum_property_with_explicitely_commented_no_default_value_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_commented_Enum_property_with_explicitly_commented_no_default_value_([Values("returns", "value")] string xmlTag) => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -334,6 +334,57 @@ public class TestMe
     /// The default is <see langword=""true""/>.
     /// </value>
     public bool DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Enum_as_default_value()
+        {
+            CurrentCodeFixProvider = new MiKo_2036_Enum_CodeFixProvider();
+
+            const string OriginalCode = @"
+using System;
+
+public enum MyEnum
+{
+    A = 0,
+    B,
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// One of the MyEnum values.
+    /// </value>
+    public MyEnum DoSomething { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public enum MyEnum
+{
+    A = 0,
+    B,
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <value>
+    /// One of the MyEnum values.
+    /// The default is <see cref=""MyEnum.A""/>.
+    /// </value>
+    public MyEnum DoSomething { get; set; }
 }
 ";
 

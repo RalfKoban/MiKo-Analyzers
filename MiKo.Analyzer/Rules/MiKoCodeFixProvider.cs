@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules
 {
@@ -43,7 +44,12 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
 
-            return semanticModel.GetDeclaredSymbol(syntax, cancellationToken);
+            if (syntax is TypeSyntax typeSyntax)
+            {
+               return semanticModel?.GetTypeInfo(typeSyntax).Type;
+            }
+
+            return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
 
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);

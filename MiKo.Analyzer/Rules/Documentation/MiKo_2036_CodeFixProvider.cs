@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -8,15 +9,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public sealed override string FixableDiagnosticId => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
 
-        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType) => WithDefaultComment(comment);
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => WithDefaultComment(document, comment, returnType);
 
-        protected override XmlElementSyntax GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType) => WithDefaultComment(comment);
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType) => WithDefaultComment(document, comment, returnType);
 
-        protected abstract IEnumerable<XmlNodeSyntax> GetDefaultComment();
+        protected abstract IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType);
 
-        private XmlElementSyntax WithDefaultComment(XmlElementSyntax comment)
+        private XmlElementSyntax WithDefaultComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
         {
-            var texts = GetDefaultComment();
+            var texts = GetDefaultComment(document, returnType);
 
             var newContent = comment.Content
                                     .AddRange(texts)

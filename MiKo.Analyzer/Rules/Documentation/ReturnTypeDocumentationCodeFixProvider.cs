@@ -54,10 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (ancestor)
                 {
                     case MethodDeclarationSyntax m:
-                        return Comment(comment, m.ReturnType);
+                        return Comment(document, comment, m.ReturnType);
 
                     case PropertyDeclarationSyntax p:
-                        return Comment(comment, p.Type);
+                        return Comment(document, comment, p.Type);
 
                     default:
                         continue;
@@ -67,12 +67,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected abstract XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType);
+        protected abstract XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType);
 
-        protected abstract XmlElementSyntax GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType);
+        protected abstract XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType);
 
-        private SyntaxNode Comment(XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                           ? GenericComment(comment, genericReturnType)
-                                                                                           : NonGenericComment(comment, returnType);
+        private SyntaxNode Comment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
+                                                                                                              ? GenericComment(document, comment, genericReturnType)
+                                                                                                              : NonGenericComment(document, comment, returnType);
     }
 }

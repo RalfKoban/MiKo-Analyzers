@@ -4996,6 +4996,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix comment for enum default value.
+        /// </summary>
+        public static string MiKo_2036_CodeFixTitle_Enum {
+            get {
+                return ResourceManager.GetString("MiKo_2036_CodeFixTitle_Enum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix comment for no default value.
         /// </summary>
         public static string MiKo_2036_CodeFixTitle_NoDefault {

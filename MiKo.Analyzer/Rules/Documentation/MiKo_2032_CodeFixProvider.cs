@@ -42,9 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
-        protected override XmlElementSyntax GenericComment(XmlElementSyntax comment, GenericNameSyntax returnType) => Comment(comment, GenericStartParts, GenericEndParts);
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType) => Comment(comment, GenericStartParts, GenericEndParts);
 
-        protected override XmlElementSyntax NonGenericComment(XmlElementSyntax comment, TypeSyntax returnType) => Comment(comment, NonGenericStartParts, NonGenericEndParts);
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => Comment(comment, NonGenericStartParts, NonGenericEndParts);
 
         private static XmlElementSyntax Comment(XmlElementSyntax comment, IReadOnlyList<string> startParts, IReadOnlyList<string> endParts)
         {
