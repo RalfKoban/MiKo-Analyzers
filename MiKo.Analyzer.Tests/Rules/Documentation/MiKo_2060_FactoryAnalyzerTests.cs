@@ -216,12 +216,15 @@ public class TestMeFactory
 }
 ");
 
-        [TestCase("Creates")]
         [TestCase("A factory that creates")]
+        [TestCase("Creates")]
+        [TestCase("Factory for creating")]
+        [TestCase("Factory for")]
         [TestCase("Represents a factory that creates")]
-        [TestCase("Used to create")]
+        [TestCase("Represents a factory which creates")]
         [TestCase("Used for creating")]
-        public void Code_gets_fixed_for_class_summary(string summary)
+        [TestCase("Used to create")]
+        public void Code_gets_fixed_for_class_summary_(string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -246,11 +249,15 @@ public class TestMeFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase("Creates")]
         [TestCase("A factory that creates")]
+        [TestCase("A factory which creates")]
+        [TestCase("Creates")]
         [TestCase("Represents a factory that creates")]
+        [TestCase("Represents the factory which creates")]
+        [TestCase("The factory that creates")]
+        [TestCase("The factory which creates")]
         [TestCase("Used for creating")]
-        public void Code_gets_fixed_for_interface_summary(string summary)
+        public void Code_gets_fixed_for_interface_summary_(string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -273,10 +280,19 @@ public interface ITestMeFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase("A factory method for creating a")]
+        [TestCase("A factory method that creates a")]
+        [TestCase("A factory method which creates a")]
         [TestCase("A")]
-        [TestCase("Used to create a")]
+        [TestCase("Factory method for creating a")]
+        [TestCase("Factory method that creates a")]
+        [TestCase("Factory method which creates a")]
+        [TestCase("The factory method for creating a")]
+        [TestCase("The factory method that creates a")]
+        [TestCase("The factory method which creates a")]
         [TestCase("Used for creating a")]
-        public void Code_gets_fixed_for_method_summary(string summary)
+        [TestCase("Used to create a")]
+        public void Code_gets_fixed_for_method_summary_(string summary)
         {
             var originalCode = @"
 public class TestMeFactory

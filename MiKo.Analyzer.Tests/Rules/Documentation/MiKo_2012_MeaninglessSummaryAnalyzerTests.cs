@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NCrunch.Framework;
@@ -335,9 +336,69 @@ public class TestMe : ITestMe
 }
 ");
 
+        [TestCase("Class that allows", "Allows")]
+        [TestCase("Class that creates", "Creates")]
+        [TestCase("Class that enhances", "Enhances")]
+        [TestCase("Class that extends", "Extends")]
+        [TestCase("Class that represents", "Represents")]
+        [TestCase("Class that serves", "Provides")]
+        [TestCase("Class that will represent", "Represents")]
+        [TestCase("Class to provide", "Provides")]
+        [TestCase("Class which serves", "Provides")]
+        [TestCase("Class which will represent", "Represents")]
+        [TestCase("Classes implementing the interfaces provide", "Provides")]
+        [TestCase("Classes implementing the interfaces will provide", "Provides")]
+        [TestCase("Classes implementing the interfaces, will provide", "Provides")]
+        [TestCase("Event argument for", "Provides data for the")]
+        [TestCase("Event argument that is used in the", "Provides data for the")]
+        [TestCase("Event argument that provides information", "Provides data for the")]
+        [TestCase("Event argument which is used in the", "Provides data for the")]
+        [TestCase("Event argument which provides information", "Provides data for the")]
+        [TestCase("Event arguments for", "Provides data for the")]
+        [TestCase("Event arguments that provide information", "Provides data for the")]
+        [TestCase("Event arguments which provide information", "Provides data for the")]
+        [TestCase("Event is fired", "Occurs")]
+        [TestCase("Event that is published", "Occurs")]
+        [TestCase("Event that is published,", "Occurs")]
+        [TestCase("Event which is published", "Occurs")]
+        [TestCase("Event which is published,", "Occurs")]
+        [TestCase("Every class that implements this interface can do", "Allows to do")]
+        [TestCase("Every class that implements this interface can", "Allows to")]
+        [TestCase("Extension of", "Extends the")]
+        [TestCase("Factory for", "Provides support for creating")]
+        [TestCase("Factory class that creates", "Creates")]
+        [TestCase("Factory method that creates", "Creates")]
+        [TestCase("Factory method which creates", "Creates")]
+        [TestCase("Helper class that manipulates", "Manipulates")]
+        [TestCase("Helper class which manipulates", "Manipulates")]
+        [TestCase("Helper class to manipulate", "Manipulates")]
+        [TestCase("Helper method to generate", "Generates")]
+        [TestCase("Implementation of", "Provides a")]
+        [TestCase("Interface that serves", "Provides")]
+        [TestCase("Interface which serves", "Provides")]
+        [TestCase("The class offers", "Provides")]
+        [TestCase("The interface offers", "Provides")]
+        [TestCase("This class represents", "Represents")]
+        [TestCase("This interface represents", "Represents")]
+        public void Code_gets_fixed_for_term_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+/// <summary>
+/// ### something.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2012_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static string[] CreateMeaninglessPhrases()

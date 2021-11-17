@@ -16,11 +16,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                 {
                                                                                     { "A factory that creates ", string.Empty },
                                                                                     { "A factory that ", string.Empty },
+                                                                                    { "A factory which creates ", string.Empty },
+                                                                                    { "A factory which ", string.Empty },
+                                                                                    { "Creates ", string.Empty },
+                                                                                    { "Factory for creating ", string.Empty },
+                                                                                    { "Factory for ", string.Empty },
                                                                                     { "Represents a factory that creates ", string.Empty },
                                                                                     { "Represents a factory that ", string.Empty },
-                                                                                    { "Creates ", string.Empty },
-                                                                                    { "Used to create ", string.Empty },
+                                                                                    { "Represents a factory which creates ", string.Empty },
+                                                                                    { "Represents a factory which ", string.Empty },
+                                                                                    { "Represents the factory that creates ", string.Empty },
+                                                                                    { "Represents the factory that ", string.Empty },
+                                                                                    { "Represents the factory which creates ", string.Empty },
+                                                                                    { "Represents the factory which ", string.Empty },
+                                                                                    { "The factory that creates ", string.Empty },
+                                                                                    { "The factory that ", string.Empty },
+                                                                                    { "The factory which creates ", string.Empty },
+                                                                                    { "The factory which ", string.Empty },
                                                                                     { "Used for creating ", string.Empty },
+                                                                                    { "Used to create ", string.Empty },
                                                                                 };
 
         private static readonly Dictionary<string, string> MethodReplacementMap = new Dictionary<string, string>
@@ -31,6 +45,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "Creates a ", string.Empty },
                                                                                     { "Used to create ", string.Empty },
                                                                                     { "Used for creating ", string.Empty },
+                                                                                    { "Factory method for creating ", string.Empty },
+                                                                                    { "Factory method that creates ", string.Empty },
+                                                                                    { "Factory method which creates ", string.Empty },
+                                                                                    { "A factory method for creating ", string.Empty },
+                                                                                    { "A factory method that creates ", string.Empty },
+                                                                                    { "A factory method which creates ", string.Empty },
+                                                                                    { "The factory method for creating ", string.Empty },
+                                                                                    { "The factory method that creates ", string.Empty },
+                                                                                    { "The factory method which creates ", string.Empty },
                                                                                 };
 
         private static readonly Dictionary<string, string> CleanupReplacementMap = new Dictionary<string, string>
