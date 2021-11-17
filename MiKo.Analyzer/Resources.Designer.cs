@@ -6473,6 +6473,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;..&apos; from documentation.
+        /// </summary>
+        public static string MiKo_2209_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2209_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to XML documentation is intended for other developers. It shall contain all the information that is important for them in a way that they can easily read and understand. Typos or other kinds of strange comments however are harder to understand. Thus, such things need to be avoided to not confuse the developers..
         /// </summary>
         public static string MiKo_2209_Description {

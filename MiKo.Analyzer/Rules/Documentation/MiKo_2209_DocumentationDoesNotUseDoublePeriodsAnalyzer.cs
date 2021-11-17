@@ -23,8 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.OrdinalIgnoreCase)
-                                                                                                        ? new[] { Issue(symbol) }
-                                                                                                        : Enumerable.Empty<Diagnostic>();
+        internal static bool CommentHasIssue(string comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.OrdinalIgnoreCase);
+
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => CommentHasIssue(commentXml)
+                                                                                                            ? new[] { Issue(symbol) }
+                                                                                                            : Enumerable.Empty<Diagnostic>();
     }
 }
