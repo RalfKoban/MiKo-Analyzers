@@ -213,7 +213,7 @@ The following tables list all the 301 rules that are currently provided by the a
 |MiKo_2206|Documentation should not use the term 'flag'.|&#x2713;|\-|
 |MiKo_2207|&lt;summary&gt; documentation shall be short.|&#x2713;|\-|
 |MiKo_2208|Documentation should not use the term 'an instance of'.|&#x2713;|\-|
-|MiKo_2209|Do not use double periods in documentation.|&#x2713;|\-|
+|MiKo_2209|Do not use double periods in documentation.|&#x2713;|&#x2713;|
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'.|&#x2713;|&#x2713;|
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections.|&#x2713;|&#x2713;|
 |MiKo_2212|Documentation should use the phrase 'failed' instead of 'was not sucessful'.|&#x2713;|&#x2713;|

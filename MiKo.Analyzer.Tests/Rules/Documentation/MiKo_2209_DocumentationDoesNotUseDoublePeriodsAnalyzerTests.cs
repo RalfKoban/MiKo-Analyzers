@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -115,7 +116,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_comment_with_double_period_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_single_line_comment_with_double_period_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 
 public class TestMe
 {
@@ -141,8 +142,98 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_single_line_comment_with_double_period_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>Some text..</summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>Some text.</summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_single_line_comment_with_double_period_on_extra_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some text..
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multi_line_comment_with_double_period()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some text..
+    /// Some more text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Some text.
+    /// Some more text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2209_DocumentationDoesNotUseDoublePeriodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2209_DocumentationDoesNotUseDoublePeriodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2209_CodeFixProvider();
     }
 }
