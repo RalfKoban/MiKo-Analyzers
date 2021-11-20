@@ -58,12 +58,16 @@ public static class TestMeExtensions
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed()
+        [TestCase("Doing", @"Provides a set of <see langword=""static""/> methods for doing")]
+        [TestCase("Contains extensions for", @"Provides a set of <see langword=""static""/> methods for")]
+        [TestCase("Contains extension methods for", @"Provides a set of <see langword=""static""/> methods for")]
+        [TestCase("Provides extensions for", @"Provides a set of <see langword=""static""/> methods for")]
+        [TestCase("Provides extension methods for", @"Provides a set of <see langword=""static""/> methods for")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 /// <summary>
-/// Doing something.
+/// ### something.
 /// </summary>
 public static class TestMeExtensions
 {
@@ -71,17 +75,7 @@ public static class TestMeExtensions
 }
 ";
 
-            const string FixedCode = @"
-/// <summary>
-/// Provides a set of <see langword=""static""/> methods for doing something.
-/// </summary>
-public static class TestMeExtensions
-{
-    public static void DoSomething(this int value) { }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
         protected override string GetDiagnosticId() => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
