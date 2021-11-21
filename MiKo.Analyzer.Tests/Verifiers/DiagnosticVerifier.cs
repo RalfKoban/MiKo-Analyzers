@@ -65,7 +65,7 @@ namespace TestHelper
         {
             var results = GetDiagnostics(fileContent);
 
-            Assert.That(results, Is.Empty, Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => path ?? _.Location + ":" + _)));
+            Assert.That(results, Is.Empty, path ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
         }
 
         protected void No_issue_is_reported_for_file(string path) => No_issue_is_reported_for(File.ReadAllText(path), path);

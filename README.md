@@ -71,7 +71,7 @@ The following tables list all the 301 rules that are currently provided by the a
 |MiKo_1046|Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).|&#x2713;|&#x2713;|
 |MiKo_1047|Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.|&#x2713;|&#x2713;|
 |MiKo_1048|To ease maintenance, the names of classes that are value converters should end with the same suffix.|&#x2713;|&#x2713;|
-|MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|&#x2713;|\-|
+|MiKo_1049|Do not use requirement terms such as 'Shall', 'Should', 'Must' or 'Need' for names.|&#x2713;|&#x2713;|
 |MiKo_1050|Return values should have descriptive names.|&#x2713;|&#x2713;|
 |MiKo_1051|Do not suffix parameters with delegate types.|&#x2713;|&#x2713;|
 |MiKo_1052|Do not suffix variables with delegate types.|&#x2713;|&#x2713;|

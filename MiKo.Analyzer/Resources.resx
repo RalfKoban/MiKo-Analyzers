@@ -701,6 +701,9 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1048_Title" xml:space="preserve">
     <value>To ease maintenance, the names of classes that are value converters should end with the same suffix.</value>
   </data>
+  <data name="MiKo_1049_CodeFixTitle" xml:space="preserve">
+    <value>Replace requirement term</value>
+  </data>
   <data name="MiKo_1049_Description" xml:space="preserve">
     <value>Requirement terms such as 'Must', 'Need', 'Shall', 'Should', 'Will' or 'Would' within a name are not explicit enough. Instead, use a positive verb or an adjective like 'Is', 'Has', 'Can', etc.</value>
   </data>
