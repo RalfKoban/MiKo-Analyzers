@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        internal static string FindBetterName(IMethodSymbol symbol)
         {
             var methodName = symbol.Name;
             var escapedMethod = methodName;
@@ -41,9 +41,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return found
-                   ? new[] { Issue(symbol, UnescapeValidPhrases(escapedMethod.Without(DoPhrase))) }
-                   : Enumerable.Empty<Diagnostic>();
+            if (found)
+            {
+                var proposal = UnescapeValidPhrases(escapedMethod.Without(DoPhrase));
+                switch (proposal)
+                {
+                    case "": // special case 'Do'
+                    case "Can": // special case 'CanDo'
+                        return proposal + "Execute";
+
+                    default:
+                        return proposal;
+                }
+            }
+
+            return null;
+        }
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        {
+            var proposal = FindBetterName(symbol);
+
+            return proposal is null
+                       ? Enumerable.Empty<Diagnostic>()
+                       : new[] { Issue(symbol, proposal) };
         }
 
         private static bool ContainsPhrase(string methodName, string phrase = DoPhrase) => methodName.Contains(phrase, StringComparison.Ordinal);
