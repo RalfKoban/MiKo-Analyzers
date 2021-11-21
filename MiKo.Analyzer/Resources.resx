@@ -288,6 +288,9 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
   <data name="MiKo_1010_Title" xml:space="preserve">
     <value>Methods should not contain 'CanExecute' or 'Execute' in their names.</value>
   </data>
+  <data name="MiKo_1011_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Do' from name</value>
+  </data>
   <data name="MiKo_1011_Description" xml:space="preserve">
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'Do' in their names.</value>
   </data>

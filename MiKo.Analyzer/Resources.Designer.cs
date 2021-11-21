@@ -568,6 +568,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Do&apos; from name.
+        /// </summary>
+        public static string MiKo_1011_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1011_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The purpose of methods is to execute code, so it&apos;s useless and repetitive to have &apos;Do&apos; in their names..
         /// </summary>
         public static string MiKo_1011_Description {

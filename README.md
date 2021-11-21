@@ -35,7 +35,7 @@ The following tables list all the 301 rules that are currently provided by the a
 |MiKo_1008|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.|&#x2713;|&#x2713;|
 |MiKo_1009|'System.EventHandler' variables should be named properly.|&#x2713;|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names.|&#x2713;|\-|
-|MiKo_1011|Methods should not contain 'Do' in their names.|&#x2713;|\-|
+|MiKo_1011|Methods should not contain 'Do' in their names.|&#x2713;|&#x2713;|
 |MiKo_1012|Methods should not be named 'Fire'.|&#x2713;|&#x2713;|
 |MiKo_1013|Methods should not be named 'Notify' or 'OnNotify'.|&#x2713;|&#x2713;|
 |MiKo_1014|Methods should not be named 'Check'.|&#x2713;|&#x2713;|
