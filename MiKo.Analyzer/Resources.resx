@@ -279,6 +279,9 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
   <data name="MiKo_1009_Title" xml:space="preserve">
     <value>'System.EventHandler' variables should be named properly.</value>
   </data>
+  <data name="MiKo_1010_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Execute' from name</value>
+  </data>
   <data name="MiKo_1010_Description" xml:space="preserve">
     <value>The purpose of methods is to execute code, so it's useless and repetitive to have 'CanExecute' or 'Execute' in their names.</value>
   </data>

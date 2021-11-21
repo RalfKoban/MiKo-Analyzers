@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -92,8 +93,18 @@ public class TestMe
 }
 ");
 
+        [TestCase("DoExecute", "Do")]
+        [TestCase("CanDoExecute", "CanDo")]
+        [TestCase("ExecuteUpdate", "Update")]
+        [TestCase("Execute", "Execute")]
+        public void Code_gets_fixed_(string method, string wanted) => VerifyCSharpFix(
+                                                                                      @"using System; class TestMe { void " + method + "() { } }",
+                                                                                      @"using System; class TestMe { void " + wanted + "() { } }");
+
         protected override string GetDiagnosticId() => MiKo_1010_CommandMethodsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1010_CommandMethodsAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1010_CodeFixProvider();
     }
 }

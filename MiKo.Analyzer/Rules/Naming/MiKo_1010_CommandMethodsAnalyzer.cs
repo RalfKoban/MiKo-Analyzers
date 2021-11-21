@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IMethodSymbol symbol) => GetProposal(symbol.Name, "Execute");
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementationOf<ICommand>() is false && symbol.IsTestMethod() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
