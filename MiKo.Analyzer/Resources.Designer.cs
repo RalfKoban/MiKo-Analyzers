@@ -1803,6 +1803,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace requirement term.
+        /// </summary>
+        public static string MiKo_1049_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1049_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requirement terms such as &apos;Must&apos;, &apos;Need&apos;, &apos;Shall&apos;, &apos;Should&apos;, &apos;Will&apos; or &apos;Would&apos; within a name are not explicit enough. Instead, use a positive verb or an adjective like &apos;Is&apos;, &apos;Has&apos;, &apos;Can&apos;, etc..
         /// </summary>
         public static string MiKo_1049_Description {

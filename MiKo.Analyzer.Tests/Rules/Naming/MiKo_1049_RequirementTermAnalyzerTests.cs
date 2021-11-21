@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -11,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1049_RequirementTermAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Marker = { "Must", "Need", "Shall", "Should", "Will", "Would" };
+
         [Test]
         public void No_issue_is_reported_for_correctly_named_symbols() => No_issue_is_reported_for(@"
 using System;
@@ -86,10 +87,31 @@ public class TestMe
 }
 ");
 
+        [TestCase("SomethingShouldHaveAnything", "SomethingHaveAnything")]
+        [TestCase("SomethingShouldNotHaveAnything", "SomethingDoNotHaveAnything")]
+        [TestCase("SomethingShouldNtHaveAnything", "SomethingDoNotHaveAnything")]
+        [TestCase("SomethingShouldntHaveAnything", "SomethingDoNotHaveAnything")]
+        [TestCase("SomethingShouldAnything", "SomethingDoesAnything")]
+        [TestCase("SomethingShouldBeAnything", "SomethingIsAnything")]
+        [TestCase("SomethingShouldNotBeAnything", "SomethingIsNotAnything")]
+        [TestCase("SomethingShouldNtBeAnything", "SomethingIsNotAnything")]
+        [TestCase("SomethingShouldntBeAnything", "SomethingIsNotAnything")]
+        [TestCase("SomethingWillBeAnything", "SomethingIsAnything")]
+        [TestCase("SomethingWillNotBeAnything", "SomethingIsNotAnything")]
+        [TestCase("SomethingShallBeAnything", "SomethingIsAnything")]
+        [TestCase("SomethingShallNotBeAnything", "SomethingIsNotAnything")]
+        [TestCase("Something_should_have_Anything", "Something_has_Anything")]
+        [TestCase("Something_should_not_have_Anything", "Something_does_not_have_Anything")]
+        [TestCase("Something_should_be_Anything", "Something_is_Anything")]
+        [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
+        public void Code_gets_fixed_(string method, string wanted) => VerifyCSharpFix(
+                                                                                      @"using System; class TestMe { void " + method + "() { } }",
+                                                                                      @"using System; class TestMe { void " + wanted + "() { } }");
+
         protected override string GetDiagnosticId() => MiKo_1049_RequirementTermAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1049_RequirementTermAnalyzer();
 
-        private static IEnumerable<string> Marker() => new[] { "Must", "Need", "Shall", "Should", "Will", "Would" };
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1049_CodeFixProvider();
     }
 }
