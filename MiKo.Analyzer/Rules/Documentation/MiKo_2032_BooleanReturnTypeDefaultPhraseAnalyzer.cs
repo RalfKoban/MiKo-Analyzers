@@ -38,13 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (IsAcceptedType(returnType))
             {
-                var startingPhrases = Constants.Comments.BooleanReturnTypeStartingPhrase;
+                var hasPropertySetter = owningSymbol is IPropertySymbol property && property.IsReadOnly is false;
 
-                var alternativeStartingPhrases = owningSymbol is IPropertySymbol property && property.IsReadOnly is false
-                                                     ? Constants.Comments.BooleanParameterStartingPhrase
-                                                     : Array.Empty<string>();
-
-                return startingPhrases.Concat(alternativeStartingPhrases).Distinct().ToArray();
+                return hasPropertySetter
+                           ? Constants.Comments.BooleanPropertySetterStartingPhrase
+                           : Constants.Comments.BooleanReturnTypeStartingPhrase;
             }
 
             return Constants.Comments.BooleanTaskReturnTypeStartingPhrase;

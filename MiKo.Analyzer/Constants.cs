@@ -258,6 +258,8 @@ namespace MiKoSolutions.Analyzers
                     string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\" />"),
                 };
 
+            internal static readonly string[] BooleanPropertySetterStartingPhrase = BooleanReturnTypeStartingPhrase.Concat(BooleanParameterStartingPhrase).Distinct().ToArray();
+
             internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
