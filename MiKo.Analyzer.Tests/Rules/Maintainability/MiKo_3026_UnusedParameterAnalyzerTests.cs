@@ -107,6 +107,29 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_dependency_property_changed_event_handling_method() => No_issue_is_reported_for(@"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething(object sender, DependencyPropertyChangedEventArgs e)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_dependency_object_event_handling_method() => No_issue_is_reported_for(@"
 namespace System.Windows
 {

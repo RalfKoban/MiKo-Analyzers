@@ -530,11 +530,18 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol value)
+        internal static bool IsDependencyObjectEventHandler(this IMethodSymbol value)
         {
             var parameters = value.Parameters;
 
             return parameters.Length == 2 && parameters[0].Type.IsDependencyObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
+        }
+
+        internal static bool IsDependencyPropertyEventHandler(this IMethodSymbol value)
+        {
+            var parameters = value.Parameters;
+
+            return parameters.Length == 2 && parameters[0].Type.IsObject() && parameters[1].Type.IsDependencyPropertyChangedEventArgs();
         }
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == Constants.DependencyPropertyKey.TypeName || value.Name == Constants.DependencyPropertyKey.FullyQualifiedTypeName;

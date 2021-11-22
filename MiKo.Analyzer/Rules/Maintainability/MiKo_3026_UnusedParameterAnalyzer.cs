@@ -47,6 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
+            if (method.IsDependencyObjectEventHandler())
+            {
+                return true;
+            }
+
             if (method.IsCoerceValueCallback())
             {
                 return true;
