@@ -14,8 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsString();
 
-        protected override string[] GetStartingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
-                                                                                     ? Constants.Comments.StringReturnTypeStartingPhrase
-                                                                                     : Constants.Comments.StringTaskReturnTypeStartingPhrase;
+        protected override string[] GetStartingPhrases(ISymbol owningSymbol, ITypeSymbol returnType) => IsAcceptedType(returnType)
+                                                                                                            ? Constants.Comments.StringReturnTypeStartingPhrase
+                                                                                                            : Constants.Comments.StringTaskReturnTypeStartingPhrase;
     }
 }

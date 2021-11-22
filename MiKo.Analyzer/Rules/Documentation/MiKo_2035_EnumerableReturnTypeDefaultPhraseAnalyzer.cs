@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsEnumerable();
 
-        protected override string[] GetStartingPhrases(ITypeSymbol returnType)
+        protected override string[] GetStartingPhrases(ISymbol owningSymbol, ITypeSymbol returnType)
         {
             if (returnType.IsEnumerable())
             {

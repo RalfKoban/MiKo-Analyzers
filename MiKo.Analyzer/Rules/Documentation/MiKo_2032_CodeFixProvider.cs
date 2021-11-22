@@ -86,8 +86,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (comment.Content.Count == 0)
             {
-                // we have no comment, hence we fake a "..." into the resulting comment
-                return new[] { XmlText(startingPhrase + "..." + endingPhrase) };
+                // we have no comment, hence we add a "TODO" into the resulting comment
+                return new[] { XmlText(startingPhrase + "TODO" + endingPhrase) };
             }
 
             // remove boolean <see langword="..."/> and <c>...</c>

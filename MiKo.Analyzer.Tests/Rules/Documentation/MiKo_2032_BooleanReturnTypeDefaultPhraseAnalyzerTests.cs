@@ -157,6 +157,22 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_Boolean_only_property_with_To_and_setter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets or sets a value.
+    /// </summary>
+    /// <value>
+    /// <see langword=""true""/> to set something; otherwise, <see langword=""false""/>.
+    /// </value>
+    public bool SomeProperty { get; set; }
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_wrong_commented_method_(
                                                                 [Values("returns", "value")] string xmlTag,
@@ -199,7 +215,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// <see langword=""true""/> if ...; otherwise, <see langword=""false""/>.
+    /// <see langword=""true""/> if TODO; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
@@ -231,7 +247,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// A task that will complete with a result of <see langword=""true""/> if ..., otherwise with a result of <see langword=""false""/>.
+    /// A task that will complete with a result of <see langword=""true""/> if TODO, otherwise with a result of <see langword=""false""/>.
     /// </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }

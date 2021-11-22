@@ -28,13 +28,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
         {
-            var startingPhrases = GetStartingPhrases(returnType);
+            var startingPhrases = GetStartingPhrases(owningSymbol, returnType);
 
             return AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, startingPhrases);
         }
 
         protected abstract bool IsAcceptedType(ITypeSymbol returnType);
 
-        protected abstract string[] GetStartingPhrases(ITypeSymbol returnType);
+        protected abstract string[] GetStartingPhrases(ISymbol owningSymbol, ITypeSymbol returnType);
     }
 }
