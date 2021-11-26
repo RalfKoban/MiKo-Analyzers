@@ -53,6 +53,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
+            var inheritDoc = comment.Content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Inheritdoc);
+            if (inheritDoc != null)
+            {
+                // special case: its an inherit documentation, so mark it so
+                return inheritDoc;
+            }
+
             return Comment(comment, ReplacementMap.Keys, ReplacementMap);
         }
 

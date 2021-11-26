@@ -271,6 +271,18 @@ public class TestMe
 }
 ");
 
+        [TestCase("Some")]
+        [TestCase("All")]
+        public void No_issue_is_reported_for_enum_member_with_documentation_(string firstWord) => No_issue_is_reported_for(@"
+public enum TestMe
+{
+    /// <summary>
+    /// " + firstWord + @" documentation.
+    /// </summary>
+    None = 0,
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_field_with_meaningless_phrase()
         {
@@ -392,6 +404,28 @@ public class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_inheritdoc()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// <inheritdoc />
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <inheritdoc />
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
