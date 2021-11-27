@@ -81,6 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case IfStatementSyntax _:
                         case ElseClauseSyntax _:
                         case ParenthesizedLambdaExpressionSyntax _:
+                        case InitializerExpressionSyntax _:
                             return null; // no issue
 
                         case MethodDeclarationSyntax _:

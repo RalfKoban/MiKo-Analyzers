@@ -182,6 +182,29 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_object_initializer() => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<TestCaseData> DoSomething(string phrase, string fixedPhrase)
+        {
+            yield return new TestCaseData
+                             {
+                                 Wrong = phrase,
+                                 Fixed = fixedPhrase,
+                             };
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_variable_assignment_preceded_by_if_block() => An_issue_is_reported_for(@"
 namespace Bla
 {
