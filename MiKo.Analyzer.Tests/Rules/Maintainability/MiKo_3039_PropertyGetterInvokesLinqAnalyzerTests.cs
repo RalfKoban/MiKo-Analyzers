@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3038_PropertyGetterInvokesLinqAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3039_PropertyGetterInvokesLinqAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_methods() => No_issue_is_reported_for(@"
@@ -177,8 +177,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3038_PropertyGetterInvokesLinqAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3039_PropertyGetterInvokesLinqAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3038_PropertyGetterInvokesLinqAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3039_PropertyGetterInvokesLinqAnalyzer();
     }
 }

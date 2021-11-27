@@ -266,7 +266,7 @@ The following tables list all the 302 rules that are currently provided by the a
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|\-|
 |MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors.|&#x2713;|\-|
 |MiKo_3037|Do not use magic numbers for timeouts.|&#x2713;|\-|
-|MiKo_3038|Properties should not use Linq or yield.|&#x2713;|\-|
+|MiKo_3039|Properties should not use Linq or yield.|&#x2713;|\-|
 |MiKo_3040|Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values.|&#x2713;|\-|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|\-|
 |MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|\-|

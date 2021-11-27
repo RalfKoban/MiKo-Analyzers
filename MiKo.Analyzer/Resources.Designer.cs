@@ -8078,27 +8078,27 @@ namespace MiKoSolutions.Analyzers {
         ///   Looks up a localized string similar to Properties that use Linq internally most probably behave differently when being accessed later on or multiple times. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
         ///Such properties should be methods instead to make it clear that they behave differently between calls..
         /// </summary>
-        public static string MiKo_3038_Description {
+        public static string MiKo_3039_Description {
             get {
-                return ResourceManager.GetString("MiKo_3038_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_3039_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Do not use &apos;{1}&apos; inside property.
         /// </summary>
-        public static string MiKo_3038_MessageFormat {
+        public static string MiKo_3039_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_3038_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_3039_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Properties should not use Linq or yield..
         /// </summary>
-        public static string MiKo_3038_Title {
+        public static string MiKo_3039_Title {
             get {
-                return ResourceManager.GetString("MiKo_3038_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_3039_Title", resourceCulture);
             }
         }
         

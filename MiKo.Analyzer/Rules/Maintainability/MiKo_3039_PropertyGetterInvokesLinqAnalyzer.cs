@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3038_PropertyGetterInvokesLinqAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3039_PropertyGetterInvokesLinqAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3038";
+        public const string Id = "MiKo_3039";
 
-        public MiKo_3038_PropertyGetterInvokesLinqAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3039_PropertyGetterInvokesLinqAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 

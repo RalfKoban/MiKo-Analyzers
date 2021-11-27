@@ -2863,14 +2863,14 @@ It would be even better to use extension methods such as 'Minutes()' or 'Days()'
   <data name="MiKo_3037_Title" xml:space="preserve">
     <value>Do not use magic numbers for timeouts.</value>
   </data>
-  <data name="MiKo_3038_Description" xml:space="preserve">
+  <data name="MiKo_3039_Description" xml:space="preserve">
     <value>Properties that use Linq internally most probably behave differently when being accessed later on or multiple times. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
 Such properties should be methods instead to make it clear that they behave differently between calls.</value>
   </data>
-  <data name="MiKo_3038_MessageFormat" xml:space="preserve">
+  <data name="MiKo_3039_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}' inside property</value>
   </data>
-  <data name="MiKo_3038_Title" xml:space="preserve">
+  <data name="MiKo_3039_Title" xml:space="preserve">
     <value>Properties should not use Linq or yield.</value>
   </data>
   <data name="MiKo_3040_Description" xml:space="preserve">
