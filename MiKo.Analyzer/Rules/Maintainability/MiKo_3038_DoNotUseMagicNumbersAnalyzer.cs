@@ -28,10 +28,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            if (symbol.ContainingType.IsTestClass())
+            var containingType = symbol.ContainingType;
+            if (containingType != null)
             {
-                // ignore unit tests
-                return;
+                if (containingType.IsTestClass())
+                {
+                    // ignore unit tests
+                    return;
+                }
+
+                if (containingType.ContainingType?.IsTestClass() is true)
+                {
+                    // ignore nested types in unit tests
+                    return;
+                }
             }
 
             if (symbol is IMethodSymbol method && method.IsTestMethod())

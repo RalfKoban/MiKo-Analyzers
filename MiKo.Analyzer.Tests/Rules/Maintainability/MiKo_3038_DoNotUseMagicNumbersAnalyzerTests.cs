@@ -170,6 +170,25 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_nested_type_in_test_fixture_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    [" + fixture + @"]
+    public class TestMe
+    {
+        private sealed class Helper
+        {
+            public int ReturnSomething() => 42;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using System;
 
