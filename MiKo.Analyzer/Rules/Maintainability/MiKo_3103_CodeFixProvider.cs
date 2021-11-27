@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,62 +12,73 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3103_CodeFixProvider)), Shared]
     public class MiKo_3103_CodeFixProvider : MaintainabilityCodeFixProvider
     {
+        private const string DefaultFormat = "D";
+
         public sealed override string FixableDiagnosticId => MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer.Id;
 
         protected sealed override string Title => Resources.MiKo_3103_CodeFixTitle;
 
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
-            var invocation = syntaxNodes.OfType<InvocationExpressionSyntax>().First();
+            foreach (var syntax in syntaxNodes)
+            {
+                if (syntax is InvocationExpressionSyntax invocation)
+                {
+                    return IsToStringCall(invocation.Parent)
+                               ? invocation.Parent?.Parent
+                               : invocation;
+                }
 
-            return IsToStringCall(invocation.Parent)
-                       ? invocation.Parent.Parent
-                       : invocation;
+                if (syntax is ArgumentSyntax argument)
+                {
+                    // we have a method group, so we have to identify the argument
+                    return argument.Expression;
+                }
+            }
+
+            return null;
         }
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            var guid = CreateGuid();
-            var format = "D";
-
-            var isToString = false;
-
-            if (syntax is InvocationExpressionSyntax i && IsToStringCall(i.Expression))
+            if (syntax is InvocationExpressionSyntax i)
             {
-                isToString = true;
-
-                var arguments = i.ArgumentList.Arguments;
-                if (arguments.Count == 1)
+                if (IsToStringCall(i.Expression))
                 {
-                    format = arguments[0].Expression.ToString().WithoutQuotes();
+                    var arguments = i.ArgumentList.Arguments;
+                    var format = arguments.Count == 1
+                                 ? arguments[0].Expression.ToString().WithoutQuotes()
+                                 : DefaultFormat;
+
+                    // we only want to have a GUID
+                    return Guid(format);
                 }
+
+                return GuidParse(Guid());
             }
 
-            var newGuid = guid.ToString(format).SurroundedWithDoubleQuote();
-
-            var literal = CreateStringLiteralExpressionSyntax(newGuid);
-
-            // we only want to have a GUID
-            if (isToString)
+            if (syntax is MemberAccessExpressionSyntax)
             {
-                // we only want to have a GUID
-                return literal;
+                return SyntaxFactory.ParenthesizedLambdaExpression(SyntaxFactory.ParameterList(), GuidParse(Guid()));
             }
 
-            return Invocation(nameof(Guid), nameof(Guid.Parse), Argument(literal));
+            return null;
         }
 
-        protected virtual Guid CreateGuid() => Guid.NewGuid();
+        protected virtual Guid CreateGuid() => System.Guid.NewGuid();
 
-        private static LiteralExpressionSyntax CreateStringLiteralExpressionSyntax(string value)
+        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
+                                                               && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                               && m.GetName() == nameof(ToString);
+
+        private static InvocationExpressionSyntax GuidParse(ExpressionSyntax literal) => Invocation(nameof(System.Guid), nameof(System.Guid.Parse), Argument(literal));
+
+        private LiteralExpressionSyntax Guid(string format = DefaultFormat)
         {
-            var token = value.ToSyntaxToken();
+            var guid = CreateGuid();
+            var token = guid.ToString(format).SurroundedWithDoubleQuote().ToSyntaxToken();
 
             return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
         }
-
-        private static bool IsToStringCall(SyntaxNode node) => node is MemberAccessExpressionSyntax m
-                                                            && m.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                            && m.GetName() == nameof(ToString);
     }
 }
