@@ -3274,9 +3274,11 @@ Therefore, a hard-coded GUID should be used instead.</value>
     <value>Test methods should use NUnit's fluent Assert approach.</value>
   </data>
   <data name="MiKo_3106_Description" xml:space="preserve">
-    <value>If assertions such as Assert.That(...) contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; or patterns such as 'is true' or type checks via 'is' or the Equals() method, then those methods test for booleans.
-In case the test fails, the failure (e.g. 'true' expected but 'false' received) is hard to understand and needs to be carefully inspected.
-In worst case the test needs to be debugged to see what went wrong. If the test itself is a shaky one, this is even more annoying.
+    <value>Assertions such as Assert.That(...) that contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; assert for booleans.
+The same is valid for patterns such as 'is true' or type checks via 'is' or the Equals() method.
+
+If such a test fails it is difficult to understand why it failed. The failure reason gives no useful hint (e.g. 'true' expected but 'false' received), so the failure needs to be carefully inspected.
+At worst the test needs to be debugged to find out what went wrong. That is annoying and becomes even more annoying if the test itself is a shaky one.
 
 In contrast, the failure would be much easier to understand if the test would immediately state what was expected (e.g. '5' was expected but '12' was received).</value>
   </data>
@@ -3284,7 +3286,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Do not use '{1}' in assertion</value>
   </data>
   <data name="MiKo_3106_Title" xml:space="preserve">
-    <value>Do not use equality or comparison operators in assertions.</value>
+    <value>Assertions should not use equality or comparison operators.</value>
   </data>
   <data name="MiKo_3107_Description" xml:space="preserve">
     <value>It is troublesome to have code that attemps to use Moq mocks but actually does not use them properly. So condition matchers should be used on mocks to setup or verify conditions. Such matchers should not be used on constructors or methods of non-mocks as they don't make sense there.</value>
@@ -3312,6 +3314,21 @@ In contrast, the failure would be much easier to understand if the test would im
   </data>
   <data name="MiKo_3109_Title" xml:space="preserve">
     <value>Multiple assertions shall use assertion messages.</value>
+  </data>
+  <data name="MiKo_3110_Description" xml:space="preserve">
+    <value>Assertions such as Assert.That(...) using 'Count' or 'Length' assert for exact values.
+If such a test fails it is diffucult to find out why it exactly failed as the failure reason gives no useful hint (e.g. '5' expected but '3' received).
+
+So the failure needs to be carefully inspected. At worst the test needs to be debugged to find out what went wrong.
+That is annoying and becomes even more annoying if the test itself is a shaky one.
+
+In contrast, the failure would be much easier to understand if the test would immediately state what was expected (e.g. Expected items 'A', 'B' and 'C' but found 'B' and 'D').</value>
+  </data>
+  <data name="MiKo_3110_MessageFormat" xml:space="preserve">
+    <value>Do not use '{1}' in assertion</value>
+  </data>
+  <data name="MiKo_3110_Title" xml:space="preserve">
+    <value>Assertions should not use 'Count' or 'Length'.</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

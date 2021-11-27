@@ -9245,11 +9245,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If assertions such as Assert.That(...) contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; or patterns such as &apos;is true&apos; or type checks via &apos;is&apos; or the Equals() method, then those methods test for booleans.
-        ///In case the test fails, the failure (e.g. &apos;true&apos; expected but &apos;false&apos; received) is hard to understand and needs to be carefully inspected.
-        ///In worst case the test needs to be debugged to see what went wrong. If the test itself is a shaky one, this is even more annoying.
+        ///   Looks up a localized string similar to Assertions such as Assert.That(...) that contain operators such as ==, !=, &lt;=, &lt;, &gt;=, &gt; assert for booleans.
+        ///The same is valid for patterns such as &apos;is true&apos; or type checks via &apos;is&apos; or the Equals() method.
         ///
-        ///In contrast, the failure would be m [rest of string was truncated]&quot;;.
+        ///If such a test fails it is difficult to understand why it failed. The failure reason gives no useful hint (e.g. &apos;true&apos; expected but &apos;false&apos; received), so the failure needs to be carefully inspected.
+        ///At worst the test needs to be debugged to find out what went wrong. That is annoying and becomes even  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string MiKo_3106_Description {
             get {
@@ -9267,7 +9267,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use equality or comparison operators in assertions..
+        ///   Looks up a localized string similar to Assertions should not use equality or comparison operators..
         /// </summary>
         public static string MiKo_3106_Title {
             get {
@@ -9353,6 +9353,39 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3109_Title {
             get {
                 return ResourceManager.GetString("MiKo_3109_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertions such as Assert.That(...) using &apos;Count&apos; or &apos;Length&apos; assert for exact values.
+        ///If such a test fails it is diffucult to find out why it exactly failed as the failure reason gives no useful hint (e.g. &apos;5&apos; expected but &apos;3&apos; received).
+        ///
+        ///So the failure needs to be carefully inspected. At worst the test needs to be debugged to find out what went wrong.
+        ///That is annoying and becomes even more annoying if the test itself is a shaky one.
+        ///
+        ///In contrast, the failure would be much easier to understand if the [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_3110_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3110_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in assertion.
+        /// </summary>
+        public static string MiKo_3110_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3110_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertions should not use &apos;Count&apos; or &apos;Length&apos;..
+        /// </summary>
+        public static string MiKo_3110_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3110_Title", resourceCulture);
             }
         }
         
