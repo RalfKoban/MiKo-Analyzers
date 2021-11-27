@@ -8075,6 +8075,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hard-coded numbers are difficult to understand why they are exactly as they are. So they are kind of &apos;magic&apos; numbers.
+        ///To ease maintenance, such numbers should not be hard-coded - instead they should be defined as constants..
+        /// </summary>
+        public static string MiKo_3038_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3038_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use magic number.
+        /// </summary>
+        public static string MiKo_3038_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3038_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use magic numbers..
+        /// </summary>
+        public static string MiKo_3038_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3038_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Properties that use Linq internally most probably behave differently when being accessed later on or multiple times. As the idea of properties is to be able to access fields (with some safety checks in place), that contradicts the intention of being a property and lead to all sorts of unwanted side-effects.
         ///Such properties should be methods instead to make it clear that they behave differently between calls..
         /// </summary>
