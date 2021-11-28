@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3038_DoNotUseMagicNumbersAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_const_field_([Values("-42", "-1", "0", "1", "42")] string value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_const_field_([Values(-42, -1, 0, 1, 42)] int value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -23,7 +23,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_const_variable_([Values("-42", "-1", "0", "1", "42")] string value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_const_variable_([Values(-42, -1, 0, 1, 42)] int value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -187,6 +187,38 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_range_expression() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public string DoSomething(string value)
+        {
+            return char.ToUpper(value[0]) + value[1..];
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_array_access_at_([Values(0, 1)] int value) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int[] values)
+        {
+            int value = values[" + value + @"];
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_fixture_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using System;
 
@@ -246,7 +278,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_([Values("-42", "42")] string value) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_([Values(-42, 42)] int value) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -254,6 +286,22 @@ namespace Bla
     public class TestMe
     {
         private int i = " + value + @";
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_array_access_at_([Values(2, 3, 4, 5, 10, 20, 42)] int value) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int[] values)
+        {
+            int value = values[" + value + @"];
+        }
     }
 }
 ");

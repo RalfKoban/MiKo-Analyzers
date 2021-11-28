@@ -18,6 +18,45 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNumericLiteralExpression, SyntaxKind.NumericLiteralExpression);
 
+        private static bool IgnoreBasedOnAncestor(LiteralExpressionSyntax node)
+        {
+            foreach (var ancestor in node.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case LocalDeclarationStatementSyntax variable when variable.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
+                    case FieldDeclarationSyntax field when field.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
+                    case EnumMemberDeclarationSyntax _:
+                    case AttributeArgumentSyntax _:
+                    case BracketedArgumentListSyntax _ when node.Token.Text == "1":
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IgnoreBasedOnParent(LiteralExpressionSyntax node)
+        {
+            switch (node.Parent?.Kind())
+            {
+                case SyntaxKind.UnaryMinusExpression:
+                case SyntaxKind.UnaryPlusExpression:
+                case SyntaxKind.AddExpression:
+                case SyntaxKind.AddAssignmentExpression:
+                case SyntaxKind.SubtractExpression:
+                case SyntaxKind.SubtractAssignmentExpression:
+                    return node.Token.Text == "1";
+
+                case SyntaxKind.CaseSwitchLabel:
+                case SyntaxKind.RangeExpression:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         private void AnalyzeNumericLiteralExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (LiteralExpressionSyntax)context.Node;
@@ -25,6 +64,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var symbol = context.ContainingSymbol;
             if (symbol is null)
             {
+                return;
+            }
+
+            if (symbol is IMethodSymbol method && method.IsTestMethod())
+            {
+                // ignore unit tests
                 return;
             }
 
@@ -44,68 +89,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            if (symbol is IMethodSymbol method && method.IsTestMethod())
+            if (node.Token.Text == "0")
             {
-                // ignore unit tests
                 return;
             }
 
-            var issue = FindIssue(node, symbol);
-            if (issue != null)
+            if (IgnoreBasedOnParent(node) || IgnoreBasedOnAncestor(node))
             {
-                context.ReportDiagnostic(issue);
-            }
-        }
-
-        private Diagnostic FindIssue(LiteralExpressionSyntax node, ISymbol symbol)
-        {
-            foreach (var ancestor in node.Ancestors())
-            {
-                switch (ancestor)
-                {
-                    case LocalDeclarationStatementSyntax variable when variable.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
-                        return null; // ignore const variables
-
-                    case FieldDeclarationSyntax field when field.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
-                        return null; // ignore const fields
-
-                    case EnumMemberDeclarationSyntax _:
-                        return null; // ignore enum members
-
-                    case AttributeArgumentSyntax _:
-                        return null; // ignore constants in attributes
-                }
+                return;
             }
 
-            switch (node.Parent?.Kind())
-            {
-                case SyntaxKind.UnaryMinusExpression:
-                case SyntaxKind.UnaryPlusExpression:
-                case SyntaxKind.AddExpression:
-                case SyntaxKind.AddAssignmentExpression:
-                case SyntaxKind.SubtractExpression:
-                case SyntaxKind.SubtractAssignmentExpression:
-                {
-                    if (node.Token.Text == "1")
-                    {
-                        return null; // ignore 1
-                    }
-
-                    break;
-                }
-
-                case SyntaxKind.CaseSwitchLabel:
-                {
-                    return null; // ignore case statements
-                }
-            }
-
-            if (node.Token.Text == "0")
-            {
-                return null; // ignore zero
-            }
-
-            return Issue(symbol.Name, node);
+            context.ReportDiagnostic(Issue(symbol.Name, node));
         }
     }
 }
