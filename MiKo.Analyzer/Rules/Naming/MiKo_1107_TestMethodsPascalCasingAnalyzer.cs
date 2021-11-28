@@ -31,14 +31,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var caseAlreadyFlipped = false;
 
+            const int CharacterToStartWith = 1;
+
             var characters = new List<char>(symbolName);
-            for (var index = 1; index < characters.Count; index++)
+            for (var index = CharacterToStartWith; index < characters.Count; index++)
             {
                 var c = characters[index];
 
                 if (c.IsUpperCase())
                 {
-                    if (index == 1)
+                    if (index == CharacterToStartWith)
                     {
                         // multiple upper cases in a line at beginning of the name, so do not flip
                         caseAlreadyFlipped = true;
