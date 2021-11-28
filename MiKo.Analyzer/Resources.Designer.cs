@@ -8085,7 +8085,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use magic number.
+        ///   Looks up a localized string similar to Do not use magic number {1}.
         /// </summary>
         public static string MiKo_3038_MessageFormat {
             get {

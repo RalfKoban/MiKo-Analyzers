@@ -91,7 +91,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            switch (node.Token.Text)
+            var number = node.Token.Text;
+            switch (number)
             {
                 case "0": // ignore zero
                 case "1": // ignore one as it is often used as offset
@@ -103,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            context.ReportDiagnostic(Issue(symbol.Name, node));
+            context.ReportDiagnostic(Issue(symbol.Name, node, number));
         }
     }
 }
