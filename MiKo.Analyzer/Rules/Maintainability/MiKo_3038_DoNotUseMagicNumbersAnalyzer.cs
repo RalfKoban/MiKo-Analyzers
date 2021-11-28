@@ -63,17 +63,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (ancestor)
                 {
+                    case LocalDeclarationStatementSyntax variable when variable.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
+                        return null; // ignore const variables
+
                     case FieldDeclarationSyntax field when field.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
-                        return null; // ignore enum members
+                        return null; // ignore const fields
 
                     case EnumMemberDeclarationSyntax _:
-                        return null; // ignore constants
+                        return null; // ignore enum members
 
                     case AttributeArgumentSyntax _:
-                        return null; // ignore constants
-
-                    case PrefixUnaryExpressionSyntax prefix when prefix.IsKind(SyntaxKind.UnaryMinusExpression) && node.Token.Text == "1":
-                        return null; // ignore -1
+                        return null; // ignore constants in attributes
                 }
             }
 
@@ -81,10 +81,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case SyntaxKind.UnaryMinusExpression:
                 case SyntaxKind.UnaryPlusExpression:
-                {
-                    return Issue(symbol.Name, node.Parent);
-                }
-
                 case SyntaxKind.AddExpression:
                 case SyntaxKind.AddAssignmentExpression:
                 case SyntaxKind.SubtractExpression:
@@ -96,6 +92,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     break;
+                }
+
+                case SyntaxKind.CaseSwitchLabel:
+                {
+                    return null; // ignore case statements
                 }
             }
 

@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3038_DoNotUseMagicNumbersAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_const_([Values("-42", "-1", "0", "1", "42")] string value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_const_field_([Values("-42", "-1", "0", "1", "42")] string value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -18,6 +18,22 @@ namespace Bla
     public class TestMe
     {
         private const int i = " + value + @";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_const_variable_([Values("-42", "-1", "0", "1", "42")] string value) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            const int i = " + value + @";
+        }
     }
 }
 ");
@@ -143,6 +159,28 @@ namespace Bla
             var i = 0;
             i = i - 1;
             i -= 1;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_switch_case() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    break;
+            }
         }
     }
 }
