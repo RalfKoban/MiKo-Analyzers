@@ -28,8 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case FieldDeclarationSyntax field when field.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
                     case EnumMemberDeclarationSyntax _:
                     case AttributeArgumentSyntax _:
-                    case BracketedArgumentListSyntax _ when node.Token.Text == "1":
                         return true;
+
+                    case ArgumentSyntax _:
+                        return false; // we want to know what those numbers mean
                 }
             }
 
@@ -46,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.AddAssignmentExpression:
                 case SyntaxKind.SubtractExpression:
                 case SyntaxKind.SubtractAssignmentExpression:
-                    return node.Token.Text == "1";
+                    return false;
 
                 case SyntaxKind.CaseSwitchLabel:
                 case SyntaxKind.RangeExpression:
@@ -89,9 +91,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            if (node.Token.Text == "0")
+            switch (node.Token.Text)
             {
-                return;
+                case "0": // ignore zero
+                case "1": // ignore one as it is often used as offset
+                    return;
             }
 
             if (IgnoreBasedOnParent(node) || IgnoreBasedOnAncestor(node))
