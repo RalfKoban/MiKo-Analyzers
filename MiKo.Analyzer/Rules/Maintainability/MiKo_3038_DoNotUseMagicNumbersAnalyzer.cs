@@ -55,6 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.Argument:
                     return IgnoreBasedOnArgument(node.Parent); // we want to know what those numbers mean
 
+                case SyntaxKind.SimpleAssignmentExpression:
+                    return false; // assignments to width and height (???)
+
                 default:
                     return false;
             }
@@ -74,6 +77,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return true;
                     }
                 }
+            }
+
+            return false;
+        }
+
+        private static bool IsWellknownNumber(string number)
+        {
+            switch (number.ToLowerCase())
+            {
+                // ignore zero
+                case "0":
+                case "0l":
+                case "0u":
+                case "0d":
+                case "0f":
+                case "0.0":
+                case "0.0f":
+                case "0.0d":
+
+                // ignore one as it is often used as offset
+                case "1":
+                case "1l":
+                case "1u":
+                case "1d":
+                case "1f":
+                case "1.0":
+                case "1.0f":
+                case "1.0d":
+                    return true;
             }
 
             return false;
@@ -121,11 +153,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var number = node.Token.Text;
-            switch (number)
+            if (IsWellknownNumber(number))
             {
-                case "0": // ignore zero
-                case "1": // ignore one as it is often used as offset
-                    return;
+                return;
             }
 
             if (IgnoreBasedOnParent(node) || IgnoreBasedOnAncestor(node))

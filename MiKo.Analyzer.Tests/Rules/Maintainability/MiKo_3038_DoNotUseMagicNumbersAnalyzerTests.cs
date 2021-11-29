@@ -80,6 +80,22 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_variable_assigned_to_([Values("0", "0L", "0u", "0.0", "0d", "0.0d", "0f", "0.0f", "1", "1L", "1u", "1.0", "1d", "1.0d", "1f", "1.0f", "-1", "-1L", "-1d", "-1f", "-1.0")] string value) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var x = " + value + @";
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parameter_call_with_minus_1() => No_issue_is_reported_for(@"
 using System;
 
