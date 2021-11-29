@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var symbol = syntax.Identifier.GetSymbol(semanticModel);
 
-            return symbol.Kind == SymbolKind.Local;
+            return symbol?.Kind == SymbolKind.Local;
         }
 
         private void AnalyzeSimpleAssignmentExpression(SyntaxNodeAnalysisContext context)
