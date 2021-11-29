@@ -205,6 +205,43 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_property_setter_with_assignment_to_discarded_value() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeValue
+        {
+            get => 0:
+
+            set
+            {
+                _ = value;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_assignment_to_discarded_value() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int value)
+        {
+            _ = value;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_variable_assignment_preceded_by_if_block() => An_issue_is_reported_for(@"
 namespace Bla
 {

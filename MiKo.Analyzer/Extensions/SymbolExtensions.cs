@@ -135,7 +135,6 @@ namespace MiKoSolutions.Analyzers
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol value, string invocation) => value.GetAssignmentsVia(invocation)
                                                                                                                                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
                                                                                                                                              .Select(_ => _.ArgumentList)
-                                                                                                                                             .Where(_ => _ != null)
                                                                                                                                              .Select(_ => _.Arguments)
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
