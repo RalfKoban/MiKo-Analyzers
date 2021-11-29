@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -29,9 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case EnumMemberDeclarationSyntax _:
                     case AttributeArgumentSyntax _:
                         return true;
-
-                    case ArgumentSyntax _:
-                        return false; // we want to know what those numbers mean
                 }
             }
 
@@ -54,9 +52,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.RangeExpression:
                     return true;
 
+                case SyntaxKind.Argument:
+                    return IgnoreBasedOnArgument(node.Parent); // we want to know what those numbers mean
+
                 default:
                     return false;
             }
+        }
+
+        private static bool IgnoreBasedOnArgument(SyntaxNode node)
+        {
+            if (node.Parent is ArgumentListSyntax list && list.Parent is ObjectCreationExpressionSyntax o)
+            {
+                var name = o.Type.GetNameOnlyPart();
+                if (name == nameof(DateTime))
+                {
+                    const int MinimumArgumentsForHoursMinutesSeconds = 3;
+
+                    if (list.Arguments.Count >= MinimumArgumentsForHoursMinutesSeconds)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void AnalyzeNumericLiteralExpression(SyntaxNodeAnalysisContext context)

@@ -235,6 +235,22 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_DateTime_ctor_with_hour_minute_seconds() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public DateTime Create()
+        {
+            return new DateTime(2021, 1, 1);
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_fixture_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using System;
 
@@ -317,6 +333,38 @@ namespace Bla
         public void DoSomething(int[] values)
         {
             int value = values[" + value + @"];
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_DateTime_ctor_with_ticks() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public DateTime Create()
+        {
+            return new DateTime(2021);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_DateTime_ctor_with_ticks_and_DateTimeKind() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public DateTime Create()
+        {
+            return new DateTime(2021, DateTimeKind.Utc);
         }
     }
 }
