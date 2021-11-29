@@ -69,10 +69,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            if (symbol is IMethodSymbol method && method.IsTestMethod())
+            if (symbol is IMethodSymbol method)
             {
-                // ignore unit tests
-                return;
+                if (method.Name == nameof(GetHashCode))
+                {
+                    // ignore hash calculation
+                    return;
+                }
+
+                if (method.IsTestMethod())
+                {
+                    // ignore unit tests
+                    return;
+                }
             }
 
             var containingType = symbol.ContainingType;

@@ -219,6 +219,22 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_GetHashCode_method() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int GetHashCode()
+        {
+            return 297 * 511 ^ 123;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_fixture_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using System;
 
