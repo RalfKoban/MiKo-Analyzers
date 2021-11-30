@@ -283,6 +283,24 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_pragma_directive() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+#pragma warning disable 618
+            var i = 0;
+#pragma warning restore 618
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_fixture_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using System;
 

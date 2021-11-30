@@ -68,6 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case FieldDeclarationSyntax field when field.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
                     case EnumMemberDeclarationSyntax _:
                     case AttributeArgumentSyntax _:
+                    case PragmaWarningDirectiveTriviaSyntax _:
                         return true;
                 }
             }
