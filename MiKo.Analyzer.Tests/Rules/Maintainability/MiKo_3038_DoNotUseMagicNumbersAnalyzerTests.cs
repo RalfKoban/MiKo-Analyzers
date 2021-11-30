@@ -267,6 +267,22 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_screen_resolution_number_([Values(320, 200, 640, 480, 800, 600, 1024, 768, 1920, 1080, 1280, 1440, 1600, 1200)] int number) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var i = " + number + @";
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_test_fixture_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 using System;
 

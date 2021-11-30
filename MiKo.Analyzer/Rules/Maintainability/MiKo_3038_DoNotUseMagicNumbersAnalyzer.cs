@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -12,6 +13,44 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3038_DoNotUseMagicNumbersAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3038";
+
+        private static readonly HashSet<string> WellKnownNumbers = new HashSet<string>
+                                                                       {
+                                                                           // ignore zero
+                                                                           "0",
+                                                                           "0l",
+                                                                           "0u",
+                                                                           "0d",
+                                                                           "0f",
+                                                                           "0.0",
+                                                                           "0.0f",
+                                                                           "0.0d",
+
+                                                                           // ignore one as it is often used as offset
+                                                                           "1",
+                                                                           "1l",
+                                                                           "1u",
+                                                                           "1d",
+                                                                           "1f",
+                                                                           "1.0",
+                                                                           "1.0f",
+                                                                           "1.0d",
+
+                                                                           "320",
+                                                                           "200",
+                                                                           "640",
+                                                                           "480",
+                                                                           "800",
+                                                                           "600",
+                                                                           "1024",
+                                                                           "768",
+                                                                           "1920",
+                                                                           "1080",
+                                                                           "1280",
+                                                                           "1440",
+                                                                           "1600",
+                                                                           "1200",
+                                                                       };
 
         public MiKo_3038_DoNotUseMagicNumbersAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -82,34 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool IsWellknownNumber(string number)
-        {
-            switch (number.ToLowerCase())
-            {
-                // ignore zero
-                case "0":
-                case "0l":
-                case "0u":
-                case "0d":
-                case "0f":
-                case "0.0":
-                case "0.0f":
-                case "0.0d":
-
-                // ignore one as it is often used as offset
-                case "1":
-                case "1l":
-                case "1u":
-                case "1d":
-                case "1f":
-                case "1.0":
-                case "1.0f":
-                case "1.0d":
-                    return true;
-            }
-
-            return false;
-        }
+        private static bool IsWellKnownNumber(string number) => WellKnownNumbers.Contains(number.ToLowerCase());
 
         private void AnalyzeNumericLiteralExpression(SyntaxNodeAnalysisContext context)
         {
@@ -153,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var number = node.Token.Text;
-            if (IsWellknownNumber(number))
+            if (IsWellKnownNumber(number))
             {
                 return;
             }
