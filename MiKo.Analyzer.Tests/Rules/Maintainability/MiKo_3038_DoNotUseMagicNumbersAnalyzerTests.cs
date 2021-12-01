@@ -266,6 +266,24 @@ namespace Bla
 }
 ");
 
+        [TestCase("FromRgb(127, 42, 17)")]
+        [TestCase("FromArgb(127, 42, 17, 815)")]
+        public void No_issue_is_reported_for_Color_From_method_(string value) => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Media;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public Color Create()
+        {
+            return Color." + value + @";
+        }
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_screen_resolution_number_([Values(320, 200, 640, 480, 800, 600, 1024, 768, 1920, 1080, 1280, 1440, 1600, 1200)] int number) => No_issue_is_reported_for(@"
 using System;
@@ -415,6 +433,22 @@ namespace Bla
         public DateTime Create()
         {
             return new DateTime(2021, DateTimeKind.Utc);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_array_rank_specifier() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            byte[] buffer = new byte[4];
         }
     }
 }

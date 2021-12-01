@@ -98,6 +98,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.SimpleAssignmentExpression:
                     return false; // assignments to width and height (???)
 
+                case SyntaxKind.ArrayRankSpecifier:
+                    return false; // arrays, such as new byte[123]
+
                 default:
                     return false;
             }
@@ -105,16 +108,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IgnoreBasedOnArgument(SyntaxNode node)
         {
-            if (node.Parent is ArgumentListSyntax list && list.Parent is ObjectCreationExpressionSyntax o)
+            if (node.Parent is ArgumentListSyntax list)
             {
-                var name = o.Type.GetNameOnlyPart();
-                if (name == nameof(DateTime))
+                switch (list.Parent)
                 {
-                    const int MinimumArgumentsForHoursMinutesSeconds = 3;
-
-                    if (list.Arguments.Count >= MinimumArgumentsForHoursMinutesSeconds)
+                    case ObjectCreationExpressionSyntax o:
                     {
-                        return true;
+                        var name = o.Type.GetNameOnlyPart();
+                        if (name == nameof(DateTime))
+                        {
+                            const int MinimumArgumentsForHoursMinutesSeconds = 3;
+
+                            if (list.Arguments.Count >= MinimumArgumentsForHoursMinutesSeconds)
+                            {
+                                return true;
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax mae:
+                    {
+                        var name = mae.GetName();
+                        if (name.StartsWith("From", StringComparison.Ordinal))
+                        {
+                            var typeName = mae.Expression.GetName();
+                            if (typeName == "Color")
+                            {
+                                // ignore all Color.FromXyz calls
+                                return true;
+                            }
+                        }
+
+                        break;
                     }
                 }
             }

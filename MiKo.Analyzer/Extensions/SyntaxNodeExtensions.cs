@@ -185,9 +185,33 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                // nameof
-                case InvocationExpressionSyntax i: return i.ArgumentList.Arguments[0].ToString();
+                case InvocationExpressionSyntax i:
+                {
+                    if (i.Expression is IdentifierNameSyntax identifier)
+                    {
+                        var text = identifier.GetName();
+
+                        if (text != "nameof")
+                        {
+                            return text;
+                        }
+
+                        if (i.Ancestors().OfType<MemberAccessExpressionSyntax>().None())
+                        {
+                            // nameof
+                            var arguments = i.ArgumentList.Arguments;
+                            if (arguments.Count > 0)
+                            {
+                                return arguments[0].ToString();
+                            }
+                        }
+                    }
+
+                    return string.Empty;
+                }
+
                 case LiteralExpressionSyntax l: return l.GetName();
+                case IdentifierNameSyntax i: return i.GetName();
                 default: return string.Empty;
             }
         }
