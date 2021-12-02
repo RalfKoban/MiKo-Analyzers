@@ -212,6 +212,7 @@ namespace MiKoSolutions.Analyzers
 
                 case LiteralExpressionSyntax l: return l.GetName();
                 case IdentifierNameSyntax i: return i.GetName();
+                case MemberAccessExpressionSyntax m: return m.GetName();
                 default: return string.Empty;
             }
         }

@@ -78,7 +78,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IgnoreBasedOnParent(LiteralExpressionSyntax node)
         {
-            switch (node.Parent?.Kind())
+            var parent = node.Parent;
+
+            switch (parent?.Kind())
             {
                 case SyntaxKind.UnaryMinusExpression:
                 case SyntaxKind.UnaryPlusExpression:
@@ -93,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return true;
 
                 case SyntaxKind.Argument:
-                    return IgnoreBasedOnArgument(node.Parent); // we want to know what those numbers mean
+                    return IgnoreBasedOnArgument(parent); // we want to know what those numbers mean
 
                 case SyntaxKind.SimpleAssignmentExpression:
                     return false; // assignments to width and height (???)
@@ -124,19 +126,36 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 return true;
                             }
                         }
+                        else if (name.Contains("Progress"))
+                        {
+                            // ignore progress ctors
+                            return true;
+                        }
 
                         break;
                     }
 
-                    case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax mae:
+                    case InvocationExpressionSyntax i:
                     {
-                        var name = mae.GetName();
-                        if (name.StartsWith("From", StringComparison.Ordinal))
+                        var name = i.Expression.GetName();
+
+                        if (i.Expression is MemberAccessExpressionSyntax mae)
                         {
-                            var typeName = mae.Expression.GetName();
-                            if (typeName == "Color")
+                            if (name.StartsWith("From", StringComparison.Ordinal))
                             {
-                                // ignore all Color.FromXyz calls
+                                var typeName = mae.Expression.GetName();
+                                if (typeName == "Color")
+                                {
+                                    // ignore all Color.FromXyz calls
+                                    return true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (name.Contains("Progress"))
+                            {
+                                // ignore progress
                                 return true;
                             }
                         }

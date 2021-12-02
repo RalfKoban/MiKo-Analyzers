@@ -285,6 +285,58 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Progress_method() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            ReportProgress(100);
+        }
+
+        public void ReportProgress(int progress)
+        { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Progress_ctor() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class MyProgress
+    {
+        public MyProgress(int progress) => Progress = progress;
+
+        public int Progress { get; }
+    }
+
+    public class TestMe
+    {
+        public void DoSomethingA()
+        {
+            var progress = new MyProgress(100);
+
+            ReportProgress(progress);
+        }
+
+        public void DoSomethingB()
+        {
+            ReportProgress(new MyProgress(100));
+        }
+
+        public void ReportProgress(MyProgress progress)
+        { }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_screen_resolution_number_([Values(320, 200, 640, 480, 800, 600, 1024, 768, 1920, 1080, 1280, 1440, 1600, 1200)] int number) => No_issue_is_reported_for(@"
 using System;
 
