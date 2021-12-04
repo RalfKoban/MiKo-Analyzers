@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsEventHandler();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {

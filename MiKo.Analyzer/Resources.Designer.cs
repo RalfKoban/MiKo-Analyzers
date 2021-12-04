@@ -6073,6 +6073,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
+        ///Such phrases are for example &apos;Defines&apos;, &apos;Indicates&apos; or &apos;Specifies&apos;. Instead, the Enum member summary should describe the meaning of the member itself..
+        /// </summary>
+        public static string MiKo_2082_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2082_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not start &lt;summary&gt; with: &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2082_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2082_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation..
+        /// </summary>
+        public static string MiKo_2082_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2082_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply standard comment.
         /// </summary>
         public static string MiKo_2090_CodeFixTitle {

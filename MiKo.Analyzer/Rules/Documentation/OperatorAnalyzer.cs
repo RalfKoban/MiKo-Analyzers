@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected abstract string[] GetReturnsPhrases(ISymbol symbol);
 
-        protected sealed override bool ShallAnalyzeMethod(IMethodSymbol symbol)
+        protected sealed override bool ShallAnalyze(IMethodSymbol symbol)
         {
             switch (symbol.MethodKind)
             {

@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeProperty(IPropertySymbol symbol) => symbol.Type.IsCommand();
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.Type.IsCommand();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
