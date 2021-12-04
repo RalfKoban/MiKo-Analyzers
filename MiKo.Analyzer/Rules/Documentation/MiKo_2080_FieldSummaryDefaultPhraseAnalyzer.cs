@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return StartingDefaultPhrase;
         }
 
-        protected override bool ShallAnalyzeField(IFieldSymbol symbol)
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
             if (symbol.ContainingType.IsEnum())
             {

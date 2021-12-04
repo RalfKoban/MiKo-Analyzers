@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeType(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsException();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsException();
 
-        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
             if (symbol.IsConstructor() is false)
             {

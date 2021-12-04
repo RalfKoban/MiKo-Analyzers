@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static string GetEventArgsEndingPhrase() => " that contains the event data";
 
-        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol) => symbol.IsEventHandler();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => commentXml.IsNullOrWhiteSpace() || commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
                                                                                                                  ? Enumerable.Empty<Diagnostic>()

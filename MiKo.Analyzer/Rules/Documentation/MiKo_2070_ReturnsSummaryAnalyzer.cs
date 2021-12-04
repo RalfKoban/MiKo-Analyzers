@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                         ? new[] { Issue(symbol, GetProposal(symbol)) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
-        protected override bool ShallAnalyzeMethod(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
             switch (symbol.Name)
             {

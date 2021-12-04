@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
-            if (ShallAnalyzeMethod(context.GetEnclosingMethod()))
+            if (ShallAnalyze(context.GetEnclosingMethod()))
             {
                 var node = (BaseMethodDeclarationSyntax)context.Node;
 

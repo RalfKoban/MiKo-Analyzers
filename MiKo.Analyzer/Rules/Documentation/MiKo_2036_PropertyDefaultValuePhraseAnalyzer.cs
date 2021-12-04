@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Property);
 
-        protected override bool ShallAnalyzeProperty(IPropertySymbol symbol)
+        protected override bool ShallAnalyze(IPropertySymbol symbol)
         {
             var returnType = symbol.GetReturnType();
             if (returnType is null)

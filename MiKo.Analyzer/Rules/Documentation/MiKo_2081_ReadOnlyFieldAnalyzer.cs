@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeField(IFieldSymbol symbol)
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
             if (symbol.IsReadOnly)
             {
