@@ -428,6 +428,31 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_to_inheritdoc_for_default_implementation_(
+                                                                        [Values("A", "The", "")] string startPhrase,
+                                                                        [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl")] string text,
+                                                                        [Values("for", "of")] string middlePart)
+        {
+            var originalCode = @"
+/// <summary>
+/// " + startPhrase + " " + text + " " + middlePart + @" something <see cref=""TestMe"" />.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <inheritdoc/>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
@@ -484,8 +509,10 @@ public class TestMe
                                   "Implements ",
                                   "Interaction logic ",
                                   "Implementation of ",
-                                  "Default-Implementation of ",
+                                  "Default-implementation of ",
                                   "Default implementation of ",
+                                  "Default-Implementation for ",
+                                  "Default Implementation for ",
                                   "Impl ",
                                   "Default impl ",
                                   "Default-Impl ",

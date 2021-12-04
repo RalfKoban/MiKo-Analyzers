@@ -43,6 +43,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "This interface class ",
             };
 
+        private static readonly string[] DefaultPhrases =
+            {
+                "A default impl",
+                "A default-impl",
+                "Default impl",
+                "Default-impl",
+                "The default impl",
+                "The default-impl",
+            };
+
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapEntries().ToDictionary(_ => _.Key, _ => _.Value);
 
         public override string FixableDiagnosticId => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
@@ -58,6 +68,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // special case: its an inherit documentation, so mark it so
                 return inheritDoc;
+            }
+
+            // maybe it is a docu that should be an inherit documentation instead
+            if (comment.Content.FirstOrDefault() is XmlTextSyntax t)
+            {
+                var text = t.WithoutXmlCommentExterior();
+
+                if (text.StartsWithAny(DefaultPhrases, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Inheritdoc();
+                }
             }
 
             return Comment(comment, ReplacementMap.Keys, ReplacementMap);
