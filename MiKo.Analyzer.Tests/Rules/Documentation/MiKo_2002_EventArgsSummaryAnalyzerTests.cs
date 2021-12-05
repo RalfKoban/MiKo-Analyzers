@@ -144,6 +144,50 @@ public class MyEventArgs : EventArgs
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_comment_with_link_to_event()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary>
+/// Event argument which is used in the <see cref=""IMyInterface.MyEvent""/> event.
+/// </summary>
+/// <remarks>
+/// These are some remarks.
+/// </remarks>
+public class MyEventArgs : EventArgs
+{
+}
+
+public interface IMyInterface
+{
+    event EventHandler<MyEventArgs> MyEvent;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+/// <summary>
+/// Provides data for the <see cref=""IMyInterface.MyEvent""/> event.
+/// </summary>
+/// <remarks>
+/// These are some remarks.
+/// </remarks>
+public class MyEventArgs : EventArgs
+{
+}
+
+public interface IMyInterface
+{
+    event EventHandler<MyEventArgs> MyEvent;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2002_EventArgsSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2002_EventArgsSummaryAnalyzer();

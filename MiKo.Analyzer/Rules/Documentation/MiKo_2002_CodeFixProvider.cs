@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -17,7 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            return Comment(comment, "Provides data for the ", SeeCref("TODO"), " event.");
+            var cref = comment.Content.LastOrDefault(IsSeeCref) ?? SeeCref("TODO");
+
+            return Comment(comment, "Provides data for the ", cref, " event.");
         }
     }
 }

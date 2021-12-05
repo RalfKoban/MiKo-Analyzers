@@ -276,11 +276,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(
                                                 XmlElementSyntax comment,
                                                 string commentStart,
-                                                XmlEmptyElementSyntax seeCref,
+                                                XmlNodeSyntax link,
                                                 string commentEnd,
                                                 params XmlNodeSyntax[] commendEndNodes)
         {
-            var start = new XmlNodeSyntax[] { XmlText(commentStart), seeCref };
+            var start = new[] { XmlText(commentStart), link };
             var end = CommentEnd(commentEnd, commendEndNodes);
 
             return Comment(comment, start.Concat(end));
@@ -289,26 +289,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(
                                                 XmlElementSyntax comment,
                                                 string commentStart,
-                                                XmlEmptyElementSyntax seeCref1,
+                                                XmlNodeSyntax link1,
                                                 string commentMiddle,
-                                                XmlEmptyElementSyntax seeCref2,
+                                                XmlNodeSyntax link2,
                                                 string commentEnd,
                                                 params XmlNodeSyntax[] commendEndNodes)
         {
-            return Comment(comment, commentStart, seeCref1, new[] { XmlText(commentMiddle) }, seeCref2, commentEnd, commendEndNodes);
+            return Comment(comment, commentStart, link1, new[] { XmlText(commentMiddle) }, link2, commentEnd, commendEndNodes);
         }
 
         protected static XmlElementSyntax Comment(
                                                 XmlElementSyntax comment,
                                                 string commentStart,
-                                                XmlEmptyElementSyntax seeCref1,
+                                                XmlNodeSyntax link1,
                                                 IEnumerable<XmlNodeSyntax> commentMiddle,
-                                                XmlEmptyElementSyntax seeCref2,
+                                                XmlNodeSyntax link2,
                                                 string commentEnd,
                                                 params XmlNodeSyntax[] commendEndNodes)
         {
-            var start = new XmlNodeSyntax[] { XmlText(commentStart), seeCref1 };
-            var middle = new[] { seeCref2 };
+            var start = new[] { XmlText(commentStart), link1 };
+            var middle = new[] { link2 };
             var end = CommentEnd(commentEnd, commendEndNodes);
 
             // TODO RKN: Fix XML escaping caused by string conversion
@@ -327,6 +327,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
 
         protected static XmlEmptyElementSyntax Inheritdoc() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
+
+        protected static bool IsSeeCref(SyntaxNode value)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(emptyElement.Attributes);
+                }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(element.StartTag.Attributes);
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax;
+        }
 
         protected static bool IsSeeCref(SyntaxNode value, string type)
         {
