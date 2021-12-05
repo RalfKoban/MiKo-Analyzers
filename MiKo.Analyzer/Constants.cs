@@ -164,6 +164,7 @@ namespace MiKoSolutions.Analyzers
                     "Helper ",
                     "Impl ",
                     "Implement ",
+                    "Implementation for ",
                     "Implementation of ",
                     "Implements ",
                     "Interaction logic",

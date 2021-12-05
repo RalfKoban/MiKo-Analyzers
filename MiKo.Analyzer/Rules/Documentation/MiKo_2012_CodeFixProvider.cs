@@ -68,10 +68,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "A default impl",
                 "A default-impl",
+                "A impl ",
+                "An impl ",
+                "A implementation ",
+                "An implementation ",
                 "Default impl",
                 "Default-impl",
+                "Impl ",
+                "Implementation ",
                 "The default impl",
                 "The default-impl",
+                "The imp ",
+                "The implementation ",
             };
 
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapEntries().ToDictionary(_ => _.Key, _ => _.Value);
@@ -83,8 +91,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var comment = (XmlElementSyntax)syntax;
-
             var content = comment.Content;
+
             var inheritdoc = GetUpdatedSyntaxWithInheritdoc(content);
             if (inheritdoc != null)
             {
@@ -139,6 +147,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (text.StartsWithAny(DefaultPhrases, StringComparison.OrdinalIgnoreCase))
                 {
+                    if (content.Count > 1 && IsSeeCref(content[1]))
+                    {
+                        return Inheritdoc(GetCref(content[1]));
+                    }
+
                     return Inheritdoc();
                 }
             }
@@ -212,7 +225,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Every class that implements this interface can ", "Allows to ");
             yield return new KeyValuePair<string, string>("Extension of ", "Extends the ");
             yield return new KeyValuePair<string, string>("Factory for ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Implementation of ", "Provides a ");
             yield return new KeyValuePair<string, string>("Interface that serves ", "Provides ");
             yield return new KeyValuePair<string, string>("Interface which serves ", "Provides ");
             yield return new KeyValuePair<string, string>("The class offers ", "Provides ");

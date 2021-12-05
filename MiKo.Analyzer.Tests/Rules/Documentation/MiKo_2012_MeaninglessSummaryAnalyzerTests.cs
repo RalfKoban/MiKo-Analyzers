@@ -393,7 +393,6 @@ public class TestMe : ITestMe
         [TestCase("Helper class to manipulate", "Manipulates")]
         [TestCase("Helper class which manipulates", "Manipulates")]
         [TestCase("Helper method to generate", "Generates")]
-        [TestCase("Implementation of", "Provides a")]
         [TestCase("Interface describing", "Describes")]
         [TestCase("Interface for objects that can provide", "Provides")]
         [TestCase("Interface providing", "Provides")]
@@ -446,21 +445,29 @@ public class TestMe
         [Test]
         public void Code_gets_fixed_to_inheritdoc_for_default_implementation_(
                                                                         [Values("A", "The", "")] string startPhrase,
-                                                                        [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl")] string text,
+                                                                        [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl", "Implementation")] string text,
                                                                         [Values("for", "of")] string middlePart)
         {
             var originalCode = @"
 /// <summary>
-/// " + startPhrase + " " + text + " " + middlePart + @" something <see cref=""TestMe"" />.
+/// " + startPhrase + " " + text + " " + middlePart + @" <see cref=""ITestMe"" />.
 /// </summary>
 public class TestMe
+{
+}
+
+public interface ITestMe
 {
 }
 ";
 
             const string FixedCode = @"
-/// <inheritdoc/>
+/// <inheritdoc cref=""ITestMe""/>
 public class TestMe
+{
+}
+
+public interface ITestMe
 {
 }
 ";

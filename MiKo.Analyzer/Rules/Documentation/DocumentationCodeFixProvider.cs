@@ -328,6 +328,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax Inheritdoc() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
+        protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(new SyntaxList<XmlAttributeSyntax>(cref));
+
+        protected static XmlCrefAttributeSyntax GetCref(SyntaxNode value)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                {
+                    return GetCref(emptyElement.Attributes);
+                }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                {
+                    return GetCref(element.StartTag.Attributes);
+                }
+
+                default:
+                {
+                    return null;
+                }
+
+                XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
+            }
+        }
+
         protected static bool IsSeeCref(SyntaxNode value)
         {
             switch (value)
