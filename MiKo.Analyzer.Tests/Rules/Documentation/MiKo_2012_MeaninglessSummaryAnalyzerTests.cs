@@ -362,6 +362,9 @@ public class TestMe : ITestMe
         [TestCase("Classes implementing the interfaces provide", "Provides")]
         [TestCase("Classes implementing the interfaces will provide", "Provides")]
         [TestCase("Classes implementing the interfaces, will provide", "Provides")]
+        [TestCase("Command that does", "Represents a command that does")]
+        [TestCase("Contain", "Provides")]
+        [TestCase("Contains", "Provides")]
         [TestCase("Event argument for", "Provides data for the")]
         [TestCase("Event argument that is used in the", "Provides data for the")]
         [TestCase("Event argument that provides information", "Provides data for the")]
@@ -378,29 +381,32 @@ public class TestMe : ITestMe
         [TestCase("Every class that implements this interface can do", "Allows to do")]
         [TestCase("Every class that implements this interface can", "Allows to")]
         [TestCase("Extension of", "Extends the")]
-        [TestCase("Factory for", "Provides support for creating")]
+        [TestCase("Factory class creating", "Creates")]
         [TestCase("Factory class that creates", "Creates")]
+        [TestCase("Factory class to create", "Creates")]
+        [TestCase("Factory for", "Provides support for creating")]
+        [TestCase("Factory method creating", "Creates")]
         [TestCase("Factory method that creates", "Creates")]
+        [TestCase("Factory method to create", "Creates")]
         [TestCase("Factory method which creates", "Creates")]
         [TestCase("Helper class that manipulates", "Manipulates")]
-        [TestCase("Helper class which manipulates", "Manipulates")]
         [TestCase("Helper class to manipulate", "Manipulates")]
+        [TestCase("Helper class which manipulates", "Manipulates")]
         [TestCase("Helper method to generate", "Generates")]
         [TestCase("Implementation of", "Provides a")]
-        [TestCase("Interface that serves", "Provides")]
-        [TestCase("Interface which serves", "Provides")]
-        [TestCase("Interface to represent", "Represents")]
-        [TestCase("Interface representing", "Represents")]
-        [TestCase("Interface providing", "Provides")]
         [TestCase("Interface describing", "Describes")]
+        [TestCase("Interface for objects that can provide", "Provides")]
+        [TestCase("Interface providing", "Provides")]
+        [TestCase("Interface representing", "Represents")]
+        [TestCase("Interface that serves", "Provides")]
         [TestCase("Interface to describe", "Describes")]
+        [TestCase("Interface to represent", "Represents")]
+        [TestCase("Interface which serves", "Provides")]
         [TestCase("The class offers", "Provides")]
         [TestCase("The interface offers", "Provides")]
         [TestCase("This class represents", "Represents")]
         [TestCase("This interface represents", "Represents")]
-        [TestCase("Command that does", "Represents a command that does")]
-        [TestCase("Contains", "Provides")]
-        [TestCase("Contain", "Provides")]
+        [TestCase("The class implementing this interface provides", "Provides")]
         public void Code_gets_fixed_for_term_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -502,6 +508,52 @@ public class TestMe
 /// </summary>
 public class TestMe
 {
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_declarations()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// The value.
+    /// </summary>
+    public int Something1 { get; set; }
+
+    /// <summary>
+    /// A value.
+    /// </summary>
+    public int Something2 { get; }
+
+    /// <summary>
+    /// An value.
+    /// </summary>
+    public int Something3 { set; }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Gets or sets the value.
+    /// </summary>
+    public int Something1 { get; set; }
+
+    /// <summary>
+    /// Gets a value.
+    /// </summary>
+    public int Something2 { get; }
+
+    /// <summary>
+    /// Sets an value.
+    /// </summary>
+    public int Something3 { set; }
 }
 ";
 
