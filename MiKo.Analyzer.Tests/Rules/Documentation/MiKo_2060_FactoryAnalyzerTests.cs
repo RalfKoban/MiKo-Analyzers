@@ -251,7 +251,13 @@ public class TestMeFactory
 
         [TestCase("A factory that creates")]
         [TestCase("A factory which creates")]
+        [TestCase("A interface for factories that create")]
+        [TestCase("A interface to create")]
+        [TestCase("An interface for factories that create")]
+        [TestCase("An interface to create")]
         [TestCase("Creates")]
+        [TestCase("Interface for factories that create")]
+        [TestCase("Interface to create")]
         [TestCase("Represents a factory that creates")]
         [TestCase("Represents the factory which creates")]
         [TestCase("The factory that creates")]
