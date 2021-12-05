@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "Allows ",
                 "Creates ",
+                "Describes ",
                 "Enhances ",
                 "Extends ",
                 "Generates ",
@@ -63,17 +64,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            var inheritDoc = comment.Content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Inheritdoc);
-            if (inheritDoc != null)
+            var content = comment.Content;
+            var inheritdoc = GetUpdatedSyntaxWithInheritdoc(content);
+            if (inheritdoc != null)
+            {
+                return inheritdoc;
+            }
+
+            if (content.FirstOrDefault() is XmlTextSyntax t)
+            {
+                if (t.WithoutXmlCommentExterior().StartsWith("Interaction logic for", StringComparison.Ordinal))
+                {
+                    // seems like this is the default comment for WPF controls
+                    return Comment(comment, XmlText("Represents a TODO"));
+                }
+            }
+
+            return Comment(comment, ReplacementMap.Keys, ReplacementMap);
+        }
+
+        private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(SyntaxList<XmlNodeSyntax> content)
+        {
+            var inheritdoc = content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Inheritdoc);
+            if (inheritdoc != null)
             {
                 // special case: its an inherit documentation, so mark it so
-                return inheritDoc;
+                return inheritdoc;
             }
 
             // maybe it is a docu that should be an inherit documentation instead
-            if (comment.Content.FirstOrDefault() is XmlTextSyntax t)
+            if (content.FirstOrDefault() is XmlTextSyntax t)
             {
                 var text = t.WithoutXmlCommentExterior();
+
+                if (text.IsNullOrWhiteSpace() && content.Count > 1 && IsSeeCref(content[1]))
+                {
+                    return Inheritdoc();
+                }
 
                 if (text.StartsWithAny(DefaultPhrases, StringComparison.OrdinalIgnoreCase))
                 {
@@ -81,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return Comment(comment, ReplacementMap.Keys, ReplacementMap);
+            return null;
         }
 
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
@@ -104,6 +131,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Classes implementing the interfaces provide ", "Provides ");
             yield return new KeyValuePair<string, string>("Classes implementing the interfaces will provide ", "Provides ");
             yield return new KeyValuePair<string, string>("Classes implementing the interfaces, will provide ", "Provides ");
+            yield return new KeyValuePair<string, string>("Command ", "Represents a command ");
+            yield return new KeyValuePair<string, string>("Contain ", "Provides ");
+            yield return new KeyValuePair<string, string>("Contains ", "Provides ");
             yield return new KeyValuePair<string, string>("Event argument for ", "Provides data for the ");
             yield return new KeyValuePair<string, string>("Event argument that is used in the ", "Provides data for the ");
             yield return new KeyValuePair<string, string>("Event argument that provides information ", "Provides data for the ");
@@ -125,6 +155,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Implementation of ", "Provides a ");
             yield return new KeyValuePair<string, string>("Interface that serves ", "Provides ");
             yield return new KeyValuePair<string, string>("Interface which serves ", "Provides ");
+            yield return new KeyValuePair<string, string>("Interface providing ", "Provides ");
+            yield return new KeyValuePair<string, string>("Interface to provide ", "Provides ");
+            yield return new KeyValuePair<string, string>("Interface representing ", "Represents ");
+            yield return new KeyValuePair<string, string>("Interface to represent ", "Represents ");
+            yield return new KeyValuePair<string, string>("Interface describing ", "Describes ");
+            yield return new KeyValuePair<string, string>("Interface to describe ", "Describes ");
             yield return new KeyValuePair<string, string>("The class offers ", "Provides ");
             yield return new KeyValuePair<string, string>("The interface offers ", "Provides ");
         }

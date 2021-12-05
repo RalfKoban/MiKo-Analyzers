@@ -350,6 +350,7 @@ public class TestMe : ITestMe
 
         [TestCase("Class that allows", "Allows")]
         [TestCase("Class that creates", "Creates")]
+        [TestCase("Class that describes", "Describes")]
         [TestCase("Class that enhances", "Enhances")]
         [TestCase("Class that extends", "Extends")]
         [TestCase("Class that represents", "Represents")]
@@ -388,10 +389,18 @@ public class TestMe : ITestMe
         [TestCase("Implementation of", "Provides a")]
         [TestCase("Interface that serves", "Provides")]
         [TestCase("Interface which serves", "Provides")]
+        [TestCase("Interface to represent", "Represents")]
+        [TestCase("Interface representing", "Represents")]
+        [TestCase("Interface providing", "Provides")]
+        [TestCase("Interface describing", "Describes")]
+        [TestCase("Interface to describe", "Describes")]
         [TestCase("The class offers", "Provides")]
         [TestCase("The interface offers", "Provides")]
         [TestCase("This class represents", "Represents")]
         [TestCase("This interface represents", "Represents")]
+        [TestCase("Command that does", "Represents a command that does")]
+        [TestCase("Contains", "Provides")]
+        [TestCase("Contain", "Provides")]
         public void Code_gets_fixed_for_term_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -451,6 +460,52 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_to_inheritdoc_for_summary_that_contains_only_a_see_cref()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// <see cref=""TestMe""/>
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <inheritdoc/>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_XAML()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Interaction logic for TestMe.xaml
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Represents a TODO
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
