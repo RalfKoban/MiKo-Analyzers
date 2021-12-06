@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol value, string invocation)
         {
-            var field = value.GetSyntax();
+            var field = value.GetSyntax<FieldDeclarationSyntax>();
             if (field is null)
             {
                 return Enumerable.Empty<MemberAccessExpressionSyntax>();
@@ -155,15 +155,50 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
 
-        internal static SyntaxNode GetSyntax(this ISymbol value) => value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value) => value.DeclaringSyntaxReferences
+                                                                                           .Select(_ => _.GetSyntax())
+                                                                                           .Where(_ => _.GetLocation().IsInSource);
 
-        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.DeclaringSyntaxReferences.Select(_ => (ParameterSyntax)_.GetSyntax()).FirstOrDefault(_ => _.GetLocation().IsInSource);
+        internal static SyntaxNode GetSyntax(this ISymbol value)
+        {
+            switch (value)
+            {
+                case IFieldSymbol field:
+                {
+                    var fieldNode = GetSyntax<FieldDeclarationSyntax>(field);
+                    if (fieldNode != null)
+                    {
+                        return fieldNode;
+                    }
 
-        internal static FieldDeclarationSyntax GetSyntax(this IFieldSymbol value) => value.DeclaringSyntaxReferences
-                                                                                            .Select(_ => _.GetSyntax())
-                                                                                            .Where(_ => _.GetLocation().IsInSource)
-                                                                                            .Select(_ => _.GetEnclosing<FieldDeclarationSyntax>())
-                                                                                            .FirstOrDefault();
+                    // maybe it is an enum member
+                    return GetSyntax<EnumMemberDeclarationSyntax>(field);
+                }
+
+                case IEventSymbol @event:
+                {
+                    var eventField = GetSyntax<EventFieldDeclarationSyntax>(@event);
+                    if (eventField != null)
+                    {
+                        return eventField;
+                    }
+
+                    return GetSyntax<EventDeclarationSyntax>(@event);
+                }
+
+                case IParameterSymbol parameter:
+                    return GetSyntax(parameter);
+
+                default:
+                    return value.GetSyntaxNodes().FirstOrDefault();
+            }
+        }
+
+        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodes().OfType<ParameterSyntax>().FirstOrDefault();
+
+        internal static T GetSyntax<T>(this ISymbol value) where T : SyntaxNode => value.GetSyntaxNodes()
+                                                                                        .Select(_ => _.GetEnclosing<T>())
+                                                                                        .FirstOrDefault();
 
         internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {

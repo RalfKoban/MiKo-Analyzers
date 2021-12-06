@@ -6751,6 +6751,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sentences containing up to 15 words are most effective in terms of content and descriptiveness. Longer sentences are hard to read any may boring out readers..
+        /// </summary>
+        public static string MiKo_2215_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2215_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shorten sentences to contain up to 15 words each.
+        /// </summary>
+        public static string MiKo_2215_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2215_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sentences in documentation shall be short..
+        /// </summary>
+        public static string MiKo_2215_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2215_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
