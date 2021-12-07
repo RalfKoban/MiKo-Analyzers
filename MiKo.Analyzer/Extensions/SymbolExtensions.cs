@@ -28,6 +28,13 @@ namespace MiKoSolutions.Analyzers
                                                                                                           SymbolDisplayGenericsOptions.IncludeTypeParameters,
                                                                                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
+        private static readonly string[] GeneratedCSharpFileExtensions =
+            {
+                ".g.cs",
+                ".generated.cs",
+                ".Designer.cs",
+            };
+
         internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
@@ -155,9 +162,33 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetLineSpan().StartLinePosition.Line;
 
-        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value) => value.DeclaringSyntaxReferences
-                                                                                           .Select(_ => _.GetSyntax())
-                                                                                           .Where(_ => _.GetLocation().IsInSource);
+        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value)
+        {
+            foreach (var node in value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
+            {
+                var location = node.GetLocation();
+
+                var sourceTree = location.SourceTree;
+
+                // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
+                if (sourceTree is null)
+                {
+                    continue;
+                }
+
+                var filePath = sourceTree.FilePath;
+
+                // ignore non C# code (might be part of partial classes, e.g. for XAML)
+                if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                {
+                    // ignore generated code (might be part of partial classes)
+                    if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false)
+                    {
+                        yield return node;
+                    }
+                }
+            }
+        }
 
         internal static SyntaxNode GetSyntax(this ISymbol value)
         {
