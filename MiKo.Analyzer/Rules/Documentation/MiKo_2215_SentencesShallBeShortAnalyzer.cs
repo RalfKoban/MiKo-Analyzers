@@ -23,21 +23,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
+            if (HasIssue(symbol))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return new[] { Issue(symbol) };
             }
 
-            // inspect the comments
-            var comment = symbol.GetSyntax().DescendantNodes(_ => true, true).OfType<DocumentationCommentTriviaSyntax>().First();
-            var constructedComment = ConstructComment(comment);
-
-            return HasIssue(constructedComment)
-                       ? new[] { Issue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+            return Enumerable.Empty<Diagnostic>();
         }
 
-        private static string ConstructComment(DocumentationCommentTriviaSyntax comment)
+        private static bool HasIssue(ISymbol symbol)
+        {
+            var comment = symbol.GetSyntax().DescendantNodes(_ => true, true).OfType<DocumentationCommentTriviaSyntax>().FirstOrDefault();
+            if (comment is null)
+            {
+                // it might be that there is no documentation comment available (while the comment XML contains something like " <member name='xyz' ...> "
+                return false;
+            }
+
+            var elements = comment.DescendantNodes().OfType<XmlElementSyntax>().ToList();
+
+            var hasIssue = Analyze(elements, Constants.XmlTag.Summary)
+                        || Analyze(elements, Constants.XmlTag.Remarks)
+                        || Analyze(elements, Constants.XmlTag.Param)
+                        || Analyze(elements, Constants.XmlTag.Returns)
+                        || Analyze(elements, Constants.XmlTag.Value)
+                        || Analyze(elements, Constants.XmlTag.Exception)
+                        || Analyze(elements, Constants.XmlTag.TypeParam)
+                        || Analyze(elements, Constants.XmlTag.Example);
+
+            return hasIssue;
+        }
+
+        private static bool Analyze(IEnumerable<XmlElementSyntax> nodes, string tagName) => nodes.Where(_ => _.GetName() == tagName).Select(ConstructComment).Any(HasIssue);
+
+        private static string ConstructComment(SyntaxNode comment)
         {
             var builder = new StringBuilder();
 
