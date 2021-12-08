@@ -38,9 +38,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "returns",
             };
 
+        private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().ToArray();
+
         public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
+
+        internal static IEnumerable<string> CreateSimpleStartingPhrases()
+        {
+            var starts = new[] { "A ", "An ", string.Empty };
+            var booleans = new[]
+                               {
+                                   "bool value",
+                                   "Bool value",
+                                   "bool",
+                                   "Bool",
+                                   "boolean value",
+                                   "Boolean value",
+                                   "boolean",
+                                   "Boolean",
+                                   "value",
+                               };
+            var verbs = new[] { "indicating", "that indicates", "which indicates" };
+            var conditions = new[] { "if", "whether" };
+
+            foreach (var start in starts)
+            {
+                foreach (var boolean in booleans)
+                {
+                    foreach (var verb in verbs)
+                    {
+                        foreach (var condition in conditions)
+                        {
+                            yield return $"{start}{boolean} {verb} {condition} ";
+                        }
+                    }
+                }
+            }
+        }
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
                                                                                                                                              ? Comment(comment, GenericStartParts, GenericEndParts)
@@ -129,7 +164,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove boolean <see langword="..."/> and <c>...</c>
             var adjustedComment = comment.Without(comment.Content.Where(_ => _.IsSeeLangwordBool() || _.IsCBool()));
 
-            var nodes = adjustedComment.WithoutText(Phrases).WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
+            var nodes = adjustedComment.WithoutText(SimpleStartingPhrases)
+                                        .WithoutText(Phrases)
+                                        .WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
 
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
