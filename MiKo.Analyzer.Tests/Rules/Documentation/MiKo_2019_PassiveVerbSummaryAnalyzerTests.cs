@@ -135,11 +135,11 @@ using Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_class([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
-/// Provide some test data.
+/// " + start + @" some test data.
 /// </summary>
 public class TestMe
 {
@@ -147,7 +147,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Perform", "Miss", "Mixs", "Buzzs", "Enrichs")] string verb) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_([Values("Perform", "Miss", "Mixs", "Buzzs", "Enrichs", "This are")] string verb) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
