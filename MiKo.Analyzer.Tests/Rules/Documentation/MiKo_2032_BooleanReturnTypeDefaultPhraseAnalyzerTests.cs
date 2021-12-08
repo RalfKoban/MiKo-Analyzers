@@ -29,6 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "System.Threading.Tasks.Task<System.Boolean>",
             };
 
+        private static readonly string[] SimpleStartingPhrases = MiKo_2032_CodeFixProvider.CreateSimpleStartingPhrases().ToArray();
+
         private static readonly string[] BooleanReturnValues = BooleanOnlyReturnValues.Concat(BooleanTaskReturnValues).ToArray();
 
         [Test]
@@ -191,6 +193,23 @@ public class TestMe
     /// " + comment + @"
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_commented_method_with_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
+            => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + comment + @"
+    /// </returns>
+    public bool DoSomething(object o) => null;
 }
 ");
 
@@ -532,6 +551,36 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_simple_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string returnsComment)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>" + returnsComment + @" something.</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
