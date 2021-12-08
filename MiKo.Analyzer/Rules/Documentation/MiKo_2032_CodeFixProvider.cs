@@ -42,9 +42,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType) => Comment(comment, GenericStartParts, GenericEndParts);
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
+                                                                                                                                             ? Comment(comment, GenericStartParts, GenericEndParts)
+                                                                                                                                             : comment;
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => Comment(comment, NonGenericStartParts, NonGenericEndParts);
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => CommentCanBeFixed(comment)
+                                                                                                                                         ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
+                                                                                                                                         : comment;
+
+        // introduced as workaround for issue #399
+        private static bool CommentCanBeFixed(SyntaxNode syntax)
+        {
+            var comment = syntax.ToString();
+
+            var falseIndex = comment.IndexOf("false", StringComparison.OrdinalIgnoreCase);
+            if (falseIndex == -1)
+            {
+                return true;
+            }
+
+            var trueIndex = comment.IndexOf("true", StringComparison.OrdinalIgnoreCase);
+            if (trueIndex == -1)
+            {
+                // cannot fix currently (false case comes as only case)
+                if (comment.IndexOf("otherwise", StringComparison.OrdinalIgnoreCase) == -1)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (falseIndex < trueIndex)
+                {
+                    // cannot fix currently (false case comes before true case)
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         private static XmlElementSyntax Comment(XmlElementSyntax comment, IReadOnlyList<string> startParts, IReadOnlyList<string> endParts)
         {

@@ -403,6 +403,63 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase(@"<see langword=""false""/> if something; <see langword=""true""/> otherwise.")]
+        [TestCase(@"<see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
+        [TestCase(@"<see langword=""false""/> if something; otherwise <see langword=""true""/>.")]
+        [TestCase(@"<see langword=""false""/> if something, otherwise <see langword=""true""/>.")]
+        [TestCase(@"false if something. Otherwise true.")]
+        [TestCase(@"<c>false</c> if something. Otherwise <c>true</c>.")]
+        [TestCase(@"False if something, otherwise True.")]
+        [TestCase(@"False if something, True otherwise.")]
+        [TestCase(@"false if something, true otherwise.")]
+        [TestCase(@"False if something, otherwise returns True.")]
+        [TestCase(@"FALSE if something, otherwise returns TRUE.")]
+        [TestCase(@"FALSE: if something, otherwise returns TRUE.")]
+        [TestCase(@"Returns False if something, otherwise returns True.")]
+        [TestCase(@"Returns False if something, returns otherwise True.")]
+        [TestCase(@"Returns <see langref=""false""/> if something.")]
+        [TestCase(@"Returns <see langword=""false""/> if something.")]
+        [TestCase(@"false: if something, true: otherwise.")]
+        public void Code_gets_not_fixed_for_almost_correct_comment_on_non_generic_method_if_starting_with_false_(string returnsComment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>" + returnsComment + @"</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, originalCode);
+        }
+
+        [TestCase(@"A task that will complete with a result of <see langword=""false""/> if something; otherwise, <see langword=""true""/>.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""false""/> if something, otherwise, <see langword=""true""/>.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""false""/> if something; <see langword=""true""/> otherwise.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
+        [TestCase(@"Returns a task that will complete with a result of <see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
+        [TestCase(@"Returns a task that will complete with a result of <see langword=""false""/> if something, returns <see langword=""true""/> otherwise.")]
+        public void Code_gets_not_fixed_for_almost_correct_comment_on_generic_method_if_starting_with_false_(string returnsComment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>" + returnsComment + @"</returns>
+    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, originalCode);
+        }
+
         [Test]
         public void Code_fix_keeps_spaces_before_paramref_tag()
         {
