@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summary = (XmlElementSyntax)syntax;
 
-            if (summary.Content.Count > 0)
+            if (summary.Content.Count > 0 && CommentCanBeFixed(summary))
             {
                 summary = AdjustBeginning(summary);
                 summary = AdjustMiddle(summary);
@@ -29,6 +29,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return summary;
+        }
+
+        // introduced as workaround for issue #399
+        private static bool CommentCanBeFixed(SyntaxNode syntax)
+        {
+            var comment = syntax.ToString();
+
+            var falseIndex = comment.IndexOf("false", StringComparison.OrdinalIgnoreCase);
+            if (falseIndex == -1)
+            {
+                return true;
+            }
+
+            var trueIndex = comment.IndexOf("true", StringComparison.OrdinalIgnoreCase);
+            if (trueIndex == -1)
+            {
+                // cannot fix currently (false case comes as only case)
+                if (comment.IndexOf("otherwise", StringComparison.OrdinalIgnoreCase) == -1)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (falseIndex < trueIndex)
+                {
+                    // cannot fix currently (false case comes before true case)
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static XmlElementSyntax AdjustBeginning(XmlElementSyntax summary)

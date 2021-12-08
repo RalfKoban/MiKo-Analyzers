@@ -199,6 +199,27 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase(@"Returns false if")]
+        [TestCase(@"Returns false whether")]
+        [TestCase(@"Returns <see langword=""false""/> if")]
+        [TestCase(@"Returns <see langword=""false""/> whether")]
+        [TestCase(@"Returns <see langref=""false""/> if")]
+        [TestCase(@"Returns <see langref=""false""/> whether")]
+        public void Code_gets_not_fixed_for_boolean_method_summary_starting_with_false_(string startPhrase)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// " + startPhrase + @" something.
+    /// </summary>
+    public bool DoSomething() => true;
+}
+";
+
+            VerifyCSharpFix(originalCode, originalCode);
+        }
+
         [TestCase("Asynchronously returns")]
         [TestCase("Asynchronously returns true if")]
         [TestCase("Asynchronously returns true whether")]
