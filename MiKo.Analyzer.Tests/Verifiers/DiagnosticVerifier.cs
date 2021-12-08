@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -84,6 +85,72 @@ namespace TestHelper
                                         No_issue_is_reported_for_file(file);
                                     }
                                 });
+        }
+
+        protected void Collect_issues_for_folder(string path, bool showFiles = false)
+        {
+            if (showFiles)
+            {
+                var issues = Collect_issued_files_for_folder_(path);
+                var problems = issues.OrderBy(_ => _).ToList();
+
+                Assert.That(problems, Has.Count.Zero, string.Join(Environment.NewLine, problems));
+            }
+            else
+            {
+                var issues = Collect_issues_for_folder_(path);
+
+                var problems = issues.OrderBy(_ => _.Id)
+                                     .ThenBy(_ => _.Location.SourceTree?.FilePath ?? string.Empty)
+                                     .ThenBy(_ => _.Location.SourceSpan.Start)
+                                     .ToList();
+
+                Assert.That(problems, Has.Count.Zero);
+                Assert.That(problems, Is.Empty);
+            }
+
+            IEnumerable<Diagnostic> Collect_issues_for_folder_(string path)
+            {
+                foreach (var directory in Directory.EnumerateDirectories(path))
+                {
+                    var results = Collect_issues_for_folder_(directory);
+                    foreach (var result in results)
+                    {
+                        yield return result;
+                    }
+                }
+
+                foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+                {
+                    var results = GetDiagnostics(File.ReadAllText(file));
+
+                    foreach (var result in results)
+                    {
+                        yield return result;
+                    }
+                }
+            }
+
+            IEnumerable<string> Collect_issued_files_for_folder_(string path)
+            {
+                foreach (var directory in Directory.EnumerateDirectories(path))
+                {
+                    var results = Collect_issued_files_for_folder_(directory);
+                    foreach (var result in results)
+                    {
+                        yield return result;
+                    }
+                }
+
+                foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+                {
+                    var results = GetDiagnostics(File.ReadAllText(file));
+                    if (results.Any())
+                    {
+                        yield return file;
+                    }
+                }
+            }
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 
 ## Available Rules
-The following tables list all the 305 rules that are currently provided by the analyzer.
+The following tables list all the 306 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -221,6 +221,7 @@ The following tables list all the 305 rules that are currently provided by the a
 |MiKo_2213|Documentation should not use the contradiction "n't".|&#x2713;|&#x2713;|
 |MiKo_2214|Documentation should not contain empty lines.|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short.|&#x2713;|\-|
+|MiKo_2216|Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|

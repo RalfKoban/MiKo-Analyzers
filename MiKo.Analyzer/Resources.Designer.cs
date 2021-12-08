@@ -6778,6 +6778,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change &lt;param&gt; to &lt;paramref&gt;.
+        /// </summary>
+        public static string MiKo_2216_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2216_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &lt;param&gt; tag is used to describe parameters while the &lt;paramref&gt; tag gives you a way to indicate that a word in the code comments refers to a parameter.
+        ///So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;remarks&gt; section, you should use the &lt;paramref&gt; tag..
+        /// </summary>
+        public static string MiKo_2216_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2216_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt;.
+        /// </summary>
+        public static string MiKo_2216_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2216_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters..
+        /// </summary>
+        public static string MiKo_2216_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2216_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>

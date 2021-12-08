@@ -396,12 +396,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsParameter(this IdentifierNameSyntax node, SemanticModel semanticModel) => node.EnclosingMethodHasParameter(node.GetName(), semanticModel);
 
-        internal static bool IsPara(this SyntaxNode value)
+        internal static bool IsPara(this SyntaxNode value) => value.IsXmlTag(Constants.XmlTag.Para);
+
+        internal static bool IsXmlTag(this SyntaxNode value, string tagName)
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax xees when xees.GetName() == Constants.XmlTag.Para:
-                case XmlElementSyntax xes when xes.GetName() == Constants.XmlTag.Para:
+                case XmlEmptyElementSyntax xees when xees.GetName() == tagName:
+                case XmlElementSyntax xes when xes.GetName() == tagName:
                     return true;
 
                 default:
