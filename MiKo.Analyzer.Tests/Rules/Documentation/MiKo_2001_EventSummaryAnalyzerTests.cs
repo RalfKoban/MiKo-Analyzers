@@ -53,6 +53,7 @@ public class TestMe
         [TestCase("Occur")]
         [TestCase("The")]
         [TestCase("Whatever that comment means")]
+        [TestCase("Invoked if the something changed")]
         public void An_issue_is_reported_for_wrong_comment_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -121,6 +122,7 @@ public class TestMe
         [TestCase("This event shall be fired when", "Occurs when")]
         [TestCase("This event shall be raised when", "Occurs when")]
         [TestCase("When", "Occurs when")]
+        [TestCase("Invoked if", "Occurs when")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
             const string Template = @"

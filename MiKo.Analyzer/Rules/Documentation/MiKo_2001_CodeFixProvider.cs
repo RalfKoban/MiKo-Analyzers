@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "Event which is raised ", string.Empty },
                                                                                     { "Fired ", string.Empty },
                                                                                     { "Indicates ", string.Empty },
+                                                                                    { "Invoked if ", "when " },
                                                                                     { "Is fired ", string.Empty },
                                                                                     { "Is raised ", string.Empty },
                                                                                     { "Raised ", string.Empty },
