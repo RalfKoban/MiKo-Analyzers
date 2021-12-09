@@ -223,6 +223,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, SyntaxList<XmlNodeSyntax> additionalComment)
+        {
+            return Comment(comment, text[0], additionalComment);
+        }
+
         protected static T Comment<T>(T syntax, IEnumerable<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
         {
             var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
@@ -263,6 +268,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
+        {
+            var end = CommentEnd(text, additionalComment.ToArray());
+
+            return Comment(comment, end);
+        }
+
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
         {
             return Comment(comment, XmlText(text + additionalComment));
@@ -271,6 +283,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
         {
             return Comment(comment, commentStart, SeeCref(type), commentEnd);
+        }
+
+        protected static XmlElementSyntax Comment(
+                                                XmlElementSyntax comment,
+                                                string commentStart,
+                                                XmlNodeSyntax link,
+                                                string commentEnd,
+                                                SyntaxList<XmlNodeSyntax> commendEndNodes)
+        {
+            return Comment(comment, commentStart, link, commentEnd, commendEndNodes.ToArray());
         }
 
         protected static XmlElementSyntax Comment(

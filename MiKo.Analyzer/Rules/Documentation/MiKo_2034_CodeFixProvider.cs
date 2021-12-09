@@ -17,12 +17,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
         {
-            return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1] + comment.Content);
+            return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], comment.Content);
         }
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
         {
-            return Comment(comment, Constants.Comments.EnumReturnTypeStartingPhrase, comment.Content.ToString());
+            return Comment(comment, Constants.Comments.EnumReturnTypeStartingPhrase, comment.Content);
         }
     }
 }

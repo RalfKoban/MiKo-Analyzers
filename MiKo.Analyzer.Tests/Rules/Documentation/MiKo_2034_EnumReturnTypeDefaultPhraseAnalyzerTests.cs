@@ -126,10 +126,11 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_non_generic_method()
+        [TestCase("Something.", "something.")]
+        [TestCase(@"Something, such as <see cref=""string.Empty""/>.", @"something, such as <see cref=""string.Empty""/>.")]
+        public void Code_gets_fixed_for_non_generic_method_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 
 public class TestMe
@@ -137,12 +138,12 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <returns>Something.</returns>
+    /// <returns>" + originalText + @"</returns>
     public StringComparison DoSomething(object o) => null;
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 
 public class TestMe
@@ -151,19 +152,20 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// The enumerated constant that is the Something.
+    /// The enumerated constant that is the " + fixedText + @"
     /// </returns>
     public StringComparison DoSomething(object o) => null;
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_generic_method()
+        [TestCase("Something.", "something.")]
+        [TestCase(@"Something, such as <see cref=""string.Empty""/>.", @"something, such as <see cref=""string.Empty""/>.")]
+        public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Threading.Tasks;
 
@@ -172,12 +174,12 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <returns>Something.</returns>
+    /// <returns>" + originalText + @"</returns>
     public Task<StringComparison> DoSomething(object o) => null;
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Threading.Tasks;
 
@@ -187,13 +189,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains the enumerated constant that is the Something.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains the enumerated constant that is the " + fixedText + @"
     /// </returns>
     public Task<StringComparison> DoSomething(object o) => null;
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2034_EnumReturnTypeDefaultPhraseAnalyzer.Id;

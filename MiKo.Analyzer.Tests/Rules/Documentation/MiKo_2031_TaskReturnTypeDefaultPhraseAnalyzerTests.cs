@@ -132,17 +132,19 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_non_generic_method()
+        [TestCase("Something.")]
+        [TestCase("A result describing something.")]
+        [TestCase(@"A result describing something, such as <see cref=""string.Empty""/>.")]
+        public void Code_gets_fixed_for_non_generic_method_(string originalText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Threading.Tasks;
 
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>Something.</returns>
+    /// <returns>" + originalText + @"</returns>
     public Task DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -161,25 +163,27 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_generic_method()
+        [TestCase("Something.", "something.")]
+        [TestCase("A result describing something.", "a result describing something.")]
+        [TestCase(@"A result describing something, such as <see cref=""string.Empty""/>.", @"a result describing something, such as <see cref=""string.Empty""/>.")]
+        public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Threading.Tasks;
 
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>Something.</returns>
+    /// <returns>" + originalText + @"</returns>
     public Task<int> DoSomething(object o) => throw new NotSupportedException();
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Threading.Tasks;
 
@@ -187,13 +191,13 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains Something.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains " + fixedText + @"
     /// </returns>
     public Task<int> DoSomething(object o) => throw new NotSupportedException();
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer.Id;
