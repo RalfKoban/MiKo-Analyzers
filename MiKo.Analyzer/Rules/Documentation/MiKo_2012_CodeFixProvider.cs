@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2012_CodeFixProvider)), Shared]
@@ -27,13 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "Offer",
                 "Perform",
                 "Provide",
+                "Process",
                 "Represent",
+                "Store",
                 "Wrap",
             };
 
-        private static readonly Dictionary<string, string> PassiveVerbs = Verbs.ToDictionary(_ => _, _ => _ + "s");
+        private static readonly Dictionary<string, string> ThirdPersonVerbs = Verbs.ToDictionary(_ => _, Verbalizer.MakeThirdPersonSingularVerb);
 
-        private static readonly Dictionary<string, string> GerundVerbs = Verbs.ToDictionary(_ => _, _ => (_ + "ing").Replace("ping", "pping").Replace("eing", "ing"));
+        private static readonly Dictionary<string, string> GerundVerbs = Verbs.ToDictionary(_ => _, Verbalizer.MakeGerundVerb);
 
         private static readonly string[] DefaultPhrases =
             {
@@ -268,12 +272,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var verb in Verbs)
             {
-                var passiveVerb = PassiveVerbs[verb];
-                var fix = passiveVerb + " ";
+                var thirdPersonVerb = ThirdPersonVerbs[verb];
+                var fix = thirdPersonVerb + " ";
 
                 yield return new KeyValuePair<string, string>(start + verb + " ", fix);
                 yield return new KeyValuePair<string, string>(start + verb.ToLowerCaseAt(0) + " ", fix);
-                yield return new KeyValuePair<string, string>(start + passiveVerb.ToLowerCaseAt(0) + " ", fix);
+                yield return new KeyValuePair<string, string>(start + thirdPersonVerb.ToLowerCaseAt(0) + " ", fix);
                 yield return new KeyValuePair<string, string>(start + GerundVerbs[verb].ToLowerCaseAt(0) + " ", fix);
             }
         }

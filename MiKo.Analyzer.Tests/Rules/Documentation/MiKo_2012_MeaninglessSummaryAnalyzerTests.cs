@@ -414,6 +414,8 @@ public class TestMe : ITestMe
         [TestCase("Interface for objects that provide", "Provides")]
         [TestCase("Interface for objects that represent", "Represents")]
         [TestCase("Interface for objects which represent", "Represents")]
+        [TestCase("Interface for processing", "Processes")]
+        [TestCase("Interface for storing", "Stores")]
         [TestCase("Interface for the", "Represents a")]
         [TestCase("Interface for view models describing", "Describes")]
         [TestCase("Interface for view models representing", "Represents")]

@@ -6,6 +6,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 {
     public static class Verbalizer
     {
+        private static readonly string[] TwoCharacterEndingsWithS = { "as", "hs", "is", "os", "ss", "us", "xs", "zs" };
+
         private static readonly KeyValuePair<string, string>[] Endings =
             {
                 new KeyValuePair<string, string>(nameof(Action), nameof(Action)),
@@ -104,57 +106,110 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                 .ThenBy(_ => _)
                                                                 .ToArray();
 
-        public static string MakeInfiniteVerb(string name)
+        public static string MakeInfiniteVerb(string value)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (value.IsNullOrWhiteSpace())
             {
-                return name;
+                return value;
             }
 
-            if (name.EndsWith("s", StringComparison.Ordinal))
+            if (value.EndsWith("s", StringComparison.Ordinal))
             {
-                if (name.EndsWith("oes", StringComparison.Ordinal) || name.EndsWith("shes", StringComparison.Ordinal))
+                if (value.EndsWith("oes", StringComparison.Ordinal) || value.EndsWith("shes", StringComparison.Ordinal))
                 {
-                    return name.WithoutSuffix("es");
+                    return value.WithoutSuffix("es");
                 }
 
-                return name.WithoutSuffix("s");
+                return value.WithoutSuffix("s");
             }
 
-            return name;
+            return value;
         }
 
-        public static bool TryMakeVerb(string name, out string result)
+        public static string MakeThirdPersonSingularVerb(string value)
         {
-            result = name;
+            if (value.IsNullOrWhiteSpace())
+            {
+                return value;
+            }
 
-            if (string.IsNullOrWhiteSpace(name))
+            if (value.EndsWith("ss", StringComparison.Ordinal))
+            {
+                return value + "es";
+            }
+
+            if (value.EndsWith("oes", StringComparison.Ordinal) || value.EndsWith("shes", StringComparison.Ordinal))
+            {
+                return value;
+            }
+
+            if (IsThirdPersonSingularVerb(value))
+            {
+                return value;
+            }
+
+            var result = value + "s";
+            if (result.EndsWithAny(TwoCharacterEndingsWithS, StringComparison.Ordinal))
+            {
+                return value + "es";
+            }
+
+            return result;
+        }
+
+        public static bool IsThirdPersonSingularVerb(string value)
+        {
+            const StringComparison Comparison = StringComparison.Ordinal;
+
+            return value.EndsWith("s", Comparison) && value.EndsWithAny(TwoCharacterEndingsWithS, Comparison) is false;
+        }
+
+        public static string MakeGerundVerb(string value)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return value;
+            }
+
+            if (value.EndsWith("ing", StringComparison.Ordinal))
+            {
+                return value;
+            }
+
+            return (value + "ing").Replace("ping", "pping").Replace("eing", "ing");
+        }
+
+        public static bool TryMakeVerb(string value, out string result)
+        {
+            result = value;
+
+            if (value.IsNullOrWhiteSpace())
             {
                 return false;
             }
 
-            if (HasAcceptableStartingPhrase(name))
+            if (HasAcceptableStartingPhrase(value))
             {
                 return false;
             }
 
-            foreach (var pair in Endings.Where(_ => name.EndsWith(_.Key, StringComparison.Ordinal)))
+            foreach (var pair in Endings.Where(_ => value.EndsWith(_.Key, StringComparison.Ordinal)))
             {
-                result = name.Substring(0, name.Length - pair.Key.Length) + pair.Value;
+                result = value.Substring(0, value.Length - pair.Key.Length) + pair.Value;
 
-                return string.Equals(result, name, StringComparison.Ordinal) is false;
+                return string.Equals(result, value, StringComparison.Ordinal) is false;
             }
 
             return false;
         }
 
-        private static bool HasAcceptableStartingPhrase(string name)
+        private static bool HasAcceptableStartingPhrase(string value)
         {
-            foreach (var phrase in StartingPhrases.Where(_ => name.StartsWith(_, StringComparison.Ordinal)))
+            foreach (var phrase in StartingPhrases.Where(_ => value.StartsWith(_, StringComparison.Ordinal)))
             {
-                var remainingName = name.Substring(phrase.Length);
+                var remaining = value.Substring(phrase.Length);
 
-                if (remainingName.Length == 0 || remainingName[0].IsUpperCase())
+                if (remaining.Length == 0 || remaining[0].IsUpperCase())
                 {
                     return true;
                 }
