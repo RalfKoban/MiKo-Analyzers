@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2059_CodeFixProvider)), Shared]
-    public sealed class MiKo_2059_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2059_CodeFixProvider : ExceptionDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2059_DuplicateExceptionAnalyzer.Id;
 
@@ -78,8 +78,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return finalContent;
         }
-
-        private static IEnumerable<XmlElementSyntax> GetExceptionXmls(DocumentationCommentTriviaSyntax comment) => GetXmlSyntax(Constants.XmlTag.Exception, comment);
 
         private static XmlElementSyntax CreateParaOr() => SyntaxFactory.XmlParaElement(XmlText("-or-"));
 
