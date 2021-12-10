@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -80,9 +81,50 @@ public class TestMe
 }
 ");
 
+        [TestCase("Exception", "if the ", "")]
+        [TestCase("Exception", "If the ", "")]
+        [TestCase("Exception", @"Thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        public void Code_gets_fixed_for_(string exceptionType, string startingPhrase, string fixedPhrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// " + startingPhrase + @"something.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// " + fixedPhrase + @"something.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2051_ExceptionTagDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2051_ExceptionTagDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2051_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static string[] CreateForbiddenExceptionStartingPhrases()
