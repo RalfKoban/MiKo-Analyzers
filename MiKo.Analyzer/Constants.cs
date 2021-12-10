@@ -528,21 +528,24 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionForbiddenStartingPhrase =
                 {
-                    "Thrown ",
-                    "Is thrown ",
-                    "Gets thrown ",
-                    "Will be thrown ",
-                    "If ",
-                    "In case ",
-                    "When ",
-                    "Throws ",
-                    "Throw ",
-                    "Exception ",
-                    "The exception ",
+                    "Can be thrown ",
+                    "Should be thrown ",
                     "A exception ",
                     "An exception ",
+                    "Exception ",
                     "Fired ",
+                    "Gets thrown ",
+                    "If ",
+                    "In case ",
                     "Is fired ",
+                    "Is thrown ",
+                    "The exception ",
+                    "This exception ",
+                    "Throw ",
+                    "Thrown ",
+                    "Throws ",
+                    "When ",
+                    "Will be thrown ",
                 };
 
             internal const string XmlElementStartingTag = "<";
