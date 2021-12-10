@@ -376,6 +376,8 @@ namespace MiKoSolutions.Analyzers
 
             internal const string SealedClassPhrase = "This class cannot be inherited.";
 
+            internal const string EventArgsSummaryStartingPhrase = "Provides data for the ";
+
             internal const string EventHandlerSummaryStartingPhrase = "Handles the ";
 
             internal static readonly string[] EventHandlerSummaryPhrase =

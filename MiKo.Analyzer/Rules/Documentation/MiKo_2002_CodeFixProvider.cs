@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var cref = comment.Content.LastOrDefault(IsSeeCref) ?? SeeCref("TODO");
 
-            return Comment(comment, "Provides data for the ", cref, " event.");
+            return Comment(comment, Constants.Comments.EventArgsSummaryStartingPhrase, cref, " event.");
         }
     }
 }

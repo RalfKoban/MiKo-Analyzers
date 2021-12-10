@@ -57,9 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "The implementation ",
             };
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapEntries()
-                                                                            .OrderBy(_ => _.Key[0]) // sort by first character
-                                                                            .ToDictionary(_ => _.Key, _ => _.Value);
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
         public override string FixableDiagnosticId => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
@@ -169,11 +167,85 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> CreateStartingTerms()
+        private static Dictionary<string, string> CreateReplacementMap()
+        {
+            var entries = CreateReplacementMapEntries().OrderBy(_ => _.Key[0]).ToList(); // sort by first character
+
+            var result = new Dictionary<string, string>(entries.Count);
+
+            foreach (var entry in entries)
+            {
+                if (result.ContainsKey(entry.Key) is false)
+                {
+                    result[entry.Key] = entry.Value;
+                }
+            }
+
+            return result;
+        }
+
+        private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
+        {
+            // event arguments
+            yield return new KeyValuePair<string, string>("Event argument for ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event argument that is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event argument that provides information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event argument which is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event argument which provides information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event arguments for ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event arguments that provide information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event arguments which provide information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+
+            // events
+            yield return new KeyValuePair<string, string>("Event is fired ", "Occurs ");
+            yield return new KeyValuePair<string, string>("Event that is published ", "Occurs ");
+            yield return new KeyValuePair<string, string>("Event that is published, ", "Occurs ");
+            yield return new KeyValuePair<string, string>("Event which is published ", "Occurs ");
+            yield return new KeyValuePair<string, string>("Event which is published, ", "Occurs ");
+
+            // factories
+            yield return new KeyValuePair<string, string>("Factory for ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class that creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class which creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Interface for factories creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Interface for factories to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Interface for factories that create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Interface for factories which create ", Constants.Comments.FactorySummaryPhrase);
+
+            yield return new KeyValuePair<string, string>("Class that serves as ", "Represents a ");
+            yield return new KeyValuePair<string, string>("Class that serves ", "Provides ");
+            yield return new KeyValuePair<string, string>("Class which serves as ", "Represents a ");
+            yield return new KeyValuePair<string, string>("Class which serves ", "Provides ");
+
+            yield return new KeyValuePair<string, string>("Command ", "Represents a command ");
+            yield return new KeyValuePair<string, string>("Contain ", "Provides ");
+            yield return new KeyValuePair<string, string>("Contains ", "Provides ");
+            yield return new KeyValuePair<string, string>("Every class that implements the interface can ", "Allows to ");
+            yield return new KeyValuePair<string, string>("Every class that implements this interface can ", "Allows to ");
+            yield return new KeyValuePair<string, string>("Extension of ", "Extends the ");
+            yield return new KeyValuePair<string, string>("Interface for the ", "Represents a ");
+            yield return new KeyValuePair<string, string>("Interface that serves ", "Provides ");
+            yield return new KeyValuePair<string, string>("Interface which serves ", "Provides ");
+            yield return new KeyValuePair<string, string>("The class offers ", "Provides ");
+            yield return new KeyValuePair<string, string>("The interface offers ", "Provides ");
+            yield return new KeyValuePair<string, string>("This class offers ", "Provides ");
+            yield return new KeyValuePair<string, string>("This interface offers ", "Provides ");
+
+            foreach (var phrase in CreatePhrases())
+            {
+                yield return phrase;
+            }
+        }
+
+        private static IEnumerable<KeyValuePair<string, string>> CreatePhrases()
         {
             var beginnings = new[]
                                  {
                                      "Class",
+                                     "Classes implementing the interfaces",
+                                     "Classes implementing the interfaces,",
                                      "Factory method",
                                      "Helper class",
                                      "Helper method",
@@ -186,99 +258,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "Interface for work flows",
                                      "Interface for",
                                      "Interface",
+                                     "The class implementing the interface",
+                                     "The class implementing the interface,",
                                      "The class implementing this interface",
                                      "This class",
                                      "This interface class",
                                      "This interface",
                                  };
 
-            var endings = new[]
+            var middleParts = new[]
                               {
-                                  " to ",
-                                  " that can ",
-                                  " that ",
-                                  " which can ",
-                                  " which ",
-                                  " ",
+                                  "that can",
+                                  "that will",
+                                  "that",
+                                  "which can",
+                                  "which will",
+                                  "which",
+                                  "will",
                               };
 
-            foreach (var beginning in beginnings)
+            foreach (var word in Verbs)
             {
-                foreach (var ending in endings)
+                var noun = word.ToUpperCaseAt(0);
+                var verb = word.ToLowerCaseAt(0);
+
+                var thirdPersonStart = ThirdPersonVerbs[word];
+                var thirdPersonVerb = thirdPersonStart.ToLowerCaseAt(0);
+                var gerundVerb = GerundVerbs[word].ToLowerCaseAt(0);
+
+                var fix = thirdPersonStart + " ";
+
+                foreach (var start in beginnings)
                 {
-                    yield return beginning + ending;
+                    foreach (var middle in middleParts)
+                    {
+                        yield return new KeyValuePair<string, string>($"{start} {middle} {verb} ", fix);
+                        yield return new KeyValuePair<string, string>($"{start} {middle} {thirdPersonVerb} ", fix);
+                    }
+
+                    yield return new KeyValuePair<string, string>($"{start} to {noun} ", fix);
+                    yield return new KeyValuePair<string, string>($"{start} to {verb} ", fix);
+
+                    yield return new KeyValuePair<string, string>($"{start} {verb} ", fix);
+                    yield return new KeyValuePair<string, string>($"{start} {thirdPersonVerb} ", fix);
+                    yield return new KeyValuePair<string, string>($"{start} {gerundVerb} ", fix);
                 }
-            }
-        }
-
-        private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
-        {
-            yield return new KeyValuePair<string, string>("Class that serves ", "Provides ");
-            yield return new KeyValuePair<string, string>("Class that will represent ", "Represents ");
-            yield return new KeyValuePair<string, string>("Class which serves ", "Provides ");
-            yield return new KeyValuePair<string, string>("Class which will represent ", "Represents ");
-            yield return new KeyValuePair<string, string>("Classes implementing the interfaces provide ", "Provides ");
-            yield return new KeyValuePair<string, string>("Classes implementing the interfaces will provide ", "Provides ");
-            yield return new KeyValuePair<string, string>("Classes implementing the interfaces, will provide ", "Provides ");
-            yield return new KeyValuePair<string, string>("Command ", "Represents a command ");
-            yield return new KeyValuePair<string, string>("Contain ", "Provides ");
-            yield return new KeyValuePair<string, string>("Contains ", "Provides ");
-
-            // event arguments
-            yield return new KeyValuePair<string, string>("Event argument for ", "Provides data for the ");
-            yield return new KeyValuePair<string, string>("Event argument that is used in the ", "Provides data for the ");
-            yield return new KeyValuePair<string, string>("Event argument that provides information ", "Provides data for the ");
-            yield return new KeyValuePair<string, string>("Event argument which is used in the ", "Provides data for the ");
-            yield return new KeyValuePair<string, string>("Event argument which provides information ", "Provides data for the ");
-            yield return new KeyValuePair<string, string>("Event arguments for ", "Provides data for the ");
-            yield return new KeyValuePair<string, string>("Event arguments that provide information ", "Provides data for the ");
-            yield return new KeyValuePair<string, string>("Event arguments which provide information ", "Provides data for the ");
-
-            // events
-            yield return new KeyValuePair<string, string>("Event is fired ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event that is published ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event that is published, ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event which is published ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event which is published, ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Every class that implements this interface can ", "Allows to ");
-            yield return new KeyValuePair<string, string>("Extension of ", "Extends the ");
-
-            // factories
-            yield return new KeyValuePair<string, string>("Factory for ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Factory class creating ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Factory class to create ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Factory class that creates ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Factory class which creates ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Interface for factories creating ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Interface for factories to create ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Interface for factories that create ", "Provides support for creating ");
-            yield return new KeyValuePair<string, string>("Interface for factories which create ", "Provides support for creating ");
-
-            yield return new KeyValuePair<string, string>("Interface for the ", "Represents a ");
-            yield return new KeyValuePair<string, string>("Interface that serves ", "Provides ");
-            yield return new KeyValuePair<string, string>("Interface which serves ", "Provides ");
-            yield return new KeyValuePair<string, string>("The class offers ", "Provides ");
-            yield return new KeyValuePair<string, string>("The interface offers ", "Provides ");
-
-            var startingTerms = CreateStartingTerms();
-
-            foreach (var phrase in startingTerms.SelectMany(CreatePhrase))
-            {
-                yield return phrase;
-            }
-        }
-
-        private static IEnumerable<KeyValuePair<string, string>> CreatePhrase(string start)
-        {
-            foreach (var verb in Verbs)
-            {
-                var thirdPersonVerb = ThirdPersonVerbs[verb];
-                var fix = thirdPersonVerb + " ";
-
-                yield return new KeyValuePair<string, string>(start + verb + " ", fix);
-                yield return new KeyValuePair<string, string>(start + verb.ToLowerCaseAt(0) + " ", fix);
-                yield return new KeyValuePair<string, string>(start + thirdPersonVerb.ToLowerCaseAt(0) + " ", fix);
-                yield return new KeyValuePair<string, string>(start + GerundVerbs[verb].ToLowerCaseAt(0) + " ", fix);
             }
         }
     }
