@@ -66,7 +66,7 @@ test_script:
 
 # Codecov Flags (https://docs.codecov.io/v4.3.6/docs/flags)
 #  - '%USERPROFILE%\.nuget\packages\Codecov\1.10.0\tools\codecov.exe -f "c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" -t 3599e0b3-8d22-44eb-a33d-58383db89b64 --flag api'
-  - '%USERPROFILE%\.nuget\packages\Codecov\1.10.0\tools\codecov.exe -f "c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" -t 3599e0b3-8d22-44eb-a33d-58383db89b64 --flag api'
+  - '%USERPROFILE%\.nuget\packages\Codecov\1.13.0\tools\codecov.exe -f "c:\projects\MiKo.Analyzers\MiKoAnalyzers_coverage.xml" -t 3599e0b3-8d22-44eb-a33d-58383db89b64 --flag api'
 
 # Run SonarQube scanner
 
