@@ -14,8 +14,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "Thrown if the ",
                 "Thrown if ",
-                "if the ",
+                "Thrown when the ",
+                "Thrown when ",
+                "Throws if the ",
+                "Throws if ",
+                "Throws when the ",
+                "Throws when ",
+                "Is thrown when the ",
+                "Is thrown when ",
+                "Gets thrown when the ",
+                "Gets thrown when ",
                 "If the ",
+                "In case the ",
+                "In case ",
+                "if the ",
+                "in case the ",
+                "in case ",
             };
 
         public override string FixableDiagnosticId => MiKo_2051_ExceptionTagDefaultPhraseAnalyzer.Id;
