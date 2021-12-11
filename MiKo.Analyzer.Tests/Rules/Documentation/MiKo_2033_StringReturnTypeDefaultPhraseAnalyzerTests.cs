@@ -539,6 +539,42 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_([Values("that returns", "which returns", "returning", "which contains")] string text)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> " + text + @" the <c>Foo</c>.
+    /// </value>
+    public string Foo => ""Foo"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> that contains the <c>Foo</c>.
+    /// </value>
+    public string Foo => ""Foo"";
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer();

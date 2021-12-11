@@ -13,6 +13,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] TaskParts = string.Format(Constants.Comments.StringTaskReturnTypeStartingPhraseTemplate, "|", "|", "contains").Split('|');
         private static readonly string[] StringParts = string.Format(Constants.Comments.StringReturnTypeStartingPhraseTemplate, "|", "contains").Split('|');
 
+        private static readonly string[] TextParts =
+            {
+                "containing",
+                "returning",
+                "that returns",
+                "which returns",
+                "which contains",
+            };
+
         public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2033_CodeFixTitle;
@@ -33,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (IsSeeCref(newComment.Content[3], "string") && newComment.Content[4] is XmlTextSyntax continueText2)
                     {
-                        newComment = ReplaceText(newComment, continueText2, "containing", "that contains");
+                        newComment = ReplaceText(newComment, continueText2, TextParts, "that contains");
                     }
 
                     var first = (XmlTextSyntax)newComment.Content.First();
@@ -64,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (startText.TextTokens.Any(_ => _.ValueText.TrimStart() == commentStart))
                     {
-                        var newComment = ReplaceText(comment, continueText, "containing", "that contains");
+                        var newComment = ReplaceText(comment, continueText, TextParts, "that contains");
 
                         if (ReferenceEquals(comment, newComment) is false)
                         {
