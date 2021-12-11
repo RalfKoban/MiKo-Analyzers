@@ -15,7 +15,7 @@ init:
 - git config --global core.autocrlf true
 
 # environment:
-#    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/v3.10/NUnit.Console-3.10.0.zip
+#    NUnitRunnerUri: https://github.com/nunit/nunit-console/releases/download/3.13/NUnit.Console-3.13.0.zip
 
 install:
   - choco install gitversion.portable -pre -y
