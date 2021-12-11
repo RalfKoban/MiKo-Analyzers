@@ -345,6 +345,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsException(this XmlElementSyntax value) => value.GetName() == Constants.XmlTag.Exception;
+
         internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
         {
             foreach (var a in value.Ancestors().OfType<ArgumentSyntax>())

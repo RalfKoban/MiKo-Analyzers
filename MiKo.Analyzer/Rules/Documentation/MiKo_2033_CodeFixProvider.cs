@@ -77,22 +77,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // we have to replace the XmlText if it is part of the first item of context
             return Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());
         }
-
-        private static XmlElementSyntax ReplaceText(XmlElementSyntax comment, XmlTextSyntax textSyntax, string phrase, string replacement)
-        {
-            foreach (var token in textSyntax.TextTokens)
-            {
-                var text = token.ValueText;
-
-                if (text.Contains(phrase))
-                {
-                    var newToken = token.WithText(text.Replace(phrase, replacement));
-
-                    return comment.ReplaceToken(token, newToken);
-                }
-            }
-
-            return comment;
-        }
     }
 }

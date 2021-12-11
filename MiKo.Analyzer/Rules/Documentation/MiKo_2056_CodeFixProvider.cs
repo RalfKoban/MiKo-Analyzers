@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2056_CodeFixProvider)), Shared]
-    public sealed class MiKo_2056_CodeFixProvider : OverallDocumentationCodeFixProvider
+    public sealed class MiKo_2056_CodeFixProvider : ExceptionDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.Id;
 
@@ -32,27 +32,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        private static DocumentationCommentTriviaSyntax FixComment(Document document, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
+        protected override DocumentationCommentTriviaSyntax FixExceptionComment(Document document, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var part in comment.Content)
+            foreach (var attribute in exception.GetAttributes<XmlCrefAttributeSyntax>())
             {
-                if (part is XmlElementSyntax e && e.GetName() == Constants.XmlTag.Exception)
+                switch (attribute.Cref)
                 {
-                    foreach (var attribute in e.GetAttributes<XmlCrefAttributeSyntax>())
+                    case QualifiedCrefSyntax q when IsObjectDisposedException(q.ToString()):
+                    case NameMemberCrefSyntax m when IsObjectDisposedException(m.ToString()):
                     {
-                        switch (attribute.Cref)
-                        {
-                            case QualifiedCrefSyntax q when IsObjectDisposedException(q.ToString()):
-                            case NameMemberCrefSyntax m when IsObjectDisposedException(m.ToString()):
-                            {
-                                var symbol = GetSymbol(document, syntax);
-                                var phrase = MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.GetEndingPhrase(symbol);
+                        var symbol = GetSymbol(document, syntax);
+                        var phrase = MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.GetEndingPhrase(symbol);
 
-                                var exceptionComment = CommentEndingWith(e, phrase);
+                        var exceptionComment = CommentEndingWith(exception, phrase);
 
-                                return comment.ReplaceNode(part, exceptionComment);
-                            }
-                        }
+                        return comment.ReplaceNode(exception, exceptionComment);
                     }
                 }
             }

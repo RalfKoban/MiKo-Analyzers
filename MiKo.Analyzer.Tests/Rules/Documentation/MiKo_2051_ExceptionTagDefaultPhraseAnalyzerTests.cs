@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -80,9 +81,65 @@ public class TestMe
 }
 ");
 
+        [TestCase("Exception", "if the ", "")]
+        [TestCase("Exception", "If the ", "")]
+        [TestCase("Exception", @"Gets thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"in case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"In case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"In case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Is thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Thrown if any error ", @"any error ")]
+        [TestCase("Exception", @"Thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Throws if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase("Exception", @"Throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        public void Code_gets_fixed_for_(string exceptionType, string startingPhrase, string fixedPhrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// " + startingPhrase + @"something.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// " + fixedPhrase + @"something.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2051_ExceptionTagDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2051_ExceptionTagDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2051_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static string[] CreateForbiddenExceptionStartingPhrases()
@@ -98,7 +155,10 @@ public class TestMe
                                   "Is thrown ",
                                   "Gets thrown ",
                                   "Will be thrown ",
+                                  "Can be thrown ",
+                                  "Should be thrown ",
                                   "The exception in case ",
+                                  "This exception should be thrown ",
                                   "Exception in case ",
                                   "A exception thrown ",
                                   "An exception thrown ",

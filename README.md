@@ -184,7 +184,7 @@ The following tables list all the 306 rules that are currently provided by the a
 |MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'.|&#x2713;|\-|
 |MiKo_2050|Exceptions should be documented following the .NET Framework.|&#x2713;|&#x2713;|
-|MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').|&#x2713;|\-|
+|MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').|&#x2713;|&#x2713;|
 |MiKo_2052|Throwing of ArgumentNullException should be documented using a default phrase.|&#x2713;|\-|
 |MiKo_2053|Throwing of ArgumentNullException should be documented only for reference type parameters.|&#x2713;|\-|
 |MiKo_2054|Throwing of ArgumentException should be documented using a default starting phrase.|&#x2713;|\-|
