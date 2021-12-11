@@ -2567,7 +2567,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rephrase question as statement.
+        ///   Looks up a localized string similar to Formulate question as statement.
         /// </summary>
         public static string MiKo_1071_MessageFormat {
             get {
@@ -2602,7 +2602,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rephrase question as statement.
+        ///   Looks up a localized string similar to Formulate question as statement.
         /// </summary>
         public static string MiKo_1072_MessageFormat {
             get {
@@ -2637,7 +2637,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rephrase question as statement.
+        ///   Looks up a localized string similar to Formulate question as statement.
         /// </summary>
         public static string MiKo_1073_MessageFormat {
             get {
@@ -5884,7 +5884,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use phrase &apos;{1}&apos; in &lt;summary&gt;.
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in &lt;summary&gt;.
         /// </summary>
         public static string MiKo_2071_MessageFormat {
             get {
