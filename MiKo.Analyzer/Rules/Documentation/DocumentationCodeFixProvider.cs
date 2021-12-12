@@ -110,7 +110,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var startText = XmlText(commentStart).WithLeadingXmlComment();
 
             XmlTextSyntax continueText;
-            if (content[index] is XmlTextSyntax text)
+            var syntax = content[index];
+            if (syntax is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
                 content = content.Remove(text);
@@ -127,14 +128,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
+                if (index == 1 && content[0].WithoutXmlCommentExterior().IsNullOrWhiteSpace())
+                {
+                    // seems that the non-text element is the first element, so we should remove the empty text element before
+                    content = content.RemoveAt(0);
+                }
+
                 index = Math.Max(0, index - 1);
                 continueText = XmlText(commentContinue);
             }
 
-            return SyntaxFactory.XmlElement(
-                                            comment.StartTag,
-                                            content.Insert(index, startText).Insert(index + 1, seeCref).Insert(index + 2, continueText),
-                                            comment.EndTag);
+            var newContent = content.Insert(index, startText)
+                                     .Insert(index + 1, seeCref)
+                                     .Insert(index + 2, continueText);
+
+            return SyntaxFactory.XmlElement(comment.StartTag, newContent, comment.EndTag);
         }
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
