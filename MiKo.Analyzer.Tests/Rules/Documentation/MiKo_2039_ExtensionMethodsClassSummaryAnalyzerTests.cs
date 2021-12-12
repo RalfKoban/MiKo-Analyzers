@@ -66,11 +66,16 @@ public static class TestMeExtensions
         [TestCase("Provides extension methods to", "")]
         [TestCase("Provides extension mehtods for", "")] // typo by intent
         [TestCase("Provides extension mehtods to", "")] // typo by intent
+        [TestCase("Provides extension-mehtods for", "")] // typo by intent
+        [TestCase("Provides extension-methods for", "")]
         [TestCase("Provides extensions for", "")]
         [TestCase("Provides extensions to", "")]
         [TestCase(@"Extension methods for", @"")]
         [TestCase(@"Extension methods to", @"")]
         [TestCase(@"Extension methods used in", @"")]
+        [TestCase(@"Extension mehtods used in", @"")] // typo by intent
+        [TestCase(@"Extension-methods for", @"")]
+        [TestCase(@"Extension-mehtods for", @"")] // typo by intent
         [TestCase(@"Extensions for", @"")]
         [TestCase(@"Extensions to", @"")]
         [TestCase(@"Extensions used in", @"")]

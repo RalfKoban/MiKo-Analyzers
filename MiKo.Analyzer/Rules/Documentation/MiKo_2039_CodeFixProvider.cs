@@ -47,9 +47,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  "extension",
                                  "extensions",
                                  "extension method",
-                                 "extension mehtod", // typo by intent
                                  "extension methods",
+                                 "extension-method",
+                                 "extension-methods",
+                                 "extension mehtod", // typo by intent
+                                 "extension-mehtod", // typo by intent
                                  "extension mehtods", // typo by intent
+                                 "extension-mehtods", // typo by intent
                              };
 
             var ends = new[]
