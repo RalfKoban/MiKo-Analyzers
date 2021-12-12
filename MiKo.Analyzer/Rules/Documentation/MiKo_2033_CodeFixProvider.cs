@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System.Collections.Generic;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -17,10 +18,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "containing",
                 "returning",
+                "that contains",
                 "that returns",
-                "which returns",
                 "which contains",
+                "which returns",
             };
+
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
 
         public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
@@ -66,7 +70,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var contents = comment.Content;
 
-            if (contents.Count >= 3)
+            if (contents.Count == 1)
+            {
+                // fix start text
+                contents = PrepareComment(comment).Content;
+            }
+            else if (contents.Count >= 3)
             {
                 // we might have an almost complete string
                 if (contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
@@ -85,6 +94,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // we have to replace the XmlText if it is part of the first item of context
             return Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());
+        }
+
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+
+        private static IEnumerable<string> CreateReplacementMapKeys()
+        {
+            var starts = new[] { "a", "A" };
+            var middles = new[] { "string", "String" };
+
+            return from start in starts
+                   from middle in middles
+                   from text in TextParts
+                   select string.Concat(start, " ", middle, " ", text);
         }
     }
 }
