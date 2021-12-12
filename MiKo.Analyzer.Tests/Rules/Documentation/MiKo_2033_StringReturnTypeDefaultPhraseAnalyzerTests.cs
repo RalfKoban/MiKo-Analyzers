@@ -551,9 +551,9 @@ public class TestMe
     /// Gets something.
     /// </summary>
     /// <value>
-    /// A <see cref=""string""/> " + text + @" the <c>Foo</c>.
+    /// A <see cref=""string""/> " + text + @" something.
     /// </value>
-    public string Foo => ""Foo"";
+    public string Something => ""Something"";
 }
 ";
 
@@ -566,9 +566,9 @@ public class TestMe
     /// Gets something.
     /// </summary>
     /// <value>
-    /// A <see cref=""string""/> that contains the <c>Foo</c>.
+    /// A <see cref=""string""/> that contains something.
     /// </value>
-    public string Foo => ""Foo"";
+    public string Something => ""Something"";
 }
 ";
 

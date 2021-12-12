@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var contents = comment.Content;
 
-            if (contents.Count > 3)
+            if (contents.Count >= 3)
             {
                 // we might have an almost complete string
                 if (contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
