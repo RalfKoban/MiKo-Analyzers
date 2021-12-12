@@ -173,7 +173,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
                                          .WithoutTrailing(" otherwise")
-                                         .WithoutXmlCommentExterior();
+                                         .GetComment();
+
                 if (text.IsNullOrWhiteSpace())
                 {
                     nodes = nodes.Remove(sentenceEnding);
@@ -188,7 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       .WithoutTrailing(" otherwise with a result of ")
                                       .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 
-                var text = replacement.WithoutXmlCommentExterior();
+                var text = replacement.GetComment();
 
                 if (text.IsNullOrWhiteSpace())
                 {

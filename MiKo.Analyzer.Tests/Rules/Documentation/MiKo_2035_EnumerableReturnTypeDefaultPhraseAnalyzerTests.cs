@@ -227,17 +227,41 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_byte_array_type()
+        [TestCase("")]
+        [TestCase("An array of byte containing")]
+        [TestCase("An array of byte that contains")]
+        [TestCase("An array of byte which contains")]
+        [TestCase("An array of bytes containing")]
+        [TestCase("An array of bytes that contains")]
+        [TestCase("An array of bytes which contains")]
+        [TestCase(@"An array of <see cref=""byte""/> containing")]
+        [TestCase(@"An array of <see cref=""byte""/> that contains")]
+        [TestCase(@"An array of <see cref=""byte""/> which contains")]
+        [TestCase(@"An array of <see cref=""byte""/>s containing")]
+        [TestCase(@"An array of <see cref=""byte""/>s that contains")]
+        [TestCase(@"An array of <see cref=""byte""/>s which contains")]
+        [TestCase("The array of byte containing")]
+        [TestCase("The array of byte that contains")]
+        [TestCase("The array of byte which contains")]
+        [TestCase("The array of bytes containing")]
+        [TestCase("The array of bytes that contains")]
+        [TestCase("The array of bytes which contains")]
+        [TestCase(@"The array of <see cref=""byte""/> containing")]
+        [TestCase(@"The array of <see cref=""byte""/> that contains")]
+        [TestCase(@"The array of <see cref=""byte""/> which contains")]
+        [TestCase(@"The array of <see cref=""byte""/>s containing")]
+        [TestCase(@"The array of <see cref=""byte""/>s that contains")]
+        [TestCase(@"The array of <see cref=""byte""/>s which contains")]
+        public void Code_gets_fixed_for_byte_array_type_(string text)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some data.
+    /// " + text + @" data.
     /// </returns>
     public byte[] DoSomething { get; set; }
 }
@@ -250,13 +274,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A byte array containing some data.
+    /// A byte array containing data.
     /// </returns>
     public byte[] DoSomething { get; set; }
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [TestCase("Some integers.", "A collection of some integers.")]

@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
         {
-            var nodes = comment.DescendantNodes().OfType<XmlEmptyElementSyntax>().Where(_ => _.IsEmptySee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsEmptySeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
+            var nodes = comment.DescendantNodes().OfType<XmlEmptyElementSyntax>().Where(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
                                                    {
@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongNonEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
         {
-            var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsNonEmptySee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsNonEmptySeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
+            var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
                                                    {

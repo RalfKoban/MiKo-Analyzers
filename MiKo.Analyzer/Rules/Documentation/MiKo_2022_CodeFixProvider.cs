@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var symbol = (IParameterSymbol)GetSymbol(document, parameter);
             var phrase = MiKo_2022_OutParamDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
 
-            return CommentStartingWith(preparedComment, phrase[0]);
+            return CommentStartingWith(preparedComment, phrase);
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);

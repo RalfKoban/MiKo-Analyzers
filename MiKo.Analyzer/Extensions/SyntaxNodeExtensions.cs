@@ -55,6 +55,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) => value?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
 
+        internal static string GetComment(this XmlTextSyntax value) => value.WithoutXmlCommentExterior();
+
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode
         {
             var node = value;
@@ -462,13 +464,13 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsEmptySee(this SyntaxNode value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
+        internal static bool IsSee(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
 
-        internal static bool IsEmptySeeAlso(this SyntaxNode value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
+        internal static bool IsSeeAlso(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
-        internal static bool IsNonEmptySee(this SyntaxNode value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
+        internal static bool IsSee(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
 
-        internal static bool IsNonEmptySeeAlso(this SyntaxNode value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.SeeAlso, attributeNames);
+        internal static bool IsSeeAlso(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {

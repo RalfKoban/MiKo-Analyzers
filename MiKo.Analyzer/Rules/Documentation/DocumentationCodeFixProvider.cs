@@ -64,6 +64,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Where(_ => tags.Contains(_.GetName()));
         }
 
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases) => CommentStartingWith(comment, phrases[0]);
+
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase)
         {
             var content = CommentStartingWith(comment.Content, phrase);
