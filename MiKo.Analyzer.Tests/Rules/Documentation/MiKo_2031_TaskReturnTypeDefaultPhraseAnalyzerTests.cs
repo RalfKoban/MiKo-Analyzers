@@ -169,6 +169,13 @@ public class TestMe
         [TestCase("Something.", "something.")]
         [TestCase("A result describing something.", "a result describing something.")]
         [TestCase(@"A result describing something, such as <see cref=""string.Empty""/>.", @"a result describing something, such as <see cref=""string.Empty""/>.")]
+        [TestCase(@"A result containing something.", @"something.")]
+        [TestCase(@"A result that contains something.", @"something.")]
+        [TestCase(@"A result which contains something.", @"something.")]
+        [TestCase(@"A task that contains something.", @"something.")]
+        [TestCase(@"A task which contains something.", @"something.")]
+        [TestCase(@"The task that contains something.", @"something.")]
+        [TestCase(@"The task which contains something.", @"something.")]
         public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"
