@@ -69,10 +69,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (ancestor)
                 {
                     case MethodDeclarationSyntax m:
-                        return Comment(document, comment, m.ReturnType);
+                        return Comment(document, comment, m);
 
                     case PropertyDeclarationSyntax p:
-                        return Comment(document, comment, p.Type);
+                        return Comment(document, comment, p);
 
                     default:
                         continue;
@@ -85,6 +85,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected abstract XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType);
 
         protected abstract XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType);
+
+        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.ReturnType);
+
+        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax propertySyntax) => Comment(document, comment, propertySyntax.Type);
 
         private SyntaxNode Comment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
                                                                                                               ? GenericComment(document, comment, genericReturnType)

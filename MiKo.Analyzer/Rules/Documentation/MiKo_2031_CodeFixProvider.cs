@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Composition;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -29,17 +30,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2031_CodeFixTitle;
 
+        protected override SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method)
+        {
+            return HandleSpecialMethod(comment, method) ?? base.Comment(document, comment, method);
+        }
+
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
         {
-            comment = PrepareComment(comment);
+            comment = PrepareGenericComment(comment);
 
             // we have to replace the XmlText if it is part of the first item of context
             return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], comment.Content);
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => Comment(comment, Constants.Comments.NonGenericTaskReturnTypePhrase);
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
+        {
+            return Comment(comment, Constants.Comments.NonGenericTaskReturnTypePhrase);
+        }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
+        private static XmlElementSyntax HandleSpecialMethod(XmlElementSyntax comment, MethodDeclarationSyntax method)
+        {
+            switch (method.GetName())
+            {
+                case nameof(Task.FromCanceled): return Comment(comment, Constants.Comments.FromCanceledTaskReturnTypeStartingPhrase);
+                case nameof(Task.FromException): return Comment(comment, Constants.Comments.FromExceptionTaskReturnTypeStartingPhrase);
+                case nameof(Task.FromResult): return Comment(comment, Constants.Comments.FromResultTaskReturnTypeStartingPhrase);
+                case nameof(Task.ContinueWith): return Comment(comment, Constants.Comments.ContinueWithTaskReturnTypeStartingPhrase);
+                case nameof(Task.Run): return Comment(comment, Constants.Comments.RunTaskReturnTypeStartingPhrase);
+                case nameof(Task.WhenAll): return Comment(comment, Constants.Comments.WhenAllTaskReturnTypeStartingPhrase);
+                case nameof(Task.WhenAny):
+                {
+                    var parts = string.Format(Constants.Comments.WhenAnyTaskReturnTypeStartingPhraseTemplate, "task", "|").Split('|');
+
+                    return Comment(comment, parts[0], SeeCrefTaskResult(), parts[1]);
+                }
+
+                default: return null;
+            }
+        }
+
+        private static XmlElementSyntax PrepareGenericComment(XmlElementSyntax comment)
         {
             var contents = comment.Content;
 

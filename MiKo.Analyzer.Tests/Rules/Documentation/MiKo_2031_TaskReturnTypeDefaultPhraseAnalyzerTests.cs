@@ -57,6 +57,37 @@ public class TestMe
 }
 ");
 
+        [TestCase("ContinueWith", "A new continuation task.")]
+        [TestCase("FromCanceled", "The canceled task.")]
+        [TestCase("FromException", "The faulted task.")]
+        [TestCase("FromResult", "The successfully completed task.")]
+        [TestCase("Run", "A task that represents the work queued to execute in the thread pool.")]
+        [TestCase("WhenAll", "A task that represents the completion of all of the supplied tasks.")]
+        [TestCase("WhenAny", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"Task{TResult}.Result\" /> is the task that completed first.")]
+        [TestCase("WhenAny", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"Task{TResult}.Result\"/> is the task that completed first.")]
+        [TestCase("WhenAny", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> is the task that completed first.")]
+        [TestCase("WhenAny", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/> is the task that completed first.")]
+        [TestCase("WhenAny", "A <see cref=\"System.Threading.Tasks.Task{TResult}\" /> that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> is the task that completed first.")]
+        [TestCase("WhenAny", "A <see cref=\"System.Threading.Tasks.Task{TResult}\" /> that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/> is the task that completed first.")]
+        [TestCase("WhenAny", "A <see cref=\"System.Threading.Tasks.Task{TResult}\"/> that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\" /> is the task that completed first.")]
+        [TestCase("WhenAny", "A <see cref=\"System.Threading.Tasks.Task{TResult}\"/> that represents the completion of one of the supplied tasks. Its <see cref=\"System.Threading.Tasks.Task{TResult}.Result\"/> is the task that completed first.")]
+        public void No_issue_is_reported_for_special_method_(string methodName, string comment)
+            => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + comment + @"
+    /// </returns>
+    public Task " + methodName + @"() => throw new NotSupportedException();
+}
+");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Task_only_method_(
                                                                                 [Values("returns", "value")] string xmlTag,
@@ -215,6 +246,51 @@ public class TestMe
     /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains " + fixedText + @"
     /// </returns>
     public Task<int> DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase("Task ContinueWith()", "A new continuation task.")]
+        [TestCase("Task FromCanceled()", "The canceled task.")]
+        [TestCase("Task FromException()", "The faulted task.")]
+        [TestCase("Task FromResult()", "The successfully completed task.")]
+        [TestCase("Task Run()", "A task that represents the work queued to execute in the thread pool.")]
+        [TestCase("Task WhenAll()", "A task that represents the completion of all of the supplied tasks.")]
+        [TestCase("Task WhenAny()", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"Task{TResult}.Result\"/> is the task that completed first.")]
+        [TestCase("Task<int> WhenAny()", "A task that represents the completion of one of the supplied tasks. Its <see cref=\"Task{TResult}.Result\"/> is the task that completed first.")]
+        public void Code_gets_fixed_for_special_method_(string specialMethod, string comment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// Some comment.
+    /// </returns>
+    public " + specialMethod + @" => throw new NotSupportedException();
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + comment + @"
+    /// </returns>
+    public " + specialMethod + @" => throw new NotSupportedException();
 }
 ";
 
