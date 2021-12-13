@@ -166,6 +166,10 @@ public class TestMe
         [TestCase("Something.")]
         [TestCase("A result describing something.")]
         [TestCase(@"A result describing something, such as <see cref=""string.Empty""/>.")]
+        [TestCase(@"Task, that executes the operation.")]
+        [TestCase(@"The task of the operation.")]
+        [TestCase(@"An awaitable task.")]
+        [TestCase(@"An awaitable task")]
         public void Code_gets_fixed_for_non_generic_method_(string originalText)
         {
             var originalCode = @"
@@ -221,6 +225,13 @@ public class TestMe
         [TestCase(@"The task which contains something.", @"something.")]
         [TestCase(@"The result of the whole stuff.", @"the result of the whole stuff.")]
         [TestCase(@"A <see cref=""Task""/> containing the <see cref=""int""/> of this single operation.", @"the <see cref=""int""/> of this single operation.")]
+        [TestCase(@"<see langword=""true""/> if something, <see langword=""false""/> in all other cases.", @"<see langword=""true""/> if something, <see langword=""false""/> in all other cases.")]
+        [TestCase(@"A task that can be used to await and the new <see cref=""string"" />.", @"the new <see cref=""string"" />.")]
+        [TestCase(@"A task that can be used to await. The new <see cref=""string"" />.", @"the new <see cref=""string"" />.")]
+        [TestCase(@"A task to await and the new <see cref=""string"" />.", @"the new <see cref=""string"" />.")]
+        [TestCase(@"A task to await. The new <see cref=""string"" />.", @"the new <see cref=""string"" />.")]
+        [TestCase(@"An awaitable task and the new <see cref=""string"" />.", @"the new <see cref=""string"" />.")]
+        [TestCase(@"An awaitable task. The new <see cref=""string"" />.", @"the new <see cref=""string"" />.")]
         public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"

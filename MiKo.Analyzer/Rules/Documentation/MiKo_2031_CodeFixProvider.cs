@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,9 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "that represents the asynchronous operation.",
             };
 
-        private static readonly string[] TextParts = (from x in new[] { "A result", "A task", "The task" }
-                                                      from y in ContinueTextParts
-                                                      select x + " " + y).ToArray();
+        private static readonly string[] TextParts = CreateTextParts().ToArray();
 
         public override string FixableDiagnosticId => MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer.Id;
 
@@ -99,13 +98,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
                     }
                 }
-                else
-                {
-                    return ReplaceText(comment, startText, TextParts, string.Empty);
-                }
+
+                return ReplaceText(comment, startText, TextParts, string.Empty);
             }
 
             return comment;
+        }
+
+        private static IEnumerable<string> CreateTextParts()
+        {
+            yield return "An awaitable task.";
+            yield return "An awaitable task and";
+            yield return "A task to await.";
+            yield return "A task to await and";
+            yield return "A task that can be used to await.";
+            yield return "A task that can be used to await and";
+
+            foreach (var start in new[] { "A result", "A task", "The task" })
+            {
+                foreach (var end in ContinueTextParts)
+                {
+                    yield return start + " " + end;
+                }
+            }
         }
     }
 }
