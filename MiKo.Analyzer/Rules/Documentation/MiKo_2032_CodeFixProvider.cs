@@ -171,9 +171,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
             {
-                var text = sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
-                                         .WithoutTrailing(" otherwise")
-                                         .GetComment();
+                var text = GetText(sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                                                 .WithoutTrailing(" otherwise"));
 
                 if (text.IsNullOrWhiteSpace())
                 {
@@ -189,7 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       .WithoutTrailing(" otherwise with a result of ")
                                       .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 
-                var text = replacement.GetComment();
+                var text = GetText(replacement);
 
                 if (text.IsNullOrWhiteSpace())
                 {

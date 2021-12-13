@@ -26,6 +26,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return IsSeeCref(value, type, member);
         }
 
+        protected static bool IsSeeCrefTask(SyntaxNode value)
+        {
+            if (IsSeeCref(value, SyntaxFactory.ParseTypeName("Task")))
+            {
+                return true;
+            }
+
+            if (IsSeeCref(value, SyntaxFactory.ParseTypeName("Task<TResult>")))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
             foreach (var syntaxNode in syntaxNodes)

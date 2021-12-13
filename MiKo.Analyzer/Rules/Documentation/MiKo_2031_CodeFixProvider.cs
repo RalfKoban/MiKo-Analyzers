@@ -1,4 +1,6 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,18 +13,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Parts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", "|").Split('|');
 
-        private static readonly string[] TextParts =
+        private static readonly string[] ContinueTextParts =
             {
-                "A result containing",
-                "A result that contains",
-                "A result which contains",
-                "A task containing",
-                "A task that contains",
-                "A task which contains",
-                "The task containing",
-                "The task that contains",
-                "The task which contains",
+                "containing",
+                "that contains",
+                "which contains",
+                "that represents the asynchronous operation.",
             };
+
+        private static readonly string[] TextParts = (from x in new[] { "A result", "A task", "The task" }
+                                                      from y in ContinueTextParts
+                                                      select x + " " + y).ToArray();
 
         public override string FixableDiagnosticId => MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer.Id;
 
@@ -40,9 +41,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
         {
-            if (comment.Content.FirstOrDefault() is XmlTextSyntax startText)
+            var contents = comment.Content;
+
+            if (contents.FirstOrDefault() is XmlTextSyntax startText)
             {
-                return ReplaceText(comment, startText, TextParts, string.Empty);
+                if (contents.Count >= 3)
+                {
+                    var taskRef = contents[1];
+
+                    if (IsSeeCrefTask(taskRef) && contents[2] is XmlTextSyntax continueText)
+                    {
+                        // might be an almost complete text
+                        var text = GetText(continueText);
+
+                        if (text.StartsWithAny(ContinueTextParts))
+                        {
+                            var newText = text.Without(ContinueTextParts).Trim();
+                            if (newText.EndsWith('.') is false)
+                            {
+                                newText += " "; // add extra space so that next XML syntax node is placed well
+                            }
+
+                            var newContents = contents.Replace(continueText, XmlText(newText));
+
+                            // remove the beginning node and the <see cref="Task"/> node
+                            return comment.WithContent(newContents.RemoveAt(0).RemoveAt(0));
+                        }
+                    }
+                }
+                else
+                {
+                    return ReplaceText(comment, startText, TextParts, string.Empty);
+                }
             }
 
             return comment;

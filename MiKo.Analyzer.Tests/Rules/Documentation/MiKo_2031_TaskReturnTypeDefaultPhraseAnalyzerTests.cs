@@ -166,16 +166,30 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase("", "")]
         [TestCase("Something.", "something.")]
         [TestCase("A result describing something.", "a result describing something.")]
-        [TestCase(@"A result describing something, such as <see cref=""string.Empty""/>.", @"a result describing something, such as <see cref=""string.Empty""/>.")]
+        [TestCase(@"A <see cref=""Task""/> that contains something.", @"something.")]
+        [TestCase(@"A <see cref=""Task""/> that represents the asynchronous operation.", @"")]
+        [TestCase(@"A <see cref=""Task""/> which contains something.", @"something.")]
+        [TestCase(@"A <see cref=""Task{TResult}""/> that contains something.", @"something.")]
+        [TestCase(@"A <see cref=""Task{TResult}""/> that represents the asynchronous operation.", @"")]
+        [TestCase(@"A <see cref=""Task{TResult}""/> which contains something.", @"something.")]
         [TestCase(@"A result containing something.", @"something.")]
+        [TestCase(@"A result describing something, such as <see cref=""string.Empty""/>.", @"a result describing something, such as <see cref=""string.Empty""/>.")]
         [TestCase(@"A result that contains something.", @"something.")]
         [TestCase(@"A result which contains something.", @"something.")]
         [TestCase(@"A task that contains something.", @"something.")]
+        [TestCase(@"A task that represents the asynchronous operation.", @"")]
         [TestCase(@"A task which contains something.", @"something.")]
+        [TestCase(@"The <see cref=""Task""/> that contains something.", @"something.")]
+        [TestCase(@"The <see cref=""Task""/> which contains something.", @"something.")]
+        [TestCase(@"The <see cref=""Task{TResult}""/> that contains something.", @"something.")]
+        [TestCase(@"The <see cref=""Task{TResult}""/> which contains something.", @"something.")]
         [TestCase(@"The task that contains something.", @"something.")]
         [TestCase(@"The task which contains something.", @"something.")]
+        [TestCase(@"The result of the whole stuff.", @"the result of the whole stuff.")]
+        [TestCase(@"A <see cref=""Task""/> containing the <see cref=""int""/> of this single operation.", @"the <see cref=""int""/> of this single operation.")]
         public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"

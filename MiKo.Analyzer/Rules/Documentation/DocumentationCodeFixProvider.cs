@@ -431,6 +431,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
         }
 
+        protected static bool IsSeeCref(SyntaxNode value, TypeSyntax type)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(emptyElement.Attributes, type);
+                }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(element.StartTag.Attributes, type);
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, TypeSyntax t)
+            {
+                if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
+                {
+                    if (attribute.Cref is NameMemberCrefSyntax m)
+                    {
+                        return t is GenericNameSyntax
+                                   ? IsSameGeneric(m.Name, t)
+                                   : IsSameName(m.Name, t);
+                    }
+                }
+
+                return false;
+            }
+        }
+
         protected static bool IsSeeCref(SyntaxNode value, TypeSyntax type, NameSyntax member)
         {
             switch (value)
@@ -465,43 +501,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 return false;
-
-                bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
-                {
-                    if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
-                    {
-                        if (g1.Identifier.ValueText == g2.Identifier.ValueText)
-                        {
-                            var arguments1 = g1.TypeArgumentList.Arguments;
-                            var arguments2 = g2.TypeArgumentList.Arguments;
-
-                            if (arguments1.Count == arguments2.Count)
-                            {
-                                for (var i = 0; i < arguments1.Count; i++)
-                                {
-                                    if (IsSameName(arguments1[i], arguments2[i]) is false)
-                                    {
-                                        return false;
-                                    }
-                                }
-
-                                return true;
-                            }
-                        }
-                    }
-
-                    return false;
-                }
-
-                bool IsSameName(TypeSyntax t1, TypeSyntax t2)
-                {
-                    if (t1 is IdentifierNameSyntax ti && t2 is IdentifierNameSyntax ni)
-                    {
-                        return ti.Identifier.ValueText == ni.Identifier.ValueText;
-                    }
-
-                    return t1.ToString() == t2.ToString();
-                }
             }
         }
 
@@ -555,6 +554,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
+        }
+
+        protected static string GetText(XmlTextSyntax text)
+        {
+            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim();
         }
 
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
@@ -658,11 +662,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
         }
 
-        private static string GetText(XmlTextSyntax text)
-        {
-            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia()));
-        }
-
         private static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
         {
             foreach (var token in text.TextTokens)
@@ -685,6 +684,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return text;
+        }
+
+        private static bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
+        {
+            if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
+            {
+                if (g1.Identifier.ValueText == g2.Identifier.ValueText)
+                {
+                    var arguments1 = g1.TypeArgumentList.Arguments;
+                    var arguments2 = g2.TypeArgumentList.Arguments;
+
+                    if (arguments1.Count == arguments2.Count)
+                    {
+                        for (var i = 0; i < arguments1.Count; i++)
+                        {
+                            if (IsSameName(arguments1[i], arguments2[i]) is false)
+                            {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsSameName(TypeSyntax t1, TypeSyntax t2)
+        {
+            if (t1 is IdentifierNameSyntax n1 && t2 is IdentifierNameSyntax n2)
+            {
+                return n1.Identifier.ValueText == n2.Identifier.ValueText;
+            }
+
+            return t1.ToString() == t2.ToString();
         }
     }
 }

@@ -55,8 +55,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) => value?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
 
-        internal static string GetComment(this XmlTextSyntax value) => value.WithoutXmlCommentExterior();
-
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode
         {
             var node = value;
