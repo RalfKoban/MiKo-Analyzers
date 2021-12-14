@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (IsSeeCrefTask(taskRef) && contents[2] is XmlTextSyntax continueText)
                     {
                         // might be an almost complete text
-                        var text = GetText(continueText);
+                        var text = GetTextWithoutTrivia(continueText);
 
                         if (text.StartsWithAny(ContinueTextParts))
                         {

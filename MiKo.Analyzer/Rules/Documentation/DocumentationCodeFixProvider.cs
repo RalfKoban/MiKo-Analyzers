@@ -556,10 +556,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
-        protected static string GetText(XmlTextSyntax text)
+        protected static string GetTextWithoutTrivia(XmlTextSyntax text)
         {
             return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim();
         }
+
+        protected static bool IsWhiteSpaceOnlyText(XmlTextSyntax text) => GetTextWithoutTrivia(text).IsNullOrWhiteSpace();
 
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
         {
@@ -644,7 +646,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return -1;
             }
 
-            var onlyWhitespaceText = content[0] is XmlTextSyntax t && GetText(t).IsNullOrWhiteSpace();
+            var onlyWhitespaceText = content[0] is XmlTextSyntax t && IsWhiteSpaceOnlyText(t);
 
             return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
         }

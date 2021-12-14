@@ -718,7 +718,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutFirstXmlNewLine(this SyntaxList<XmlNodeSyntax> list)
         {
-            if (list.Count > 1 && list[0] is XmlTextSyntax text)
+            if (list.FirstOrDefault() is XmlTextSyntax text)
             {
                 var newText = text.WithoutFirstXmlNewLine();
 
@@ -824,6 +824,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts) => texts.Aggregate(values, (current, text) => current.WithoutText(text));
 
+        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts) => texts.Aggregate(value, WithoutTrailing);
+
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text)
         {
             var textTokens = new List<SyntaxToken>(value.TextTokens);
@@ -925,6 +927,58 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static string WithoutXmlCommentExterior(this SyntaxNode value) => value.ToString().Replace("///", string.Empty).Trim();
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, params string[] startTexts) => value.Content.WithoutStartText(startTexts);
+
+        internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this SyntaxList<XmlNodeSyntax> values, params string[] startTexts)
+        {
+            if (values.Count > 0 && values[0] is XmlTextSyntax textSyntax)
+            {
+                return values.Replace(textSyntax, textSyntax.WithoutStartText(startTexts));
+            }
+
+            return values;
+        }
+
+        internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, params string[] startTexts)
+        {
+            if (startTexts == null || startTexts.Length == 0)
+            {
+                return value;
+            }
+
+            var textTokens = new List<SyntaxToken>(value.TextTokens);
+
+            for (var i = 0; i < textTokens.Count; i++)
+            {
+                var token = textTokens[i];
+
+                // ignore trivia such as " /// "
+                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                {
+                    var originalText = token.Text.TrimStart();
+
+                    if (originalText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
+
+                    foreach (var startText in startTexts)
+                    {
+                        if (originalText.StartsWith(startText, StringComparison.Ordinal))
+                        {
+                            var modifiedText = originalText.Substring(startText.Length);
+
+                            textTokens[i] = token.WithText(modifiedText);
+
+                            return XmlText(textTokens);
+                        }
+                    }
+                }
+            }
+
+            return value;
+        }
 
         internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText) => value.Content.WithStartText(startText);
 

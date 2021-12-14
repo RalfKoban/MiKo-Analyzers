@@ -216,6 +216,9 @@ public class TestMe
         [TestCase("", "TODO")]
         [TestCase(" Something . ", "something")]
         [TestCase("Something.", "something")]
+        [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
+        [TestCase("When the stuff is done, True; False else.", "the stuff is done")]
+        [TestCase("In case the stuff is done, True; False else.", "the stuff is done")]
         public void Code_gets_fixed_for_non_generic_method_(string comment, string fixedPhrase)
         {
             var originalCode = @"
@@ -248,6 +251,7 @@ public class TestMe
         [TestCase("", "TODO")]
         [TestCase(" Something . ", "something")]
         [TestCase("Something.", "something")]
+        [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
         public void Code_gets_fixed_for_generic_method_(string comment, string fixedPhrase)
         {
             var originalCode = @"
@@ -395,6 +399,46 @@ public class TestMe
     /// <returns>
     /// <see langword=""true""/> if subset is found in <paramref name=""superset""/> or if subset
     /// is empty; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_3()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// If the specified window true
+    /// XXX,
+    /// YYY,
+    /// ZZZ.
+    /// </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if the specified window 
+    /// XXX,
+    /// YYY,
+    /// ZZZ; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object superset) => throw new NotSupportedException();
 }

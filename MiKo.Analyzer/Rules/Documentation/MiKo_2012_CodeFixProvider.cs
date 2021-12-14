@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (content.FirstOrDefault() is XmlTextSyntax t)
             {
-                var text = GetText(t);
+                var text = GetTextWithoutTrivia(t);
 
                 if (text.StartsWith("Interaction logic for", StringComparison.Ordinal))
                 {
@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // maybe it is a docu that should be an inherit documentation instead
             if (content.FirstOrDefault() is XmlTextSyntax t)
             {
-                var text = GetText(t);
+                var text = GetTextWithoutTrivia(t);
 
                 if (text.IsNullOrWhiteSpace() && content.Count > 1 && IsSeeCref(content[1]))
                 {

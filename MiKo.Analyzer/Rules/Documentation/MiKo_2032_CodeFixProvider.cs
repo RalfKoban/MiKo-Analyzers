@@ -41,6 +41,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().ToArray();
 
+        private static readonly string[] OtherStartingPhrases =
+            {
+                "If ",
+                "When ",
+                "In case ",
+            };
+
+        private static readonly string[] SimpleTrailingPhrases =
+            {
+                " otherwise",
+                " otherwise with a result of",
+                " else it",
+                " else with",
+                ", ; else",
+            };
+
         public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
@@ -168,19 +184,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove boolean <see langword="..."/> and <c>...</c>
             var adjustedComment = comment.Without(comment.Content.Where(_ => _.IsSeeLangwordBool() || _.IsCBool()));
 
-            var nodes = adjustedComment.WithoutText(SimpleStartingPhrases)
-                                       .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
-                                       .WithoutText(Phrases)
-                                       .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
-                                       .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
+            var nodes = adjustedComment.WithoutStartText(SimpleStartingPhrases)
+                                        .WithoutStartText(OtherStartingPhrases)
+                                        .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
+                                        .WithoutText(Phrases)
+                                        .WithoutFirstXmlNewLine()
+                                        .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
+                                        .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
 
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
             {
-                var text = GetText(sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
-                                                 .WithoutTrailing(" otherwise"));
-
-                if (text.IsNullOrWhiteSpace())
+                if (IsWhiteSpaceOnlyText(sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers).WithoutTrailing(" otherwise")))
                 {
                     nodes = nodes.Remove(sentenceEnding);
                 }
@@ -190,15 +205,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (nodes.LastOrDefault() is XmlTextSyntax last)
             {
                 var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
-                                      .WithoutTrailing(" otherwise")
-                                      .WithoutTrailing(" otherwise with a result of")
-                                      .WithoutTrailing(" else it")
-                                      .WithoutTrailing(" else with")
+                                      .WithoutTrailing(SimpleTrailingPhrases)
                                       .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 
-                var text = GetText(replacement);
-
-                if (text.IsNullOrWhiteSpace())
+                if (IsWhiteSpaceOnlyText(replacement))
                 {
                     nodes = nodes.Remove(last);
 
@@ -214,10 +224,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var untouchedText = replacement.ToString();
                     if (textWithoutTrailingXml.Length != untouchedText.Length)
                     {
-                        // seems like there was an '///' at the very end of the text, so move text on same line
-                        var glue = untouchedText[0].IsWhiteSpace() ? " " : string.Empty;
-
-                        return nodes.Replace(last, XmlText(glue + text + endingPhrase));
+                        // seems like there was an '///' at the very end of the text, so move trailing text on same line
+                        return nodes.Replace(last, XmlText(textWithoutTrailingXml + endingPhrase));
                     }
 
                     nodes = nodes.Replace(last, replacement);
