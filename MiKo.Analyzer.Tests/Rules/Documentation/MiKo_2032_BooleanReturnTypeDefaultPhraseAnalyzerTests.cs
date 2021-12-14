@@ -301,6 +301,7 @@ public class TestMe
         [TestCase(@"Returns <see langref=""true""/> if something.")]
         [TestCase(@"Returns <see langref=""true""/> if something, otherwise returns <see langref=""false""/>.")]
         [TestCase(@"true: if something, false: otherwise.")]
+        [TestCase("true: if something,\r\n/// false: otherwise.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string returnsComment)
         {
             var originalCode = @"
@@ -517,8 +518,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// <see langword=""true""/> if something in the given <paramref name=""o""/>
-    /// is there; otherwise, <see langword=""false""/>.
+    /// <see langword=""true""/> if something in the given <paramref name=""o""/> is there; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }

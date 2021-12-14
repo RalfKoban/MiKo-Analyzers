@@ -186,7 +186,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
                                       .WithoutTrailing(" otherwise")
                                       .WithoutTrailing(" otherwise with a result of ")
-                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
+                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                                      .WithoutTrailingXmlComment();
 
                 var text = GetText(replacement);
 
@@ -202,7 +203,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    nodes = nodes.Replace(last, replacement);
+                    // maybe we should just add the text here
+                    var glue = replacement.ToString()[0].IsWhiteSpace() ? " " : string.Empty;
+
+                    return nodes.Replace(last, XmlText(glue + text + endingPhrase));
                 }
             }
 

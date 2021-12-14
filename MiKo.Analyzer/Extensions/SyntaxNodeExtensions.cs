@@ -771,7 +771,7 @@ namespace MiKoSolutions.Analyzers
 
             var replaced = false;
 
-            for (var i = 0; i < textTokens.Count; i++)
+            for (var i = textTokens.Count - 1; i >= 0; i--)
             {
                 var token = textTokens[i];
 
