@@ -576,31 +576,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
-        protected static T ReplaceText<T>(T comment, XmlTextSyntax textSyntax, string phrase, string replacement) where T : SyntaxNode
+        protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode
         {
-            return ReplaceText(comment, textSyntax, new[] { phrase }, replacement);
+            return ReplaceText(comment, text, new[] { phrase }, replacement);
         }
 
-        protected static T ReplaceText<T>(T comment, XmlTextSyntax textSyntax, string[] phrases, string replacement) where T : SyntaxNode
+        protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string[] phrases, string replacement) where T : SyntaxNode
         {
-            foreach (var token in textSyntax.TextTokens)
-            {
-                var text = token.ValueText;
+            var modifiedText = text.ReplaceText(phrases, replacement);
 
-                foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
-                {
-                    text = text.Replace(phrase, replacement);
-                }
-
-                if (ReferenceEquals(token.ValueText, text) is false)
-                {
-                    var newToken = token.WithText(text);
-
-                    return comment.ReplaceToken(token, newToken);
-                }
-            }
-
-            return comment;
+            return ReferenceEquals(text, modifiedText)
+                       ? comment
+                       : comment.ReplaceNode(text, modifiedText);
         }
 
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)

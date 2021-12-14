@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "false",
                 "Returns",
                 "returns",
+                "will return",
             };
 
         private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().ToArray();
@@ -161,12 +162,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return new[] { XmlText(startingPhrase + "TODO" + endingPhrase) };
             }
 
+            const string OrIfPhrase = " or if ";
+            const string OrIfReplacementPhrase = " orif ";
+
             // remove boolean <see langword="..."/> and <c>...</c>
             var adjustedComment = comment.Without(comment.Content.Where(_ => _.IsSeeLangwordBool() || _.IsCBool()));
 
             var nodes = adjustedComment.WithoutText(SimpleStartingPhrases)
-                                        .WithoutText(Phrases)
-                                        .WithStartText(startingPhrase); // add starting text and ensure that first character of original text is now lower-case
+                                       .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
+                                       .WithoutText(Phrases)
+                                       .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
+                                       .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
 
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
@@ -185,9 +191,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
                                       .WithoutTrailing(" otherwise")
-                                      .WithoutTrailing(" otherwise with a result of ")
-                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
-                                      .WithoutTrailingXmlComment();
+                                      .WithoutTrailing(" otherwise with a result of")
+                                      .WithoutTrailing(" else it")
+                                      .WithoutTrailing(" else with")
+                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 
                 var text = GetText(replacement);
 
@@ -203,10 +210,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    // maybe we should just add the text here
-                    var glue = replacement.ToString()[0].IsWhiteSpace() ? " " : string.Empty;
+                    var textWithoutTrailingXml = replacement.WithoutTrailingXmlComment().ToString();
+                    var untouchedText = replacement.ToString();
+                    if (textWithoutTrailingXml.Length != untouchedText.Length)
+                    {
+                        // seems like there was an '///' at the very end of the text, so move text on same line
+                        var glue = untouchedText[0].IsWhiteSpace() ? " " : string.Empty;
 
-                    return nodes.Replace(last, XmlText(glue + text + endingPhrase));
+                        return nodes.Replace(last, XmlText(glue + text + endingPhrase));
+                    }
+
+                    nodes = nodes.Replace(last, replacement);
                 }
             }
 

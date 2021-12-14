@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable CA1506 // Avoid excessive class coupling
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -609,6 +611,63 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
+        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string phrase, string replacement)
+        {
+            var result = source.ToList();
+            for (var index = 0; index < result.Count; index++)
+            {
+                var value = result[index];
+                if (value is XmlTextSyntax text)
+                {
+                    result[index] = text.ReplaceText(phrase, replacement);
+                }
+            }
+
+            return new SyntaxList<XmlNodeSyntax>(result);
+        }
+
+        internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
+        {
+            var result = source.ToList();
+            for (var index = 0; index < result.Count; index++)
+            {
+                var value = result[index];
+                if (value is XmlTextSyntax text)
+                {
+                    result[index] = text.ReplaceText(phrases, replacement);
+                }
+            }
+
+            return new SyntaxList<XmlNodeSyntax>(result);
+        }
+
+        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string phrase, string replacement)
+        {
+            return ReplaceText(value, new[] { phrase }, replacement);
+        }
+
+        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
+        {
+            var map = new Dictionary<SyntaxToken, SyntaxToken>();
+
+            foreach (var token in value.TextTokens)
+            {
+                var text = token.ValueText;
+
+                foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
+                {
+                    text = text.Replace(phrase, replacement);
+                }
+
+                if (ReferenceEquals(token.ValueText, text) is false)
+                {
+                    map[token] = token.WithText(text);
+                }
+            }
+
+            return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
+        }
+
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
         internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
@@ -1064,3 +1123,5 @@ namespace MiKoSolutions.Analyzers
         private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
     }
 }
+
+#pragma warning restore CA1506 // Avoid excessive class coupling

@@ -302,6 +302,9 @@ public class TestMe
         [TestCase(@"Returns <see langref=""true""/> if something, otherwise returns <see langref=""false""/>.")]
         [TestCase(@"true: if something, false: otherwise.")]
         [TestCase("true: if something,\r\n/// false: otherwise.")]
+        [TestCase("true: if something, else it returns false.")]
+        [TestCase("true if something, else with false.")]
+        [TestCase("true if something else will return with false.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string returnsComment)
         {
             var originalCode = @"
@@ -334,7 +337,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method()
+        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_1()
         {
             const string OriginalCode = @"
 using System;
@@ -360,6 +363,40 @@ public class TestMe
     /// <see langword=""true""/> if <paramref name=""o""/> contains something different than <paramref name=""o""/>; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_2()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>will return <see langword=""true""/> if subset is found in <paramref name=""superset""/> or if subset
+    /// is empty; <see langword=""false""/> otherwise. </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if subset is found in <paramref name=""superset""/> or if subset
+    /// is empty; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
 }
 ";
 
@@ -518,7 +555,8 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// <see langword=""true""/> if something in the given <paramref name=""o""/> is there; otherwise, <see langword=""false""/>.
+    /// <see langword=""true""/> if something in the given <paramref name=""o""/>
+    /// is there; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
