@@ -333,6 +333,39 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>True if <paramref name=""o""/> contains something different than <paramref name=""o""/>,
+    /// false otherwise.</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if <paramref name=""o""/> contains something different than <paramref name=""o""/>; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_multiple_references_in_comment_on_non_generic_method()
         {
             const string OriginalCode = @"
