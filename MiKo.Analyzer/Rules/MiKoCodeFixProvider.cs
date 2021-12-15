@@ -30,11 +30,17 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
-            var diagnostic = context.Diagnostics.First();
-            var codeFix = CreateCodeFix(context.Document, root, diagnostic);
-            if (codeFix != null)
+            var diagnostics = context.Diagnostics;
+
+            if (IsApplicable(diagnostics))
             {
-                context.RegisterCodeFix(codeFix, diagnostic);
+                var diagnostic = diagnostics.First();
+
+                var codeFix = CreateCodeFix(context.Document, root, diagnostic);
+                if (codeFix != null)
+                {
+                    context.RegisterCodeFix(codeFix, diagnostic);
+                }
             }
         }
 
@@ -51,6 +57,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
+
+        protected virtual bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => true;
 
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);
 
