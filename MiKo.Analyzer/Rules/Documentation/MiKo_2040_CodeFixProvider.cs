@@ -23,8 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = syntax;
 
-            comment = ReplaceCode(comment);
-            comment = ReplaceValue(comment);
+            comment = ReplaceWrongTag(comment);
             comment = ReplaceWrongEmptySeeOrSeeAlso(comment);
             comment = ReplaceWrongNonEmptySeeOrSeeAlso(comment);
             comment = ReplaceText(comment);
@@ -58,18 +57,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    });
         }
 
-        private static DocumentationCommentTriviaSyntax ReplaceCode(DocumentationCommentTriviaSyntax comment)
+        private static DocumentationCommentTriviaSyntax ReplaceWrongTag(DocumentationCommentTriviaSyntax comment)
         {
-            // replace all '<c>true</c>', '<c>false</c>' and '<c>null</c>', but ignore <code>
-            var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsCBool() || _.IsCNull()).ToList();
-
-            return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLowerCase()));
-        }
-
-        private static DocumentationCommentTriviaSyntax ReplaceValue(DocumentationCommentTriviaSyntax comment)
-        {
+            // replace all '<b>true</b>', '<b>false</b>' and '<b>null</b>'
+            // replace all '<c>true</c>', '<c>false</c>' and '<c>null</c>'
             // replace all '<value>true</value>', '<value>false</value>' and '<value>null</value>'
-            var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsValueBool() || _.IsValueNull()).ToList();
+            // but ignore <code>
+            var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>()
+                               .Where(_ => _.IsCBool() || _.IsBBool() || _.IsValueBool() || _.IsCNull() || _.IsBNull() || _.IsValueNull())
+                               .ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLowerCase()));
         }

@@ -323,6 +323,7 @@ public class TestMe
             var results = new HashSet<string>();
             foreach (var token in words)
             {
+                results.Add("<b>" + token + "</b>");
                 results.Add("<c>" + token + "</c>");
                 results.Add("<value>" + token + "</value>");
                 results.Add(" " + token + " ");

@@ -592,6 +592,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : comment.ReplaceNode(text, modifiedText);
         }
 
+        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment)
+        {
+            return comment.Without(comment.Content.Where(_ => _.IsBooleanTag()));
+        }
+
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
         {
             return SyntaxFactory.XmlEmptyElement(tag).WithAttributes(new SyntaxList<XmlAttributeSyntax>(SyntaxFactory.XmlCrefAttribute(syntax)));

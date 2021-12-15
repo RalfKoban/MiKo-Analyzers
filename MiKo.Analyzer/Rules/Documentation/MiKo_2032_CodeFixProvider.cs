@@ -182,7 +182,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const string OrIfReplacementPhrase = " orif ";
 
             // remove boolean <see langword="..."/> and <c>...</c>
-            var adjustedComment = comment.Without(comment.Content.Where(_ => _.IsSeeLangwordBool() || _.IsCBool()));
+            var adjustedComment = RemoveBooleansTags(comment);
 
             var nodes = adjustedComment.WithoutStartText(SimpleStartingPhrases)
                                         .WithoutStartText(OtherStartingPhrases)
