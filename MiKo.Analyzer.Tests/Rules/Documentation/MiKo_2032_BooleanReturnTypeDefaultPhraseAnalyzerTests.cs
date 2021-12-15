@@ -293,6 +293,7 @@ public class TestMe
         [TestCase(@"<b>true</b> if something. Otherwise <b>false</b>.")]
         [TestCase(@"<c>true</c> if something. Otherwise <c>false</c>.")]
         [TestCase(@"<c>true</c> if something; otherwise, <c>false</c>.")]
+        [TestCase(@"<code>true</code> if something; otherwise, <code>false</code>.")]
         [TestCase(@"True if something. False otherwise.")]
         [TestCase(@"True if something, otherwise False.")]
         [TestCase(@"True if something, False otherwise.")]

@@ -30,7 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                            string.Empty,
                                                                        };
 
-        private static readonly IEnumerable<string> WrongItems = CreateWrongItems(Terms);
+        private static readonly IEnumerable<string> WrongItemsWithoutCode = CreateWrongItems(false, Terms);
+        private static readonly IEnumerable<string> WrongItemsWithCode = CreateWrongItems(true, Terms);
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
@@ -49,7 +50,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_class_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + finding + @"
 /// </summary>
@@ -59,7 +60,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_method_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_method_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -70,7 +71,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_method_returnValue_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_method_returnValue_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -84,7 +85,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_property_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_property_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -95,7 +96,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_property_value_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_property_value_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -109,7 +110,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_event_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_event_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -120,7 +121,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_field_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_documentation_is_reported_on_field_([ValueSource(nameof(WrongItemsWithCode))] string finding) => An_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -185,7 +186,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_example_for_documentation_is_not_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_example_for_documentation_is_not_reported_on_class_([ValueSource(nameof(WrongItemsWithoutCode))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -198,7 +199,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_example_for_documentation_is_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void Wrong_example_for_documentation_is_reported_on_class_([ValueSource(nameof(WrongItemsWithoutCode))] string finding) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -310,7 +311,7 @@ public class TestMe
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2040_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateWrongItems(params string[] tokens)
+        private static IEnumerable<string> CreateWrongItems(bool withCode, params string[] tokens)
         {
             var words = new List<string>();
             foreach (var token in tokens)
@@ -321,6 +322,15 @@ public class TestMe
             }
 
             var results = new HashSet<string>();
+
+            if (withCode)
+            {
+                foreach (var token in words)
+                {
+                    results.Add("<code>" + token + "</code>");
+                }
+            }
+
             foreach (var token in words)
             {
                 results.Add("<b>" + token + "</b>");
@@ -356,7 +366,7 @@ public class TestMe
         {
             foreach (var word in Terms)
             {
-                foreach (var phrase in CreateWrongItems(word))
+                foreach (var phrase in CreateWrongItems(true, word))
                 {
                     // distinguish between XML and non-XML
                     var fixedPhrase = phrase.StartsWith('<')

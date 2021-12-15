@@ -62,9 +62,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // replace all '<b>true</b>', '<b>false</b>' and '<b>null</b>'
             // replace all '<c>true</c>', '<c>false</c>' and '<c>null</c>'
             // replace all '<value>true</value>', '<value>false</value>' and '<value>null</value>'
-            // but ignore <code>
             var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>()
-                               .Where(_ => _.IsCBool() || _.IsBBool() || _.IsValueBool() || _.IsCNull() || _.IsBNull() || _.IsValueNull())
+                               .Where(_ => _.IsWrongBooleanTag() || _.IsWrongNullTag())
                                .ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLowerCase()));

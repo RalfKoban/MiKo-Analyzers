@@ -317,7 +317,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangwordBool() || value.IsCBool() || value.IsBBool() || value.IsValueBool();
+        internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
+
+        internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();
+
+        internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangwordBool() || value.IsWrongBooleanTag();
 
         internal static bool IsBBool(this SyntaxNode value) => value.Is("b", Booleans);
 
@@ -326,6 +330,10 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsCBool(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Booleans);
 
         internal static bool IsCNull(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Nulls);
+
+        internal static bool IsCodeBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Booleans);
+
+        internal static bool IsCodeNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Nulls);
 
         internal static bool IsCode(this SyntaxNode value) => value is XmlElementSyntax xes && xes.IsCode();
 

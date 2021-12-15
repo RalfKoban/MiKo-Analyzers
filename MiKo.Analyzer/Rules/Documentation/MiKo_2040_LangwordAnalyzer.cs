@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add($" {phrase};", $" {proposal};");
                 results.Add($"<b>{phrase}</b>", proposal);
                 results.Add($"<c>{phrase}</c>", proposal);
+                results.Add($"<code>{phrase}</code>", proposal);
                 results.Add($"<value>{phrase}</value>", proposal);
 
                 foreach (var attribute in WrongAttributes)
