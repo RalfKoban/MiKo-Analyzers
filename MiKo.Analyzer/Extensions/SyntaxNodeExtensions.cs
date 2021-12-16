@@ -738,7 +738,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+
         internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+
+        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
 
         internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
 

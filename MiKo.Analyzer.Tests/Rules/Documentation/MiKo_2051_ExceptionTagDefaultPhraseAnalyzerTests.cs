@@ -143,7 +143,7 @@ public class TestMe
         [TestCase("System." + nameof(ArgumentNullException), @"If <paramref name=""o""/> is null")]
         [TestCase("System." + nameof(ArgumentNullException), @"If <paramref name=""o""/> is <see langword=""null""/>")]
         [TestCase("System." + nameof(ArgumentNullException), @"If the <paramref name=""o""/> is <see langword=""null""/>.")]
-        public void Code_gets_fixed_for_single_ArgumentNullException_(string exceptionType, string text)
+        public void Code_gets_fixed_for_ArgumentNullException_and_single_parameter_(string exceptionType, string text)
         {
             var originalCode = @"
 using System;
@@ -176,6 +176,82 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_2_referenced_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// If <paramref name=""o1""/> or <paramref name=""o2""/> are null.
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o1""/> is <see langword=""null""/>.
+    /// <para>-or-</para>
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_3_parameters_but_only_2_referenced_ones()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// If <paramref name=""o1""/> or <paramref name=""o2""/> are null.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o1""/> is <see langword=""null""/>.
+    /// <para>-or-</para>
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2051_ExceptionTagDefaultPhraseAnalyzer.Id;

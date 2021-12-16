@@ -506,6 +506,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
 
+        protected static XmlElementSyntax Para(string text) => Para(new SyntaxList<XmlNodeSyntax>(XmlText(text)));
+
         protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlElement(Constants.XmlTag.Para, nodes);
 
         protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter)
@@ -542,7 +544,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var token = text.ToSyntaxToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttributes(new SyntaxList<XmlAttributeSyntax>(attribute));
+            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
         }
 
         protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, SyntaxFactory.ParseTypeName(typeName));
@@ -606,7 +608,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
         {
-            return SyntaxFactory.XmlEmptyElement(tag).WithAttributes(new SyntaxList<XmlAttributeSyntax>(SyntaxFactory.XmlCrefAttribute(syntax)));
+            return SyntaxFactory.XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
         }
 
         private static IEnumerable<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)

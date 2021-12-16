@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -46,12 +48,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (exceptionComment.IsExceptionCommentFor<ArgumentNullException>())
                 {
                     var parameters = exceptionComment.GetParameters();
-                    if (parameters.Count == 1)
+                    switch (parameters.Count)
                     {
-                        // seems like we have only a single parameter, so place it on a single line
-                        var newComment = exceptionComment.WithContent(ParamRef(parameters[0]).WithLeadingXmlComment(), XmlText(" is "), SeeLangword_Null(), XmlText(".").WithTrailingXmlComment());
+                        case 0:
+                            break; // TODO RKN: cannot fix as there seems to be no parameter
 
-                        return syntax.ReplaceNode(exceptionComment, newComment);
+                        case 1:
+                        {
+                            // seems like we have only a single parameter, so place it on a single line
+                            var newComment = exceptionComment.WithContent(ParameterIsNull(parameters[0]));
+
+                            return syntax.ReplaceNode(exceptionComment, newComment);
+                        }
+
+                        default:
+                        {
+                            // more than 1 parameter, so pick the referenced ones
+                            var comment = exceptionComment.ToString();
+                            var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_))).ToArray();
+
+                            var newComment = exceptionComment.WithContent(ParameterIsNull(ps));
+
+                            return syntax.ReplaceNode(exceptionComment, newComment);
+                        }
                     }
                 }
 
@@ -63,6 +82,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return syntax;
+        }
+
+        private static IEnumerable<string> GetParameterReferences(ParameterSyntax p)
+        {
+            var name = p.GetName();
+
+            yield return " " + name + " ";
+            yield return "\"" + name + "\"";
+        }
+
+        private static IEnumerable<XmlNodeSyntax> ParameterIsNull(params ParameterSyntax[] parameters)
+        {
+            for (var i = 0; i < parameters.Length; i++)
+            {
+                var parameter = parameters[i];
+
+                yield return ParamRef(parameter).WithLeadingXmlComment();
+                yield return XmlText(" is ");
+                yield return SeeLangword_Null();
+                yield return XmlText(".").WithTrailingXmlComment();
+
+                if (i < parameters.Length - 1)
+                {
+                    yield return Para("-or-");
+                }
+            }
         }
     }
 }
