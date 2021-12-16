@@ -64,6 +64,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Where(_ => tags.Contains(_.GetName()));
         }
 
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases) => CommentStartingWith(comment, phrases[0]);
+
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase)
         {
             var content = CommentStartingWith(comment.Content, phrase);
@@ -110,7 +112,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var startText = XmlText(commentStart).WithLeadingXmlComment();
 
             XmlTextSyntax continueText;
-            if (content[index] is XmlTextSyntax text)
+            var syntax = content[index];
+            if (syntax is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
                 content = content.Remove(text);
@@ -127,14 +130,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
+                if (index == 1 && content[0].WithoutXmlCommentExterior().IsNullOrWhiteSpace())
+                {
+                    // seems that the non-text element is the first element, so we should remove the empty text element before
+                    content = content.RemoveAt(0);
+                }
+
                 index = Math.Max(0, index - 1);
                 continueText = XmlText(commentContinue);
             }
 
-            return SyntaxFactory.XmlElement(
-                                            comment.StartTag,
-                                            content.Insert(index, startText).Insert(index + 1, seeCref).Insert(index + 2, continueText),
-                                            comment.EndTag);
+            var newContent = content.Insert(index, startText)
+                                     .Insert(index + 1, seeCref)
+                                     .Insert(index + 2, continueText);
+
+            return SyntaxFactory.XmlElement(comment.StartTag, newContent, comment.EndTag);
         }
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
@@ -421,6 +431,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
         }
 
+        protected static bool IsSeeCref(SyntaxNode value, TypeSyntax type)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(emptyElement.Attributes, type);
+                }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                {
+                    return IsCref(element.StartTag.Attributes, type);
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, TypeSyntax t)
+            {
+                if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
+                {
+                    if (attribute.Cref is NameMemberCrefSyntax m)
+                    {
+                        return t is GenericNameSyntax
+                                   ? IsSameGeneric(m.Name, t)
+                                   : IsSameName(m.Name, t);
+                    }
+                }
+
+                return false;
+            }
+        }
+
         protected static bool IsSeeCref(SyntaxNode value, TypeSyntax type, NameSyntax member)
         {
             switch (value)
@@ -455,43 +501,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 return false;
-
-                bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
-                {
-                    if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
-                    {
-                        if (g1.Identifier.ValueText == g2.Identifier.ValueText)
-                        {
-                            var arguments1 = g1.TypeArgumentList.Arguments;
-                            var arguments2 = g2.TypeArgumentList.Arguments;
-
-                            if (arguments1.Count == arguments2.Count)
-                            {
-                                for (var i = 0; i < arguments1.Count; i++)
-                                {
-                                    if (IsSameName(arguments1[i], arguments2[i]) is false)
-                                    {
-                                        return false;
-                                    }
-                                }
-
-                                return true;
-                            }
-                        }
-                    }
-
-                    return false;
-                }
-
-                bool IsSameName(TypeSyntax t1, TypeSyntax t2)
-                {
-                    if (t1 is IdentifierNameSyntax ti && t2 is IdentifierNameSyntax ni)
-                    {
-                        return ti.Identifier.ValueText == ni.Identifier.ValueText;
-                    }
-
-                    return t1.ToString() == t2.ToString();
-                }
             }
         }
 
@@ -547,6 +556,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
+        protected static string GetTextWithoutTrivia(XmlTextSyntax text)
+        {
+            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim();
+        }
+
+        protected static bool IsWhiteSpaceOnlyText(XmlTextSyntax text) => GetTextWithoutTrivia(text).IsNullOrWhiteSpace();
+
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
         {
             if (syntax.Content.FirstOrDefault() is XmlTextSyntax text)
@@ -562,31 +578,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
-        protected static T ReplaceText<T>(T comment, XmlTextSyntax textSyntax, string phrase, string replacement) where T : SyntaxNode
+        protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode
         {
-            return ReplaceText(comment, textSyntax, new[] { phrase }, replacement);
+            return ReplaceText(comment, text, new[] { phrase }, replacement);
         }
 
-        protected static T ReplaceText<T>(T comment, XmlTextSyntax textSyntax, string[] phrases, string replacement) where T : SyntaxNode
+        protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string[] phrases, string replacement) where T : SyntaxNode
         {
-            foreach (var token in textSyntax.TextTokens)
-            {
-                var text = token.ValueText;
+            var modifiedText = text.ReplaceText(phrases, replacement);
 
-                foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
-                {
-                    text = text.Replace(phrase, replacement);
-                }
+            return ReferenceEquals(text, modifiedText)
+                       ? comment
+                       : comment.ReplaceNode(text, modifiedText);
+        }
 
-                if (ReferenceEquals(token.ValueText, text) is false)
-                {
-                    var newToken = token.WithText(text);
-
-                    return comment.ReplaceToken(token, newToken);
-                }
-            }
-
-            return comment;
+        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment)
+        {
+            return comment.Without(comment.Content.Where(_ => _.IsBooleanTag()));
         }
 
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
@@ -643,14 +651,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return -1;
             }
 
-            var onlyWhitespaceText = content[0] is XmlTextSyntax t && GetText(t).IsNullOrWhiteSpace();
+            var onlyWhitespaceText = content[0] is XmlTextSyntax t && IsWhiteSpaceOnlyText(t);
 
             return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
-        }
-
-        private static string GetText(XmlTextSyntax text)
-        {
-            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia()));
         }
 
         private static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
@@ -675,6 +678,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return text;
+        }
+
+        private static bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
+        {
+            if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
+            {
+                if (g1.Identifier.ValueText == g2.Identifier.ValueText)
+                {
+                    var arguments1 = g1.TypeArgumentList.Arguments;
+                    var arguments2 = g2.TypeArgumentList.Arguments;
+
+                    if (arguments1.Count == arguments2.Count)
+                    {
+                        for (var i = 0; i < arguments1.Count; i++)
+                        {
+                            if (IsSameName(arguments1[i], arguments2[i]) is false)
+                            {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsSameName(TypeSyntax t1, TypeSyntax t2)
+        {
+            if (t1 is IdentifierNameSyntax n1 && t2 is IdentifierNameSyntax n2)
+            {
+                return n1.Identifier.ValueText == n2.Identifier.ValueText;
+            }
+
+            return t1.ToString() == t2.ToString();
         }
     }
 }

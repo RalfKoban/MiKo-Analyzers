@@ -103,7 +103,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // we might have some '<see langword="xyz"/>' in the summary
                 var element = contents[1];
 
-                if (element.IsSeeLangwordBool() || element.IsCBool())
+                if (element.IsBooleanTag())
                 {
                     // remove the '<see langword="true"/>'
                     summary = summary.Without(element);

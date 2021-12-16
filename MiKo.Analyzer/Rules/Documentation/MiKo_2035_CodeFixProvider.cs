@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Threading.Tasks;
 
@@ -35,6 +36,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "The readonly collection with ", string.Empty },
                                                                                 };
 
+        private static readonly Dictionary<string, string> ByteArrayReplacementMap = new Dictionary<string, string>
+                                                                                         {
+                                                                                             { "An array of bytes which contains ", string.Empty },
+                                                                                             { "An array of bytes that contains ", string.Empty },
+                                                                                             { "An array of bytes containing ", string.Empty },
+                                                                                             { "An array of byte which contains ", string.Empty },
+                                                                                             { "An array of byte that contains ", string.Empty },
+                                                                                             { "An array of byte containing ", string.Empty },
+                                                                                             { "The array of bytes which contains ", string.Empty },
+                                                                                             { "The array of bytes that contains ", string.Empty },
+                                                                                             { "The array of bytes containing ", string.Empty },
+                                                                                             { "The array of byte which contains ", string.Empty },
+                                                                                             { "The array of byte that contains ", string.Empty },
+                                                                                             { "The array of byte containing ", string.Empty },
+                                                                                             { "An array of ", string.Empty },
+                                                                                             { "The array of ", string.Empty },
+                                                                                         };
+
+        private static readonly string[] ByteArrayContinueTexts =
+            {
+                "s containing ",
+                "s that contains ",
+                "s which contains ",
+                " containing ",
+                " that contains ",
+                " which contains ",
+            };
+
         private static readonly string[] TaskParts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", '|').Split('|');
 
         public override string FixableDiagnosticId => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
@@ -54,15 +83,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return CommentStartingWith(preparedComment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1] + middlePart);
             }
 
-            return CommentStartingWith(preparedComment, Constants.Comments.EnumerableReturnTypeStartingPhrase[0]);
+            return CommentStartingWith(preparedComment, Constants.Comments.EnumerableReturnTypeStartingPhrase);
         }
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
         {
-            var phrases = GetNonGenericCommentPhrases(returnType);
-            var preparedComment = PrepareComment(comment);
+            if (returnType is ArrayTypeSyntax arrayType)
+            {
+                if (arrayType.ElementType.IsByte())
+                {
+                    return CommentStartingWith(PrepareByteArrayComment(comment), Constants.Comments.ByteArrayReturnTypeStartingPhrase);
+                }
 
-            return CommentStartingWith(preparedComment, phrases[0]);
+                return CommentStartingWith(PrepareComment(comment), Constants.Comments.ArrayReturnTypeStartingPhrase);
+            }
+
+            return CommentStartingWith(PrepareComment(comment), Constants.Comments.EnumerableReturnTypeStartingPhrase);
         }
 
         private static string GetGenericCommentMiddlePart(GenericNameSyntax returnType)
@@ -79,18 +115,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return "a collection of ";
         }
 
-        private static string[] GetNonGenericCommentPhrases(TypeSyntax returnType)
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+
+        private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
         {
-            if (returnType is ArrayTypeSyntax arrayType)
+            var preparedComment = Comment(comment, ByteArrayReplacementMap.Keys, ByteArrayReplacementMap);
+
+            var contents = preparedComment.Content;
+
+            if (contents.Count > 1 && IsSeeCref(contents[1], "byte") && contents[0] is XmlTextSyntax startText && IsWhiteSpaceOnlyText(startText))
             {
-                return arrayType.ElementType.IsByte()
-                              ? Constants.Comments.ByteArrayReturnTypeStartingPhrase
-                              : Constants.Comments.ArrayReturnTypeStartingPhrase;
+                // inspect the continue text and - if necessary - clean it up
+                if (contents.Count > 2 && contents[2] is XmlTextSyntax continueText)
+                {
+                    var token = continueText.TextTokens.First();
+                    var text = token.ValueText;
+
+                    if (text.StartsWithAny(ByteArrayContinueTexts))
+                    {
+                        var newContinueText = continueText.ReplaceToken(token, token.WithText(text.Without(ByteArrayContinueTexts)));
+
+                        preparedComment = preparedComment.ReplaceNode(continueText, newContinueText);
+                    }
+                }
+
+                // remove the <see cref="byte"/> element
+                preparedComment = preparedComment.Without(preparedComment.Content[1]);
             }
 
-            return Constants.Comments.EnumerableReturnTypeStartingPhrase;
+            return preparedComment;
         }
-
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
     }
 }

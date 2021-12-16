@@ -85,15 +85,21 @@ public class TestMe : IDisposable
     }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_boolean_parameter() => An_issue_is_reported_for(@"
+        [TestCase("Some condition")]
+        [TestCase("<b>true</b> to some condition")]
+        [TestCase("true to some condition, <b>false</b> otherwise.")]
+        [TestCase("<c>true</c> to some condition")]
+        [TestCase("true to some condition, <c>false</c> otherwise.")]
+        [TestCase("<value>true</value> to some condition")]
+        [TestCase("true to some condition, <value>false</value> otherwise.")]
+        public void An_issue_is_reported_for_incorrectly_documented_boolean_parameter_(string comment) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
     /// </summary>
-    /// <param name=""condition"">Some condition</param>
+    /// <param name=""condition"">" + comment + @"</param>
     public void DoSomething(bool condition) { }
 }
 ");
@@ -234,7 +240,9 @@ public class TestMe
         [TestCase(@"<see langword=""true""/> if some condition; otherwise <see langword=""false""/>.")]
         [TestCase(@"<see langword=""true""/> if some condition; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langref=""true""/> if some condition")]
+        [TestCase(@"<b>true</b> if some condition; <b>false</b> otherwise.")]
         [TestCase(@"<c>true</c> if some condition; <c>false</c> otherwise.")]
+        [TestCase(@"<value>true</value> if some condition; <value>false</value> otherwise.")]
         [TestCase(@"Determines whether some condition.")]
         [TestCase(@"Indicates whether some condition.")]
         [TestCase(@"If set to true if some condition.")]

@@ -213,52 +213,60 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_empty_returns_on_non_generic_method()
+        [TestCase("", "TODO")]
+        [TestCase(" Something . ", "something")]
+        [TestCase("Something.", "something")]
+        [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
+        [TestCase("When the stuff is done, True; False else.", "the stuff is done")]
+        [TestCase("In case the stuff is done, True; False else.", "the stuff is done")]
+        public void Code_gets_fixed_for_non_generic_method_(string comment, string fixedPhrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns></returns>
+    /// <returns>" + comment + @"</returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 
 public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// <see langword=""true""/> if TODO; otherwise, <see langword=""false""/>.
+    /// <see langword=""true""/> if " + fixedPhrase + @"; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_empty_returns_on_generic_method()
+        [TestCase("", "TODO")]
+        [TestCase(" Something . ", "something")]
+        [TestCase("Something.", "something")]
+        [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
+        public void Code_gets_fixed_for_generic_method_(string comment, string fixedPhrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Threading.Tasks;
 
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns></returns>
+    /// <returns>" + comment + @"</returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Threading.Tasks;
 
@@ -266,83 +274,27 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>
-    /// A task that will complete with a result of <see langword=""true""/> if TODO, otherwise with a result of <see langword=""false""/>.
+    /// A task that will complete with a result of <see langword=""true""/> if " + fixedPhrase + @", otherwise with a result of <see langword=""false""/>.
     /// </returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_non_generic_method()
-        {
-            const string OriginalCode = @"
-using System;
-
-public class TestMe
-{
-    /// <summary>Does something.</summary>
-    /// <returns> Something . </returns>
-    public bool DoSomething(object o) => throw new NotSupportedException();
-}
-";
-
-            const string FixedCode = @"
-using System;
-
-public class TestMe
-{
-    /// <summary>Does something.</summary>
-    /// <returns>
-    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
-    /// </returns>
-    public bool DoSomething(object o) => throw new NotSupportedException();
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_generic_method()
-        {
-            const string OriginalCode = @"
-using System;
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    /// <summary>Does something.</summary>
-    /// <returns> Something . </returns>
-    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
-}
-";
-
-            const string FixedCode = @"
-using System;
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    /// <summary>Does something.</summary>
-    /// <returns>
-    /// A task that will complete with a result of <see langword=""true""/> if something, otherwise with a result of <see langword=""false""/>.
-    /// </returns>
-    public Task<bool> DoSomething(object o) => throw new NotSupportedException();
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [TestCase(@"<see langword=""true""/> if something; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> if something; otherwise <see langword=""false""/>.")]
         [TestCase(@"<see langword=""true""/> if something, otherwise <see langword=""false""/>.")]
+        [TestCase(@"<see langword=""true""/> if something, otherwise returns <see langword=""false""/>.")]
+        [TestCase(@"<see langword=""true""/> if something, returns otherwise <see langword=""false""/>.")]
         [TestCase(@"true if something. Otherwise false.")]
+        [TestCase(@"<b>true</b> if something. Otherwise <b>false</b>.")]
         [TestCase(@"<c>true</c> if something. Otherwise <c>false</c>.")]
+        [TestCase(@"<c>true</c> if something; otherwise, <c>false</c>.")]
+        [TestCase(@"<code>true</code> if something; otherwise, <code>false</code>.")]
+        [TestCase(@"True if something. False otherwise.")]
         [TestCase(@"True if something, otherwise False.")]
         [TestCase(@"True if something, False otherwise.")]
         [TestCase(@"true if something, false otherwise.")]
@@ -351,9 +303,14 @@ public class TestMe
         [TestCase(@"TRUE: if something, otherwise returns FALSE.")]
         [TestCase(@"Returns True if something, otherwise returns False.")]
         [TestCase(@"Returns True if something, returns otherwise False.")]
-        [TestCase(@"Returns <see langref=""true""/> if something.")]
         [TestCase(@"Returns <see langword=""true""/> if something.")]
+        [TestCase(@"Returns <see langref=""true""/> if something.")]
+        [TestCase(@"Returns <see langref=""true""/> if something, otherwise returns <see langref=""false""/>.")]
         [TestCase(@"true: if something, false: otherwise.")]
+        [TestCase("true: if something,\r\n/// false: otherwise.")]
+        [TestCase("true: if something, else it returns false.")]
+        [TestCase("true if something, else with false.")]
+        [TestCase("true if something else will return with false.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string returnsComment)
         {
             var originalCode = @"
@@ -383,6 +340,145 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_1()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>True if <paramref name=""o""/> contains something different than <paramref name=""o""/>,
+    /// false otherwise.</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if <paramref name=""o""/> contains something different than <paramref name=""o""/>; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_2()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>will return <see langword=""true""/> if subset is found in <paramref name=""superset""/> or if subset
+    /// is empty; <see langword=""false""/> otherwise. </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if subset is found in <paramref name=""superset""/> or if subset
+    /// is empty; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline_comment_on_non_generic_method_variant_3()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// If the specified window true
+    /// XXX,
+    /// YYY,
+    /// ZZZ.
+    /// </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if the specified window 
+    /// XXX,
+    /// YYY,
+    /// ZZZ; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object superset) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiple_references_in_comment_on_non_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns><see langword=""true""/> if the content of <paramref name=""o""/> matches <paramref name=""o""/>; <see langword=""false""/> otherwise.</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if the content of <paramref name=""o""/> matches <paramref name=""o""/>; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
@@ -427,7 +523,9 @@ public class TestMe
         [TestCase(@"<see langword=""false""/> if something; otherwise <see langword=""true""/>.")]
         [TestCase(@"<see langword=""false""/> if something, otherwise <see langword=""true""/>.")]
         [TestCase(@"false if something. Otherwise true.")]
+        [TestCase(@"<b>false</b> if something. Otherwise <b>true</b>.")]
         [TestCase(@"<c>false</c> if something. Otherwise <c>true</c>.")]
+        [TestCase(@"<value>false</value> if something. Otherwise <value>true</value>.")]
         [TestCase(@"False if something, otherwise True.")]
         [TestCase(@"False if something, True otherwise.")]
         [TestCase(@"false if something, true otherwise.")]

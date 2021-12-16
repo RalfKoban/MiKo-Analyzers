@@ -58,11 +58,46 @@ public static class TestMeExtensions
 }
 ");
 
-        [TestCase("Doing", @"Provides a set of <see langword=""static""/> methods for doing")]
-        [TestCase("Contains extensions for", @"Provides a set of <see langword=""static""/> methods for")]
-        [TestCase("Contains extension methods for", @"Provides a set of <see langword=""static""/> methods for")]
-        [TestCase("Provides extensions for", @"Provides a set of <see langword=""static""/> methods for")]
-        [TestCase("Provides extension methods for", @"Provides a set of <see langword=""static""/> methods for")]
+        [TestCase("Contains extension methods for", "")]
+        [TestCase("Contains extension methods to", "")]
+        [TestCase("Contains extensions for", "")]
+        [TestCase("Contains extensions to", "")]
+        [TestCase("Provides extension methods for", "")]
+        [TestCase("Provides extension methods to", "")]
+        [TestCase("Provides extension mehtods for", "")] // typo by intent
+        [TestCase("Provides extension mehtods to", "")] // typo by intent
+        [TestCase("Provides extension-mehtods for", "")] // typo by intent
+        [TestCase("Provides extension-methods for", "")]
+        [TestCase("Provides extensions for", "")]
+        [TestCase("Provides extensions to", "")]
+        [TestCase(@"Extension methods for", @"")]
+        [TestCase(@"Extension methods to", @"")]
+        [TestCase(@"Extension methods used in", @"")]
+        [TestCase(@"Extension mehtods used in", @"")] // typo by intent
+        [TestCase(@"Extension-methods for", @"")]
+        [TestCase(@"Extension-mehtods for", @"")] // typo by intent
+        [TestCase(@"Extensions for", @"")]
+        [TestCase(@"Extensions to", @"")]
+        [TestCase(@"Extensions used in", @"")]
+        [TestCase(@"Offers extension methods for", "")]
+        [TestCase(@"Offers extension methods to", "")]
+        [TestCase(@"Offers extensions for", "")]
+        [TestCase(@"Offers extensions to", "")]
+        [TestCase(@"Offers the extension for", "")]
+        [TestCase(@"Offers the extension to", "")]
+        [TestCase(@"Offers the extension method for", "")]
+        [TestCase(@"Offers the extension method to", "")]
+        [TestCase(@"Static collection of extension methods for", "")]
+        [TestCase(@"Static collection of extension methods to", "")]
+        [TestCase(@"Static collection of extensions for", "")]
+        [TestCase(@"Static collection of extensions to", "")]
+        [TestCase(@"The extension methods for", "")]
+        [TestCase(@"The extension methods to", "")]
+        [TestCase(@"The extensions for", "")]
+        [TestCase(@"The extensions to", "")]
+        [TestCase("Doing", @" doing")]
+        [TestCase(@"Extension methods for <see cref=""String""/>.", @" <see cref=""String""/>.")]
+        [TestCase(@"Extensions for <see cref=""String""/>.", @" <see cref=""String""/>.")]
         public void Code_gets_fixed_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -75,7 +110,7 @@ public static class TestMeExtensions
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", @"Provides a set of <see langword=""static""/> methods for" + fixedCode));
         }
 
         protected override string GetDiagnosticId() => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
@@ -86,8 +121,8 @@ public static class TestMeExtensions
 
         private static IEnumerable<string> ValidPhrases() => new[]
                                                                  {
-                                                                     "Provides a set of <see langword=\"static\"/> methods for ",
-                                                                     "Provides a set of <see langword=\"static\" /> methods for ",
+                                                                     @"Provides a set of <see langword=""static""/> methods for ",
+                                                                     @"Provides a set of <see langword=""static"" /> methods for ",
                                                                  };
     }
 }

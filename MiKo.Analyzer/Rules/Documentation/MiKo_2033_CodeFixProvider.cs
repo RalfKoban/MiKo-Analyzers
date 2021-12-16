@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System.Collections.Generic;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -12,6 +13,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] TaskParts = string.Format(Constants.Comments.StringTaskReturnTypeStartingPhraseTemplate, "|", "|", "contains").Split('|');
         private static readonly string[] StringParts = string.Format(Constants.Comments.StringReturnTypeStartingPhraseTemplate, "|", "contains").Split('|');
+
+        private static readonly string[] TextParts =
+            {
+                "containing",
+                "returning",
+                "that contains",
+                "that returns",
+                "which contains",
+                "which returns",
+            };
+
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
 
         public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
@@ -33,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (IsSeeCref(newComment.Content[3], "string") && newComment.Content[4] is XmlTextSyntax continueText2)
                     {
-                        newComment = ReplaceText(newComment, continueText2, "containing", "that contains");
+                        newComment = ReplaceText(newComment, continueText2, TextParts, "that contains");
                     }
 
                     var first = (XmlTextSyntax)newComment.Content.First();
@@ -57,14 +70,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var contents = comment.Content;
 
-            if (contents.Count > 3)
+            if (contents.Count == 1)
+            {
+                // fix start text
+                contents = PrepareComment(comment).Content;
+            }
+            else if (contents.Count >= 3)
             {
                 // we might have an almost complete string
                 if (contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
                 {
                     if (startText.TextTokens.Any(_ => _.ValueText.TrimStart() == commentStart))
                     {
-                        var newComment = ReplaceText(comment, continueText, "containing", "that contains");
+                        var newComment = ReplaceText(comment, continueText, TextParts, "that contains");
 
                         if (ReferenceEquals(comment, newComment) is false)
                         {
@@ -76,6 +94,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // we have to replace the XmlText if it is part of the first item of context
             return Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());
+        }
+
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+
+        private static IEnumerable<string> CreateReplacementMapKeys()
+        {
+            var starts = new[] { "a", "A" };
+            var middles = new[] { "string", "String" };
+
+            return from start in starts
+                   from middle in middles
+                   from text in TextParts
+                   select string.Concat(start, " ", middle, " ", text);
         }
     }
 }

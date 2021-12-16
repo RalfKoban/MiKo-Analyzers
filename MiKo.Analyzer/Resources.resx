@@ -974,7 +974,7 @@ Example:
    'if (deviceIsOnline) DoSomething();' is more fluent to read.</value>
   </data>
   <data name="MiKo_1071_MessageFormat" xml:space="preserve">
-    <value>Rephrase question as statement</value>
+    <value>Formulate question as statement</value>
   </data>
   <data name="MiKo_1071_Title" xml:space="preserve">
     <value>Local boolean variables should be named as statements and not as questions.</value>
@@ -991,7 +991,7 @@ Example:
    'if (DeviceIsOnline) DoSomething();' is more fluent to read.</value>
   </data>
   <data name="MiKo_1072_MessageFormat" xml:space="preserve">
-    <value>Rephrase question as statement</value>
+    <value>Formulate question as statement</value>
   </data>
   <data name="MiKo_1072_Title" xml:space="preserve">
     <value>Boolean properties or methods should be named as statements and not as questions.</value>
@@ -1008,7 +1008,7 @@ Example:
    'if (DeviceIsOnline) DoSomething();' is more fluent to read.</value>
   </data>
   <data name="MiKo_1073_MessageFormat" xml:space="preserve">
-    <value>Rephrase question as statement</value>
+    <value>Formulate question as statement</value>
   </data>
   <data name="MiKo_1073_Title" xml:space="preserve">
     <value>Boolean fields should be named as statements and not as questions.</value>
@@ -2107,7 +2107,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Enum types are no boolean values. Hence the documentation should not contain any phrase that would handle enums as if they were booleans (such as it would be the case in phrase 'indicates whether').</value>
   </data>
   <data name="MiKo_2071_MessageFormat" xml:space="preserve">
-    <value>Do not use phrase '{1}' in &lt;summary&gt;</value>
+    <value>Do not use '{1}' in &lt;summary&gt;</value>
   </data>
   <data name="MiKo_2071_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.</value>

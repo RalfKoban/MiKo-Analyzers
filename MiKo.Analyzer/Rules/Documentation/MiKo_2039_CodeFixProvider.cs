@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,13 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Parts = string.Format(Constants.Comments.ExtensionMethodClassStartingPhraseTemplate, '|').Split('|');
 
-        private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
-                                                                                {
-                                                                                    { "Contains extensions for", string.Empty },
-                                                                                    { "Contains extension methods for", string.Empty },
-                                                                                    { "Provides extensions for", string.Empty },
-                                                                                    { "Provides extension methods for", string.Empty },
-                                                                                };
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
 
         public override string FixableDiagnosticId => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
 
@@ -32,5 +28,53 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+
+        private static IEnumerable<string> CreateReplacementMapKeys()
+        {
+            var starts = new[]
+                             {
+                                 string.Empty,
+                                 "Contains",
+                                 "Offers",
+                                 "Offers the",
+                                 "Provides",
+                                 "Static collection of",
+                                 "The",
+                             };
+
+            var middles = new[]
+                             {
+                                 "extension",
+                                 "extensions",
+                                 "extension method",
+                                 "extension methods",
+                                 "extension-method",
+                                 "extension-methods",
+                                 "extension mehtod", // typo by intent
+                                 "extension-mehtod", // typo by intent
+                                 "extension mehtods", // typo by intent
+                                 "extension-mehtods", // typo by intent
+                             };
+
+            var ends = new[]
+                           {
+                               "for",
+                               "to",
+                               "used in",
+                           };
+
+            foreach (var start in starts)
+            {
+                foreach (var middle in middles)
+                {
+                    foreach (var end in ends)
+                    {
+                        yield return start.IsNullOrWhiteSpace()
+                                         ? string.Concat(middle.ToUpperCaseAt(0), " ", end)
+                                         : string.Concat(start, " ", middle, " ", end);
+                    }
+                }
+            }
+        }
     }
 }

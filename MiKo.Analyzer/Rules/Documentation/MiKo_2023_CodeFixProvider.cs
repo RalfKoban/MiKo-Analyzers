@@ -55,12 +55,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
         {
-            // Fix <see langword> or <c> by replacing them with nothing
-            var nodes = Enumerable.Empty<SyntaxNode>()
-                                  .Concat(comment.Content.Where(_ => _.IsSeeLangwordBool()))
-                                  .Concat(comment.Content.Where(_ => _.IsCBool()));
-
-            var result = comment.Without(nodes);
+            // Fix <see langword>, <b> or <c> by replacing them with nothing
+            var result = RemoveBooleansTags(comment);
 
             // convert first word in infinite verb (if applicable)
             return MakeFirstWordInfiniteVerb(result);
