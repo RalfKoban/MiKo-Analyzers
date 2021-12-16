@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // re-wrap with <para> tag
                     var paraTag = element.WithContent(replacedComment.Content.WithLeadingXmlComment().WithTrailingXmlComment());
 
-                    return replacedComment.WithContent(new SyntaxList<XmlNodeSyntax>(paraTag));
+                    return replacedComment.WithContent(paraTag);
                 }
                 else
                 {

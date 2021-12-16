@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
             var parameterName = GetParameterName(parameterCommentSyntax);
 
-            var parameters = GetParameters(parameterCommentSyntax);
+            var parameters = parameterCommentSyntax.GetParameters();
 
             for (var index = 0; index < parameters.Count; index++)
             {
@@ -50,13 +50,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected virtual IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>();
-
-        protected virtual SeparatedSyntaxList<ParameterSyntax> GetParameters(XmlElementSyntax syntax)
-        {
-            var method = syntax.Ancestors().OfType<MethodDeclarationSyntax>().First();
-
-            return method.ParameterList.Parameters;
-        }
 
         protected abstract DocumentationCommentTriviaSyntax Comment(Document document, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic);
 

@@ -508,6 +508,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlElement(Constants.XmlTag.Para, nodes);
 
+        protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter)
+        {
+            var name = SyntaxFactory.XmlNameAttribute(parameter.GetName());
+
+            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
+        }
+
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string[] comments) => ParameterComment(parameter, comments[0]);
 
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string comment) => Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comment);

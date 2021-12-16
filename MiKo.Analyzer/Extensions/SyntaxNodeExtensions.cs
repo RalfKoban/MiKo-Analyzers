@@ -223,6 +223,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
 
+        internal static SeparatedSyntaxList<ParameterSyntax> GetParameters(this XmlElementSyntax value)
+        {
+            var method = value.Ancestors().OfType<BaseMethodDeclarationSyntax>().First();
+
+            return method.ParameterList.Parameters;
+        }
+
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)
         {
             var type = value.Expression.GetTypeSymbol(semanticModel);
@@ -348,20 +355,36 @@ namespace MiKoSolutions.Analyzers
                 && symbol.IsCommand();
         }
 
-        internal static bool IsException(this TypeSyntax value)
-        {
-            switch (value.ToString())
-            {
-                case nameof(Exception):
-                case nameof(System) + "." + nameof(Exception):
-                    return true;
+        internal static bool IsException(this TypeSyntax value) => value.IsException<Exception>();
 
-                default:
-                    return false;
-            }
+        internal static bool IsException<T>(this TypeSyntax value) where T : Exception
+        {
+            var exceptionType = typeof(T);
+            var s = value.ToString();
+
+            return s == exceptionType.Name || s == exceptionType.FullName;
         }
 
         internal static bool IsException(this XmlElementSyntax value) => value.GetName() == Constants.XmlTag.Exception;
+
+        internal static bool IsExceptionCommentFor<T>(this XmlElementSyntax value) where T : Exception
+        {
+            var attribute = value?.StartTag.Attributes.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
+            if (attribute != null)
+            {
+                if (attribute.Cref is NameMemberCrefSyntax n && n.Name.IsException<T>())
+                {
+                    return true;
+                }
+
+                if (attribute.Cref is QualifiedCrefSyntax q && q.Member is NameMemberCrefSyntax nn && nn.Name.IsException<T>())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
         {
@@ -686,12 +709,40 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
 
-        internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
-
         internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivias) where T : SyntaxNode
         {
             return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivias));
         }
+
+        internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax
+        {
+            switch (value)
+            {
+                case XmlElementSyntax xes:
+                {
+                    var newAttributes = xes.StartTag.Attributes.Add(attribute);
+                    var newStartTag = xes.StartTag.WithAttributes(newAttributes);
+
+                    return xes.ReplaceNode(xes.StartTag, newStartTag) as T;
+                }
+
+                case XmlEmptyElementSyntax xees:
+                {
+                    var newAttributes = xees.Attributes.Add(attribute);
+
+                    return xees.WithAttributes(newAttributes) as T;
+                }
+
+                default:
+                    return value;
+            }
+        }
+
+        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+
+        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+
+        internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         internal static T WithFirstLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
         {

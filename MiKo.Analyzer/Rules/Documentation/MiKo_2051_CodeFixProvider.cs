@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -42,6 +43,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var exceptionComment in exceptionComments)
             {
+                if (exceptionComment.IsExceptionCommentFor<ArgumentNullException>())
+                {
+                    var parameters = exceptionComment.GetParameters();
+                    if (parameters.Count == 1)
+                    {
+                        // seems like we have only a single parameter, so place it on a single line
+                        var newComment = exceptionComment.WithContent(ParamRef(parameters[0]).WithLeadingXmlComment(), XmlText(" is "), SeeLangword_Null(), XmlText(".").WithTrailingXmlComment());
+
+                        return syntax.ReplaceNode(exceptionComment, newComment);
+                    }
+                }
+
                 if (exceptionComment.Content.First() is XmlTextSyntax text)
                 {
                     // TODO: RKN Put this into a lookup

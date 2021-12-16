@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ExceptionTypes =
             {
-                typeof(ArgumentNullException).Name,
+                typeof(ArgumentException).Name,
                 typeof(InvalidOperationException).Name,
                 typeof(NotSupportedException).Name,
                 typeof(Exception).Name,
@@ -127,6 +127,49 @@ public class TestMe
     /// </summary>
     /// <exception cref=""" + exceptionType + @""">
     /// " + fixedPhrase + @"something.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase(nameof(ArgumentNullException), "If null")]
+        [TestCase(nameof(ArgumentNullException), @"If <paramref name=""o""/> is null")]
+        [TestCase(nameof(ArgumentNullException), @"If <paramref name=""o""/> is <see langword=""null""/>")]
+        [TestCase(nameof(ArgumentNullException), @"If the <paramref name=""o""/> is <see langword=""null""/>.")]
+        [TestCase("System." + nameof(ArgumentNullException), "If null")]
+        [TestCase("System." + nameof(ArgumentNullException), @"If <paramref name=""o""/> is null")]
+        [TestCase("System." + nameof(ArgumentNullException), @"If <paramref name=""o""/> is <see langword=""null""/>")]
+        [TestCase("System." + nameof(ArgumentNullException), @"If the <paramref name=""o""/> is <see langword=""null""/>.")]
+        public void Code_gets_fixed_for_single_ArgumentNullException_(string exceptionType, string text)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// " + text + @"
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// <paramref name=""o""/> is <see langword=""null""/>.
     /// </exception>
     public void DoSomething(object o) { }
 }
