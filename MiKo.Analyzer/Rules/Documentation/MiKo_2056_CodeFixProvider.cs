@@ -34,37 +34,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax FixExceptionComment(Document document, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var attribute in exception.GetAttributes<XmlCrefAttributeSyntax>())
+            if (exception.IsExceptionCommentFor<ObjectDisposedException>())
             {
-                switch (attribute.Cref)
-                {
-                    case QualifiedCrefSyntax q when IsObjectDisposedException(q.ToString()):
-                    case NameMemberCrefSyntax m when IsObjectDisposedException(m.ToString()):
-                    {
-                        var symbol = GetSymbol(document, syntax);
-                        var phrase = MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.GetEndingPhrase(symbol);
+                var symbol = GetSymbol(document, syntax);
+                var phrase = MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.GetEndingPhrase(symbol);
 
-                        var exceptionComment = CommentEndingWith(exception, phrase);
+                var exceptionComment = CommentEndingWith(exception, phrase);
 
-                        return comment.ReplaceNode(exception, exceptionComment);
-                    }
-                }
+                return comment.ReplaceNode(exception, exceptionComment);
             }
 
             return null;
-        }
-
-        private static bool IsObjectDisposedException(string syntax)
-        {
-            switch (syntax)
-            {
-                case nameof(ObjectDisposedException):
-                case nameof(System) + "." + nameof(ObjectDisposedException):
-                    return true;
-
-                default:
-                    return false;
-            }
         }
     }
 }
