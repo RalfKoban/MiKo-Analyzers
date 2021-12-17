@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                if (index == 1 && content[0].WithoutXmlCommentExterior().IsNullOrWhiteSpace())
+                if (index == 1 && content[0].IsWhiteSpaceOnlyText())
                 {
                     // seems that the non-text element is the first element, so we should remove the empty text element before
                     content = content.RemoveAt(0);
@@ -548,8 +548,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
-        protected static bool IsWhiteSpaceOnlyText(XmlTextSyntax text) => text.GetTextWithoutTrivia().IsNullOrWhiteSpace();
-
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
         {
             if (syntax.Content.FirstOrDefault() is XmlTextSyntax text)
@@ -638,9 +636,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return -1;
             }
 
-            var onlyWhitespaceText = content[0] is XmlTextSyntax t && IsWhiteSpaceOnlyText(t);
-
-            return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
+            return content[0].IsWhiteSpaceOnlyText() && content.Count > 1
+                       ? 1
+                       : 0;
         }
 
         private static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)

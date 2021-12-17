@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -111,8 +112,47 @@ public class TestMe : Base
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException""></exception>
+    /// <exception cref=""ArgumentNullException""></exception>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException""></exception>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2057_ObjectDisposedExceptionWrongPlacedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2057_ObjectDisposedExceptionWrongPlacedAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2057_CodeFixProvider();
     }
 }

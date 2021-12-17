@@ -5748,6 +5748,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove exception comment.
+        /// </summary>
+        public static string MiKo_2057_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2057_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Types that do not inherit from &apos;IDisposable&apos; cannot be disposed. Hence they shall not throw an ObjectDisposedException..
         /// </summary>
         public static string MiKo_2057_Description {

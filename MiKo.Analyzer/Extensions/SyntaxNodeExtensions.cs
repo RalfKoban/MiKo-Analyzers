@@ -511,6 +511,10 @@ namespace MiKoSolutions.Analyzers
             return value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
         }
 
+        internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
+
+        internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value) => value.GetTextWithoutTrivia().IsNullOrWhiteSpace();
+
         internal static bool IsParameter(this IdentifierNameSyntax node, SemanticModel semanticModel) => node.EnclosingMethodHasParameter(node.GetName(), semanticModel);
 
         internal static bool IsPara(this SyntaxNode value) => value.IsXmlTag(Constants.XmlTag.Para);
