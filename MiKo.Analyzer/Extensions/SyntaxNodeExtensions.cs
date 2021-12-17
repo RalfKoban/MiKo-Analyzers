@@ -281,6 +281,47 @@ namespace MiKoSolutions.Analyzers
             return typeInfo.Type;
         }
 
+        internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode syntaxNode)
+        {
+            return syntaxNode?.DescendantNodes(__ => true, true).OfType<DocumentationCommentTriviaSyntax>().FirstOrDefault();
+        }
+
+        internal static string GetTextWithoutTrivia(this XmlTextSyntax text)
+        {
+            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim();
+        }
+
+        internal static string GetTextWithoutTrivia(this XmlElementSyntax element)
+        {
+            return element.Content.ToString().WithoutXmlCommentExterior();
+        }
+
+        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element)
+        {
+            return element.WithoutXmlCommentExterior();
+        }
+
+        internal static IEnumerable<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Exception);
+
+        /// <summary>
+        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// </summary>
+        /// <param name="syntax">
+        /// The documentation syntax.
+        /// </param>
+        /// <param name="startTag">
+        /// The tag of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// </returns>
+        internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode syntax, string startTag)
+        {
+            // we have to delve into the trivias to find the XML syntax nodes
+            return syntax.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
+                         .Where(_ => _.GetName() == startTag);
+        }
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
         internal static TRoot InsertNodeAfter<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
@@ -357,9 +398,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsException(this TypeSyntax value) => value.IsException<Exception>();
 
-        internal static bool IsException<T>(this TypeSyntax value) where T : Exception
+        internal static bool IsException<T>(this TypeSyntax value) where T : Exception => value.IsException(typeof(T));
+
+        internal static bool IsException(this TypeSyntax value, Type exceptionType)
         {
-            var exceptionType = typeof(T);
             var s = value.ToString();
 
             return s == exceptionType.Name || s == exceptionType.FullName;
@@ -367,17 +409,19 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsException(this XmlElementSyntax value) => value.GetName() == Constants.XmlTag.Exception;
 
-        internal static bool IsExceptionCommentFor<T>(this XmlElementSyntax value) where T : Exception
+        internal static bool IsExceptionCommentFor<T>(this XmlElementSyntax value) where T : Exception => IsExceptionComment(value, typeof(T));
+
+        internal static bool IsExceptionComment(this XmlElementSyntax value, Type exceptionType)
         {
             var attribute = value?.StartTag.Attributes.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
             if (attribute != null)
             {
-                if (attribute.Cref is NameMemberCrefSyntax n && n.Name.IsException<T>())
+                if (attribute.Cref is NameMemberCrefSyntax n && n.Name.IsException(exceptionType))
                 {
                     return true;
                 }
 
-                if (attribute.Cref is QualifiedCrefSyntax q && q.Member is NameMemberCrefSyntax nn && nn.Name.IsException<T>())
+                if (attribute.Cref is QualifiedCrefSyntax q && q.Member is NameMemberCrefSyntax nn && nn.Name.IsException(exceptionType))
                 {
                     return true;
                 }
@@ -995,7 +1039,9 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
-        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => value.ToString().Replace("///", string.Empty).Trim();
+        internal static string WithoutXmlCommentExterior(this string value) => value.Without("///").Trim();
+
+        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => value.ToString().WithoutXmlCommentExterior();
 
         internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, params string[] startTexts) => value.Content.WithoutStartText(startTexts);
 

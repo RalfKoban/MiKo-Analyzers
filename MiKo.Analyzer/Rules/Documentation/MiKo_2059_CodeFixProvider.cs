@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var exceptionComments = GetExceptionXmls(syntax);
+            var exceptionComments = syntax.GetExceptionXmls();
 
             var newNodes = new Dictionary<string, XmlElementSyntax>();
             var obsoleteNodes = new List<SyntaxNode>();
@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         obsoleteNodes.Add(previousSibling);
                     }
 
-                    newContent = newContent.Add(CreateParaOr().WithLeadingXmlComment())
+                    newContent = newContent.Add(ParaOr().WithLeadingXmlComment())
                                            .AddRange(duplicate.Content.WithLeadingXmlComment());
                 }
 
@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // find and replace the nodes with the new fixed ones
             var finalContent = commentWithoutObsoleteNodes.ReplaceNodes(
-                                                                        GetExceptionXmls(commentWithoutObsoleteNodes),
+                                                                        commentWithoutObsoleteNodes.GetExceptionXmls(),
                                                                         (original, rewritten) =>
                                                                             {
                                                                                 var exceptionName = GetReferencedExceptionName(original);
@@ -78,8 +78,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return finalContent;
         }
-
-        private static XmlElementSyntax CreateParaOr() => SyntaxFactory.XmlParaElement(XmlText("-or-"));
 
         private static string GetReferencedExceptionName(XmlElementSyntax e) => e.GetAttributes<XmlCrefAttributeSyntax>().Select(__ => __.Cref.ToString()).FirstOrDefault();
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -17,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             m_exceptionPhrases = phrases;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
+        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
             switch (symbol)
             {
@@ -27,10 +28,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, string exceptionComment)
+        protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
+            // get rid of the para tags as we are not interested into them
+            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTags();
+
             // remove -or- separators and split comment into parts to inspect individually
-            var parts = exceptionComment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
+            var parts = comment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
 
             // create default proposal for parameter names
             var proposal = parameters
@@ -44,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var results = new List<Diagnostic>(1);
 
-            if (exceptionComment.ContainsAny(allParameterIndicatorPhrases, Comparison))
+            if (comment.ContainsAny(allParameterIndicatorPhrases, Comparison))
             {
                 foreach (var parameter in parameters)
                 {
@@ -56,12 +60,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      .Select(_ => _.Trim())
                                      .Where(_ => _.StartsWithAny(phrases, Comparison) is false)
                                      .Where(_ => _.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
-                                     .Select(_ => ExceptionIssue(owningSymbol, proposal)));
+                                     .Select(_ => ExceptionIssue(exceptionComment, proposal)));
                 }
             }
             else
             {
-                results.Add(ExceptionIssue(owningSymbol, proposal));
+                results.Add(ExceptionIssue(exceptionComment, proposal));
             }
 
             return results;
@@ -69,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IReadOnlyCollection<IParameterSymbol> GetMatchingParameters(IReadOnlyCollection<IParameterSymbol> parameterSymbols) => parameterSymbols;
 
-        private IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IMethodSymbol methodSymbol, string exceptionComment)
+        private IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IMethodSymbol methodSymbol, XmlElementSyntax exceptionComment)
         {
             if (methodSymbol is null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -18,12 +19,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IReadOnlyCollection<IParameterSymbol> GetMatchingParameters(IReadOnlyCollection<IParameterSymbol> parameterSymbols) => parameterSymbols.Where(_ => _.Type.IsValueType && _.Type.IsNullable() is false).ToList();
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, string exceptionComment)
+        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
+            var comment = exceptionComment.GetTextWithoutTrivia();
+
             var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
 
             return parameterIndicators
-                   .Where(_ => exceptionComment.Contains(_.Value))
+                   .Where(_ => comment.Contains(_.Value))
                    .Select(_ => Issue(owningSymbol, _.Key.Type.Name, _.Value + Constants.Comments.XmlElementEndingTag))
                    .ToList();
         }

@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "Gets thrown when the ",
                 "Gets thrown when ",
                 "If the ",
+                "If ",
                 "In case the ",
                 "In case ",
                 "if the ",
@@ -41,73 +42,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var exceptionComments = GetExceptionXmls(syntax);
+            var updatedSyntax = syntax.ReplaceNodes(
+                                                    syntax.GetExceptionXmls(),
+                                                    (original, rewritten)
+                                                        =>
+                                                        {
+                                                            if (original.IsExceptionCommentFor<ArgumentNullException>())
+                                                            {
+                                                                return GetFixedExceptionCommentForArgumentNullException(original);
+                                                            }
 
-            foreach (var exceptionComment in exceptionComments)
-            {
-                if (exceptionComment.IsExceptionCommentFor<ArgumentNullException>())
-                {
-                    var parameters = exceptionComment.GetParameters();
-                    switch (parameters.Count)
-                    {
-                        case 0:
-                            break; // TODO RKN: cannot fix as there seems to be no parameter
+                                                            if (original.Content.First() is XmlTextSyntax text)
+                                                            {
+                                                                return ReplaceText(original, text, Phrases, string.Empty);
+                                                            }
 
-                        case 1:
-                        {
-                            // seems like we have only a single parameter, so place it on a single line
-                            var newComment = exceptionComment.WithContent(ParameterIsNull(parameters[0]));
+                                                            return rewritten;
+                                                        });
 
-                            return syntax.ReplaceNode(exceptionComment, newComment);
-                        }
-
-                        default:
-                        {
-                            // more than 1 parameter, so pick the referenced ones
-                            var comment = exceptionComment.ToString();
-                            var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_))).ToArray();
-
-                            var newComment = exceptionComment.WithContent(ParameterIsNull(ps));
-
-                            return syntax.ReplaceNode(exceptionComment, newComment);
-                        }
-                    }
-                }
-
-                if (exceptionComment.Content.First() is XmlTextSyntax text)
-                {
-                    // TODO: RKN Put this into a lookup
-                    return ReplaceText(syntax, text, Phrases, string.Empty);
-                }
-            }
-
-            return syntax;
-        }
-
-        private static IEnumerable<string> GetParameterReferences(ParameterSyntax p)
-        {
-            var name = p.GetName();
-
-            yield return " " + name + " ";
-            yield return "\"" + name + "\"";
-        }
-
-        private static IEnumerable<XmlNodeSyntax> ParameterIsNull(params ParameterSyntax[] parameters)
-        {
-            for (var i = 0; i < parameters.Length; i++)
-            {
-                var parameter = parameters[i];
-
-                yield return ParamRef(parameter).WithLeadingXmlComment();
-                yield return XmlText(" is ");
-                yield return SeeLangword_Null();
-                yield return XmlText(".").WithTrailingXmlComment();
-
-                if (i < parameters.Length - 1)
-                {
-                    yield return Para("-or-");
-                }
-            }
+            return updatedSyntax;
         }
     }
 }

@@ -231,6 +231,8 @@ namespace MiKoSolutions.Analyzers
                                                                                         .Select(_ => _.GetEnclosing<T>())
                                                                                         .FirstOrDefault();
 
+        internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax();
+
         internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?

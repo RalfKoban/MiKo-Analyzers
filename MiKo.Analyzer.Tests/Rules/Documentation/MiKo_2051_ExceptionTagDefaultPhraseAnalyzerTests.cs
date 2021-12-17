@@ -217,7 +217,49 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_ArgumentNullException_and_3_parameters_but_only_2_referenced_ones()
+        public void Code_gets_fixed_for_ArgumentNullException_and_2_parameters_but_only_1_referenced_one()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    /// If <paramref name=""o1""/> is no item
+    /// </exception>
+    /// <exception cref=""ArgumentNullException"">
+    /// If <paramref name=""o2""/> is null
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    /// <paramref name=""o1""/> is no item
+    /// </exception>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_3_parameters_but_only_2_referenced_ones_variant_1()
         {
             const string OriginalCode = @"
 using System;
@@ -229,6 +271,44 @@ public class TestMe
     /// </summary>
     /// <exception cref=""ArgumentNullException"">
     /// If <paramref name=""o1""/> or <paramref name=""o2""/> are null.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o1""/> is <see langword=""null""/>.
+    /// <para>-or-</para>
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_3_parameters_but_only_2_referenced_ones_variant_2()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    ///     If o1 or o2 are null.
     /// </exception>
     public void DoSomething(object o1, object o2, object o3) { }
 }

@@ -50,8 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case MethodDeclarationSyntax _:
                     case PropertyDeclarationSyntax _:
                     {
-                        var syntax = GetXmlSyntax(Constants.XmlTag.Returns, syntaxNode).FirstOrDefault()
-                                  ?? GetXmlSyntax(Constants.XmlTag.Value, syntaxNode).FirstOrDefault();
+                        var syntax = syntaxNode.GetXmlSyntax(Constants.XmlTag.Returns).FirstOrDefault()
+                                  ?? syntaxNode.GetXmlSyntax(Constants.XmlTag.Value).FirstOrDefault();
 
                         return syntax;
                     }
