@@ -11,8 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
         {
-            var parameters = exceptionComment.GetParameters();
-            switch (parameters.Count)
+            var parameters = exceptionComment.GetParameterNames();
+            switch (parameters.Length)
             {
                 case 0:
                     return exceptionComment; // TODO RKN: cannot fix as there seems to be no parameter
@@ -44,15 +44,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(Document document, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment) => null;
 
-        private static IEnumerable<string> GetParameterReferences(ParameterSyntax p)
+        private static IEnumerable<string> GetParameterReferences(string parameterName)
         {
-            var name = p.GetName();
-
-            yield return " " + name + " ";
-            yield return "\"" + name + "\"";
+            yield return " " + parameterName + " ";
+            yield return "\"" + parameterName + "\"";
         }
 
-        private static IEnumerable<XmlNodeSyntax> ParameterIsNull(params ParameterSyntax[] parameters)
+        private static IEnumerable<XmlNodeSyntax> ParameterIsNull(params string[] parameters)
         {
             for (var i = 0; i < parameters.Length; i++)
             {

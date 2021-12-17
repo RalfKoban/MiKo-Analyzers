@@ -223,11 +223,43 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
 
-        internal static SeparatedSyntaxList<ParameterSyntax> GetParameters(this XmlElementSyntax value)
+        internal static ParameterSyntax[] GetParameters(this XmlElementSyntax value)
         {
-            var method = value.Ancestors().OfType<BaseMethodDeclarationSyntax>().First();
+            foreach (var ancestor in value.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case BaseMethodDeclarationSyntax method:
+                        return method.ParameterList.Parameters.ToArray();
 
-            return method.ParameterList.Parameters;
+                    case IndexerDeclarationSyntax indexer:
+                        return indexer.ParameterList.Parameters.ToArray();
+                }
+            }
+
+            return Array.Empty<ParameterSyntax>();
+        }
+
+        internal static string[] GetParameterNames(this XmlElementSyntax value)
+        {
+            foreach (var ancestor in value.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case BaseMethodDeclarationSyntax method:
+                        return method.ParameterList.Parameters.Select(_ => _.GetName()).ToArray();
+
+                    case IndexerDeclarationSyntax indexer:
+                        return indexer.ParameterList.Parameters.Select(_ => _.GetName()).ToArray();
+
+                    case BasePropertyDeclarationSyntax property:
+                        return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
+                                   ? new[] { "value" }
+                                   : Array.Empty<string>();
+                }
+            }
+
+            return Array.Empty<string>();
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)

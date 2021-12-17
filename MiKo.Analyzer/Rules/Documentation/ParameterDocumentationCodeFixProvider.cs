@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameters = parameterCommentSyntax.GetParameters();
 
-            for (var index = 0; index < parameters.Count; index++)
+            for (var index = 0; index < parameters.Length; index++)
             {
                 var parameter = parameters[index];
                 if (parameter.GetName() == parameterName)

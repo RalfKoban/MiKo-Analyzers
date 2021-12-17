@@ -5591,6 +5591,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix exception comment.
+        /// </summary>
+        public static string MiKo_2052_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2052_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of an ArgumentNullException being thrown should be a specific phrase..
         /// </summary>
         public static string MiKo_2052_Description {

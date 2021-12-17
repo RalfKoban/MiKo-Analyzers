@@ -2005,6 +2005,9 @@ Or with: '{3}'</value>
   <data name="MiKo_2051_Title" xml:space="preserve">
     <value>Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').</value>
   </data>
+  <data name="MiKo_2052_CodeFixTitle" xml:space="preserve">
+    <value>Fix exception comment</value>
+  </data>
   <data name="MiKo_2052_Description" xml:space="preserve">
     <value>The documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
   </data>

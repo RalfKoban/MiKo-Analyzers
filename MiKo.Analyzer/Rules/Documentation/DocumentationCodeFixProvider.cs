@@ -491,9 +491,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
 
-        protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter)
+        protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter) => ParamRef(parameter.GetName());
+
+        protected static XmlEmptyElementSyntax ParamRef(string parameterName)
         {
-            var name = SyntaxFactory.XmlNameAttribute(parameter.GetName());
+            var name = SyntaxFactory.XmlNameAttribute(parameterName);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
         }
