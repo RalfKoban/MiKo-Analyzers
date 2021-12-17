@@ -123,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var contents = preparedComment.Content;
 
-            if (contents.Count > 1 && IsSeeCref(contents[1], "byte") && contents[0] is XmlTextSyntax startText && IsWhiteSpaceOnlyText(startText))
+            if (contents.Count > 1 && IsSeeCref(contents[1], "byte") && contents[0].IsWhiteSpaceOnlyText())
             {
                 // inspect the continue text and - if necessary - clean it up
                 if (contents.Count > 2 && contents[2] is XmlTextSyntax continueText)

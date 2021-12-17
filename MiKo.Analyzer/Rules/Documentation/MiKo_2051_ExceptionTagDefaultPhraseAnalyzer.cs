@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,19 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
+        protected override IEnumerable<XmlElementSyntax> GetExceptionComments(DocumentationCommentTriviaSyntax documentation) => documentation.GetExceptionXmls();
+
+        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
-            if (commentXml.IsNullOrWhiteSpace())
+            var comment = exceptionComment.GetTextWithoutTrivia();
+
+            if (comment.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase))
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield return Issue(symbol.Name, exceptionComment);
             }
-
-            var results = CommentExtensions.GetExceptionComments(commentXml)
-                          .Where(_ => _.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase))
-                          .Select(_ => Issue(symbol))
-                          .ToList();
-
-            return results;
         }
     }
 }

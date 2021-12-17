@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ExceptionTypes =
             {
-                typeof(ArgumentNullException).Name,
+                typeof(ArgumentException).Name,
                 typeof(InvalidOperationException).Name,
                 typeof(NotSupportedException).Name,
                 typeof(Exception).Name,
@@ -81,25 +81,25 @@ public class TestMe
 }
 ");
 
-        [TestCase("Exception", "if the ", "")]
-        [TestCase("Exception", "If the ", "")]
-        [TestCase("Exception", @"Gets thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"in case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"In case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"In case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Is thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Thrown if any error ", @"any error ")]
-        [TestCase("Exception", @"Thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Throws if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase("Exception", @"Throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), "if the ", "")]
+        [TestCase(nameof(Exception), "If the ", "")]
+        [TestCase(nameof(Exception), @"Gets thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"in case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"In case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"In case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Is thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Thrown if any error ", @"any error ")]
+        [TestCase(nameof(Exception), @"Thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Throws if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         public void Code_gets_fixed_for_(string exceptionType, string startingPhrase, string fixedPhrase)
         {
             var originalCode = @"
@@ -133,6 +133,284 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase(nameof(ObjectDisposedException), "If the ")]
+        [TestCase(nameof(ObjectDisposedException), @"Gets thrown when the")]
+        [TestCase(nameof(ObjectDisposedException), @"In case the")]
+        [TestCase(nameof(ObjectDisposedException), @"Is thrown when the")]
+        [TestCase(nameof(ObjectDisposedException), @"Thrown if the")]
+        [TestCase(nameof(ObjectDisposedException), @"Thrown when the")]
+        [TestCase(nameof(ObjectDisposedException), @"Throws if the")]
+        [TestCase(nameof(ObjectDisposedException), @"Throws when the")]
+        public void Code_gets_fixed_for_ObjectDisposedException_(string exceptionType, string startingPhrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// " + startingPhrase + @"something.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// The current instance has been disposed.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase(nameof(ArgumentNullException), "If null")]
+        [TestCase(nameof(ArgumentNullException), @"If <paramref name=""o""/> is null")]
+        [TestCase(nameof(ArgumentNullException), @"If <paramref name=""o""/> is <see langword=""null""/>")]
+        [TestCase(nameof(ArgumentNullException), @"If the <paramref name=""o""/> is <see langword=""null""/>.")]
+        [TestCase("System." + nameof(ArgumentNullException), "If null")]
+        [TestCase("System." + nameof(ArgumentNullException), @"If <paramref name=""o""/> is null")]
+        [TestCase("System." + nameof(ArgumentNullException), @"If <paramref name=""o""/> is <see langword=""null""/>")]
+        [TestCase("System." + nameof(ArgumentNullException), @"If the <paramref name=""o""/> is <see langword=""null""/>.")]
+        public void Code_gets_fixed_for_ArgumentNullException_and_single_parameter_(string exceptionType, string text)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// " + text + @"
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""" + exceptionType + @""">
+    /// <paramref name=""o""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_2_referenced_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// If <paramref name=""o1""/> or <paramref name=""o2""/> are null.
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o1""/> is <see langword=""null""/>.
+    /// <para>-or-</para>
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_2_parameters_but_only_1_referenced_one()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    /// If <paramref name=""o1""/> is no item
+    /// </exception>
+    /// <exception cref=""ArgumentNullException"">
+    /// If <paramref name=""o2""/> is null
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    /// <paramref name=""o1""/> is no item
+    /// </exception>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_3_parameters_but_only_2_referenced_ones_variant_1()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// If <paramref name=""o1""/> or <paramref name=""o2""/> are null.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o1""/> is <see langword=""null""/>.
+    /// <para>-or-</para>
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentNullException_and_3_parameters_but_only_2_referenced_ones_variant_2()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    ///     If o1 or o2 are null.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <paramref name=""o1""/> is <see langword=""null""/>.
+    /// <para>-or-</para>
+    /// <paramref name=""o2""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(object o1, object o2, object o3) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_indexer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    ///     If key is -1.
+    /// </exception>
+    public object this[int key] { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    ///     key is -1.
+    /// </exception>
+    public object this[int key] { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2051_ExceptionTagDefaultPhraseAnalyzer.Id;

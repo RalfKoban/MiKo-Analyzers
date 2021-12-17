@@ -17,13 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ConstructorDeclarationSyntax>();
 
-        protected override SeparatedSyntaxList<ParameterSyntax> GetParameters(XmlElementSyntax syntax)
-        {
-            var method = syntax.Ancestors().OfType<ConstructorDeclarationSyntax>().First();
-
-            return method.ParameterList.Parameters;
-        }
-
         protected override DocumentationCommentTriviaSyntax Comment(Document document, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic) => comment; // TODO RKN: fix
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)

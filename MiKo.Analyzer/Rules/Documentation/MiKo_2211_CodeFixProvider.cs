@@ -17,8 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var remarks = GetXmlSyntax(Constants.XmlTag.Remarks, syntax).First();
-            var summary = GetXmlSyntax(Constants.XmlTag.Summary, syntax).FirstOrDefault();
+            var remarks = syntax.GetXmlSyntax(Constants.XmlTag.Remarks).First();
+            var summary = syntax.GetXmlSyntax(Constants.XmlTag.Summary).FirstOrDefault();
 
             // add remarks into summary
             if (summary is null)

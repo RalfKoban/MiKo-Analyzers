@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // re-wrap with <para> tag
                     var paraTag = element.WithContent(replacedComment.Content.WithLeadingXmlComment().WithTrailingXmlComment());
 
-                    return replacedComment.WithContent(new SyntaxList<XmlNodeSyntax>(paraTag));
+                    return replacedComment.WithContent(paraTag);
                 }
                 else
                 {
@@ -195,7 +195,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
             {
-                if (IsWhiteSpaceOnlyText(sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers).WithoutTrailing(" otherwise")))
+                var ending = sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                                           .WithoutTrailing(" otherwise");
+
+                if (ending.IsWhiteSpaceOnlyText())
                 {
                     nodes = nodes.Remove(sentenceEnding);
                 }
@@ -208,7 +211,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       .WithoutTrailing(SimpleTrailingPhrases)
                                       .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 
-                if (IsWhiteSpaceOnlyText(replacement))
+                if (replacement.IsWhiteSpaceOnlyText())
                 {
                     nodes = nodes.Remove(last);
 

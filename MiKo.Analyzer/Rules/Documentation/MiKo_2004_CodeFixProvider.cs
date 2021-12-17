@@ -32,13 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // find summary to add sender
                 if (isSender)
                 {
-                    var summary = GetXmlSyntax(Constants.XmlTag.Summary, comment).FirstOrDefault();
+                    var summary = comment.GetXmlSyntax(Constants.XmlTag.Summary).FirstOrDefault();
                     if (summary != null)
                     {
                         comment = comment.InsertNodeAfter(summary, content);
 
                         // fix situation that content got placed on same line as summary end tag
-                        summary = GetXmlSyntax(Constants.XmlTag.Summary, comment).First();
+                        summary = comment.GetXmlSyntax(Constants.XmlTag.Summary).First();
 
                         return comment.ReplaceNode(summary, summary.WithTrailingNewLine());
                     }

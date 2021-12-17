@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -22,20 +23,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       ? Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase
                                                                       : Constants.Comments.ObjectDisposedExceptionEndingPhrase;
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, string exceptionComment)
+        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
-            if (exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison))
+            var comment = exceptionComment.GetTextWithoutTrivia();
+
+            if (comment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
             // alternative check for Closed methods
-            if (HasCloseMethod(symbol) && exceptionComment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
+            if (HasCloseMethod(symbol) && comment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return new[] { ExceptionIssue(symbol, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
+            return new[] { ExceptionIssue(exceptionComment, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
         }
 
         private static bool HasCloseMethod(ISymbol symbol) => symbol

@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -25,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "Gets thrown when the ",
                 "Gets thrown when ",
                 "If the ",
+                "If ",
                 "In case the ",
                 "In case ",
                 "if the ",
@@ -38,18 +40,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var exceptionComments = GetExceptionXmls(syntax);
+            var updatedSyntax = syntax.ReplaceNodes(
+                                                    syntax.GetExceptionXmls(),
+                                                    (original, rewritten)
+                                                        =>
+                                                        {
+                                                            if (original.IsExceptionCommentFor<ArgumentNullException>())
+                                                            {
+                                                                return GetFixedExceptionCommentForArgumentNullException(original);
+                                                            }
 
-            foreach (var exceptionComment in exceptionComments)
-            {
-                if (exceptionComment.Content.First() is XmlTextSyntax text)
-                {
-                    // TODO: RKN Put this into a lookup
-                    return ReplaceText(syntax, text, Phrases, string.Empty);
-                }
-            }
+                                                            if (original.IsExceptionCommentFor<ObjectDisposedException>())
+                                                            {
+                                                                return original.WithContent(XmlText(Constants.Comments.ObjectDisposedExceptionPhrase).WithLeadingXmlComment().WithTrailingXmlComment());
+                                                            }
 
-            return syntax;
+                                                            if (original.Content.First() is XmlTextSyntax text)
+                                                            {
+                                                                return ReplaceText(original, text, Phrases, string.Empty);
+                                                            }
+
+                                                            return rewritten;
+                                                        });
+
+            return updatedSyntax;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             const string Phrase = Constants.Comments.ExceptionTypeSummaryStartingPhrase;
 
-            var summary = GetXmlSyntax(Constants.XmlTag.Summary, comment).FirstOrDefault();
+            var summary = comment.GetXmlSyntax(Constants.XmlTag.Summary).FirstOrDefault();
             if (summary is null)
             {
                 var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();

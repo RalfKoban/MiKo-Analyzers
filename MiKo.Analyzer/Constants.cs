@@ -536,8 +536,9 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] ArgumentOutOfRangeExceptionStartingPhrase = ArgumentExceptionStartingPhrase;
 
             internal const string ObjectDisposedExceptionEndingPhrase = " has been disposed.";
-
             internal const string ObjectDisposedExceptionAlternatingEndingPhrase = " has been closed.";
+            internal const string ObjectDisposedExceptionPhrase = "The current instance" + ObjectDisposedExceptionEndingPhrase;
+            internal const string ObjectDisposedExceptionAlternatingPhrase = "The current instance" + ObjectDisposedExceptionAlternatingEndingPhrase;
 
             internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
 

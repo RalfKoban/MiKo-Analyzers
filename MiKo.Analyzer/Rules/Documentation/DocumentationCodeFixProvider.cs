@@ -14,30 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
-            return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<DocumentationCommentTriviaSyntax>()).FirstOrDefault();
+            return syntaxNodes.Select(_ => _.GetDocumentationCommentTriviaSyntax()).FirstOrDefault(_ => _ != null);
         }
 
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes)
-        {
-            // we have to delve into the trivias to find the XML syntax nodes
-            return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
-                              .Where(_ => _.GetName() == startTag);
-        }
-
-        /// <summary>
-        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the list of syntax nodes.
-        /// </summary>
-        /// <param name="startTag">
-        /// The tag of the XML elements to consider.
-        /// </param>
-        /// <param name="syntaxNodes">
-        /// The starting points of the XML elements to consider.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the list of syntax nodes.
-        /// </returns>
-        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode, IEnumerable{string})"/>
-        protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, params SyntaxNode[] syntaxNodes)
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntaxNodes.SelectMany(_ => _.DescendantNodes(__ => true, true).OfType<XmlElementSyntax>())
@@ -56,7 +36,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <returns>
         /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
         /// </returns>
-        /// <seealso cref="GetXmlSyntax(string, SyntaxNode[])"/>
         protected static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(SyntaxNode syntaxNode, IEnumerable<string> tags)
         {
             // we have to delve into the trivias to find the XML syntax nodes
@@ -130,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                if (index == 1 && content[0].WithoutXmlCommentExterior().IsNullOrWhiteSpace())
+                if (index == 1 && content[0].IsWhiteSpaceOnlyText())
                 {
                     // seems that the non-text element is the first element, so we should remove the empty text element before
                     content = content.RemoveAt(0);
@@ -506,7 +485,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
 
-        protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlElement(Constants.XmlTag.Para, nodes);
+        protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
+
+        protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
+
+        protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
+
+        protected static XmlEmptyElementSyntax ParamRef(ParameterSyntax parameter) => ParamRef(parameter.GetName());
+
+        protected static XmlEmptyElementSyntax ParamRef(string parameterName)
+        {
+            var name = SyntaxFactory.XmlNameAttribute(parameterName);
+
+            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
+        }
 
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string[] comments) => ParameterComment(parameter, comments[0]);
 
@@ -535,7 +527,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var token = text.ToSyntaxToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttributes(new SyntaxList<XmlAttributeSyntax>(attribute));
+            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
         }
 
         protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, SyntaxFactory.ParseTypeName(typeName));
@@ -555,13 +547,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // fix trivia, to avoid situation as reported in https://github.com/dotnet/roslyn/issues/47550
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
-
-        protected static string GetTextWithoutTrivia(XmlTextSyntax text)
-        {
-            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim();
-        }
-
-        protected static bool IsWhiteSpaceOnlyText(XmlTextSyntax text) => GetTextWithoutTrivia(text).IsNullOrWhiteSpace();
 
         protected static XmlElementSyntax MakeFirstWordInfiniteVerb(XmlElementSyntax syntax)
         {
@@ -599,7 +584,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax)
         {
-            return SyntaxFactory.XmlEmptyElement(tag).WithAttributes(new SyntaxList<XmlAttributeSyntax>(SyntaxFactory.XmlCrefAttribute(syntax)));
+            return SyntaxFactory.XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
         }
 
         private static IEnumerable<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
@@ -651,9 +636,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return -1;
             }
 
-            var onlyWhitespaceText = content[0] is XmlTextSyntax t && IsWhiteSpaceOnlyText(t);
-
-            return onlyWhitespaceText && content.Count > 1 ? 1 : 0;
+            return content[0].IsWhiteSpaceOnlyText() && content.Count > 1
+                       ? 1
+                       : 0;
         }
 
         private static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
