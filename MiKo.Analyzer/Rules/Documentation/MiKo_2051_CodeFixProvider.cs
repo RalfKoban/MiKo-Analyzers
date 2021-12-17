@@ -50,6 +50,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 return GetFixedExceptionCommentForArgumentNullException(original);
                                                             }
 
+                                                            if (original.IsExceptionCommentFor<ObjectDisposedException>())
+                                                            {
+                                                                return original.WithContent(XmlText(Constants.Comments.ObjectDisposedExceptionPhrase).WithLeadingXmlComment().WithTrailingXmlComment());
+                                                            }
+
                                                             if (original.Content.First() is XmlTextSyntax text)
                                                             {
                                                                 return ReplaceText(original, text, Phrases, string.Empty);
