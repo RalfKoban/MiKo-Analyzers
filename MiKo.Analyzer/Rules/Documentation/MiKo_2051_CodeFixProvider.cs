@@ -13,25 +13,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
         private static readonly string[] Phrases =
             {
-                "Thrown if the ",
-                "Thrown if ",
-                "Thrown when the ",
-                "Thrown when ",
-                "Throws if the ",
-                "Throws if ",
-                "Throws when the ",
-                "Throws when ",
-                "Is thrown when the ",
-                "Is thrown when ",
+                "gets thrown when the ",
                 "Gets thrown when the ",
+                "is thrown when the ",
+                "Is thrown when the ",
+                "gets thrown when ",
                 "Gets thrown when ",
-                "If the ",
-                "If ",
+                "thrown when the ",
+                "Thrown when the ",
+                "throws when the ",
+                "Throws when the ",
+                "is thrown when ",
+                "Is thrown when ",
+                "thrown if the ",
+                "Thrown if the ",
+                "throws if the ",
+                "Throws if the ",
+                "throws when ",
+                "Throws when ",
+                "thrown when ",
+                "Thrown when ",
+                "thrown if ",
+                "Thrown if ",
+                "throws if ",
+                "Throws if ",
+                "in case the ",
                 "In case the ",
+                "In case the ",
+                "in case ",
+                "In case ",
                 "In case ",
                 "if the ",
-                "in case the ",
-                "in case ",
+                "If the ",
+                "If ",
             };
 
         public override string FixableDiagnosticId => MiKo_2051_ExceptionTagDefaultPhraseAnalyzer.Id;
@@ -55,12 +69,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 return original.WithContent(XmlText(Constants.Comments.ObjectDisposedExceptionPhrase).WithLeadingXmlComment().WithTrailingXmlComment());
                                                             }
 
-                                                            if (original.Content.First() is XmlTextSyntax text)
+                                                            var replaced = original;
+
+                                                            if (original.IsExceptionCommentFor<ArgumentOutOfRangeException>())
                                                             {
-                                                                return ReplaceText(original, text, Phrases, string.Empty);
+                                                                replaced = GetFixedExceptionCommentForArgumentOutOfRangeException(original);
                                                             }
 
-                                                            return rewritten;
+                                                            if (replaced.Content.First() is XmlTextSyntax text)
+                                                            {
+                                                                replaced = ReplaceText(replaced, text, Phrases, string.Empty);
+                                                            }
+
+                                                            return replaced;
                                                         });
 
             return updatedSyntax;

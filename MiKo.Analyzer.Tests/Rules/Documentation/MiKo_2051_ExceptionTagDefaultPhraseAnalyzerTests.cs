@@ -85,6 +85,8 @@ public class TestMe
         [TestCase(nameof(Exception), "If the ", "")]
         [TestCase(nameof(Exception), @"Gets thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"gets thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"in case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"In case <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
@@ -100,6 +102,15 @@ public class TestMe
         [TestCase(nameof(Exception), @"Throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"thrown if any error ", @"any error ")]
+        [TestCase(nameof(Exception), @"thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"throws if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         public void Code_gets_fixed_for_(string exceptionType, string startingPhrase, string fixedPhrase)
         {
             var originalCode = @"
@@ -378,7 +389,151 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_property_indexer()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_and_method_with_1_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// Thrown if i is negative.
+    /// </exception>
+    public void DoSomething(int i) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// <paramref name=""i""/> is negative.
+    /// </exception>
+    public void DoSomething(int i) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_and_method_with_3_parameters_but_only_1_mentioned()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// If k is negative.
+    /// </exception>
+    public void DoSomething(int i, int j, int k) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// <paramref name=""k""/> is negative.
+    /// </exception>
+    public void DoSomething(int i, int j, int k) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_and_method_with_3_parameters_but_only_2_mentioned()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// Thrown if i or k is negative.
+    /// </exception>
+    public void DoSomething(int i, int j, int k) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// <paramref name=""i""/> or <paramref name=""k""/> is negative.
+    /// </exception>
+    public void DoSomething(int i, int j, int k) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_and_method_with_3_parameters_and_all_3_mentioned()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// Thrown if i, j or k is negative.
+    /// </exception>
+    public void DoSomething(int i, int j, int k) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// <paramref name=""i""/>, <paramref name=""j""/> or <paramref name=""k""/> is negative.
+    /// </exception>
+    public void DoSomething(int i, int j, int k) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentException_on_property_indexer()
         {
             const string OriginalCode = @"
 using System;
