@@ -9,6 +9,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ExceptionDocumentationCodeFixProvider : OverallDocumentationCodeFixProvider
     {
+        // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
+        private static readonly string[] Phrases =
+            {
+                "gets thrown when the ",
+                "Gets thrown when the ",
+                "is thrown when the ",
+                "Is thrown when the ",
+                "gets thrown when ",
+                "Gets thrown when ",
+                "thrown when the ",
+                "Thrown when the ",
+                "throws when the ",
+                "Throws when the ",
+                "is thrown when ",
+                "Is thrown when ",
+                "thrown if the ",
+                "Thrown if the ",
+                "throws if the ",
+                "Throws if the ",
+                "throws when ",
+                "Throws when ",
+                "thrown when ",
+                "Thrown when ",
+                "thrown if ",
+                "Thrown if ",
+                "throws if ",
+                "Throws if ",
+                "in case the ",
+                "In case the ",
+                "In case the ",
+                "in case ",
+                "In case ",
+                "In case ",
+                "if the ",
+                "If the ",
+                "If ",
+            };
+
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
         {
             var parameters = exceptionComment.GetParameterNames();
@@ -34,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentOutOfRangeException(XmlElementSyntax exceptionComment)
+        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentException(XmlElementSyntax exceptionComment)
         {
             var parameters = exceptionComment.GetParameterNames();
             if (parameters.Length == 0)
@@ -53,7 +91,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // TODO RKN: maybe we should now try to separate all <paramref/> with <para>-or-</para>
-            return exceptionComment;
+            return GetFixedStartingPhrase(exceptionComment);
+        }
+
+        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentOutOfRangeException(XmlElementSyntax exceptionComment)
+        {
+            return GetFixedExceptionCommentForArgumentException(exceptionComment);
+        }
+
+        protected static XmlElementSyntax GetFixedStartingPhrase(XmlElementSyntax replaced)
+        {
+            if (replaced.Content.First() is XmlTextSyntax text)
+            {
+                replaced = ReplaceText(replaced, text, Phrases, string.Empty);
+            }
+
+            return replaced;
         }
 
         protected DocumentationCommentTriviaSyntax FixComment(Document document, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)

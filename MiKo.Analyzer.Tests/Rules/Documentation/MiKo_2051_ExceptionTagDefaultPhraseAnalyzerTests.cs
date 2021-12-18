@@ -559,7 +559,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <exception cref=""ArgumentException"">
-    ///     key is -1.
+    ///     <paramref name=""key""/> is -1.
     /// </exception>
     public object this[int key] { get; set; }
 }
