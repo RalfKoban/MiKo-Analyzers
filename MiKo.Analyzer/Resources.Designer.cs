@@ -5656,6 +5656,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix exception comment.
+        /// </summary>
+        public static string MiKo_2054_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2054_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of an ArgumentException being thrown should have a specific starting phrase..
         /// </summary>
         public static string MiKo_2054_Description {
@@ -5680,6 +5689,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2054_Title {
             get {
                 return ResourceManager.GetString("MiKo_2054_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix exception comment.
+        /// </summary>
+        public static string MiKo_2055_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2055_CodeFixTitle", resourceCulture);
             }
         }
         

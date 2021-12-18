@@ -9,13 +9,51 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ExceptionDocumentationCodeFixProvider : OverallDocumentationCodeFixProvider
     {
+        // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
+        private static readonly string[] Phrases =
+            {
+                "gets thrown when the ",
+                "Gets thrown when the ",
+                "is thrown when the ",
+                "Is thrown when the ",
+                "gets thrown when ",
+                "Gets thrown when ",
+                "thrown when the ",
+                "Thrown when the ",
+                "throws when the ",
+                "Throws when the ",
+                "is thrown when ",
+                "Is thrown when ",
+                "thrown if the ",
+                "Thrown if the ",
+                "throws if the ",
+                "Throws if the ",
+                "throws when ",
+                "Throws when ",
+                "thrown when ",
+                "Thrown when ",
+                "thrown if ",
+                "Thrown if ",
+                "throws if ",
+                "Throws if ",
+                "in case the ",
+                "In case the ",
+                "In case the ",
+                "in case ",
+                "In case ",
+                "In case ",
+                "if the ",
+                "If the ",
+                "If ",
+            };
+
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
         {
             var parameters = exceptionComment.GetParameterNames();
             switch (parameters.Length)
             {
                 case 0:
-                    return exceptionComment; // TODO RKN: cannot fix as there seems to be no parameter
+                    return exceptionComment;
 
                 case 1:
                 {
@@ -34,6 +72,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentException(XmlElementSyntax exceptionComment)
+        {
+            var parameters = exceptionComment.GetParameterNames();
+            if (parameters.Length == 0)
+            {
+                return exceptionComment;
+            }
+
+            var parametersAsTextReferences = parameters.SelectMany(GetParameterAsTextReference).ToArray();
+
+            // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
+            var textNodes = exceptionComment.DescendantNodes().OfType<XmlTextSyntax>().Where(_ => _.GetTextWithoutTrivia().ContainsAny(parametersAsTextReferences)).ToList();
+            if (textNodes.Any())
+            {
+                // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
+                exceptionComment = exceptionComment.ReplaceNodes(textNodes, text => ReplaceTextWithParamRefs(text, parametersAsTextReferences));
+            }
+
+            // TODO RKN: maybe we should now try to separate all <paramref/> with <para>-or-</para>
+            return GetFixedStartingPhrase(exceptionComment);
+        }
+
+        protected static XmlElementSyntax GetFixedExceptionCommentForArgumentOutOfRangeException(XmlElementSyntax exceptionComment)
+        {
+            return GetFixedExceptionCommentForArgumentException(exceptionComment);
+        }
+
+        protected static XmlElementSyntax GetFixedStartingPhrase(XmlElementSyntax replaced)
+        {
+            if (replaced.Content.First() is XmlTextSyntax text)
+            {
+                replaced = ReplaceText(replaced, text, Phrases, string.Empty);
+            }
+
+            return replaced;
+        }
+
         protected DocumentationCommentTriviaSyntax FixComment(Document document, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
         {
             return comment.Content.OfType<XmlElementSyntax>()
@@ -46,9 +121,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> GetParameterReferences(string parameterName)
         {
-            yield return " " + parameterName + " ";
-            yield return "\"" + parameterName + "\"";
+            yield return GetParameterAsReference(parameterName);
+
+            foreach (var textRef in GetParameterAsTextReference(parameterName))
+            {
+                yield return textRef;
+            }
         }
+
+        private static IEnumerable<string> GetParameterAsTextReference(string parameterName) => Constants.TrailingSentenceMarkers.Select(_ => " " + parameterName + _);
+
+        private static string GetParameterAsReference(string parameterName) => "\"" + parameterName + "\"";
 
         private static IEnumerable<XmlNodeSyntax> ParameterIsNull(params string[] parameters)
         {
@@ -66,6 +149,56 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return ParaOr();
                 }
             }
+        }
+
+        private static IEnumerable<SyntaxNode> ReplaceTextWithParamRefs(XmlTextSyntax text, string[] parametersAsTextReferences)
+        {
+            var parts = SplitCommentsOnParametersInText(text.ToString(), parametersAsTextReferences);
+
+            foreach (var part in parts)
+            {
+                if (part.ContainsAny(parametersAsTextReferences))
+                {
+                    var parameterName = part.Substring(1, part.Length - 2);
+                    yield return ParamRef(parameterName);
+                }
+                else
+                {
+                    yield return XmlText(part);
+                }
+            }
+        }
+
+        private static IEnumerable<string> SplitCommentsOnParametersInText(string comment, string[] parametersAsTextReferences)
+        {
+            // split into parts, so that we can easily detect which part is a parameter and which is some normal text
+            var parts = comment.SplitBy(parametersAsTextReferences).ToArray();
+
+            // now correct the parameters back
+            for (var i = 0; i < parts.Length; i++)
+            {
+                var part = parts[i];
+
+                foreach (var textRef in parametersAsTextReferences)
+                {
+                    if (part == textRef)
+                    {
+                        if (i > 0)
+                        {
+                            // that's text before the parameter, so add the missing character afterwards
+                            parts[i - 1] = parts[i - 1] + part.First();
+                        }
+
+                        if (i < parts.Length - 1)
+                        {
+                            // that's text after the parameter, so add the missing character before
+                            parts[i + 1] = part.Last() + parts[i + 1];
+                        }
+                    }
+                }
+            }
+
+            return parts;
         }
     }
 }

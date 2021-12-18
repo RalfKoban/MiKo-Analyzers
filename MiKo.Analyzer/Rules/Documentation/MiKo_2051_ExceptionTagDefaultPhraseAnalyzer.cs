@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = exceptionComment.GetTextWithoutTrivia();
 
-            if (comment.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase))
+            if (comment.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase, StringComparison.OrdinalIgnoreCase))
             {
                 yield return Issue(symbol.Name, exceptionComment);
             }
