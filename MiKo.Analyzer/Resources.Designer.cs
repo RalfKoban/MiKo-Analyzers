@@ -5375,6 +5375,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix parameter reference.
+        /// </summary>
+        public static string MiKo_2045_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2045_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &lt;summary&gt; documentation should not reference method parameters as its only purpose is to give a brief description..
         /// </summary>
         public static string MiKo_2045_Description {
@@ -5384,7 +5393,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should not contain parameter reference &apos; {1} &apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain parameter reference &apos; {0} &apos;.
         /// </summary>
         public static string MiKo_2045_MessageFormat {
             get {

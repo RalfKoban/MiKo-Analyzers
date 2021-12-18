@@ -55,6 +55,8 @@ namespace MiKoSolutions.Analyzers
             return used;
         }
 
+        internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) => value?.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
+
         internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) => value?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
 
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode
@@ -323,17 +325,13 @@ namespace MiKoSolutions.Analyzers
             return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim();
         }
 
-        internal static string GetTextWithoutTrivia(this XmlElementSyntax element)
-        {
-            return element.Content.ToString().WithoutXmlCommentExterior();
-        }
+        internal static string GetTextWithoutTrivia(this XmlElementSyntax element) => element.Content.ToString().WithoutXmlCommentExterior();
 
-        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element)
-        {
-            return element.WithoutXmlCommentExterior();
-        }
+        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
 
         internal static IEnumerable<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Exception);
+
+        internal static IEnumerable<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Summary);
 
         /// <summary>
         /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
@@ -341,17 +339,86 @@ namespace MiKoSolutions.Analyzers
         /// <param name="syntax">
         /// The documentation syntax.
         /// </param>
-        /// <param name="startTag">
+        /// <param name="tag">
         /// The tag of the XML elements to consider.
         /// </param>
         /// <returns>
         /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
         /// </returns>
-        internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode syntax, string startTag)
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,IEnumerable{string})"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,IEnumerable{string})"/>
+        internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode syntax, string tag)
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return syntax.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
-                         .Where(_ => _.GetName() == startTag);
+                         .Where(_ => _.GetName() == tag);
+        }
+
+        /// <summary>
+        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// </summary>
+        /// <param name="syntax">
+        /// The documentation syntax.
+        /// </param>
+        /// <param name="tags">
+        /// The tags of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// </returns>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,IEnumerable{string})"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
+        internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode syntax, IEnumerable<string> tags)
+        {
+            // we have to delve into the trivias to find the XML syntax nodes
+            return syntax.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
+                         .Where(_ => tags.Contains(_.GetName()));
+        }
+
+        /// <summary>
+        /// Only gets the XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
+        /// </summary>
+        /// <param name="syntax">
+        /// The documentation syntax.
+        /// </param>
+        /// <param name="tag">
+        /// The tag of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
+        /// </returns>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,IEnumerable{string})"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,IEnumerable{string})"/>
+        internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode syntax, string tag)
+        {
+            // we have to delve into the trivias to find the XML syntax nodes
+            return syntax.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
+                         .Where(_ => _.GetName() == tag);
+        }
+
+        /// <summary>
+        /// Only gets the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// </summary>
+        /// <param name="syntaxNode">
+        /// The starting point of the XML elements to consider.
+        /// </param>
+        /// <param name="tags">
+        /// The tags of the XML elements to consider.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// </returns>
+        /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
+        /// <seealso cref="GetXmlSyntax(SyntaxNode,IEnumerable{string})"/>
+        internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode syntaxNode, IEnumerable<string> tags)
+        {
+            // we have to delve into the trivias to find the XML syntax nodes
+            return syntaxNode.DescendantNodes(__ => true, true).OfType<XmlEmptyElementSyntax>()
+                             .Where(_ => tags.Contains(_.GetName()));
         }
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();

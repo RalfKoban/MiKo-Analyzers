@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -12,68 +11,49 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2045";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
+        private static readonly HashSet<string> InvalidTags = new HashSet<string>
+                                                                  {
+                                                                      Constants.XmlTag.Param,
+                                                                      Constants.XmlTag.ParamRef,
+                                                                  };
 
         public MiKo_2045_InvalidParameterReferenceInSummaryAnalyzer() : base(Id, SymbolKind.Method)
         {
+        }
+
+        internal static IEnumerable<SyntaxNode> GetIssues(DocumentationCommentTriviaSyntax documentation)
+        {
+                if (documentation != null)
+                {
+                    var summaryXmls = documentation.GetSummaryXmls();
+
+                    foreach (var summary in summaryXmls)
+                    {
+                        foreach (var node in summary.GetXmlSyntax(InvalidTags))
+                        {
+                            yield return node;
+                        }
+
+                        foreach (var node in summary.GetEmptyXmlSyntax(InvalidTags))
+                        {
+                            yield return node;
+                        }
+                    }
+                }
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
             var method = (IMethodSymbol)symbol;
 
-            if (method.Parameters.Length == 0)
+            if (method.Parameters.Length != 0)
             {
-                return Enumerable.Empty<Diagnostic>();
-            }
+                var documentation = method.GetDocumentationCommentTriviaSyntax();
 
-            List<Diagnostic> findings = null;
-            foreach (var summary in summaries)
-            {
-                var comment = summary.Without(Constants.Markers.Symbols);
-
-                foreach (var parameter in method.Parameters)
+                foreach (var node in GetIssues(documentation))
                 {
-                    InspectPhrases(parameter, comment, ref findings);
+                    yield return Issue(node);
                 }
-            }
-
-            return findings ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        private static string[] CreateParamPhrases(string parameterName) => new[]
-                                                                                {
-                                                                                    string.Intern("<param name=\"" + parameterName + "\""),
-                                                                                    string.Intern("<paramref name=\"" + parameterName + "\""),
-                                                                                };
-
-        private static string[] CreateNonParamPhrases(string parameterName) => new[]
-                                                                                   {
-                                                                                       string.Intern("'" + parameterName + "'"),
-                                                                                       string.Intern("\"" + parameterName + "\""),
-                                                                                   };
-
-        private void InspectPhrases(IParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
-        {
-            var paramPhrases = CreateParamPhrases(parameter.Name);
-            var nonParamPhrases = CreateNonParamPhrases(parameter.Name);
-
-            InspectPhrases(parameter, commentXml, paramPhrases, ref findings);
-            InspectPhrases(parameter, commentXml.Without(paramPhrases), nonParamPhrases, ref findings);
-        }
-
-        private void InspectPhrases(IParameterSymbol parameter, string commentXml, string[] phrases, ref List<Diagnostic> findings)
-        {
-            foreach (var phrase in phrases
-                                   .Where(_ => commentXml.Contains(_, Comparison))
-                                   .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
-            {
-                if (findings is null)
-                {
-                    findings = new List<Diagnostic>(1);
-                }
-
-                findings.Add(Issue(parameter, phrase));
             }
         }
     }

@@ -39,9 +39,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return syntax;
             }
         }
-
-        private static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().First().Identifier.GetName();
-
-        private static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlNameAttributeSyntax>().First().Identifier.GetName();
     }
 }

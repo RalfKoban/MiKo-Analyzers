@@ -11,13 +11,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2101_CodeFixProvider)), Shared]
-    public sealed class MiKo_2101_CodeFixProvider : DocumentationCodeFixProvider
+    public sealed class MiKo_2101_CodeFixProvider : ExampleDocumentationCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2101_ExampleUsesCodeTagAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2101_CodeFixTitle;
-
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Example, syntaxNodes).FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
         {
