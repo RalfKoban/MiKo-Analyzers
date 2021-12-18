@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -237,8 +238,82 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    /// In case i is -1.
+    /// </exception>
+    public void DoSomething(int i) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    /// <paramref name=""i""/> is -1.
+    /// </exception>
+    public void DoSomething(int i) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_indexer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    ///     If key is -1.
+    /// </exception>
+    public object this[int key] { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentException"">
+    ///     <paramref name=""key""/> is -1.
+    /// </exception>
+    public object this[int key] { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2054_ArgumentExceptionPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2054_ArgumentExceptionPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2054_CodeFixProvider();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -221,8 +222,46 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_method_with_1_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// Thrown if i is negative.
+    /// </exception>
+    public void DoSomething(int i) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentOutOfRangeException"">
+    /// <paramref name=""i""/> is negative.
+    /// </exception>
+    public void DoSomething(int i) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2055_ArgumentOutOfRangeExceptionPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2055_ArgumentOutOfRangeExceptionPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2055_CodeFixProvider();
     }
 }

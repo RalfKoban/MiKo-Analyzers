@@ -2028,6 +2028,9 @@ Or with: '{3}'</value>
   <data name="MiKo_2053_Title" xml:space="preserve">
     <value>Throwing of ArgumentNullException should be documented only for reference type parameters.</value>
   </data>
+  <data name="MiKo_2054_CodeFixTitle" xml:space="preserve">
+    <value>Fix exception comment</value>
+  </data>
   <data name="MiKo_2054_Description" xml:space="preserve">
     <value>The documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
   </data>
@@ -2037,6 +2040,9 @@ Or with: '{3}'</value>
   </data>
   <data name="MiKo_2054_Title" xml:space="preserve">
     <value>Throwing of ArgumentException should be documented using a default starting phrase.</value>
+  </data>
+  <data name="MiKo_2055_CodeFixTitle" xml:space="preserve">
+    <value>Fix exception comment</value>
   </data>
   <data name="MiKo_2055_Description" xml:space="preserve">
     <value>The documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
