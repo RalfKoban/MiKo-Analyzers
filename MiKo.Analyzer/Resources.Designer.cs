@@ -3065,6 +3065,37 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Although the terms &apos;Delete&apos; and &apos;Remove&apos; are defined quite similarly, there is a main difference between both:
+        ///- &apos;Delete&apos; means &apos;erase&apos; (i.e. render nonexistent or nonrecoverable)
+        ///- &apos;Remove&apos; means &apos;take away and set aside&apos; (but keep in existence)
+        ///
+        ///Therefore, both terms should not be used together in documentation and naming (such as a method is named &apos;RemoveUser&apos; but the documentation states &apos;Deletes the user from the database.&apos;).
+        /// </summary>
+        public static string MiKo_1095_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1095_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose wisely between &apos;Delete&apos; and &apos;Remove&apos;.
+        /// </summary>
+        public static string MiKo_1095_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1095_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;Delete&apos; and &apos;Remove&apos; both in names and documentation..
+        /// </summary>
+        public static string MiKo_1095_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1095_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
