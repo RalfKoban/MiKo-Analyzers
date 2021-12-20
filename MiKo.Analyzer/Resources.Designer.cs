@@ -8772,7 +8772,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Append colon to log message.
+        ///   Looks up a localized string similar to End log message with colon.
         /// </summary>
         public static string MiKo_3062_CodeFixTitle {
             get {
@@ -8804,6 +8804,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3062_Title {
             get {
                 return ResourceManager.GetString("MiKo_3062_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End log message with dot.
+        /// </summary>
+        public static string MiKo_3063_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3063_CodeFixTitle", resourceCulture);
             }
         }
         
