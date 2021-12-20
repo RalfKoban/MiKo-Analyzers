@@ -8772,6 +8772,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log messages that log exceptions should end with a colon, to indicate that there is an exception..
+        /// </summary>
+        public static string MiKo_3062_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3062_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End log message with colon.
+        /// </summary>
+        public static string MiKo_3062_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3062_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do end log messages for exceptions with a colon..
+        /// </summary>
+        public static string MiKo_3062_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3062_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
         ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
         /// </summary>
