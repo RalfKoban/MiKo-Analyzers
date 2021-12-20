@@ -9,14 +9,14 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3062_CodeFixProvider)), Shared]
-    public sealed class MiKo_3062_CodeFixProvider : MaintainabilityCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3063_CodeFixProvider)), Shared]
+    public sealed class MiKo_3063_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        private const char FinalTextChar = ':';
+        private const char FinalTextChar = '.';
 
-        public override string FixableDiagnosticId => MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3063_NonExceptionLogMessageEndsWithDotAnalyzer.Id;
 
-        protected override string Title => Resources.MiKo_3062_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3063_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First();
 
