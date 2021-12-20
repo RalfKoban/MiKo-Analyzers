@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3062_LogExceptionMessageEndsWithColonAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3062";
 
-        public MiKo_3062_LogExceptionMessageEndsWithColonAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
