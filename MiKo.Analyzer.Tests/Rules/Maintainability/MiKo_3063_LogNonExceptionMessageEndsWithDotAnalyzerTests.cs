@@ -508,8 +508,12 @@ namespace Bla
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_non_interpolated_log_message()
+        [TestCase("some text", "some text.")]
+        [TestCase("some text ", "some text.")]
+        [TestCase("some text?", "some text.")]
+        [TestCase("some text!", "some text.")]
+        [TestCase("some text:", "some text.")]
+        public void Code_gets_fixed_for_non_interpolated_log_message_(string originalText, string fixedText)
         {
             const string Template = @"
 using System;
@@ -527,13 +531,13 @@ namespace Bla
 
         public void DoSomething()
         {
-            Log.Error(###);
+            Log.Error(""###"");
         }
     }
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "\"some text\""), Template.Replace("###", "\"some text.\""));
+            VerifyCSharpFix(Template.Replace("###", originalText), Template.Replace("###", fixedText));
         }
 
         [Test]
