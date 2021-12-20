@@ -8772,6 +8772,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Append colon to log message.
+        /// </summary>
+        public static string MiKo_3062_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3062_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log messages that log exceptions should end with a colon, to indicate that there is an exception..
         /// </summary>
         public static string MiKo_3062_Description {
