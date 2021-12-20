@@ -3112,6 +3112,15 @@ Therefore, the logger should be requested via a string that acts as category.</v
   <data name="MiKo_3061_Title" xml:space="preserve">
     <value>Loggers shall use a proper log category.</value>
   </data>
+  <data name="MiKo_3062_Description" xml:space="preserve">
+    <value>Log messages that log exceptions should end with a colon, to indicate that there is an exception.</value>
+  </data>
+  <data name="MiKo_3062_MessageFormat" xml:space="preserve">
+    <value>End log message with colon</value>
+  </data>
+  <data name="MiKo_3062_Title" xml:space="preserve">
+    <value>Do end log messages for exceptions with a colon.</value>
+  </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
     <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
 It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null.</value>
