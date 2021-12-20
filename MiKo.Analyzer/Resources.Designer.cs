@@ -8799,6 +8799,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log messages that do not log exceptions should end with a dot because there is no exception to focus on..
+        /// </summary>
+        public static string MiKo_3063_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3063_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do end log message with dot.
+        /// </summary>
+        public static string MiKo_3063_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3063_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do end non-exceptional log messages with a dot..
+        /// </summary>
+        public static string MiKo_3063_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3063_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
         ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
         /// </summary>
