@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -520,8 +521,94 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_non_interpolated_log_message()
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public interface ILog
+    {
+        void Error(string, Exception);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(Exception ex)
+        {
+            Log.Error(###, ex);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "\"some text\""), Template.Replace("###", "\"some text:\""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_interpolated_log_message()
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public interface ILog
+    {
+        void Error(string, Exception);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(int i, Exception ex)
+        {
+            Log.Error(###, ex);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "$\"some {i} text\""), Template.Replace("###", "$\"some {i} text:\""));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_interpolated_log_message_with_interpolation_at_end()
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public interface ILog
+    {
+        void Error(string, Exception);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(int i, Exception ex)
+        {
+            Log.Error(###, ex);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "$\"some text {i}\""), Template.Replace("###", "$\"some text {i}:\""));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3062_CodeFixProvider();
     }
 }

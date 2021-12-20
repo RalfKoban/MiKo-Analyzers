@@ -3112,6 +3112,9 @@ Therefore, the logger should be requested via a string that acts as category.</v
   <data name="MiKo_3061_Title" xml:space="preserve">
     <value>Loggers shall use a proper log category.</value>
   </data>
+  <data name="MiKo_3062_CodeFixTitle" xml:space="preserve">
+    <value>Append colon to log message</value>
+  </data>
   <data name="MiKo_3062_Description" xml:space="preserve">
     <value>Log messages that log exceptions should end with a colon, to indicate that there is an exception.</value>
   </data>
