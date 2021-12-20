@@ -33,11 +33,17 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel)
         {
-            var numberOfParameters = node.ArgumentList.Arguments.Count;
+            var arguments = node.ArgumentList.Arguments;
 
-            if (numberOfParameters > 0 && node.Expression is MemberAccessExpressionSyntax methodCall)
+            if (arguments.Count == 0)
+            {
+                return null;
+            }
+
+            if (node.Expression is MemberAccessExpressionSyntax methodCall)
             {
                 var methodName = methodCall.GetName();
+
                 switch (methodName)
                 {
                     case Constants.ILog.Debug:
@@ -46,12 +52,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     case Constants.ILog.Error:
                     case Constants.ILog.Fatal:
                     {
-                        if (numberOfParameters == 1)
-                        {
-                            return AnalyzeNonFormatCall(methodCall, node.ArgumentList.Arguments[0], semanticModel, methodName);
-                        }
-
-                        break;
+                        return arguments.Count == 1
+                                   ? AnalyzeCall(methodCall, new[] { arguments[0] }, semanticModel, methodName)
+                                   : null;
                     }
 
                     case Constants.ILog.DebugFormat:
@@ -60,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     case Constants.ILog.ErrorFormat:
                     case Constants.ILog.FatalFormat:
                     {
-                        return AnalyzeFormatCall(methodCall, node.ArgumentList.Arguments, semanticModel, methodName.Without("Format"));
+                        return AnalyzeCall(methodCall, arguments, semanticModel, methodName.Without("Format"));
                     }
                 }
             }
@@ -68,22 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return null;
         }
 
-        private Diagnostic AnalyzeNonFormatCall(MemberAccessExpressionSyntax methodCall, ArgumentSyntax argument, SemanticModel semanticModel, string proposedMethodName)
-        {
-            // only ILog methods shall be reported
-            var type = methodCall.GetTypeSymbol(semanticModel);
-
-            if (type.Name == Constants.ILog.TypeName && argument.IsException(semanticModel))
-            {
-                var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
-
-                return Issue(enclosingMethod.Name, methodCall.Name, proposedMethodName);
-            }
-
-            return null;
-        }
-
-        private Diagnostic AnalyzeFormatCall(MemberAccessExpressionSyntax methodCall, IEnumerable<ArgumentSyntax> arguments, SemanticModel semanticModel, string proposedMethodName)
+        private Diagnostic AnalyzeCall(MemberAccessExpressionSyntax methodCall, IEnumerable<ArgumentSyntax> arguments, SemanticModel semanticModel, string proposedMethodName)
         {
             // only ILog methods shall be reported
             var type = methodCall.GetTypeSymbol(semanticModel);
