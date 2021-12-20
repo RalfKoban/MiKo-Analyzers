@@ -19,6 +19,7 @@ public class TestMe
     public void DoSomething()
     {
     }
+}
 ");
 
         [Test]
