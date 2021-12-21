@@ -43,11 +43,16 @@ namespace Bla
     }
 }");
 
-        [TestCase("Handler for the <see cref='MyEvent' /> event.")]
         [TestCase("Handle the <see cref='MyEvent' /> event.")]
         [TestCase("<para>Handle the <see cref='MyEvent' /> event.</para>")]
         [TestCase("Called by the <see cref='MyEvent' /> event.")]
         [TestCase("<para>Called by the <see cref='MyEvent' /> event.</para>")]
+        [TestCase("Callback that is called by the <see cref='MyEvent' /> event.")]
+        [TestCase("Handler for the <see cref='MyEvent' /> event.")]
+        [TestCase("EventHandler for the <see cref='MyEvent' /> event.")]
+        [TestCase("When the <see cref='MyEvent' /> event.")]
+        [TestCase("when the <see cref='MyEvent' /> event.")]
+        [TestCase("Raised when the <see cref='MyEvent' /> event.")]
         public void An_issue_is_reported_for_incorrectly_documented_event_handling_method_(string comment) => An_issue_is_reported_for(@"
 using System;
 
