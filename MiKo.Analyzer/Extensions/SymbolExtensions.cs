@@ -112,6 +112,7 @@ namespace MiKoSolutions.Analyzers
                     case null: return null;
                     case IMethodSymbol method: return method;
                     case IPropertySymbol property: return property.IsIndexer ? (property.GetMethod ?? property.SetMethod) : property.SetMethod;
+                    case ITypeSymbol _: return null;
 
                     default:
                         symbol = symbol.ContainingSymbol;

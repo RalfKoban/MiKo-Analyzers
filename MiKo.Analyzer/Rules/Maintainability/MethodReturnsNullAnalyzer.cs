@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -28,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<ExpressionSyntax> GetCandidates(SyntaxNode node, IEnumerable<string> names)
         {
-            var descendantNodes = node.DescendantNodes().ToList();
+            var descendantNodes = node.DescendantNodes();
 
             return descendantNodes.SelectMany(_ => GetSpecificCandidates(_, names));
         }
@@ -190,7 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
 
-            var candidates = GetCandidates(method, localVariableNames).ToList();
+            var candidates = GetCandidates(method, localVariableNames).ToHashSet();
             if (candidates.Any())
             {
                 AnalyzeAssignments(context, candidates);

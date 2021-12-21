@@ -38,5 +38,7 @@ namespace System.Linq
                     }
             }
         }
+
+        public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
     }
 }

@@ -245,7 +245,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
 
-            var codeFixProviders = AllCodeFixProviders.SelectMany(_ => _.FixableDiagnosticIds).ToHashSet();
+            var codeFixProviders = EnumerableExtensions.ToHashSet(AllCodeFixProviders.SelectMany(_ => _.FixableDiagnosticIds));
 
             foreach (var descriptor in AllAnalyzers.Select(_ => _.GetType().GetProperty("Rule", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(_)).OfType<DiagnosticDescriptor>().OrderBy(_ => _.Id).ThenBy(_ => _.Category))
             {

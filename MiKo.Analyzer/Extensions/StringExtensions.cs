@@ -323,8 +323,6 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value.SurroundedWith("\"");
 
-        public static HashSet<string> ToHashSet(this IEnumerable<string> source) => new HashSet<string>(source);
-
 #pragma warning disable CA1308 // Normalize strings to uppercase
         public static string ToLowerCase(this string value) => value.ToLower(CultureInfo.InvariantCulture);
 #pragma warning restore CA1308 // Normalize strings to uppercase

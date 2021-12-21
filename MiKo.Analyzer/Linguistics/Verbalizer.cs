@@ -6,7 +6,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 {
     public static class Verbalizer
     {
-        private static readonly string[] TwoCharacterEndingsWithS = { "as", "hs", "is", "os", "ss", "us", "xs", "zs" };
+        private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
         private static readonly KeyValuePair<string, string>[] Endings =
             {
@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
-            if (value.EndsWith("s", StringComparison.Ordinal))
+            if (value.EndsWith('s'))
             {
                 if (value.EndsWith("oes", StringComparison.Ordinal) || value.EndsWith("shes", StringComparison.Ordinal))
                 {
@@ -133,23 +133,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
-            if (value.EndsWith("ss", StringComparison.Ordinal))
+            if (value.EndsWith('s'))
             {
-                return value + "es";
+                if (value.EndsWith("ss", StringComparison.Ordinal))
+                {
+                    return value + "es";
+                }
+
+                if (value.EndsWith("oes", StringComparison.Ordinal) || value.EndsWith("shes", StringComparison.Ordinal))
+                {
+                    return value;
+                }
+
+                if (IsThirdPersonSingularVerb(value))
+                {
+                    return value;
+                }
             }
 
-            if (value.EndsWith("oes", StringComparison.Ordinal) || value.EndsWith("shes", StringComparison.Ordinal))
-            {
-                return value;
-            }
-
-            if (IsThirdPersonSingularVerb(value))
-            {
-                return value;
-            }
-
-            var result = value + "s";
-            if (result.EndsWithAny(TwoCharacterEndingsWithS, StringComparison.Ordinal))
+            var result = value + 's';
+            if (IsTwoCharacterEndingsWithS(result))
             {
                 return value + "es";
             }
@@ -159,9 +162,24 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         public static bool IsThirdPersonSingularVerb(string value)
         {
-            const StringComparison Comparison = StringComparison.Ordinal;
+            var length = value?.Length;
+            if (length >= 2)
+            {
+                return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]) is false;
+            }
 
-            return value.EndsWith("s", Comparison) && value.EndsWithAny(TwoCharacterEndingsWithS, Comparison) is false;
+            return false;
+        }
+
+        public static bool IsTwoCharacterEndingsWithS(string value)
+        {
+            var length = value?.Length;
+            if (length >= 2)
+            {
+                return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]);
+            }
+
+            return false;
         }
 
         public static string MakeGerundVerb(string value)
@@ -193,11 +211,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            foreach (var pair in Endings.Where(_ => value.EndsWith(_.Key, StringComparison.Ordinal)))
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var pair in Endings)
             {
-                result = value.Substring(0, value.Length - pair.Key.Length) + pair.Value;
+                if (value.EndsWith(pair.Key, StringComparison.Ordinal))
+                {
+                    result = value.Substring(0, value.Length - pair.Key.Length) + pair.Value;
 
-                return string.Equals(result, value, StringComparison.Ordinal) is false;
+                    return string.Equals(result, value, StringComparison.Ordinal) is false;
+                }
             }
 
             return false;
@@ -205,13 +227,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool HasAcceptableStartingPhrase(string value)
         {
-            foreach (var phrase in StartingPhrases.Where(_ => value.StartsWith(_, StringComparison.Ordinal)))
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var phrase in StartingPhrases)
             {
-                var remaining = value.Substring(phrase.Length);
-
-                if (remaining.Length == 0 || remaining[0].IsUpperCase())
+                if (value.StartsWith(phrase, StringComparison.Ordinal))
                 {
-                    return true;
+                    var remaining = value.Substring(phrase.Length);
+
+                    if (remaining.Length == 0 || remaining[0].IsUpperCase())
+                    {
+                        return true;
+                    }
                 }
             }
 
