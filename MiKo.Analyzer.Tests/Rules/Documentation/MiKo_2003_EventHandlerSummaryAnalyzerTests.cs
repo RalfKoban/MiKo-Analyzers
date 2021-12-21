@@ -43,6 +43,7 @@ namespace Bla
     }
 }");
 
+        [TestCase("Handler for the <see cref='MyEvent' /> event.")]
         [TestCase("Handle the <see cref='MyEvent' /> event.")]
         [TestCase("<para>Handle the <see cref='MyEvent' /> event.</para>")]
         [TestCase("Called by the <see cref='MyEvent' /> event.")]
