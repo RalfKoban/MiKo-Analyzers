@@ -1555,14 +1555,14 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Fix meaningless phrase</value>
   </data>
   <data name="MiKo_2012_Description" xml:space="preserve">
-    <value>To ease development and maintenance, the summary documentation should describe its responsibility.
-It should not start with or contain a meaningless phrase like 'Used to'. Instead it should start with something more descriptive, such as: 'Allows to ', 'Represents ' or 'Provides '.</value>
+    <value>To ease development and maintenance, the &lt;summary&gt; documentation should shortly describe a type's responsibility from the user's point of view. It should not be described from the implementer's point of view, except for callback interfaces.
+So it should not start with or contain a meaningless phrase like 'Used to'. Instead, it should start with a phrase like 'Allows to ', 'Represents ' or 'Provides '.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not {1} meaningless phrase: '{2}'</value>
   </data>
   <data name="MiKo_2012_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should describe its responsibility.</value>
+    <value>&lt;summary&gt; documentation should describe the type's responsibility.</value>
   </data>
   <data name="MiKo_2013_CodeFixTitle" xml:space="preserve">
     <value>Start comment with '{0}'</value>

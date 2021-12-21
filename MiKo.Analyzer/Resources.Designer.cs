@@ -4234,8 +4234,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease development and maintenance, the summary documentation should describe its responsibility.
-        ///It should not start with or contain a meaningless phrase like &apos;Used to&apos;. Instead it should start with something more descriptive, such as: &apos;Allows to &apos;, &apos;Represents &apos; or &apos;Provides &apos;..
+        ///   Looks up a localized string similar to To ease development and maintenance, the &lt;summary&gt; documentation should shortly describe a type&apos;s responsibility from the user&apos;s point of view. It should not be described from the implementer&apos;s point of view, except for callback interfaces.
+        ///So it should not start with or contain a meaningless phrase like &apos;Used to&apos;. Instead, it should start with a phrase like &apos;Allows to &apos;, &apos;Represents &apos; or &apos;Provides &apos;..
         /// </summary>
         public static string MiKo_2012_Description {
             get {
@@ -4253,7 +4253,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should describe its responsibility..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should describe the type&apos;s responsibility..
         /// </summary>
         public static string MiKo_2012_Title {
             get {
