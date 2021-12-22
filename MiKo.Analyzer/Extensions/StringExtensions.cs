@@ -184,22 +184,23 @@ namespace System
             return count > limit;
         }
 
-        public static string HumanizedConcatenated(this IEnumerable<string> values)
+        public static string HumanizedConcatenated(this IEnumerable<string> values, string lastSeparator = "or")
         {
             var items = values.Select(_ => _.SurroundedWithApostrophe()).ToList();
 
             const string Separator = ", ";
-            const string SeparatorForLast = " or ";
+
+            var separatorForLast = string.Intern(" " + lastSeparator + " ");
 
             var count = items.Count;
             switch (count)
             {
                 case 0: return string.Empty;
                 case 1: return items[0];
-                case 2: return string.Concat(items[0], SeparatorForLast, items[1]);
-                case 3: return string.Concat(string.Concat(items[0], Separator, items[1]), SeparatorForLast, items[2]);
-                case 4: return string.Concat(string.Concat(items[0], Separator, items[1]), string.Concat(Separator, items[2], SeparatorForLast, items[3]));
-                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), SeparatorForLast, items[count - 1]);
+                case 2: return string.Concat(items[0], separatorForLast, items[1]);
+                case 3: return string.Concat(string.Concat(items[0], Separator, items[1]), separatorForLast, items[2]);
+                case 4: return string.Concat(string.Concat(items[0], Separator, items[1]), string.Concat(Separator, items[2], separatorForLast, items[3]));
+                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), separatorForLast, items[count - 1]);
             }
         }
 

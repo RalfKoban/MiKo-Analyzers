@@ -9012,6 +9012,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If a static member initializer uses another member that is defined below or in another type part, then the chance is high that during runtime the static member gets initialized with the wrong value. That&apos;s because the member gets initialized before the other referenced member gets initialized.
+        ///
+        ///This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values..
+        /// </summary>
+        public static string MiKo_3076_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3076_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static member initializer refers to static member(s) {1} below or in other type part.
+        /// </summary>
+        public static string MiKo_3076_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3076_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not initialize static member with static member below or in other type part..
+        /// </summary>
+        public static string MiKo_3076_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3076_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply &apos;is false&apos; pattern.
         /// </summary>
         public static string MiKo_3081_CodeFixTitle {
