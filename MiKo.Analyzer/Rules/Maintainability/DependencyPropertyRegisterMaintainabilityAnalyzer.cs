@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var name = nameArgument.GetName();
 
                 var owningType = symbol.ContainingType;
-                var property = owningType.GetMembers().OfType<IPropertySymbol>().FirstOrDefault(_ => _.Name == name);
+                var property = owningType.GetProperties().FirstOrDefault(_ => _.Name == name);
                 if (property is null)
                 {
                     // wrong name

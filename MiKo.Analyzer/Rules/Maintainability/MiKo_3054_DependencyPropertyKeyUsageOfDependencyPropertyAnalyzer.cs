@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // hint: names should match
             var owingType = symbol.FindContainingType();
 
-            var dependencyProperties = owingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyProperty());
+            var dependencyProperties = owingType.GetFields().Where(_ => _.Type.IsDependencyProperty());
             var noneAssigned = dependencyProperties.None(_ => _.GetAssignmentsVia(invocation).Any());
             if (noneAssigned)
             {

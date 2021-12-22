@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal static IEnumerable<string> FindPropertyNames(IFieldSymbol symbol, string unwantedSuffix, string invocation)
         {
             // find properties
-            var propertyNames = symbol.ContainingType.GetMembers().OfType<IPropertySymbol>().Select(_ => _.Name).ToHashSet();
+            var propertyNames = symbol.ContainingType.GetProperties().Select(_ => _.Name).ToHashSet();
 
             // there might be none available; in such case don't report anything
             if (propertyNames.None())

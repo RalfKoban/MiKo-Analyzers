@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             return symbol.IsTestClass()
                        ? Enumerable.Empty<Diagnostic>() // ignore tests
-                       : symbol.GetMembers().OfType<IMethodSymbol>().Select(AnalyzeTryMethod).Where(_ => _ != null);
+                       : symbol.GetNamedMethods().Select(AnalyzeTryMethod).Where(_ => _ != null);
         }
 
         private static string GetPreferredParameterName(string methodName)

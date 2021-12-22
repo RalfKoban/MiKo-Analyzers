@@ -17,10 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override IMethodSymbol GetMethod(INamedTypeSymbol symbol) => symbol.GetMembers()
-                                                                                     .OfType<IMethodSymbol>()
-                                                                                     .Where(_ => _.MethodKind == MethodKind.Ordinary)
-                                                                                     .FirstOrDefault(_ => _.IsTestOneTimeTearDownMethod());
+        protected override IMethodSymbol GetMethod(INamedTypeSymbol symbol) => symbol.GetMethods(MethodKind.Ordinary).FirstOrDefault(_ => _.IsTestOneTimeTearDownMethod());
 
         protected override int GetExpectedMethodIndex(IEnumerable<IMethodSymbol> methods)
         {

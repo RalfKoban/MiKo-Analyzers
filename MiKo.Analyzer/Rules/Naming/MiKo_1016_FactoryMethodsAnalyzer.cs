@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.GetMembers().OfType<IMethodSymbol>().SelectMany(AnalyzeMethod).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.GetNamedMethods().SelectMany(AnalyzeMethod).ToList();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.StartsWith(Prefix, StringComparison.Ordinal)
                                                                                                       ? Enumerable.Empty<Diagnostic>()

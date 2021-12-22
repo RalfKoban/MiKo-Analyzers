@@ -57,8 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 proposedEndingPhrase = string.Format(Constants.Comments.DefaultCrefPhrase, "...");
 
-                endingPhrases = returnType.GetMembers()
-                                          .OfType<IFieldSymbol>()
+                endingPhrases = returnType.GetFields()
                                           .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => string.Format(phrase, symbol))
                                           .ToArray();
             }

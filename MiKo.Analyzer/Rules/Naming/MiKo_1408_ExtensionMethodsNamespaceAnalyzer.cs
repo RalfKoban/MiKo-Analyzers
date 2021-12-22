@@ -22,9 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private IEnumerable<Diagnostic> AnalyzeNamespaceNames(INamedTypeSymbol symbol, string qualifiedNamespaceOfExtensionMethod)
         {
             // get namespace (qualified) of class and of extension method parameter (first one) and compare those
-            var diagnostic = symbol.GetMembers()
-                                   .OfType<IMethodSymbol>()
-                                   .Where(_ => _.IsExtensionMethod)
+            var diagnostic = symbol.GetExtensionMethods()
                                    .Select(_ => _.Parameters[0].Type.ContainingNamespace)
                                    .Where(_ => _ != null) // generic types do not have a namespace to detect
                                    .Select(_ => _.ToString())
