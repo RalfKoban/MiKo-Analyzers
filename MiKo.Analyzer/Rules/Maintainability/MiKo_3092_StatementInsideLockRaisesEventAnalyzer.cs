@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -39,20 +38,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case SyntaxKind.InvocationExpression: // MyEvent()
                     case SyntaxKind.EqualsValueClause: // handler()
                     {
-                        var eventName = token.ValueText;
-
-                        var method = context.GetEnclosingMethod();
-                        var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
-
-                        if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
-                        {
-                            var issue = Issue(method.Name, token);
-                            context.ReportDiagnostic(issue);
-                        }
-
+                        AnalyzeToken(context, token);
                         break;
                     }
                 }
+            }
+        }
+
+        private void AnalyzeToken(SyntaxNodeAnalysisContext context, SyntaxToken token)
+        {
+            var eventName = token.ValueText;
+
+            var method = context.GetEnclosingMethod();
+            var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
+
+            if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
+            {
+                var issue = Issue(method.Name, token);
+                context.ReportDiagnostic(issue);
             }
         }
     }

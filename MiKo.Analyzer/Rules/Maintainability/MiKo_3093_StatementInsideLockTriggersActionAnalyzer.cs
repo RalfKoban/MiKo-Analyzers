@@ -19,6 +19,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLockStatement, SyntaxKind.LockStatement);
 
+        private static bool IsInvocation(SyntaxNode identifier)
+        {
+            switch (identifier.Parent?.Kind())
+            {
+                case SyntaxKind.ConditionalAccessExpression:
+                case SyntaxKind.InvocationExpression:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {
             var lockStatement = (LockStatementSyntax)context.Node;
@@ -38,17 +51,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     // only warn if it is an invocation
-                    switch (identifier.Parent.Kind())
+                    if (IsInvocation(identifier))
                     {
-                        case SyntaxKind.ConditionalAccessExpression:
-                        case SyntaxKind.InvocationExpression:
-                        {
-                            var method = context.GetEnclosingMethod();
-                            var issue = Issue(method.Name, token);
-                            context.ReportDiagnostic(issue);
+                        var method = context.GetEnclosingMethod();
+                        var issue = Issue(method.Name, token);
 
-                            break;
-                        }
+                        context.ReportDiagnostic(issue);
                     }
                 }
             }
