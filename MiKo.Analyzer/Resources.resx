@@ -3196,6 +3196,17 @@ As with any implementation detail, they can be easily changed if/when derivation
   <data name="MiKo_3075_Title" xml:space="preserve">
     <value>Internal and private types should be either static or sealed unless derivation from them is required.</value>
   </data>
+  <data name="MiKo_3076_Description" xml:space="preserve">
+    <value>If a static member initializer uses another member that is defined below or in another type part, then the chance is high that during runtime the static member gets initialized with the wrong value. That's because the member gets initialized before the other referenced member gets initialized.
+
+This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values.</value>
+  </data>
+  <data name="MiKo_3076_MessageFormat" xml:space="preserve">
+    <value>Static member initializer refers to static member(s) {1} below or in other type part</value>
+  </data>
+  <data name="MiKo_3076_Title" xml:space="preserve">
+    <value>Do not initialize static member with static member below or in other type part.</value>
+  </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
   </data>
