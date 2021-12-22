@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.IsEnum())
             {
-                foreach (var member in symbol.GetMembers())
+                foreach (var member in symbol.GetFields())
                 {
                     var diagnostic = AnalyzeName(member);
                     if (diagnostic != null)

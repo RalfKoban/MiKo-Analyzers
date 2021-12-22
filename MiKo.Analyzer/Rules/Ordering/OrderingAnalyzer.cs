@@ -13,9 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected static IEnumerable<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, MethodKind kind = MethodKind.Ordinary) => GetMethodsOrderedByLocation(type, type.Locations.First(_ => _.IsInSource).GetLineSpan().Path, kind);
 
-        protected static IEnumerable<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, string path, MethodKind kind = MethodKind.Ordinary) => type.GetMembers()
-                                                                                                                                                                  .OfType<IMethodSymbol>()
-                                                                                                                                                                  .Where(_ => _.MethodKind == kind)
+        protected static IEnumerable<IMethodSymbol> GetMethodsOrderedByLocation(INamedTypeSymbol type, string path, MethodKind kind = MethodKind.Ordinary) => type.GetMethods(kind)
                                                                                                                                                                   .Where(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().Path == path)
                                                                                                                                                                   .OrderBy(_ => _.Locations.First(__ => __.IsInSource).GetLineSpan().StartLinePosition);
     }

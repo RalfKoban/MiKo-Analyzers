@@ -25,11 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<IMethodSymbol> GetTestMethods(INamedTypeSymbol symbol)
         {
-            var typeSymbols = symbol.IncludingAllBaseTypes().Concat(symbol.IncludingAllNestedTypes()).Distinct();
+            var typeSymbols = symbol.IncludingAllBaseTypes().Concat(symbol.IncludingAllNestedTypes()).Where(_ => _.CanBeReferencedByName).Distinct();
 
             return typeSymbols
-                       .SelectMany(_ => _.GetMembers().OfType<IMethodSymbol>())
-                       .Where(_ => _.MethodKind == MethodKind.Ordinary)
+                       .SelectMany(_ => _.GetMethods(MethodKind.Ordinary))
                        .Where(_ => _.IsTestMethod());
         }
     }

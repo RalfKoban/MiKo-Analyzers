@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (symbol is INamedTypeSymbol typeSymbol && typeSymbol.IsEnum())
             {
-                var defaultValue = typeSymbol.GetMembers().OfType<IFieldSymbol>().First();
+                var defaultValue = typeSymbol.GetFields().First();
                 var nameSyntax = SyntaxFactory.ParseName(defaultValue.Name);
 
                 yield return XmlText(Constants.Comments.DefaultStartingPhrase);

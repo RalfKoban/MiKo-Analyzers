@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // ignore "Key.DependencyProperty" assignments
-            var keys = symbol.ContainingType.GetMembers().OfType<IFieldSymbol>().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + "." + Constants.DependencyPropertyKey.DependencyProperty).ToHashSet();
+            var keys = symbol.ContainingType.GetFields().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + "." + Constants.DependencyPropertyKey.DependencyProperty).ToHashSet();
 
             foreach (var key in keys)
             {

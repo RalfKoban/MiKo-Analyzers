@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
         {
-            foreach (var field in symbol.GetMembers().OfType<IFieldSymbol>())
+            foreach (var field in symbol.GetFields())
             {
                 var descriptionAttributes = field.GetAttributes().Where(_ => _.AttributeClass.InheritsFrom(DescriptionAttributeName)).ToList();
 

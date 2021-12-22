@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var syntaxTree = semanticModel.SyntaxTree;
 
-            var allMethods = testClass.GetMembers().OfType<IMethodSymbol>().ToList();
+            var allMethods = testClass.GetNamedMethods().ToList();
             var methods = allMethods.Where(_ => _.GetSyntax()?.SyntaxTree == syntaxTree).ToList();
 
             if (testClass.IsPartial() && allMethods.Count != methods.Count)

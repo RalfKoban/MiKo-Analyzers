@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         return Enumerable.Empty<Diagnostic>();
                     }
 
-                    var loc = symbol.GetMembers().OfType<IMethodSymbol>()
+                    var loc = symbol.GetMethods()
                                     .Select(_ => _.GetSyntax())
                                     .SelectMany(SyntaxNodeCollector.Collect<BlockSyntax>)
                                     .Sum(Counter.CountLinesOfCode);

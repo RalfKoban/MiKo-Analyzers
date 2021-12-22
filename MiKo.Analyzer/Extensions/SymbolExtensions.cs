@@ -35,7 +35,40 @@ namespace MiKoSolutions.Analyzers
                 ".Designer.cs",
             };
 
-        internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetMembers().OfType<IMethodSymbol>().Any(_ => _.IsExtensionMethod);
+        internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
+
+        internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers().OfType<IMethodSymbol>();
+
+        internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value, MethodKind kind)
+        {
+            // note that methods with MethodKind.Constructor cannot be referenced by name
+            var methods = kind == MethodKind.Ordinary
+                              ? value.GetNamedMethods()
+                              : value.GetMethods();
+
+            return methods.Where(_ => _.MethodKind == kind);
+        }
+
+        /// <summary>
+        /// Gets all methods that can be referenced by name.
+        /// </summary>
+        /// <param name="value">
+        /// The type whose methods are wanted.</param>
+        /// <returns>
+        /// A collection of methods (that can be referenced by name).
+        /// </returns>
+        /// <remarks>
+        /// <note type="important">
+        /// Methods with <see cref="MethodKind.Constructor"/> or <see cref="MethodKind.StaticConstructor"/> cannot be referenced by name and therefore are not part of the result.
+        /// </note>
+        /// </remarks>
+        internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value) => value.GetMembers().OfType<IMethodSymbol>().Where(_ => _.CanBeReferencedByName);
+
+        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value) => value.GetMembers().OfType<IPropertySymbol>().Where(_ => _.CanBeReferencedByName);
+
+        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers().OfType<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
+
+        internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetExtensionMethods().Any();
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
@@ -98,7 +131,7 @@ namespace MiKoSolutions.Analyzers
         // TODO RKN: find better name
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethods(this ITypeSymbol value)
         {
-            return value.GetMembers().OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).SelectMany(GetCreatedObjectSyntaxReturnedByMethod);
+            return value.GetNamedMethods().Where(IsTypeUnderTestCreationMethod).SelectMany(GetCreatedObjectSyntaxReturnedByMethod);
         }
 
         internal static IMethodSymbol GetEnclosingMethod(this ISymbol value)
@@ -146,7 +179,7 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                              .Select(_ => _.Arguments)
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
-        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<TSymbol>());
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
 
         internal static string GetMethodSignature(this IMethodSymbol value)
         {
@@ -789,7 +822,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         var typeSymbol = value.ContainingType;
 
-                        var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>());
+                        var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
 
                         return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
                     }
