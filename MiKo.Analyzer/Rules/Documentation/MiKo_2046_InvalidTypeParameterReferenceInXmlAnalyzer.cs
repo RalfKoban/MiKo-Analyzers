@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace())
             {

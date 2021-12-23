@@ -28,9 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(ForbiddenPhrases, Comparison)
-                                                                                                            ? new[] { Issue(symbol, AllowedWordsForRule, ForbiddenWordsForRule) }
-                                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => commentXml.ContainsAny(ForbiddenPhrases, Comparison)
+                                                                                                                                     ? new[] { Issue(symbol, AllowedWordsForRule, ForbiddenWordsForRule) }
+                                                                                                                                     : Enumerable.Empty<Diagnostic>();
 
         private static IEnumerable<string> CreateForbiddenPhrases(IEnumerable<string> forbiddenWords) => from suffix in Constants.Comments.Delimiters from forbiddenWord in forbiddenWords select forbiddenWord + suffix;
     }

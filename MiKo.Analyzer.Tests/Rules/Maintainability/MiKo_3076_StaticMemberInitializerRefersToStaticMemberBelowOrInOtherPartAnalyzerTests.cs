@@ -119,6 +119,29 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_static_property_from_different_class() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public static class TestMe2
+    {
+        public static int B { get; }
+    }
+
+    public class TestMe
+    {
+        private static readonly int[] A =
+            {
+                TestMe2.B,
+            };
+
+        private static readonly int B = 42;
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3076_StaticMemberInitializerRefersToStaticMemberBelowOrInOtherPartAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3076_StaticMemberInitializerRefersToStaticMemberBelowOrInOtherPartAnalyzer();

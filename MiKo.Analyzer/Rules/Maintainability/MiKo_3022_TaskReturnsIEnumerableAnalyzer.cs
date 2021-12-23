@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             var typeArguments = ((INamedTypeSymbol)symbol.ReturnType).TypeArguments;
 

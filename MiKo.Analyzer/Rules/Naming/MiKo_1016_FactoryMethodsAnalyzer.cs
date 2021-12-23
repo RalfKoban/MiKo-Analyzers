@@ -58,10 +58,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol) => symbol.GetNamedMethods().SelectMany(AnalyzeMethod).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)).ToList();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Name.StartsWith(Prefix, StringComparison.Ordinal)
-                                                                                                      ? Enumerable.Empty<Diagnostic>()
-                                                                                                      : new[] { Issue(symbol) };
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Name.StartsWith(Prefix, StringComparison.Ordinal)
+                                                                                                                     ? Enumerable.Empty<Diagnostic>()
+                                                                                                                     : new[] { Issue(symbol) };
     }
 }

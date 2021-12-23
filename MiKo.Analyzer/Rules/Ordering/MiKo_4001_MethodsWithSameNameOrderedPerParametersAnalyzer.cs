@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                                                                                                            .ThenBy(_ => _.Parameters.Length)
                                                                                                                                            .ToList();
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
             var methods = GetMethodsOrderedByLocation(symbol);

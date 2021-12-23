@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeParameters(symbol.Parameters).Where(_ => _ != null);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeParameters(symbol.Parameters).Where(_ => _ != null);
 
         private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters)
         {

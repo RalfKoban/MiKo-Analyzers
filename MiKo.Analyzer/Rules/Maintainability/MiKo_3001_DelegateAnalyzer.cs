@@ -16,6 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate;
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => new[] { Issue(symbol) };
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => new[] { Issue(symbol) };
     }
 }

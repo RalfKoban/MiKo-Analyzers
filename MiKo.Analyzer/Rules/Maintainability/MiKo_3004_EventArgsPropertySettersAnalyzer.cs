@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.ContainingType?.IsEventArgs() is true;
 
-        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
         {
             if (symbol.IsReadOnly)
             {

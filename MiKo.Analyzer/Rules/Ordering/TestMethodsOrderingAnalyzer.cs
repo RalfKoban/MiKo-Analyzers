@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected abstract int GetExpectedMethodIndex(IEnumerable<IMethodSymbol> methods);
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             var method = GetMethod(symbol);
 

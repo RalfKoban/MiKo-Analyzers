@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(WrongNames); // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var betterName = FindBetterName(symbol);
 

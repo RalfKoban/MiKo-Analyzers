@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(TypeSuffixes, Comparison);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var name = symbol.Name;
 

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Verbalizer.TryMakeVerb(name, out var result) ? result : name;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
 

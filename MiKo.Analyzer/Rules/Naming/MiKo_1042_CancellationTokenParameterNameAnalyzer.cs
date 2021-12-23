@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Length > 0;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             foreach (var parameter in symbol.Parameters)
             {

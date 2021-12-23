@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => Verbalizer.TryMakeVerb(symbol.Name, out var betterName)
-                                                                                            ? new[] { Issue(symbol, betterName) }
-                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => Verbalizer.TryMakeVerb(symbol.Name, out var betterName)
+                                                                                                                     ? new[] { Issue(symbol, betterName) }
+                                                                                                                     : Enumerable.Empty<Diagnostic>();
     }
 }

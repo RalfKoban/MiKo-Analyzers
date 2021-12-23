@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride is false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => symbol.Parameters.SelectMany(Analyze).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Parameters.SelectMany(Analyze).ToList();
     }
 }

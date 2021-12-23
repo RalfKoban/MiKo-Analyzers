@@ -15,11 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, string commentXml) => AnalyzeComment(symbol, symbol.GetDocumentationCommentXml());
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, symbol.GetDocumentationCommentXml());
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var method = (IMethodSymbol)symbol;
             if (method.ReturnsVoid)

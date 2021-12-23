@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private Diagnostic AnalyzeMethod(ExpressionSyntax node, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var isEquals = IsObjectEqualsMethod(semanticModel.GetSymbolInfo(node).Symbol) && IsStruct(semanticModel, arguments);
+            var isEquals = IsObjectEqualsMethod(node.GetSymbol(semanticModel)) && IsStruct(semanticModel, arguments);
             if (isEquals)
             {
                 var method = node.GetEnclosingMethod(semanticModel);

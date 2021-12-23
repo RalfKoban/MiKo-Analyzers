@@ -14,6 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol) => Analyze(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation) => Analyze(symbol);
     }
 }

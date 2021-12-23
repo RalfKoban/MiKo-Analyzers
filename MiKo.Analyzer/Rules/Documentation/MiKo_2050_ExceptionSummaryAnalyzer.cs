@@ -36,9 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false; // unknown ctor
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, string commentXml) => base.AnalyzeType(symbol, commentXml).Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(AnalyzeMethod)).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => base.AnalyzeType(symbol, compilation, commentXml).Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(_ => AnalyzeMethod(_, compilation))).ToList();
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, string commentXml) => base.AnalyzeMethod(symbol, commentXml).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml) => base.AnalyzeMethod(symbol, compilation, commentXml).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {

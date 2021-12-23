@@ -22,10 +22,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                    && symbol.IsInterfaceImplementation() is false
                                                                    && symbol.IsTestMethod() is false;
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.GetNamedMethods()
-                                                                                             .Where(ShallAnalyze)
-                                                                                             .Select(AnalyzeTryMethod)
-                                                                                             .Where(_ => _ != null);
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods()
+                                                                                                                      .Where(ShallAnalyze)
+                                                                                                                      .Select(AnalyzeTryMethod)
+                                                                                                                      .Where(_ => _ != null);
 
         private Diagnostic AnalyzeTryMethod(IMethodSymbol method)
         {

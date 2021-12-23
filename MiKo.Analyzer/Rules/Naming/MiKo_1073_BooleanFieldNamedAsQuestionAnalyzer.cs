@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsBoolean();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => AnalyzeName(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {

@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
 

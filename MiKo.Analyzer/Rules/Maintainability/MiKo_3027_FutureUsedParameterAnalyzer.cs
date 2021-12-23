@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.Parameters.Length > 0;
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             var commentXml = symbol.GetComment();
             foreach (var parameter in symbol.Parameters)

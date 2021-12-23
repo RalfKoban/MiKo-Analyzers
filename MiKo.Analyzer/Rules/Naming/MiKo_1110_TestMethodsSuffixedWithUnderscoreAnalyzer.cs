@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.Parameters.Length > 0 && symbol.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var endsWithUnderscore = symbol.Name.EndsWith("_", StringComparison.OrdinalIgnoreCase);
 

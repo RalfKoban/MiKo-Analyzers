@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var propertyNames = FindPropertyNames(symbol);
             if (propertyNames.Any())

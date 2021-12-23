@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyProperty();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => symbol.Name.EndsWith(Constants.DependencyProperty.FieldSuffix, StringComparison.Ordinal)
-                                                                                           ? Enumerable.Empty<Diagnostic>()
-                                                                                           : new[] { Issue(symbol, symbol.Name + Constants.DependencyProperty.FieldSuffix) };
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => symbol.Name.EndsWith(Constants.DependencyProperty.FieldSuffix, StringComparison.Ordinal)
+                                                                                                                    ? Enumerable.Empty<Diagnostic>()
+                                                                                                                    : new[] { Issue(symbol, symbol.Name + Constants.DependencyProperty.FieldSuffix) };
     }
 }

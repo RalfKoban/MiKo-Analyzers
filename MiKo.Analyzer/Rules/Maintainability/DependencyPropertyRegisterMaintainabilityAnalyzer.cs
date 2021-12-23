@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected DependencyPropertyRegisterMaintainabilityAnalyzer(string diagnosticId, string invocation) : base(diagnosticId, SymbolKind.Field) => m_invocation = invocation;
 
-        protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {
             var arguments = symbol.GetInvocationArgumentsFrom(m_invocation);
             if (arguments.Count < 3)

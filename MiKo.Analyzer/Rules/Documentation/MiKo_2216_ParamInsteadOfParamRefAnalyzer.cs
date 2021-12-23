@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var comment = symbol.GetSyntax().DescendantNodes(_ => true, true).OfType<DocumentationCommentTriviaSyntax>().FirstOrDefault();
             if (comment is null)

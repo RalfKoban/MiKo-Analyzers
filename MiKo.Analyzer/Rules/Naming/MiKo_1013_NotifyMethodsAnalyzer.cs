@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                              .Replace(StartingPhrase, CorrectStartingPhrase)
                                                                              .Replace(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase); // may happen for "OnNotifyXyz"
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol.Name.StartsWithAny(StartingPhrases))
             {

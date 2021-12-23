@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyPropertyKey();
 
-        protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {
             var invocation = symbol.Name + "." + Constants.DependencyPropertyKey.DependencyProperty;
 

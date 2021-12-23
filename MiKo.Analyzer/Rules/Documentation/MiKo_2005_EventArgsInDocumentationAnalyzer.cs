@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.Contains("event arg", _ => _ != 'u', StringComparison.OrdinalIgnoreCase)
-                                                                                                            ? new[] { Issue(symbol) }
-                                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => commentXml.Contains("event arg", _ => _ != 'u', StringComparison.OrdinalIgnoreCase)
+                                                                                                                                     ? new[] { Issue(symbol) }
+                                                                                                                                     : Enumerable.Empty<Diagnostic>();
     }
 }

@@ -22,13 +22,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask() && symbol.ReturnType.IsGeneric() is false; // allow only plain tasks
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol) => symbol.GetSyntax()
-                                                                                          .DescendantNodes()
-                                                                                          .OfType<MemberAccessExpressionSyntax>()
-                                                                                          .Where(_ => _.ToCleanedUpString() == Invocation)
-                                                                                          .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                          .Where(_ => _.Parent.IsKind(SyntaxKind.Argument) is false)
-                                                                                          .Select(_ => Issue(Invocation, _))
-                                                                                          .ToList();
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.GetSyntax()
+                                                                                                                   .DescendantNodes()
+                                                                                                                   .OfType<MemberAccessExpressionSyntax>()
+                                                                                                                   .Where(_ => _.ToCleanedUpString() == Invocation)
+                                                                                                                   .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                                                   .Where(_ => _.Parent.IsKind(SyntaxKind.Argument) is false)
+                                                                                                                   .Select(_ => Issue(Invocation, _))
+                                                                                                                   .ToList();
     }
 }

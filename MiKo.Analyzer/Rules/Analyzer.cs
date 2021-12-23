@@ -86,31 +86,31 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeNamespace(INamespaceSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeNamespace(SymbolAnalysisContext context) => ReportDiagnostics<INamespaceSymbol>(context, AnalyzeNamespace);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeType(SymbolAnalysisContext context) => ReportDiagnostics<INamedTypeSymbol>(context, AnalyzeType);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeEvent(SymbolAnalysisContext context) => ReportDiagnostics<IEventSymbol>(context, AnalyzeEvent);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeField(SymbolAnalysisContext context) => ReportDiagnostics<IFieldSymbol>(context, AnalyzeField);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeMethod(SymbolAnalysisContext context) => ReportDiagnostics<IMethodSymbol>(context, AnalyzeMethod);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeProperty(SymbolAnalysisContext context) => ReportDiagnostics<IPropertySymbol>(context, AnalyzeProperty);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
@@ -185,11 +185,12 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
         private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
 
-        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
+        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, Compilation, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
         {
             var symbol = context.Symbol;
+            var compilation = context.Compilation;
 
-            var diagnostics = analyzer((T)symbol);
+            var diagnostics = analyzer((T)symbol, compilation);
             foreach (var diagnostic in diagnostics)
             {
                 context.ReportDiagnostic(diagnostic);

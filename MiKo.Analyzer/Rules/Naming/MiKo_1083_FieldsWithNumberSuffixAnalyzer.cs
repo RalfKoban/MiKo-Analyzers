@@ -34,8 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol) => symbol.Name.EndsWithCommonNumber()
-                                                                                           ? new[] { Issue(symbol) }
-                                                                                           : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => symbol.Name.EndsWithCommonNumber()
+                                                                                                                    ? new[] { Issue(symbol) }
+                                                                                                                    : Enumerable.Empty<Diagnostic>();
     }
 }
