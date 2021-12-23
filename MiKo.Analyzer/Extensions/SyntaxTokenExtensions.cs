@@ -12,6 +12,17 @@ namespace MiKoSolutions.Analyzers
     {
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
+        internal static ISymbol GetSymbol(this SyntaxToken value, Compilation compilation)
+        {
+            if (value.SyntaxTree is null)
+            {
+                return null;
+            }
+
+            var semanticModel = compilation.GetSemanticModel(value.SyntaxTree);
+            return value.GetSymbol(semanticModel);
+        }
+
         internal static ISymbol GetSymbol(this SyntaxToken value, SemanticModel semanticModel)
         {
             var position = value.GetLocation().SourceSpan.Start;

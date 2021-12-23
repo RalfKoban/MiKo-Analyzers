@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.ContainingType.IsEventArgs();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             switch (symbol.MethodKind)
             {
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
         {
             var returnType = symbol.GetReturnType();
             if (returnType?.TypeKind == TypeKind.Delegate)

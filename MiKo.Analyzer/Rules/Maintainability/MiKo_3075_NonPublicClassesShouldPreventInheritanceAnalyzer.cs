@@ -30,8 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol) => symbol.IsStatic || symbol.IsSealed
-                                                                                           ? Enumerable.Empty<Diagnostic>()
-                                                                                           : new[] { Issue(symbol) };
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsStatic || symbol.IsSealed
+                                                                                                                    ? Enumerable.Empty<Diagnostic>()
+                                                                                                                    : new[] { Issue(symbol) };
     }
 }

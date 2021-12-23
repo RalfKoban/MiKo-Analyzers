@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => AnalyzeSummaries(symbol, commentXml);
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => AnalyzeSummaries(symbol, commentXml);
 
         protected IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, string commentXml)
         {

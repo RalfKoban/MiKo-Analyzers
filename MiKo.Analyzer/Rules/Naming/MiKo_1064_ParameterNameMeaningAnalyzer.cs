@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
             // only investigate into more deep analysis if the name matches
             var method = symbol.GetEnclosingMethod();

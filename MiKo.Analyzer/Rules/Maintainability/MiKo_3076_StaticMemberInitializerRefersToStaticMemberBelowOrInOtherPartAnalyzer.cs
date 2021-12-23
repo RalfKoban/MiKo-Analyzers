@@ -19,17 +19,34 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => IsStaticField(symbol);
 
-        protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {
             var fieldSyntax = symbol.GetSyntax<FieldDeclarationSyntax>();
+            var identifierNames = fieldSyntax.DescendantNodes().OfType<IdentifierNameSyntax>().ToList();
+
+            if (identifierNames.None())
+            {
+                // nothing to inspect
+                return Enumerable.Empty<Diagnostic>();
+            }
+
             var fieldLocation = fieldSyntax.GetLocation().GetLineSpan();
-            var identifierNames = fieldSyntax.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
 
             // get all fields
             var problematicFields = GetStaticFieldsFromBelowOrFromOtherPart(symbol, fieldLocation);
             var problematicFieldNames = problematicFields.SelectMany(_ => _.Declaration.Variables).Select(_ => _.GetName()).ToHashSet();
 
-            var wrongReferences = identifierNames.Where(_ => problematicFieldNames.Contains(_)).ToList();
+            var wrongReferences = new List<string>();
+            foreach (var identifier in identifierNames)
+            {
+                var name = identifier.GetName();
+
+                if (problematicFieldNames.Contains(name) && identifier.GetSymbol(compilation) is IFieldSymbol f && f.ContainingType == symbol.ContainingType)
+                {
+                    wrongReferences.Add(name);
+                }
+            }
+
             return wrongReferences.Any()
                        ? new[] { Issue(symbol, wrongReferences.HumanizedConcatenated("and")) }
                        : Enumerable.Empty<Diagnostic>();

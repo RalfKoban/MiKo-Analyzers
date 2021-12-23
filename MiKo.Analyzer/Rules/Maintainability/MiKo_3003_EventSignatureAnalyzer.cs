@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IEventSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementation() is false;
 
-        protected override IEnumerable<Diagnostic> Analyze(IEventSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IEventSymbol symbol, Compilation compilation)
         {
             switch (symbol.Type.Name)
             {

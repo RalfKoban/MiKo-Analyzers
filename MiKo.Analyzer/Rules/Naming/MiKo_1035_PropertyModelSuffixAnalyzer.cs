@@ -18,6 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsInterfaceImplementation() is false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => AnalyzeEntityMarkers(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeEntityMarkers(symbol);
     }
 }

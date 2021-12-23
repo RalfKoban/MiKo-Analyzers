@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(ISymbol symbol) => symbol.Name.Without(Suffix);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                           ? new[] { Issue(symbol, FindBetterName(symbol)) }
-                                                                                           : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
+                                                                                                                    ? new[] { Issue(symbol, FindBetterName(symbol)) }
+                                                                                                                    : Enumerable.Empty<Diagnostic>();
     }
 }

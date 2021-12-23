@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
             var parameterCount = symbol.Parameters.Length;
             if (parameterCount <= MaxParametersCount)

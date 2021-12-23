@@ -115,7 +115,16 @@ namespace MiKoSolutions.Analyzers
             return GetEnclosingMethod(value.Node, value.SemanticModel);
         }
 
+        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode value, Compilation compilation) => value.GetEnclosingSymbol(compilation) as IMethodSymbol;
+
         internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode value, SemanticModel semanticModel) => value.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
+
+        internal static ISymbol GetEnclosingSymbol(this SyntaxNode value, Compilation compilation)
+        {
+            var semanticModel = compilation.GetSemanticModel(value.SyntaxTree);
+
+            return value.GetEnclosingSymbol(semanticModel);
+        }
 
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
@@ -262,6 +271,18 @@ namespace MiKoSolutions.Analyzers
             }
 
             return Array.Empty<string>();
+        }
+
+        internal static ISymbol GetSymbol(this SyntaxNode value, Compilation compilation)
+        {
+            return value.GetSymbol(compilation.GetSemanticModel(value.SyntaxTree));
+        }
+
+        internal static ISymbol GetSymbol(this SyntaxNode value, SemanticModel semanticModel)
+        {
+            var symbolInfo = semanticModel.GetSymbolInfo(value);
+
+            return symbolInfo.Symbol;
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)

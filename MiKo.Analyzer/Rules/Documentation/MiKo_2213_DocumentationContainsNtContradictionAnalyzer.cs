@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static bool CommentHasIssue(string comment) => comment.ContainsAny(Constants.Comments.NotContradictionPhrase, StringComparison.OrdinalIgnoreCase);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => CommentHasIssue(commentXml)
-                                                                                                            ? new[] { Issue(symbol) }
-                                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => CommentHasIssue(commentXml)
+                                                                                                                                     ? new[] { Issue(symbol) }
+                                                                                                                                     : Enumerable.Empty<Diagnostic>();
     }
 }

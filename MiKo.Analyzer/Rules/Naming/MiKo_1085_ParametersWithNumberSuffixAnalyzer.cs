@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IParameterSymbol symbol) => symbol.Name.WithoutNumberSuffix();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol) => HasIssue(symbol)
-                                                                                               ? new[] { Issue(symbol) }
-                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => HasIssue(symbol)
+                                                                                                                        ? new[] { Issue(symbol) }
+                                                                                                                        : Enumerable.Empty<Diagnostic>();
 
         private static bool HasIssue(IParameterSymbol symbol)
         {

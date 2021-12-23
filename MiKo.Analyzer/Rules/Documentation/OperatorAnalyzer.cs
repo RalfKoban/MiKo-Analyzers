@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             if (commentXml.IsNullOrWhiteSpace())
             {

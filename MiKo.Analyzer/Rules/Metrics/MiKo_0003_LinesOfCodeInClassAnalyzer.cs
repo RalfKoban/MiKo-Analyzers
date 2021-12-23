@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSymbolAction(AnalyzeType, SymbolKind.NamedType);
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             switch (symbol.TypeKind)
             {

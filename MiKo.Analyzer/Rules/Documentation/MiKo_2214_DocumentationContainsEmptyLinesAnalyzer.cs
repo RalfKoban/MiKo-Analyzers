@@ -30,8 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return allLines.Any(_ => _.IsNullOrWhiteSpace());
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => CommentHasIssue(commentXml?.Trim())
-                                                                                                            ? new[] { Issue(symbol) }
-                                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => CommentHasIssue(commentXml?.Trim())
+                                                                                                                                     ? new[] { Issue(symbol) }
+                                                                                                                                     : Enumerable.Empty<Diagnostic>();
     }
 }

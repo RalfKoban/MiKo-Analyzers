@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       && symbol.IsTestSetUpMethod() is false
                                                                       && symbol.IsTestTearDownMethod() is false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
 

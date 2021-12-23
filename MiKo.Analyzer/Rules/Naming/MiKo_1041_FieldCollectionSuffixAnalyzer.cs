@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType?.IsEnum() is false; // ignore enum definitions
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var diagnostic = AnalyzeCollectionSuffix(symbol);
 

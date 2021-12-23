@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             var ordinaryMethods = GetMethodsOrderedByLocation(symbol).ToList();
 

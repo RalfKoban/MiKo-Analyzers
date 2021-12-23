@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return null;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var proposal = FindBetterName(symbol);
 

@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, string commentXml) => commentXml.ContainsAny(Triggers, StringComparison.OrdinalIgnoreCase)
-                                                                                                            ? new[] { Issue(symbol) }
-                                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => commentXml.ContainsAny(Triggers, StringComparison.OrdinalIgnoreCase)
+                                                                                                                                     ? new[] { Issue(symbol) }
+                                                                                                                                     : Enumerable.Empty<Diagnostic>();
     }
 }

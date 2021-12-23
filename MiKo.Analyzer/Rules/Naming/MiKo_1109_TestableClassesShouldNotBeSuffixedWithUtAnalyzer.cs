@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                         ? symbolName.WithoutSuffix(Suffix)
                                                                         : Prefix + symbolName.WithoutSuffix(Suffix);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
 

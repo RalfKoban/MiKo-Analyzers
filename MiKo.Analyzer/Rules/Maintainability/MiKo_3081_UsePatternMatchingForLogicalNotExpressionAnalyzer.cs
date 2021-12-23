@@ -17,15 +17,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (PrefixUnaryExpressionSyntax)context.Node;
+            var semanticModel = context.SemanticModel;
 
-            if (node.IsExpression(context.SemanticModel))
+            if (node.IsExpression(semanticModel))
             {
                 // ignore expression trees
                 return;
             }
 
-            var symbol = context.SemanticModel.GetSymbolInfo(node.Operand).Symbol;
-            if (symbol is IFieldSymbol f && f.IsConst)
+            if (node.Operand.GetSymbol(semanticModel) is IFieldSymbol f && f.IsConst)
             {
                 // ignore constants
                 return;

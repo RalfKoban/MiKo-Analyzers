@@ -39,9 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => StrangePrefixes.Any(_ => HasStrangePrefix(symbol, _))
-                                                                                                  ? new[] { Issue(symbol, FindBetterName(symbol)) }
-                                                                                                  : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => StrangePrefixes.Any(_ => HasStrangePrefix(symbol, _))
+                                                                                                                     ? new[] { Issue(symbol, FindBetterName(symbol)) }
+                                                                                                                     : Enumerable.Empty<Diagnostic>();
 
         private static string FindBetterName(string name)
         {

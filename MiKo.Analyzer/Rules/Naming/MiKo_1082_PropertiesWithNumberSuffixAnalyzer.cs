@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && symbol.GetReturnType()?.Name.EndsWithNumber() is true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => symbol.Name.EndsWithCommonNumber()
-                                                                                              ? new[] { Issue(symbol) }
-                                                                                              : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => symbol.Name.EndsWithCommonNumber()
+                                                                                                                       ? new[] { Issue(symbol) }
+                                                                                                                       : Enumerable.Empty<Diagnostic>();
     }
 }

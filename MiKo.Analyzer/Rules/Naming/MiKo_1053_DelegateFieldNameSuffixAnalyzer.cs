@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return null;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var symbolType = symbol.Type;
             switch (symbolType.TypeKind)

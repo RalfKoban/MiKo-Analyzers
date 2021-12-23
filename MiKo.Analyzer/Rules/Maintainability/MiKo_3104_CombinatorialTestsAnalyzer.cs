@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsTestClass();
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
             foreach (var method in symbol.GetNamedMethods())
             {

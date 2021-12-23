@@ -28,11 +28,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsBoolean();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol) => AnalyzeCamelCase(symbol, symbol.Name, 4);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name, 4);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol) => AnalyzeCamelCase(symbol, symbol.Name, 3);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeCamelCase(symbol, symbol.Name, 3);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
 
