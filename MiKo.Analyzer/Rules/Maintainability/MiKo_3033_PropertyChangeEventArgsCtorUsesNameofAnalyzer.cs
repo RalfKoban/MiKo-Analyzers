@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
+    public sealed class MiKo_3033_PropertyChangeEventArgsCtorUsesNameofAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3033";
 
@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                    TypeNames.PropertyChangingEventArgs,
                                                                };
 
-        public MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer() : base(Id)
+        public MiKo_3033_PropertyChangeEventArgsCtorUsesNameofAnalyzer() : base(Id)
         {
         }
 

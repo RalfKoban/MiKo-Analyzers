@@ -10,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3033_PropertyChangeEventArgsCtorUsesNameofAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] TypeNames =
                                                     {
@@ -239,9 +239,9 @@ namespace Bla
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3033_PropertyChangeEventArgsCtorUsesNameofAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3033_PropertyChangeEventArgsCtorUsingNameofAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3033_PropertyChangeEventArgsCtorUsesNameofAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3033_CodeFixProvider();
     }
