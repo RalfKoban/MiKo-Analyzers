@@ -16,6 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out && parameter.Type.IsEnum();
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => AnalyzeStartingPhrase(parameter, comment, Constants.Comments.EnumParameterStartingPhrase);
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
+        {
+            var phrases = Constants.Comments.EnumParameterStartingPhrase;
+
+            for (var i = 0; i < phrases.Length; i++)
+            {
+                // apply full qualified name here as this is applied under the hood to the comment itself
+                phrases[i] = string.Format(phrases[i], parameter.Type.FullyQualifiedName());
+            }
+
+            return AnalyzeStartingPhrase(parameter, comment, phrases);
+        }
     }
 }

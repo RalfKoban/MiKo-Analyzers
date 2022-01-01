@@ -47,17 +47,57 @@ public class TestMe
 }
 ");
 
+        [TestCase("One of the enumeration members specifying something.")]
         [TestCase("One of the enumeration members that specifies something.")]
         [TestCase("One of the enumeration members that specifies something")]
         [TestCase("One of the enumeration members that determines something.")]
         [TestCase("One of the enumeration members that determines something")]
+        [TestCase("One of the enumeration values specifying something.")]
         [TestCase("One of the enumeration values that specifies something.")]
         [TestCase("One of the enumeration values that specifies something")]
         [TestCase("One of the enumeration values that determines something.")]
         [TestCase("One of the enumeration values that determines something")]
+        public void No_issue_is_reported_for_method_with_correct_comment_(string comment) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>" + comment + @"</param>
+    public void DoSomething(StringComparison o) { }
+}
+");
+
         [TestCase("Unused")]
         [TestCase("Unused.")]
-        public void No_issue_is_reported_for_method_with_correct_comment_(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_with_correct_unused_comment_(string comment) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>" + comment + @"</param>
+    public void DoSomething(StringComparison o) { }
+}
+");
+
+        [TestCase(@"A <see cref=""StringComparison"" /> value specifying something.")]
+        [TestCase(@"A <see cref=""StringComparison"" /> value that specifies something.")]
+        [TestCase(@"A <see cref=""StringComparison""/> value specifying something.")]
+        [TestCase(@"A <see cref=""StringComparison""/> value that specifies something.")]
+        [TestCase(@"A <see cref=""System.StringComparison"" /> value specifying something.")]
+        [TestCase(@"A <see cref=""System.StringComparison"" /> value that specifies something.")]
+        [TestCase(@"A <see cref=""System.StringComparison""/> value specifying something.")]
+        [TestCase(@"A <see cref=""System.StringComparison""/> value that specifies something.")]
+        [TestCase(@"An <see cref=""StringComparison"" /> value specifying something.")]
+        [TestCase(@"An <see cref=""StringComparison"" /> value that specifies something.")]
+        [TestCase(@"An <see cref=""StringComparison""/> value specifying something.")]
+        [TestCase(@"An <see cref=""StringComparison""/> value that specifies something.")]
+        [TestCase(@"An <see cref=""System.StringComparison"" /> value specifying something.")]
+        [TestCase(@"An <see cref=""System.StringComparison"" /> value that specifies something.")]
+        [TestCase(@"An <see cref=""System.StringComparison""/> value specifying something.")]
+        [TestCase(@"An <see cref=""System.StringComparison""/> value that specifies something.")]
+        public void No_issue_is_reported_for_method_with_correct_type_comment_(string comment) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
