@@ -157,19 +157,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetName(this XmlElementSyntax value) => value?.StartTag.Name.LocalName.ValueText;
-
-        internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.LocalName.ValueText;
-
-        internal static string GetName(this XmlAttributeSyntax value) => value?.Name.LocalName.ValueText;
-
-        internal static string GetName(this MemberAccessExpressionSyntax value) => value?.Name.GetName();
-
-        internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();
-
-        internal static string GetName(this SimpleNameSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
+        internal static string GetName(this ArgumentSyntax argument) => argument.Expression.GetName();
 
         internal static string GetName(this BaseMethodDeclarationSyntax value)
         {
@@ -182,55 +170,74 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this PropertyDeclarationSyntax value) => value?.Identifier.ValueText;
-
         internal static string GetName(this ConstructorDeclarationSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
 
         internal static string GetName(this ExpressionSyntax value)
         {
             switch (value)
             {
-                case InvocationExpressionSyntax i:
-                {
-                    if (i.Expression is IdentifierNameSyntax identifier)
-                    {
-                        var text = identifier.GetName();
-
-                        if (text != "nameof")
-                        {
-                            return text;
-                        }
-
-                        if (i.Ancestors().OfType<MemberAccessExpressionSyntax>().None())
-                        {
-                            // nameof
-                            var arguments = i.ArgumentList.Arguments;
-                            if (arguments.Count > 0)
-                            {
-                                return arguments[0].ToString();
-                            }
-                        }
-                    }
-
-                    return string.Empty;
-                }
-
-                case LiteralExpressionSyntax l: return l.GetName();
                 case IdentifierNameSyntax i: return i.GetName();
+                case InvocationExpressionSyntax i: return i.GetName();
+                case LiteralExpressionSyntax l: return l.GetName();
                 case MemberAccessExpressionSyntax m: return m.GetName();
+                case SimpleNameSyntax s: return s.GetName();
                 default: return string.Empty;
             }
         }
 
-        internal static string GetName(this ArgumentSyntax nameArgument) => nameArgument.Expression.GetName();
+        internal static string GetName(this InvocationExpressionSyntax value)
+        {
+            switch (value?.Expression)
+            {
+                case IdentifierNameSyntax identifier:
+                {
+                    var text = identifier.GetName();
+
+                    if (text == "nameof" && value.Ancestors().OfType<MemberAccessExpressionSyntax>().None())
+                    {
+                        // nameof
+                        var arguments = value.ArgumentList.Arguments;
+                        if (arguments.Count > 0)
+                        {
+                            return arguments[0].ToString();
+                        }
+                    }
+
+                    return text;
+                }
+
+                case MemberAccessExpressionSyntax m:
+                {
+                    return m.Expression.GetName();
+                }
+            }
+
+            return string.Empty;
+        }
+
+        internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
+
+        internal static string GetName(this MemberAccessExpressionSyntax value) => value?.Name.GetName();
+
+        internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();
+
+        internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this PropertyDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this SimpleNameSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this XmlAttributeSyntax value) => value?.Name.LocalName.ValueText;
+
+        internal static string GetName(this XmlElementSyntax value) => value?.StartTag.Name.LocalName.ValueText;
+
+        internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.LocalName.ValueText;
 
         internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
 
