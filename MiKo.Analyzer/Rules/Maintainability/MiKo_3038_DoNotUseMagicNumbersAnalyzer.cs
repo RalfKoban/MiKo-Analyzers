@@ -139,11 +139,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var name = i.Expression.GetName();
 
-                        if (i.Expression is MemberAccessExpressionSyntax mae)
+                        if (i.Expression is MemberAccessExpressionSyntax)
                         {
                             if (name.StartsWith("From", StringComparison.Ordinal))
                             {
-                                var typeName = mae.Expression.GetName();
+                                var typeName = i.GetName();
                                 if (typeName == "Color")
                                 {
                                     // ignore all Color.FromXyz calls

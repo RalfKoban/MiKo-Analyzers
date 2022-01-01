@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 
 ## Available Rules
-The following tables list all the 310 rules that are currently provided by the analyzer.
+The following tables list all the 311 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -275,6 +275,7 @@ The following tables list all the 310 rules that are currently provided by the a
 |MiKo_3040|Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values.|&#x2713;|\-|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|\-|
 |MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|\-|
+|MiKo_3043|Event handlers for WeakEventManager shall be provided via 'nameof' operator.|&#x2713;|\-|
 |MiKo_3047|Applied [ContentProperty] attributes shall use 'nameof'.|&#x2713;|\-|
 |MiKo_3048|ValueConverters shall have the [ValueConversion] attribute applied.|&#x2713;|\-|
 |MiKo_3049|Enum members shall have the [Description] attribute applied.|&#x2713;|\-|

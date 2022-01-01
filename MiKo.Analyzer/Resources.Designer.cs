@@ -8109,7 +8109,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
         /// </summary>
         public static string MiKo_3033_MessageFormat {
             get {
@@ -8399,6 +8399,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Event handling methods that are passed into the (de-)registration on the WeakEventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        /// </summary>
+        public static string MiKo_3043_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3043_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3043_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3043_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event handlers for WeakEventManager shall be provided via &apos;nameof&apos; operator..
+        /// </summary>
+        public static string MiKo_3043_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3043_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To prevent typos, any applied [ContentProperty] attribute shall use &apos;nameof&apos; to define the property..
         /// </summary>
         public static string MiKo_3047_Description {
@@ -8408,7 +8435,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead.
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
         /// </summary>
         public static string MiKo_3047_MessageFormat {
             get {
