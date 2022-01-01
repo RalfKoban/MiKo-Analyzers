@@ -8399,6 +8399,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3043_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3043_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Event handling methods that are passed into the (de-)registration on the WeakEventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
         /// </summary>
         public static string MiKo_3043_Description {

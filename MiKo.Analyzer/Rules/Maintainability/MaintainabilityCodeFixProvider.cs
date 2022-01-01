@@ -138,6 +138,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return NameOf(syntax);
         }
 
+        protected static InvocationExpressionSyntax NameOf(TypeSyntax type, LiteralExpressionSyntax literal)
+        {
+            var typeName = type.GetNameOnlyPart();
+            var identifierName = literal.GetName();
+
+            return NameOf(typeName, identifierName);
+        }
+
         private static InvocationExpressionSyntax NameOf(ExpressionSyntax syntax)
         {
             // nameof has a special RawContextualKind, hence we have to create it via its specific SyntaxKind
