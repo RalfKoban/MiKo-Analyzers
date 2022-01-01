@@ -2977,6 +2977,9 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3042_Title" xml:space="preserve">
     <value>EventArgs shall not implement interfaces.</value>
   </data>
+  <data name="MiKo_3043_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
   <data name="MiKo_3043_Description" xml:space="preserve">
     <value>Event handling methods that are passed into the (de-)registration on the WeakEventManager shall be provided via 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
   </data>
