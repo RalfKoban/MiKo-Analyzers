@@ -110,6 +110,18 @@ namespace MiKoSolutions.Analyzers
                     "One of the enumeration members that determines ",
                     "One of the enumeration values that specifies ",
                     "One of the enumeration values that determines ",
+
+                    // special cases
+                    "One of the enumeration members specifying ",
+                    "One of the enumeration values specifying ",
+                    @"A <see cref=""{0}""/> value specifying ",
+                    @"A <see cref=""{0}"" /> value specifying ",
+                    @"A <see cref=""{0}""/> value that specifies ",
+                    @"A <see cref=""{0}"" /> value that specifies ",
+                    @"An <see cref=""{0}""/> value specifying ",
+                    @"An <see cref=""{0}"" /> value specifying ",
+                    @"An <see cref=""{0}""/> value that specifies ",
+                    @"An <see cref=""{0}"" /> value that specifies ",
                 };
 
             internal static readonly string[] CancellationTokenParameterPhrase = { "The token to monitor for cancellation requests." };
