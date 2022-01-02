@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic)
         {
-            return token.ReplaceTrivia(token.LeadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia)), ComputeReplacementTrivia);
+            return token.ReplaceTrivia(token.GetAllTrivia().Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia)), ComputeReplacementTrivia);
         }
 
         protected abstract SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten);

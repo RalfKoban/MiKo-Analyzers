@@ -118,6 +118,32 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_end_of_line_([ValueSource(nameof(WrongPhrases))] string wrongPhrase)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    public bool DoSomething()
+    {
+        return true; // " + wrongPhrase + @"
+    }
+}
+";
+
+            var fixedCode = @"
+public class TestMe
+{
+    public bool DoSomething()
+    {
+        return true; // " + Map[wrongPhrase] + @"
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2309_CommentContainsNtContradictionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2309_CommentContainsNtContradictionAnalyzer();
