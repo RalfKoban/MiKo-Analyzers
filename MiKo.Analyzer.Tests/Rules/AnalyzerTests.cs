@@ -74,6 +74,24 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(findings, Is.Empty);
         }
 
+        [Test, Explicit, Ignore("Shall be run manually")]
+        public static void Resources_contains_no_multiple_consecutive_spaces_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        {
+            var findings = new[]
+                               {
+                                   analyzer.DiagnosticId + "_Description",
+                                   analyzer.DiagnosticId + "_MessageFormat",
+                                   analyzer.DiagnosticId + "_Title",
+                                   analyzer.DiagnosticId + "_CodeFixTitle",
+                               }
+                           .Where(_ => ResourceManager.GetString(_)?.Contains("  ") is true)
+                           .ToList();
+
+            findings.Sort();
+
+            Assert.That(findings, Is.Empty);
+        }
+
         [Test]
         public static void Titles_should_end_with_dot_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
@@ -95,7 +113,15 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var key = analyzer.DiagnosticId + "_MessageFormat";
 
-            Assert.That(ResourceManager.GetString(key), Does.Not.EndWith("."), $"'{key}' is incorrect.{Environment.NewLine}");
+            Assert.That(ResourceManager.GetString(key), Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' is incorrect.{Environment.NewLine}");
+        }
+
+        [Test]
+        public static void CodeFixTitles_should_not_end_with_dot_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        {
+            var key = analyzer.DiagnosticId + "_CodeFixTitle";
+
+            Assert.That(ResourceManager.GetString(key), Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' is incorrect.{Environment.NewLine}");
         }
 
         [Test, Combinatorial, Ignore("Just to check from time to time whether the texts are acceptable or need to be rephrased.")]

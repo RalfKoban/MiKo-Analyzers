@@ -1266,7 +1266,7 @@ To ease reading, use underscores between the different words instead.</value>
   </data>
   <data name="MiKo_1108_Description" xml:space="preserve">
     <value>For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-Hence naming them e.g.  'Mock', 'Stub', 'Fake' or 'Shim' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
+Hence naming them e.g. 'Mock', 'Stub', 'Fake' or 'Shim' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
   </data>
   <data name="MiKo_1108_MessageFormat" xml:space="preserve">
     <value>Do not name it 'Mock', 'Stub', 'Fake' or 'Shim'</value>
@@ -1374,7 +1374,7 @@ Example:
     <value>Namespace names should be in plural.</value>
   </data>
   <data name="MiKo_1401_Description" xml:space="preserve">
-    <value>Namespaces should not contain any language specific (technical) name, such as  'Interfaces', 'Exceptions' or 'Enums'.</value>
+    <value>Namespaces should not contain any language specific (technical) name, such as 'Interfaces', 'Exceptions' or 'Enums'.</value>
   </data>
   <data name="MiKo_1401_MessageFormat" xml:space="preserve">
     <value>Do not use technical name '{1}' in namespace</value>
@@ -1402,7 +1402,7 @@ Models are Entities. Commands, ViewModels and Views belong together and are UI s
     <value>Namespaces should not be named after any of their parent namespaces.</value>
   </data>
   <data name="MiKo_1404_Description" xml:space="preserve">
-    <value>Namespaces should not contain any unspecific name, such as  'Miscellaneous' or 'Utilities'.</value>
+    <value>Namespaces should not contain any unspecific name, such as 'Miscellaneous' or 'Utilities'.</value>
   </data>
   <data name="MiKo_1404_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}' in namespace</value>
@@ -1474,7 +1474,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Events should be documented properly.</value>
   </data>
   <data name="MiKo_2002_CodeFixTitle" xml:space="preserve">
-    <value>Apply 'Provides data for the &lt;see cref="TODO"/&gt; event.' comment.</value>
+    <value>Apply 'Provides data for the &lt;see cref="TODO"/&gt; event.' comment</value>
   </data>
   <data name="MiKo_2002_Description" xml:space="preserve">
     <value>To ease maintenance, classes that inherit from 'System.EventArgs' should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
@@ -1974,7 +1974,7 @@ Or with: '{3}'</value>
     <value>Start &lt;summary&gt; with: {1}</value>
   </data>
   <data name="MiKo_2047_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation of Attributes should have a  default starting phrase.</value>
+    <value>&lt;summary&gt; documentation of Attributes should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2048_CodeFixTitle" xml:space="preserve">
     <value>Start comment with '{0}'</value>
@@ -1986,7 +1986,7 @@ Or with: '{3}'</value>
     <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2048_Title" xml:space="preserve">
-    <value>&lt;summary&gt; documentation of value converters should have a  default starting phrase.</value>
+    <value>&lt;summary&gt; documentation of value converters should have a default starting phrase.</value>
   </data>
   <data name="MiKo_2049_Description" xml:space="preserve">
     <value>The term 'will be' is not explicit enough and it uses the wrong tense. Instead, a term such as 'is' gets to the point and uses present tense.</value>

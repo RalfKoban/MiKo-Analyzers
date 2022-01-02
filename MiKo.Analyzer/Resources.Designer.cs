@@ -3387,7 +3387,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-        ///Hence naming them e.g.  &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
+        ///Hence naming them e.g. &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
         /// </summary>
         public static string MiKo_1108_Description {
             get {
@@ -3699,7 +3699,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical) name, such as  &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
+        ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical) name, such as &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
         /// </summary>
         public static string MiKo_1401_Description {
             get {
@@ -3781,7 +3781,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain any unspecific name, such as  &apos;Miscellaneous&apos; or &apos;Utilities&apos;..
+        ///   Looks up a localized string similar to Namespaces should not contain any unspecific name, such as &apos;Miscellaneous&apos; or &apos;Utilities&apos;..
         /// </summary>
         public static string MiKo_1404_Description {
             get {
@@ -3991,7 +3991,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply &apos;Provides data for the &lt;see cref=&quot;TODO&quot;/&gt; event.&apos; comment..
+        ///   Looks up a localized string similar to Apply &apos;Provides data for the &lt;see cref=&quot;TODO&quot;/&gt; event.&apos; comment.
         /// </summary>
         public static string MiKo_2002_CodeFixTitle {
             get {
@@ -5487,7 +5487,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a  default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a default starting phrase..
         /// </summary>
         public static string MiKo_2047_Title {
             get {
@@ -5523,7 +5523,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a  default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a default starting phrase..
         /// </summary>
         public static string MiKo_2048_Title {
             get {
