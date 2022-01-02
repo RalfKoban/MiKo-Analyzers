@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -18,17 +19,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic diagnostic)
         {
-            if (trivia.Token.Parent is BlockSyntax block)
+            switch (trivia.Token.Parent)
             {
-                // remove trivia from block and add new item
-                var newBlock = block.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
-
-                var statement = newBlock.Statements.LastOrDefault();
-                if (statement != null)
+                case BlockSyntax block:
                 {
-                    newBlock = newBlock.ReplaceNode(statement, statement.WithAdditionalLeadingTrivia(trivia, SyntaxFactory.ElasticCarriageReturnLineFeed));
+                    // remove trivia from block and add new item
+                    var newBlock = block.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
 
-                    return root.ReplaceNode(block, newBlock);
+                    var statement = newBlock.Statements.LastOrDefault();
+                    if (statement != null)
+                    {
+                        newBlock = newBlock.ReplaceNode(statement, statement.WithAdditionalLeadingTrivia(trivia, SyntaxFactory.ElasticCarriageReturnLineFeed));
+
+                        return root.ReplaceNode(block, newBlock);
+                    }
+
+                    break;
+                }
+
+                case LocalDeclarationStatementSyntax declaration when declaration.DescendantNodes().OfType<InitializerExpressionSyntax>().Any():
+                {
+                    // remove trivia from declaration and add new item
+                    var newDeclaration = declaration.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker)
+                                                    .WithAdditionalLeadingTrivia(trivia, SyntaxFactory.ElasticCarriageReturnLineFeed);
+
+                    return root.ReplaceNode(declaration, newDeclaration);
                 }
             }
 

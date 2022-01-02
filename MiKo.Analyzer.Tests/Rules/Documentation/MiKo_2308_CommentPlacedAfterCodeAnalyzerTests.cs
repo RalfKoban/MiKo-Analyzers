@@ -72,6 +72,30 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_comment_as_last_statement_in_array_initializer() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var array = new[]
+                        {
+                            ""something"",
+                            ""something else"", // some comment
+                        };
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_comment_after_simple_local_declaration() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var value = 42; // some comment
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_comment_as_only_statement_in_catch_block_if_Resharper_comment() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -131,6 +155,20 @@ public class TestMe
 
             // some comment
         }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_comment_after_array_initializer() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var array = new[]
+                        {
+                            ""something"",
+                            ""something else"",
+                        }; // some comment
     }
 }");
 
@@ -196,6 +234,39 @@ public class TestMe
             // some comment
             DoSomething();
         }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_comment_after_array_initializer()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var array = new[]
+                        {
+                            ""something"",
+                            ""something else"",
+                        }; // some comment
+    }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment
+        var array = new[]
+                        {
+                            ""something"",
+                            ""something else"",
+                        };
     }
 }";
 

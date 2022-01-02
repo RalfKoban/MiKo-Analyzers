@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -23,7 +25,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (current.IsKind(SyntaxKind.SemicolonToken))
             {
-                // comment is on same line as the semicolon, so it's no issue
+                // comment is on same line as the semicolon, so it's no issue (except for initializers)
+                if (current.Parent is LocalDeclarationStatementSyntax d)
+                {
+                    return d.DescendantNodes().OfType<InitializerExpressionSyntax>().Any();
+                }
+
+                return false;
+            }
+
+            if (current.Parent is InitializerExpressionSyntax)
+            {
+                // comment is on collection initializer, so it's no issue
                 return false;
             }
 
