@@ -435,19 +435,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Is", name, name1), argument);
 
+        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
+        {
+            var expression = InvocationIs(name, argument);
+
+            return Argument(SimpleMemberAccess(expression, name1));
+        }
+
+        private static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, Argument(expression));
+
         private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, string name2)
         {
             var expression = SimpleMemberAccess("Is", name, name1);
             var invocation = Invocation(expression, argument);
 
             return Argument(SimpleMemberAccess(invocation, name2));
-        }
-
-        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
-        {
-            var expression = InvocationIs(name, argument);
-
-            return Argument(SimpleMemberAccess(expression, name1));
         }
 
         private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1, ArgumentSyntax argument1)
@@ -457,8 +459,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return Argument(appendixCall, argument1);
         }
-
-        private static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, Argument(expression));
 
         private static ArgumentSyntax Is(params string[] names) => Argument(SimpleMemberAccess("Is", names));
 

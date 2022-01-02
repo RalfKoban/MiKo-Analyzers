@@ -54,6 +54,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return hasIssue;
         }
 
+        private static bool HasIssue(string text)
+        {
+            var sentences = text.Split(Constants.SentenceMarkers, StringSplitOptions.RemoveEmptyEntries);
+
+            return sentences.Any(SentenceHasIssue);
+        }
+
         private static bool Analyze(IEnumerable<XmlElementSyntax> nodes, string tagName) => nodes.Where(_ => _.GetName() == tagName).Select(ConstructComment).Any(HasIssue);
 
         private static string ConstructComment(SyntaxNode comment)
@@ -66,13 +73,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return builder.ToString().Trim();
-        }
-
-        private static bool HasIssue(string text)
-        {
-            var sentences = text.Split(Constants.SentenceMarkers, StringSplitOptions.RemoveEmptyEntries);
-
-            return sentences.Any(SentenceHasIssue);
         }
 
         private static bool SentenceHasIssue(string sentence)

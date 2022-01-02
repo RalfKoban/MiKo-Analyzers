@@ -19,6 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
+        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, string commentXml)
+        {
+            var returnType = symbol.GetReturnType();
+
+            return returnType != null
+                       ? AnalyzeReturnType(symbol, returnType, commentXml)
+                       : Enumerable.Empty<Diagnostic>();
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var method = (IMethodSymbol)symbol;
@@ -28,15 +37,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return AnalyzeReturnType(method, method.ReturnType, commentXml);
-        }
-
-        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, string commentXml)
-        {
-            var returnType = symbol.GetReturnType();
-
-            return returnType != null
-                       ? AnalyzeReturnType(symbol, returnType, commentXml)
-                       : Enumerable.Empty<Diagnostic>();
         }
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)

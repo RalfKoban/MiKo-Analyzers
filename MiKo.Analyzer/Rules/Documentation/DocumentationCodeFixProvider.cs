@@ -12,6 +12,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationCodeFixProvider : MiKoCodeFixProvider
     {
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
+        {
+            return comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                          .WithContent(content)
+                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+        }
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, SyntaxFactory.List(nodes));
+
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
             return Comment(comment, text[0], additionalComment);
@@ -89,6 +98,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, commentStart, link, commentEnd, commendEndNodes.ToArray());
         }
 
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
+
         protected static XmlElementSyntax Comment(
                                                 XmlElementSyntax comment,
                                                 string commentStart,
@@ -130,17 +141,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // TODO RKN: Fix XML escaping caused by string conversion
             return Comment(comment, start.Concat(commentMiddle).Concat(middle).Concat(end));
         }
-
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
-        {
-            return comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                          .WithContent(content)
-                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
-        }
-
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, SyntaxFactory.List(nodes));
-
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
         {

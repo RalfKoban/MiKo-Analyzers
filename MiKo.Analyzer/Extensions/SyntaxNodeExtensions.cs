@@ -535,14 +535,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsException<T>(this TypeSyntax value) where T : Exception => value.IsException(typeof(T));
 
+        internal static bool IsException(this XmlElementSyntax value) => value.GetName() == Constants.XmlTag.Exception;
+
         internal static bool IsException(this TypeSyntax value, Type exceptionType)
         {
             var s = value.ToString();
 
             return s == exceptionType.Name || s == exceptionType.FullName;
         }
-
-        internal static bool IsException(this XmlElementSyntax value) => value.GetName() == Constants.XmlTag.Exception;
 
         internal static bool IsExceptionCommentFor<T>(this XmlElementSyntax value) where T : Exception => IsExceptionComment(value, typeof(T));
 
@@ -686,9 +686,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSee(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
 
-        internal static bool IsSeeAlso(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
-
         internal static bool IsSee(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
+
+        internal static bool IsSeeAlso(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
         internal static bool IsSeeAlso(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 
@@ -936,9 +936,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
 
-        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
-
         internal static XmlElementSyntax WithContent(this XmlElementSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+
+        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
 
         internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
 
@@ -1089,8 +1089,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts) => texts.Aggregate(values, (current, text) => current.WithoutText(text));
 
-        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts) => texts.Aggregate(value, WithoutTrailing);
-
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text)
         {
             var textTokens = new List<SyntaxToken>(value.TextTokens);
@@ -1129,6 +1127,8 @@ namespace MiKoSolutions.Analyzers
 
             return value;
         }
+
+        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts) => texts.Aggregate(value, WithoutTrailing);
 
         internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, char[] characters)
         {
