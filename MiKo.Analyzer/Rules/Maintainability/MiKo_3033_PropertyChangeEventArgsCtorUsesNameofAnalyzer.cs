@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return NameofHasIssue(node, i.ArgumentList.Arguments, semanticModel);
 
                 case IdentifierNameSyntax s when node.EnclosingMethodHasParameter(s.GetName(), semanticModel):
-                    return false; // it's a parameter, so don't report an issue
+                    return false; // it's a parameter, so do not report an issue
 
                 default:
                     return true; // report to use nameof instead

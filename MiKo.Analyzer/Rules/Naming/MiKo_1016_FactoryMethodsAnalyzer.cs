@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 case Accessibility.NotApplicable:
                 case Accessibility.Private:
-                    return false; // ignore private methods or those that don't have any accessibility (means they are also private)
+                    return false; // ignore private methods or those that do not have any accessibility (means they are also private)
 
                 default:
                     return base.ShallAnalyze(symbol);

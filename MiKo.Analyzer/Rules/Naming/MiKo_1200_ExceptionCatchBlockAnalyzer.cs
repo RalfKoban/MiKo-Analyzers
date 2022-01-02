@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (node is null)
             {
-                return null; // we don't have an exception
+                return null; // we do not have an exception
             }
 
             var identifier = node.Identifier;
@@ -45,8 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             switch (name)
             {
-                case null: // we don't have one
-                case "": // we don't have one
+                case null: // we do not have one
+                case "": // we do not have one
                 case ExpectedName: // correct identifier
                     return null;
 

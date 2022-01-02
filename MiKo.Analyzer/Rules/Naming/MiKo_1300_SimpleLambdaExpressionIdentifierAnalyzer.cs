@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var parameterName = node.Parameter.GetName();
             switch (parameterName)
             {
-                case null: // we don't have one
+                case null: // we do not have one
                 case Constants.LambdaIdentifiers.Default: // correct identifier (default one)
                 case Constants.LambdaIdentifiers.Fallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
