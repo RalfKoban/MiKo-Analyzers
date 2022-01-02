@@ -553,7 +553,7 @@ namespace MiKoSolutions.Analyzers
             {
                 if (value.AllInterfaces.Contains(type))
                 {
-                    // its an interface implementation, so we don't need an extra type
+                    // its an interface implementation, so we do not need an extra type
                     return true;
                 }
             }
@@ -561,7 +561,7 @@ namespace MiKoSolutions.Analyzers
             {
                 if (value.IncludingAllBaseTypes().Contains(type))
                 {
-                    // its a base type. sp we don't need an extra type
+                    // its a base type, so we do not need an extra type
                     return true;
                 }
             }

@@ -137,7 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string name)
         {
-            // double check for performance improvements (we don't need to replace if it's not contained at all)
+            // double check for performance improvements (we do not need to replace if it's not contained at all)
             if (name.ContainsAny(Numbers, StringComparison.OrdinalIgnoreCase))
             {
                 var nameToInspect = HandleKnownParts(name);

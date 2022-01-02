@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                            {
                                                                if (ReferencesTestAssemblies(compilationContext.Compilation) is false)
                                                                {
-                                                                   // don't run analyzer if there are no tests contained
+                                                                   // do not run analyzer if there are no tests contained
                                                                    return;
                                                                }
                                                            }

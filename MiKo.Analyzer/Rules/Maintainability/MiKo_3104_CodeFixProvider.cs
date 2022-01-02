@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             var listWithoutAttribute = attributeList.Without(attribute);
                             if (listWithoutAttribute.Attributes.Count == 0)
                             {
-                                // we don't need an empty list
+                                // we do not need an empty list
                                 return method.Without(attributeList);
                             }
 

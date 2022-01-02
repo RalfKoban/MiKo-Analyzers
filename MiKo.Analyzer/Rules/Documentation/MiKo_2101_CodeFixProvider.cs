@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (text.Any(_ => _.ValueText.IsNullOrWhiteSpace() is false))
             {
-                // remove last new line token so that we don't have empty lines
+                // remove last new line token so that we do not have empty lines
                 var last = text.Last();
                 if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {

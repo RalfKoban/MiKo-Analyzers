@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (IsSequential(method))
                 {
-                    // both attributes combined don't make sense
+                    // both attributes combined do not make sense
                     if (IsCombinatorial(method))
                     {
                         yield return Issue(method);
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
                 else if (IsPairwise(method))
                 {
-                    // both attributes combined don't make sense
+                    // both attributes combined do not make sense
                     if (IsCombinatorial(method))
                     {
                         yield return Issue(method);

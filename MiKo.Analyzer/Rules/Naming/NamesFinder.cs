@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // find properties
             var propertyNames = symbol.ContainingType.GetProperties().Select(_ => _.Name).ToHashSet();
 
-            // there might be none available; in such case don't report anything
+            // there might be none available; in such case do not report anything
             if (propertyNames.None())
             {
                 return Enumerable.Empty<string>();
