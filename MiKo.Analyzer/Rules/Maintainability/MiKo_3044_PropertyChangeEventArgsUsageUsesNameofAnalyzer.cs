@@ -29,7 +29,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case CaseSwitchLabelSyntax caseLabel:
                 {
+                    // switch / case
                     return IsPropertyNameAccess(caseLabel.Ancestors().OfType<SwitchStatementSyntax>().First().Expression);
+                }
+
+                case ConstantPatternSyntax pattern when pattern.Parent is SwitchExpressionArmSyntax arm:
+                {
+                    // switch expression in an arm
+                    return IsPropertyNameAccess(arm.Ancestors().OfType<SwitchExpressionSyntax>().First().GoverningExpression);
                 }
 
                 case MemberAccessExpressionSyntax maes when maes.IsKind(SyntaxKind.SimpleMemberAccessExpression) && maes.Parent is InvocationExpressionSyntax invocation && IsEqualsCall(maes):

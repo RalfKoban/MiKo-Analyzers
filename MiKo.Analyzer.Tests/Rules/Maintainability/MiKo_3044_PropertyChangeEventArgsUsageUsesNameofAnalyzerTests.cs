@@ -294,6 +294,122 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_PropertyChangedEventArgs_PropertyName_comparison_with_nameof_in_switch_case_when_statement() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    private PropertyChangedEventArgs Args { get; set; }
+
+    public static bool DoSomething(object value)
+    {
+        switch (value)
+        {
+            case TestMe t when t.MyProperty.PropertyName == nameof(MyProperty):
+                return true;
+
+            default:
+                return false;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_PropertyChangedEventArgs_PropertyName_Equals_comparison_with_string_literal_in_switch_case_when_statement() => An_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    private PropertyChangedEventArgs Args { get; set; }
+
+    public static bool DoSomething(object value)
+    {
+        switch (value)
+        {
+            case TestMe t when t.MyProperty.PropertyName == ""MyProperty"":
+                return true;
+
+            default:
+                return false;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_string_literal_in_switch_case_when_statement() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string Text { get; set; }
+
+    public static bool DoSomething(object value)
+    {
+        switch (value)
+        {
+            case TestMe t when t.Text == ""MyText"":
+                return true;
+
+            default:
+                return false;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_PropertyChangedEventArgs_PropertyName_comparison_with_nameof_in_switch_expression_arm_statement() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    private int MyProperty { get; set; }
+
+    public bool DoSomething(PropertyChangedEventArgs e) => e.PropertyName switch
+                                                                                {
+                                                                                    nameof(MyProperty) => true,
+                                                                                    _ => false,
+                                                                                };
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_PropertyChangedEventArgs_PropertyName_Equals_comparison_with_string_literal_in_switch_expression_arm_statement() => An_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    private int MyProperty { get; set; }
+
+    public bool DoSomething(PropertyChangedEventArgs e) => e.PropertyName switch
+                                                                                {
+                                                                                    ""MyProperty"" => true,
+                                                                                    _ => false,
+                                                                                };
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_string_literal_in_switch_expression_arm_statement() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(string text) => text switch
+                                                    {
+                                                        ""MyText"" => true,
+                                                        _ => false,
+                                                    };
+}
+");
+
         [TestCase("e.PropertyName.Equals(nameof(MyProperty))")]
         [TestCase("nameof(MyProperty).Equals(e.PropertyName)")]
         [TestCase("!e.PropertyName.Equals(nameof(MyProperty))")]
