@@ -146,7 +146,7 @@ The following tables list all the 312 rules that are currently provided by the a
 |MiKo_2006|Routed events should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2010|Sealed classes should document being sealed.|&#x2713;|&#x2713;|
 |MiKo_2011|Unsealed classes should not lie about sealing.|&#x2713;|&#x2713;|
-|MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|&#x2713;|&#x2713;|
+|MiKo_2012|&lt;summary&gt; documentation should describe the type's responsibility.|&#x2713;|&#x2713;|
 |MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|&#x2713;|&#x2713;|
@@ -181,8 +181,8 @@ The following tables list all the 312 rules that are currently provided by the a
 |MiKo_2044|Documentation references method parameters correctly.|&#x2713;|&#x2713;|
 |MiKo_2045|&lt;summary&gt; documentation should not reference parameters.|&#x2713;|&#x2713;|
 |MiKo_2046|Documentation should reference type parameters correctly.|&#x2713;|\-|
-|MiKo_2047|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|&#x2713;|\-|
-|MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2047|&lt;summary&gt; documentation of Attributes should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2048|&lt;summary&gt; documentation of value converters should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'.|&#x2713;|\-|
 |MiKo_2050|Exceptions should be documented following the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').|&#x2713;|&#x2713;|
