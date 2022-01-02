@@ -2859,31 +2859,31 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3032_Description" xml:space="preserve">
-    <value>Property names that are passed into the  'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This eases refactorings.</value>
+    <value>Property names that are passed into the 'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This eases refactorings.</value>
   </data>
   <data name="MiKo_3032_MessageFormat" xml:space="preserve">
     <value>Use '{1}' instead</value>
   </data>
   <data name="MiKo_3032_Title" xml:space="preserve">
-    <value>Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.</value>
+    <value>Use 'nameof' instead of Cinch for names of properties for created 'PropertyChangedEventArgs' instances.</value>
   </data>
   <data name="MiKo_3033_CodeFixTitle" xml:space="preserve">
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3033_Description" xml:space="preserve">
-    <value>Property names that are passed into the  'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
+    <value>Property names that are passed into the 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' constructors shall be provided via the 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
   </data>
   <data name="MiKo_3033_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3033_Title" xml:space="preserve">
-    <value>Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.</value>
+    <value>Use 'nameof' for names of properties for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances.</value>
   </data>
   <data name="MiKo_3034_CodeFixTitle" xml:space="preserve">
     <value>Apply [CallerMemberName]</value>
   </data>
   <data name="MiKo_3034_Description" xml:space="preserve">
-    <value>A method that raises the PropertyChanging or PropertyChanged events should use the CallerMemberNameAttribute to specify the name of the property automatically.</value>
+    <value>A method that raises the PropertyChanging or PropertyChanged events should use the [CallerMemberNameAttribute] to specify the name of the property automatically.</value>
   </data>
   <data name="MiKo_3034_MessageFormat" xml:space="preserve">
     <value>Apply [CallerMemberName] attribute</value>
@@ -2981,13 +2981,25 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3043_Description" xml:space="preserve">
-    <value>Event handling methods that are passed into the (de-)registration on the WeakEventManager shall be provided via 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
+    <value>The names of events that are (de-)registered on the WeakEventManager shall be provided via 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
   </data>
   <data name="MiKo_3043_MessageFormat" xml:space="preserve">
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3043_Title" xml:space="preserve">
-    <value>Event handlers for WeakEventManager shall be provided via 'nameof' operator.</value>
+    <value>Use 'nameof' for WeakEventManager event (de-)registrations.</value>
+  </data>
+  <data name="MiKo_3044_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3044_Description" xml:space="preserve">
+    <value>Property names that are provided by the 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' shall be compared via the 'nameof' operator. This prevents typos or non-existing invalid names and eases refactorings.</value>
+  </data>
+  <data name="MiKo_3044_MessageFormat" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3044_Title" xml:space="preserve">
+    <value>Use 'nameof' to compare property names of 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'.</value>
   </data>
   <data name="MiKo_3047_Description" xml:space="preserve">
     <value>To prevent typos, any applied [ContentProperty] attribute shall use 'nameof' to define the property.</value>
@@ -2996,7 +3008,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Use 'nameof'</value>
   </data>
   <data name="MiKo_3047_Title" xml:space="preserve">
-    <value>Applied [ContentProperty] attributes shall use 'nameof'.</value>
+    <value>Use 'nameof' for applied [ContentProperty] attributes.</value>
   </data>
   <data name="MiKo_3048_Description" xml:space="preserve">
     <value>To indicate to development tools the data types involved in a conversion, it is a good practice to decorate implementations of the IValueConverter interface with the ValueConversionAttribute attribute.</value>
