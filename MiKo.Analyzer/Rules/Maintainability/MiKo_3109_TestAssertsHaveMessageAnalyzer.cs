@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (expectedParameterName == index)
                 {
                     // we have a message
-                    return IsString(arguments[index]);
+                    return arguments[index].IsStringLiteral();
                 }
 
                 if (expectedParameterName > index)
@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 // we have some parameters and some arguments
-                return IsString(arguments[expectedParameterName]);
+                return arguments[expectedParameterName].IsStringLiteral();
             }
 
             // we are unsure, so we have to test
@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return false;
                 }
 
-                if (IsString(arguments[expectedParameterName]))
+                if (arguments[expectedParameterName].IsStringLiteral())
                 {
                     // TODO: we might have a message, but maybe it is also just a normal string parameter
                     return true;
@@ -93,19 +93,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return false;
-        }
-
-        private static bool IsString(ArgumentSyntax syntax)
-        {
-            switch (syntax.Expression.Kind())
-            {
-                case SyntaxKind.StringLiteralExpression:
-                case SyntaxKind.InterpolatedStringExpression:
-                    return true;
-
-                default:
-                    return false;
-            }
         }
 
 #pragma warning disable CA1502 // Avoid excessive complexity

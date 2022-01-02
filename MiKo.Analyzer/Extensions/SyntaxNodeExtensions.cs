@@ -470,6 +470,8 @@ namespace MiKoSolutions.Analyzers
             return value.InsertNodesBefore(nodeInList, new[] { modifiedNode });
         }
 
+        internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds) => kinds.ToHashSet().Contains(value.Kind());
+
         internal static bool IsBoolean(this TypeSyntax value)
         {
             switch (value.ToString())
@@ -721,6 +723,19 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsString(this ArgumentSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
 
         internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
+
+        internal static bool IsStringLiteral(this ArgumentSyntax value)
+        {
+            switch (value?.Expression?.Kind())
+            {
+                case SyntaxKind.StringLiteralExpression:
+                case SyntaxKind.InterpolatedStringExpression:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         internal static bool IsStruct(this ExpressionSyntax value, SemanticModel semanticModel)
         {
