@@ -19,18 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLockStatement, SyntaxKind.LockStatement);
 
-        private static bool IsInvocation(SyntaxNode identifier)
-        {
-            switch (identifier.Parent?.Kind())
-            {
-                case SyntaxKind.ConditionalAccessExpression:
-                case SyntaxKind.InvocationExpression:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
+        private static bool IsInvocation(SyntaxNode identifier) => identifier.Parent?.IsAnyKind(SyntaxKind.ConditionalAccessExpression, SyntaxKind.InvocationExpression) is true;
 
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {

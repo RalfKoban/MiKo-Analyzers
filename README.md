@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 
 ## Available Rules
-The following tables list all the 311 rules that are currently provided by the analyzer.
+The following tables list all the 312 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -146,7 +146,7 @@ The following tables list all the 311 rules that are currently provided by the a
 |MiKo_2006|Routed events should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2010|Sealed classes should document being sealed.|&#x2713;|&#x2713;|
 |MiKo_2011|Unsealed classes should not lie about sealing.|&#x2713;|&#x2713;|
-|MiKo_2012|&lt;summary&gt; documentation should describe its responsibility.|&#x2713;|&#x2713;|
+|MiKo_2012|&lt;summary&gt; documentation should describe the type's responsibility.|&#x2713;|&#x2713;|
 |MiKo_2013|&lt;summary&gt; documentation of Enums should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2014|Dispose methods should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2015|Documentation should use 'raise' or 'throw' instead of 'fire'.|&#x2713;|&#x2713;|
@@ -181,8 +181,8 @@ The following tables list all the 311 rules that are currently provided by the a
 |MiKo_2044|Documentation references method parameters correctly.|&#x2713;|&#x2713;|
 |MiKo_2045|&lt;summary&gt; documentation should not reference parameters.|&#x2713;|&#x2713;|
 |MiKo_2046|Documentation should reference type parameters correctly.|&#x2713;|\-|
-|MiKo_2047|&lt;summary&gt; documentation of Attributes should have a  default starting phrase.|&#x2713;|\-|
-|MiKo_2048|&lt;summary&gt; documentation of value converters should have a  default starting phrase.|&#x2713;|&#x2713;|
+|MiKo_2047|&lt;summary&gt; documentation of Attributes should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2048|&lt;summary&gt; documentation of value converters should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'.|&#x2713;|\-|
 |MiKo_2050|Exceptions should be documented following the .NET Framework.|&#x2713;|&#x2713;|
 |MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;').|&#x2713;|&#x2713;|
@@ -264,8 +264,8 @@ The following tables list all the 311 rules that are currently provided by the a
 |MiKo_3028|Do not assign null to lambda parameters.|&#x2713;|\-|
 |MiKo_3030|Methods should follow the Law of Demeter.|\-|\-|
 |MiKo_3031|ICloneable.Clone() should not be implemented.|&#x2713;|\-|
-|MiKo_3032|Property names for created 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator instead of Cinch.|&#x2713;|&#x2713;|
-|MiKo_3033|Property names for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances shall be provided via 'nameof' operator.|&#x2713;|&#x2713;|
+|MiKo_3032|Use 'nameof' instead of Cinch for names of properties for created 'PropertyChangedEventArgs' instances.|&#x2713;|&#x2713;|
+|MiKo_3033|Use 'nameof' for names of properties for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances.|&#x2713;|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute.|&#x2713;|&#x2713;|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts.|&#x2713;|\-|
 |MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors.|&#x2713;|\-|
@@ -275,8 +275,9 @@ The following tables list all the 311 rules that are currently provided by the a
 |MiKo_3040|Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values.|&#x2713;|\-|
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|\-|
 |MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|\-|
-|MiKo_3043|Event handlers for WeakEventManager shall be provided via 'nameof' operator.|&#x2713;|&#x2713;|
-|MiKo_3047|Applied [ContentProperty] attributes shall use 'nameof'.|&#x2713;|\-|
+|MiKo_3043|Use 'nameof' for WeakEventManager event (de-)registrations.|&#x2713;|&#x2713;|
+|MiKo_3044|Use 'nameof' to compare property names of 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'.|&#x2713;|\-|
+|MiKo_3047|Use 'nameof' for applied [ContentProperty] attributes.|&#x2713;|\-|
 |MiKo_3048|ValueConverters shall have the [ValueConversion] attribute applied.|&#x2713;|\-|
 |MiKo_3049|Enum members shall have the [Description] attribute applied.|&#x2713;|\-|
 |MiKo_3050|DependencyProperty fields should be 'public static readonly'.|&#x2713;|&#x2713;|

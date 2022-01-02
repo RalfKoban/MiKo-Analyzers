@@ -3387,7 +3387,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-        ///Hence naming them e.g.  &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
+        ///Hence naming them e.g. &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos; does not provide any additional value and is just some cluttering noise. In addition, those names put the developer&apos;s attention and focus on the wrong thing..
         /// </summary>
         public static string MiKo_1108_Description {
             get {
@@ -3699,7 +3699,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical) name, such as  &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
+        ///   Looks up a localized string similar to Namespaces should not contain any language specific (technical) name, such as &apos;Interfaces&apos;, &apos;Exceptions&apos; or &apos;Enums&apos;..
         /// </summary>
         public static string MiKo_1401_Description {
             get {
@@ -3781,7 +3781,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain any unspecific name, such as  &apos;Miscellaneous&apos; or &apos;Utilities&apos;..
+        ///   Looks up a localized string similar to Namespaces should not contain any unspecific name, such as &apos;Miscellaneous&apos; or &apos;Utilities&apos;..
         /// </summary>
         public static string MiKo_1404_Description {
             get {
@@ -3991,7 +3991,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply &apos;Provides data for the &lt;see cref=&quot;TODO&quot;/&gt; event.&apos; comment..
+        ///   Looks up a localized string similar to Apply &apos;Provides data for the &lt;see cref=&quot;TODO&quot;/&gt; event.&apos; comment.
         /// </summary>
         public static string MiKo_2002_CodeFixTitle {
             get {
@@ -5487,7 +5487,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a  default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a default starting phrase..
         /// </summary>
         public static string MiKo_2047_Title {
             get {
@@ -5523,7 +5523,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a  default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a default starting phrase..
         /// </summary>
         public static string MiKo_2048_Title {
             get {
@@ -8064,7 +8064,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are passed into the  &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This eases refactorings..
+        ///   Looks up a localized string similar to Property names that are passed into the &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This eases refactorings..
         /// </summary>
         public static string MiKo_3032_Description {
             get {
@@ -8082,7 +8082,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names for created &apos;PropertyChangedEventArgs&apos; instances shall be provided via &apos;nameof&apos; operator instead of Cinch..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead of Cinch for names of properties for created &apos;PropertyChangedEventArgs&apos; instances..
         /// </summary>
         public static string MiKo_3032_Title {
             get {
@@ -8100,7 +8100,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names that are passed into the  &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to Property names that are passed into the &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; constructors shall be provided via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
         /// </summary>
         public static string MiKo_3033_Description {
             get {
@@ -8118,7 +8118,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names for created &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; instances shall be provided via &apos;nameof&apos; operator..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for names of properties for created &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; instances..
         /// </summary>
         public static string MiKo_3033_Title {
             get {
@@ -8136,7 +8136,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A method that raises the PropertyChanging or PropertyChanged events should use the CallerMemberNameAttribute to specify the name of the property automatically..
+        ///   Looks up a localized string similar to A method that raises the PropertyChanging or PropertyChanged events should use the [CallerMemberNameAttribute] to specify the name of the property automatically..
         /// </summary>
         public static string MiKo_3034_Description {
             get {
@@ -8408,7 +8408,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event handling methods that are passed into the (de-)registration on the WeakEventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        ///   Looks up a localized string similar to The names of events that are (de-)registered on the WeakEventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
         /// </summary>
         public static string MiKo_3043_Description {
             get {
@@ -8426,11 +8426,47 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event handlers for WeakEventManager shall be provided via &apos;nameof&apos; operator..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for WeakEventManager event (de-)registrations..
         /// </summary>
         public static string MiKo_3043_Title {
             get {
                 return ResourceManager.GetString("MiKo_3043_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3044_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3044_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property names that are provided by the &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; shall be compared via the &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        /// </summary>
+        public static string MiKo_3044_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3044_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3044_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3044_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; to compare property names of &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos;..
+        /// </summary>
+        public static string MiKo_3044_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3044_Title", resourceCulture);
             }
         }
         
@@ -8453,7 +8489,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Applied [ContentProperty] attributes shall use &apos;nameof&apos;..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for applied [ContentProperty] attributes..
         /// </summary>
         public static string MiKo_3047_Title {
             get {

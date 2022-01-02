@@ -19,19 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
-        private static bool IsStringLiteral(ArgumentSyntax argument)
-        {
-            switch (argument?.Expression?.Kind())
-            {
-                case SyntaxKind.StringLiteralExpression:
-                case SyntaxKind.InterpolatedStringExpression:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
             var node = (InvocationExpressionSyntax)context.Node;
@@ -66,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (arguments.None(_ => _.IsException(semanticModel)))
                         {
-                            if (IsStringLiteral(arguments[0]))
+                            if (arguments[0].IsStringLiteral())
                             {
                                 return AnalyzeCall(methodCall, arguments[0], semanticModel);
                             }
@@ -83,13 +70,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (arguments.None(_ => _.IsException(semanticModel)))
                         {
-                            if (IsStringLiteral(arguments[0]))
+                            if (arguments[0].IsStringLiteral())
                             {
                                 return AnalyzeCall(methodCall, arguments[0], semanticModel);
                             }
 
                             // TODO: Find correct argument, especially for those with 3 or 4 parameters
-                            if (arguments.Count > 1 && IsStringLiteral(arguments[1]))
+                            if (arguments.Count > 1 && arguments[1].IsStringLiteral())
                             {
                                 return AnalyzeCall(methodCall, arguments[1], semanticModel);
                             }
