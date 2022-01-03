@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Composition;
 using System.Linq;
 
@@ -56,6 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         case nameof(ArgumentOutOfRangeException):
                             return GetUpdatedArgumentListForArgumentOutOfRangeException(originalArguments, parameter);
+
+                        case nameof(InvalidEnumArgumentException):
+                            return GetUpdatedArgumentListForInvalidEnumArgumentException(originalArguments, parameter);
                     }
                 }
             }
@@ -127,6 +131,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return originalArguments;
         }
 
+        private static ArgumentListSyntax GetUpdatedArgumentListForInvalidEnumArgumentException(ArgumentListSyntax originalArguments, ParameterSyntax parameter)
+        {
+            var parameterType = parameter.Type;
+            if (parameterType is null)
+            {
+                return originalArguments;
+            }
+
+            var arguments = originalArguments.Arguments;
+
+            switch (arguments.Count)
+            {
+                case 0: // missing data
+                case 1: // it's only the message
+                case 3: // switched message and parameter
+                {
+                    return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(SyntaxFactory.TypeOfExpression(parameterType)));
+                }
+            }
+
+            return originalArguments;
+        }
+
         private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax o)
         {
             var method = o.GetEnclosing<BaseMethodDeclarationSyntax>();
@@ -141,7 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
 
                 // 'value' is a special parameter that is not part of the parameter list
-                parameters.Insert(0, Parameter("value"));
+                parameters.Insert(0, Parameter(indexer.Type));
 
                 return parameters;
             }
@@ -150,7 +177,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (property != null)
             {
                 // 'value' is a special parameter that is not part of the parameter list
-                return new[] { Parameter("value") };
+                return new[] { Parameter(property.Type) };
             }
 
             return Enumerable.Empty<ParameterSyntax>();
