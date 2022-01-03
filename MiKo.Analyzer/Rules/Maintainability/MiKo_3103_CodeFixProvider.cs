@@ -76,9 +76,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private LiteralExpressionSyntax Guid(string format = DefaultFormat)
         {
             var guid = CreateGuid();
-            var token = guid.ToString(format).SurroundedWithDoubleQuote().ToSyntaxToken();
 
-            return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
+            return StringLiteral(guid.ToString(format));
         }
     }
 }

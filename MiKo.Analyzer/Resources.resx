@@ -2687,6 +2687,9 @@ That is they should return a Boolean and have the last parameter as [out] parame
   <data name="MiKo_3010_Title" xml:space="preserve">
     <value>Do not create or throw reserved exception types.</value>
   </data>
+  <data name="MiKo_3011_CodeFixTitle" xml:space="preserve">
+    <value>Add 'paramName' parameter</value>
+  </data>
   <data name="MiKo_3011_Description" xml:space="preserve">
     <value>Thrown ArgumentExceptions (or its subtypes) should contain the name of the parameter that caused the exception to be thrown.</value>
   </data>
