@@ -248,7 +248,7 @@ The following tables list all the 312 rules that are currently provided by the a
 |MiKo_3008|Method should not return collections that can be changed from outside.|&#x2713;|\-|
 |MiKo_3009|Commands should invoke only named methods and no lambda expressions.|&#x2713;|\-|
 |MiKo_3010|Do not create or throw reserved exception types.|&#x2713;|\-|
-|MiKo_3011|Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name.|&#x2713;|\-|
+|MiKo_3011|Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name.|&#x2713;|&#x2713;|
 |MiKo_3012|Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown.|&#x2713;|\-|
 |MiKo_3013|The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException.|&#x2713;|\-|
 |MiKo_3014|InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message.|&#x2713;|\-|
