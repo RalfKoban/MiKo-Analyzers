@@ -131,6 +131,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
-        internal static SyntaxToken ToSyntaxToken(this string text, SyntaxKind kind = SyntaxKind.StringLiteralToken) => SyntaxFactory.Token(default, kind, text, text, default);
+        internal static SyntaxToken ToSyntaxToken(this string text, SyntaxKind kind = SyntaxKind.StringLiteralToken)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.IdentifierToken:
+                    return SyntaxFactory.Identifier(text);
+
+                default:
+                    return SyntaxFactory.Token(default, kind, text, text, default);
+            }
+        }
     }
 }

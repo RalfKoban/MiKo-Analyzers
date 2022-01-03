@@ -90,6 +90,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return result;
         }
 
+        protected static LiteralExpressionSyntax StringLiteral(string text)
+        {
+            var token = text.SurroundedWithDoubleQuote().ToSyntaxToken();
+
+            return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
+        }
+
         protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(SyntaxFactory.Token));
 
         protected static SyntaxNode WithUsing(SyntaxNode root, string usingNamespace)

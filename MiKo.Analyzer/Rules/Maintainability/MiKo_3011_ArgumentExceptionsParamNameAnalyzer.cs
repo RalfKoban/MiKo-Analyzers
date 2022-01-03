@@ -39,6 +39,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        internal static IfStatementSyntax FindIfStatementSyntax(SyntaxNode node)
+        {
+            var ifStatement = node.Ancestors().OfType<IfStatementSyntax>().FirstOrDefault();
+            if (ifStatement is null)
+            {
+                // maybe part of a block outside the if statement
+                var block = node.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
+                if (block != null)
+                {
+                    // try to find the corresponding if statement
+                    ifStatement = block.ChildNodes().OfType<IfStatementSyntax>().FirstOrDefault();
+                }
+            }
+
+            return ifStatement;
+        }
+
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => Mappings.ContainsKey(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
@@ -163,20 +180,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == _.SurroundedWithDoubleQuote() || argumentName == AsNameof(_));
         }
 
-        private static Location GetLocation(ArgumentListSyntax syntax) => Location.Create(syntax.SyntaxTree, syntax.Arguments.Span);
+        private static Location GetLocation(ArgumentListSyntax syntax) => syntax.GetLocation(); // Location.Create(syntax.SyntaxTree, syntax.Arguments.Span);
 
         private static string GetParameterNames(SyntaxNode node, IMethodSymbol method)
         {
             var parameters = method.Parameters.Select(_ => AsNameof(_.Name)).HumanizedConcatenated();
 
-            var ifStatement = node.GetEnclosing<IfStatementSyntax>();
+            var ifStatement = FindIfStatementSyntax(node);
             if (ifStatement != null)
             {
                 var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
                 var parameter = method.Parameters.FirstOrDefault(_ => identifiers.Contains(_.Name));
                 if (parameter != null)
                 {
-                    parameters = parameter.Name.SurroundedWithApostrophe();
+                    parameters = AsNameof(parameter.Name).SurroundedWithApostrophe();
                 }
             }
 

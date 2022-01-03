@@ -7563,6 +7563,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add &apos;paramName&apos; parameter.
+        /// </summary>
+        public static string MiKo_3011_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3011_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) should contain the name of the parameter that caused the exception to be thrown..
         /// </summary>
         public static string MiKo_3011_Description {
