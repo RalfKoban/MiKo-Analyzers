@@ -53,6 +53,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         case nameof(ArgumentNullException):
                             return GetUpdatedArgumentListForArgumentNullException(originalArguments, parameter);
+
+                        case nameof(ArgumentOutOfRangeException):
+                            return GetUpdatedArgumentListForArgumentOutOfRangeException(originalArguments, parameter);
                     }
                 }
             }
@@ -82,6 +85,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case 2: // switched message and parameter
                     return ArgumentList(arguments[1], ParamName(parameter));
+
+                case 3: // switched message and parameter
+                    return ArgumentList(arguments[1], ParamName(parameter), arguments[2]);
             }
 
             return originalArguments;
@@ -96,9 +102,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case 0: // missing message, so add a TODO
                     return ArgumentList(ParamName(parameter), ToDo());
 
-                case 1: // it's only the message
+                case 1: // it's the message instead of the parameter
                 case 2: // switched message and parameter
                     return ArgumentList(ParamName(parameter), arguments[0]);
+            }
+
+            return originalArguments;
+        }
+
+        private static ArgumentListSyntax GetUpdatedArgumentListForArgumentOutOfRangeException(ArgumentListSyntax originalArguments, ParameterSyntax parameter)
+        {
+            var arguments = originalArguments.Arguments;
+
+            switch (arguments.Count)
+            {
+                case 0: // missing message, so add a TODO
+                    return ArgumentList(ParamName(parameter), Argument(parameter), ToDo());
+
+                case 1: // it's the message instead of the parameter
+                case 2: // switched message and parameter
+                    return ArgumentList(ParamName(parameter), Argument(parameter), arguments[0]);
             }
 
             return originalArguments;
@@ -118,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
 
                 // 'value' is a special parameter that is not part of the parameter list
-                parameters.Insert(0, SyntaxFactory.Parameter(SyntaxFactory.Identifier("value")));
+                parameters.Insert(0, Parameter("value"));
 
                 return parameters;
             }
@@ -127,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (property != null)
             {
                 // 'value' is a special parameter that is not part of the parameter list
-                return new[] { SyntaxFactory.Parameter(SyntaxFactory.Identifier("value")) };
+                return new[] { Parameter("value") };
             }
 
             return Enumerable.Empty<ParameterSyntax>();
@@ -143,8 +166,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
-            var parameter = parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
-            return parameter;
+
+            return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
         }
 
         private static ArgumentSyntax ToDo() => Argument(StringLiteral("TODO"));

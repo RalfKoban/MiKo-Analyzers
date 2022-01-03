@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         protected static ArgumentSyntax Argument(ExpressionSyntax expression) => SyntaxFactory.Argument(expression);
 
+        protected static ArgumentSyntax Argument(ParameterSyntax parameter) => Argument(SyntaxFactory.IdentifierName(parameter.GetName()));
+
         protected static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, ArgumentSyntax argument) => Argument(Invocation(expression, argument));
 
         protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
@@ -47,6 +49,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return Invocation(member);
         }
+
+        protected static ParameterSyntax Parameter(string name) => SyntaxFactory.Parameter(SyntaxFactory.Identifier(name));
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName)
         {
