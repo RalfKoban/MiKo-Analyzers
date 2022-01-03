@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return InspectArgument(arguments[1], method, semanticModel);
             }
 
-            return GetLocation(syntax);
+            return syntax.GetLocation();
         }
 
         private static Location InspectArgumentNullException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
             }
 
-            return GetLocation(syntax);
+            return syntax.GetLocation();
         }
 
         private static Location InspectArgumentOutOfRangeException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return InspectArgument(arguments[0], method, semanticModel);
             }
 
-            return GetLocation(syntax);
+            return syntax.GetLocation();
         }
 
         private static Location InspectInvalidEnumArgumentException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
@@ -153,11 +153,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arguments = syntax.Arguments;
             switch (arguments.Count)
             {
+                case 2:
+                    return Location.None;
+
                 case 3:
                     return InspectArgument(arguments[0], method, semanticModel);
             }
 
-            return GetLocation(syntax);
+            return syntax.GetLocation();
         }
 
         private static Location InspectArgument(ArgumentSyntax argument, IMethodSymbol method, SemanticModel semanticModel)
@@ -179,8 +182,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return method.Parameters.Select(_ => _.Name).Any(_ => argumentName == _.SurroundedWithDoubleQuote() || argumentName == AsNameof(_));
         }
-
-        private static Location GetLocation(ArgumentListSyntax syntax) => syntax.GetLocation(); // Location.Create(syntax.SyntaxTree, syntax.Arguments.Span);
 
         private static string GetParameterNames(SyntaxNode node, IMethodSymbol method)
         {
