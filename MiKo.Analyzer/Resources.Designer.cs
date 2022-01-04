@@ -7608,6 +7608,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provide actual value.
+        /// </summary>
+        public static string MiKo_3012_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3012_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) should contain the actual value of the parameter that caused the exception to be thrown..
         /// </summary>
         public static string MiKo_3012_Description {

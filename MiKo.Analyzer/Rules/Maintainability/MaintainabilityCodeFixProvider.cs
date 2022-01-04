@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Argument(ParameterSyntax parameter) => Argument(SyntaxFactory.IdentifierName(parameter.GetName()));
 
-        protected static ArgumentSyntax Argument(ParameterSyntax parameter, SyntaxKind kind) => Argument(parameter, SyntaxFactory.PredefinedType(SyntaxFactory.Token(kind)));
+        protected static ArgumentSyntax Argument(ParameterSyntax parameter, SyntaxKind kind) => Argument(parameter, PredefinedType(kind));
 
         protected static ArgumentSyntax Argument(ParameterSyntax parameter, TypeSyntax type) => Argument(SyntaxFactory.CastExpression(type, SyntaxFactory.IdentifierName(parameter.GetName())));
 
@@ -55,6 +55,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected static ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier("value"), default);
+
+        protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(SyntaxFactory.Token(kind));
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName)
         {
@@ -106,6 +108,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(SyntaxFactory.Token));
+
+        protected static TypeOfExpressionSyntax TypeOf(ParameterSyntax parameter)
+        {
+            var typeSyntax = parameter.Type;
+            return typeSyntax is null
+                       ? TypeOf(SyntaxKind.VoidKeyword)
+                       : TypeOf(typeSyntax);
+        }
+
+        protected static TypeOfExpressionSyntax TypeOf(SyntaxKind kind) => TypeOf(PredefinedType(kind));
+
+        protected static TypeOfExpressionSyntax TypeOf(string typeName) => TypeOf(SyntaxFactory.ParseTypeName(typeName));
+
+        protected static TypeOfExpressionSyntax TypeOf(TypeSyntax type) => SyntaxFactory.TypeOfExpression(type);
 
         protected static SyntaxNode WithUsing(SyntaxNode root, string usingNamespace)
         {

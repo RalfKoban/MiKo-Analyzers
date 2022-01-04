@@ -39,23 +39,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        internal static IfStatementSyntax FindIfStatementSyntax(SyntaxNode node)
-        {
-            var ifStatement = node.Ancestors().OfType<IfStatementSyntax>().FirstOrDefault();
-            if (ifStatement is null)
-            {
-                // maybe part of a block outside the if statement
-                var block = node.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
-                if (block != null)
-                {
-                    // try to find the corresponding if statement
-                    ifStatement = block.ChildNodes().OfType<IfStatementSyntax>().FirstOrDefault();
-                }
-            }
-
-            return ifStatement;
-        }
-
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel) => Mappings.ContainsKey(node.Type.ToString());
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
@@ -187,7 +170,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var parameters = method.Parameters.Select(_ => AsNameof(_.Name)).HumanizedConcatenated();
 
-            var ifStatement = FindIfStatementSyntax(node);
+            var ifStatement = node.GetRelatedIfStatement();
             if (ifStatement != null)
             {
                 var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();

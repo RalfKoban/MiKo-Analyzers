@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,59 +10,35 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3011_CodeFixProvider)), Shared]
-    public sealed class MiKo_3011_CodeFixProvider : MaintainabilityCodeFixProvider
+    public sealed class MiKo_3011_CodeFixProvider : ObjectCreationExpressionMaintainabilityCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_3011_ArgumentExceptionsParamNameAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3011_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
-
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => GetUpdatedSyntax((ObjectCreationExpressionSyntax)syntax);
-
-        private static SyntaxNode GetUpdatedSyntax(ObjectCreationExpressionSyntax o)
+        protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
-            var arguments = GetUpdatedArgumentListSyntax(o);
-
-            return SyntaxFactory.ObjectCreationExpression(o.Type, arguments, null);
-        }
-
-        private static ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax o)
-        {
-            var originalArguments = o.ArgumentList;
-            if (originalArguments is null)
+            // there might be multiple parameters, so we have to find out which parameter is meant
+            var parameter = FindUsedParameter(syntax);
+            if (parameter != null)
             {
-                return null;
-            }
-
-            var parameters = CollectParameters(o);
-            if (parameters.Any())
-            {
-                // there might be multiple parameters, so we have to find out which parameter is meant
-                var parameter = parameters.Count() > 1
-                                    ? FindUsedParameter(originalArguments, parameters)
-                                    : parameters.First();
-
-                if (parameter != null)
+                switch (syntax.Type.GetNameOnlyPart())
                 {
-                    switch (o.Type.GetNameOnlyPart())
-                    {
-                        case nameof(ArgumentException):
-                            return GetUpdatedArgumentListForArgumentException(originalArguments, parameter);
+                    case nameof(ArgumentException):
+                        return GetUpdatedArgumentListForArgumentException(syntax.ArgumentList, parameter);
 
-                        case nameof(ArgumentNullException):
-                            return GetUpdatedArgumentListForArgumentNullException(originalArguments, parameter);
+                    case nameof(ArgumentNullException):
+                        return GetUpdatedArgumentListForArgumentNullException(syntax.ArgumentList, parameter);
 
-                        case nameof(ArgumentOutOfRangeException):
-                            return GetUpdatedArgumentListForArgumentOutOfRangeException(originalArguments, parameter);
+                    case nameof(ArgumentOutOfRangeException):
+                        return GetUpdatedArgumentListForArgumentOutOfRangeException(syntax.ArgumentList, parameter);
 
-                        case nameof(InvalidEnumArgumentException):
-                            return GetUpdatedArgumentListForInvalidEnumArgumentException(originalArguments, parameter);
-                    }
+                    case nameof(InvalidEnumArgumentException):
+                        return GetUpdatedArgumentListForInvalidEnumArgumentException(syntax.ArgumentList, parameter);
                 }
             }
 
-            return originalArguments;
+            return syntax.ArgumentList;
         }
 
         private static ArgumentListSyntax GetUpdatedArgumentListForArgumentException(ArgumentListSyntax originalArguments, ParameterSyntax parameter)
@@ -133,12 +107,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentListSyntax GetUpdatedArgumentListForInvalidEnumArgumentException(ArgumentListSyntax originalArguments, ParameterSyntax parameter)
         {
-            var parameterType = parameter.Type;
-            if (parameterType is null)
-            {
-                return originalArguments;
-            }
-
             var arguments = originalArguments.Arguments;
 
             switch (arguments.Count)
@@ -147,58 +115,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case 1: // it's only the message
                 case 3: // switched message and parameter
                 {
-                    return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(SyntaxFactory.TypeOfExpression(parameterType)));
+                    return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(TypeOf(parameter)));
                 }
             }
 
             return originalArguments;
         }
-
-        private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax o)
-        {
-            var method = o.GetEnclosing<BaseMethodDeclarationSyntax>();
-            if (method != null)
-            {
-                return method.ParameterList.Parameters;
-            }
-
-            var indexer = o.GetEnclosing<IndexerDeclarationSyntax>();
-            if (indexer != null)
-            {
-                var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
-
-                // 'value' is a special parameter that is not part of the parameter list
-                parameters.Insert(0, Parameter(indexer.Type));
-
-                return parameters;
-            }
-
-            var property = o.GetEnclosing<PropertyDeclarationSyntax>();
-            if (property != null)
-            {
-                // 'value' is a special parameter that is not part of the parameter list
-                return new[] { Parameter(property.Type) };
-            }
-
-            return Enumerable.Empty<ParameterSyntax>();
-        }
-
-        private static ParameterSyntax FindUsedParameter(SyntaxNode node, IEnumerable<ParameterSyntax> parameters)
-        {
-            var ifStatement = MiKo_3011_ArgumentExceptionsParamNameAnalyzer.FindIfStatementSyntax(node);
-            if (ifStatement is null)
-            {
-                // nothing found
-                return null;
-            }
-
-            var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
-
-            return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
-        }
-
-        private static ArgumentSyntax ToDo() => Argument(StringLiteral("TODO"));
-
-        private static ArgumentSyntax ParamName(ParameterSyntax parameter) => Argument(NameOf(parameter.GetName()));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -29,10 +30,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            if (node.ArgumentList?.Arguments.Count != 3)
+            var list = node.ArgumentList;
+            if (list is null)
             {
-                yield return Issue(node.Type.ToString(), node);
+                // incomplete, so no issue
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var arguments = list.Arguments;
+            switch (arguments.Count)
+            {
+                case 2:
+                    // both are strings, so we have an issue
+                    if (arguments[1].IsString(semanticModel))
+                    {
+                        break;
+                    }
+
+                    // it's either the serialization ctor or the one with the inner exception
+                    return Enumerable.Empty<Diagnostic>();
+
+                case 3: // correct call
+                    return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { Issue(node.Type.ToString(), node) };
         }
     }
 }
