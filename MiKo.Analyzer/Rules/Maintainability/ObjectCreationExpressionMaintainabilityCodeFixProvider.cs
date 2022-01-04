@@ -21,9 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (parameters.Any())
             {
                 // there might be multiple parameters, so we have to find out which parameter is meant
-                var parameter = parameters.Count() > 1
-                                    ? FindUsedParameter(syntax.ArgumentList, parameters)
-                                    : parameters.First();
+                var parameter = FindUsedParameter(syntax.ArgumentList, parameters);
+
                 return parameter;
             }
 

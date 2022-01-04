@@ -15,7 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Argument(ParameterSyntax parameter, SyntaxKind kind) => Argument(parameter, PredefinedType(kind));
 
-        protected static ArgumentSyntax Argument(ParameterSyntax parameter, TypeSyntax type) => Argument(SyntaxFactory.CastExpression(type, SyntaxFactory.IdentifierName(parameter.GetName())));
+        protected static ArgumentSyntax Argument(ParameterSyntax parameter, TypeSyntax type) => Argument(SyntaxFactory.IdentifierName(parameter.GetName()), type);
+
+        protected static ArgumentSyntax Argument(IdentifierNameSyntax identifier, SyntaxKind kind) => Argument(identifier, PredefinedType(kind));
+
+        protected static ArgumentSyntax Argument(IdentifierNameSyntax identifier, TypeSyntax type) => Argument(SyntaxFactory.CastExpression(type, identifier));
 
         protected static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, ArgumentSyntax argument) => Argument(Invocation(expression, argument));
 

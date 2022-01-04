@@ -23,37 +23,67 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // there might be multiple parameters, so we have to find out which parameter is meant
             if (parameter != null)
             {
-                switch (syntax.Type.GetNameOnlyPart())
+                var arguments = GetUpdatedArgumentListSyntaxForParameter(syntax, parameter);
+                if (arguments != null)
                 {
-                    case nameof(ArgumentOutOfRangeException):
-                        return GetUpdatedArgumentListForArgumentOutOfRangeException(syntax.ArgumentList, parameter);
+                    return arguments;
+                }
+            }
 
-                    case nameof(InvalidEnumArgumentException):
-                        return GetUpdatedArgumentListForInvalidEnumArgumentException(parameter);
+            // it might be a local variable inside a switch, so we have to find out which one
+            if (syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression is IdentifierNameSyntax identifier)
+            {
+                var arguments = GetUpdatedArgumentListSyntaxForIdentifier(syntax, identifier);
+                if (arguments != null)
+                {
+                    return arguments;
                 }
             }
 
             return syntax.ArgumentList;
         }
 
-        private static ArgumentListSyntax GetUpdatedArgumentListForArgumentOutOfRangeException(ArgumentListSyntax originalArguments, ParameterSyntax parameter)
+        private static ArgumentListSyntax GetUpdatedArgumentListSyntaxForParameter(ObjectCreationExpressionSyntax syntax, ParameterSyntax parameter)
         {
-            var arguments = originalArguments.Arguments;
+            var arguments = syntax.ArgumentList?.Arguments;
 
-            switch (arguments.Count)
+            switch (syntax.Type.GetNameOnlyPart())
             {
-                case 0: // missing message, so add a TODO
-                case 1: // it's either the parameter or the message instead of the parameter
-                case 2: // message and parameter (might be switched)
-                    return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(arguments));
+                case nameof(ArgumentOutOfRangeException):
+                {
+                    switch (arguments?.Count)
+                    {
+                        case 0: // missing message, so add a TODO
+                        case 1: // it's either the parameter or the message instead of the parameter
+                        case 2: // message and parameter (might be switched)
+                            return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(arguments));
+                    }
+
+                    break;
+                }
+
+                case nameof(InvalidEnumArgumentException):
+                    return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(TypeOf(parameter)));
             }
 
-            return originalArguments;
+            return null;
         }
 
-        private static ArgumentListSyntax GetUpdatedArgumentListForInvalidEnumArgumentException(ParameterSyntax parameter)
+        private static ArgumentListSyntax GetUpdatedArgumentListSyntaxForIdentifier(ObjectCreationExpressionSyntax syntax, IdentifierNameSyntax identifier)
         {
-            return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(TypeOf(parameter)));
+            switch (syntax.Type.GetNameOnlyPart())
+            {
+                case nameof(ArgumentOutOfRangeException):
+                    return ArgumentList(ParamName(identifier), Argument(identifier), GetUpdatedErrorMessage(syntax.ArgumentList?.Arguments));
+
+                case nameof(InvalidEnumArgumentException):
+                    return ArgumentList(
+                                    ParamName(identifier),
+                                    Argument(identifier, SyntaxKind.IntKeyword),
+                                    Argument(Invocation(SimpleMemberAccess(identifier, nameof(GetType))))); // use .GetType() call as we are not sure which type the identifier has
+            }
+
+            return null;
         }
     }
 }
