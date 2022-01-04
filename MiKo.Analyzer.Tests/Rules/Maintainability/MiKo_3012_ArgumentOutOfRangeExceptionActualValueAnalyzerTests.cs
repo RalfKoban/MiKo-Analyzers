@@ -103,6 +103,56 @@ public class TestMe
 ");
 
         [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_in_switch_statement_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1:
+                return;
+            case 2:
+            case 3:
+                return;
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1:
+                return;
+            case 2:
+            case 3:
+                return;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(x), x, ""TODO"");
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_ArgumentOutOfRangeException_without_parameters()
         {
             const string OriginalCode = @"
@@ -335,6 +385,56 @@ public class TestMe
     public void DoSomething(int x)
     {
         if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_in_switch_statement_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(StringComparison c)
+    {
+        switch (c)
+        {
+            case StringComparison.Ordinal:
+                return;
+            case StringComparison.OrdinalIgnoreCase:
+            case StringComparison.InvariantCulture:
+                return;
+
+            default:
+                throw new InvalidEnumArgumentException();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(StringComparison c)
+    {
+        switch (c)
+        {
+            case StringComparison.Ordinal:
+                return;
+            case StringComparison.OrdinalIgnoreCase:
+            case StringComparison.InvariantCulture:
+                return;
+
+            default:
+                throw new InvalidEnumArgumentException(nameof(c), (int)c, typeof(StringComparison));
+        }
     }
 }
 ";
