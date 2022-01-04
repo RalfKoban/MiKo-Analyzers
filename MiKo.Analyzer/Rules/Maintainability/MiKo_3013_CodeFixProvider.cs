@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -9,12 +9,14 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3012_CodeFixProvider)), Shared]
-    public sealed class MiKo_3012_CodeFixProvider : ObjectCreationExpressionMaintainabilityCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3013_CodeFixProvider)), Shared]
+    public sealed class MiKo_3013_CodeFixProvider : ObjectCreationExpressionMaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer.Id;
 
-        protected override string Title => Resources.MiKo_3012_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3013_CodeFixTitle;
+
+        protected override TypeSyntax GetUpdatedSyntaxType(ObjectCreationExpressionSyntax syntax) => SyntaxFactory.ParseTypeName(nameof(ArgumentOutOfRangeException));
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
@@ -23,14 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // there might be multiple parameters, so we have to find out which parameter is meant
             if (parameter != null)
             {
-                switch (syntax.Type.GetNameOnlyPart())
-                {
-                    case nameof(ArgumentOutOfRangeException):
-                        return GetUpdatedArgumentListForArgumentOutOfRangeException(syntax.ArgumentList, parameter);
-
-                    case nameof(InvalidEnumArgumentException):
-                        return GetUpdatedArgumentListForInvalidEnumArgumentException(parameter);
-                }
+                return GetUpdatedArgumentListForArgumentOutOfRangeException(syntax.ArgumentList, parameter);
             }
 
             return syntax.ArgumentList;
@@ -49,11 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return originalArguments;
-        }
-
-        private static ArgumentListSyntax GetUpdatedArgumentListForInvalidEnumArgumentException(ParameterSyntax parameter)
-        {
-            return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(TypeOf(parameter)));
         }
     }
 }

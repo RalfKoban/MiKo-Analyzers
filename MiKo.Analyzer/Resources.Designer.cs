@@ -7644,6 +7644,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change to &apos;ArgumentOutOfRangeException&apos;.
+        /// </summary>
+        public static string MiKo_3013_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3013_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;default&apos; clause in &apos;switch&apos; statements should throw an ArgumentOutOfRangeException (or subtype) to indicate that the given argument is out of range, but no ArgumentException..
         /// </summary>
         public static string MiKo_3013_Description {

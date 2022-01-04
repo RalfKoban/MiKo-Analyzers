@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -65,8 +66,34 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_parameterless_exception_([Values(nameof(ArgumentException), nameof(ArgumentNullException))] string exceptionName)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1: break;
+            case 2:
+            default:
+                throw new ###;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", exceptionName + "()"), Template.Replace("###", @"ArgumentOutOfRangeException(nameof(x), x, ""TODO"")"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3013_CodeFixProvider();
     }
 }

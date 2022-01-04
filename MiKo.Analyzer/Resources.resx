@@ -2714,6 +2714,9 @@ That is they should return a Boolean and have the last parameter as [out] parame
   <data name="MiKo_3012_Title" xml:space="preserve">
     <value>Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown.</value>
   </data>
+  <data name="MiKo_3013_CodeFixTitle" xml:space="preserve">
+    <value>Change to 'ArgumentOutOfRangeException'</value>
+  </data>
   <data name="MiKo_3013_Description" xml:space="preserve">
     <value>The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype) to indicate that the given argument is out of range, but no ArgumentException.</value>
   </data>
