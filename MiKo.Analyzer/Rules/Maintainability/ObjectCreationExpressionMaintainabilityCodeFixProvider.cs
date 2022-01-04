@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax ParamName(ParameterSyntax parameter) => Argument(NameOf(parameter.GetName()));
 
+        protected static ArgumentSyntax ParamName(IdentifierNameSyntax identifier) => Argument(NameOf(identifier.GetName()));
+
         protected static ParameterSyntax FindUsedParameter(ObjectCreationExpressionSyntax syntax)
         {
             var parameters = CollectParameters(syntax);
@@ -28,9 +30,37 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
+        protected static ArgumentSyntax GetUpdatedErrorMessage(IEnumerable<ArgumentSyntax> arguments)
+        {
+            foreach (var argument in arguments)
+            {
+                if (argument.Contains(' '))
+                {
+                    // textual (string) message
+                    return argument;
+                }
+
+                if (argument.Expression is IdentifierNameSyntax)
+                {
+                    // const (string) message
+                    return argument;
+                }
+
+                if (argument.Expression is MemberAccessExpressionSyntax)
+                {
+                    // localized (resource) message
+                    return argument;
+                }
+            }
+
+            return ToDo();
+        }
+
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic) => GetUpdatedSyntax((ObjectCreationExpressionSyntax)syntax);
+
+        protected virtual TypeSyntax GetUpdatedSyntaxType(ObjectCreationExpressionSyntax syntax) => syntax.Type;
 
         protected abstract ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax);
 
@@ -88,8 +118,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var arguments = GetUpdatedArgumentListSyntax(syntax);
+            var type = GetUpdatedSyntaxType(syntax);
 
-            return SyntaxFactory.ObjectCreationExpression(syntax.Type, arguments, null);
+            return SyntaxFactory.ObjectCreationExpression(type, arguments, null);
         }
     }
 }
