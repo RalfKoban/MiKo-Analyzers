@@ -6,8 +6,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed partial class MiKo_3011_ArgumentExceptionsParamNameAnalyzerTests
     {
         [TestCase("\"some message\", new Exception()")]
-        [TestCase("\"x\", 42, typeof(StringComparison)")]
-        [TestCase("nameof(x), 42, typeof(StringComparison)")]
+        [TestCase("\"x\", (int)x, typeof(StringComparison)")]
+        [TestCase("nameof(x), (int)x, typeof(StringComparison)")]
         public void No_issue_is_reported_for_correctly_thrown_InvalidEnumArgumentException_(string parameters) => No_issue_is_reported_for(@"
 using System;
 
@@ -26,7 +26,7 @@ public class TestMe
         [TestCase("\"X\"")]
         [TestCase("nameof(TestMe)")]
         [TestCase("\"some message\"")]
-        [TestCase("\"some message\", 42, typeof(StringComparison)")]
+        [TestCase("\"some message\", (int)x, typeof(StringComparison)")]
         public void An_issue_is_reported_for_incorrectly_thrown_InvalidEnumArgumentException_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
@@ -34,7 +34,7 @@ public class TestMe
 {
     public void DoSomething(StringComparison x)
     {
-        if (x == 42) throw new InvalidEnumArgumentException(" + parameters + @");
+        if (x == StringComparison.OrdinalIgnoreCase) throw new InvalidEnumArgumentException(" + parameters + @");
     }
 }
 ");

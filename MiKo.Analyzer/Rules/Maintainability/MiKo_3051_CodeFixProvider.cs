@@ -3,7 +3,6 @@ using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -49,9 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (diagnostic.Properties.TryGetValue(MiKo_3051_DependencyPropertyRegisterAnalyzer.Value, out var value))
                 {
-                    var typeSyntax = SyntaxFactory.ParseTypeName(value);
-
-                    return SyntaxFactory.TypeOfExpression(typeSyntax);
+                    return TypeOf(value);
                 }
             }
 

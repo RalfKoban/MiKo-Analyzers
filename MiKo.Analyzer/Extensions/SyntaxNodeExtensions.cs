@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly string[] Nulls = { "null" };
 
+        internal static bool Contains(this SyntaxNode node, char c) => node?.ToString().Contains(c) ?? false;
+
         internal static bool EnclosingMethodHasParameter(this SyntaxNode node, string parameterName, SemanticModel semanticModel)
         {
             var method = node.GetEnclosingMethod(semanticModel);
@@ -1319,6 +1321,23 @@ namespace MiKoSolutions.Analyzers
         internal static T WithTrailingXmlComment<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(XmlCommentStart);
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
+
+        internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
+        {
+            var ifStatement = value.Ancestors().OfType<IfStatementSyntax>().FirstOrDefault();
+            if (ifStatement is null)
+            {
+                // maybe part of a block outside the if statement
+                var block = value.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
+                if (block != null)
+                {
+                    // try to find the corresponding if statement
+                    ifStatement = block.ChildNodes().OfType<IfStatementSyntax>().FirstOrDefault();
+                }
+            }
+
+            return ifStatement;
+        }
 
         private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 

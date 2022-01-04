@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -37,6 +38,7 @@ public class TestMe
 
         [TestCase("\"x\", 42, \"some message\"")]
         [TestCase("nameof(x), 42, \"some message\"")]
+        [TestCase("\"some message\", new Exception()")]
         public void No_issue_is_reported_for_correctly_thrown_ArgumentOutOfRangeException_(string parameters) => No_issue_is_reported_for(@"
 using System;
 
@@ -57,7 +59,6 @@ public class TestMe
         [TestCase("\"some message\"")]
         [TestCase("\"some message\", \"x\"")]
         [TestCase("\"some message\", nameof(x)")]
-        [TestCase("\"some message\", new Exception()")]
         public void An_issue_is_reported_for_incorrectly_thrown_ArgumentOutOfRangeException_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
@@ -70,16 +71,17 @@ public class TestMe
 }
 ");
 
-        [TestCase("\"x\", 42, typeof(StringComparison)")]
-        [TestCase("nameof(x), 42, typeof(StringComparison)")]
+        [TestCase("\"x\", (int)x, typeof(StringComparison)")]
+        [TestCase("nameof(x), (int)x, typeof(StringComparison)")]
+        [TestCase("\"some message\", new Exception()")]
         public void No_issue_is_reported_for_correctly_thrown_InvalidEnumArgumentException_(string parameters) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    public void DoSomething(int x)
+    public void DoSomething(StringComparison x)
     {
-        if (x == 42) throw new InvalidEnumArgumentException(" + parameters + @");
+        if (x == StringComparison.Ordinal) throw new InvalidEnumArgumentException(" + parameters + @");
     }
 }
 ");
@@ -87,12 +89,7 @@ public class TestMe
         [TestCase("")]
         [TestCase("\"x\"")]
         [TestCase("nameof(x)")]
-        [TestCase("\"x\", \"some message\"")]
-        [TestCase("nameof(x), \"some message\"")]
         [TestCase("\"some message\"")]
-        [TestCase("\"some message\", \"x\"")]
-        [TestCase("\"some message\", nameof(x)")]
-        [TestCase("\"some message\", new Exception()")]
         public void An_issue_is_reported_for_incorrectly_thrown_InvalidEnumArgumentException_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
@@ -100,13 +97,315 @@ public class TestMe
 {
     public void DoSomething(int x)
     {
-        if (x == 42) throw new InvalidEnumArgumentException(" + parameters + @");
+        if (x == StringComparison.Ordinal) throw new InvalidEnumArgumentException(" + parameters + @");
     }
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""TODO"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_single_paramName_parameter_as_string()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(""x"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""TODO"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_single_paramName_parameter_as_nameof()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""TODO"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_single_misused_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(""some message"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_paramName_as_string_and_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(""x"", ""some message"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_paramName_as_nameof_and_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), ""some message"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_switched_paramName_as_string_and_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(""some message"", ""x"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_switched_paramName_as_nameof_and_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(""some message"", nameof(x));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_without_parameters()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(StringComparison c)
+    {
+        if (c == StringComparison.Ordinal) throw new InvalidEnumArgumentException();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(StringComparison c)
+    {
+        if (c == StringComparison.Ordinal) throw new InvalidEnumArgumentException(nameof(c), (int)c, typeof(StringComparison));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_InvalidEnumArgumentException_with_single_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(StringComparison c)
+    {
+        if (c == StringComparison.Ordinal) throw new InvalidEnumArgumentException(""some message"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(StringComparison c)
+    {
+        if (c == StringComparison.Ordinal) throw new InvalidEnumArgumentException(nameof(c), (int)c, typeof(StringComparison));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3012_CodeFixProvider();
     }
 }

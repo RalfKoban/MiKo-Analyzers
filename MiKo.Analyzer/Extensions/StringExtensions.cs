@@ -41,6 +41,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
 
+        public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
+
         public static bool Contains(this string value, string finding, StringComparison comparison)
         {
             if (finding.Length > value.Length)
