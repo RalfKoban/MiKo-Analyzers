@@ -293,7 +293,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_single_misused_message_parameter()
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_single_misused_text_message_parameter()
         {
             const string OriginalCode = @"
 using System;
@@ -315,6 +315,79 @@ public class TestMe
     public void DoSomething(int x)
     {
         if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, ""some message"");
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_single_misused_constant_text_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private const string SomeMessage = ""some message"";
+
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(SomeMessage);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private const string SomeMessage = ""some message"";
+
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, SomeMessage);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentOutOfRangeException_with_single_misused_localized_text_message_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Resources
+{
+    public static string Text { get; } => ""some message"";
+}
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(Resources.Text);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Resources
+{
+    public static string Text { get; } => ""some message"";
+}
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x == 42) throw new ArgumentOutOfRangeException(nameof(x), x, Resources.Text);
     }
 }
 ";
