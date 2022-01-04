@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax ParamName(ParameterSyntax parameter) => Argument(NameOf(parameter.GetName()));
 
+        protected static ArgumentSyntax ParamName(IdentifierNameSyntax identifier) => Argument(NameOf(identifier.GetName()));
+
         protected static ParameterSyntax FindUsedParameter(ObjectCreationExpressionSyntax syntax)
         {
             var parameters = CollectParameters(syntax);

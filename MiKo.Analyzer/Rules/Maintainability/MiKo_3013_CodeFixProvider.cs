@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -22,28 +21,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var parameter = FindUsedParameter(syntax);
 
+            var arguments = syntax.ArgumentList?.Arguments;
+
             // there might be multiple parameters, so we have to find out which parameter is meant
             if (parameter != null)
             {
-                return GetUpdatedArgumentListForArgumentOutOfRangeException(syntax.ArgumentList, parameter);
+                switch (arguments?.Count)
+                {
+                    case 0: // missing message, so add a TODO
+                    case 1: // it's either the parameter or the message instead of the parameter
+                    case 2: // message and parameter (might be switched)
+                        return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(arguments));
+                }
+            }
+
+            // it might be a local variable inside a switch, so we have to find out which one
+            if (syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression is IdentifierNameSyntax identifier)
+            {
+                return ArgumentList(ParamName(identifier), Argument(identifier), GetUpdatedErrorMessage(arguments));
             }
 
             return syntax.ArgumentList;
-        }
-
-        private static ArgumentListSyntax GetUpdatedArgumentListForArgumentOutOfRangeException(ArgumentListSyntax originalArguments, ParameterSyntax parameter)
-        {
-            var arguments = originalArguments.Arguments;
-
-            switch (arguments.Count)
-            {
-                case 0: // missing message, so add a TODO
-                case 1: // it's either the parameter or the message instead of the parameter
-                case 2: // message and parameter (might be switched)
-                    return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(arguments));
-            }
-
-            return originalArguments;
         }
     }
 }
