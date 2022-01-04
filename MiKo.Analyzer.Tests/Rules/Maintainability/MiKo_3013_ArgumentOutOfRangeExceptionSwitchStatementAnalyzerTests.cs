@@ -90,6 +90,126 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", exceptionName + "()"), Template.Replace("###", @"ArgumentOutOfRangeException(nameof(x), x, ""TODO"")"));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_ArgumentException_with_only_message()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1: break;
+            case 2:
+            default:
+                throw new ###;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", @"ArgumentException(""some message"")"), Template.Replace("###", @"ArgumentOutOfRangeException(nameof(x), x, ""some message"")"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentException_with_message_and_parameter_as_string()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1: break;
+            case 2:
+            default:
+                throw new ###;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", @"ArgumentException(""some message"", ""x"")"), Template.Replace("###", @"ArgumentOutOfRangeException(nameof(x), x, ""some message"")"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentException_with_switched_message_and_parameter_as_string()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1: break;
+            case 2:
+            default:
+                throw new ###;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", @"ArgumentException(""x"", ""some message"")"), Template.Replace("###", @"ArgumentOutOfRangeException(nameof(x), x, ""some message"")"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentException_with_message_and_parameter_as_nameof()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1: break;
+            case 2:
+            default:
+                throw new ###;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", @"ArgumentException(""some message"", nameof(x))"), Template.Replace("###", @"ArgumentOutOfRangeException(nameof(x), x, ""some message"")"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ArgumentException_with_switched_message_and_parameter_as_nameof()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        switch (x)
+        {
+            case 1: break;
+            case 2:
+            default:
+                throw new ###;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", @"ArgumentException(nameof(x), ""some message"")"), Template.Replace("###", @"ArgumentOutOfRangeException(nameof(x), x, ""some message"")"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3013_ArgumentOutOfRangeExceptionSwitchStatementAnalyzer();
