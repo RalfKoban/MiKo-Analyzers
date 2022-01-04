@@ -36,14 +36,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ParameterSyntax FindUsedParameter(SyntaxNode node, IEnumerable<ParameterSyntax> parameters)
         {
-            var ifStatement = node.GetRelatedIfStatement();
-            if (ifStatement is null)
+            // most probably it's a if/else, but it might be a switch statement as well
+            var condition = node.GetRelatedIfStatement()?.Condition ?? node.GetEnclosing<SwitchStatementSyntax>()?.Expression;
+
+            if (condition is null)
             {
                 // nothing found
                 return null;
             }
 
-            var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
+            var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
 
             return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
         }
