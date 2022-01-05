@@ -94,8 +94,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(30)) };
+        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
 
-        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(30)) };
+        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
     }
 }

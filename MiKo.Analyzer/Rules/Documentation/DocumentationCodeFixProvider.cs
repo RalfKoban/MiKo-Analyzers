@@ -223,16 +223,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.InsertNodeAfter(lastNode, XmlText(commentContinue));
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases) => CommentStartingWith(comment, phrases[0]);
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, FirstWordHandling firstWordHandling = FirstWordHandling.None) => CommentStartingWith(comment, phrases[0], firstWordHandling);
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
-            var content = CommentStartingWith(comment.Content, phrase);
+            var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
 
             return SyntaxFactory.XmlElement(comment.StartTag, content, comment.EndTag);
         }
 
-        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase)
+        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one
@@ -252,7 +252,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     text = text.WithoutTrailingXmlComment();
                 }
 
-                var newText = text.WithStartText(phrase);
+                var newText = text.WithStartText(phrase, firstWordHandling);
 
                 return content.Insert(index, newText);
             }

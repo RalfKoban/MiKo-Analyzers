@@ -365,7 +365,6 @@ public class TestMe : ITestMe
         [TestCase("Classes implementing the interfaces provide", "Provides")]
         [TestCase("Classes implementing the interfaces will provide", "Provides")]
         [TestCase("Classes implementing the interfaces, will provide", "Provides")]
-        [TestCase("Command that does", "Represents a command that does")]
         [TestCase("Contain", "Provides")]
         [TestCase("Contains", "Provides")]
         [TestCase("Event argument for", "Provides data for the")]
@@ -393,10 +392,24 @@ public class TestMe : ITestMe
         [TestCase("Factory method that creates", "Creates")]
         [TestCase("Factory method to create", "Creates")]
         [TestCase("Factory method which creates", "Creates")]
+        [TestCase("Function to generate", "Generates")]
+        [TestCase("Function that generates", "Generates")]
+        [TestCase("Function which generates", "Generates")]
         [TestCase("Helper class that manipulates", "Manipulates")]
         [TestCase("Helper class to manipulate", "Manipulates")]
         [TestCase("Helper class which manipulates", "Manipulates")]
         [TestCase("Helper method to generate", "Generates")]
+        [TestCase("Helper method that generates", "Generates")]
+        [TestCase("Helper method which generates", "Generates")]
+        [TestCase("Helper function to generate", "Generates")]
+        [TestCase("Helper function that generates", "Generates")]
+        [TestCase("Helper function which generates", "Generates")]
+        [TestCase("Help function to generate", "Generates")]
+        [TestCase("Help function that generates", "Generates")]
+        [TestCase("Help function which generates", "Generates")]
+        [TestCase("Help method to generate", "Generates")]
+        [TestCase("Help method that generates", "Generates")]
+        [TestCase("Help method which generates", "Generates")]
         [TestCase("Interface describing", "Describes")]
         [TestCase("Interface for classes that represent", "Represents")]
         [TestCase("Interface for classes that provide", "Provides")]
@@ -433,6 +446,9 @@ public class TestMe : ITestMe
         [TestCase("Interface to describe", "Describes")]
         [TestCase("Interface to represent", "Represents")]
         [TestCase("Interface which serves", "Provides")]
+        [TestCase("Method to generate", "Generates")]
+        [TestCase("Method that generates", "Generates")]
+        [TestCase("Method which generates", "Generates")]
         [TestCase("The class offers", "Provides")]
         [TestCase("The interface offers", "Provides")]
         [TestCase("This class offers", "Provides")]
@@ -599,6 +615,55 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Initialize_method()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Initialize something.
+    /// </summary>
+    public void Initialize() { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Initializes something.
+    /// </summary>
+    public void Initialize() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase("A command that can", "Represents a command that can")]
+        [TestCase("Command that can", "Represents a command that can")]
+        [TestCase("Command that does", "Represents a command that can do")]
+        [TestCase("Command that opens", "Represents a command that can open")]
+        [TestCase("Command which does", "Represents a command that can do")]
+        [TestCase("Command which opens", "Represents a command that can open")]
+        [TestCase("Command for", "Represents a command that can")]
+        [TestCase("Command to", "Represents a command that can")]
+        [TestCase("command to", "Represents a command that can")]
+        public void Code_gets_fixed_for_command(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+/// <summary>
+/// ### something.
+/// </summary>
+public class TestMeCommand
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
         [TestCase("Used to create something", "Provides support for creating something")]
