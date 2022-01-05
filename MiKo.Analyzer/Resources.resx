@@ -3013,6 +3013,9 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3044_Title" xml:space="preserve">
     <value>Use 'nameof' to compare property names of 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'.</value>
   </data>
+  <data name="MiKo_3047_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
   <data name="MiKo_3047_Description" xml:space="preserve">
     <value>To prevent typos, any applied [ContentProperty] attribute shall use 'nameof' to define the property.</value>
   </data>
