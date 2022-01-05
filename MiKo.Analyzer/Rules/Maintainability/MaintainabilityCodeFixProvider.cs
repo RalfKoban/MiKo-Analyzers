@@ -152,6 +152,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                        : root.InsertNodeAfter(usings.Last(), directive);
         }
 
+        protected static SyntaxNode WithoutUsing(SyntaxNode node, string usingNamespace)
+        {
+            var root = node.SyntaxTree.GetRoot();
+
+            return root.DescendantNodes()
+                       .OfType<UsingDirectiveSyntax>()
+                       .Where(_ => _.Name.ToFullString() == usingNamespace)
+                       .Select(root.Without)
+                       .FirstOrDefault();
+        }
+
         protected static InvocationExpressionSyntax NameOf(LiteralExpressionSyntax literal)
         {
             var identifierName = literal.GetName();

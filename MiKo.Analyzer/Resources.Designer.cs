@@ -7707,6 +7707,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change to &apos;InvalidOperationException&apos;.
+        /// </summary>
+        public static string MiKo_3015_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3015_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods..
         /// </summary>
         public static string MiKo_3015_Description {

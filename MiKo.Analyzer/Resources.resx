@@ -2735,6 +2735,9 @@ That is they should return a Boolean and have the last parameter as [out] parame
   <data name="MiKo_3014_Title" xml:space="preserve">
     <value>InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message.</value>
   </data>
+  <data name="MiKo_3015_CodeFixTitle" xml:space="preserve">
+    <value>Change to 'InvalidOperationException'</value>
+  </data>
   <data name="MiKo_3015_Description" xml:space="preserve">
     <value>ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods.</value>
   </data>
