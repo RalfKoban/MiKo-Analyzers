@@ -39,6 +39,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic) => WithoutUsing(root, "System.ComponentModel"); // remove unused "using System.ComponentModel;"
+        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => WithoutUsing(root, "System.ComponentModel"); // remove unused "using System.ComponentModel;"
     }
 }

@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var invocation = GetInvocationExpressionSyntax(syntax, out var kind);
             if (invocation is null)

@@ -14,13 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2080_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
             var fieldDeclaration = comment.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
             var field = fieldDeclaration.Declaration.Variables.First();
 
-            var symbol = (IFieldSymbol)GetSymbol(document, field);
+            var symbol = (IFieldSymbol)GetSymbol(context, field);
             var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
 
             return CommentStartingWith(comment, phrase);

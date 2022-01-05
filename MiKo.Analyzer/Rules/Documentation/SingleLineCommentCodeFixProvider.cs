@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected override bool IsTrivia => true;
 
-        protected sealed override SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic diagnostic)
+        protected sealed override SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue)
         {
             return token.ReplaceTrivia(token.GetAllTrivia().Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia)), ComputeReplacementTrivia);
         }

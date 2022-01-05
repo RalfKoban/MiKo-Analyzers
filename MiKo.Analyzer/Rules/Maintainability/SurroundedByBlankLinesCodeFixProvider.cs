@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -22,16 +23,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var result = syntax;
 
-            if (diagnostic.Properties.ContainsKey(SurroundedByBlankLinesAnalyzer.NoLineBefore))
+            if (issue.Properties.ContainsKey(SurroundedByBlankLinesAnalyzer.NoLineBefore))
             {
                 result = result.WithLeadingEmptyLine();
             }
 
-            if (diagnostic.Properties.ContainsKey(SurroundedByBlankLinesAnalyzer.NoLineAfter))
+            if (issue.Properties.ContainsKey(SurroundedByBlankLinesAnalyzer.NoLineAfter))
             {
                 result = result.WithTrailingEmptyLine();
             }

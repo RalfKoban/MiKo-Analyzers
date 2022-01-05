@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => "Change '" + MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Term + "' into '" + Replacement + "'";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             return Comment(syntax, MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Terms, ReplacementMap);
         }

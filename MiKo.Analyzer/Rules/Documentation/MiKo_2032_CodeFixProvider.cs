@@ -94,13 +94,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                             ? Comment(comment, GenericStartParts, GenericEndParts)
-                                                                                                                                             : comment;
+        protected override XmlElementSyntax GenericComment(CodeFixContext context, XmlElementSyntax comment, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
+                                                                                                                                                  ? Comment(comment, GenericStartParts, GenericEndParts)
+                                                                                                                                                  : comment;
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                         ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
-                                                                                                                                         : comment;
+        protected override XmlElementSyntax NonGenericComment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType) => CommentCanBeFixed(comment)
+                                                                                                                                              ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
+                                                                                                                                              : comment;
 
         // introduced as workaround for issue #399
         private static bool CommentCanBeFixed(SyntaxNode syntax)
