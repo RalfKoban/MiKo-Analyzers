@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -9,7 +10,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzerTests : CodeFixVerifier
+    public sealed partial class MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ExceptionNames =
             {
@@ -54,5 +55,7 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3015_CodeFixProvider();
     }
 }
