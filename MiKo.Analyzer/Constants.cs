@@ -148,6 +148,7 @@ namespace MiKoSolutions.Analyzers
                     "Action",
                     "Adapter",
                     "An ",
+                    "Attribute",
                     "Base",
                     "Builder",
                     "Called ",

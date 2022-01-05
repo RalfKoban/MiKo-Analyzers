@@ -695,6 +695,7 @@ public class TestMeFactory
         {
             var types = new[]
                             {
+                                "Attribute",
                                 "Base",
                                 "Class",
                                 "Interface",
