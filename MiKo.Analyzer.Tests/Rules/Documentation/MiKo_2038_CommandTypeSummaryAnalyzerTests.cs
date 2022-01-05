@@ -84,28 +84,33 @@ public class TestMe : ICommand
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_interface() => An_issue_is_reported_for(@"
+        [TestCase("A command that can do something.")]
+        [TestCase("Command that can do something.")]
+        [TestCase("Command which can do something.")]
+        [TestCase("Can do something.")]
+        public void An_issue_is_reported_for_incorrectly_documented_interface_(string text) => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
 
 /// <summary>
-/// Can do something.
+/// " + text + @"
 /// </summary>
 public interface ITestMe : ICommand
 {
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed()
+        [TestCase("A command that can do something.", "Represents a command that can do something.")]
+        [TestCase("Command that can do something.", "Represents a command that can do something.")]
+        [TestCase("Do something.", "Represents a command that can do something.")]
+        public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 using System;
 using System.Windows.Input;
 
 /// <summary>
-/// Do something.
+/// ###
 /// </summary>
 public class TestMe : ICommand
 {
@@ -117,24 +122,7 @@ public class TestMe : ICommand
 }
 ";
 
-            const string FixedCode = @"
-using System;
-using System.Windows.Input;
-
-/// <summary>
-/// Represents a command that can do something.
-/// </summary>
-public class TestMe : ICommand
-{
-    public event EventHandler CanExecuteChanged;
-
-    public bool CanExecute(object parameter) => true;
-
-    public void Execute(object parameter) { }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
         protected override string GetDiagnosticId() => MiKo_2038_CommandTypeSummaryAnalyzer.Id;

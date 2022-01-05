@@ -11,6 +11,8 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {
@@ -1249,21 +1251,21 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText) => value.Content.WithStartText(startText);
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None) => value.Content.WithStartText(startText, firstWordHandling);
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this SyntaxList<XmlNodeSyntax> values, string startText)
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this SyntaxList<XmlNodeSyntax> values, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
             if (values.Count > 0)
             {
                 return values[0] is XmlTextSyntax textSyntax
-                           ? values.Replace(textSyntax, textSyntax.WithStartText(startText))
+                           ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordHandling))
                            : values.Insert(0, XmlText(startText));
             }
 
             return new SyntaxList<XmlNodeSyntax>(XmlText(startText));
         }
 
-        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText)
+        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
             var textTokens = new List<SyntaxToken>(value.TextTokens);
 
@@ -1296,7 +1298,20 @@ namespace MiKoSolutions.Analyzers
 
                     var space = i == 0 ? string.Empty : " ";
 
-                    var modifiedText = space + startText + originalText.TrimStart().ToLowerCaseAt(0);
+                    var continuation = originalText.TrimStart().ToLowerCaseAt(0);
+
+                    // replace 3rd person word by infinite word if configured
+                    if (firstWordHandling == FirstWordHandling.MakeInfinite)
+                    {
+                        if (continuation[0] != '<')
+                        {
+                            var word = continuation.FirstWord();
+
+                            continuation = Verbalizer.MakeInfiniteVerb(word) + continuation.Substring(word.Length);
+                        }
+                    }
+
+                    var modifiedText = space + startText + continuation;
 
                     textTokens[i] = token.WithText(modifiedText);
 

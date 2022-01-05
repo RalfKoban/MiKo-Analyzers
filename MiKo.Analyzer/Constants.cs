@@ -175,6 +175,8 @@ namespace MiKoSolutions.Analyzers
                     "Field",
                     "For ",
                     "Func",
+                    "Function",
+                    "Help ",
                     "Helper ",
                     "Impl ",
                     "Implement ",

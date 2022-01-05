@@ -87,11 +87,11 @@ namespace TestHelper
                                 });
         }
 
-        protected IEnumerable<string> Collect_files_having_issues_in_folder(string path)
+        protected IEnumerable<string> Collect_files_having_issues_in_folder_(string path)
         {
             foreach (var directory in Directory.EnumerateDirectories(path))
             {
-                var results = Collect_files_having_issues_in_folder(directory);
+                var results = Collect_files_having_issues_in_folder_(directory);
                 foreach (var result in results)
                 {
                     yield return result;
@@ -104,6 +104,27 @@ namespace TestHelper
                 if (results.Any())
                 {
                     yield return file;
+                }
+            }
+        }
+
+        protected IEnumerable<string> Collect_messages_of_issues_in_folder_(string path)
+        {
+            foreach (var directory in Directory.EnumerateDirectories(path))
+            {
+                var results = Collect_messages_of_issues_in_folder_(directory);
+                foreach (var result in results)
+                {
+                    yield return result;
+                }
+            }
+
+            foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+            {
+                var results = GetDiagnostics(File.ReadAllText(file));
+                foreach (var result in results)
+                {
+                    yield return result.GetMessage() + "[" + file + "]";
                 }
             }
         }

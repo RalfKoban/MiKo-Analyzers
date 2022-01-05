@@ -84,6 +84,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Comment(comment, XmlText("Represents a TODO"));
                 }
 
+                if (text.StartsWithAny(MiKo_2038_CodeFixProvider.CommandStartingPhrases, StringComparison.Ordinal))
+                {
+                    return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
+                }
+
                 if (text.StartsWithAny(Constants.Comments.FieldStartingPhrase, StringComparison.Ordinal))
                 {
                     var property = syntax.Ancestors().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
@@ -221,7 +226,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Class which serves as ", "Represents a ");
             yield return new KeyValuePair<string, string>("Class which serves ", "Provides ");
 
-            yield return new KeyValuePair<string, string>("Command ", "Represents a command ");
+            // initialize method
+            yield return new KeyValuePair<string, string>("Initialize ", "Initializes ");
+
             yield return new KeyValuePair<string, string>("Contain ", "Provides ");
             yield return new KeyValuePair<string, string>("Contains ", "Provides ");
             yield return new KeyValuePair<string, string>("Every class that implements the interface can ", "Allows to ");
@@ -249,7 +256,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "Classes implementing the interfaces",
                                      "Classes implementing the interfaces,",
                                      "Factory method",
+                                     "Function",
+                                     "Help function",
+                                     "Help method",
                                      "Helper class",
+                                     "Helper function",
                                      "Helper method",
                                      "Interface for classes",
                                      "Interface for elements",
@@ -260,6 +271,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "Interface for work flows",
                                      "Interface for",
                                      "Interface",
+                                     "Method",
                                      "The class implementing the interface",
                                      "The class implementing the interface,",
                                      "The class implementing this interface",
