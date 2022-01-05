@@ -213,6 +213,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Interface for factories to create ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Interface for factories that create ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Interface for factories which create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Used to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Used for creating ", Constants.Comments.FactorySummaryPhrase);
 
             yield return new KeyValuePair<string, string>("Class that serves as ", "Represents a ");
             yield return new KeyValuePair<string, string>("Class that serves ", "Provides ");

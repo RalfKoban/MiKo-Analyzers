@@ -601,6 +601,24 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("Used to create something", "Provides support for creating something")]
+        [TestCase(@"Used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
+        [TestCase(@"Used for creating something", @"Provides support for creating something")]
+        [TestCase(@"Used for creating <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
+        public void Code_gets_fixed_for_factory_Types(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+/// <summary>
+/// ###
+/// </summary>
+public class TestMeFactory
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();
