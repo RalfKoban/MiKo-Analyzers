@@ -52,6 +52,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var lambda = descendantNodes.OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault();
             if (lambda?.Body is MemberAccessExpressionSyntax property)
             {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 var propertyName = property.GetName();
 
                 var properties = new Dictionary<string, string>
@@ -75,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 var issue = Issue(symbol?.Name, node, string.Format(issueTemplate, propertyName), properties);
-                context.ReportDiagnostic(issue);
+                ReportDiagnostics(context, issue);
             }
         }
     }

@@ -30,12 +30,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeEventFieldDeclaration(SyntaxNodeAnalysisContext context)
         {
             var node = (EventFieldDeclarationSyntax)context.Node;
+            var issue = AnalyzeVariableDeclaration(node.Declaration, context.ContainingSymbol, context.SemanticModel);
 
-            var diagnostic = AnalyzeVariableDeclaration(node.Declaration, context.ContainingSymbol, context.SemanticModel);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeVariableDeclaration(VariableDeclarationSyntax declaration, ISymbol containingSymbol, SemanticModel semanticModel)

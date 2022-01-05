@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -27,6 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
+            var issues = AnalyzeFinallyClause(context, finallyBlock);
+
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeFinallyClause(SyntaxNodeAnalysisContext context, BlockSyntax finallyBlock)
+        {
+            var semanticModel = context.SemanticModel;
+
             var method = context.GetEnclosingMethod();
             var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
 
@@ -34,10 +43,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var eventName = token.ValueText;
 
-                if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
+                if (events.Contains(eventName) && token.GetSymbol(semanticModel) is IEventSymbol)
                 {
-                    var issue = Issue(method.Name, token, eventName);
-                    context.ReportDiagnostic(issue);
+                    yield return Issue(method.Name, token, eventName);
                 }
             }
         }

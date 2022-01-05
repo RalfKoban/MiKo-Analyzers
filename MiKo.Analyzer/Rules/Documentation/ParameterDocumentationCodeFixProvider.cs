@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -25,11 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetXmlSyntax(fittingSyntaxNodes);
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             if (syntax is DocumentationCommentTriviaSyntax d)
             {
-                return Comment(document, d, diagnostic);
+                return Comment(context, d, issue);
             }
 
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
@@ -42,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var parameter = parameters[index];
                 if (parameter.GetName() == parameterName)
                 {
-                    return Comment(document, parameterCommentSyntax, parameter, index);
+                    return Comment(context, parameterCommentSyntax, parameter, index);
                 }
             }
 
@@ -51,8 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>();
 
-        protected abstract DocumentationCommentTriviaSyntax Comment(Document document, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic);
+        protected abstract DocumentationCommentTriviaSyntax Comment(CodeFixContext context, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic);
 
-        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index);
+        protected abstract XmlElementSyntax Comment(CodeFixContext context, XmlElementSyntax comment, ParameterSyntax parameter, int index);
     }
 }

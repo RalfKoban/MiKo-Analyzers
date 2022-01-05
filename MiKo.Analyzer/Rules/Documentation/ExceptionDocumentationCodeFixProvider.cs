@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -109,15 +110,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return replaced;
         }
 
-        protected DocumentationCommentTriviaSyntax FixComment(Document document, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
+        protected DocumentationCommentTriviaSyntax FixComment(CodeFixContext context, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
         {
             return comment.Content.OfType<XmlElementSyntax>()
                           .Where(_ => _.IsException())
-                          .Select(e => FixExceptionComment(document, syntax, e, comment))
+                          .Select(e => FixExceptionComment(context, syntax, e, comment))
                           .FirstOrDefault(fix => fix != null);
         }
 
-        protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(Document document, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment) => null;
+        protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(CodeFixContext context, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment) => null;
 
         private static IEnumerable<string> GetParameterReferences(string parameterName)
         {

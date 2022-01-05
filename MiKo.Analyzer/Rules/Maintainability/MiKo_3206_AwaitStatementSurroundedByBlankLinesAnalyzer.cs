@@ -40,12 +40,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeAwaitExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (AwaitExpressionSyntax)context.Node;
+            var issue = AnalyzeAwaitExpression(node);
 
-            var diagnostic = AnalyzeAwaitExpression(node);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeAwaitExpression(AwaitExpressionSyntax node)

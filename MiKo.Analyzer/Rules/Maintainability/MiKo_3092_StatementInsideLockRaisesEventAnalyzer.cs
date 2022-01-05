@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -22,7 +23,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {
             var lockStatement = (LockStatementSyntax)context.Node;
+            var issues = AnalyzeLockStatement(context, lockStatement);
 
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeLockStatement(SyntaxNodeAnalysisContext context, LockStatementSyntax lockStatement)
+        {
             foreach (var token in lockStatement.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
             {
                 switch (token.Parent?.Parent?.Kind())
@@ -38,14 +45,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case SyntaxKind.InvocationExpression: // MyEvent()
                     case SyntaxKind.EqualsValueClause: // handler()
                     {
-                        AnalyzeToken(context, token);
-                        break;
+                        yield return AnalyzeToken(context, token);
+
+                        continue;
                     }
                 }
             }
         }
 
-        private void AnalyzeToken(SyntaxNodeAnalysisContext context, SyntaxToken token)
+        private Diagnostic AnalyzeToken(SyntaxNodeAnalysisContext context, SyntaxToken token)
         {
             var eventName = token.ValueText;
 
@@ -54,9 +62,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
             {
-                var issue = Issue(method.Name, token);
-                context.ReportDiagnostic(issue);
+                return Issue(method.Name, token);
             }
+
+            return null;
         }
     }
 }

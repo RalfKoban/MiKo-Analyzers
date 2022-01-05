@@ -58,12 +58,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeExpressionStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (ExpressionStatementSyntax)context.Node;
+            var issue = AnalyzeExpressionStatement(node);
 
-            var diagnostic = AnalyzeExpressionStatement(node);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeExpressionStatement(ExpressionStatementSyntax node)

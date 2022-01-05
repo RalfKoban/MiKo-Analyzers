@@ -174,10 +174,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (LiteralExpressionSyntax)context.Node;
 
-            var symbol = context.ContainingSymbol;
+            ReportDiagnostics(context, AnalyzeNumericLiteralExpression(node, context.ContainingSymbol));
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeNumericLiteralExpression(LiteralExpressionSyntax node, ISymbol symbol)
+        {
             if (symbol is null)
             {
-                return;
+                yield break;
             }
 
             if (symbol is IMethodSymbol method)
@@ -185,13 +189,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (method.Name == nameof(GetHashCode))
                 {
                     // ignore hash calculation
-                    return;
+                    yield break;
                 }
 
                 if (method.IsTestMethod())
                 {
                     // ignore unit tests
-                    return;
+                    yield break;
                 }
             }
 
@@ -201,28 +205,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (containingType.IsTestClass())
                 {
                     // ignore unit tests
-                    return;
+                    yield break;
                 }
 
                 if (containingType.ContainingType?.IsTestClass() is true)
                 {
                     // ignore nested types in unit tests
-                    return;
+                    yield break;
                 }
             }
 
             var number = node.Token.Text;
             if (IsWellKnownNumber(number))
             {
-                return;
+                yield break;
             }
 
             if (IgnoreBasedOnParent(node) || IgnoreBasedOnAncestor(node))
             {
-                return;
+                yield break;
             }
 
-            context.ReportDiagnostic(Issue(symbol.Name, node, number));
+            yield return Issue(symbol.Name, node, number);
         }
     }
 }

@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => base.IsApplicable(diagnostics) is false;
 
-        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
+        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(CodeFixContext context, TypeSyntax returnType)
         {
-            var symbol = GetSymbol(document, returnType);
+            var symbol = GetSymbol(context, returnType);
 
             if (symbol is INamedTypeSymbol typeSymbol && typeSymbol.IsEnum())
             {

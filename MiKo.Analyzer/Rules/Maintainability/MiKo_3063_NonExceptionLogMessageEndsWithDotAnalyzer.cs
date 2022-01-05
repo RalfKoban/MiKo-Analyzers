@@ -22,12 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
             var node = (InvocationExpressionSyntax)context.Node;
+            var issue = AnalyzeInvocation(node, context.SemanticModel);
 
-            var diagnostic = AnalyzeInvocation(node, context.SemanticModel);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel)

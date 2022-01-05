@@ -84,7 +84,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token, SyntaxNode node)
         {
             var issue = Issue(string.Empty, node, token.ValueText);
-            context.ReportDiagnostic(issue);
+
+            ReportDiagnostics(context, issue);
         }
     }
 }

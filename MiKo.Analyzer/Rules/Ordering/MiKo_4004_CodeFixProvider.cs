@@ -14,19 +14,19 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4004_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
             var typeSyntax = syntax.AncestorsAndSelf().OfType<BaseTypeDeclarationSyntax>().First();
 
-            var updatedTypeSyntax = GetUpdatedTypeSyntax(document, typeSyntax, syntax, diagnostic);
+            var updatedTypeSyntax = GetUpdatedTypeSyntax(context, typeSyntax, syntax, issue);
 
             return root.ReplaceNode(typeSyntax, updatedTypeSyntax);
         }
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(CodeFixContext context, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var disposeMethod = (MethodDeclarationSyntax)syntax;
-            var targetMethod = FindTargetMethod(document, typeSyntax, disposeMethod);
+            var targetMethod = FindTargetMethod(context, typeSyntax, disposeMethod);
 
             var disposeAnnotation = new SyntaxAnnotation();
             var targetAnnotation = new SyntaxAnnotation();
@@ -58,10 +58,10 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return modifiedType.InsertNodeBefore(annotatedTargetMethod, disposeMethod);
         }
 
-        private static MethodDeclarationSyntax FindTargetMethod(Document document, BaseTypeDeclarationSyntax typeSyntax, MethodDeclarationSyntax disposeMethod)
+        private static MethodDeclarationSyntax FindTargetMethod(CodeFixContext context, BaseTypeDeclarationSyntax typeSyntax, MethodDeclarationSyntax disposeMethod)
         {
-            var methodSymbol = (IMethodSymbol)GetSymbol(document, disposeMethod);
-            var typeSymbol = (INamedTypeSymbol)GetSymbol(document, typeSyntax);
+            var methodSymbol = (IMethodSymbol)GetSymbol(context, disposeMethod);
+            var typeSymbol = (INamedTypeSymbol)GetSymbol(context, typeSyntax);
 
             var methods = typeSymbol.GetMethods().Except(new[] { methodSymbol }).ToList();
 

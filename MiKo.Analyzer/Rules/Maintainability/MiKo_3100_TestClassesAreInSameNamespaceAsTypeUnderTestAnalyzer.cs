@@ -126,9 +126,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var semanticModel = context.SemanticModel;
-
             var node = (ClassDeclarationSyntax)context.Node;
+
+            var issues = AnalyzeClassDeclaration(context, node);
+
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax node)
+        {
+            var semanticModel = context.SemanticModel;
 
             var testClass = node.GetTypeSymbol(semanticModel);
 
@@ -138,15 +145,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var typeUnderTest in typesUnderTest)
                 {
-                    if (TypeHasNamespaceIssue(testClass, typeUnderTest, out var diagnostic))
-                    {
-                        context.ReportDiagnostic(diagnostic);
-                    }
+                    yield return TypeHasNamespaceIssue(testClass, typeUnderTest);
                 }
             }
         }
 
-        private bool TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest, out Diagnostic result)
+        private Diagnostic TypeHasNamespaceIssue(ITypeSymbol testClass, ITypeSymbol typeUnderTest)
         {
             if (typeUnderTest != null)
             {
@@ -155,15 +159,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (expectedNamespace != unitTestNamespace)
                 {
-                    result = Issue(testClass, expectedNamespace);
-
-                    return true;
+                    return Issue(testClass, expectedNamespace);
                 }
             }
 
-            result = null;
-
-            return false;
+            return null;
         }
     }
 }

@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var issue = Issue(string.Empty, node);
 
-            context.ReportDiagnostic(issue);
+            ReportDiagnostics(context, issue);
         }
     }
 }

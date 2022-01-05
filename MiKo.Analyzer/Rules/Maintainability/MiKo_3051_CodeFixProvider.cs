@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             if (syntax is LiteralExpressionSyntax literal)
             {
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (syntax is TypeOfExpressionSyntax)
             {
-                if (diagnostic.Properties.TryGetValue(MiKo_3051_DependencyPropertyRegisterAnalyzer.Value, out var value))
+                if (issue.Properties.TryGetValue(MiKo_3051_DependencyPropertyRegisterAnalyzer.Value, out var value))
                 {
                     return TypeOf(value);
                 }

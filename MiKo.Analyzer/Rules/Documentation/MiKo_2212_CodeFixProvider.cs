@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2212_CodeFixTitle;
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var affectedTokens = syntax.DescendantNodes().OfType<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Where(_ => _.ValueText.Contains(Constants.Comments.WasNotSuccessfulPhrase)).ToList();
 

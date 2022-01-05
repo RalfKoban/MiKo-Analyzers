@@ -32,12 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context)
         {
             var node = (AccessorDeclarationSyntax)context.Node;
-            var semanticModel = context.SemanticModel;
 
-            foreach (var issue in Analyze(node, semanticModel))
-            {
-                context.ReportDiagnostic(issue);
-            }
+            ReportDiagnostics(context, Analyze(node, context.SemanticModel));
         }
 
         private IEnumerable<Diagnostic> Analyze(AccessorDeclarationSyntax node, SemanticModel semanticModel)

@@ -52,12 +52,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeSimpleAssignmentExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (AssignmentExpressionSyntax)context.Node;
+            var issue = AnalyzeSimpleAssignmentExpression(node, context.SemanticModel);
 
-            var diagnostic = AnalyzeSimpleAssignmentExpression(node, context.SemanticModel);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeSimpleAssignmentExpression(AssignmentExpressionSyntax statement, SemanticModel semanticModel)

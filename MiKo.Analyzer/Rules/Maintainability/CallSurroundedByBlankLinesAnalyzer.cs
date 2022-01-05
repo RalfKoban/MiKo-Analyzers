@@ -36,12 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
+            var issue = AnalyzeSimpleMemberAccessExpression(node, context.SemanticModel);
 
-            var diagnostic = AnalyzeSimpleMemberAccessExpression(node, context.SemanticModel);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax call, SemanticModel semanticModel)

@@ -72,6 +72,56 @@ namespace MiKoSolutions.Analyzers.Rules
                                                        });
         }
 
+        protected static void ReportDiagnostics(SymbolAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
+
+        protected static void ReportDiagnostics(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
+        {
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                // seems that we should cancel and not report further issues
+                return;
+            }
+
+            foreach (var issue in issues)
+            {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    // seems that we should cancel and not report further issues
+                    return;
+                }
+
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
+            }
+        }
+
+        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
+
+        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
+        {
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                // seems that we should cancel and not report further issues
+                return;
+            }
+
+            foreach (var issue in issues)
+            {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    // seems that we should cancel and not report further issues
+                    return;
+                }
+
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
+            }
+        }
+
         protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
 
         protected void InitializeCore(CompilationStartAnalysisContext context, params SymbolKind[] symbolKinds)
@@ -148,6 +198,14 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
+        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, Compilation, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
+        {
+            var symbol = context.Symbol;
+            var compilation = context.Compilation;
+
+            ReportDiagnostics(context, analyzer((T)symbol, compilation));
+        }
+
         private static bool ReferencesTestAssemblies(Compilation compilation)
         {
             if (compilation.GetTypeByMetadataName("NUnit.Framework.TestAttribute") != null)
@@ -184,18 +242,6 @@ namespace MiKoSolutions.Analyzers.Rules
         // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
         private static LocalizableResourceString LocalizableResource(string id, string suffix) => new LocalizableResourceString(id + "_" + suffix, Resources.ResourceManager, typeof(Resources));
-
-        private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, Compilation, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
-        {
-            var symbol = context.Symbol;
-            var compilation = context.Compilation;
-
-            var diagnostics = analyzer((T)symbol, compilation);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
-        }
 
         private Diagnostic CreateIssue(Location location, Dictionary<string, string> properties, params object[] args)
         {

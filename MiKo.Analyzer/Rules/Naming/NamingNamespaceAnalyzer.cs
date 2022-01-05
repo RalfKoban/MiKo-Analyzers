@@ -20,12 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeNamespaceDeclaration(SyntaxNodeAnalysisContext context)
         {
             var qualifiedName = ((NamespaceDeclarationSyntax)context.Node).Name;
+            var issues = AnalyzeNamespaceName(qualifiedName.ToString(), qualifiedName.GetLocation());
 
-            var diagnostics = AnalyzeNamespaceName(qualifiedName.ToString(), qualifiedName.GetLocation());
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issues);
         }
     }
 }

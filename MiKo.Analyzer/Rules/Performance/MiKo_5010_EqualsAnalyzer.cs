@@ -34,12 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
             var node = (InvocationExpressionSyntax)context.Node;
+            var issue = AnalyzeEqualsInvocation(node, context.SemanticModel);
 
-            var diagnostic = AnalyzeEqualsInvocation(node, context.SemanticModel);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeEqualsInvocation(InvocationExpressionSyntax node, SemanticModel semanticModel)

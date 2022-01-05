@@ -66,11 +66,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var results = Analyze(context, methodBody, methodSymbol);
-            foreach (var diagnostic in results)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issues = Analyze(context, methodBody, methodSymbol);
+            ReportDiagnostics(context, issues);
         }
 
         private void AnalyzeConstructor(SyntaxNodeAnalysisContext context)
@@ -95,11 +92,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var results = Analyze(context, methodBody, methodSymbol);
-            foreach (var diagnostic in results)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issues = Analyze(context, methodBody, methodSymbol);
+            ReportDiagnostics(context, issues);
         }
 
         private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, IMethodSymbol method)

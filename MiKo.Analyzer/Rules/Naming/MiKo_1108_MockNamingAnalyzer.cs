@@ -144,12 +144,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, params SyntaxToken[] identifiers)
         {
-            var diagnostics = AnalyzeIdentifiers(context.SemanticModel, identifiers);
+            var issues = AnalyzeIdentifiers(context.SemanticModel, identifiers);
 
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issues);
         }
     }
 }

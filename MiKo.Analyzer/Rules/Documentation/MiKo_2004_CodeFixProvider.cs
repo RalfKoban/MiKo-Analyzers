@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2004_CodeFixTitle;
 
-        protected override DocumentationCommentTriviaSyntax Comment(Document document, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax Comment(CodeFixContext context, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
         {
             // comment is missing, so add one
             var method = comment.FirstAncestorOrSelf<MethodDeclarationSyntax>();
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var parameter = method.ParameterList.Parameters[index];
 
                 var paramElement = ParamComment(parameter.GetName());
-                var content = Comment(document, paramElement, parameter, index).WithLeadingXmlCommentExterior();
+                var content = Comment((CodeFixContext)context, paramElement, parameter, index).WithLeadingXmlCommentExterior();
 
                 // find summary to add sender
                 if (isSender)
@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(CodeFixContext context, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
             if (index == 0)
             {

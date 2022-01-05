@@ -31,11 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (node.Type.IsCommand(semanticModel))
             {
-                var diagnostics = AnalyzeCommandCreation(node, semanticModel);
-                foreach (var diagnostic in diagnostics)
-                {
-                    context.ReportDiagnostic(diagnostic);
-                }
+                var issues = AnalyzeCommandCreation(node, semanticModel);
+
+                ReportDiagnostics(context, issues);
             }
         }
 
@@ -44,25 +42,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var argumentList = node.ArgumentList;
             if (argumentList is null)
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
             var arguments = argumentList.Arguments;
             if (arguments.Count == 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
-            var results = new List<Diagnostic>();
             foreach (var argument in arguments)
             {
-                AnalyzeSuffix(argument, semanticModel, results);
+                yield return AnalyzeSuffix(argument, semanticModel);
             }
-
-            return results;
         }
 
-        private void AnalyzeSuffix(ArgumentSyntax argument, SemanticModel semanticModel, ICollection<Diagnostic> list)
+        private Diagnostic AnalyzeSuffix(ArgumentSyntax argument, SemanticModel semanticModel)
         {
             var argumentName = argument.ToString();
             if (argumentName.EndsWith(Suffix, StringComparison.Ordinal))
@@ -71,9 +66,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var symbol = semanticModel.LookupSymbols(location.SourceSpan.Start, name: argumentName).FirstOrDefault();
                 if (symbol != null)
                 {
-                    list.Add(Issue(symbol, argumentName.WithoutSuffix(Suffix)));
+                    return Issue(symbol, argumentName.WithoutSuffix(Suffix));
                 }
             }
+
+            return null;
         }
     }
 }

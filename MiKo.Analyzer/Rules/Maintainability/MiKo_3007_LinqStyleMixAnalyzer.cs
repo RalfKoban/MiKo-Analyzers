@@ -53,12 +53,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeQueryExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (QueryExpressionSyntax)context.Node;
+            var issue = AnalyzeQueryExpression(node, context.SemanticModel);
 
-            var diagnostic = AnalyzeQueryExpression(node, context.SemanticModel);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)

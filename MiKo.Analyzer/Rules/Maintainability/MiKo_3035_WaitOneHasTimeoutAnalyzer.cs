@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var issue = Issue(methodSymbol.Name, node);
 
-                context.ReportDiagnostic(issue);
+                ReportDiagnostics(context, issue);
             }
         }
     }

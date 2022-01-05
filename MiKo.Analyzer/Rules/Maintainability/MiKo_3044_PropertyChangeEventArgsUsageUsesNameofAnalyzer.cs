@@ -89,7 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (HasIssue(literal))
             {
-                context.ReportDiagnostic(Issue(literal));
+                ReportDiagnostics(context, Issue(literal));
             }
         }
     }

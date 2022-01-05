@@ -112,6 +112,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
+            var issues = AnalyzeSimpleMemberAccessExpression(context, node);
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax node)
+        {
             if (IsAssertionMethod(node) && node.Parent is InvocationExpressionSyntax methodCall)
             {
                 foreach (var argument in methodCall.ArgumentList.Arguments)
@@ -122,18 +128,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (IsFrameworkAssertion(context, expression) is false)
                         {
-                            ReportIssue(context, token);
+                            var methodName = context.GetEnclosingMethod()?.Name;
+
+                            yield return Issue(methodName, token, token.ValueText);
                         }
                     }
                 }
             }
-        }
-
-        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token)
-        {
-            var methodName = context.GetEnclosingMethod()?.Name;
-            var issue = Issue(methodName, token, token.ValueText);
-            context.ReportDiagnostic(issue);
         }
     }
 }

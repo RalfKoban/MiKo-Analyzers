@@ -26,11 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (ShallAnalyzeObjectCreation(node, semanticModel))
             {
-                var diagnostics = AnalyzeObjectCreation(node, semanticModel);
-                foreach (var diagnostic in diagnostics)
-                {
-                    context.ReportDiagnostic(diagnostic);
-                }
+                var issues = AnalyzeObjectCreation(node, semanticModel);
+
+                ReportDiagnostics(context, issues);
             }
         }
     }

@@ -22,6 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var descendant in node.DescendantNodes())
             {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 if (descendant.IsKind(SyntaxKind.ConditionalExpression))
                 {
                     ReportIssue(context, descendant);
@@ -36,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
             var issue = Issue(string.Empty, node);
-            context.ReportDiagnostic(issue);
+            ReportDiagnostics(context, issue);
         }
     }
 }

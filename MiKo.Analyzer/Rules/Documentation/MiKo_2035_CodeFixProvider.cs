@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2035_CodeFixTitle;
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override XmlElementSyntax GenericComment(CodeFixContext context, XmlElementSyntax comment, GenericNameSyntax returnType)
         {
             var preparedComment = PrepareComment(comment);
 
@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentStartingWith(preparedComment, Constants.Comments.EnumerableReturnTypeStartingPhrase);
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
+        protected override XmlElementSyntax NonGenericComment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType)
         {
             if (returnType is ArrayTypeSyntax arrayType)
             {

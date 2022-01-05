@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -61,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic diagnostic)
+        protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
             foreach (var ancestor in comment.Ancestors())
@@ -69,10 +70,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 switch (ancestor)
                 {
                     case MethodDeclarationSyntax m:
-                        return Comment(document, comment, m);
+                        return Comment(context, comment, m);
 
                     case PropertyDeclarationSyntax p:
-                        return Comment(document, comment, p);
+                        return Comment(context, comment, p);
 
                     default:
                         continue;
@@ -82,16 +83,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected abstract XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType);
+        protected abstract XmlElementSyntax NonGenericComment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType);
 
-        protected abstract XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType);
+        protected abstract XmlElementSyntax GenericComment(CodeFixContext context, XmlElementSyntax comment, GenericNameSyntax returnType);
 
-        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.ReturnType);
+        protected virtual SyntaxNode Comment(CodeFixContext context, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(context, comment, method.ReturnType);
 
-        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax propertySyntax) => Comment(document, comment, propertySyntax.Type);
+        protected virtual SyntaxNode Comment(CodeFixContext context, XmlElementSyntax comment, PropertyDeclarationSyntax propertySyntax) => Comment(context, comment, propertySyntax.Type);
 
-        private SyntaxNode Comment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                                              ? GenericComment(document, comment, genericReturnType)
-                                                                                                              : NonGenericComment(document, comment, returnType);
+        private SyntaxNode Comment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
+                                                                                                                   ? GenericComment(context, comment, genericReturnType)
+                                                                                                                   : NonGenericComment(context, comment, returnType);
     }
 }

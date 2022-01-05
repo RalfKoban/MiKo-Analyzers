@@ -26,12 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
+            var issue = AnalyzeLocalDeclarationStatement(node);
 
-            var diagnostic = AnalyzeLocalDeclarationStatement(node);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeLocalDeclarationStatement(StatementSyntax declaration)
