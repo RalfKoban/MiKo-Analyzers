@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -61,8 +62,66 @@ namespace Bla
     }
 }");
 
+        [Test]
+        public void Code_gets_fixed()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace System.Windows.Markup
+{
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=false, Inherited=true)]
+    public sealed class ContentPropertyAttribute : Attribute
+    {
+        public ContentPropertyAttribute(string propertyName)
+        {
+        }
+    }
+}
+
+namespace Bla
+{
+    using System.Windows.Markup;
+
+    [ContentProperty(""MyProperty"")]
+    public class TestMe
+    {
+        public string MyProperty { get; set; }
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+namespace System.Windows.Markup
+{
+    [System.AttributeUsage(System.AttributeTargets.Class, AllowMultiple=false, Inherited=true)]
+    public sealed class ContentPropertyAttribute : Attribute
+    {
+        public ContentPropertyAttribute(string propertyName)
+        {
+        }
+    }
+}
+
+namespace Bla
+{
+    using System.Windows.Markup;
+
+    [ContentProperty(nameof(MyProperty))]
+    public class TestMe
+    {
+        public string MyProperty { get; set; }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3047_ContentPropertyAttributeUsesNameofAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3047_ContentPropertyAttributeUsesNameofAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3047_CodeFixProvider();
     }
 }
