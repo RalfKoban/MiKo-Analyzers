@@ -129,7 +129,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private bool CanBeIgnored(SyntaxNodeAnalysisContext context) => ShallAnalyze(context.GetEnclosingMethod()) is false;
+        private bool CanBeIgnored(SyntaxNodeAnalysisContext context)
+        {
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                return true;
+            }
+
+            return ShallAnalyze(context.GetEnclosingMethod()) is false;
+        }
 
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
@@ -259,7 +267,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var issue = Issue(node);
 
-            context.ReportDiagnostic(issue);
+            ReportDiagnostics(context, issue);
         }
     }
 }

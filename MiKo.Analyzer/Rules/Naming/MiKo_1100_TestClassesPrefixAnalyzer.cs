@@ -112,8 +112,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     if (TestClassStartsWithName(testClass, typeUnderTestName) is false)
                     {
-                        var diagnostic = Issue(testClass, typeUnderTestName + Constants.TestsSuffix);
-                        context.ReportDiagnostic(diagnostic);
+                        var issue = Issue(testClass, typeUnderTestName + Constants.TestsSuffix);
+
+                        ReportDiagnostics(context, issue);
                     }
                 }
             }

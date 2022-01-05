@@ -37,33 +37,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (MemberAccessExpressionSyntax)context.Node;
 
+            var issues = AnalyzeSimpleMemberAccessExpression(context, node);
+
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax node)
+        {
             if (node.Expression is IdentifierNameSyntax invokedClass)
             {
                 if (AllowedAssertionMethods.Contains(node.GetName()))
                 {
-                    return;
+                    yield break;
                 }
 
                 if (Constants.Names.AssertionTypes.Contains(invokedClass.GetName()) is false)
                 {
-                    return;
+                    yield break;
                 }
 
                 var testFrameworkNamespace = invokedClass.GetTypeSymbol(context.SemanticModel)?.ContainingNamespace.FullyQualifiedName();
 
                 if (Constants.Names.AssertionNamespaces.Contains(testFrameworkNamespace) is false)
                 {
-                    return; // ignore other test frameworks
+                    yield break;
                 }
 
                 var method = context.GetEnclosingMethod();
                 if (method is null)
                 {
                     // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown
-                    return;
+                    yield break;
                 }
 
-                context.ReportDiagnostic(Issue(method.Name, node));
+                yield return Issue(method.Name, node);
             }
         }
     }

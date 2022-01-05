@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var issue = Issue(context.ContainingSymbol?.Name, argument);
 
-                    context.ReportDiagnostic(issue);
+                    ReportDiagnostics(context, issue);
                 }
             }
         }

@@ -64,12 +64,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeNormalInvocationExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (InvocationExpressionSyntax)context.Node;
+            var issues = AnalyzeNormalInvocationExpression(node, context.SemanticModel);
 
-            var diagnostics = AnalyzeNormalInvocationExpression(node, context.SemanticModel);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issues);
         }
 
         private IEnumerable<Diagnostic> AnalyzeNormalInvocationExpression(InvocationExpressionSyntax node, SemanticModel semanticModel)
@@ -111,12 +108,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeInitializerExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (InitializerExpressionSyntax)context.Node;
+            var issues = AnalyzeInitializerExpression(node, context.SemanticModel);
 
-            var diagnostics = AnalyzeInitializerExpression(node, context.SemanticModel);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, issues);
         }
 
         private IEnumerable<Diagnostic> AnalyzeInitializerExpression(InitializerExpressionSyntax node, SemanticModel semanticModel)

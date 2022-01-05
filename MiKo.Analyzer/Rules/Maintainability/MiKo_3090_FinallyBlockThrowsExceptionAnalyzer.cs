@@ -26,13 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            foreach (var statement in finallyBlock.DescendantNodesAndSelf().OfType<ThrowStatementSyntax>())
-            {
-                var location = statement.GetLocation();
-                var method = context.GetEnclosingMethod();
-                var issue = Issue(method, location);
-                context.ReportDiagnostic(issue);
-            }
+            var method = context.GetEnclosingMethod();
+
+            var issues = finallyBlock.DescendantNodesAndSelf().OfType<ThrowStatementSyntax>()
+                                     .Select(_ => Issue(method, _.GetLocation()));
+
+            ReportDiagnostics(context, issues);
         }
     }
 }

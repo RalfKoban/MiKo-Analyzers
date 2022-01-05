@@ -106,10 +106,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
             foreach (var parameter in parameters)
             {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 var parameterName = parameter.GetName();
 
                 if (used.Contains(parameterName))
@@ -123,8 +133,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                var diagnostic = Issue(parameterName, parameter.Identifier);
-                context.ReportDiagnostic(diagnostic);
+                var issue = Issue(parameterName, parameter.Identifier);
+                ReportDiagnostics(context, issue);
             }
         }
     }

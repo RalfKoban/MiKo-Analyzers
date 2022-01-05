@@ -59,10 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            foreach (var issue in AnalyzeIssue(node, methodSymbol))
-            {
-                context.ReportDiagnostic(issue);
-            }
+            ReportDiagnostics(context, AnalyzeIssue(node, methodSymbol));
         }
     }
 }

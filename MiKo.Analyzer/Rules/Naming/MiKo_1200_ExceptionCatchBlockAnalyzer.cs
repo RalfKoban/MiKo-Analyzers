@@ -24,11 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeCatchBlock(SyntaxNodeAnalysisContext context)
         {
             var node = (CatchClauseSyntax)context.Node;
-            var diagnostic = AnalyzeCatchClause(node);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issue = AnalyzeCatchClause(node);
+
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeCatchClause(CatchClauseSyntax node) => AnalyzeCatchDeclaration(node.Declaration);

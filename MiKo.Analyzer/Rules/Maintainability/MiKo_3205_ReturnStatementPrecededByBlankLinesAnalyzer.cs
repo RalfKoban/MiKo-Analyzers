@@ -23,11 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeReturnStatementSyntax(SyntaxNodeAnalysisContext context)
         {
-            var diagnostic = AnalyzeReturnStatementSyntax(context.Node);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issue = AnalyzeReturnStatementSyntax(context.Node);
+
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeReturnStatementSyntax(SyntaxNode statement)

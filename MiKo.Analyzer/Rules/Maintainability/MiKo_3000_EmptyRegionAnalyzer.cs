@@ -47,8 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (somethingInside is false)
             {
-                var issue = Issue(regionNode);
-                context.ReportDiagnostic(issue);
+                ReportDiagnostics(context, Issue(regionNode));
             }
         }
     }

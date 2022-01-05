@@ -52,10 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var issues = AnalyzeSingleLineCommentTrivia(node, context.SemanticModel);
 
-            foreach (var issue in issues)
-            {
-                context.ReportDiagnostic(issue);
-            }
+            ReportDiagnostics(context, issues);
         }
 
         private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)

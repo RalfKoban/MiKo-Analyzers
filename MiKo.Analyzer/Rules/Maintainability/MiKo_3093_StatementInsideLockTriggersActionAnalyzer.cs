@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,6 +25,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {
             var lockStatement = (LockStatementSyntax)context.Node;
+            var issues = AnalyzeLockStatement(context, lockStatement);
+
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeLockStatement(SyntaxNodeAnalysisContext context, LockStatementSyntax lockStatement)
+        {
             var semanticModel = context.SemanticModel;
 
             foreach (var token in lockStatement.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
@@ -43,9 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (IsInvocation(identifier))
                     {
                         var method = context.GetEnclosingMethod();
-                        var issue = Issue(method.Name, token);
 
-                        context.ReportDiagnostic(issue);
+                        yield return Issue(method.Name, token);
                     }
                 }
             }

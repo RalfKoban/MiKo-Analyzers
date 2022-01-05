@@ -22,22 +22,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private void AnalyzeSimpleLambdaExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (SimpleLambdaExpressionSyntax)context.Node;
-            var diagnostic = AnalyzeSimpleLambdaExpression(node);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issue = AnalyzeSimpleLambdaExpression(node);
+
+            ReportDiagnostics(context, issue);
         }
 
         private Diagnostic AnalyzeSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
         {
-            if (node.Parameter is null)
+            var parameter = node.Parameter;
+
+            if (parameter is null)
             {
                 return null;
             }
 
-            var identifier = node.Parameter.Identifier;
-            var parameterName = node.Parameter.GetName();
+            var identifier = parameter.Identifier;
+            var parameterName = parameter.GetName();
             switch (parameterName)
             {
                 case null: // we do not have one

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
@@ -138,7 +139,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         private void AnalyzeMethodDeclarationSyntax(SyntaxNodeAnalysisContext context)
         {
             var method = (MethodDeclarationSyntax)context.Node;
+            var issues = AnalyzeMethodDeclarationSyntax(context, method);
 
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeMethodDeclarationSyntax(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
+        {
             if (ReturnsEnumerable(method))
             {
                 var semanticModel = context.SemanticModel;
@@ -149,8 +156,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     if (IsRecursiveYield(yieldStatement, semanticModel, methodSymbol))
                     {
-                        var issue = Issue(method.GetName(), yieldStatement);
-                        context.ReportDiagnostic(issue);
+                        yield return Issue(method.GetName(), yieldStatement);
                     }
                 }
             }

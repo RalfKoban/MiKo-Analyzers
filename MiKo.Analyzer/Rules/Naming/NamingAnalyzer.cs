@@ -130,11 +130,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var diagnostics = AnalyzeIdentifiers(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issues = AnalyzeIdentifiers(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+
+            ReportDiagnostics(context, issues);
         }
 
         protected virtual void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
@@ -149,11 +147,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var diagnostics = Analyze(semanticModel, node.Designation);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issues = Analyze(semanticModel, node.Designation);
+
+            ReportDiagnostics(context, issues);
         }
 
         protected virtual void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
@@ -168,11 +164,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var diagnostics = AnalyzeIdentifiers(semanticModel, node.Identifier);
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issues = AnalyzeIdentifiers(semanticModel, node.Identifier);
+
+            ReportDiagnostics(context, issues);
         }
 
         protected virtual void AnalyzeForStatement(SyntaxNodeAnalysisContext context)
@@ -194,11 +188,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var diagnostics = AnalyzeIdentifiers(semanticModel, variableDeclaration.Variables.Select(_ => _.Identifier).ToArray());
-            foreach (var diagnostic in diagnostics)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            var issues = AnalyzeIdentifiers(semanticModel, variableDeclaration.Variables.Select(_ => _.Identifier).ToArray());
+
+            ReportDiagnostics(context, issues);
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();

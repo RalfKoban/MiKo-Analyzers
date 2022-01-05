@@ -41,13 +41,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     var argumentList = node.ArgumentList;
                     if (argumentList != null)
                     {
-                        foreach (var expression in argumentList.Arguments
-                                                               .Select(_ => _.Expression)
-                                                               .Where(_ => _?.IsKind(SyntaxKind.StringLiteralExpression) is true))
-                        {
-                            var issue = Issue(attributeName, expression);
-                            context.ReportDiagnostic(issue);
-                        }
+                        var issues = argumentList.Arguments
+                                                 .Select(_ => _.Expression)
+                                                 .Where(_ => _?.IsKind(SyntaxKind.StringLiteralExpression) is true)
+                                                 .Select(_ => Issue(attributeName, _));
+
+                        ReportDiagnostics(context, issues);
                     }
 
                     break;
