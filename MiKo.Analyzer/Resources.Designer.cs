@@ -7689,7 +7689,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide a reason why the &apos;{0}&apos; is thrown.
+        ///   Looks up a localized string similar to Provide a reason for the thrown &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_3014_MessageFormat {
             get {
@@ -7743,11 +7743,58 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states..
+        ///   Looks up a localized string similar to Throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states of parameterless methods..
         /// </summary>
         public static string MiKo_3015_Title {
             get {
                 return ResourceManager.GetString("MiKo_3015_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change to &apos;ArgumentException&apos; or &apos;InvalidOperationException&apos;.
+        /// </summary>
+        public static string MiKo_3016_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3016_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ArgumentNullExceptions should not be thrown for values of properties that are returned by parameters.
+        ///If you want to indicate a problem for the parameter, throw an ArgumentException instead.
+        ///If it&apos;s no issue of the parameter itself, throw an InvalidOperationException instead..
+        /// </summary>
+        public static string MiKo_3016_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3016_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
+        /// </summary>
+        public static string MiKo_3016_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3016_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throw an &apos;ArgumentException&apos; or &apos;InvalidOperationException&apos; instead.
+        /// </summary>
+        public static string MiKo_3016_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3016_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not throw ArgumentNullException for inappropriate states of property return values..
+        /// </summary>
+        public static string MiKo_3016_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3016_Title", resourceCulture);
             }
         }
         

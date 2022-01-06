@@ -43,6 +43,55 @@ namespace MiKoSolutions.Analyzers
             return method.Parameters.Any(_ => _.Name == parameterName);
         }
 
+        internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
+        {
+            var ifStatement = value.Ancestors().OfType<IfStatementSyntax>().FirstOrDefault();
+            if (ifStatement is null)
+            {
+                // maybe part of a block outside the if statement
+                var block = value.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
+                if (block != null)
+                {
+                    // try to find the corresponding if statement
+                    ifStatement = block.ChildNodes().OfType<IfStatementSyntax>().FirstOrDefault();
+                }
+            }
+
+            return ifStatement;
+        }
+
+        internal static ExpressionSyntax GetRelatedCondition(this ObjectCreationExpressionSyntax syntax)
+        {
+            var node = syntax.ArgumentList;
+
+            // most probably it's a if/else, but it might be a switch statement as well
+            var condition = node.GetRelatedIfStatement()?.Condition ?? node.GetEnclosing<SwitchStatementSyntax>()?.Expression;
+
+            return condition;
+        }
+
+        internal static ParameterSyntax GetUsedParameter(this ObjectCreationExpressionSyntax syntax)
+        {
+            var parameters = CollectParameters(syntax);
+            if (parameters.Any())
+            {
+                // there might be multiple parameters, so we have to find out which parameter is meant
+                var condition = GetRelatedCondition(syntax);
+
+                if (condition is null)
+                {
+                    // nothing found
+                    return null;
+                }
+
+                var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
+
+                return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
+            }
+
+            return null;
+        }
+
         internal static HashSet<string> GetAllUsedVariables(this SyntaxNode statementOrExpression, SemanticModel semanticModel)
         {
             var dataFlow = semanticModel.AnalyzeDataFlow(statementOrExpression);
@@ -1337,21 +1386,35 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
-        internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
+        private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
-            var ifStatement = value.Ancestors().OfType<IfStatementSyntax>().FirstOrDefault();
-            if (ifStatement is null)
+            var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();
+            if (method != null)
             {
-                // maybe part of a block outside the if statement
-                var block = value.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
-                if (block != null)
-                {
-                    // try to find the corresponding if statement
-                    ifStatement = block.ChildNodes().OfType<IfStatementSyntax>().FirstOrDefault();
-                }
+                return method.ParameterList.Parameters;
             }
 
-            return ifStatement;
+            var indexer = syntax.GetEnclosing<IndexerDeclarationSyntax>();
+            if (indexer != null)
+            {
+                var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
+
+                // 'value' is a special parameter that is not part of the parameter list
+                parameters.Insert(0, Parameter(indexer.Type));
+
+                return parameters;
+            }
+
+            var property = syntax.GetEnclosing<PropertyDeclarationSyntax>();
+            if (property != null)
+            {
+                // 'value' is a special parameter that is not part of the parameter list
+                return new[] { Parameter(property.Type) };
+            }
+
+            return Enumerable.Empty<ParameterSyntax>();
+
+            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier("value"), default);
         }
 
         private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());

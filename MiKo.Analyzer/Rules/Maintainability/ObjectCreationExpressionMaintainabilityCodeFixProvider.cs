@@ -16,20 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax ParamName(IdentifierNameSyntax identifier) => Argument(NameOf(identifier.GetName()));
 
-        protected static ParameterSyntax FindUsedParameter(ObjectCreationExpressionSyntax syntax)
-        {
-            var parameters = CollectParameters(syntax);
-            if (parameters.Any())
-            {
-                // there might be multiple parameters, so we have to find out which parameter is meant
-                var parameter = FindUsedParameter(syntax.ArgumentList, parameters);
-
-                return parameter;
-            }
-
-            return null;
-        }
-
         protected static ArgumentSyntax GetUpdatedErrorMessage(IEnumerable<ArgumentSyntax> arguments)
         {
             foreach (var argument in arguments)
@@ -63,51 +49,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected virtual TypeSyntax GetUpdatedSyntaxType(ObjectCreationExpressionSyntax syntax) => syntax.Type;
 
         protected abstract ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax);
-
-        private static ParameterSyntax FindUsedParameter(SyntaxNode node, IEnumerable<ParameterSyntax> parameters)
-        {
-            // most probably it's a if/else, but it might be a switch statement as well
-            var condition = node.GetRelatedIfStatement()?.Condition ?? node.GetEnclosing<SwitchStatementSyntax>()?.Expression;
-
-            if (condition is null)
-            {
-                // nothing found
-                return null;
-            }
-
-            var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
-
-            return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
-        }
-
-        private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
-        {
-            var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();
-            if (method != null)
-            {
-                return method.ParameterList.Parameters;
-            }
-
-            var indexer = syntax.GetEnclosing<IndexerDeclarationSyntax>();
-            if (indexer != null)
-            {
-                var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
-
-                // 'value' is a special parameter that is not part of the parameter list
-                parameters.Insert(0, Parameter(indexer.Type));
-
-                return parameters;
-            }
-
-            var property = syntax.GetEnclosing<PropertyDeclarationSyntax>();
-            if (property != null)
-            {
-                // 'value' is a special parameter that is not part of the parameter list
-                return new[] { Parameter(property.Type) };
-            }
-
-            return Enumerable.Empty<ParameterSyntax>();
-        }
 
         private SyntaxNode GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax)
         {

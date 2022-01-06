@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
-            var parameter = FindUsedParameter(syntax);
+            var parameter = syntax.GetUsedParameter();
 
             var arguments = syntax.ArgumentList?.Arguments;
 

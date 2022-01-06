@@ -58,8 +58,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Invocation(member);
         }
 
-        protected static ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier("value"), default);
-
         protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(SyntaxFactory.Token(kind));
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName)
