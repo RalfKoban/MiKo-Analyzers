@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 
 ## Available Rules
-The following tables list all the 312 rules that are currently provided by the analyzer.
+The following tables list all the 313 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -252,7 +252,8 @@ The following tables list all the 312 rules that are currently provided by the a
 |MiKo_3012|Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown.|&#x2713;|&#x2713;|
 |MiKo_3013|The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException.|&#x2713;|&#x2713;|
 |MiKo_3014|InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message.|&#x2713;|\-|
-|MiKo_3015|Parameterless methods should throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states.|&#x2713;|&#x2713;|
+|MiKo_3015|Throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states of parameterless methods.|&#x2713;|&#x2713;|
+|MiKo_3016|Do not throw ArgumentNullException for inappropriate states of property return values.|&#x2713;|&#x2713;|
 |MiKo_3020|Use 'Task.CompletedTask' instead of 'Task.FromResult'.|&#x2713;|&#x2713;|
 |MiKo_3021|Do not use 'Task.Run' in the implementation.|&#x2713;|\-|
 |MiKo_3022|Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;.|&#x2713;|\-|

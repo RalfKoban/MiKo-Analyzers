@@ -25,7 +25,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             };
 
         [Test]
-        public void No_issue_is_reported_for_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_pattern_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public void DoSomething(int x)
+    {
+        if (x is null) throw new " + exceptionName + @"();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_binary_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;
 
@@ -37,6 +51,52 @@ public class TestMe
     }
 }
 ");
+
+        [Test]
+        public void No_issue_is_reported_on_pattern_based_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName)
+        {
+            var content = @"
+using System;
+using System.ComponentModel;
+
+public class SomeObject
+{
+    public int SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject x)
+    {
+        if (x.SomeData is null) throw new " + exceptionName + @"();
+    }
+}
+";
+            No_issue_is_reported_for(content, $"Situation should be detected as error by related rule '{nameof(MiKo_3016_ArgumentNullExceptionThrownAtWrongPlaceAnalyzer)}'");
+        }
+
+        [Test]
+        public void No_issue_is_reported_on_binary_based_property_comparison_for_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName)
+        {
+            var content = @"
+using System;
+using System.ComponentModel;
+
+public class SomeObject
+{
+    public int SomeData { get; set; }
+}
+
+public class TestMe
+{
+    public void DoSomething(SomeObject x)
+    {
+        if (x.SomeData == 42) throw new " + exceptionName + @"();
+    }
+}
+";
+            No_issue_is_reported_for(content, $"Situation should be detected as error by related rule '{nameof(MiKo_3016_ArgumentNullExceptionThrownAtWrongPlaceAnalyzer)}'");
+        }
 
         [Test]
         public void An_issue_is_reported_for_incorrectly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => An_issue_is_reported_for(@"

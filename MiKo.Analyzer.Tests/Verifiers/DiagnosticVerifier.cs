@@ -62,11 +62,11 @@ namespace TestHelper
 
         protected void An_issue_is_reported_for_file(string path, int violations = 0) => An_issue_is_reported_for(File.ReadAllText(path), violations);
 
-        protected void No_issue_is_reported_for(string fileContent, string path = null)
+        protected void No_issue_is_reported_for(string fileContent, string message = null)
         {
             var results = GetDiagnostics(fileContent);
 
-            Assert.That(results, Is.Empty, path ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
+            Assert.That(results, Is.Empty, message ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
         }
 
         protected void No_issue_is_reported_for_file(string path) => No_issue_is_reported_for(File.ReadAllText(path), path);
