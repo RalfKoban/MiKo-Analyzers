@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -21,6 +22,15 @@ public class TestMe
         public void No_issue_is_reported_for_undocumented_event_handling_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
+    public void DoSomething(object sender, MyEventArgs e) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_inherited_documented_event_handling_method() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <inheritdoc/>
     public void DoSomething(object sender, MyEventArgs e) { }
 }
 ");
@@ -69,8 +79,48 @@ namespace Bla
     }
 }");
 
+        [TestCase("Handler for event", "Handles the event")]
+        [TestCase("Handler for the event", "Handles the event")]
+        [TestCase(@"Handler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Handler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase("EventHandler for event", "Handles the event")]
+        [TestCase("EventHandler for the event", "Handles the event")]
+        [TestCase(@"EventHandler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"EventHandler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase("Event handler for event", "Handles the event")]
+        [TestCase("Event handler for the event", "Handles the event")]
+        [TestCase(@"Event handler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Event handler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Called by the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Called if the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Called if <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Called when the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Called when <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Callback that is called by the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"When the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"when the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Raised when the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        public void Code_gets_fixed_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// ###
+    /// </summary>
+    void OnSomething(object sender, EventArgs e);
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2003_EventHandlerSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2003_EventHandlerSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2003_CodeFixProvider();
     }
 }

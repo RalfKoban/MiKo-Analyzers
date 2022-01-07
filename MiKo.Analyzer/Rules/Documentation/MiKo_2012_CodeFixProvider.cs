@@ -202,11 +202,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Event arguments which provide information ", Constants.Comments.EventArgsSummaryStartingPhrase);
 
             // events
-            yield return new KeyValuePair<string, string>("Event is fired ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event that is published ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event that is published, ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event which is published ", "Occurs ");
-            yield return new KeyValuePair<string, string>("Event which is published, ", "Occurs ");
+            yield return new KeyValuePair<string, string>("Event is fired ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event that is published ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event that is published, ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event which is published ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event which is published, ", Constants.Comments.EventSummaryStartingPhrase);
+
+            // event handler
+            yield return new KeyValuePair<string, string>("EventHandler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("EventHandler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event handler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Event handler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Handler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new KeyValuePair<string, string>("Handler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
 
             // factories
             yield return new KeyValuePair<string, string>("Factory for ", Constants.Comments.FactorySummaryPhrase);

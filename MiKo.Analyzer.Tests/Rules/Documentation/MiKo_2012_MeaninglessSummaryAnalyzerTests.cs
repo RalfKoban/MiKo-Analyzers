@@ -652,7 +652,7 @@ public class TestMe
         [TestCase("Command for", "Represents a command that can")]
         [TestCase("Command to", "Represents a command that can")]
         [TestCase("command to", "Represents a command that can")]
-        public void Code_gets_fixed_for_command(string originalComment, string fixedComment)
+        public void Code_gets_fixed_for_command_(string originalComment, string fixedComment)
         {
             const string Template = @"
 /// <summary>
@@ -670,7 +670,7 @@ public class TestMeCommand
         [TestCase(@"Used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
         [TestCase(@"Used for creating something", @"Provides support for creating something")]
         [TestCase(@"Used for creating <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
-        public void Code_gets_fixed_for_factory_Types(string originalComment, string fixedComment)
+        public void Code_gets_fixed_for_factory_Types_(string originalComment, string fixedComment)
         {
             const string Template = @"
 /// <summary>
@@ -678,6 +678,35 @@ public class TestMeCommand
 /// </summary>
 public class TestMeFactory
 {
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Handler for event", "Handles the event")]
+        [TestCase("Handler for the event", "Handles the event")]
+        [TestCase(@"Handler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Handler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase("EventHandler for event", "Handles the event")]
+        [TestCase("EventHandler for the event", "Handles the event")]
+        [TestCase(@"EventHandler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"EventHandler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase("Event handler for event", "Handles the event")]
+        [TestCase("Event handler for the event", "Handles the event")]
+        [TestCase(@"Event handler for <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        [TestCase(@"Event handler for the <see cref=""string""/> event", @"Handles the <see cref=""string""/> event")]
+        public void Code_gets_fixed_for_event_handler_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// ###
+    /// </summary>
+    void OnSomething(object sender, EventArgs e);
 }
 ";
 
@@ -703,6 +732,8 @@ public class TestMeFactory
                                 "Field",
                                 "Property",
                                 "Event",
+                                "EventHandler",
+                                "Handler",
                                 "Component",
                                 "Constructor",
                                 "Ctor",

@@ -4027,6 +4027,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start comment with &apos;Handles the &apos;.
+        /// </summary>
+        public static string MiKo_2003_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2003_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation of an event handler should have a default starting phrase that describes what event gets handled..
         /// </summary>
         public static string MiKo_2003_Description {
