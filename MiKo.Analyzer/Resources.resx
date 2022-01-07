@@ -2770,6 +2770,15 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
   <data name="MiKo_3016_Title" xml:space="preserve">
     <value>Do not throw ArgumentNullException for inappropriate states of property return values.</value>
   </data>
+  <data name="MiKo_3017_Description" xml:space="preserve">
+    <value>If an exception gets caught and a new exception gets thrown, it's much easier if the new exception contains the caught one as inner exception.</value>
+  </data>
+  <data name="MiKo_3017_MessageFormat" xml:space="preserve">
+    <value>Provide exception as inner exception</value>
+  </data>
+  <data name="MiKo_3017_Title" xml:space="preserve">
+    <value>Do not swallow thrown exceptions when throwing exceptions.</value>
+  </data>
   <data name="MiKo_3020_CodeFixTitle" xml:space="preserve">
     <value>Use 'Task.CompletedTask'</value>
   </data>

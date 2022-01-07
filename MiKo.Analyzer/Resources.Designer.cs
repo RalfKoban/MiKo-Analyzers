@@ -7808,6 +7808,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If an exception gets caught and a new exception gets thrown, it&apos;s much easier if the new exception contains the caught one as inner exception..
+        /// </summary>
+        public static string MiKo_3017_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3017_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide exception as inner exception.
+        /// </summary>
+        public static string MiKo_3017_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3017_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not swallow thrown exceptions when throwing exceptions..
+        /// </summary>
+        public static string MiKo_3017_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3017_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &apos;Task.CompletedTask&apos;.
         /// </summary>
         public static string MiKo_3020_CodeFixTitle {
