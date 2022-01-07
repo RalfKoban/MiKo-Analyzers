@@ -58,6 +58,42 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_created_exception_without_inner_exception_if_there_is_no_exception() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(int i)
+    {
+        if (i != 42)
+            throw new InvalidOperationException(""something went wrong here"");
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_created_exception_without_inner_exception_if_there_is_no_exception_2() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is null)
+        {
+            throw new ArgumentNullException(""something went wrong here"");
+        }
+
+        if (o.GetHashCode() != 42)
+        {
+            throw new ArgumentException(""something went wrong here"");
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_created_exception_without_inner_exception() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;

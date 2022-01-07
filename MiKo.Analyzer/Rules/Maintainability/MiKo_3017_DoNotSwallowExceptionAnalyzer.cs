@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var condition = node.GetRelatedCondition();
             if (condition != null)
             {
-                if (condition.DescendantNodes().OfType<ExpressionSyntax>().Any(_ => _.GetTypeSymbol(semanticModel).IsException()))
+                if (condition.DescendantNodes().OfType<ExpressionSyntax>().Any(_ => _.GetTypeSymbol(semanticModel)?.IsException() is true))
                 {
                     yield return Issue(node.Type.ToString(), node);
                 }
