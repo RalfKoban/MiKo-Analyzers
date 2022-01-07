@@ -60,12 +60,10 @@ namespace MiKoSolutions.Analyzers
             return ifStatement;
         }
 
-        internal static ExpressionSyntax GetRelatedCondition(this ObjectCreationExpressionSyntax syntax)
+        internal static ExpressionSyntax GetRelatedCondition(this SyntaxNode syntax)
         {
-            var node = syntax.ArgumentList;
-
             // most probably it's a if/else, but it might be a switch statement as well
-            var condition = node.GetRelatedIfStatement()?.Condition ?? node.GetEnclosing<SwitchStatementSyntax>()?.Expression;
+            var condition = syntax.GetRelatedIfStatement()?.Condition ?? syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression;
 
             return condition;
         }
