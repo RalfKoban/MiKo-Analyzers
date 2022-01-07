@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var preparedComment = PrepareComment((XmlElementSyntax)syntax);
 
-            var fixedComment = CommentStartingWith(preparedComment, MiKo_2001_EventSummaryAnalyzer.Phrase);
+            var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.EventSummaryStartingPhrase);
 
             var text = fixedComment.Content[0].WithoutXmlCommentExterior();
             if (text.StartsWith(SpecialTerm, StringComparison.Ordinal))
