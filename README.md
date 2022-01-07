@@ -277,7 +277,7 @@ The following tables list all the 313 rules that are currently provided by the a
 |MiKo_3041|EventArgs shall not use delegates.|&#x2713;|\-|
 |MiKo_3042|EventArgs shall not implement interfaces.|&#x2713;|\-|
 |MiKo_3043|Use 'nameof' for WeakEventManager event (de-)registrations.|&#x2713;|&#x2713;|
-|MiKo_3044|Use 'nameof' to compare property names of 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'.|&#x2713;|\-|
+|MiKo_3044|Use 'nameof' to compare property names of 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'.|&#x2713;|&#x2713;|
 |MiKo_3047|Use 'nameof' for applied [ContentProperty] attributes.|&#x2713;|&#x2713;|
 |MiKo_3048|ValueConverters shall have the [ValueConversion] attribute applied.|&#x2713;|\-|
 |MiKo_3049|Enum members shall have the [Description] attribute applied.|&#x2713;|\-|

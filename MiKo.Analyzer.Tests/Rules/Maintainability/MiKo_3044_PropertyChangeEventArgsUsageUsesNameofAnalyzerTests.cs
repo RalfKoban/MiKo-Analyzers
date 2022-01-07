@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -466,8 +467,244 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_own_property_in_method_body()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    private int MyProperty { get; set; }
+
+    public bool DoSomething(PropertyChangedEventArgs e) => e.PropertyName == ""MyProperty"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    private int MyProperty { get; set; }
+
+    public bool DoSomething(PropertyChangedEventArgs e) => e.PropertyName == nameof(MyProperty);
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_of_other_type_in_method_body_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == ""MachineName"")
+        {
+            var other = (Environment)sender;
+
+            if (other.MachineName is null)
+                return true;
+        }
+
+        return false;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Environment.MachineName))
+        {
+            var other = (Environment)sender;
+
+            if (other.MachineName is null)
+                return true;
+        }
+
+        return false;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_of_other_type_in_method_body_else_if_statement()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == ""MachineName"")
+        {
+            var other = (Environment)sender;
+
+            if (other is null)
+                return false;
+            else if (other.MachineName is null)
+                return true;
+        }
+
+        return false;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Environment.MachineName))
+        {
+            var other = (Environment)sender;
+
+            if (other is null)
+                return false;
+            else if (other.MachineName is null)
+                return true;
+        }
+
+        return false;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_of_other_type_in_method_body_else_statement()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == ""MachineName"")
+        {
+            var other = (Environment)sender;
+
+            if (other is null)
+                return false;
+            else
+                return other.MachineName is null;
+        }
+
+        return false;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Environment.MachineName))
+        {
+            var other = (Environment)sender;
+
+            if (other is null)
+                return false;
+            else
+                return other.MachineName is null;
+        }
+
+        return false;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_of_other_type_in_method_body_switch_statement()
+        {
+            const string OriginalCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case ""MachineName"":
+            {
+                var other = (Environment)sender;
+
+                return other.MachineName is null;
+            }
+        }
+
+        return false;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    public bool DoSomething(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(Environment.MachineName):
+            {
+                var other = (Environment)sender;
+
+                return other.MachineName is null;
+            }
+        }
+
+        return false;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3044_PropertyChangeEventArgsUsageUsesNameofAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3044_PropertyChangeEventArgsUsageUsesNameofAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3044_CodeFixProvider();
     }
 }
