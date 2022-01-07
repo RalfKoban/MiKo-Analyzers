@@ -140,7 +140,7 @@ The following tables list all the 313 rules that are currently provided by the a
 |MiKo_2000|Documentation should be valid XML.|&#x2713;|&#x2713;|
 |MiKo_2001|Events should be documented properly.|&#x2713;|&#x2713;|
 |MiKo_2002|EventArgs should be documented properly.|&#x2713;|&#x2713;|
-|MiKo_2003|Documentation of event handlers should have a default starting phrase.|&#x2713;|\-|
+|MiKo_2003|Documentation of event handlers should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.|&#x2713;|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly.|&#x2713;|\-|
 |MiKo_2006|Routed events should be documented as done by the .NET Framework.|&#x2713;|&#x2713;|

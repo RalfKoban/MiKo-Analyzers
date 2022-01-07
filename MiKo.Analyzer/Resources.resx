@@ -1485,6 +1485,9 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_2002_Title" xml:space="preserve">
     <value>EventArgs should be documented properly.</value>
   </data>
+  <data name="MiKo_2003_CodeFixTitle" xml:space="preserve">
+    <value>Start comment with 'Handles the '</value>
+  </data>
   <data name="MiKo_2003_Description" xml:space="preserve">
     <value>Documentation of an event handler should have a default starting phrase that describes what event gets handled.</value>
   </data>
