@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     foreach (var argument in argumentList.Arguments)
                     {
                         var symbol = argument.GetTypeSymbol(semanticModel);
-                        if (symbol.IsException())
+                        if (symbol?.IsException() is true)
                         {
                             // seems like we found the inner exception
                             return false;
