@@ -20,23 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
             var argumentList = syntax.ArgumentList;
-            if (argumentList is null)
-            {
-                return null;
-            }
-
             var arguments = argumentList.Arguments;
-            switch (arguments.Count)
-            {
-                case 3: // actual argument seems to be part of the exception, so we have to ignore it when trying to find the error message
-                    return ArgumentList(GetUpdatedErrorMessage(arguments.RemoveAt(1)));
 
-                // case 0: // missing message, so add a TODO
-                // case 1: // it's either the parameter or the message instead of the parameter
-                // case 2: // message and parameter (might be switched)
-                default:
-                    return ArgumentList(GetUpdatedErrorMessage(arguments));
-            }
+            var errorMessage = arguments.Count == 3
+                                   ? GetUpdatedErrorMessage(arguments.RemoveAt(1)) // actual argument seems to be part of the exception, so we have to ignore it when trying to find the error message
+                                   : GetUpdatedErrorMessage(argumentList);
+
+            return ArgumentList(errorMessage);
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => WithoutUsing(root, "System.ComponentModel"); // remove unused "using System.ComponentModel;"

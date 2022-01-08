@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var ctor = syntax.AncestorsAndSelf().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
+            var ctor = syntax.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
             if (ctor != null)
             {
                 return FixCtorComment(ctor);
@@ -48,8 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax FixCtorComment(ConstructorDeclarationSyntax ctor)
         {
-            var typeDeclarationSyntax = ctor.Ancestors().OfType<TypeDeclarationSyntax>().First();
-            var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax.Identifier.ValueText);
+            var typeDeclarationSyntax = ctor.FirstAncestorOrSelf<TypeDeclarationSyntax>();
+            var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax?.Identifier.ValueText ?? string.Empty);
 
             // we have a ctor
             var parameters = ctor.ParameterList.Parameters;

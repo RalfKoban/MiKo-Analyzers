@@ -19,29 +19,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
-            var parameter = syntax.GetUsedParameter();
-
-            var arguments = syntax.ArgumentList?.Arguments;
+            var argumentList = syntax.ArgumentList;
 
             // there might be multiple parameters, so we have to find out which parameter is meant
+            var parameter = syntax.GetUsedParameter();
             if (parameter != null)
             {
-                switch (arguments?.Count)
+                switch (argumentList.Arguments.Count)
                 {
                     case 0: // missing message, so add a TODO
                     case 1: // it's either the parameter or the message instead of the parameter
                     case 2: // message and parameter (might be switched)
-                        return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(arguments));
+                        return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(argumentList));
                 }
             }
 
             // it might be a local variable inside a switch, so we have to find out which one
             if (syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression is IdentifierNameSyntax identifier)
             {
-                return ArgumentList(ParamName(identifier), Argument(identifier), GetUpdatedErrorMessage(arguments));
+                return ArgumentList(ParamName(identifier), Argument(identifier), GetUpdatedErrorMessage(argumentList));
             }
 
-            return syntax.ArgumentList;
+            return argumentList;
         }
     }
 }

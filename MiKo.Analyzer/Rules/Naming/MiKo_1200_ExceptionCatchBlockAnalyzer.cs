@@ -10,8 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1200";
 
-        public const string ExpectedName = "ex";
-
         public MiKo_1200_ExceptionCatchBlockAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -45,11 +43,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 case null: // we do not have one
                 case "": // we do not have one
-                case ExpectedName: // correct identifier
+                case Constants.ExceptionIdentifier: // correct identifier
                     return null;
 
                 default:
-                    return Issue(name, identifier, ExpectedName);
+                    return Issue(name, identifier, Constants.ExceptionIdentifier);
             }
         }
     }

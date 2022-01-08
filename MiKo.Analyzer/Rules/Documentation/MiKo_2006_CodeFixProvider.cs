@@ -21,7 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var fieldDeclaration = syntax.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
+            var fieldDeclaration = syntax.FirstAncestorOrSelf<FieldDeclarationSyntax>();
+            if (fieldDeclaration is null)
+            {
+                return syntax;
+            }
+
             var fieldName = fieldDeclaration.Declaration.Variables.First().Identifier.ValueText;
             var name = fieldName.WithoutSuffix(Constants.RoutedEventFieldSuffix);
 

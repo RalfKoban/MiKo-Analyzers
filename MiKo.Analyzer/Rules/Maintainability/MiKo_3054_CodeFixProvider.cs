@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                    TokenList(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword),
                                                    variableDeclaration);
 
-            var originalField = syntax.Ancestors().OfType<FieldDeclarationSyntax>().First();
+            var originalField = syntax.FirstAncestorOrSelf<FieldDeclarationSyntax>();
 
             return root.InsertNodeAfter(originalField, field);
         }

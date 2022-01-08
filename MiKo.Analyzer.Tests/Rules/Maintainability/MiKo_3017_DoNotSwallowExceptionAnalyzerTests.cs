@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -94,7 +95,21 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_created_exception_without_inner_exception() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_created_exception_without_inner_exception_from_parameter() => An_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(Exception ex)
+    {
+        throw new InvalidOperationException(""something went wrong here"");
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_created_exception_without_inner_exception_from_task() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -130,7 +145,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_with_ExceptionType_only() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_with_exception_type_only() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -151,7 +166,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_with_ignored_exception_instance() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_with_available_but_ignored_exception_instance() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
 
@@ -171,8 +186,214 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_created_exception_without_inner_exception_from_parameter()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(Exception ex)
+    {
+        throw new InvalidOperationException(""something went wrong here"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(Exception ex)
+    {
+        throw new InvalidOperationException(""something went wrong here"", ex);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_created_exception_without_inner_exception_from_Task()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(Task task)
+    {
+        if (task.Exception != null)
+            throw new InvalidOperationException(""something went wrong here"");
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(Task task)
+    {
+        if (task.Exception != null)
+            throw new InvalidOperationException(""something went wrong here"", task.Exception);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_created_exception_message_only_in_catch_block_without_exception()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch
+        {
+            throw new InvalidOperationException(""something went wrong here"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException(""something went wrong here"", ex);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_created_exception_message_only_in_catch_block_with_exception_type_only()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (NotSupportedException)
+        {
+            throw new InvalidOperationException(""something went wrong here"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (NotSupportedException ex)
+        {
+            throw new InvalidOperationException(""something went wrong here"", ex);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_created_exception_message_only_in_catch_block_with_available_but_ignored_exception_instance()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (NotSupportedException ex)
+        {
+            throw new InvalidOperationException(""something went wrong here"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (NotSupportedException ex)
+        {
+            throw new InvalidOperationException(""something went wrong here"", ex);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3017_DoNotSwallowExceptionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3017_DoNotSwallowExceptionAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3017_CodeFixProvider();
     }
 }

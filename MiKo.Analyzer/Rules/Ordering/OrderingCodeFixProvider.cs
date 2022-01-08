@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
-            var typeSyntax = syntax.AncestorsAndSelf().OfType<BaseTypeDeclarationSyntax>().First();
+            var typeSyntax = syntax.FirstAncestorOrSelf<BaseTypeDeclarationSyntax>();
 
             var updatedTypeSyntax = GetUpdatedTypeSyntax(context, typeSyntax, syntax, issue);
 

@@ -27,19 +27,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
-            var argumentList = syntax.ArgumentList;
-            if (argumentList is null)
-            {
-                return null;
-            }
-
             var parameter = syntax.GetUsedParameter();
-            if (parameter != null)
-            {
-                return ArgumentList(GetUpdatedErrorMessage(argumentList.Arguments), ParamName(parameter));
-            }
+            var errorMessage = GetUpdatedErrorMessage(syntax.ArgumentList);
 
-            return ArgumentList(GetUpdatedErrorMessage(argumentList.Arguments));
+            return parameter != null
+                       ? ArgumentList(errorMessage, ParamName(parameter))
+                       : ArgumentList(errorMessage);
         }
     }
 }

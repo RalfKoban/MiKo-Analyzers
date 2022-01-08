@@ -115,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case 1: // it's only the message
                 case 3: // switched message and parameter
                 {
-                    return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(TypeOf(parameter)));
+                    return ArgumentList(ParamName(parameter), ArgumentWithCast(SyntaxKind.IntKeyword, parameter), Argument(TypeOf(parameter)));
                 }
             }
 

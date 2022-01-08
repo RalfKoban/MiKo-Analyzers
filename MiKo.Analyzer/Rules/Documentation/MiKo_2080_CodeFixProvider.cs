@@ -17,8 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
-            var fieldDeclaration = comment.AncestorsAndSelf().OfType<FieldDeclarationSyntax>().First();
-            var field = fieldDeclaration.Declaration.Variables.First();
+            var fieldDeclaration = comment.FirstAncestorOrSelf<FieldDeclarationSyntax>();
+            var field = fieldDeclaration?.Declaration.Variables.First();
 
             var symbol = (IFieldSymbol)GetSymbol(context, field);
             var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrase(symbol);

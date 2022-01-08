@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var element = (XmlElementSyntax)syntax;
 
-            var property = syntax.AncestorsAndSelf().OfType<PropertyDeclarationSyntax>().First();
+            var property = syntax.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
             var commentParts = GetCommentParts(property);
 
             return CommentStartingWith(element, commentParts[0], SeeCref("ICommand"), commentParts[1]);

@@ -45,25 +45,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentListSyntax GetUpdatedArgumentListSyntaxForParameter(ObjectCreationExpressionSyntax syntax, ParameterSyntax parameter)
         {
-            var arguments = syntax.ArgumentList?.Arguments;
-
             switch (syntax.Type.GetNameOnlyPart())
             {
                 case nameof(ArgumentOutOfRangeException):
                 {
-                    switch (arguments?.Count)
+                    var argumentList = syntax.ArgumentList;
+
+                    switch (argumentList.Arguments.Count)
                     {
                         case 0: // missing message, so add a TODO
                         case 1: // it's either the parameter or the message instead of the parameter
                         case 2: // message and parameter (might be switched)
-                            return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(arguments));
+                            return ArgumentList(ParamName(parameter), Argument(parameter), GetUpdatedErrorMessage(argumentList));
                     }
 
                     break;
                 }
 
                 case nameof(InvalidEnumArgumentException):
-                    return ArgumentList(ParamName(parameter), Argument(parameter, SyntaxKind.IntKeyword), Argument(TypeOf(parameter)));
+                    return ArgumentList(ParamName(parameter), ArgumentWithCast(SyntaxKind.IntKeyword, parameter), Argument(TypeOf(parameter)));
             }
 
             return null;
@@ -74,12 +74,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (syntax.Type.GetNameOnlyPart())
             {
                 case nameof(ArgumentOutOfRangeException):
-                    return ArgumentList(ParamName(identifier), Argument(identifier), GetUpdatedErrorMessage(syntax.ArgumentList?.Arguments));
+                    return ArgumentList(ParamName(identifier), Argument(identifier), GetUpdatedErrorMessage(syntax.ArgumentList));
 
                 case nameof(InvalidEnumArgumentException):
                     return ArgumentList(
                                     ParamName(identifier),
-                                    Argument(identifier, SyntaxKind.IntKeyword),
+                                    ArgumentWithCast(SyntaxKind.IntKeyword, identifier),
                                     Argument(Invocation(SimpleMemberAccess(identifier, nameof(GetType))))); // use .GetType() call as we are not sure which type the identifier has
             }
 
