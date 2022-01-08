@@ -61,7 +61,6 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_created_exception_without_inner_exception_if_there_is_no_exception() => No_issue_is_reported_for(@"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -97,7 +96,6 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_created_exception_without_inner_exception_from_parameter() => An_issue_is_reported_for(@"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -126,7 +124,6 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_without_exception() => An_issue_is_reported_for(@"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -147,7 +144,6 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_with_exception_type_only() => An_issue_is_reported_for(@"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -168,7 +164,6 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_with_available_but_ignored_exception_instance() => An_issue_is_reported_for(@"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -187,11 +182,30 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_created_exception_with_inner_exception_containing_null_caught_exception() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException(""something went wrong here"", null);
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_created_exception_without_inner_exception_from_parameter()
         {
             const string OriginalCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -204,7 +218,6 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -257,7 +270,6 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -277,7 +289,6 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -303,7 +314,6 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -323,7 +333,6 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -349,7 +358,6 @@ public class TestMe
         {
             const string OriginalCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -369,7 +377,6 @@ public class TestMe
 
             const string FixedCode = @"
 using System;
-using System.Threading.Tasks;
 
 public class TestMe
 {
@@ -380,6 +387,50 @@ public class TestMe
             return o.ToString();
         }
         catch (NotSupportedException ex)
+        {
+            throw new InvalidOperationException(""something went wrong here"", ex);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_created_exception_with_null_for_inner_exception_in_catch_block_with_available_but_ignored_exception_instance()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException(""something went wrong here"", null);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        try
+        {
+            return o.ToString();
+        }
+        catch (Exception ex)
         {
             throw new InvalidOperationException(""something went wrong here"", ex);
         }
