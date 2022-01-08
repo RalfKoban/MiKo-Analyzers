@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax ParamName(IdentifierNameSyntax identifier) => Argument(NameOf(identifier.GetName()));
 
+        protected static ArgumentSyntax GetUpdatedErrorMessage(ArgumentListSyntax argumentList) => GetUpdatedErrorMessage(argumentList.Arguments);
+
         protected static ArgumentSyntax GetUpdatedErrorMessage(IEnumerable<ArgumentSyntax> arguments)
         {
             foreach (var argument in arguments)
@@ -59,9 +61,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var arguments = GetUpdatedArgumentListSyntax(syntax);
-            var type = GetUpdatedSyntaxType(syntax);
+            if (arguments != originalArguments)
+            {
+                var type = GetUpdatedSyntaxType(syntax);
 
-            return SyntaxFactory.ObjectCreationExpression(type, arguments, null);
+                return SyntaxFactory.ObjectCreationExpression(type, arguments, null);
+            }
+
+            return syntax;
         }
     }
 }

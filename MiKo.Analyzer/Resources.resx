@@ -2742,7 +2742,8 @@ That is they should return a Boolean and have the last parameter as [out] parame
     <value>Change to 'InvalidOperationException'</value>
   </data>
   <data name="MiKo_3015_Description" xml:space="preserve">
-    <value>ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods.</value>
+    <value>ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods.
+If the method call does not have any argument or if the failure does not involve the arguments themselves, then InvalidOperationException should be used.</value>
   </data>
   <data name="MiKo_3015_HelpLinkUri" xml:space="preserve">
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
@@ -2770,6 +2771,9 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
   <data name="MiKo_3016_Title" xml:space="preserve">
     <value>Do not throw ArgumentNullException for inappropriate states of property return values.</value>
   </data>
+  <data name="MiKo_3017_CodeFixTitle" xml:space="preserve">
+    <value>Add inner exception</value>
+  </data>
   <data name="MiKo_3017_Description" xml:space="preserve">
     <value>If an exception gets caught and a new exception gets thrown, it's much easier if the new exception contains the caught one as inner exception.</value>
   </data>
@@ -2777,7 +2781,7 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
     <value>Provide exception as inner exception</value>
   </data>
   <data name="MiKo_3017_Title" xml:space="preserve">
-    <value>Do not swallow thrown exceptions when throwing exceptions.</value>
+    <value>Do not swallow exceptions when throwing new exceptions.</value>
   </data>
   <data name="MiKo_3020_CodeFixTitle" xml:space="preserve">
     <value>Use 'Task.CompletedTask'</value>

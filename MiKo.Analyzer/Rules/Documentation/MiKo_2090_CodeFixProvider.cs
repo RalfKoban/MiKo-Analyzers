@@ -17,10 +17,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var method = syntax.AncestorsAndSelf().OfType<OperatorDeclarationSyntax>().First();
+            var method = syntax.FirstAncestorOrSelf<OperatorDeclarationSyntax>();
+            if (method is null)
+            {
+                return syntax;
+            }
+
             var parameters = method.ParameterList.Parameters;
-            var typeDeclarationSyntax = method.Ancestors().OfType<TypeDeclarationSyntax>().First();
-            var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax.Identifier.ValueText);
+            var typeDeclarationSyntax = method.FirstAncestorOrSelf<TypeDeclarationSyntax>();
+            var type = SyntaxFactory.ParseTypeName(typeDeclarationSyntax?.Identifier.ValueText ?? string.Empty);
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), "Determines whether the specified ", SeeCref(type), " instances are considered equal.").WithTrailingXmlComment();
             var param1 = ParameterComment(parameters[0], "The first value to compare.").WithTrailingXmlComment();

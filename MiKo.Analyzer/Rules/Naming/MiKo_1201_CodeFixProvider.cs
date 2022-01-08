@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1201_CodeFixTitle;
 
-        protected override string FindBetterName(IParameterSymbol symbol) => MiKo_1201_ExceptionParameterAnalyzer.ExpectedName;
+        protected override string FindBetterName(IParameterSymbol symbol) => Constants.ExceptionIdentifier;
     }
 }

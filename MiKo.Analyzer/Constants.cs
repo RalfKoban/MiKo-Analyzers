@@ -13,6 +13,9 @@ namespace MiKoSolutions.Analyzers
         internal const string AsyncSuffix = "Async";
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string TestsSuffix = "Tests";
+
+        internal const string ExceptionIdentifier = "ex";
+
         internal const string Entity = "Entity";
         internal const string Entities = "Entities";
 

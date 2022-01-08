@@ -7725,7 +7725,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods..
+        ///   Looks up a localized string similar to ArgumentExceptions (or its subtypes) should not be thrown by parameterless methods.
+        ///If the method call does not have any argument or if the failure does not involve the arguments themselves, then InvalidOperationException should be used..
         /// </summary>
         public static string MiKo_3015_Description {
             get {
@@ -7808,6 +7809,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add inner exception.
+        /// </summary>
+        public static string MiKo_3017_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3017_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If an exception gets caught and a new exception gets thrown, it&apos;s much easier if the new exception contains the caught one as inner exception..
         /// </summary>
         public static string MiKo_3017_Description {
@@ -7826,7 +7836,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not swallow thrown exceptions when throwing exceptions..
+        ///   Looks up a localized string similar to Do not swallow exceptions when throwing new exceptions..
         /// </summary>
         public static string MiKo_3017_Title {
             get {

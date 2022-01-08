@@ -45,11 +45,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
         {
-            var ifStatement = value.Ancestors().OfType<IfStatementSyntax>().FirstOrDefault();
+            var ifStatement = value.FirstAncestorOrSelf<IfStatementSyntax>();
             if (ifStatement is null)
             {
                 // maybe part of a block outside the if statement
-                var block = value.Ancestors().OfType<BlockSyntax>().FirstOrDefault();
+                var block = value.FirstAncestorOrSelf<BlockSyntax>();
                 if (block != null)
                 {
                     // try to find the corresponding if statement
@@ -110,21 +110,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) => value?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
 
-        internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode
-        {
-            var node = value;
-
-            while (true)
-            {
-                switch (node)
-                {
-                    case null: return null;
-                    case T t: return t;
-                }
-
-                node = node.Parent;
-            }
-        }
+        internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode => value.FirstAncestorOrSelf<T>();
 
         internal static T GetEnclosing<T>(this Location value, SemanticModel semanticModel) where T : class, ISymbol
         {

@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (text.StartsWithAny(Constants.Comments.FieldStartingPhrase, StringComparison.Ordinal))
                 {
-                    var property = syntax.Ancestors().OfType<PropertyDeclarationSyntax>().FirstOrDefault();
+                    var property = syntax.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
                     if (property != null)
                     {
                         var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);

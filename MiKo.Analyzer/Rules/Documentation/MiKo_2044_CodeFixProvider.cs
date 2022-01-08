@@ -25,7 +25,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var method = syntax.AncestorsAndSelf().OfType<MethodDeclarationSyntax>().First();
+            var method = syntax.FirstAncestorOrSelf<MethodDeclarationSyntax>();
+            if (method is null)
+            {
+                return syntax;
+            }
+
             var parameters = method.ParameterList.Parameters.Select(_ => _.GetName()).ToHashSet();
 
             var map = new Dictionary<XmlEmptyElementSyntax, string>();

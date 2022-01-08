@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1201";
 
-        internal const string ExpectedName = "ex";
-
         public MiKo_1201_ExceptionParameterAnalyzer() : base(Id, SymbolKind.Parameter)
         {
         }
@@ -23,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             switch (symbol.Name)
             {
-                case ExpectedName:
+                case Constants.ExceptionIdentifier:
                 case "exception":
                 case "innerException":
                     return Enumerable.Empty<Diagnostic>();
@@ -45,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     break;
             }
 
-            return new[] { Issue(symbol, ExpectedName, "exception") };
+            return new[] { Issue(symbol, Constants.ExceptionIdentifier, "exception") };
         }
     }
 }
