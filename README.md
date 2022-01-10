@@ -175,7 +175,7 @@ The following tables list all the 314 rules that are currently provided by the a
 |MiKo_2038|&lt;summary&gt; documentation of command should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2039|&lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2040|&lt;see langword="..."/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;.|&#x2713;|&#x2713;|
-|MiKo_2041|&lt;summary&gt; documentation should not contain other documentation tags.|&#x2713;|\-|
+|MiKo_2041|&lt;summary&gt; documentation should not contain other documentation tags.|&#x2713;|&#x2713;|
 |MiKo_2042|Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags.|&#x2713;|&#x2713;|
 |MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase.|&#x2713;|&#x2713;|
 |MiKo_2044|Documentation references method parameters correctly.|&#x2713;|&#x2713;|
