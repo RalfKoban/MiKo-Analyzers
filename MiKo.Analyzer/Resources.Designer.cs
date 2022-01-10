@@ -4081,7 +4081,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Set Documentation to: &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2004_MessageFormat {
             get {
@@ -4325,7 +4325,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2014_MessageFormat {
             get {
@@ -4361,7 +4361,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use {1} instead of {2}.
+        ///   Looks up a localized string similar to Use {1} instead of {2} in documentation.
         /// </summary>
         public static string MiKo_2015_MessageFormat {
             get {
@@ -4559,7 +4559,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with: {1}.
+        ///   Looks up a localized string similar to Start documentation with: {1}.
         /// </summary>
         public static string MiKo_2021_MessageFormat {
             get {
@@ -4595,7 +4595,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with: {1}.
+        ///   Looks up a localized string similar to Start documentation with: {1}.
         /// </summary>
         public static string MiKo_2022_MessageFormat {
             get {
@@ -4667,7 +4667,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with: {1}.
+        ///   Looks up a localized string similar to Start documentation with: {1}.
         /// </summary>
         public static string MiKo_2024_MessageFormat {
             get {
@@ -4703,7 +4703,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should start with: {1}.
+        ///   Looks up a localized string similar to Start documentation with: {1}.
         /// </summary>
         public static string MiKo_2025_MessageFormat {
             get {
@@ -4766,7 +4766,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2027_MessageFormat {
             get {
@@ -5550,7 +5550,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &apos;is&apos; instead of &apos;will be&apos;.
+        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;will be&apos; in documentation.
         /// </summary>
         public static string MiKo_2049_MessageFormat {
             get {
@@ -7437,7 +7437,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; should be last parameter.
+        ///   Looks up a localized string similar to Place &apos;{0}&apos; as last parameter.
         /// </summary>
         public static string MiKo_3006_MessageFormat {
             get {
@@ -8074,7 +8074,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not reserve parameter &apos;{0}&apos; for future usage.
+        ///   Looks up a localized string similar to Do not reserve &apos;{0}&apos; for future usage.
         /// </summary>
         public static string MiKo_3027_MessageFormat {
             get {
@@ -9036,7 +9036,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end log message with dot.
+        ///   Looks up a localized string similar to End log message with dot.
         /// </summary>
         public static string MiKo_3063_MessageFormat {
             get {

@@ -1504,7 +1504,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2004_MessageFormat" xml:space="preserve">
-    <value>Documentation should be: '{2}'</value>
+    <value>Set Documentation to: '{2}'</value>
   </data>
   <data name="MiKo_2004_Title" xml:space="preserve">
     <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.</value>
@@ -1586,7 +1586,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Dispose methods should be documented in the same way as they are documented by the .NET Framework.</value>
   </data>
   <data name="MiKo_2014_MessageFormat" xml:space="preserve">
-    <value>Documentation should be: '{1}'</value>
+    <value>Set Documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2014_Title" xml:space="preserve">
     <value>Dispose methods should be documented as done by the .NET Framework.</value>
@@ -1598,7 +1598,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events or exceptions. Events get raised and exceptions get thrown.</value>
   </data>
   <data name="MiKo_2015_MessageFormat" xml:space="preserve">
-    <value>Documentation should use {1} instead of {2}</value>
+    <value>Use {1} instead of {2} in documentation</value>
   </data>
   <data name="MiKo_2015_Title" xml:space="preserve">
     <value>Documentation should use 'raise' or 'throw' instead of 'fire'.</value>
@@ -1664,7 +1664,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>The documentation of parameters should describe what they represent.</value>
   </data>
   <data name="MiKo_2021_MessageFormat" xml:space="preserve">
-    <value>Documentation should start with: {1}</value>
+    <value>Start documentation with: {1}</value>
   </data>
   <data name="MiKo_2021_Title" xml:space="preserve">
     <value>Documentation of parameter should have a default starting phrase.</value>
@@ -1676,7 +1676,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>The documentation of [out] parameters should start with the success case.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
-    <value>Documentation should start with: {1}</value>
+    <value>Start documentation with: {1}</value>
   </data>
   <data name="MiKo_2022_Title" xml:space="preserve">
     <value>Documentation of [out] parameters should have a default starting phrase.</value>
@@ -1700,7 +1700,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
-    <value>Documentation should start with: {1}</value>
+    <value>Start documentation with: {1}</value>
   </data>
   <data name="MiKo_2024_Title" xml:space="preserve">
     <value>Documentation of Enum parameters should have a default starting phrase.</value>
@@ -1712,7 +1712,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>The documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
-    <value>Documentation should start with: {1}</value>
+    <value>Start documentation with: {1}</value>
   </data>
   <data name="MiKo_2025_Title" xml:space="preserve">
     <value>Documentation of 'CancellationToken' parameters should have a default starting phrase.</value>
@@ -1733,7 +1733,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain.</value>
   </data>
   <data name="MiKo_2027_MessageFormat" xml:space="preserve">
-    <value>Documentation should be: '{1}'</value>
+    <value>Set Documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2027_Title" xml:space="preserve">
     <value>Serialization constructor parameters shall be documented with a specific phrase.</value>
@@ -1995,7 +1995,7 @@ Or with: '{3}'</value>
     <value>The term 'will be' is not explicit enough and it uses the wrong tense. Instead, a term such as 'is' gets to the point and uses present tense.</value>
   </data>
   <data name="MiKo_2049_MessageFormat" xml:space="preserve">
-    <value>Documentation should use 'is' instead of 'will be'</value>
+    <value>Use 'is' instead of 'will be' in documentation</value>
   </data>
   <data name="MiKo_2049_Title" xml:space="preserve">
     <value>Documentation should be more explicit and not use 'will be'.</value>
@@ -2646,7 +2646,7 @@ That is they should return a Boolean and have the last parameter as [out] parame
     <value>To ease maintenance, and being consistent with the .NET Framework classes, 'CancellationToken' parameters should come after all the other parameters of a method.</value>
   </data>
   <data name="MiKo_3006_MessageFormat" xml:space="preserve">
-    <value>'{0}' should be last parameter</value>
+    <value>Place '{0}' as last parameter</value>
   </data>
   <data name="MiKo_3006_Title" xml:space="preserve">
     <value>'CancellationToken' parameter should be last method parameter.</value>
@@ -2863,7 +2863,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
   </data>
   <data name="MiKo_3027_MessageFormat" xml:space="preserve">
-    <value>Do not reserve parameter '{0}' for future usage</value>
+    <value>Do not reserve '{0}' for future usage</value>
   </data>
   <data name="MiKo_3027_Title" xml:space="preserve">
     <value>Parameters should not be marked to be reserved for future usage.</value>
@@ -3203,7 +3203,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>Log messages that do not log exceptions should end with a dot because there is no exception to focus on.</value>
   </data>
   <data name="MiKo_3063_MessageFormat" xml:space="preserve">
-    <value>Do end log message with dot</value>
+    <value>End log message with dot</value>
   </data>
   <data name="MiKo_3063_Title" xml:space="preserve">
     <value>Do end non-exceptional log messages with a dot.</value>
