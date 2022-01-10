@@ -768,12 +768,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsException(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
+        internal static bool IsException(this ITypeSymbol value) => value != null
+                                                                     && value.TypeKind == TypeKind.Class
                                                                      && value.SpecialType == SpecialType.None
                                                                      && value.OriginalDefinition.InheritsFrom<Exception>();
 
         internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
         {
+            if (value is null)
+            {
+                return false;
+            }
+
             var argumentType = value.Expression is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m
                                ? m.GetTypeSymbol(semanticModel)
                                : value.GetTypeSymbol(semanticModel);
