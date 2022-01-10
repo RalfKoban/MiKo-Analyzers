@@ -398,6 +398,24 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<XmlElementSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Summary);
 
+        internal static IEnumerable<XmlNodeSyntax> GetSummaryXmls(this DocumentationCommentTriviaSyntax comment, IEnumerable<string> tags)
+        {
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summary in summaryXmls)
+            {
+                foreach (var node in summary.GetXmlSyntax(tags))
+                {
+                    yield return node;
+                }
+
+                foreach (var node in summary.GetEmptyXmlSyntax(tags))
+                {
+                    yield return node;
+                }
+            }
+        }
+
         internal static IEnumerable<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Remarks);
 
         internal static IEnumerable<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Returns);

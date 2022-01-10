@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -138,9 +139,38 @@ public class TestMe : ITestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_([ValueSource(nameof(AmbiguousPhrases))] string phrase)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// " + phrase + @" whatever.
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            var fixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    ///  whatever.
+    /// </summary>
+    /// " + phrase + @"
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2041_InvalidXmlInSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2041_InvalidXmlInSummaryAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2041_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
         private static string[] CreateAmbiguousPhrases()
@@ -166,8 +196,7 @@ public class TestMe : ITestMe
                               };
 
             var results = new List<string>(phrases);
-            results.AddRange(phrases.Select(_ => _.ToUpper()));
-            results.AddRange(phrases.Select(_ => _.Replace(" ", string.Empty).ToUpper()));
+            results.AddRange(phrases.Select(_ => _.Replace(" ", string.Empty)));
             results.Sort();
 
             return results.Distinct().ToArray();

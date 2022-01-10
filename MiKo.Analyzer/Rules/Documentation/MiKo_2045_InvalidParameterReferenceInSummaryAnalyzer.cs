@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,26 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static IEnumerable<SyntaxNode> GetIssues(DocumentationCommentTriviaSyntax documentation)
-        {
-                if (documentation != null)
-                {
-                    var summaryXmls = documentation.GetSummaryXmls();
-
-                    foreach (var summary in summaryXmls)
-                    {
-                        foreach (var node in summary.GetXmlSyntax(InvalidTags))
-                        {
-                            yield return node;
-                        }
-
-                        foreach (var node in summary.GetEmptyXmlSyntax(InvalidTags))
-                        {
-                            yield return node;
-                        }
-                    }
-                }
-        }
+        internal static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
+                                                                                                                    ? documentation.GetSummaryXmls(InvalidTags)
+                                                                                                                    : Enumerable.Empty<XmlNodeSyntax>();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {

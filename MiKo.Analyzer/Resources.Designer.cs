@@ -5262,6 +5262,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place outside &lt;summary&gt;.
+        /// </summary>
+        public static string MiKo_2041_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2041_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;..
         /// </summary>
         public static string MiKo_2041_Description {
@@ -5280,7 +5289,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain: &apos;&lt;{0}/&gt;&apos;.
         /// </summary>
         public static string MiKo_2041_MessageFormat {
             get {
