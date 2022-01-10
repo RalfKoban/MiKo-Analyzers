@@ -9036,7 +9036,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end log message with dot.
+        ///   Looks up a localized string similar to End log message with dot.
         /// </summary>
         public static string MiKo_3063_MessageFormat {
             get {
