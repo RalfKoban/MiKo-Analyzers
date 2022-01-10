@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -92,6 +94,26 @@ public class TestMe
     }
 }
 ");
+
+        [Test]
+        public void No_issue_is_reported_for_created_ArgumentException_without_inner_exception_even_if_there_is_an_exception_([Values(nameof(ArgumentException), nameof(ArgumentNullException), nameof(ArgumentOutOfRangeException))] string exception)
+        {
+            var code = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(Exception ex)
+    {
+        if (ex is null)
+        {
+            throw new " + exception + @"(""something went wrong here"");
+        }
+    }
+}
+";
+            No_issue_is_reported_for(code);
+        }
 
         [Test]
         public void An_issue_is_reported_for_created_exception_without_inner_exception_from_parameter() => An_issue_is_reported_for(@"
