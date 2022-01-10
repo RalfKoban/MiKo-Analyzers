@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -51,14 +52,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var argumentList = node.ArgumentList;
                 if (argumentList != null)
                 {
-                    foreach (var argument in argumentList.Arguments)
+                    if (argumentList.Arguments.Any(_ => _.GetTypeSymbol(semanticModel)?.IsException() is true))
                     {
-                        var symbol = argument.GetTypeSymbol(semanticModel);
-                        if (symbol?.IsException() is true)
-                        {
-                            // seems like we found the inner exception
-                            return false;
-                        }
+                        // seems like we found the inner exception
+                        return false;
                     }
 
                     // seems like this is an exception with no inner exception, so see if the exception type supports creation via exceptions
@@ -72,10 +69,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            var problematicNode = FindProblematicSyntaxNode(node, semanticModel);
-            if (problematicNode != null)
+            if (HasIssue(node, semanticModel))
             {
                 yield return Issue(node.Type.ToString(), node);
+            }
+        }
+
+        private static bool HasIssue(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
+        {
+            var problematicNode = FindProblematicSyntaxNode(node, semanticModel);
+
+            switch (problematicNode)
+            {
+                case null:
+                    return false;
+
+                case CatchClauseSyntax _:
+                    // always report missing exceptions inside catch clauses
+                    return true;
+
+                default:
+                    // do not report argument exceptions as they most probably are used to verify arguments
+                    return node.GetTypeSymbol(semanticModel).InheritsFrom<ArgumentException>() is false;
             }
         }
     }
