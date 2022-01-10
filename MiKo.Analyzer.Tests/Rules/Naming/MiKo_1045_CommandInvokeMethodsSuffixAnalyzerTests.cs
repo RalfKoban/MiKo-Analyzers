@@ -107,7 +107,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_for_Execute_method()
         {
             const string Template = @"
 using System;
@@ -134,6 +134,46 @@ public class TestMe
     }
 
     private void ###() { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "DoSomethingCommand"), Template.Replace("###", "DoSomething"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_CanExecute_and_Execute_methods()
+        {
+            const string Template = @"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand(Action execute, Func<bool> canExecute)
+    {
+        _execute = execute;
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => _canExecute();
+
+    public void Execute(object parameter) _execute();
+
+    private Action _execute;
+}
+
+public class TestMe
+{
+    public void Initialize()
+    {
+        var testMeCommand = new TestMeCommand(###, Can###);
+    }
+
+    private void ###() { }
+
+    private bool Can###() => true;
 }
 ";
 
