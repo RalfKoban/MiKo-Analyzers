@@ -53,7 +53,8 @@ namespace MiKoSolutions.Analyzers
         /// Gets all methods that can be referenced by name.
         /// </summary>
         /// <param name="value">
-        /// The type whose methods are wanted.</param>
+        /// The type whose methods are wanted.
+        /// </param>
         /// <returns>
         /// A collection of methods (that can be referenced by name).
         /// </returns>
@@ -62,7 +63,7 @@ namespace MiKoSolutions.Analyzers
         /// Methods with <see cref="MethodKind.Constructor"/> or <see cref="MethodKind.StaticConstructor"/> cannot be referenced by name and therefore are not part of the result.
         /// </note>
         /// </remarks>
-        internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value) => value.GetMembers().OfType<IMethodSymbol>().Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.CanBeReferencedByName);
 
         internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value) => value.GetMembers().OfType<IPropertySymbol>().Where(_ => _.CanBeReferencedByName);
 
@@ -769,7 +770,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsException(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
                                                                      && value.SpecialType == SpecialType.None
-                                                                     && value.InheritsFrom<Exception>();
+                                                                     && value.OriginalDefinition.InheritsFrom<Exception>();
 
         internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
         {
