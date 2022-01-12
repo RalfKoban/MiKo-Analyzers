@@ -318,16 +318,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Cref(tag, SyntaxFactory.QualifiedCref(type.WithoutTrivia(), SyntaxFactory.NameMemberCref(member.WithoutTrivia())));
         }
 
-        protected static XmlCrefAttributeSyntax GetCref(SyntaxNode value)
+        protected static XmlCrefAttributeSyntax GetCref(SyntaxNode value, string name)
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == name:
                     {
                         return GetCref(emptyElement.Attributes);
                     }
 
-                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                case XmlElementSyntax element when element.GetName() == name:
                     {
                         return GetCref(element.StartTag.Attributes);
                     }
@@ -344,6 +344,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().First().Identifier.GetName();
 
         protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlNameAttributeSyntax>().First().Identifier.GetName();
+
+        protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => GetCref(value, Constants.XmlTag.See);
 
         protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.Select(_ => _.GetDocumentationCommentTriviaSyntax())
                                                                                                                           .FirstOrDefault(_ => _ != null);

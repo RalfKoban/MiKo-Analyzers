@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (content.Count > 1 && IsSeeCref(content[1]))
                     {
-                        return Inheritdoc(GetCref(content[1]));
+                        return Inheritdoc(GetSeeCref(content[1]));
                     }
 
                     return Inheritdoc();
