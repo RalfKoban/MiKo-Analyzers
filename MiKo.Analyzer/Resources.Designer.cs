@@ -5923,7 +5923,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Factories should be documented in a uniform way..
+        ///   Looks up a localized string similar to Factories should be documented in an uniform way..
         /// </summary>
         public static string MiKo_2060_Title {
             get {

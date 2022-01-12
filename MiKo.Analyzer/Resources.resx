@@ -2122,7 +2122,7 @@ Or with: '{3}'</value>
     <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2060_Title" xml:space="preserve">
-    <value>Factories should be documented in a uniform way.</value>
+    <value>Factories should be documented in an uniform way.</value>
   </data>
   <data name="MiKo_2070_CodeFixTitle" xml:space="preserve">
     <value>Replace 'Return' in comment</value>
