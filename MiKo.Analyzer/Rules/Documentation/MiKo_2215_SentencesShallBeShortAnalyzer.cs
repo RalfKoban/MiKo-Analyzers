@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = symbol.GetDocumentationCommentTriviaSyntax();
             if (comment is null)
             {
-                // it might be that there is no documentation comment available (while the comment XML contains something like " <member name='xyz' ...> "
+                // it might be that there is no documentation comment available (while the comment XML contains something like " <member name='xyz' ...> ")
                 return false;
             }
 
