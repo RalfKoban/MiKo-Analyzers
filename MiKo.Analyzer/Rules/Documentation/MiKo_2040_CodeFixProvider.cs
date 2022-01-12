@@ -38,9 +38,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
                                                    {
                                                        var attribute = rewritten.Attributes.First() as XmlTextAttributeSyntax;
-                                                       var textToken = attribute?.TextTokens[0];
+                                                       var text = attribute.GetTextWithoutTrivia();
 
-                                                       return SeeLangword(textToken?.ValueText.ToLowerCase());
+                                                       return SeeLangword(text.ToLowerCase());
                                                    });
         }
 
@@ -51,9 +51,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
                                                    {
                                                        var attribute = rewritten.StartTag.Attributes.First() as XmlTextAttributeSyntax;
-                                                       var textToken = attribute?.TextTokens[0];
+                                                       var text = attribute.GetTextWithoutTrivia();
 
-                                                       return SeeLangword(textToken?.ValueText.ToLowerCase());
+                                                       return SeeLangword(text.ToLowerCase());
                                                    });
         }
 

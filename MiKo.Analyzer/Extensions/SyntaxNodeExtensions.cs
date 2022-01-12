@@ -385,9 +385,18 @@ namespace MiKoSolutions.Analyzers
             return syntaxNode?.DescendantNodes(__ => true, true).OfType<DocumentationCommentTriviaSyntax>().FirstOrDefault();
         }
 
+        internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
+        {
+            return text != null
+                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
+                       : null;
+        }
+
         internal static string GetTextWithoutTrivia(this XmlTextSyntax text)
         {
-            return string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim();
+            return text != null
+                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
+                       : null;
         }
 
         internal static string GetTextWithoutTrivia(this XmlElementSyntax element) => element.Content.ToString().WithoutXmlCommentExterior();

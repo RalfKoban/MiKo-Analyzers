@@ -321,13 +321,13 @@ namespace System
         public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithApostrophe(this string value) => value.SurroundedWith("\'");
+        public static string SurroundedWithApostrophe(this string value) => value?.SurroundedWith("\'");
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithDoubleQuote(this string value) => value.SurroundedWith("\"");
+        public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
 
 #pragma warning disable CA1308 // Normalize strings to uppercase
-        public static string ToLowerCase(this string value) => value.ToLower(CultureInfo.InvariantCulture);
+        public static string ToLowerCase(this string value) => value?.ToLower(CultureInfo.InvariantCulture);
 #pragma warning restore CA1308 // Normalize strings to uppercase
 
         public static char ToLowerCase(this char value) => char.ToLowerInvariant(value);
