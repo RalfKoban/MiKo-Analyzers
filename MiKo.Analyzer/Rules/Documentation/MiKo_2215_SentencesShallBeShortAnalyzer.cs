@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasIssue(ISymbol symbol)
         {
-            var comment = symbol.GetSyntax().DescendantNodes(_ => true, true).OfType<DocumentationCommentTriviaSyntax>().FirstOrDefault();
+            var comment = symbol.GetDocumentationCommentTriviaSyntax();
             if (comment is null)
             {
                 // it might be that there is no documentation comment available (while the comment XML contains something like " <member name='xyz' ...> "
