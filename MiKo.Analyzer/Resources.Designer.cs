@@ -6918,6 +6918,102 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The documentation of a &lt;list&gt; is a little bit ambiguous.
+        ///There are 3 types of lists: &apos;number&apos;, &apos;bullet&apos; and &apos;table&apos;. Only the &apos;table&apos; can have a single &lt;listheader&gt; and multiple &lt;item&gt;s, the others have only &lt;item&gt;s.
+        ///
+        ///For a &apos;table&apos;, each &lt;listheader&gt; and &lt;item&gt;s can contain either a single but optional &lt;term&gt; and a single required &lt;description&gt;, or multiple &lt;term&gt; entries.
+        ///For a &apos;bullet&apos; or &apos;number&apos; list, each &lt;item&gt; can contain a single but optional &lt;term&gt; and a single required &lt;description&gt;.
+        ///
+        ///Any &lt;i [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_2217_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2217_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://www.blackwasp.co.uk/DocumentationLists.aspx.
+        /// </summary>
+        public static string MiKo_2217_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_2217_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;description&gt; is missing.
+        /// </summary>
+        public static string MiKo_2217_MessageArgument_MissingDescription {
+            get {
+                return ResourceManager.GetString("MiKo_2217_MessageArgument_MissingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;description&gt; or &lt;term&gt; is missing.
+        /// </summary>
+        public static string MiKo_2217_MessageArgument_MissingTermOrDescription {
+            get {
+                return ResourceManager.GetString("MiKo_2217_MessageArgument_MissingTermOrDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;listheader&gt; is not allowed for this type of &lt;list&gt;.
+        /// </summary>
+        public static string MiKo_2217_MessageArgument_NoHeaderAllowed {
+            get {
+                return ResourceManager.GetString("MiKo_2217_MessageArgument_NoHeaderAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;description&gt; is not allowed to occur multiple times for this type of &lt;list&gt;.
+        /// </summary>
+        public static string MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed {
+            get {
+                return ResourceManager.GetString("MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;term&gt; is not allowed to occur multiple times for this type of &lt;list&gt;.
+        /// </summary>
+        public static string MiKo_2217_MessageArgument_OnlySingleTermAllowed {
+            get {
+                return ResourceManager.GetString("MiKo_2217_MessageArgument_OnlySingleTermAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;type&apos; attribute contains the unknown type {0}.
+        /// </summary>
+        public static string MiKo_2217_MessageArgument_UnknownTypeSpecified {
+            get {
+                return ResourceManager.GetString("MiKo_2217_MessageArgument_UnknownTypeSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;list&gt; properly: {1}.
+        /// </summary>
+        public static string MiKo_2217_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2217_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;list&gt; documentation is done properly..
+        /// </summary>
+        public static string MiKo_2217_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2217_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
