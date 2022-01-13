@@ -2462,6 +2462,42 @@ So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;r
   <data name="MiKo_2216_Title" xml:space="preserve">
     <value>Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.</value>
   </data>
+  <data name="MiKo_2217_Description" xml:space="preserve">
+    <value>The documentation of a &lt;list&gt; is a little bit ambiguous.
+There are 3 types of lists: 'number', 'bullet' and 'table'. Only the 'table' can have a single &lt;listheader&gt; and multiple &lt;item&gt;s, the others have only &lt;item&gt;s.
+
+For a 'table', each &lt;listheader&gt; and &lt;item&gt;s can contain either a single but optional &lt;term&gt; and a single required &lt;description&gt;, or multiple &lt;term&gt; entries.
+For a 'bullet' or 'number' list, each &lt;item&gt; can contain a single but optional &lt;term&gt; and a single required &lt;description&gt;.
+
+Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</value>
+  </data>
+  <data name="MiKo_2217_HelpLinkUri" xml:space="preserve">
+    <value>http://www.blackwasp.co.uk/DocumentationLists.aspx</value>
+  </data>
+  <data name="MiKo_2217_MessageArgument_MissingDescription" xml:space="preserve">
+    <value>&lt;description&gt; is missing</value>
+  </data>
+  <data name="MiKo_2217_MessageArgument_MissingTermOrDescription" xml:space="preserve">
+    <value>&lt;description&gt; or &lt;term&gt; is missing</value>
+  </data>
+  <data name="MiKo_2217_MessageArgument_NoHeaderAllowed" xml:space="preserve">
+    <value>&lt;listheader&gt; is not allowed for this type of &lt;list&gt;</value>
+  </data>
+  <data name="MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed" xml:space="preserve">
+    <value>&lt;description&gt; is not allowed to occur multiple times for this type of &lt;list&gt;</value>
+  </data>
+  <data name="MiKo_2217_MessageArgument_OnlySingleTermAllowed" xml:space="preserve">
+    <value>&lt;term&gt; is not allowed to occur multiple times for this type of &lt;list&gt;</value>
+  </data>
+  <data name="MiKo_2217_MessageArgument_UnknownTypeSpecified" xml:space="preserve">
+    <value>The 'type' attribute contains the unknown type {0}</value>
+  </data>
+  <data name="MiKo_2217_MessageFormat" xml:space="preserve">
+    <value>Use &lt;list&gt; properly: {1}</value>
+  </data>
+  <data name="MiKo_2217_Title" xml:space="preserve">
+    <value>&lt;list&gt; documentation is done properly.</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
