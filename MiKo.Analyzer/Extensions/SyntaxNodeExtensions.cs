@@ -1243,16 +1243,34 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlElementSyntax WithoutWhitespaceOnlyComment(this XmlElementSyntax value)
         {
-            if (value.Content.Count > 0 && value.Content[0] is XmlTextSyntax t)
-            {
-                var newT = t.WithoutLeadingXmlComment();
+            var texts = value.Content.OfType<XmlTextSyntax>().ToList();
 
-                return newT.TextTokens.Count == 1 && newT.TextTokens[0].ValueText.IsNullOrWhiteSpace()
-                           ? value.Without(t)
-                           : value.ReplaceNode(t, newT);
+            if (texts.Count > 0)
+            {
+                var text = texts.Count == 1
+                               ? texts[0]
+                               : texts[texts.Count - 2];
+
+                return WithoutWhitespaceOnlyComment(text);
             }
 
             return value;
+
+            XmlElementSyntax WithoutWhitespaceOnlyComment(XmlTextSyntax text)
+            {
+                var newText = text.WithoutLeadingXmlComment();
+                var newTextTokens = newText.TextTokens;
+
+                switch (newTextTokens.Count)
+                {
+                    case 0:
+                    case 1 when newTextTokens[0].ValueText.IsNullOrWhiteSpace():
+                        return value.Without(text);
+
+                    default:
+                        return value.ReplaceNode(text, newText);
+                }
+            }
         }
 
         internal static string WithoutXmlCommentExterior(this string value) => value.Without("///").Trim();

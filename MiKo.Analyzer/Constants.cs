@@ -703,6 +703,13 @@ namespace MiKoSolutions.Analyzers
                 internal const string Langref = "langref";
                 internal const string Type = "type";
             }
+
+            internal static class ListType
+            {
+                internal const string Bullet = "bullet";
+                internal const string Number = "number";
+                internal const string Table = "table";
+            }
         }
 
         internal static class DependencyProperty

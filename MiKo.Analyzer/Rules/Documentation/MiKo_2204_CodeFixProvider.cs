@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var list = XmlElement(Constants.XmlTag.List, items);
-            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, "bullet".ToSyntaxToken());
+            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet.ToSyntaxToken());
 
             return list.AddStartTagAttributes(listType).WithLeadingXmlComment();
         }

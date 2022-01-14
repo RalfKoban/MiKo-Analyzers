@@ -2462,6 +2462,9 @@ So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;r
   <data name="MiKo_2216_Title" xml:space="preserve">
     <value>Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.</value>
   </data>
+  <data name="MiKo_2217_CodeFixTitle" xml:space="preserve">
+    <value>Fix '&lt;list&gt;'</value>
+  </data>
   <data name="MiKo_2217_Description" xml:space="preserve">
     <value>The documentation of a &lt;list&gt; is a little bit ambiguous.
 There are 3 types of lists: 'number', 'bullet' and 'table'. Only the 'table' can have a single &lt;listheader&gt; and multiple &lt;item&gt;s, the others have only &lt;item&gt;s.

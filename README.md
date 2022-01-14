@@ -223,7 +223,7 @@ The following tables list all the 315 rules that are currently provided by the a
 |MiKo_2214|Documentation should not contain empty lines.|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short.|&#x2713;|\-|
 |MiKo_2216|Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.|&#x2713;|&#x2713;|
-|MiKo_2217|&lt;list&gt; documentation is done properly.|&#x2713;|\-|
+|MiKo_2217|&lt;list&gt; documentation is done properly.|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'.|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests.|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out.|&#x2713;|\-|
