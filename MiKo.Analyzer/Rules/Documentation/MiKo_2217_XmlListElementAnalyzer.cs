@@ -13,14 +13,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2217";
 
-        private const string ListHeaderElement = "listheader";
-        private const string ItemElement = "item";
-
         public MiKo_2217_XmlListElementAnalyzer() : base(Id)
         {
         }
 
         internal static IEnumerable<XmlElementSyntax> GetProblematicElements(DocumentationCommentTriviaSyntax comment) => comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsXmlTag(Constants.XmlTag.List));
+
+        internal static XmlTextAttributeSyntax GetListType(XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
+                                                                                         .FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Type);
+
+        internal static string GetListType(XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
@@ -28,35 +30,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment is null)
             {
                 // it might be that there is no documentation comment available (while the comment XML contains something like " <member name='xyz' ...> ")
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
-            foreach (var list in GetProblematicElements(comment))
-            {
-                var listType = list.GetAttributes<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() == "type");
-                if (listType is null)
-                {
-                    // no type specified, so it seems to be a bullet, hence analyze it
-                }
+            return GetProblematicElements(comment).SelectMany(AnalyzeList);
+        }
 
-                foreach (var issue in AnalyzeType(list, listType))
-                {
-                    yield return issue;
-                }
+        private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list)
+        {
+            var listType = GetListType(list);
+            if (listType is null)
+            {
+                // no type specified, so it seems to be a bullet, hence analyze it
+            }
+
+            foreach (var issue in AnalyzeList(list, listType))
+            {
+                yield return issue;
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeType(XmlElementSyntax list, XmlTextAttributeSyntax listType)
+        private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list, XmlTextAttributeSyntax listType)
         {
-            var type = listType.GetTextWithoutTrivia();
+            var type = GetListType(listType);
             switch (type.ToLowerCase())
             {
                 case null: // no list type specified
-                case "bullet":
-                case "number":
+                case Constants.XmlTag.ListType.Bullet:
+                case Constants.XmlTag.ListType.Number:
                     return AnalyzeBulletOrNumberList(list);
 
-                case "table":
+                case Constants.XmlTag.ListType.Table:
                     return AnalyzeTable(list);
 
                 default: // unknown type
@@ -70,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 switch (child.GetName())
                 {
-                    case ListHeaderElement:
+                    case Constants.XmlTag.ListHeader:
                     {
                         // no header allowed
                         yield return Issue(string.Empty, child, Resources.MiKo_2217_MessageArgument_NoHeaderAllowed);
@@ -78,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         break;
                     }
 
-                    case ItemElement:
+                    case Constants.XmlTag.Item:
                     {
                         var termFound = false;
                         var descriptionFound = false;
@@ -87,28 +91,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             switch (grandChild.GetName())
                             {
-                                case "description" when descriptionFound:
+                                case Constants.XmlTag.Description when descriptionFound:
                                 {
                                     yield return Issue(string.Empty, grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed); // there should be only a single description
 
                                     break;
                                 }
 
-                                case "description":
+                                case Constants.XmlTag.Description:
                                 {
                                     descriptionFound = true; // a single description is allowed
 
                                     break;
                                 }
 
-                                case "term" when termFound:
+                                case Constants.XmlTag.Term when termFound:
                                 {
                                     yield return Issue(string.Empty, grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleTermAllowed); // there should be only a single term
 
                                     break;
                                 }
 
-                                case "term":
+                                case Constants.XmlTag.Term:
                                 {
                                     termFound = true; // a single term is allowed
 
@@ -135,8 +139,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 switch (child.GetName())
                 {
-                    case ListHeaderElement:
-                    case ItemElement:
+                    case Constants.XmlTag.ListHeader:
+                    case Constants.XmlTag.Item:
                     {
                         var termFound = false;
                         var descriptionFound = false;
@@ -145,21 +149,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             switch (grandChild.GetName())
                             {
-                                case "description" when descriptionFound:
+                                case Constants.XmlTag.Description when descriptionFound:
                                 {
                                     yield return Issue(string.Empty, grandChild, Resources.MiKo_2217_MessageArgument_OnlySingleDescriptionAllowed); // there should be only a single description
 
                                     break;
                                 }
 
-                                case "description":
+                                case Constants.XmlTag.Description:
                                 {
                                     descriptionFound = true; // a single description is allowed
 
                                     break;
                                 }
 
-                                case "term":
+                                case Constants.XmlTag.Term:
                                 {
                                     termFound = true; // multiple terms per item
 

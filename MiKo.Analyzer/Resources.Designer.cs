@@ -6918,6 +6918,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix &apos;&lt;list&gt;&apos;.
+        /// </summary>
+        public static string MiKo_2217_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2217_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of a &lt;list&gt; is a little bit ambiguous.
         ///There are 3 types of lists: &apos;number&apos;, &apos;bullet&apos; and &apos;table&apos;. Only the &apos;table&apos; can have a single &lt;listheader&gt; and multiple &lt;item&gt;s, the others have only &lt;item&gt;s.
         ///
