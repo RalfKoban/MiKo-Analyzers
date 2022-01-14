@@ -2825,6 +2825,18 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
   <data name="MiKo_3017_Title" xml:space="preserve">
     <value>Do not swallow exceptions when throwing new exceptions.</value>
   </data>
+  <data name="MiKo_3018_Description" xml:space="preserve">
+    <value>Already disposed instances of disposable types should indicate that they are disposed when invoking methods on them. That makes it easier to spot bugs because the user code should never access already disposed types.</value>
+  </data>
+  <data name="MiKo_3018_HelpLinkUri" xml:space="preserve">
+    <value>https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose</value>
+  </data>
+  <data name="MiKo_3018_MessageFormat" xml:space="preserve">
+    <value>Throw ObjectDisposedException if disposed</value>
+  </data>
+  <data name="MiKo_3018_Title" xml:space="preserve">
+    <value>Throw ObjectDisposedExceptions on publicly visible methods of disposable types.</value>
+  </data>
   <data name="MiKo_3020_CodeFixTitle" xml:space="preserve">
     <value>Use 'Task.CompletedTask'</value>
   </data>

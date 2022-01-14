@@ -7959,6 +7959,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Already disposed instances of disposable types should indicate that they are disposed when invoking methods on them. That makes it easier to spot bugs because the user code should never access already disposed types..
+        /// </summary>
+        public static string MiKo_3018_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3018_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose.
+        /// </summary>
+        public static string MiKo_3018_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3018_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throw ObjectDisposedException if disposed.
+        /// </summary>
+        public static string MiKo_3018_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3018_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throw ObjectDisposedExceptions on publicly visible methods of disposable types..
+        /// </summary>
+        public static string MiKo_3018_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3018_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use &apos;Task.CompletedTask&apos;.
         /// </summary>
         public static string MiKo_3020_CodeFixTitle {
