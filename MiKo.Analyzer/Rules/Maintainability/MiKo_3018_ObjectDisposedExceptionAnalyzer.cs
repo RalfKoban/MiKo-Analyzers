@@ -33,6 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case MethodKind.StaticConstructor:
                         return false;
 
+                    case MethodKind.PropertyGet:
+                    case MethodKind.PropertySet:
+                        return symbol.AssociatedSymbol?.Name != "IsDisposed"; // IsDisposed properties are allowed to NOT throw ObjectDisposedExceptions because they should return a value indicating whether the instance is already disposed
+
+                    case MethodKind.EventAdd:
+                    case MethodKind.EventRemove:
+                        return true;
+
                     default:
                         return symbol.Name != nameof(IDisposable.Dispose); // dispose methods are allowed to NOT throw ObjectDisposedExceptions
                 }

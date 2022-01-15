@@ -120,6 +120,18 @@ public class TestMe : IDisposable
 ");
 
         [Test]
+        public void No_issue_is_reported_for_disposable_type_special_IsDisposed_property_that_is_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    " + visibility + @" bool IsDisposed { get; private set; }
+
+    public void Dispose() => IsDisposed = true;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_disposable_type_that_throws_ObjectDisposedException_in_indexer_that_is_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
 using System;
 
