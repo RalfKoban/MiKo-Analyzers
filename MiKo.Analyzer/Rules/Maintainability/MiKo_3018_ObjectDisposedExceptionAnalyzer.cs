@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool ThrowsObjectDisposedException(IMethodSymbol symbol)
         {
-            var methods = symbol.ContainingType.GetNamedMethods().ToLookup(_ => _.Name);
+            var methods = symbol.ContainingType.GetMembersIncludingInherited<IMethodSymbol>().ToLookup(_ => _.Name);
 
             foreach (var node in symbol.GetSyntax().DescendantNodes())
             {
@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return true;
                 }
 
-                // Inspect code for calls of private helper methods
+                // Inspect code for calls of private/protected helper methods
                 if (node is InvocationExpressionSyntax i && i.Expression is IdentifierNameSyntax ii)
                 {
                     var name = ii.GetName();
