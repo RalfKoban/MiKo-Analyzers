@@ -31,13 +31,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<IPropertySymbol> GetUnassignedEnumProperties(ISymbol symbol)
         {
+            var syntaxNode = symbol.GetSyntax();
+            if (syntaxNode.ChildNodes().Any(_ => _.IsKind(SyntaxKind.ThisConstructorInitializer)))
+            {
+                // ignore ctors that invoke other ctors of same type as those would get reported as well in case of violations
+                return Enumerable.Empty<IPropertySymbol>();
+            }
+
             var unassignedEnumProperties = new List<IPropertySymbol>();
 
             foreach (var property in symbol.ContainingType.GetProperties().Where(_ => _.GetReturnType().IsEnum()))
             {
-                var syntax = property.GetSyntax<PropertyDeclarationSyntax>();
+                var propertySyntax = property.GetSyntax<PropertyDeclarationSyntax>();
 
-                if (syntax.Initializer != null)
+                if (propertySyntax.Initializer != null)
                 {
                     // ignore initializers
                     continue;
@@ -47,13 +54,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     ExpressionSyntax expression = null;
 
-                    if (syntax.ExpressionBody != null)
+                    if (propertySyntax.ExpressionBody != null)
                     {
-                        expression = syntax.ExpressionBody.Expression;
+                        expression = propertySyntax.ExpressionBody.Expression;
                     }
                     else
                     {
-                        var accessorList = syntax.AccessorList;
+                        var accessorList = propertySyntax.AccessorList;
                         if (accessorList != null)
                         {
                             var getter = accessorList.Accessors[0];
@@ -86,14 +93,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (unassignedEnumProperties.Any())
             {
                 // ignore all properties that get assigned
-                var identifierNames = symbol.GetSyntax()
-                                            .DescendantNodes()
-                                            .Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
-                                            .Cast<AssignmentExpressionSyntax>()
-                                            .Select(_ => _.Left)
-                                            .OfType<IdentifierNameSyntax>()
-                                            .Select(_ => _.GetName())
-                                            .ToHashSet();
+                var identifierNames = syntaxNode
+                                      .DescendantNodes()
+                                      .Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
+                                      .Cast<AssignmentExpressionSyntax>()
+                                      .Select(_ => _.Left)
+                                      .OfType<IdentifierNameSyntax>()
+                                      .Select(_ => _.GetName())
+                                      .ToHashSet();
 
                 unassignedEnumProperties.RemoveAll(_ => identifierNames.Contains(_.Name));
             }
