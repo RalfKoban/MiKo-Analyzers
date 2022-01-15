@@ -324,6 +324,34 @@ public class TestMe : IDisposable
 ");
 
         [Test]
+        public void No_issue_is_reported_for_inherited_disposable_type_with_protected_helper_method_which_is_called_in_method_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    protected void VerifyDisposed()
+    {
+        if (_isDisposed)
+        {
+            throw new ObjectDisposedException();
+        }
+    }
+}
+
+public class TestMeEnhanced : TestMe
+{
+    " + visibility + @" void DoSomething()
+    {
+        VerifyDisposed();
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_method_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => An_issue_is_reported_for(@"
 using System;
 
@@ -941,6 +969,33 @@ public class TestMe : IDisposable
     }
 
     private void VerifyDisposed()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_inherited_disposable_type_with_protected_helper_method_which_is_not_called_in_method_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    protected void VerifyDisposed()
+    {
+        if (_isDisposed)
+        {
+            throw new ObjectDisposedException();
+        }
+    }
+}
+
+public class TestMeEnhanced : TestMe
+{
+    " + visibility + @" void DoSomething()
     {
     }
 }
