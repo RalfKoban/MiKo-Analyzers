@@ -64,11 +64,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool ThrowsObjectDisposedException(IMethodSymbol symbol)
         {
-            var methods = symbol.ContainingType.GetNamedMethods().Select(_ => _.Name).ToHashSet();
+            var methods = symbol.ContainingType.GetNamedMethods().ToLookup(_ => _.Name);
 
             foreach (var node in symbol.GetSyntax().DescendantNodes())
             {
-                if (node is ThrowStatementSyntax t && t.Expression is ObjectCreationExpressionSyntax o && o.Type.IsException<ObjectDisposedException>())
+                if (ThrowsObjectDisposedException(node))
                 {
                     return true;
                 }
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var name = ii.GetName();
 
-                    if (name.Contains("Dispos") && methods.Contains(name))
+                    if (name.Contains("Dispos") && methods.Contains(name) && methods[name].Any(DirectlyThrowsObjectDisposedException))
                     {
                         return true;
                     }
@@ -87,5 +87,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return false;
         }
+
+        private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
+
+        private static bool ThrowsObjectDisposedException(SyntaxNode node) => node is ThrowStatementSyntax t && t.Expression is ObjectCreationExpressionSyntax o && o.Type.IsException<ObjectDisposedException>();
     }
 }
