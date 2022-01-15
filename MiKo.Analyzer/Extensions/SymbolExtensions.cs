@@ -934,6 +934,19 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
+        internal static bool IsPubliclyVisible(this ISymbol symbol)
+        {
+            switch (symbol.DeclaredAccessibility)
+            {
+                case Accessibility.NotApplicable:
+                case Accessibility.Private:
+                    return false;
+
+                default:
+                    return true;
+            }
+        }
+
         internal static bool IsRoutedEvent(this ITypeSymbol value) => value.Name == "RoutedEvent" || value.Name == "System.Windows.RoutedEvent";
 
         internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length == 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();

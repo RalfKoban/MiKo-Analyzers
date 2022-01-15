@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            if (ShallAnalyze(symbol.ContainingType) && IsPubliclyVisible(symbol))
+            if (ShallAnalyze(symbol.ContainingType) && symbol.IsPubliclyVisible())
             {
                 switch (symbol.MethodKind)
                 {
@@ -54,19 +54,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (ThrowsObjectDisposedException(symbol) is false)
             {
                 yield return Issue(symbol);
-            }
-        }
-
-        private static bool IsPubliclyVisible(ISymbol symbol)
-        {
-            switch (symbol.DeclaredAccessibility)
-            {
-                case Accessibility.NotApplicable:
-                case Accessibility.Private:
-                    return false;
-
-                default:
-                    return true;
             }
         }
 

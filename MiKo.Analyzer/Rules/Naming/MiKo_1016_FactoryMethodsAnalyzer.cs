@@ -47,15 +47,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            switch (symbol.DeclaredAccessibility)
-            {
-                case Accessibility.NotApplicable:
-                case Accessibility.Private:
-                    return false; // ignore private methods or those that do not have any accessibility (means they are also private)
-
-                default:
-                    return base.ShallAnalyze(symbol);
-            }
+            // ignore private methods or those that do not have any accessibility (means they are also private)
+            return symbol.IsPubliclyVisible() && base.ShallAnalyze(symbol);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)).ToList();
