@@ -76,6 +76,63 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_non_auto_Enum_property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe()
+    {
+    }
+
+    public StringComparison Comparison => Calculate();
+
+    private StringComparison Calculate() => StringComparison.Ordinal;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_arrow_clause_non_auto_Enum_property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe()
+    {
+    }
+
+    public StringComparison Comparison
+    {
+        get => Calculate();
+    }
+
+    private StringComparison Calculate() => StringComparison.Ordinal;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_non_auto_Enum_property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe()
+    {
+    }
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return Calculate();
+        }
+    }
+
+    private StringComparison Calculate() => StringComparison.Ordinal;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
