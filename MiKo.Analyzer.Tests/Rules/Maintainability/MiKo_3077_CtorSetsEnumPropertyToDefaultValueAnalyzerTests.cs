@@ -184,6 +184,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_ctor_on_class_that_invokes_other_ctor() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe() : this(StringComparison.Ordinal)
+    {
+    }
+
+    public TestMe(StringComparison comparison) => Comparison = comparison;
+
+    public StringComparison Comparison { get; set; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_ctor_on_class_with_Enum_auto_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
