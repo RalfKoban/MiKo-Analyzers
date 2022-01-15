@@ -650,7 +650,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
-        internal static bool IsEnum(this ITypeSymbol value) => value.TypeKind == TypeKind.Enum;
+        internal static bool IsEnum(this ITypeSymbol value) => value?.TypeKind == TypeKind.Enum;
 
         internal static bool IsEnumerable(this ITypeSymbol value)
         {

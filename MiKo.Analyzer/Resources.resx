@@ -3333,6 +3333,16 @@ This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values
   <data name="MiKo_3076_Title" xml:space="preserve">
     <value>Do not initialize static member with static member below or in other type part.</value>
   </data>
+  <data name="MiKo_3077_Description" xml:space="preserve">
+    <value>Explicitly setting values for properties that return an 'Enum' allows to easily spot the (default) value and detect any change.
+So it assists in thinking about whether the value is the intended one.</value>
+  </data>
+  <data name="MiKo_3077_MessageFormat" xml:space="preserve">
+    <value>Set a default value for the properties {1}</value>
+  </data>
+  <data name="MiKo_3077_Title" xml:space="preserve">
+    <value>Constructors should set default values for properties that return an Enum.</value>
+  </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
   </data>

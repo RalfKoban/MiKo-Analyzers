@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 
 ## Available Rules
-The following tables list all the 316 rules that are currently provided by the analyzer.
+The following tables list all the 317 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -300,6 +300,7 @@ The following tables list all the 316 rules that are currently provided by the a
 |MiKo_3074|Do not define 'ref' or 'out' parameters on constructors.|&#x2713;|\-|
 |MiKo_3075|Internal and private types should be either static or sealed unless derivation from them is required.|&#x2713;|\-|
 |MiKo_3076|Do not initialize static member with static member below or in other type part.|&#x2713;|\-|
+|MiKo_3077|Constructors should set default values for properties that return an Enum.|&#x2713;|\-|
 |MiKo_3081|Pattern matching is preferred over a logical NOT condition.|&#x2713;|&#x2713;|
 |MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|&#x2713;|
 |MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|&#x2713;|

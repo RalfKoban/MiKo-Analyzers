@@ -9401,6 +9401,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Explicitly setting values for properties that return an &apos;Enum&apos; allows to easily spot the (default) value and detect any change.
+        ///So it assists in thinking about whether the value is the intended one..
+        /// </summary>
+        public static string MiKo_3077_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3077_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set a default value for the properties {1}.
+        /// </summary>
+        public static string MiKo_3077_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3077_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constructors should set default values for properties that return an Enum..
+        /// </summary>
+        public static string MiKo_3077_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3077_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply &apos;is false&apos; pattern.
         /// </summary>
         public static string MiKo_3081_CodeFixTitle {
