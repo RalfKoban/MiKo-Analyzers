@@ -45,29 +45,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (property.IsReadOnly)
                 {
-                    var accessorList = syntax.AccessorList;
-                    if (accessorList != null)
-                    {
-                        var getter = accessorList.Accessors[0];
-                        if (getter.ExpressionBody?.Expression is InvocationExpressionSyntax)
-                        {
-                            // ignore arrow-clause getter-only properties that simply return a calculated result
-                            continue;
-                        }
+                    ExpressionSyntax expression = null;
 
-                        if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r && r.Expression is InvocationExpressionSyntax)
-                        {
-                            // ignore getter-only properties that simply return a calculated result
-                            continue;
-                        }
+                    if (syntax.ExpressionBody != null)
+                    {
+                        expression = syntax.ExpressionBody.Expression;
                     }
                     else
                     {
-                        if (syntax.ExpressionBody?.Expression is InvocationExpressionSyntax)
+                        var accessorList = syntax.AccessorList;
+                        if (accessorList != null)
                         {
-                            // ignore arrow-clause properties that simply return a calculated result
-                            continue;
+                            var getter = accessorList.Accessors[0];
+
+                            if (getter.ExpressionBody != null)
+                            {
+                                expression = getter.ExpressionBody.Expression;
+                            }
+                            else
+                            {
+                                if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)
+                                {
+                                    expression = r.Expression;
+                                }
+                            }
                         }
+                    }
+
+                    switch (expression)
+                    {
+                        case InvocationExpressionSyntax _: // ignore properties that simply return a fixed result
+                        case MemberAccessExpressionSyntax _: // ignore properties that simply return a calculated result
+                            continue;
                     }
                 }
 
