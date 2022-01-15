@@ -31,13 +31,52 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IEnumerable<IPropertySymbol> GetUnassignedEnumProperties(ISymbol symbol)
         {
-            var propertiesWithoutInitializer = symbol.ContainingType.GetProperties()
-                                                     .Where(_ => _.GetReturnType().IsEnum())
-                                                     .Where(_ => _.GetSyntax<PropertyDeclarationSyntax>().Initializer is null)
-                                                     .ToList();
+            var unassignedEnumProperties = new List<IPropertySymbol>();
 
-            if (propertiesWithoutInitializer.Any())
+            foreach (var property in symbol.ContainingType.GetProperties().Where(_ => _.GetReturnType().IsEnum()))
             {
+                var syntax = property.GetSyntax<PropertyDeclarationSyntax>();
+
+                if (syntax.Initializer != null)
+                {
+                    // ignore initializers
+                    continue;
+                }
+
+                if (property.IsReadOnly)
+                {
+                    var accessorList = syntax.AccessorList;
+                    if (accessorList != null)
+                    {
+                        var getter = accessorList.Accessors[0];
+                        if (getter.ExpressionBody?.Expression is InvocationExpressionSyntax)
+                        {
+                            // ignore arrow-clause getter-only properties that simply return a calculated result
+                            continue;
+                        }
+
+                        if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r && r.Expression is InvocationExpressionSyntax)
+                        {
+                            // ignore getter-only properties that simply return a calculated result
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if (syntax.ExpressionBody?.Expression is InvocationExpressionSyntax)
+                        {
+                            // ignore arrow-clause properties that simply return a calculated result
+                            continue;
+                        }
+                    }
+                }
+
+                unassignedEnumProperties.Add(property);
+            }
+
+            if (unassignedEnumProperties.Any())
+            {
+                // ignore all properties that get assigned
                 var identifierNames = symbol.GetSyntax()
                                             .DescendantNodes()
                                             .Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
@@ -47,10 +86,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                             .Select(_ => _.GetName())
                                             .ToHashSet();
 
-                propertiesWithoutInitializer.RemoveAll(_ => identifierNames.Contains(_.Name));
+                unassignedEnumProperties.RemoveAll(_ => identifierNames.Contains(_.Name));
             }
 
-            return propertiesWithoutInitializer;
+            return unassignedEnumProperties;
         }
     }
 }
