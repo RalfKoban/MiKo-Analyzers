@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1046";
 
-        private static readonly HashSet<string> TaskFactoryMethods = typeof(TaskFactory).GetMethods().Select(_ => _.Name).ToHashSet();
+        private static readonly HashSet<string> TaskFactoryMethods = typeof(TaskFactory).GetMethods().ToHashSet(_ => _.Name);
 
         public MiKo_1046_AsyncMethodsSuffixAnalyzer() : base(Id)
         {

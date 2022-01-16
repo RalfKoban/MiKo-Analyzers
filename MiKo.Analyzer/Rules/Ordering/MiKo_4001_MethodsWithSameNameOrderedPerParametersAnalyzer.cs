@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)
         {
-            var methodNames = methods.Select(_ => _.Name).ToHashSet();
+            var methodNames = methods.ToHashSet(_ => _.Name);
 
             List<Diagnostic> results = null;
             foreach (var methodName in methodNames)

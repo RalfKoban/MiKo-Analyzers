@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // ignore "Key.DependencyProperty" assignments
-            var keys = symbol.ContainingType.GetFields().Where(_ => _.Type.IsDependencyPropertyKey()).Select(_ => _.Name + "." + Constants.DependencyPropertyKey.DependencyProperty).ToHashSet();
+            var keys = symbol.ContainingType.GetFields().Where(_ => _.Type.IsDependencyPropertyKey()).ToHashSet(_ => _.Name + "." + Constants.DependencyPropertyKey.DependencyProperty);
 
             foreach (var key in keys)
             {
@@ -61,10 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var propertyNames = FindPropertyNames(symbol);
             if (propertyNames.Any())
             {
-                return new[] { Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
+                yield return Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated());
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         private static IEnumerable<string> FindPropertyNames(IFieldSymbol symbol) => NamesFinder.FindPropertyNames(symbol, Suffix, Invocation);

@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return names.Select(_ => _ + " ").ToHashSet();
+            return names.ToHashSet(_ => _ + " ");
         }
 
         private IEnumerable<Diagnostic> AnalyzeSummaryPhrases(ISymbol symbol, IEnumerable<string> summaries, IEnumerable<string> phrases)

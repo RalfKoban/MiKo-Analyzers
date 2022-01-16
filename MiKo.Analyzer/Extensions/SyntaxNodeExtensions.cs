@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers
                     return null;
                 }
 
-                var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().Select(_ => _.GetName()).ToHashSet();
+                var identifiers = condition.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().ToHashSet(_ => _.GetName());
 
                 return parameters.FirstOrDefault(_ => identifiers.Contains(_.GetName()));
             }
@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers
             // do not include the ones that are written outside as those are the ones that are not used at all
             var variablesWritten = dataFlow.WrittenInside;
 
-            var used = variablesRead.Union(variablesWritten).Select(_ => _.Name).ToHashSet();
+            var used = variablesRead.Union(variablesWritten).ToHashSet(_ => _.Name);
 
             return used;
         }

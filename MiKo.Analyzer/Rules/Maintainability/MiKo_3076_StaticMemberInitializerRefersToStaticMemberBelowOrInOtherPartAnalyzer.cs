@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // get all fields
             var problematicFields = GetStaticFieldsFromBelowOrFromOtherPart(symbol, fieldLocation);
-            var problematicFieldNames = problematicFields.SelectMany(_ => _.Declaration.Variables).Select(_ => _.GetName()).ToHashSet();
+            var problematicFieldNames = problematicFields.SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
 
             var wrongReferences = new List<string>();
             foreach (var identifier in identifierNames)

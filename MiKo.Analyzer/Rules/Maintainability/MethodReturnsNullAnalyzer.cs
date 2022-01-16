@@ -195,7 +195,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var exp = (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression)) ? b.Right : expression;
             var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
 
-            var localVariableNames = dataFlow.ReadInside.Select(_ => _.Name).ToHashSet();
+            var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);
 
             var candidates = GetCandidates(method, localVariableNames).ToHashSet();
             if (candidates.Any())

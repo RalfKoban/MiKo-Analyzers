@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -31,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return syntax;
             }
 
-            var parameters = method.ParameterList.Parameters.Select(_ => _.GetName()).ToHashSet();
+            var parameters = method.ParameterList.Parameters.ToHashSet(_ => _.GetName());
 
             var map = new Dictionary<XmlEmptyElementSyntax, string>();
 

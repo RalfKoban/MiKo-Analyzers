@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var method = node.GetEnclosingMethod(semanticModel);
                 if (method?.Parameters.Length > 0)
                 {
-                    var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).Select(_ => _.Name).ToHashSet();
+                    var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).ToHashSet(_ => _.Name);
 
                     var name = node.Left.ToCleanedUpString();
                     if (names.Contains(name))

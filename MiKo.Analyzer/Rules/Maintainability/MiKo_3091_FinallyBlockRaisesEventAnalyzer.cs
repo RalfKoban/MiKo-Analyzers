@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var semanticModel = context.SemanticModel;
 
             var method = context.GetEnclosingMethod();
-            var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().Select(_ => _.Name).ToHashSet();
+            var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().ToHashSet(_ => _.Name);
 
             foreach (var token in finallyBlock.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
             {
