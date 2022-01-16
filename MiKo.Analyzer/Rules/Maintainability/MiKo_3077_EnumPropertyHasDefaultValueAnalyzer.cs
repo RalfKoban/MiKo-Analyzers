@@ -69,32 +69,39 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var syntaxNode = ctor.GetSyntax();
 
-                if (syntaxNode.ChildNodes().Any(_ => _.IsKind(SyntaxKind.ThisConstructorInitializer)))
-                {
-                    // ignore ctors that invoke other ctors of same type as those would get reported as well in case of violations
-                    continue;
-                }
-
                 var unassigned = true;
 
-                foreach (var node in syntaxNode.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression)).Cast<AssignmentExpressionSyntax>())
+                if (syntaxNode is null)
                 {
-                    if (node.Left is IdentifierNameSyntax i)
+                    // seems like there is no ctor in source code
+                }
+                else
+                {
+                    if (syntaxNode.ChildNodes().Any(_ => _.IsKind(SyntaxKind.ThisConstructorInitializer)))
                     {
-                        var identifier = i.GetName();
+                        // ignore ctors that invoke other ctors of same type as those would get reported as well in case of violations
+                        continue;
+                    }
 
-                        if (identifier == symbol.Name)
+                    foreach (var node in syntaxNode.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression)).Cast<AssignmentExpressionSyntax>())
+                    {
+                        if (node.Left is IdentifierNameSyntax i)
                         {
-                            // we found a property assignment, so we have to check for backing field assignments
-                            unassigned = false;
-                            break;
-                        }
+                            var identifier = i.GetName();
 
-                        if (backingField != null && identifier == backingField.Name)
-                        {
-                            // we found a backing field assignment
-                            unassigned = false;
-                            break;
+                            if (identifier == symbol.Name)
+                            {
+                                // we found a property assignment, so we have to check for backing field assignments
+                                unassigned = false;
+                                break;
+                            }
+
+                            if (backingField != null && identifier == backingField.Name)
+                            {
+                                // we found a backing field assignment
+                                unassigned = false;
+                                break;
+                            }
                         }
                     }
                 }
