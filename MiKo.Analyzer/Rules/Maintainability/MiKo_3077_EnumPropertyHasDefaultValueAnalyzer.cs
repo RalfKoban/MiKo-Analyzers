@@ -39,32 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (property.IsReadOnly)
             {
-                ExpressionSyntax expression = null;
-
-                if (propertySyntax.ExpressionBody != null)
-                {
-                    expression = propertySyntax.ExpressionBody.Expression;
-                }
-                else
-                {
-                    var accessorList = propertySyntax.AccessorList;
-                    if (accessorList != null)
-                    {
-                        var getter = accessorList.Accessors[0];
-
-                        if (getter.ExpressionBody != null)
-                        {
-                            expression = getter.ExpressionBody.Expression;
-                        }
-                        else
-                        {
-                            if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)
-                            {
-                                expression = r.Expression;
-                            }
-                        }
-                    }
-                }
+                var expression = GetPropertyExpression(propertySyntax);
 
                 switch (expression)
                 {
@@ -88,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
-            var propertyName = symbol.Name;
+            var backingField = GetBackingField(symbol);
 
             foreach (var ctor in ctors)
             {
@@ -100,13 +75,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                var unassigned = syntaxNode.DescendantNodes()
-                                           .Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
-                                           .Cast<AssignmentExpressionSyntax>()
-                                           .None(_ => _.Left is IdentifierNameSyntax i && i.GetName() == propertyName);
+                var unassigned = true;
+
+                foreach (var node in syntaxNode.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression)).Cast<AssignmentExpressionSyntax>())
+                {
+                    if (node.Left is IdentifierNameSyntax i)
+                    {
+                        var identifier = i.GetName();
+
+                        if (identifier == symbol.Name)
+                        {
+                            // we found a property assignment, so we have to check for backing field assignments
+                            unassigned = false;
+                            break;
+                        }
+
+                        if (backingField != null && identifier == backingField.Name)
+                        {
+                            // we found a backing field assignment
+                            unassigned = false;
+                            break;
+                        }
+                    }
+                }
 
                 if (unassigned)
                 {
+                    if (backingField != null)
+                    {
+                        // here we have to inspect if we have a default value already set on the field
+                        return backingField.GetSyntax().DescendantNodes().OfType<EqualsValueClauseSyntax>().None();
+                    }
+
                     // we found no assignment, so report for that specific ctor (as it seems like the object can be created in a way that bypasses the default value assignment)
                     return true;
                 }
@@ -116,5 +116,44 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static bool IsApplicableConstructor(IMethodSymbol symbol) => symbol.IsConstructor() && symbol.IsSerializationConstructor() is false;
+
+        private static IFieldSymbol GetBackingField(IPropertySymbol symbol)
+        {
+            var expression = GetPropertyExpression(symbol.GetSyntax<PropertyDeclarationSyntax>());
+            if (expression is IdentifierNameSyntax identifier)
+            {
+                var name = identifier.GetName();
+
+                return symbol.ContainingType.GetFields().FirstOrDefault(_ => _.Name == name);
+            }
+
+            return null;
+        }
+
+        private static ExpressionSyntax GetPropertyExpression(PropertyDeclarationSyntax propertySyntax)
+        {
+            if (propertySyntax.ExpressionBody != null)
+            {
+                return propertySyntax.ExpressionBody.Expression;
+            }
+
+            var accessorList = propertySyntax.AccessorList;
+            if (accessorList != null)
+            {
+                var getter = accessorList.Accessors[0];
+
+                if (getter.ExpressionBody != null)
+                {
+                    return getter.ExpressionBody.Expression;
+                }
+
+                if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)
+                {
+                    return r.Expression;
+                }
+            }
+
+            return null;
+        }
     }
 }

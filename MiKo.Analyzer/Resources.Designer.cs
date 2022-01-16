@@ -9411,7 +9411,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set a default value for property &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Set a default value.
         /// </summary>
         public static string MiKo_3077_MessageFormat {
             get {
