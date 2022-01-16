@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3077_CtorSetsEnumPropertyToDefaultValueAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3077_EnumPropertyHasDefaultValueAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_ctor_on_class_without_properties() => No_issue_is_reported_for(@"
@@ -301,8 +301,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3077_CtorSetsEnumPropertyToDefaultValueAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3077_EnumPropertyHasDefaultValueAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3077_CtorSetsEnumPropertyToDefaultValueAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3077_EnumPropertyHasDefaultValueAnalyzer();
     }
 }
