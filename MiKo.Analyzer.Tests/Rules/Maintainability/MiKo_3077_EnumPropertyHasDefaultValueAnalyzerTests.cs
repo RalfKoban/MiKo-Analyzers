@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3077_EnumPropertyHasDefaultValueAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_without_properties() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_on_class_without_properties() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -20,7 +20,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_only_nonEnum_properties() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_only_nonEnum_properties() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -34,7 +34,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_Enum_property_if_property_has_initializer() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enum_property_if_property_has_initializer() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -46,7 +46,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_sets_property_value_to_default_one() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enum_property_if_ctor_sets_property_value_to_default_one() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -61,7 +61,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_sets_property_value_to_parameter_value() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enum_property_if_ctor_sets_property_value_to_parameter_value() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -76,7 +76,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_non_auto_calculated_Enum_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_arrow_clause_non_auto_calculated_Enum_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -92,7 +92,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_arrow_clause_non_auto_calculated_Enum_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_getter_only_arrow_clause_non_auto_calculated_Enum_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -111,7 +111,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_non_auto_calculated_Enum_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_getter_only_non_auto_calculated_Enum_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -133,7 +133,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_non_auto_Enum_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_arrow_clause_non_auto_Enum_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -147,7 +147,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_arrow_clause_non_auto_Enum_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_getter_only_arrow_clause_non_auto_Enum_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -164,7 +164,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_non_auto_Enum_property() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_getter_only_non_auto_Enum_property() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -184,7 +184,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_that_invokes_other_ctor() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_on_class_that_invokes_other_ctor() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -200,7 +200,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_arrow_clause_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -221,7 +221,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -249,7 +249,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -269,7 +269,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_backing_field_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_getter_only_backing_field_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -292,7 +292,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_arrow_clause_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -312,7 +312,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -339,7 +339,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -358,7 +358,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -380,7 +380,27 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_on_class_with_Enum_auto_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enum_auto_property_with_initializer_and_no_ctor() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public StringComparison Comparison { get; set; } = StringComparison.Ordinal;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Enum_auto_property_with_no_ctor() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public StringComparison Comparison { get; set; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Enum_auto_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -394,7 +414,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_on_class_with_arrow_clause_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_arrow_clause_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -414,7 +434,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -441,7 +461,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_on_class_with_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -460,7 +480,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_on_class_with_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
