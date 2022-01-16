@@ -3338,10 +3338,10 @@ This leads to subtle bugs, such as TypeInitializerExceptions or incorrect values
 So it assists in thinking about whether the value is the intended one.</value>
   </data>
   <data name="MiKo_3077_MessageFormat" xml:space="preserve">
-    <value>Set a default value for the properties {1}</value>
+    <value>Set a default value</value>
   </data>
   <data name="MiKo_3077_Title" xml:space="preserve">
-    <value>Constructors should set default values for properties that return an Enum.</value>
+    <value>Properties that return an Enum should have a default value.</value>
   </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>

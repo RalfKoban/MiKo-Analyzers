@@ -9411,7 +9411,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set a default value for the properties {1}.
+        ///   Looks up a localized string similar to Set a default value.
         /// </summary>
         public static string MiKo_3077_MessageFormat {
             get {
@@ -9420,7 +9420,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Constructors should set default values for properties that return an Enum..
+        ///   Looks up a localized string similar to Properties that return an Enum should have a default value..
         /// </summary>
         public static string MiKo_3077_Title {
             get {

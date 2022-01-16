@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3077_CtorSetsEnumPropertyToDefaultValueAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3077_EnumPropertyHasDefaultValueAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_ctor_on_class_without_properties() => No_issue_is_reported_for(@"
@@ -200,6 +200,186 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public TestMe()
+    {
+        m_comparison = StringComparison.Ordinal;
+    }
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+        set => m_comparison = value;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public TestMe()
+    {
+        m_comparison = StringComparison.Ordinal;
+    }
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+
+        set
+        {
+            m_comparison = value;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public TestMe()
+    {
+        m_comparison = StringComparison.Ordinal;
+    }
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_backing_field_Enum_property_if_ctor_sets_property_backing_field() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public TestMe()
+    {
+        m_comparison = StringComparison.Ordinal;
+    }
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.Ordinal;
+
+    public TestMe()
+    {
+    }
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+        set => m_comparison = value;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.Ordinal;
+
+    public TestMe()
+    {
+    }
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+
+        set
+        {
+            m_comparison = value;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_arrow_clause_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.Ordinal;
+
+    public TestMe()
+    {
+    }
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_on_class_with_getter_only_backing_field_Enum_property_if_ctor_does_not_set_property_value_but_backing_field_has_default_value() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.Ordinal;
+
+    public TestMe()
+    {
+    }
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_ctor_on_class_with_Enum_auto_property_if_ctor_does_not_set_property_value() => An_issue_is_reported_for(@"
 using System;
 
@@ -301,8 +481,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3077_CtorSetsEnumPropertyToDefaultValueAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3077_EnumPropertyHasDefaultValueAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3077_CtorSetsEnumPropertyToDefaultValueAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3077_EnumPropertyHasDefaultValueAnalyzer();
     }
 }
