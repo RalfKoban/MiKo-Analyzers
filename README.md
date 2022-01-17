@@ -300,7 +300,7 @@ The following tables list all the 317 rules that are currently provided by the a
 |MiKo_3074|Do not define 'ref' or 'out' parameters on constructors.|&#x2713;|\-|
 |MiKo_3075|Internal and private types should be either static or sealed unless derivation from them is required.|&#x2713;|\-|
 |MiKo_3076|Do not initialize static member with static member below or in other type part.|&#x2713;|\-|
-|MiKo_3077|Properties that return an Enum should have a default value.|&#x2713;|\-|
+|MiKo_3077|Properties that return an Enum should have a default value.|&#x2713;|&#x2713;|
 |MiKo_3081|Pattern matching is preferred over a logical NOT condition.|&#x2713;|&#x2713;|
 |MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'.|&#x2713;|&#x2713;|
 |MiKo_3083|Pattern matching is preferred for null checks.|&#x2713;|&#x2713;|
