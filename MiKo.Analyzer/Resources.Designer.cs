@@ -9401,6 +9401,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply a default value.
+        /// </summary>
+        public static string MiKo_3077_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3077_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Explicitly setting values for properties that return an &apos;Enum&apos; allows to easily spot the (default) value and detect any change.
         ///So it assists in thinking about whether the value is the intended one..
         /// </summary>

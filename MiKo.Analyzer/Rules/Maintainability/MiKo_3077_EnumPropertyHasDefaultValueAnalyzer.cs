@@ -17,6 +17,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        internal static string GetIdentifierNameFromPropertyExpression(PropertyDeclarationSyntax syntax)
+        {
+            var expression = GetPropertyExpression(syntax);
+
+            return expression is IdentifierNameSyntax identifier
+                       ? identifier.GetName()
+                       : null;
+        }
+
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType().IsEnum();
 
         protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
@@ -126,25 +135,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IFieldSymbol GetBackingField(IPropertySymbol symbol)
         {
-            var expression = GetPropertyExpression(symbol.GetSyntax<PropertyDeclarationSyntax>());
-            if (expression is IdentifierNameSyntax identifier)
-            {
-                var name = identifier.GetName();
+            var syntax = symbol.GetSyntax<PropertyDeclarationSyntax>();
+            var name = GetIdentifierNameFromPropertyExpression(syntax);
 
+            if (name != null)
+            {
                 return symbol.ContainingType.GetFields().FirstOrDefault(_ => _.Name == name);
             }
 
             return null;
         }
 
-        private static ExpressionSyntax GetPropertyExpression(PropertyDeclarationSyntax propertySyntax)
+        private static ExpressionSyntax GetPropertyExpression(PropertyDeclarationSyntax syntax)
         {
-            if (propertySyntax.ExpressionBody != null)
+            if (syntax.ExpressionBody != null)
             {
-                return propertySyntax.ExpressionBody.Expression;
+                return syntax.ExpressionBody.Expression;
             }
 
-            var accessorList = propertySyntax.AccessorList;
+            var accessorList = syntax.AccessorList;
             if (accessorList != null)
             {
                 var getter = accessorList.Accessors[0];

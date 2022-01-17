@@ -104,6 +104,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return result;
         }
 
+        protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
+
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {
             var token = text.SurroundedWithDoubleQuote().ToSyntaxToken();

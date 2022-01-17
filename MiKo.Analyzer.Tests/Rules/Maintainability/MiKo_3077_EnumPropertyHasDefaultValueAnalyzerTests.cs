@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -380,7 +381,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Enum_auto_property_with_initializer_and_no_ctor() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Enum_auto_property_with_initializer_and_no_ctor() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -501,8 +502,194 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_Enum_auto_property_with_no_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison Comparison { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison Comparison { get; set; } = StringComparison.CurrentCulture;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_arrow_clause_Enum_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+        set => m_comparison = value;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.CurrentCulture;
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+        set => m_comparison = value;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_getter_only_arrow_clause_Enum_property()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.CurrentCulture;
+
+    public StringComparison Comparison
+    {
+        get => m_comparison;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Enum_property_with_backing_field()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+
+        set
+        {
+            m_comparison = value;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.CurrentCulture;
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+
+        set
+        {
+            m_comparison = value;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_getter_only_Enum_property_with_backing_field()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison;
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private StringComparison m_comparison = StringComparison.CurrentCulture;
+
+    public StringComparison Comparison
+    {
+        get
+        {
+            return m_comparison;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3077_EnumPropertyHasDefaultValueAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3077_EnumPropertyHasDefaultValueAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3077_CodeFixProvider();
     }
 }

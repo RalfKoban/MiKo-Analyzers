@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var attributeList = SyntaxFactory.AttributeList().WithAttributes(SyntaxFactory.SeparatedList(new[] { attribute }));
 
             return parameter.WithAttributeLists(new SyntaxList<AttributeListSyntax>(attributeList))
-                            .WithDefault(SyntaxFactory.EqualsValueClause(SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)));
+                            .WithDefault(SyntaxFactory.EqualsValueClause(Literal(SyntaxKind.NullLiteralExpression)));
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => WithUsing(root, "System.Runtime.CompilerServices");
