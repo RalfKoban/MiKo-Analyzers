@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 yield return Issue(propertyName, name, linqCall);
             }
 
-            foreach (var yieldKeyword in node.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.YieldKeyword)))
+            foreach (var yieldKeyword in node.DescendantTokens(SyntaxKind.YieldKeyword))
             {
                 yield return Issue(propertyName, yieldKeyword, yieldKeyword.ValueText);
             }

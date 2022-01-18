@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -34,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var semanticModel = context.SemanticModel;
 
-            foreach (var token in lockStatement.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
+            foreach (var token in lockStatement.DescendantTokens(SyntaxKind.IdentifierToken))
             {
                 var identifier = token.Parent;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -10,6 +11,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTokenExtensions
     {
+        internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().Where(_ => _.IsKind(kind));
+
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
         internal static ISymbol GetSymbol(this SyntaxToken value, Compilation compilation)

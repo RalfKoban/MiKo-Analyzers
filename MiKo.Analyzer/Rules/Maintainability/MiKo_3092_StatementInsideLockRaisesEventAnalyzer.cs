@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeLockStatement(SyntaxNodeAnalysisContext context, LockStatementSyntax lockStatement)
         {
-            foreach (var token in lockStatement.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
+            foreach (var token in lockStatement.DescendantTokens(SyntaxKind.IdentifierToken))
             {
                 switch (token.Parent?.Parent?.Kind())
                 {

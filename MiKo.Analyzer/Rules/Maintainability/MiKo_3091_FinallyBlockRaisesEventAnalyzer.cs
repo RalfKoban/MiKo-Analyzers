@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = context.GetEnclosingMethod();
             var events = method.ContainingType.GetMembersIncludingInherited<IEventSymbol>().ToHashSet(_ => _.Name);
 
-            foreach (var token in finallyBlock.DescendantTokens().Where(_ => _.IsKind(SyntaxKind.IdentifierToken)))
+            foreach (var token in finallyBlock.DescendantTokens(SyntaxKind.IdentifierToken))
             {
                 var eventName = token.ValueText;
 
