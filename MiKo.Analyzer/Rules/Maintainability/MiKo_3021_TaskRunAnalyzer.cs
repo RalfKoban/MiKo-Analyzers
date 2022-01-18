@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodName = symbol.Name;
 
-            var descendantNodes = symbol.GetSyntax().DescendantNodes();
+            var descendantNodes = symbol.GetSyntax().DescendantNodes().ToList();
 
             foreach (var taskRunExpression in descendantNodes.OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
             {

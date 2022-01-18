@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {
             var fieldSyntax = symbol.GetSyntax<FieldDeclarationSyntax>();
-            var identifierNames = fieldSyntax.DescendantNodes().OfType<IdentifierNameSyntax>().ToList();
+            var identifierNames = fieldSyntax.DescendantNodes<IdentifierNameSyntax>().ToList();
 
             if (identifierNames.None())
             {

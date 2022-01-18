@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
         {
-            var nodes = comment.DescendantNodes().OfType<XmlEmptyElementSyntax>().Where(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
+            var nodes = comment.DescendantNodes<XmlEmptyElementSyntax>().Where(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
                                                    {
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongNonEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
         {
-            var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>().Where(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
+            var nodes = comment.DescendantNodes<XmlElementSyntax>().Where(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
                                                    {
@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // replace all '<b>true</b>', '<b>false</b>' and '<b>null</b>'
             // replace all '<c>true</c>', '<c>false</c>' and '<c>null</c>'
             // replace all '<value>true</value>', '<value>false</value>' and '<value>null</value>'
-            var nodes = comment.DescendantNodes().OfType<XmlElementSyntax>()
+            var nodes = comment.DescendantNodes<XmlElementSyntax>()
                                .Where(_ => _.IsWrongBooleanTag() || _.IsWrongNullTag())
                                .ToList();
 
@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax ReplaceText(DocumentationCommentTriviaSyntax comment)
         {
             var nodes = new List<XmlTextSyntax>();
-            foreach (var node in comment.DescendantNodes().OfType<XmlTextSyntax>())
+            foreach (var node in comment.DescendantNodes<XmlTextSyntax>())
             {
                 if (node.Parent.IsCode())
                 {

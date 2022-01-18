@@ -173,7 +173,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var ifStatement = node.GetRelatedIfStatement();
             if (ifStatement != null)
             {
-                var identifiers = ifStatement.Condition.DescendantNodes().OfType<IdentifierNameSyntax>().ToHashSet(_ => _.GetName());
+                var identifiers = ifStatement.Condition.DescendantNodes<IdentifierNameSyntax>().ToHashSet(_ => _.GetName());
                 var parameter = method.Parameters.FirstOrDefault(_ => identifiers.Contains(_.Name));
                 if (parameter != null)
                 {

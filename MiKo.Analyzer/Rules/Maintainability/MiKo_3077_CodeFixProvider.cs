@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var classDeclarationSyntax = syntax.FirstAncestorOrSelf<ClassDeclarationSyntax>();
                 if (classDeclarationSyntax != null)
                 {
-                    foreach (var field in classDeclarationSyntax.DescendantNodes().OfType<FieldDeclarationSyntax>())
+                    foreach (var field in classDeclarationSyntax.DescendantNodes<FieldDeclarationSyntax>())
                     {
                         var declaration = field.Declaration;
 

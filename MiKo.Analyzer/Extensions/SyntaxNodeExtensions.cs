@@ -30,11 +30,15 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly string[] Nulls = { "null" };
 
-        internal static bool Contains(this SyntaxNode node, char c) => node?.ToString().Contains(c) ?? false;
+        internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
-        internal static bool EnclosingMethodHasParameter(this SyntaxNode node, string parameterName, SemanticModel semanticModel)
+        internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes().OfType<T>();
+
+        internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes<T>().Where(_ => _.IsKind(kind));
+
+        internal static bool EnclosingMethodHasParameter(this SyntaxNode value, string parameterName, SemanticModel semanticModel)
         {
-            var method = node.GetEnclosingMethod(semanticModel);
+            var method = value.GetEnclosingMethod(semanticModel);
             if (method is null)
             {
                 return false;
@@ -844,7 +848,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
 
-        internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes().OfType<InvocationExpressionSyntax>()
+        internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>()
                                                                                                                                                  .Where(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
 
         internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, SyntaxNode node)

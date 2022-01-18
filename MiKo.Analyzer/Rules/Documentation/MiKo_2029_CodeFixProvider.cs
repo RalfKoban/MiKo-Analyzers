@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var wrongInheritDocs = syntax.DescendantNodes().OfType<XmlEmptyElementSyntax>()
+            var wrongInheritDocs = syntax.DescendantNodes<XmlEmptyElementSyntax>()
                                          .Where(_ => _.GetName() == Constants.XmlTag.Inheritdoc && _.Attributes.OfType<XmlCrefAttributeSyntax>().Any())
                                          .ToList();
 

@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            var methodCalls = symbol.GetSyntax().DescendantNodes().OfType<MemberAccessExpressionSyntax>();
+            var methodCalls = symbol.GetSyntax().DescendantNodes<MemberAccessExpressionSyntax>();
 
             List<Diagnostic> diagnostics = null;
             foreach (var methodCall in methodCalls)

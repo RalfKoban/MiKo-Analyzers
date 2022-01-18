@@ -23,8 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnType.IsTask() && symbol.ReturnType.IsGeneric() is false; // allow only plain tasks
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.GetSyntax()
-                                                                                                                   .DescendantNodes()
-                                                                                                                   .OfType<MemberAccessExpressionSyntax>()
+                                                                                                                   .DescendantNodes<MemberAccessExpressionSyntax>()
                                                                                                                    .Where(_ => _.ToCleanedUpString() == Invocation)
                                                                                                                    .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
                                                                                                                    .Where(_ => _.Parent.IsKind(SyntaxKind.Argument) is false)

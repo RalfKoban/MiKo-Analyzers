@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ITypeSymbol FindRelatedType(CodeFixContext context, SyntaxNode syntax, string identifierName)
         {
-            var identifier = syntax?.DescendantNodes().OfType<IdentifierNameSyntax>().FirstOrDefault(_ => _.GetName() == identifierName);
+            var identifier = syntax?.DescendantNodes<IdentifierNameSyntax>().FirstOrDefault(_ => _.GetName() == identifierName);
 
             if (identifier?.Parent is MemberAccessExpressionSyntax maes)
             {

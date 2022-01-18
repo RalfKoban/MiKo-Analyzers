@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var controlFlow = semanticModel.AnalyzeControlFlow(methodDeclaration.Body);
                 var returnStatements = controlFlow.ReturnStatements.OfType<ReturnStatementSyntax>();
 
-                foreach (var variable in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>().SelectMany(_ => _.Variables))
+                foreach (var variable in methodDeclaration.DescendantNodes<VariableDeclarationSyntax>().SelectMany(_ => _.Variables))
                 {
                     if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.GetName() == ins.GetName()) && variable.Initializer?.Value is ObjectCreationExpressionSyntax oces)
                     {
@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var types = new HashSet<ITypeSymbol>();
 
-            foreach (var variableDeclaration in methodDeclaration.DescendantNodes().OfType<VariableDeclarationSyntax>())
+            foreach (var variableDeclaration in methodDeclaration.DescendantNodes<VariableDeclarationSyntax>())
             {
                 // inspect associated test method
                 if (variableDeclaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))

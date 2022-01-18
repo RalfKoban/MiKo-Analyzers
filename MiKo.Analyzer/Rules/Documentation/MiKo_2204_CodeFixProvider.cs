@@ -25,8 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var list = syntax.DescendantNodes().OfType<XmlTextSyntax>()
-                             .Where(text => text.TextTokens.Any(_ => _.ValueText.TrimStart().StartsWithAny(Markers)))
+            var list = syntax.DescendantNodes<XmlTextSyntax>()
+                             .Where(_ => _.TextTokens.Any(__ => __.ValueText.TrimStart().StartsWithAny(Markers)))
                              .ToList();
 
             return syntax.ReplaceNodes(list, GetReplacements);

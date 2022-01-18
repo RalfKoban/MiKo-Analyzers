@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers
                 return Enumerable.Empty<MemberAccessExpressionSyntax>();
             }
 
-            return field.DescendantNodes().OfType<MemberAccessExpressionSyntax>().Where(__ => __.ToCleanedUpString() == invocation);
+            return field.DescendantNodes<MemberAccessExpressionSyntax>().Where(__ => __.ToCleanedUpString() == invocation);
         }
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
         {
             var method = (MethodDeclarationSyntax)value.GetSyntax();
-            foreach (var createdObject in method.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
+            foreach (var createdObject in method.DescendantNodes<ObjectCreationExpressionSyntax>())
             {
                 switch (createdObject.Parent)
                 {

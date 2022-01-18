@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     case ForEachStatementSyntax loop:
                     {
-                        foreach (var invocation in loop.DescendantNodes().OfType<InvocationExpressionSyntax>())
+                        foreach (var invocation in loop.DescendantNodes<InvocationExpressionSyntax>())
                         {
                             var calledMethod = DetectCalledMethod(semanticModel, invocation, methodName);
                             if (calledMethod is null)
@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 var methodSymbol = method.GetEnclosingMethod(semanticModel);
 
                 // https://stackoverflow.com/questions/3969963/when-not-to-use-yield-return
-                foreach (var yieldStatement in method.DescendantNodes().OfType<YieldStatementSyntax>())
+                foreach (var yieldStatement in method.DescendantNodes<YieldStatementSyntax>())
                 {
                     if (IsRecursiveYield(yieldStatement, semanticModel, methodSymbol))
                     {

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var texts = syntax.DescendantNodes().OfType<XmlTextSyntax>().Where(HasIssue);
+            var texts = syntax.DescendantNodes<XmlTextSyntax>().Where(HasIssue);
 
             return syntax.ReplaceNodes(texts, GetReplacements);
         }

@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // comment is on same line as the semicolon, so it's no issue (except for initializers)
                 if (current.Parent is LocalDeclarationStatementSyntax d)
                 {
-                    return d.DescendantNodes().OfType<InitializerExpressionSyntax>().Any();
+                    return d.DescendantNodes<InitializerExpressionSyntax>().Any();
                 }
 
                 return false;

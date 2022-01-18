@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var texts = documentation.DescendantNodes().OfType<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Select(_ => _.ValueText);
+            var texts = documentation.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Select(_ => _.ValueText);
 
             if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
             {

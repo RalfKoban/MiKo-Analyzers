@@ -58,14 +58,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case ReturnStatementSyntax r:
                 {
-                    return r.DescendantNodes().OfType<LiteralExpressionSyntax>();
+                    return r.DescendantNodes<LiteralExpressionSyntax>();
                 }
 
                 case ParameterSyntax p:
                 {
                     if (names.Contains(p.GetName()))
                     {
-                        return p.DescendantNodes().OfType<LiteralExpressionSyntax>();
+                        return p.DescendantNodes<LiteralExpressionSyntax>();
                     }
 
                     break;

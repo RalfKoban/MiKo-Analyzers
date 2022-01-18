@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static SyntaxNode WithUsing(SyntaxNode root, string usingNamespace)
         {
-            var usings = root.DescendantNodes().OfType<UsingDirectiveSyntax>().ToList();
+            var usings = root.DescendantNodes<UsingDirectiveSyntax>().ToList();
 
             if (usings.Any(_ => _.Name.ToFullString() == usingNamespace))
             {
@@ -158,8 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var root = node.SyntaxTree.GetRoot();
 
-            return root.DescendantNodes()
-                       .OfType<UsingDirectiveSyntax>()
+            return root.DescendantNodes<UsingDirectiveSyntax>()
                        .Where(_ => _.Name.ToFullString() == usingNamespace)
                        .Select(root.Without)
                        .FirstOrDefault();

@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             }
 
             // TODO: RKN Fix me (find better node)
-            return typeSyntax.DescendantNodes().OfType<MethodDeclarationSyntax>().First();
+            return typeSyntax.DescendantNodes<MethodDeclarationSyntax>().First();
         }
     }
 }

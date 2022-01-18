@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
 
-            foreach (var text in syntax.DescendantNodes().OfType<XmlTextSyntax>())
+            foreach (var text in syntax.DescendantNodes<XmlTextSyntax>())
             {
                 var tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
 

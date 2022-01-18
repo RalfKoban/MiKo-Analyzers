@@ -33,9 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static IReadOnlyCollection<MemberAccessExpressionSyntax> GetAllAssertions(SyntaxNode methodSyntax) => methodSyntax.DescendantNodes()
-                                                                                                                                  .Where(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-                                                                                                                                  .OfType<MemberAccessExpressionSyntax>()
+        private static IReadOnlyCollection<MemberAccessExpressionSyntax> GetAllAssertions(SyntaxNode methodSyntax) => methodSyntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression)
                                                                                                                                   .Where(IsAssertionMethod)
                                                                                                                                   .ToList();
 

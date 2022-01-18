@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var syntax = symbol.GetSyntax();
 
-            var nodes = syntax.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression)).OfType<MemberAccessExpressionSyntax>();
+            var nodes = syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
             foreach (var node in nodes)
             {
                 switch (node.GetName())
@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                             // no arguments, so check for a 'Verifiable' call on the same mock object
                             return nodes.Where(_ => _.GetName() == "Verifiable" && _.Parent is InvocationExpressionSyntax)
-                                        .SelectMany(_ => _.DescendantNodes().OfType<MemberAccessExpressionSyntax>())
+                                        .SelectMany(_ => _.DescendantNodes<MemberAccessExpressionSyntax>())
                                         .Any(_ => _.Expression is IdentifierNameSyntax e && e.GetName() == mockName);
                         }
 

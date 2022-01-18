@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     break;
                 }
 
-                case LocalDeclarationStatementSyntax declaration when declaration.DescendantNodes().OfType<InitializerExpressionSyntax>().Any():
+                case LocalDeclarationStatementSyntax declaration when declaration.DescendantNodes<InitializerExpressionSyntax>().Any():
                 {
                     // remove trivia from declaration and add new item
                     var newDeclaration = declaration.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker)

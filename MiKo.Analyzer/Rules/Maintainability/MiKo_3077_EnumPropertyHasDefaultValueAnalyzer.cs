@@ -92,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         continue;
                     }
 
-                    foreach (var node in syntaxNode.DescendantNodes().Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression)).Cast<AssignmentExpressionSyntax>())
+                    foreach (var node in syntaxNode.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression))
                     {
                         if (node.Left is IdentifierNameSyntax i)
                         {
@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (backingField != null)
                     {
                         // here we have to inspect if we have a default value already set on the field
-                        return backingField.GetSyntax().DescendantNodes().OfType<EqualsValueClauseSyntax>().None();
+                        return backingField.GetSyntax().DescendantNodes<EqualsValueClauseSyntax>().None();
                     }
 
                     // we found no assignment, so report for that specific ctor (as it seems like the object can be created in a way that bypasses the default value assignment)

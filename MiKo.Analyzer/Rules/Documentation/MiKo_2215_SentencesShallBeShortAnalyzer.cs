@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            var elements = comment.DescendantNodes().OfType<XmlElementSyntax>().ToList();
+            var elements = comment.DescendantNodes<XmlElementSyntax>().ToList();
 
             var hasIssue = Analyze(elements, Constants.XmlTag.Summary)
                         || Analyze(elements, Constants.XmlTag.Remarks)
