@@ -30,8 +30,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsStatic || symbol.IsSealed
-                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                    : new[] { Issue(symbol) };
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            if (symbol.IsStatic || symbol.IsSealed)
+            {
+                // nothing to report
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            if (symbol.DeclaredAccessibility == Accessibility.Private)
+            {
+                // find other symbols that inherit from this one
+                var privateClasses = symbol.ContainingType.GetMembers().OfType<INamedTypeSymbol>().Where(_ => _.TypeKind == TypeKind.Class).ToList();
+                privateClasses.Remove(symbol);
+
+                foreach (var otherClass in privateClasses)
+                {
+                    if (otherClass.InheritsFrom(symbol.FullyQualifiedName()))
+                    {
+                        // we found a private base class, so nothing to report
+                        return Enumerable.Empty<Diagnostic>();
+                    }
+                }
+            }
+
+            return new[] { Issue(symbol) };
+        }
     }
 }

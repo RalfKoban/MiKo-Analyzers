@@ -58,16 +58,73 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_unsealed_non_static_class_with_accessibility_([Values("internal", "private")] string accessibility) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_sealed_private_class_that_inherits_from_unsealed_private_class() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
 {
-    " + accessibility + @" class TestMe
+    public class TestMe
+    {
+        private class Unsealed
+        {
+        }
+
+        private sealed class Sealed : Unsealed
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_unsealed_non_static_internal_class() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    internal class TestMe
     {
     }
 }
 ");
+
+        [Test]
+        public void An_issue_is_reported_for_unsealed_private_class_that_is_the_only_private_class() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private class Unsealed
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_unsealed_private_class_that_inherits_from_unsealed_private_class()
+        {
+            const string Code = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private class Unsealed
+        {
+        }
+
+        private class Sealed : Unsealed
+        {
+        }
+    }
+}
+";
+            An_issue_is_reported_for(Code, 1);
+        }
 
         protected override string GetDiagnosticId() => MiKo_3075_NonPublicClassesShouldPreventInheritanceAnalyzer.Id;
 
