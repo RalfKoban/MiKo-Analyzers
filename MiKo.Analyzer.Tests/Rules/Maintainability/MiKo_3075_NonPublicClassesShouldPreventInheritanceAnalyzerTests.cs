@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -58,7 +59,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_sealed_private_class_that_inherits_from_unsealed_private_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_sealed_private_class_that_inherits_from_private_class() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -104,7 +105,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_unsealed_private_class_that_inherits_from_unsealed_private_class()
+        public void An_issue_is_reported_for_unsealed_private_class_that_inherits_from_private_class()
         {
             const string Code = @"
 using System;
@@ -126,8 +127,122 @@ namespace Bla
             An_issue_is_reported_for(Code, 1);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_unsealed_private_class_that_becomes_static()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private class Helper
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private static class Helper
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_unsealed_private_class_that_becomes_sealed()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private class Unsealed
+        {
+            public Unsealed() { }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private sealed class Unsealed
+        {
+            public Unsealed() { }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_unsealed_private_class_that_inherits_from_private_class()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private class Unsealed
+        {
+        }
+
+        private class Sealed : Unsealed
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private class Unsealed
+        {
+        }
+
+        private sealed class Sealed : Unsealed
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3075_NonPublicClassesShouldPreventInheritanceAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3075_NonPublicClassesShouldPreventInheritanceAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3075_CodeFixProvider();
     }
 }
