@@ -93,11 +93,17 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
-        public static void Titles_should_end_with_dot_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
+        public static void Titles_should_not_end_with_dot_([ValueSource(nameof(AllAnalyzers))] Analyzer analyzer)
         {
             var key = analyzer.DiagnosticId + "_Title";
 
-            Assert.That(ResourceManager.GetString(key), Does.EndWith("."), $"'{key}' is incorrect.{Environment.NewLine}");
+            var title = ResourceManager.GetString(key);
+
+            Assert.Multiple(() =>
+                                {
+                                    Assert.That(title, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
+                                    Assert.That(title, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
+                                });
         }
 
         [Test]
@@ -113,7 +119,13 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var key = analyzer.DiagnosticId + "_MessageFormat";
 
-            Assert.That(ResourceManager.GetString(key), Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' is incorrect.{Environment.NewLine}");
+            var message = ResourceManager.GetString(key);
+
+            Assert.Multiple(() =>
+                                {
+                                    Assert.That(message, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
+                                    Assert.That(message, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
+                                });
         }
 
         [Test]
@@ -121,7 +133,13 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var key = analyzer.DiagnosticId + "_CodeFixTitle";
 
-            Assert.That(ResourceManager.GetString(key), Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' is incorrect.{Environment.NewLine}");
+            var codefixTitle = ResourceManager.GetString(key);
+
+            Assert.Multiple(() =>
+                                {
+                                    Assert.That(codefixTitle, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
+                                    Assert.That(codefixTitle, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
+                                });
         }
 
         [Test, Combinatorial, Ignore("Just to check from time to time whether the texts are acceptable or need to be rephrased.")]
@@ -214,12 +232,12 @@ namespace MiKoSolutions.Analyzers.Rules
             var parts = string.Format(expectedTitle, '|').Split('|');
             if (parts.Length <= 1)
             {
-                Assert.That(codeFixTitle, Is.EqualTo(expectedTitle));
+                Assert.That(codeFixTitle, Is.EqualTo(expectedTitle), "No codefix title found at all");
             }
             else
             {
                 Assert.That(codeFixTitle, Is.Not.EqualTo(expectedTitle), "Missing phrase");
-                Assert.That(codeFixTitle, Does.StartWith(parts[0]).And.EndWith(parts[1]));
+                Assert.That(codeFixTitle, Does.StartWith(parts[0]).And.EndWith(parts[1]), "Codefix title missing");
             }
 
             static string CreateResourceKey(CodeFixProvider codeFixProvider)
