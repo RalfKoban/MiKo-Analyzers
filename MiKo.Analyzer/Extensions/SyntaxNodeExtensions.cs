@@ -260,6 +260,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
 
+        internal static string GetName(this LocalFunctionStatementSyntax value) => value?.Identifier.ValueText;
+
         internal static string GetName(this MemberAccessExpressionSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();

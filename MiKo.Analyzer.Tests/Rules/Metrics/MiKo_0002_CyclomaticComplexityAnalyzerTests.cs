@@ -59,6 +59,20 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Local_function_with_too_complex_term_is_not_reported() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void LocalDoSomething()
+        {
+             if (false) return;
+        }
+    }
+}
+");
+
         [Test, Ignore("Currently not testable")]
         public void Method_with_switch_expression_arms_is_reported() => An_issue_is_reported_for(@"
 public enum LifeStage

@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -17,10 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol)
         {
-            var cc = Counter.CountCyclomaticComplexity(body);
-            TryCreateDiagnostic(owningSymbol, cc, MaxCyclomaticComplexity, out var diagnostic);
+            var cc = Counter.CountCyclomaticComplexity(body, _ => _.IsKind(SyntaxKind.LocalFunctionStatement) is false);
 
-            return diagnostic;
+            return cc > MaxCyclomaticComplexity
+                    ? Issue(owningSymbol, cc, MaxCyclomaticComplexity)
+                    : null;
         }
     }
 }

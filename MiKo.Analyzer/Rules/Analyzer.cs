@@ -72,6 +72,29 @@ namespace MiKoSolutions.Analyzers.Rules
                                                        });
         }
 
+        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, IEnumerable<Diagnostic> issues)
+        {
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                // seems that we should cancel and not report further issues
+                return;
+            }
+
+            foreach (var issue in issues)
+            {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    // seems that we should cancel and not report further issues
+                    return;
+                }
+
+                if (issue != null)
+                {
+                    context.ReportDiagnostic(issue);
+                }
+            }
+        }
+
         protected static void ReportDiagnostics(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             if (context.CancellationToken.IsCancellationRequested)
@@ -117,6 +140,8 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
             }
         }
+
+        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
 
         protected static void ReportDiagnostics(SymbolAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
 

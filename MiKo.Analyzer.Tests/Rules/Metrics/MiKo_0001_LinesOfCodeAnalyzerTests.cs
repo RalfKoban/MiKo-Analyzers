@@ -83,6 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_long_switch_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public void Method()
@@ -99,6 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_long_try_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public void Method()
@@ -115,6 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_long_catch_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public void Method()
@@ -131,6 +134,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_long_catch_filter_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public void Method()
@@ -147,6 +151,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_long_finally_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public void Method()
@@ -163,6 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_too_long_returning_ObjectInitializer_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public DTO Create()
@@ -180,6 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_exaclty_matching_ObjectInitializer_statement_as_return_statement_is_not_reported() => No_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public DTO Create()
@@ -196,6 +203,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_long_ObjectInitializer_statement_is_reported() => An_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public DTO Create()
@@ -213,6 +221,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 
         [Test]
         public void Method_with_exaclty_matching_ObjectInitializer_statement_is_not_reported() => No_issue_is_reported_for(@"
+
     public class TypeWithMethod
     {
         public DTO Create()
@@ -225,6 +234,28 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         }
     }
 }
+");
+
+        [Test]
+        public void LocalFunction_with_long_if_statement_is_not_reported() => No_issue_is_reported_for(@"
+
+    public class TypeWithMethod
+    {
+        public void Method()
+        {
+            void LocalFunction()
+            {
+                if (true)
+                {
+                    var x = 0;
+                    if (x == 0)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+    }
 ");
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_0001_LinesOfCodeAnalyzer { MaxLinesOfCode = 3 };

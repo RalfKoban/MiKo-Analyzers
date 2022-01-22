@@ -14,20 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected abstract Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol);
 
-        protected bool TryCreateDiagnostic(ISymbol symbol, int metric, int limit, out Diagnostic result)
-        {
-            result = metric > limit ? Issue(symbol, metric, limit) : null;
-
-            return result != null;
-        }
-
         private static BlockSyntax GetBody(CodeBlockAnalysisContext context)
         {
             switch (context.CodeBlock)
             {
-                case MethodDeclarationSyntax s: return s.Body;
-                case ConstructorDeclarationSyntax s: return s.Body;
                 case AccessorDeclarationSyntax s: return s.Body;
+                case ConstructorDeclarationSyntax s: return s.Body;
+                case LocalFunctionStatementSyntax l: return l.Body;
+                case MethodDeclarationSyntax s: return s.Body;
                 default: return null;
             }
         }
@@ -40,11 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 return;
             }
 
-            var diagnostic = AnalyzeBody(body, context.OwningSymbol);
-            if (diagnostic != null)
-            {
-                context.ReportDiagnostic(diagnostic);
-            }
+            ReportDiagnostics(context, AnalyzeBody(body, context.OwningSymbol));
         }
     }
 }

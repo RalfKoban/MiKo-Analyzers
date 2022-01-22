@@ -153,7 +153,36 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Too many parameters: {1,4} (allowed are max. {2})</value>
   </data>
   <data name="MiKo_0004_Title" xml:space="preserve">
-    <value>Methods has too many parameters.</value>
+    <value>Method has too many parameters.</value>
+  </data>
+  <data name="MiKo_0005_Description" xml:space="preserve">
+    <value>Local functions should be short to ease reading and maintenance (SRP, SLoA).</value>
+  </data>
+  <data name="MiKo_0005_MessageFormat" xml:space="preserve">
+    <value>Too many LoC: {1,4} (allowed are max. {2})</value>
+  </data>
+  <data name="MiKo_0005_Title" xml:space="preserve">
+    <value>Local function is too big.</value>
+  </data>
+  <data name="MiKo_0006_Description" xml:space="preserve">
+    <value>Local functions should be simple to ease maintenance (KISS).
+Following code constructs increase the Cyclomatic Complexity (CC) by +1:
+    if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | catch when | ternary operator ?: | ?? | ?.</value>
+  </data>
+  <data name="MiKo_0006_MessageFormat" xml:space="preserve">
+    <value>Too high CC: {1,4} (allowed are max. {2})</value>
+  </data>
+  <data name="MiKo_0006_Title" xml:space="preserve">
+    <value>Local function is too complex.</value>
+  </data>
+  <data name="MiKo_0007_Description" xml:space="preserve">
+    <value>To follow the SRP, local functions should have as few parameters as possible.</value>
+  </data>
+  <data name="MiKo_0007_MessageFormat" xml:space="preserve">
+    <value>Too many parameters: {1,4} (allowed are max. {2})</value>
+  </data>
+  <data name="MiKo_0007_Title" xml:space="preserve">
+    <value>Local function has too many parameters.</value>
   </data>
   <data name="MiKo_1000_CodeFixTitle" xml:space="preserve">
     <value>Append suffix 'EventArgs'</value>

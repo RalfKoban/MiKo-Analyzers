@@ -162,11 +162,94 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods has too many parameters..
+        ///   Looks up a localized string similar to Method has too many parameters..
         /// </summary>
         public static string MiKo_0004_Title {
             get {
                 return ResourceManager.GetString("MiKo_0004_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local functions should be short to ease reading and maintenance (SRP, SLoA)..
+        /// </summary>
+        public static string MiKo_0005_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0005_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many LoC: {1,4} (allowed are max. {2}).
+        /// </summary>
+        public static string MiKo_0005_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0005_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local function is too big..
+        /// </summary>
+        public static string MiKo_0005_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local functions should be simple to ease maintenance (KISS).
+        ///Following code constructs increase the Cyclomatic Complexity (CC) by +1:
+        ///    if | while | for | foreach | case | continue | goto | &amp;&amp; | || | catch | catch when | ternary operator ?: | ?? | ?..
+        /// </summary>
+        public static string MiKo_0006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too high CC: {1,4} (allowed are max. {2}).
+        /// </summary>
+        public static string MiKo_0006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local function is too complex..
+        /// </summary>
+        public static string MiKo_0006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To follow the SRP, local functions should have as few parameters as possible..
+        /// </summary>
+        public static string MiKo_0007_Description {
+            get {
+                return ResourceManager.GetString("MiKo_0007_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many parameters: {1,4} (allowed are max. {2}).
+        /// </summary>
+        public static string MiKo_0007_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_0007_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local function has too many parameters..
+        /// </summary>
+        public static string MiKo_0007_Title {
+            get {
+                return ResourceManager.GetString("MiKo_0007_Title", resourceCulture);
             }
         }
         

@@ -745,8 +745,11 @@ namespace MiKoSolutions.Analyzers
         {
             internal static readonly IEnumerable<string> GeneratedAttributeNames = new HashSet<string>
                                                                                        {
+                                                                                           "CompilerGenerated",
                                                                                            "CompilerGeneratedAttribute",
+                                                                                           "DebuggerNonUserCode",
                                                                                            "DebuggerNonUserCodeAttribute",
+                                                                                           "GeneratedCode",
                                                                                            "GeneratedCodeAttribute",
                                                                                        };
 

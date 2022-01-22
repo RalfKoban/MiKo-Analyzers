@@ -11,7 +11,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 
 
 ## Available Rules
-The following tables list all the 317 rules that are currently provided by the analyzer.
+The following tables list all the 320 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -19,7 +19,10 @@ The following tables list all the 317 rules that are currently provided by the a
 |MiKo_0001|Method is too big.|&#x2713;|\-|
 |MiKo_0002|Method is too complex.|&#x2713;|\-|
 |MiKo_0003|Type is too big.|&#x2713;|\-|
-|MiKo_0004|Methods has too many parameters.|&#x2713;|\-|
+|MiKo_0004|Method has too many parameters.|&#x2713;|\-|
+|MiKo_0005|Local function is too big.|&#x2713;|\-|
+|MiKo_0006|Local function is too complex.|&#x2713;|\-|
+|MiKo_0007|Local function has too many parameters.|&#x2713;|\-|
 
 ### Naming
 |ID|Title|Enabled by default|CodeFix available|

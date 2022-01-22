@@ -26,33 +26,37 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             {
                 case TypeKind.Class:
                 case TypeKind.Struct:
-                {
-                    // ignore test classes
-                    if (symbol.IsTestClass())
                     {
-                        return Enumerable.Empty<Diagnostic>();
-                    }
+                        if (symbol.IsGenerated())
+                        {
+                            yield break;
+                        }
 
-                    if (symbol.IsGenerated())
-                    {
-                        return Enumerable.Empty<Diagnostic>();
-                    }
+                        // ignore test classes
+                        if (symbol.IsTestClass())
+                        {
+                            yield break;
+                        }
 
-                    var loc = symbol.GetMethods()
+                        var loc = symbol.GetMethods()
                                     .Select(_ => _.GetSyntax())
-                                    .SelectMany(SyntaxNodeCollector.Collect<BlockSyntax>)
-                                    .Sum(Counter.CountLinesOfCode);
+                                    .SelectMany(_ => SyntaxNodeCollector.Collect<BlockSyntax>(_))
+                                    .Sum(_ => Counter.CountLinesOfCode(_));
 
-                    return TryCreateDiagnostic(symbol, loc, MaxLinesOfCode, out var diagnostic)
-                               ? new[] { diagnostic }
-                               : Enumerable.Empty<Diagnostic>();
-                }
+                        if (loc > MaxLinesOfCode)
+                        {
+                            yield return Issue(symbol, loc, MaxLinesOfCode);
+                        }
+
+                        yield break;
+                    }
 
                 // ignore interfaces
                 case TypeKind.Interface:
-                    return Enumerable.Empty<Diagnostic>();
+                    yield break;
+
                 default:
-                    return Enumerable.Empty<Diagnostic>();
+                    yield break;
             }
         }
 
