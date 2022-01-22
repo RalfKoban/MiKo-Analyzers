@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected DiagnosticDescriptor Rule { get; }
 
-        protected SymbolKind SymbolKind { get; }
+        protected SymbolKind SymbolKind { get; } = SymbolKind.Alias;
 
         protected virtual bool IsEnabledByDefault => true;
 
@@ -57,22 +57,20 @@ namespace MiKoSolutions.Analyzers.Rules
                 context.EnableConcurrentExecution();
             }
 
-            context.RegisterCompilationStartAction(compilationContext =>
+            context.RegisterCompilationStartAction(_ =>
                                                        {
                                                            if (IsUnitTestAnalyzer)
                                                            {
-                                                               if (ReferencesTestAssemblies(compilationContext.Compilation) is false)
+                                                               if (ReferencesTestAssemblies(_.Compilation) is false)
                                                                {
                                                                    // do not run analyzer if there are no tests contained
                                                                    return;
                                                                }
                                                            }
 
-                                                           InitializeCore(compilationContext);
+                                                           InitializeCore(_);
                                                        });
         }
-
-        protected static void ReportDiagnostics(SymbolAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
 
         protected static void ReportDiagnostics(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
@@ -97,8 +95,6 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
-
         protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             if (context.CancellationToken.IsCancellationRequested)
@@ -121,6 +117,10 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
             }
         }
+
+        protected static void ReportDiagnostics(SymbolAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
+
+        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
 
         protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
 
