@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var method = symbol.GetEnclosingMethod();
 
-            var applicableParameters = method.Parameters.Where(_ => _.Type.IsEventArgs()).ToList();
+            var applicableParameters = method.Parameters.Where(_ => IsApplicable(_.Type)).ToList();
             if (applicableParameters.Count == 1)
             {
                 return method.Name == nameof(Equals) ? "other" : "e";
@@ -70,44 +70,33 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var parameters = GetParameters(symbol);
-            switch (parameters.Count)
+
+            var count = parameters.Count;
+
+            if (count > 0)
             {
-                case 0: return Enumerable.Empty<Diagnostic>();
-                case 1:
+                var i = 0;
+
+                foreach (var parameter in parameters)
+                {
+                    var expected = count == 1
+                                       ? (symbol.Name == nameof(Equals) ? "other" : "e")
+                                       : "e" + i;
+                    i++;
+
+                    if (parameter.Name != expected)
                     {
-                        var expected = symbol.Name != nameof(Equals) ? "e" : "other";
-
-                        var parameter = parameters[0];
-
-                        return parameter.Name != expected
-                                   ? new[] { Issue(parameter, expected) }
-                                   : Enumerable.Empty<Diagnostic>();
+                        yield return Issue(parameter, expected);
                     }
-
-                default:
-                    {
-                        var i = 0;
-                        var diagnostics = new List<Diagnostic>(parameters.Count);
-                        foreach (var parameter in parameters)
-                        {
-                            var expected = "e" + i;
-
-                            if (parameter.Name != expected)
-                            {
-                                diagnostics.Add(Issue(parameter, expected));
-                            }
-
-                            i++;
-                        }
-
-                        return diagnostics;
-                    }
+                }
             }
         }
 
+        private static bool IsApplicable(ITypeSymbol type) => type.IsEventArgs() || type.IsDependencyPropertyChangedEventArgs();
+
         private static List<IParameterSymbol> GetParameters(IMethodSymbol method)
         {
-            var parameters = method.Parameters.Where(_ => _.Type.IsEventArgs() || _.Type.IsDependencyPropertyChangedEventArgs()).ToList();
+            var parameters = method.Parameters.Where(_ => IsApplicable(_.Type)).ToList();
 
             return parameters;
         }
