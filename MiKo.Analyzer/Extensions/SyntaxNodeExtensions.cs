@@ -334,6 +334,13 @@ namespace MiKoSolutions.Analyzers
             return symbolInfo.Symbol;
         }
 
+        internal static IMethodSymbol GetSymbol(this LocalFunctionStatementSyntax value, SemanticModel semanticModel)
+        {
+            var symbol = semanticModel.GetDeclaredSymbol(value);
+
+            return symbol as IMethodSymbol;
+        }
+
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)
         {
             var type = value.Expression.GetTypeSymbol(semanticModel);

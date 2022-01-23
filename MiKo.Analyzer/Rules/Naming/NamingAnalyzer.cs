@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                                : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                              ? AnalyzeName(symbol, compilation)
+                                                                                                                              ? AnalyzeName(symbol, compilation).Concat(AnalyzeLocalFunctions(symbol, compilation))
                                                                                                                               : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
@@ -63,7 +63,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected virtual bool ShallAnalyze(ITypeSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol)
+        {
+            if (symbol.IsOverride)
+            {
+                return false;
+            }
+
+            switch (symbol.MethodKind)
+            {
+                case MethodKind.Ordinary:
+                    return symbol.IsInterfaceImplementation() is false;
+
+                case MethodKind.LocalFunction:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
@@ -257,6 +275,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
+        {
+            var localFunctions = symbol.GetLocalFunctions().ToList();
+            if (localFunctions.Count > 0)
+            {
+                var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
+
+                foreach (var localFunction in localFunctions.Select(_ => _.GetSymbol(semanticModel)))
+                {
+                    foreach (var diagnostic in AnalyzeName(localFunction, compilation))
+                    {
+                        yield return diagnostic;
+                    }
+                }
             }
         }
     }
