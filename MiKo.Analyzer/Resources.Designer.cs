@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method is too big..
+        ///   Looks up a localized string similar to Method is too big.
         /// </summary>
         public static string MiKo_0001_Title {
             get {
@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method is too complex..
+        ///   Looks up a localized string similar to Method is too complex.
         /// </summary>
         public static string MiKo_0002_Title {
             get {
@@ -135,7 +135,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type is too big..
+        ///   Looks up a localized string similar to Type is too big.
         /// </summary>
         public static string MiKo_0003_Title {
             get {
@@ -162,7 +162,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method has too many parameters..
+        ///   Looks up a localized string similar to Method has too many parameters.
         /// </summary>
         public static string MiKo_0004_Title {
             get {
@@ -189,7 +189,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local function is too big..
+        ///   Looks up a localized string similar to Local function is too big.
         /// </summary>
         public static string MiKo_0005_Title {
             get {
@@ -218,7 +218,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local function is too complex..
+        ///   Looks up a localized string similar to Local function is too complex.
         /// </summary>
         public static string MiKo_0006_Title {
             get {
@@ -245,7 +245,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local function has too many parameters..
+        ///   Looks up a localized string similar to Local function has too many parameters.
         /// </summary>
         public static string MiKo_0007_Title {
             get {
@@ -281,7 +281,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; types should be suffixed properly..
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; types should be suffixed properly.
         /// </summary>
         public static string MiKo_1000_Title {
             get {
@@ -326,7 +326,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly..
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly.
         /// </summary>
         public static string MiKo_1001_Title {
             get {
@@ -371,7 +371,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers..
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers.
         /// </summary>
         public static string MiKo_1002_Title {
             get {
@@ -416,7 +416,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event handling method name does not follow the .NET Framework Best Practices..
+        ///   Looks up a localized string similar to Event handling method name does not follow the .NET Framework Best Practices.
         /// </summary>
         public static string MiKo_1003_Title {
             get {
@@ -452,7 +452,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events should not contain term &apos;Event&apos; in their names..
+        ///   Looks up a localized string similar to Events should not contain term &apos;Event&apos; in their names.
         /// </summary>
         public static string MiKo_1004_Title {
             get {
@@ -488,7 +488,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; variables should be named properly..
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; variables should be named properly.
         /// </summary>
         public static string MiKo_1005_Title {
             get {
@@ -516,7 +516,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events shall use &apos;EventHandler&lt;T&gt;&apos; with properly named &apos;EventArgs&apos; as &apos;T&apos;..
+        ///   Looks up a localized string similar to Events shall use &apos;EventHandler&lt;T&gt;&apos; with properly named &apos;EventArgs&apos; as &apos;T&apos;.
         /// </summary>
         public static string MiKo_1006_Title {
             get {
@@ -543,7 +543,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events and &apos;EventArgs&apos; types shall be located in the same namespace..
+        ///   Looks up a localized string similar to Events and &apos;EventArgs&apos; types shall be located in the same namespace.
         /// </summary>
         public static string MiKo_1007_Title {
             get {
@@ -579,7 +579,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers..
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.
         /// </summary>
         public static string MiKo_1008_Title {
             get {
@@ -615,7 +615,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventHandler&apos; variables should be named properly..
+        ///   Looks up a localized string similar to &apos;System.EventHandler&apos; variables should be named properly.
         /// </summary>
         public static string MiKo_1009_Title {
             get {
@@ -651,7 +651,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names..
+        ///   Looks up a localized string similar to Methods should not contain &apos;CanExecute&apos; or &apos;Execute&apos; in their names.
         /// </summary>
         public static string MiKo_1010_Title {
             get {
@@ -687,7 +687,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not contain &apos;Do&apos; in their names..
+        ///   Looks up a localized string similar to Methods should not contain &apos;Do&apos; in their names.
         /// </summary>
         public static string MiKo_1011_Title {
             get {
@@ -723,7 +723,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named &apos;Fire&apos;..
+        ///   Looks up a localized string similar to Methods should not be named &apos;Fire&apos;.
         /// </summary>
         public static string MiKo_1012_Title {
             get {
@@ -760,7 +760,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named &apos;Notify&apos; or &apos;OnNotify&apos;..
+        ///   Looks up a localized string similar to Methods should not be named &apos;Notify&apos; or &apos;OnNotify&apos;.
         /// </summary>
         public static string MiKo_1013_Title {
             get {
@@ -796,7 +796,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named &apos;Check&apos;..
+        ///   Looks up a localized string similar to Methods should not be named &apos;Check&apos;.
         /// </summary>
         public static string MiKo_1014_Title {
             get {
@@ -832,7 +832,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named &apos;Init&apos;..
+        ///   Looks up a localized string similar to Methods should not be named &apos;Init&apos;.
         /// </summary>
         public static string MiKo_1015_Title {
             get {
@@ -868,7 +868,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Factory methods should be named &apos;Create&apos;..
+        ///   Looks up a localized string similar to Factory methods should be named &apos;Create&apos;.
         /// </summary>
         public static string MiKo_1016_Title {
             get {
@@ -904,7 +904,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;..
+        ///   Looks up a localized string similar to Methods should not be prefixed with &apos;Get&apos; or &apos;Set&apos; if followed by &apos;Is&apos;, &apos;Can&apos; or &apos;Has&apos;.
         /// </summary>
         public static string MiKo_1017_Title {
             get {
@@ -940,7 +940,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be suffixed with noun of a verb..
+        ///   Looks up a localized string similar to Methods should not be suffixed with noun of a verb.
         /// </summary>
         public static string MiKo_1018_Title {
             get {
@@ -977,7 +977,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Clear&apos; and &apos;Remove&apos; methods should be named based on their number of parameters..
+        ///   Looks up a localized string similar to &apos;Clear&apos; and &apos;Remove&apos; methods should be named based on their number of parameters.
         /// </summary>
         public static string MiKo_1019_Title {
             get {
@@ -1004,7 +1004,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type names should be limited in length..
+        ///   Looks up a localized string similar to Type names should be limited in length.
         /// </summary>
         public static string MiKo_1020_Title {
             get {
@@ -1031,7 +1031,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method names should be limited in length..
+        ///   Looks up a localized string similar to Method names should be limited in length.
         /// </summary>
         public static string MiKo_1021_Title {
             get {
@@ -1058,7 +1058,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names should be limited in length..
+        ///   Looks up a localized string similar to Parameter names should be limited in length.
         /// </summary>
         public static string MiKo_1022_Title {
             get {
@@ -1085,7 +1085,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field names should be limited in length..
+        ///   Looks up a localized string similar to Field names should be limited in length.
         /// </summary>
         public static string MiKo_1023_Title {
             get {
@@ -1112,7 +1112,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names should be limited in length..
+        ///   Looks up a localized string similar to Property names should be limited in length.
         /// </summary>
         public static string MiKo_1024_Title {
             get {
@@ -1139,7 +1139,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event names should be limited in length..
+        ///   Looks up a localized string similar to Event names should be limited in length.
         /// </summary>
         public static string MiKo_1025_Title {
             get {
@@ -1166,7 +1166,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable names should be limited in length..
+        ///   Looks up a localized string similar to Variable names should be limited in length.
         /// </summary>
         public static string MiKo_1026_Title {
             get {
@@ -1193,7 +1193,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable names in loops should be limited in length..
+        ///   Looks up a localized string similar to Variable names in loops should be limited in length.
         /// </summary>
         public static string MiKo_1027_Title {
             get {
@@ -1229,7 +1229,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types should not have an &apos;Abstract&apos; or &apos;Base&apos; marker to indicate that they are base types..
+        ///   Looks up a localized string similar to Types should not have an &apos;Abstract&apos; or &apos;Base&apos; marker to indicate that they are base types.
         /// </summary>
         public static string MiKo_1030_Title {
             get {
@@ -1265,7 +1265,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entity types should not use a &apos;Model&apos; suffix..
+        ///   Looks up a localized string similar to Entity types should not use a &apos;Model&apos; suffix.
         /// </summary>
         public static string MiKo_1031_Title {
             get {
@@ -1301,7 +1301,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods dealing with entities should not use a &apos;Model&apos; marker..
+        ///   Looks up a localized string similar to Methods dealing with entities should not use a &apos;Model&apos; as marker.
         /// </summary>
         public static string MiKo_1032_Title {
             get {
@@ -1337,7 +1337,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters representing entities should not use a &apos;Model&apos; suffix..
+        ///   Looks up a localized string similar to Parameters representing entities should not use a &apos;Model&apos; suffix.
         /// </summary>
         public static string MiKo_1033_Title {
             get {
@@ -1373,7 +1373,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields representing entities should not use a &apos;Model&apos; suffix..
+        ///   Looks up a localized string similar to Fields representing entities should not use a &apos;Model&apos; suffix.
         /// </summary>
         public static string MiKo_1034_Title {
             get {
@@ -1409,7 +1409,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties dealing with entities should not use a &apos;Model&apos; marker..
+        ///   Looks up a localized string similar to Properties dealing with entities should not use a &apos;Model&apos; marker.
         /// </summary>
         public static string MiKo_1035_Title {
             get {
@@ -1445,7 +1445,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events dealing with entities should not use a &apos;Model&apos; marker..
+        ///   Looks up a localized string similar to Events dealing with entities should not use a &apos;Model&apos; marker.
         /// </summary>
         public static string MiKo_1036_Title {
             get {
@@ -1481,7 +1481,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Enum&apos;..
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Enum&apos;.
         /// </summary>
         public static string MiKo_1037_Title {
             get {
@@ -1517,7 +1517,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes that contain extension methods should end with same suffix..
+        ///   Looks up a localized string similar to Classes that contain extension methods should end with same suffix.
         /// </summary>
         public static string MiKo_1038_Title {
             get {
@@ -1553,7 +1553,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;this&apos; parameter of extension methods should have a default name..
+        ///   Looks up a localized string similar to The &apos;this&apos; parameter of extension methods should have a default name.
         /// </summary>
         public static string MiKo_1039_Title {
             get {
@@ -1580,7 +1580,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should not be suffixed with implementation details..
+        ///   Looks up a localized string similar to Parameters should not be suffixed with implementation details.
         /// </summary>
         public static string MiKo_1040_Title {
             get {
@@ -1607,7 +1607,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields should not be suffixed with implementation details..
+        ///   Looks up a localized string similar to Fields should not be suffixed with implementation details.
         /// </summary>
         public static string MiKo_1041_Title {
             get {
@@ -1643,7 +1643,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;CancellationToken&apos; parameters should have specific name..
+        ///   Looks up a localized string similar to &apos;CancellationToken&apos; parameters should have specific name.
         /// </summary>
         public static string MiKo_1042_Title {
             get {
@@ -1679,7 +1679,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;CancellationToken&apos; variables should have specific name..
+        ///   Looks up a localized string similar to &apos;CancellationToken&apos; variables should have specific name.
         /// </summary>
         public static string MiKo_1043_Title {
             get {
@@ -1715,7 +1715,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Commands should be suffixed with &apos;Command&apos;..
+        ///   Looks up a localized string similar to Commands should be suffixed with &apos;Command&apos;.
         /// </summary>
         public static string MiKo_1044_Title {
             get {
@@ -1751,7 +1751,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that are invoked by commands should not be suffixed with &apos;Command&apos;..
+        ///   Looks up a localized string similar to Methods that are invoked by commands should not be suffixed with &apos;Command&apos;.
         /// </summary>
         public static string MiKo_1045_Title {
             get {
@@ -1796,7 +1796,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP)..
+        ///   Looks up a localized string similar to Asynchronous methods should follow the Task-based Asynchronous Pattern (TAP).
         /// </summary>
         public static string MiKo_1046_Title {
             get {
@@ -1841,7 +1841,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous..
+        ///   Looks up a localized string similar to Methods not following the Task-based Asynchronous Pattern (TAP) should not lie about being asynchronous.
         /// </summary>
         public static string MiKo_1047_Title {
             get {
@@ -1877,7 +1877,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the names of classes that are value converters should end with the same suffix..
+        ///   Looks up a localized string similar to To ease maintenance, the names of classes that are value converters should end with the same suffix.
         /// </summary>
         public static string MiKo_1048_Title {
             get {
@@ -1913,7 +1913,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use requirement terms such as &apos;Shall&apos;, &apos;Should&apos;, &apos;Must&apos; or &apos;Need&apos; for names..
+        ///   Looks up a localized string similar to Do not use requirement terms such as &apos;Shall&apos;, &apos;Should&apos;, &apos;Must&apos; or &apos;Need&apos; for names.
         /// </summary>
         public static string MiKo_1049_Title {
             get {
@@ -1950,7 +1950,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Return values should have descriptive names..
+        ///   Looks up a localized string similar to Return values should have descriptive names.
         /// </summary>
         public static string MiKo_1050_Title {
             get {
@@ -1986,7 +1986,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix parameters with delegate types..
+        ///   Looks up a localized string similar to Do not suffix parameters with delegate types.
         /// </summary>
         public static string MiKo_1051_Title {
             get {
@@ -2022,7 +2022,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix variables with delegate types..
+        ///   Looks up a localized string similar to Do not suffix variables with delegate types.
         /// </summary>
         public static string MiKo_1052_Title {
             get {
@@ -2058,7 +2058,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix fields with delegate types..
+        ///   Looks up a localized string similar to Do not suffix fields with delegate types.
         /// </summary>
         public static string MiKo_1053_Title {
             get {
@@ -2095,7 +2095,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name types &apos;Helper&apos; or &apos;Utility&apos;..
+        ///   Looks up a localized string similar to Do not name types &apos;Helper&apos; or &apos;Utility&apos;.
         /// </summary>
         public static string MiKo_1054_Title {
             get {
@@ -2140,7 +2140,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dependency properties should be suffixed with &apos;Property&apos; (as in the .NET Framework)..
+        ///   Looks up a localized string similar to Dependency properties should be suffixed with &apos;Property&apos; (as in the .NET Framework).
         /// </summary>
         public static string MiKo_1055_Title {
             get {
@@ -2176,7 +2176,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dependency properties should be prefixed with property names (as in the .NET Framework)..
+        ///   Looks up a localized string similar to Dependency properties should be prefixed with property names (as in the .NET Framework).
         /// </summary>
         public static string MiKo_1056_Title {
             get {
@@ -2221,7 +2221,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dependency property keys should be suffixed with &apos;Key&apos; (as in the .NET Framework)..
+        ///   Looks up a localized string similar to Dependency property keys should be suffixed with &apos;Key&apos; (as in the .NET Framework).
         /// </summary>
         public static string MiKo_1057_Title {
             get {
@@ -2257,7 +2257,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dependency property keys should be prefixed with property names (as in the .NET Framework)..
+        ///   Looks up a localized string similar to Dependency property keys should be prefixed with property names (as in the .NET Framework).
         /// </summary>
         public static string MiKo_1058_Title {
             get {
@@ -2294,7 +2294,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name types &apos;Impl&apos; or &apos;Implementation&apos;..
+        ///   Looks up a localized string similar to Do not name types &apos;Impl&apos; or &apos;Implementation&apos;.
         /// </summary>
         public static string MiKo_1059_Title {
             get {
@@ -2327,7 +2327,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;&lt;Entity&gt;NotFound&apos; instead of &apos;Get&lt;Entity&gt;Failed&apos; or &apos;&lt;Entity&gt;Missing&apos;..
+        ///   Looks up a localized string similar to Use &apos;&lt;Entity&gt;NotFound&apos; instead of &apos;Get&lt;Entity&gt;Failed&apos; or &apos;&lt;Entity&gt;Missing&apos;.
         /// </summary>
         public static string MiKo_1060_Title {
             get {
@@ -2367,7 +2367,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The name of &apos;Try&apos; method&apos;s [out] parameter should be specific..
+        ///   Looks up a localized string similar to The name of &apos;Try&apos; method&apos;s [out] parameter should be specific.
         /// </summary>
         public static string MiKo_1061_Title {
             get {
@@ -2395,7 +2395,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Can/Has/Contains&apos; methods, properties or fields shall consist of only a few words..
+        ///   Looks up a localized string similar to &apos;Can/Has/Contains&apos; methods, properties or fields shall consist of only a few words.
         /// </summary>
         public static string MiKo_1062_Title {
             get {
@@ -2424,7 +2424,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use abbreviations in names..
+        ///   Looks up a localized string similar to Do not use abbreviations in names.
         /// </summary>
         public static string MiKo_1063_Title {
             get {
@@ -2451,7 +2451,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names reflect their meaning and not their type..
+        ///   Looks up a localized string similar to Parameter names reflect their meaning and not their type.
         /// </summary>
         public static string MiKo_1064_Title {
             get {
@@ -2497,7 +2497,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for operator overloads..
+        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for operator overloads.
         /// </summary>
         public static string MiKo_1065_Title {
             get {
@@ -2533,7 +2533,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not contain &apos;Perform&apos; in their names..
+        ///   Looks up a localized string similar to Methods should not contain &apos;Perform&apos; in their names.
         /// </summary>
         public static string MiKo_1067_Title {
             get {
@@ -2561,7 +2561,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workflow methods should be named &apos;CanRun&apos; or &apos;Run&apos;..
+        ///   Looks up a localized string similar to Workflow methods should be named &apos;CanRun&apos; or &apos;Run&apos;.
         /// </summary>
         public static string MiKo_1068_Title {
             get {
@@ -2588,7 +2588,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property names reflect their meaning and not their type..
+        ///   Looks up a localized string similar to Property names reflect their meaning and not their type.
         /// </summary>
         public static string MiKo_1069_Title {
             get {
@@ -2624,7 +2624,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local collection variables shall use plural name..
+        ///   Looks up a localized string similar to Local collection variables shall use plural name.
         /// </summary>
         public static string MiKo_1070_Title {
             get {
@@ -2659,7 +2659,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local boolean variables should be named as statements and not as questions..
+        ///   Looks up a localized string similar to Local boolean variables should be named as statements and not as questions.
         /// </summary>
         public static string MiKo_1071_Title {
             get {
@@ -2694,7 +2694,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Boolean properties or methods should be named as statements and not as questions..
+        ///   Looks up a localized string similar to Boolean properties or methods should be named as statements and not as questions.
         /// </summary>
         public static string MiKo_1072_Title {
             get {
@@ -2729,7 +2729,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Boolean fields should be named as statements and not as questions..
+        ///   Looks up a localized string similar to Boolean fields should be named as statements and not as questions.
         /// </summary>
         public static string MiKo_1073_Title {
             get {
@@ -2756,7 +2756,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Names should contain numbers instead of their spellings..
+        ///   Looks up a localized string similar to Names should contain numbers instead of their spellings.
         /// </summary>
         public static string MiKo_1080_Title {
             get {
@@ -2792,7 +2792,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be suffixed with a number..
+        ///   Looks up a localized string similar to Methods should not be suffixed with a number.
         /// </summary>
         public static string MiKo_1081_Title {
             get {
@@ -2828,7 +2828,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties should not be suffixed with a number if their types have number suffixes..
+        ///   Looks up a localized string similar to Properties should not be suffixed with a number if their types have number suffixes.
         /// </summary>
         public static string MiKo_1082_Title {
             get {
@@ -2864,7 +2864,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fields should not be suffixed with a number if their types have number suffixes..
+        ///   Looks up a localized string similar to Fields should not be suffixed with a number if their types have number suffixes.
         /// </summary>
         public static string MiKo_1083_Title {
             get {
@@ -2900,7 +2900,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variables should not be suffixed with a number if their types have number suffixes..
+        ///   Looks up a localized string similar to Variables should not be suffixed with a number if their types have number suffixes.
         /// </summary>
         public static string MiKo_1084_Title {
             get {
@@ -2936,7 +2936,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should not be suffixed with a number..
+        ///   Looks up a localized string similar to Parameters should not be suffixed with a number.
         /// </summary>
         public static string MiKo_1085_Title {
             get {
@@ -2963,7 +2963,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named using numbers as slang..
+        ///   Looks up a localized string similar to Methods should not be named using numbers as slang.
         /// </summary>
         public static string MiKo_1086_Title {
             get {
@@ -3001,7 +3001,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should not be suffixed with specific types..
+        ///   Looks up a localized string similar to Parameters should not be suffixed with specific types.
         /// </summary>
         public static string MiKo_1090_Title {
             get {
@@ -3039,7 +3039,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variables should not be suffixed with specific types..
+        ///   Looks up a localized string similar to Variables should not be suffixed with specific types.
         /// </summary>
         public static string MiKo_1091_Title {
             get {
@@ -3075,7 +3075,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Ability&apos; Types should not be suffixed with redundant information..
+        ///   Looks up a localized string similar to &apos;Ability&apos; Types should not be suffixed with redundant information.
         /// </summary>
         public static string MiKo_1092_Title {
             get {
@@ -3111,7 +3111,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use the suffix &apos;Object&apos; or &apos;Struct&apos;..
+        ///   Looks up a localized string similar to Do not use the suffix &apos;Object&apos; or &apos;Struct&apos;.
         /// </summary>
         public static string MiKo_1093_Title {
             get {
@@ -3139,7 +3139,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not suffix types with passive namespace names..
+        ///   Looks up a localized string similar to Do not suffix types with passive namespace names.
         /// </summary>
         public static string MiKo_1094_Title {
             get {
@@ -3170,7 +3170,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;Delete&apos; and &apos;Remove&apos; both in names and documentation..
+        ///   Looks up a localized string similar to Do not use &apos;Delete&apos; and &apos;Remove&apos; both in names and documentation.
         /// </summary>
         public static string MiKo_1095_Title {
             get {
@@ -3198,7 +3198,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test classes should start with the name of the type under test..
+        ///   Looks up a localized string similar to Test classes should start with the name of the type under test.
         /// </summary>
         public static string MiKo_1100_Title {
             get {
@@ -3234,7 +3234,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test classes should end with &apos;Tests&apos;..
+        ///   Looks up a localized string similar to Test classes should end with &apos;Tests&apos;.
         /// </summary>
         public static string MiKo_1101_Title {
             get {
@@ -3270,7 +3270,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should not contain &apos;Test&apos; in their names..
+        ///   Looks up a localized string similar to Test methods should not contain &apos;Test&apos; in their names.
         /// </summary>
         public static string MiKo_1102_Title {
             get {
@@ -3306,7 +3306,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test initialization methods should be named &apos;PrepareTest&apos;..
+        ///   Looks up a localized string similar to Test initialization methods should be named &apos;PrepareTest&apos;.
         /// </summary>
         public static string MiKo_1103_Title {
             get {
@@ -3342,7 +3342,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test cleanup methods should be named &apos;CleanupTest&apos;..
+        ///   Looks up a localized string similar to Test cleanup methods should be named &apos;CleanupTest&apos;.
         /// </summary>
         public static string MiKo_1104_Title {
             get {
@@ -3378,7 +3378,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One-time test initialization methods should be named &apos;PrepareTestEnvironment&apos;..
+        ///   Looks up a localized string similar to One-time test initialization methods should be named &apos;PrepareTestEnvironment&apos;.
         /// </summary>
         public static string MiKo_1105_Title {
             get {
@@ -3414,7 +3414,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One-time test cleanup methods should be named &apos;CleanupTestEnvironment&apos;..
+        ///   Looks up a localized string similar to One-time test cleanup methods should be named &apos;CleanupTestEnvironment&apos;.
         /// </summary>
         public static string MiKo_1106_Title {
             get {
@@ -3451,7 +3451,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should not be in Pascal-casing..
+        ///   Looks up a localized string similar to Test methods should not be in Pascal-casing.
         /// </summary>
         public static string MiKo_1107_Title {
             get {
@@ -3488,7 +3488,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos;..
+        ///   Looks up a localized string similar to Do not name variables, parameters, fields and properties &apos;Mock&apos;, &apos;Stub&apos;, &apos;Fake&apos; or &apos;Shim&apos;.
         /// </summary>
         public static string MiKo_1108_Title {
             get {
@@ -3525,7 +3525,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefix testable types with &apos;Testable&apos; instead of using the &apos;Ut&apos; suffix..
+        ///   Looks up a localized string similar to Prefix testable types with &apos;Testable&apos; instead of using the &apos;Ut&apos; suffix.
         /// </summary>
         public static string MiKo_1109_Title {
             get {
@@ -3562,7 +3562,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods with parameters should be suffixed with underscore..
+        ///   Looks up a localized string similar to Test methods with parameters should be suffixed with underscore.
         /// </summary>
         public static string MiKo_1110_Title {
             get {
@@ -3593,7 +3593,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should be named in a fluent way..
+        ///   Looks up a localized string similar to Test methods should be named in a fluent way.
         /// </summary>
         public static string MiKo_1111_Title {
             get {
@@ -3629,7 +3629,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name test data &apos;arbitrary&apos;..
+        ///   Looks up a localized string similar to Do not name test data &apos;arbitrary&apos;.
         /// </summary>
         public static string MiKo_1112_Title {
             get {
@@ -3665,7 +3665,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceptions in catch blocks consistently..
+        ///   Looks up a localized string similar to Name exceptions in catch blocks consistently.
         /// </summary>
         public static string MiKo_1200_Title {
             get {
@@ -3701,7 +3701,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name exceptions as parameters consistently..
+        ///   Looks up a localized string similar to Name exceptions as parameters consistently.
         /// </summary>
         public static string MiKo_1201_Title {
             get {
@@ -3737,7 +3737,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unimportant identifiers in lambda statements should be named &apos;_&apos;..
+        ///   Looks up a localized string similar to Unimportant identifiers in lambda statements should be named &apos;_&apos;.
         /// </summary>
         public static string MiKo_1300_Title {
             get {
@@ -3773,7 +3773,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespace names should be in plural..
+        ///   Looks up a localized string similar to Namespace names should be in plural.
         /// </summary>
         public static string MiKo_1400_Title {
             get {
@@ -3800,7 +3800,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain technical language names..
+        ///   Looks up a localized string similar to Namespaces should not contain technical language names.
         /// </summary>
         public static string MiKo_1401_Title {
             get {
@@ -3828,7 +3828,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not be named after WPF specific design patterns..
+        ///   Looks up a localized string similar to Namespaces should not be named after WPF specific design patterns.
         /// </summary>
         public static string MiKo_1402_Title {
             get {
@@ -3855,7 +3855,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not be named after any of their parent namespaces..
+        ///   Looks up a localized string similar to Namespaces should not be named after any of their parent namespaces.
         /// </summary>
         public static string MiKo_1403_Title {
             get {
@@ -3882,7 +3882,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain unspecific names..
+        ///   Looks up a localized string similar to Namespaces should not contain unspecific names.
         /// </summary>
         public static string MiKo_1404_Title {
             get {
@@ -3911,7 +3911,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespaces should not contain &apos;Lib&apos;..
+        ///   Looks up a localized string similar to Namespaces should not contain &apos;Lib&apos;.
         /// </summary>
         public static string MiKo_1405_Title {
             get {
@@ -3938,7 +3938,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value converters should be placed in &apos;Converters&apos; namespace..
+        ///   Looks up a localized string similar to Value converters should be placed in &apos;Converters&apos; namespace.
         /// </summary>
         public static string MiKo_1406_Title {
             get {
@@ -3965,7 +3965,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test namespaces should not contain &apos;Test&apos;..
+        ///   Looks up a localized string similar to Test namespaces should not contain &apos;Test&apos;.
         /// </summary>
         public static string MiKo_1407_Title {
             get {
@@ -3993,7 +3993,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extension methods should be placed in same namespace as the extended types..
+        ///   Looks up a localized string similar to Extension methods should be placed in same namespace as the extended types.
         /// </summary>
         public static string MiKo_1408_Title {
             get {
@@ -4029,7 +4029,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be valid XML..
+        ///   Looks up a localized string similar to Documentation should be valid XML.
         /// </summary>
         public static string MiKo_2000_Title {
             get {
@@ -4065,7 +4065,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events should be documented properly..
+        ///   Looks up a localized string similar to Events should be documented properly.
         /// </summary>
         public static string MiKo_2001_Title {
             get {
@@ -4101,7 +4101,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs should be documented properly..
+        ///   Looks up a localized string similar to EventArgs should be documented properly.
         /// </summary>
         public static string MiKo_2002_Title {
             get {
@@ -4137,7 +4137,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of event handlers should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of event handlers should have a default starting phrase.
         /// </summary>
         public static string MiKo_2003_Title {
             get {
@@ -4173,7 +4173,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter name does not follow .NET Framework Guidelines for event handlers..
+        ///   Looks up a localized string similar to Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.
         /// </summary>
         public static string MiKo_2004_Title {
             get {
@@ -4200,7 +4200,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Textual references to EventArgs should be documented properly..
+        ///   Looks up a localized string similar to Textual references to EventArgs should be documented properly.
         /// </summary>
         public static string MiKo_2005_Title {
             get {
@@ -4236,7 +4236,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Routed events should be documented as done by the .NET Framework..
+        ///   Looks up a localized string similar to Routed events should be documented as done by the .NET Framework.
         /// </summary>
         public static string MiKo_2006_Title {
             get {
@@ -4272,7 +4272,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sealed classes should document being sealed..
+        ///   Looks up a localized string similar to Sealed classes should document being sealed.
         /// </summary>
         public static string MiKo_2010_Title {
             get {
@@ -4308,7 +4308,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unsealed classes should not lie about sealing..
+        ///   Looks up a localized string similar to Unsealed classes should not lie about sealing.
         /// </summary>
         public static string MiKo_2011_Title {
             get {
@@ -4345,7 +4345,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should describe the type&apos;s responsibility..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should describe the type&apos;s responsibility.
         /// </summary>
         public static string MiKo_2012_Title {
             get {
@@ -4381,7 +4381,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Enums should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Enums should have a default starting phrase.
         /// </summary>
         public static string MiKo_2013_Title {
             get {
@@ -4417,7 +4417,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods should be documented as done by the .NET Framework..
+        ///   Looks up a localized string similar to Dispose methods should be documented as done by the .NET Framework.
         /// </summary>
         public static string MiKo_2014_Title {
             get {
@@ -4453,7 +4453,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &apos;raise&apos; or &apos;throw&apos; instead of &apos;fire&apos;..
+        ///   Looks up a localized string similar to Documentation should use &apos;raise&apos; or &apos;throw&apos; instead of &apos;fire&apos;.
         /// </summary>
         public static string MiKo_2015_Title {
             get {
@@ -4489,7 +4489,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation for asynchronous methods should start with specific phrase..
+        ///   Looks up a localized string similar to Documentation for asynchronous methods should start with specific phrase.
         /// </summary>
         public static string MiKo_2016_Title {
             get {
@@ -4525,7 +4525,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dependency properties should be documented as done by the .NET Framework..
+        ///   Looks up a localized string similar to Dependency properties should be documented as done by the .NET Framework.
         /// </summary>
         public static string MiKo_2017_Title {
             get {
@@ -4561,7 +4561,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use the ambiguous terms &apos;Check&apos; or &apos;Test&apos;..
+        ///   Looks up a localized string similar to Documentation should not use the ambiguous terms &apos;Check&apos; or &apos;Test&apos;.
         /// </summary>
         public static string MiKo_2018_Title {
             get {
@@ -4588,7 +4588,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should start with a third person singular verb (for example &quot;Provides &quot;)..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should start with a third person singular verb (for example &quot;Provides &quot;).
         /// </summary>
         public static string MiKo_2019_Title {
             get {
@@ -4624,7 +4624,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inherited documentation should be used with &lt;inheritdoc /&gt; marker..
+        ///   Looks up a localized string similar to Inherited documentation should be used with &lt;inheritdoc /&gt; marker.
         /// </summary>
         public static string MiKo_2020_Title {
             get {
@@ -4651,7 +4651,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of parameter should have a default starting phrase.
         /// </summary>
         public static string MiKo_2021_Title {
             get {
@@ -4687,7 +4687,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of [out] parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of [out] parameters should have a default starting phrase.
         /// </summary>
         public static string MiKo_2022_Title {
             get {
@@ -4723,7 +4723,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Boolean parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of Boolean parameters should have a default starting phrase.
         /// </summary>
         public static string MiKo_2023_Title {
             get {
@@ -4759,7 +4759,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Enum parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of Enum parameters should have a default starting phrase.
         /// </summary>
         public static string MiKo_2024_Title {
             get {
@@ -4795,7 +4795,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of &apos;CancellationToken&apos; parameters should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of &apos;CancellationToken&apos; parameters should have a default starting phrase.
         /// </summary>
         public static string MiKo_2025_Title {
             get {
@@ -4822,7 +4822,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used parameters should not be documented to be unused..
+        ///   Looks up a localized string similar to Used parameters should not be documented to be unused.
         /// </summary>
         public static string MiKo_2026_Title {
             get {
@@ -4858,7 +4858,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Serialization constructor parameters shall be documented with a specific phrase..
+        ///   Looks up a localized string similar to Serialization constructor parameters shall be documented with a specific phrase.
         /// </summary>
         public static string MiKo_2027_Title {
             get {
@@ -4885,7 +4885,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter should not just contain the name of the parameter..
+        ///   Looks up a localized string similar to Documentation of parameter should not just contain the name of the parameter.
         /// </summary>
         public static string MiKo_2028_Title {
             get {
@@ -4921,7 +4921,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;inheritdoc&gt; documentation should not use a &apos;cref&apos; to itself..
+        ///   Looks up a localized string similar to &lt;inheritdoc&gt; documentation should not use a &apos;cref&apos; to itself.
         /// </summary>
         public static string MiKo_2029_Title {
             get {
@@ -4948,7 +4948,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of return value should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of return value should have a default starting phrase.
         /// </summary>
         public static string MiKo_2030_Title {
             get {
@@ -4984,7 +4984,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Task return value should have a specific (starting) phrase..
+        ///   Looks up a localized string similar to Documentation of Task return value should have a specific (starting) phrase.
         /// </summary>
         public static string MiKo_2031_Title {
             get {
@@ -5020,7 +5020,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Boolean return value should have a specific phrase..
+        ///   Looks up a localized string similar to Documentation of Boolean return value should have a specific phrase.
         /// </summary>
         public static string MiKo_2032_Title {
             get {
@@ -5056,7 +5056,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of String return value should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of String return value should have a default starting phrase.
         /// </summary>
         public static string MiKo_2033_Title {
             get {
@@ -5092,7 +5092,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Enum return value should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of Enum return value should have a default starting phrase.
         /// </summary>
         public static string MiKo_2034_Title {
             get {
@@ -5128,7 +5128,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of collection return value should have a default starting phrase..
+        ///   Looks up a localized string similar to Documentation of collection return value should have a default starting phrase.
         /// </summary>
         public static string MiKo_2035_Title {
             get {
@@ -5192,7 +5192,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of Boolean or Enum property shall describe the default value..
+        ///   Looks up a localized string similar to Documentation of Boolean or Enum property shall describe the default value.
         /// </summary>
         public static string MiKo_2036_Title {
             get {
@@ -5228,7 +5228,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of command properties should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of command properties should have a default starting phrase.
         /// </summary>
         public static string MiKo_2037_Title {
             get {
@@ -5264,7 +5264,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of command should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of command should have a default starting phrase.
         /// </summary>
         public static string MiKo_2038_Title {
             get {
@@ -5300,7 +5300,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of classes that contain extension methods should have a default starting phrase.
         /// </summary>
         public static string MiKo_2039_Title {
             get {
@@ -5336,7 +5336,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;see langword=&quot;...&quot;/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;..
+        ///   Looks up a localized string similar to &lt;see langword=&quot;...&quot;/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;.
         /// </summary>
         public static string MiKo_2040_Title {
             get {
@@ -5381,7 +5381,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain other documentation tags..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain other documentation tags.
         /// </summary>
         public static string MiKo_2041_Title {
             get {
@@ -5426,7 +5426,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; HTML tags..
+        ///   Looks up a localized string similar to Documentation should use &apos;&lt;para/&gt;&apos; XML tags instead of &apos;&lt;br/&gt;&apos; HTML tags.
         /// </summary>
         public static string MiKo_2042_Title {
             get {
@@ -5462,7 +5462,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of custom delegates should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of custom delegates should have a default starting phrase.
         /// </summary>
         public static string MiKo_2043_Title {
             get {
@@ -5498,7 +5498,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation references method parameters correctly..
+        ///   Looks up a localized string similar to Documentation references method parameters correctly.
         /// </summary>
         public static string MiKo_2044_Title {
             get {
@@ -5534,7 +5534,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not reference parameters..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not reference parameters.
         /// </summary>
         public static string MiKo_2045_Title {
             get {
@@ -5561,7 +5561,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should reference type parameters correctly..
+        ///   Looks up a localized string similar to Documentation should reference type parameters correctly.
         /// </summary>
         public static string MiKo_2046_Title {
             get {
@@ -5588,7 +5588,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Attributes should have a default starting phrase.
         /// </summary>
         public static string MiKo_2047_Title {
             get {
@@ -5624,7 +5624,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of value converters should have a default starting phrase.
         /// </summary>
         public static string MiKo_2048_Title {
             get {
@@ -5651,7 +5651,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should be more explicit and not use &apos;will be&apos;..
+        ///   Looks up a localized string similar to Documentation should be more explicit and not use &apos;will be&apos;.
         /// </summary>
         public static string MiKo_2049_Title {
             get {
@@ -5687,7 +5687,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exceptions should be documented following the .NET Framework..
+        ///   Looks up a localized string similar to Exceptions should be documented following the .NET Framework.
         /// </summary>
         public static string MiKo_2050_Title {
             get {
@@ -5723,7 +5723,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thrown Exceptions should be documented as kind of a condition (such as &apos;&lt;paramref name=&quot;xyz&quot;/&gt; is &lt;c&gt;42&lt;/c&gt;&apos;)..
+        ///   Looks up a localized string similar to Thrown Exceptions should be documented as kind of a condition (such as &apos;&lt;paramref name=&quot;xyz&quot;/&gt; is &lt;c&gt;42&lt;/c&gt;&apos;).
         /// </summary>
         public static string MiKo_2051_Title {
             get {
@@ -5761,7 +5761,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented using a default phrase..
+        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented using a default phrase.
         /// </summary>
         public static string MiKo_2052_Title {
             get {
@@ -5788,7 +5788,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented only for reference type parameters..
+        ///   Looks up a localized string similar to Throwing of ArgumentNullException should be documented only for reference type parameters.
         /// </summary>
         public static string MiKo_2053_Title {
             get {
@@ -5825,7 +5825,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentException should be documented using a default starting phrase..
+        ///   Looks up a localized string similar to Throwing of ArgumentException should be documented using a default starting phrase.
         /// </summary>
         public static string MiKo_2054_Title {
             get {
@@ -5862,7 +5862,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase..
+        ///   Looks up a localized string similar to Throwing of ArgumentOutOfRangeException should be documented using a default starting phrase.
         /// </summary>
         public static string MiKo_2055_Title {
             get {
@@ -5898,7 +5898,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throwing of ObjectDisposedException should be documented using a default ending phrase..
+        ///   Looks up a localized string similar to Throwing of ObjectDisposedException should be documented using a default ending phrase.
         /// </summary>
         public static string MiKo_2056_Title {
             get {
@@ -5934,7 +5934,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types that are not disposable shall not throw an ObjectDisposedException..
+        ///   Looks up a localized string similar to Types that are not disposable shall not throw an ObjectDisposedException.
         /// </summary>
         public static string MiKo_2057_Title {
             get {
@@ -5970,7 +5970,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple documentation of same exception should be consolidated into one..
+        ///   Looks up a localized string similar to Multiple documentation of same exception should be consolidated into one.
         /// </summary>
         public static string MiKo_2059_Title {
             get {
@@ -6006,7 +6006,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Factories should be documented in an uniform way..
+        ///   Looks up a localized string similar to Factories should be documented in an uniform way.
         /// </summary>
         public static string MiKo_2060_Title {
             get {
@@ -6043,7 +6043,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not start with &apos;Returns&apos;..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not start with &apos;Returns&apos;.
         /// </summary>
         public static string MiKo_2070_Title {
             get {
@@ -6070,7 +6070,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type.
         /// </summary>
         public static string MiKo_2071_Title {
             get {
@@ -6106,7 +6106,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not start with &apos;Try&apos;..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not start with &apos;Try&apos;.
         /// </summary>
         public static string MiKo_2072_Title {
             get {
@@ -6142,7 +6142,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of &apos;Contains&apos; methods should start with &apos;Determines whether &apos;..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of &apos;Contains&apos; methods should start with &apos;Determines whether &apos;.
         /// </summary>
         public static string MiKo_2073_Title {
             get {
@@ -6178,7 +6178,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter of &apos;Contains&apos; method should have a default ending phrase..
+        ///   Looks up a localized string similar to Documentation of parameter of &apos;Contains&apos; method should have a default ending phrase.
         /// </summary>
         public static string MiKo_2074_Title {
             get {
@@ -6214,7 +6214,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of fields should have a default starting phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of fields should have a default starting phrase.
         /// </summary>
         public static string MiKo_2080_Title {
             get {
@@ -6250,7 +6250,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase.
         /// </summary>
         public static string MiKo_2081_Title {
             get {
@@ -6278,7 +6278,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation.
         /// </summary>
         public static string MiKo_2082_Title {
             get {
@@ -6314,7 +6314,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation for equality operator shall have default phrase..
+        ///   Looks up a localized string similar to Documentation for equality operator shall have default phrase.
         /// </summary>
         public static string MiKo_2090_Title {
             get {
@@ -6350,7 +6350,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation for inequality operator shall have default phrase..
+        ///   Looks up a localized string similar to Documentation for inequality operator shall have default phrase.
         /// </summary>
         public static string MiKo_2091_Title {
             get {
@@ -6386,7 +6386,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;example&gt; documentation should start with descriptive default phrase..
+        ///   Looks up a localized string similar to &lt;example&gt; documentation should start with descriptive default phrase.
         /// </summary>
         public static string MiKo_2100_Title {
             get {
@@ -6422,7 +6422,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;example&gt; documentation should show code example in &lt;code&gt; tags..
+        ///   Looks up a localized string similar to &lt;example&gt; documentation should show code example in &lt;code&gt; tags.
         /// </summary>
         public static string MiKo_2101_Title {
             get {
@@ -6449,7 +6449,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a capitalized letter to start the comment..
+        ///   Looks up a localized string similar to Use a capitalized letter to start the comment.
         /// </summary>
         public static string MiKo_2200_Title {
             get {
@@ -6476,7 +6476,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a capitalized letter to start the sentences in the comment..
+        ///   Looks up a localized string similar to Use a capitalized letter to start the sentences in the comment.
         /// </summary>
         public static string MiKo_2201_Title {
             get {
@@ -6512,7 +6512,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the term &apos;identifier&apos; instead of &apos;id&apos;..
+        ///   Looks up a localized string similar to Documentation should use the term &apos;identifier&apos; instead of &apos;id&apos;.
         /// </summary>
         public static string MiKo_2202_Title {
             get {
@@ -6548,7 +6548,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the term &apos;unique identifier&apos; instead of &apos;guid&apos;..
+        ///   Looks up a localized string similar to Documentation should use the term &apos;unique identifier&apos; instead of &apos;guid&apos;.
         /// </summary>
         public static string MiKo_2203_Title {
             get {
@@ -6594,7 +6594,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &lt;list&gt; for enumerations..
+        ///   Looks up a localized string similar to Documentation should use &lt;list&gt; for enumerations.
         /// </summary>
         public static string MiKo_2204_Title {
             get {
@@ -6622,7 +6622,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use &lt;note&gt; for important information..
+        ///   Looks up a localized string similar to Documentation should use &lt;note&gt; for important information.
         /// </summary>
         public static string MiKo_2205_Title {
             get {
@@ -6649,7 +6649,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use the term &apos;flag&apos;..
+        ///   Looks up a localized string similar to Documentation should not use the term &apos;flag&apos;.
         /// </summary>
         public static string MiKo_2206_Title {
             get {
@@ -6677,7 +6677,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; documentation shall be short..
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation shall be short.
         /// </summary>
         public static string MiKo_2207_Title {
             get {
@@ -6705,7 +6705,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use the term &apos;an instance of&apos;..
+        ///   Looks up a localized string similar to Documentation should not use the term &apos;an instance of&apos;.
         /// </summary>
         public static string MiKo_2208_Title {
             get {
@@ -6741,7 +6741,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use double periods in documentation..
+        ///   Looks up a localized string similar to Do not use double periods in documentation.
         /// </summary>
         public static string MiKo_2209_Title {
             get {
@@ -6777,7 +6777,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the term &apos;information&apos; instead of &apos;info&apos;..
+        ///   Looks up a localized string similar to Documentation should use the term &apos;information&apos; instead of &apos;info&apos;.
         /// </summary>
         public static string MiKo_2210_Title {
             get {
@@ -6817,7 +6817,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum members should not have &lt;remarks&gt; sections..
+        ///   Looks up a localized string similar to Enum members should not have &lt;remarks&gt; sections.
         /// </summary>
         public static string MiKo_2211_Title {
             get {
@@ -6853,7 +6853,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;..
+        ///   Looks up a localized string similar to Documentation should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;.
         /// </summary>
         public static string MiKo_2212_Title {
             get {
@@ -6890,7 +6890,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not use the contradiction &quot;n&apos;t&quot;..
+        ///   Looks up a localized string similar to Documentation should not use the contradiction &quot;n&apos;t&quot;.
         /// </summary>
         public static string MiKo_2213_Title {
             get {
@@ -6928,7 +6928,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should not contain empty lines..
+        ///   Looks up a localized string similar to Documentation should not contain empty lines.
         /// </summary>
         public static string MiKo_2214_Title {
             get {
@@ -6955,7 +6955,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sentences in documentation shall be short..
+        ///   Looks up a localized string similar to Sentences in documentation shall be short.
         /// </summary>
         public static string MiKo_2215_Title {
             get {
@@ -6992,7 +6992,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters..
+        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.
         /// </summary>
         public static string MiKo_2216_Title {
             get {
@@ -7097,7 +7097,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;list&gt; documentation is done properly..
+        ///   Looks up a localized string similar to &lt;list&gt; documentation is done properly.
         /// </summary>
         public static string MiKo_2217_Title {
             get {
@@ -7125,7 +7125,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should explain the &apos;Why&apos; and not the &apos;How&apos;..
+        ///   Looks up a localized string similar to Comments should explain the &apos;Why&apos; and not the &apos;How&apos;.
         /// </summary>
         public static string MiKo_2300_Title {
             get {
@@ -7161,7 +7161,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use obvious comments in AAA-Tests..
+        ///   Looks up a localized string similar to Do not use obvious comments in AAA-Tests.
         /// </summary>
         public static string MiKo_2301_Title {
             get {
@@ -7189,7 +7189,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not keep code that is commented out..
+        ///   Looks up a localized string similar to Do not keep code that is commented out.
         /// </summary>
         public static string MiKo_2302_Title {
             get {
@@ -7227,7 +7227,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not end comments with a period..
+        ///   Looks up a localized string similar to Do not end comments with a period.
         /// </summary>
         public static string MiKo_2303_Title {
             get {
@@ -7255,7 +7255,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not formulate comments as questions..
+        ///   Looks up a localized string similar to Do not formulate comments as questions.
         /// </summary>
         public static string MiKo_2304_Title {
             get {
@@ -7291,7 +7291,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use double periods in comments..
+        ///   Looks up a localized string similar to Do not use double periods in comments.
         /// </summary>
         public static string MiKo_2305_Title {
             get {
@@ -7320,7 +7320,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end comments with a period..
+        ///   Looks up a localized string similar to Do end comments with a period.
         /// </summary>
         public static string MiKo_2306_Title {
             get {
@@ -7356,7 +7356,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;..
+        ///   Looks up a localized string similar to Comments should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;.
         /// </summary>
         public static string MiKo_2307_Title {
             get {
@@ -7393,7 +7393,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not place comment on single line before closing brace but after code..
+        ///   Looks up a localized string similar to Do not place comment on single line before closing brace but after code.
         /// </summary>
         public static string MiKo_2308_Title {
             get {
@@ -7430,7 +7430,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should not use the contradiction &quot;n&apos;t&quot;..
+        ///   Looks up a localized string similar to Comments should not use the contradiction &quot;n&apos;t&quot;.
         /// </summary>
         public static string MiKo_2309_Title {
             get {
@@ -7458,7 +7458,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use empty regions..
+        ///   Looks up a localized string similar to Do not use empty regions.
         /// </summary>
         public static string MiKo_3000_Title {
             get {
@@ -7494,7 +7494,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom delegates should not be used..
+        ///   Looks up a localized string similar to Custom delegates should not be used.
         /// </summary>
         public static string MiKo_3001_Title {
             get {
@@ -7521,7 +7521,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes should not have too many dependencies..
+        ///   Looks up a localized string similar to Classes should not have too many dependencies.
         /// </summary>
         public static string MiKo_3002_Title {
             get {
@@ -7557,7 +7557,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events should follow .NET Framework Guidelines for events..
+        ///   Looks up a localized string similar to Events should follow .NET Framework Guidelines for events.
         /// </summary>
         public static string MiKo_3003_Title {
             get {
@@ -7587,7 +7587,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property setters of EventArgs shall be private..
+        ///   Looks up a localized string similar to Property setters of EventArgs shall be private.
         /// </summary>
         public static string MiKo_3004_Title {
             get {
@@ -7616,7 +7616,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods named &apos;Try&apos; should follow the Trier-Doer-Pattern..
+        ///   Looks up a localized string similar to Methods named &apos;Try&apos; should follow the Trier-Doer-Pattern.
         /// </summary>
         public static string MiKo_3005_Title {
             get {
@@ -7643,7 +7643,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;CancellationToken&apos; parameter should be last method parameter..
+        ///   Looks up a localized string similar to &apos;CancellationToken&apos; parameter should be last method parameter.
         /// </summary>
         public static string MiKo_3006_Title {
             get {
@@ -7670,7 +7670,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use LINQ method and declarative query syntax in same method..
+        ///   Looks up a localized string similar to Do not use LINQ method and declarative query syntax in same method.
         /// </summary>
         public static string MiKo_3007_Title {
             get {
@@ -7697,7 +7697,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should not return collections that can be changed from outside..
+        ///   Looks up a localized string similar to Method should not return collections that can be changed from outside.
         /// </summary>
         public static string MiKo_3008_Title {
             get {
@@ -7724,7 +7724,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Commands should invoke only named methods and no lambda expressions..
+        ///   Looks up a localized string similar to Commands should invoke only named methods and no lambda expressions.
         /// </summary>
         public static string MiKo_3009_Title {
             get {
@@ -7760,7 +7760,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not create or throw reserved exception types..
+        ///   Looks up a localized string similar to Do not create or throw reserved exception types.
         /// </summary>
         public static string MiKo_3010_Title {
             get {
@@ -7805,7 +7805,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name..
+        ///   Looks up a localized string similar to Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name.
         /// </summary>
         public static string MiKo_3011_Title {
             get {
@@ -7841,7 +7841,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown..
+        ///   Looks up a localized string similar to Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown.
         /// </summary>
         public static string MiKo_3012_Title {
             get {
@@ -7877,7 +7877,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &apos;default&apos; clause in &apos;switch&apos; statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException..
+        ///   Looks up a localized string similar to The &apos;default&apos; clause in &apos;switch&apos; statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException.
         /// </summary>
         public static string MiKo_3013_Title {
             get {
@@ -7904,7 +7904,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message..
+        ///   Looks up a localized string similar to InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message.
         /// </summary>
         public static string MiKo_3014_Title {
             get {
@@ -7950,7 +7950,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states of parameterless methods..
+        ///   Looks up a localized string similar to Throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states of parameterless methods.
         /// </summary>
         public static string MiKo_3015_Title {
             get {
@@ -7997,7 +7997,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not throw ArgumentNullException for inappropriate states of property return values..
+        ///   Looks up a localized string similar to Do not throw ArgumentNullException for inappropriate states of property return values.
         /// </summary>
         public static string MiKo_3016_Title {
             get {
@@ -8033,7 +8033,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not swallow exceptions when throwing new exceptions..
+        ///   Looks up a localized string similar to Do not swallow exceptions when throwing new exceptions.
         /// </summary>
         public static string MiKo_3017_Title {
             get {
@@ -8069,7 +8069,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Throw ObjectDisposedExceptions on publicly visible methods of disposable types..
+        ///   Looks up a localized string similar to Throw ObjectDisposedExceptions on publicly visible methods of disposable types.
         /// </summary>
         public static string MiKo_3018_Title {
             get {
@@ -8105,7 +8105,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult&apos;..
+        ///   Looks up a localized string similar to Use &apos;Task.CompletedTask&apos; instead of &apos;Task.FromResult&apos;.
         /// </summary>
         public static string MiKo_3020_Title {
             get {
@@ -8141,7 +8141,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;Task.Run&apos; in the implementation..
+        ///   Looks up a localized string similar to Do not use &apos;Task.Run&apos; in the implementation.
         /// </summary>
         public static string MiKo_3021_Title {
             get {
@@ -8169,7 +8169,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;..
+        ///   Looks up a localized string similar to Do not return Task&lt;IEnumerable&gt; or Task&lt;IEnumerable&lt;T&gt;&gt;.
         /// </summary>
         public static string MiKo_3022_Title {
             get {
@@ -8196,7 +8196,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;CancellationTokenSource&apos; as parameter..
+        ///   Looks up a localized string similar to Do not use &apos;CancellationTokenSource&apos; as parameter.
         /// </summary>
         public static string MiKo_3023_Title {
             get {
@@ -8226,7 +8226,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use the [ref] keyword on reference parameters..
+        ///   Looks up a localized string similar to Do not use the [ref] keyword on reference parameters.
         /// </summary>
         public static string MiKo_3024_Title {
             get {
@@ -8253,7 +8253,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not re-assign method parameters..
+        ///   Looks up a localized string similar to Do not re-assign method parameters.
         /// </summary>
         public static string MiKo_3025_Title {
             get {
@@ -8280,7 +8280,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unused parameters should be removed..
+        ///   Looks up a localized string similar to Unused parameters should be removed.
         /// </summary>
         public static string MiKo_3026_Title {
             get {
@@ -8316,7 +8316,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should not be marked to be reserved for future usage..
+        ///   Looks up a localized string similar to Parameters should not be marked to be reserved for future usage.
         /// </summary>
         public static string MiKo_3027_Title {
             get {
@@ -8343,7 +8343,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not assign null to lambda parameters..
+        ///   Looks up a localized string similar to Do not assign null to lambda parameters.
         /// </summary>
         public static string MiKo_3028_Title {
             get {
@@ -8379,7 +8379,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should follow the Law of Demeter..
+        ///   Looks up a localized string similar to Methods should follow the Law of Demeter.
         /// </summary>
         public static string MiKo_3030_Title {
             get {
@@ -8408,7 +8408,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ICloneable.Clone() should not be implemented..
+        ///   Looks up a localized string similar to ICloneable.Clone() should not be implemented.
         /// </summary>
         public static string MiKo_3031_Title {
             get {
@@ -8444,7 +8444,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead of Cinch for names of properties for created &apos;PropertyChangedEventArgs&apos; instances..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; instead of Cinch for names of properties for created &apos;PropertyChangedEventArgs&apos; instances.
         /// </summary>
         public static string MiKo_3032_Title {
             get {
@@ -8480,7 +8480,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; for names of properties for created &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; instances..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for names of properties for created &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos; instances.
         /// </summary>
         public static string MiKo_3033_Title {
             get {
@@ -8516,7 +8516,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PropertyChanged event raiser shall use [CallerMemberName] attribute..
+        ///   Looks up a localized string similar to PropertyChanged event raiser shall use [CallerMemberName] attribute.
         /// </summary>
         public static string MiKo_3034_Title {
             get {
@@ -8543,7 +8543,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not invoke &apos;WaitOne&apos; methods without timeouts..
+        ///   Looks up a localized string similar to Do not invoke &apos;WaitOne&apos; methods without timeouts.
         /// </summary>
         public static string MiKo_3035_Title {
             get {
@@ -8573,7 +8573,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefer to use &apos;TimeSpan&apos; factory methods instead of constructors..
+        ///   Looks up a localized string similar to Prefer to use &apos;TimeSpan&apos; factory methods instead of constructors.
         /// </summary>
         public static string MiKo_3036_Title {
             get {
@@ -8605,7 +8605,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use magic numbers for timeouts..
+        ///   Looks up a localized string similar to Do not use magic numbers for timeouts.
         /// </summary>
         public static string MiKo_3037_Title {
             get {
@@ -8633,7 +8633,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use magic numbers..
+        ///   Looks up a localized string similar to Do not use magic numbers.
         /// </summary>
         public static string MiKo_3038_Title {
             get {
@@ -8661,7 +8661,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties should not use Linq or yield..
+        ///   Looks up a localized string similar to Properties should not use Linq or yield.
         /// </summary>
         public static string MiKo_3039_Title {
             get {
@@ -8697,7 +8697,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values..
+        ///   Looks up a localized string similar to Do not use Booleans unless you are absolutely sure that you will never ever need more than 2 values.
         /// </summary>
         public static string MiKo_3040_Title {
             get {
@@ -8725,7 +8725,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs shall not use delegates..
+        ///   Looks up a localized string similar to EventArgs shall not use delegates.
         /// </summary>
         public static string MiKo_3041_Title {
             get {
@@ -8752,7 +8752,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EventArgs shall not implement interfaces..
+        ///   Looks up a localized string similar to EventArgs shall not implement interfaces.
         /// </summary>
         public static string MiKo_3042_Title {
             get {
@@ -8788,7 +8788,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; for WeakEventManager event (de-)registrations..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for WeakEventManager event (de-)registrations.
         /// </summary>
         public static string MiKo_3043_Title {
             get {
@@ -8824,7 +8824,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; to compare property names of &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos;..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; to compare property names of &apos;PropertyChangingEventArgs&apos; and &apos;PropertyChangedEventArgs&apos;.
         /// </summary>
         public static string MiKo_3044_Title {
             get {
@@ -8860,7 +8860,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;nameof&apos; for applied [ContentProperty] attributes..
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for applied [ContentProperty] attributes.
         /// </summary>
         public static string MiKo_3047_Title {
             get {
@@ -8887,7 +8887,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ValueConverters shall have the [ValueConversion] attribute applied..
+        ///   Looks up a localized string similar to ValueConverters shall have the [ValueConversion] attribute applied.
         /// </summary>
         public static string MiKo_3048_Title {
             get {
@@ -8914,7 +8914,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enum members shall have the [Description] attribute applied..
+        ///   Looks up a localized string similar to Enum members shall have the [Description] attribute applied.
         /// </summary>
         public static string MiKo_3049_Title {
             get {
@@ -8959,7 +8959,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DependencyProperty fields should be &apos;public static readonly&apos;..
+        ///   Looks up a localized string similar to DependencyProperty fields should be &apos;public static readonly&apos;.
         /// </summary>
         public static string MiKo_3050_Title {
             get {
@@ -9005,7 +9005,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DependencyProperty fields should be properly registered..
+        ///   Looks up a localized string similar to DependencyProperty fields should be properly registered.
         /// </summary>
         public static string MiKo_3051_Title {
             get {
@@ -9050,7 +9050,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DependencyPropertyKey fields should be non-public &apos;static readonly&apos;..
+        ///   Looks up a localized string similar to DependencyPropertyKey fields should be non-public &apos;static readonly&apos;.
         /// </summary>
         public static string MiKo_3052_Title {
             get {
@@ -9087,7 +9087,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DependencyPropertyKey fields should be properly registered..
+        ///   Looks up a localized string similar to DependencyPropertyKey fields should be properly registered.
         /// </summary>
         public static string MiKo_3053_Title {
             get {
@@ -9134,7 +9134,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A read-only DependencyProperty should have an exposed DependencyProperty identifier..
+        ///   Looks up a localized string similar to A read-only DependencyProperty should have an exposed DependencyProperty identifier.
         /// </summary>
         public static string MiKo_3054_Title {
             get {
@@ -9176,7 +9176,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Debug.Assert or Trace.Assert shall not be used..
+        ///   Looks up a localized string similar to Debug.Assert or Trace.Assert shall not be used.
         /// </summary>
         public static string MiKo_3060_Title {
             get {
@@ -9206,7 +9206,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loggers shall use a proper log category..
+        ///   Looks up a localized string similar to Loggers shall use a proper log category.
         /// </summary>
         public static string MiKo_3061_Title {
             get {
@@ -9242,7 +9242,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end log messages for exceptions with a colon..
+        ///   Looks up a localized string similar to Do end log messages for exceptions with a colon.
         /// </summary>
         public static string MiKo_3062_Title {
             get {
@@ -9278,7 +9278,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end non-exceptional log messages with a dot..
+        ///   Looks up a localized string similar to Do end non-exceptional log messages with a dot.
         /// </summary>
         public static string MiKo_3063_Title {
             get {
@@ -9306,7 +9306,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return IEnumerable shall never return null..
+        ///   Looks up a localized string similar to Methods that return IEnumerable shall never return null.
         /// </summary>
         public static string MiKo_3070_Title {
             get {
@@ -9334,7 +9334,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return Task shall never return null..
+        ///   Looks up a localized string similar to Methods that return Task shall never return null.
         /// </summary>
         public static string MiKo_3071_Title {
             get {
@@ -9362,7 +9362,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non-private methods should not return &apos;List&lt;&gt;&apos; or &apos;Dictionary&lt;&gt;&apos;..
+        ///   Looks up a localized string similar to Non-private methods should not return &apos;List&lt;&gt;&apos; or &apos;Dictionary&lt;&gt;&apos;.
         /// </summary>
         public static string MiKo_3072_Title {
             get {
@@ -9389,7 +9389,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not leave objects partially initialized..
+        ///   Looks up a localized string similar to Do not leave objects partially initialized.
         /// </summary>
         public static string MiKo_3073_Title {
             get {
@@ -9417,7 +9417,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not define &apos;ref&apos; or &apos;out&apos; parameters on constructors..
+        ///   Looks up a localized string similar to Do not define &apos;ref&apos; or &apos;out&apos; parameters on constructors.
         /// </summary>
         public static string MiKo_3074_Title {
             get {
@@ -9455,7 +9455,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal and private types should be either static or sealed unless derivation from them is required..
+        ///   Looks up a localized string similar to Internal and private types should be either static or sealed unless derivation from them is required.
         /// </summary>
         public static string MiKo_3075_Title {
             get {
@@ -9484,7 +9484,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not initialize static member with static member below or in other type part..
+        ///   Looks up a localized string similar to Do not initialize static member with static member below or in other type part.
         /// </summary>
         public static string MiKo_3076_Title {
             get {
@@ -9521,7 +9521,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties that return an Enum should have a default value..
+        ///   Looks up a localized string similar to Properties that return an Enum should have a default value.
         /// </summary>
         public static string MiKo_3077_Title {
             get {
@@ -9557,7 +9557,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred over a logical NOT condition..
+        ///   Looks up a localized string similar to Pattern matching is preferred over a logical NOT condition.
         /// </summary>
         public static string MiKo_3081_Title {
             get {
@@ -9593,7 +9593,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred over a logical comparison with &apos;true&apos; or &apos;false&apos;..
+        ///   Looks up a localized string similar to Pattern matching is preferred over a logical comparison with &apos;true&apos; or &apos;false&apos;.
         /// </summary>
         public static string MiKo_3082_Title {
             get {
@@ -9629,7 +9629,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred for null checks..
+        ///   Looks up a localized string similar to Pattern matching is preferred for null checks.
         /// </summary>
         public static string MiKo_3083_Title {
             get {
@@ -9665,7 +9665,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not place constants on the left side for comparisons..
+        ///   Looks up a localized string similar to Do not place constants on the left side for comparisons.
         /// </summary>
         public static string MiKo_3084_Title {
             get {
@@ -9693,7 +9693,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Conditional statements should be short..
+        ///   Looks up a localized string similar to Conditional statements should be short.
         /// </summary>
         public static string MiKo_3085_Title {
             get {
@@ -9720,7 +9720,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not nest conditional statements..
+        ///   Looks up a localized string similar to Do not nest conditional statements.
         /// </summary>
         public static string MiKo_3086_Title {
             get {
@@ -9748,7 +9748,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not throw exceptions in finally blocks..
+        ///   Looks up a localized string similar to Do not throw exceptions in finally blocks.
         /// </summary>
         public static string MiKo_3090_Title {
             get {
@@ -9776,7 +9776,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not raise events in finally blocks..
+        ///   Looks up a localized string similar to Do not raise events in finally blocks.
         /// </summary>
         public static string MiKo_3091_Title {
             get {
@@ -9803,7 +9803,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not raise events in locks..
+        ///   Looks up a localized string similar to Do not raise events in locks.
         /// </summary>
         public static string MiKo_3092_Title {
             get {
@@ -9830,7 +9830,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not invoke delegates inside locks..
+        ///   Looks up a localized string similar to Do not invoke delegates inside locks.
         /// </summary>
         public static string MiKo_3093_Title {
             get {
@@ -9858,7 +9858,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test classes and types under test belong in same namespace..
+        ///   Looks up a localized string similar to Test classes and types under test belong in same namespace.
         /// </summary>
         public static string MiKo_3100_Title {
             get {
@@ -9885,7 +9885,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test classes should contain tests..
+        ///   Looks up a localized string similar to Test classes should contain tests.
         /// </summary>
         public static string MiKo_3101_Title {
             get {
@@ -9913,7 +9913,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should not contain conditional statements such as &apos;if&apos;, &apos;switch&apos;, etc..
+        ///   Looks up a localized string similar to Test methods should not contain conditional statements (such as &apos;if&apos;, &apos;switch&apos;, etc.).
         /// </summary>
         public static string MiKo_3102_Title {
             get {
@@ -9950,7 +9950,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should not use &apos;Guid.NewGuid()&apos;..
+        ///   Looks up a localized string similar to Test methods should not use &apos;Guid.NewGuid()&apos;.
         /// </summary>
         public static string MiKo_3103_Title {
             get {
@@ -9986,7 +9986,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] attribute properly..
+        ///   Looks up a localized string similar to Use NUnit&apos;s [Combinatorial] attribute properly.
         /// </summary>
         public static string MiKo_3104_Title {
             get {
@@ -10031,7 +10031,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should use NUnit&apos;s fluent Assert approach..
+        ///   Looks up a localized string similar to Test methods should use NUnit&apos;s fluent Assert approach.
         /// </summary>
         public static string MiKo_3105_Title {
             get {
@@ -10062,7 +10062,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assertions should not use equality or comparison operators..
+        ///   Looks up a localized string similar to Assertions should not use equality or comparison operators.
         /// </summary>
         public static string MiKo_3106_Title {
             get {
@@ -10089,7 +10089,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Moq Mock condition matchers should be used on mocks only..
+        ///   Looks up a localized string similar to Moq Mock condition matchers should be used on mocks only.
         /// </summary>
         public static string MiKo_3107_Title {
             get {
@@ -10116,7 +10116,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should use assertions..
+        ///   Looks up a localized string similar to Test methods should use assertions.
         /// </summary>
         public static string MiKo_3108_Title {
             get {
@@ -10143,7 +10143,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple assertions shall use assertion messages..
+        ///   Looks up a localized string similar to Multiple assertions shall use assertion messages.
         /// </summary>
         public static string MiKo_3109_Title {
             get {
@@ -10176,7 +10176,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assertions should not use &apos;Count&apos; or &apos;Length&apos;..
+        ///   Looks up a localized string similar to Assertions should not use &apos;Count&apos; or &apos;Length&apos;.
         /// </summary>
         public static string MiKo_3110_Title {
             get {
@@ -10212,7 +10212,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log statements should be preceded and followed by blank lines..
+        ///   Looks up a localized string similar to Log statements should be preceded and followed by blank lines.
         /// </summary>
         public static string MiKo_3201_Title {
             get {
@@ -10248,7 +10248,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assertion statements should be preceded and followed by blank lines..
+        ///   Looks up a localized string similar to Assertion statements should be preceded and followed by blank lines.
         /// </summary>
         public static string MiKo_3202_Title {
             get {
@@ -10284,7 +10284,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local variable statements should be preceded by blank lines..
+        ///   Looks up a localized string similar to Local variable statements should be preceded by blank lines.
         /// </summary>
         public static string MiKo_3203_Title {
             get {
@@ -10320,7 +10320,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable assignment statements should be preceded by blank lines..
+        ///   Looks up a localized string similar to Variable assignment statements should be preceded by blank lines.
         /// </summary>
         public static string MiKo_3204_Title {
             get {
@@ -10356,7 +10356,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Return statements should be preceded by blank lines..
+        ///   Looks up a localized string similar to Return statements should be preceded by blank lines.
         /// </summary>
         public static string MiKo_3205_Title {
             get {
@@ -10392,7 +10392,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Awaited statements should be surrounded by blank lines..
+        ///   Looks up a localized string similar to Awaited statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_3206_Title {
             get {
@@ -10428,7 +10428,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test statements should be surrounded by blank lines..
+        ///   Looks up a localized string similar to Test statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_3207_Title {
             get {
@@ -10456,7 +10456,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Namespace hierarchies should not be too deep..
+        ///   Looks up a localized string similar to Namespace hierarchies should not be too deep.
         /// </summary>
         public static string MiKo_3401_Title {
             get {
@@ -10494,7 +10494,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods with same name should be ordered based on the number of their parameters..
+        ///   Looks up a localized string similar to Methods with same name should be ordered based on the number of their parameters.
         /// </summary>
         public static string MiKo_4001_Title {
             get {
@@ -10532,7 +10532,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods with same name and accessibility should be placed side-by-side..
+        ///   Looks up a localized string similar to Methods with same name and accessibility should be placed side-by-side.
         /// </summary>
         public static string MiKo_4002_Title {
             get {
@@ -10568,7 +10568,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods should be placed directly after constructors and finalizers..
+        ///   Looks up a localized string similar to Dispose methods should be placed directly after constructors and finalizers.
         /// </summary>
         public static string MiKo_4003_Title {
             get {
@@ -10604,7 +10604,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dispose methods should be placed before all other methods of the same accessibility..
+        ///   Looks up a localized string similar to Dispose methods should be placed before all other methods of the same accessibility.
         /// </summary>
         public static string MiKo_4004_Title {
             get {
@@ -10640,7 +10640,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The interface that gives a type its name should be placed directly after the type&apos;s declaration..
+        ///   Looks up a localized string similar to The interface that gives a type its name should be placed directly after the type&apos;s declaration.
         /// </summary>
         public static string MiKo_4005_Title {
             get {
@@ -10676,7 +10676,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test initialization methods should be ordered directly after One-Time methods..
+        ///   Looks up a localized string similar to Test initialization methods should be ordered directly after One-Time methods.
         /// </summary>
         public static string MiKo_4101_Title {
             get {
@@ -10712,7 +10712,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test cleanup methods should be ordered after test initialization methods and before test methods..
+        ///   Looks up a localized string similar to Test cleanup methods should be ordered after test initialization methods and before test methods.
         /// </summary>
         public static string MiKo_4102_Title {
             get {
@@ -10748,7 +10748,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One-Time test initialization methods should be ordered before all other methods..
+        ///   Looks up a localized string similar to One-Time test initialization methods should be ordered before all other methods.
         /// </summary>
         public static string MiKo_4103_Title {
             get {
@@ -10784,7 +10784,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One-Time test cleanup methods should be ordered directly after One-Time test initialization methods..
+        ///   Looks up a localized string similar to One-Time test cleanup methods should be ordered directly after One-Time test initialization methods.
         /// </summary>
         public static string MiKo_4104_Title {
             get {
@@ -10820,7 +10820,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;Debug&apos; and &apos;DebugFormat&apos; methods should be invoked only after &apos;IsDebugEnabled&apos;..
+        ///   Looks up a localized string similar to &apos;Debug&apos; and &apos;DebugFormat&apos; methods should be invoked only after &apos;IsDebugEnabled&apos;.
         /// </summary>
         public static string MiKo_5001_Title {
             get {
@@ -10856,7 +10856,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;xxxFormat&apos; methods should be invoked with multiple arguments only..
+        ///   Looks up a localized string similar to &apos;xxxFormat&apos; methods should be invoked with multiple arguments only.
         /// </summary>
         public static string MiKo_5002_Title {
             get {
@@ -10884,7 +10884,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Correct Log methods should be invoked for exceptions..
+        ///   Looks up a localized string similar to Correct Log methods should be invoked for exceptions.
         /// </summary>
         public static string MiKo_5003_Title {
             get {
@@ -10922,7 +10922,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;object.Equals()&apos; on value types..
+        ///   Looks up a localized string similar to Do not use &apos;object.Equals()&apos; on value types.
         /// </summary>
         public static string MiKo_5010_Title {
             get {
@@ -10949,7 +10949,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not concatenate strings with += operator..
+        ///   Looks up a localized string similar to Do not concatenate strings with += operator.
         /// </summary>
         public static string MiKo_5011_Title {
             get {
@@ -10985,7 +10985,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;yield return&apos; for recursively defined structures..
+        ///   Looks up a localized string similar to Do not use &apos;yield return&apos; for recursively defined structures.
         /// </summary>
         public static string MiKo_5012_Title {
             get {
