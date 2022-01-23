@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             if (syntaxNode is null)
             {
                 // none found, so insert method before first method
-                var method = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().First();
+                var method = modifiedType.FirstChild<MethodDeclarationSyntax>();
 
                 return modifiedType.InsertNodeBefore(method, disposeMethod);
             }
@@ -36,8 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         private static SyntaxNode FindLastCtorOrFinalizer(SyntaxNode modifiedType)
         {
-            SyntaxNode ctor = modifiedType.ChildNodes().OfType<ConstructorDeclarationSyntax>().LastOrDefault();
-            SyntaxNode finalizer = modifiedType.ChildNodes().OfType<DestructorDeclarationSyntax>().LastOrDefault();
+            SyntaxNode ctor = modifiedType.LastChild<ConstructorDeclarationSyntax>();
+            SyntaxNode finalizer = modifiedType.LastChild<DestructorDeclarationSyntax>();
 
             return finalizer ?? ctor;
         }

@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var tag in tags)
             {
                 foreach (var parameterName in tag.Attributes
-                                                 .SelectMany(_ => _.ChildNodes().OfType<NameMemberCrefSyntax>())
+                                                 .SelectMany(_ => _.ChildNodes<NameMemberCrefSyntax>())
                                                  .Select(_ => _.Name.ToString())
                                                  .Where(parameters.Contains))
                 {

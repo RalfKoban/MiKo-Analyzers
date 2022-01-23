@@ -31,20 +31,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string[] GetCommentParts(PropertyDeclarationSyntax property)
         {
-            var isArrowGetterOnly = property.ChildNodes().OfType<ArrowExpressionClauseSyntax>().Any();
+            var isArrowGetterOnly = property.ChildNodes<ArrowExpressionClauseSyntax>().Any();
             if (isArrowGetterOnly)
             {
                 return GetOnly;
             }
 
             // try to find a getter
-            var getter = (AccessorDeclarationSyntax)property.AccessorList?.ChildNodes().FirstOrDefault(_ => _.IsKind(SyntaxKind.GetAccessorDeclaration));
+            var getter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
             if (getter is null || getter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
                 return SetOnly;
             }
 
-            var setter = (AccessorDeclarationSyntax)property.AccessorList?.ChildNodes().FirstOrDefault(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration));
+            var setter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
             if (setter is null || setter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
                 return GetOnly;

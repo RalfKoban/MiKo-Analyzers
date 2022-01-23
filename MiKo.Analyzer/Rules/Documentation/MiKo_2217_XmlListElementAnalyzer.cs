@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeBulletOrNumberList(XmlElementSyntax list)
         {
-            foreach (var child in list.ChildNodes().OfType<XmlElementSyntax>())
+            foreach (var child in list.ChildNodes<XmlElementSyntax>())
             {
                 switch (child.GetName())
                 {
@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var termFound = false;
                         var descriptionFound = false;
 
-                        foreach (var grandChild in child.ChildNodes().OfType<XmlElementSyntax>())
+                        foreach (var grandChild in child.ChildNodes<XmlElementSyntax>())
                         {
                             switch (grandChild.GetName())
                             {
@@ -135,7 +135,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeTable(XmlElementSyntax list)
         {
-            foreach (var child in list.ChildNodes().OfType<XmlElementSyntax>())
+            foreach (var child in list.ChildNodes<XmlElementSyntax>())
             {
                 switch (child.GetName())
                 {
@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var termFound = false;
                         var descriptionFound = false;
 
-                        foreach (var grandChild in child.ChildNodes().OfType<XmlElementSyntax>())
+                        foreach (var grandChild in child.ChildNodes<XmlElementSyntax>())
                         {
                             switch (grandChild.GetName())
                             {
