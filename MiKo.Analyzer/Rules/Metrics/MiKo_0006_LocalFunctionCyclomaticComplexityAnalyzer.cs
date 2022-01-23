@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
-            foreach (var localFunction in symbol.GetSyntaxNodes().SelectMany(_ => _.DescendantNodes<LocalFunctionStatementSyntax>()))
+            foreach (var localFunction in symbol.GetLocalFunctions())
             {
                 var cc = Counter.CountCyclomaticComplexity(localFunction.Body);
 
