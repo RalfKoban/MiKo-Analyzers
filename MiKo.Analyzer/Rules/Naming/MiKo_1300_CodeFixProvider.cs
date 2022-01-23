@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     case ArgumentSyntax a:
                     {
-                        if (a.ChildNodes().OfType<SimpleLambdaExpressionSyntax>().Any())
+                        if (a.ChildNodes<SimpleLambdaExpressionSyntax>().Any())
                         {
                             count++;
                         }

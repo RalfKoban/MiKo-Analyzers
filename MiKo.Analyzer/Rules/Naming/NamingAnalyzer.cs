@@ -89,14 +89,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
         {
-            if (symbol.Name.HasEntityMarker() is false)
+            if (symbol.Name.HasEntityMarker())
             {
-                return Enumerable.Empty<Diagnostic>();
+                var expected = FindBetterNameForEntityMarker(symbol);
+
+                yield return Issue(symbol, expected);
             }
-
-            var expected = FindBetterNameForEntityMarker(symbol);
-
-            return new[] { Issue(symbol, expected) };
         }
 
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => Constants.Markers.Collections.Select(_ => AnalyzeCollectionSuffix(symbol, _)).FirstOrDefault(_ => _ != null);

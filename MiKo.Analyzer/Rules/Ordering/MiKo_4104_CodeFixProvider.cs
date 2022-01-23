@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(method);
 
-            var firstMethod = modifiedType.ChildNodes().OfType<MethodDeclarationSyntax>().First();
+            var firstMethod = modifiedType.FirstChild<MethodDeclarationSyntax>();
 
             if (firstMethod.IsTestOneTimeSetUpMethod())
             {

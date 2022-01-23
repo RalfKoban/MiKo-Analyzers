@@ -32,6 +32,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
+        internal static IEnumerable<T> ChildNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes().OfType<T>();
+
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes().OfType<T>();
 
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes<T>().Where(_ => _.IsKind(kind));
@@ -47,6 +49,12 @@ namespace MiKoSolutions.Analyzers
             return method.Parameters.Any(_ => _.Name == parameterName);
         }
 
+        internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
+
+        internal static T FirstChild<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.ChildNodes().FirstOrDefault(_ => _.IsKind(kind)) as T;
+
+        internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
+
         internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
         {
             var ifStatement = value.FirstAncestorOrSelf<IfStatementSyntax>();
@@ -57,7 +65,7 @@ namespace MiKoSolutions.Analyzers
                 if (block != null)
                 {
                     // try to find the corresponding if statement
-                    ifStatement = block.ChildNodes().OfType<IfStatementSyntax>().FirstOrDefault();
+                    ifStatement = block.FirstChild<IfStatementSyntax>();
                 }
             }
 
@@ -156,16 +164,7 @@ namespace MiKoSolutions.Analyzers
             return GetEnclosingMethod(value.Node, value.SemanticModel);
         }
 
-        internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode value, Compilation compilation) => value.GetEnclosingSymbol(compilation) as IMethodSymbol;
-
         internal static IMethodSymbol GetEnclosingMethod(this SyntaxNode value, SemanticModel semanticModel) => value.GetEnclosingSymbol(semanticModel) as IMethodSymbol;
-
-        internal static ISymbol GetEnclosingSymbol(this SyntaxNode value, Compilation compilation)
-        {
-            var semanticModel = compilation.GetSemanticModel(value.SyntaxTree);
-
-            return value.GetEnclosingSymbol(semanticModel);
-        }
 
         internal static ISymbol GetEnclosingSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
@@ -1525,14 +1524,14 @@ namespace MiKoSolutions.Analyzers
 
         private static bool IsCallTo(this IfStatementSyntax ifStatement, string methodName)
         {
-            var ifExpression = ifStatement.ChildNodes().OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
+            var ifExpression = ifStatement.FirstChild<MemberAccessExpressionSyntax>();
 
             if (ifExpression.IsCallTo(methodName))
             {
                 return true;
             }
 
-            var binaryExpression = ifStatement.ChildNodes().OfType<BinaryExpressionSyntax>().FirstOrDefault();
+            var binaryExpression = ifStatement.FirstChild<BinaryExpressionSyntax>();
             if (binaryExpression.IsBinaryCallTo(methodName))
             {
                 return true;

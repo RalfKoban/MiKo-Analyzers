@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case Constants.XmlTag.Item:
                 {
                     // seems like the node has either some child nodes (and we are interested in the first one only) or just contains some text (we are interested in)
-                    var firstNode = node.ChildNodes().OfType<XmlElementSyntax>().FirstOrDefault();
+                    var firstNode = node.FirstChild<XmlElementSyntax>();
                     var updatedNode = node.WithContent(SyntaxFactory.XmlElement(Constants.XmlTag.Description, firstNode?.Content ?? node.Content));
 
                     return ReplaceNode(syntax, node, updatedNode);
@@ -92,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case Constants.XmlTag.Item:
                 {
                     // it's either a <term> or a <description>, so first sub item should be a term, second a description
-                    var nodes = node.ChildNodes().OfType<XmlElementSyntax>().ToList();
+                    var nodes = node.ChildNodes<XmlElementSyntax>().ToList();
                     if (nodes.Count == 2)
                     {
                         return syntax.ReplaceNodes(nodes, (original, rewritten) =>
