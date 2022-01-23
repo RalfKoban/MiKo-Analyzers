@@ -69,6 +69,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers().OfType<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
 
+        internal static IEnumerable<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value) => value.GetSyntaxNodes().SelectMany(_ => _.DescendantNodes<LocalFunctionStatementSyntax>());
+
         internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetExtensionMethods().Any();
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
