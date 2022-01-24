@@ -23,6 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsEventHandler();
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var parameters = symbol.Parameters;

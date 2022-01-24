@@ -26,6 +26,25 @@ public class TestMe
 }
 ");
 
+        [TestCase("")]
+        [TestCase("EventArgs args")]
+        [TestCase("object s")]
+        [TestCase("EventArgs args, object s")]
+        [TestCase("object s, EventArgs args, object whatever")]
+        [TestCase("object whatever, object s, EventArgs args")]
+        public void No_issue_is_reported_for_non_event_handling_local_function_(string parameters) => No_issue_is_reported_for(@"
+
+using System;
+
+public class TestMe
+{
+    public void OnWhatever(object sender, EventArgs e)
+    {
+        void DoSomething(" + parameters + @") { }
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_correctly_named_method() => No_issue_is_reported_for(@"
 
@@ -34,6 +53,22 @@ using System;
 public class TestMe
 {
     public void OnWhatever(object sender, EventArgs e) { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_local_function() => No_issue_is_reported_for(@"
+
+using System;
+
+public class TestMe
+{
+    public void OnWhatever(object sender, EventArgs e)
+    {
+        void LocalFunction(object sender, EventArgs e)
+        {
+        }
+    }
 }
 ");
 
@@ -60,6 +95,22 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_named_sender_on_local_function() => An_issue_is_reported_for(@"
+
+using System;
+
+public class TestMe
+{
+    public void OnWhatever(object sender, EventArgs e)
+    {
+        void LocalFunction(object s, EventArgs e)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_EventArgs() => An_issue_is_reported_for(@"
 
 using System;
@@ -78,6 +129,22 @@ using System;
 public class TestMe
 {
     public override void OnWhatever(object sender, EventArgs args) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_correctly_named_EventArgs_on_local_function() => An_issue_is_reported_for(@"
+
+using System;
+
+public class TestMe
+{
+    public void OnWhatever(object sender, EventArgs e)
+    {
+        void LocalFunction(object sender, EventArgs args)
+        {
+        }
+    }
 }
 ");
 
