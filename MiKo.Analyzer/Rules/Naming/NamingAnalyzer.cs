@@ -83,6 +83,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
+
         protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
         protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
@@ -287,9 +289,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 foreach (var localFunction in localFunctions.Select(_ => _.GetSymbol(semanticModel)))
                 {
-                    foreach (var diagnostic in AnalyzeName(localFunction, compilation))
+                    if (ShallAnalyzeLocalFunction(localFunction))
                     {
-                        yield return diagnostic;
+                        foreach (var diagnostic in AnalyzeName(localFunction, compilation))
+                        {
+                            yield return diagnostic;
+                        }
                     }
                 }
             }
