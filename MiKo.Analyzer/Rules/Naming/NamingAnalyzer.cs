@@ -39,9 +39,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                                ? AnalyzeName(symbol, compilation)
                                                                                                                                : Enumerable.Empty<Diagnostic>();
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                              ? AnalyzeName(symbol, compilation).Concat(AnalyzeLocalFunctions(symbol, compilation))
-                                                                                                                              : Enumerable.Empty<Diagnostic>();
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
+        {
+            if (ShallAnalyze(symbol))
+            {
+                foreach (var issue in AnalyzeName(symbol, compilation))
+                {
+                    yield return issue;
+                }
+            }
+
+            foreach (var issue in AnalyzeLocalFunctions(symbol, compilation))
+            {
+                yield return issue;
+            }
+        }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
                                                                                                                                   ? AnalyzeName(symbol, compilation)

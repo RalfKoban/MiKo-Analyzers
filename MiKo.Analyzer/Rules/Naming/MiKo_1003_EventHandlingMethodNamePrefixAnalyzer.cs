@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -29,6 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsEventHandler();
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => ShallAnalyze(symbol);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var suffix = FindProperNameSuffix(symbol);
@@ -39,9 +40,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         && methodName.EndsWith(suffix, StringComparison.Ordinal)
                         && methodName.Contains("_") is false;
 
-            return nameFits
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, Prefix + suffix) };
+            if (nameFits is false)
+            {
+                yield return Issue(symbol, Prefix + suffix);
+            }
         }
 
         private static string FindProperNameSuffix(IMethodSymbol method)
