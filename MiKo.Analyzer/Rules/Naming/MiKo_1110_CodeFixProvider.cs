@@ -4,7 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
@@ -17,6 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer.FindBetterName((IMethodSymbol)symbol);
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault(_ => _.IsAnyKind(MethodKinds));
     }
 }
