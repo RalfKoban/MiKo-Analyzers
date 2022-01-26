@@ -4,12 +4,19 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Rename;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingCodeFixProvider : MiKoCodeFixProvider
     {
+        protected static readonly SyntaxKind[] MethodKinds =
+            {
+                SyntaxKind.LocalFunctionStatement,
+                SyntaxKind.MethodDeclaration,
+            };
+
         protected override bool IsSolutionWide => true;
 
         protected sealed override async Task<Solution> ApplySolutionCodeFixAsync(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)

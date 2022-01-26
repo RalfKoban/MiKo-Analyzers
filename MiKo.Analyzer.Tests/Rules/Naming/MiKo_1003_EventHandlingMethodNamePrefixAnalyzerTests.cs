@@ -33,6 +33,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_local_function() => No_issue_is_reported_for(@"
+
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void OnWhatever(object sender, EventArgs e) { }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_incorrectly_named_overridden_method() => No_issue_is_reported_for(@"
 
 using System;
@@ -136,7 +150,32 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void An_issue_is_reported_for_incorrectly_named_local_function_with_other_event_assignment() => An_issue_is_reported_for(@"
+
+using System;
+
+public class TestMeEvent
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public TestMe(TestMeEvent tme) => TME = tme;
+
+    public TestMeEvent TME { get; set; }
+
+    public void Initialize()
+    {
+        TME.MyEvent += Whatever;
+    
+        void Whatever(object sender, EventArgs e) { }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_method()
         {
             const string Template = @"
 using System;
@@ -155,6 +194,34 @@ public class TestMe
     public void Initialize() => TME.MyEvent += #;
 
     public void #(object sender, EventArgs e) { }
+}";
+
+            VerifyCSharpFix(Template.Replace("#", "TME_MyEvent"), Template.Replace("#", "OnMyEvent"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_local_function()
+        {
+            const string Template = @"
+using System;
+
+public class TestMeEvent
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public TestMe(TestMeEvent tme) => TME = tme;
+
+    public TestMeEvent TME { get; set; }
+
+    public void Initialize()
+    {
+        TME.MyEvent += #;
+
+        void #(object sender, EventArgs e) { }
+    }
 }";
 
             VerifyCSharpFix(Template.Replace("#", "TME_MyEvent"), Template.Replace("#", "OnMyEvent"));
