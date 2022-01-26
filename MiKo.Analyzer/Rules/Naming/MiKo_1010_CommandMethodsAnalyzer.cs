@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
@@ -28,21 +27,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol) => GetProposal(symbol.Name, "Execute");
+        internal static string FindBetterName(IMethodSymbol symbol) => GetProposal(symbol.Name, nameof(ICommand.Execute));
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementationOf<ICommand>() is false && symbol.IsTestMethod() is false;
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            List<Diagnostic> diagnostics = null;
+            var issueCanExecute = AnalyzeMethodName(nameof(ICommand.CanExecute), symbol);
 
-            if (VerifyMethodName(nameof(ICommand.CanExecute), symbol, ref diagnostics) is false)
+            yield return issueCanExecute;
+
+            if (issueCanExecute is null)
             {
                 // CanExecute is not contained, thus we can check for execute (otherwise 'Execute' would already be part of the method's name)
-                VerifyMethodName(nameof(ICommand.Execute), symbol, ref diagnostics);
+                yield return AnalyzeMethodName(nameof(ICommand.Execute), symbol);
             }
-
-            return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
 
         private static string GetProposal(string methodName, string forbiddenName)
@@ -57,33 +58,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return methodName.Without(phrase);
         }
 
-        private bool VerifyMethodName(string forbiddenName, IMethodSymbol method, ref List<Diagnostic> results)
+        private Diagnostic AnalyzeMethodName(string forbiddenName, IMethodSymbol method)
         {
             var methodName = method.Name;
 
             if (ExcludedNames.Contains(methodName))
             {
-                return false;
+                return null;
             }
 
             if (methodName.StartsWith("On", StringComparison.OrdinalIgnoreCase) && methodName.EndsWith("CommandExecuted", StringComparison.OrdinalIgnoreCase))
             {
-                return false;
+                return null;
             }
 
-            var forbidden = methodName.Contains(forbiddenName);
-            if (forbidden)
+            if (methodName.Contains(forbiddenName))
             {
-                if (results is null)
-                {
-                    results = new List<Diagnostic>(1);
-                }
-
                 var proposal = GetProposal(methodName, forbiddenName);
-                results.Add(Issue(method, proposal));
+
+                return Issue(method, proposal);
             }
 
-            return forbidden;
+            return null;
         }
     }
 }
