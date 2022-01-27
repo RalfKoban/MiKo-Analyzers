@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -25,6 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                              .Replace(StartingPhrase, CorrectStartingPhrase)
                                                                              .Replace(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase); // may happen for "OnNotifyXyz"
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol.Name.StartsWithAny(StartingPhrases))
@@ -32,11 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 // avoid situation that method has no name
                 if (symbol.Name.Without(StartingPhrase).Length != 0)
                 {
-                    return new[] { Issue(symbol) };
+                    yield return Issue(symbol);
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

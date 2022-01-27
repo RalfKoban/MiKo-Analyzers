@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -32,9 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var forbidden = methodName.ContainsAny(FirePhrases) && methodName.ContainsAny(FirewallPhrases) is false;
 
-            return forbidden
-                       ? new[] { Issue(symbol, FindBetterName(symbol)) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (forbidden)
+            {
+                yield return Issue(symbol, FindBetterName(symbol));
+            }
         }
     }
 }
