@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,8 +20,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => Verbalizer.TryMakeVerb(symbol.Name, out var betterName)
-                                                                                                                     ? new[] { Issue(symbol, betterName) }
-                                                                                                                     : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            if (Verbalizer.TryMakeVerb(symbol.Name, out var betterName))
+            {
+                yield return Issue(symbol, betterName);
+            }
+        }
     }
 }
