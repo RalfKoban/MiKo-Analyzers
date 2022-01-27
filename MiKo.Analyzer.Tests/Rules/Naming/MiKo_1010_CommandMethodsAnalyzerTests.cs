@@ -77,10 +77,43 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_local_function_with_Execute_in_name() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    private Something()
+    {
+        void DoExecute() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_with_CanExecute_in_name() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    private Something()
+    {
+        void DoCanExecute() { }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_event_handling_method_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private int " + methodName + @"() => 42;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_handling_local_function_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    private Something()
+    {
+        void " + methodName + @"() { }
+    }
 }
 ");
 
@@ -97,9 +130,17 @@ public class TestMe
         [TestCase("CanDoExecute", "CanDo")]
         [TestCase("ExecuteUpdate", "Update")]
         [TestCase("Execute", "Execute")]
-        public void Code_gets_fixed_(string method, string wanted) => VerifyCSharpFix(
+        public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
                                                                                       @"using System; class TestMe { void " + method + "() { } }",
                                                                                       @"using System; class TestMe { void " + wanted + "() { } }");
+
+        [TestCase("DoExecute", "Do")]
+        [TestCase("CanDoExecute", "CanDo")]
+        [TestCase("ExecuteUpdate", "Update")]
+        [TestCase("Execute", "Execute")]
+        public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
+                                                                                      @"using System; class TestMe { void Something() { void " + method + "() { } } }",
+                                                                                      @"using System; class TestMe { void Something() { void " + wanted + "() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1010_CommandMethodsAnalyzer.Id;
 
