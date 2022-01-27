@@ -24,6 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                   .Replace("Firing", "Raising")
                                                                                   .Replace("_firing", "_raising");
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
