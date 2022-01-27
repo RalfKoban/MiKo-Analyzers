@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -72,9 +71,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var proposal = FindBetterName(symbol);
 
-            return proposal is null
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, proposal) };
+            if (proposal != null)
+            {
+                yield return Issue(symbol, proposal);
+            }
         }
 
         private static bool ContainsPhrase(string methodName, string phrase = DoPhrase) => methodName.Contains(phrase, StringComparison.Ordinal);
