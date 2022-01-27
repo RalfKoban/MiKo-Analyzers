@@ -133,6 +133,49 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_local_function_with_name_([ValueSource(nameof(ValidMethodNames))] string name) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void Something()
+    {
+        void " + name + @"()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_with_name_([ValueSource(nameof(InvalidMethodNames))] string name) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void Something()
+    {
+        void " + name + @"()
+        {
+        }
+    }
+}
+");
+
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_test_local_function_with_name_(
+                                                                        [ValueSource(nameof(Tests))] string test,
+                                                                        [ValueSource(nameof(InvalidMethodNames))] string name)
+            => No_issue_is_reported_for(@"
+public class TestMe
+{
+    [" + test + @"]
+    public void Something()
+    {
+        void " + name + @"()
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"
