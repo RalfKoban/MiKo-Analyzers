@@ -58,6 +58,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return null;
         }
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var proposal = FindBetterName(symbol);
