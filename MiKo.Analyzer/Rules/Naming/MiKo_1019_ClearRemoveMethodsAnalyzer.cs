@@ -25,27 +25,48 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            if (HasIssue(symbol))
+            {
+                var betterName = FindBetterName(symbol);
+
+                yield return Issue(symbol, betterName);
+            }
+        }
+
+        private static bool HasIssue(IMethodSymbol symbol)
         {
             var methodName = symbol.Name;
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            if (methodName.StartsWith(Clear, Comparison) && methodName.StartsWith(Clear + "s", Comparison) is false)
+            if (methodName.StartsWith(Clear, Comparison))
             {
-                return symbol.Parameters.Any()
-                       ? new[] { Issue(symbol, methodName.Replace(Clear, Remove)) }
-                       : Enumerable.Empty<Diagnostic>();
+                if (methodName.StartsWith(Clear + "s", Comparison) is false && symbol.Parameters.Any())
+                {
+                    return true;
+                }
+            }
+            else if (methodName.StartsWith(Remove, Comparison))
+            {
+                if (methodName.StartsWith(Remove + "s", Comparison) is false && symbol.Parameters.None())
+                {
+                    return true;
+                }
             }
 
-            if (methodName.StartsWith(Remove, Comparison) && methodName.StartsWith(Remove + "s", Comparison) is false)
-            {
-                return symbol.Parameters.Any()
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, methodName.Replace(Remove, Clear)) };
-            }
-
-            return Enumerable.Empty<Diagnostic>();
+            return false;
         }
     }
 }
