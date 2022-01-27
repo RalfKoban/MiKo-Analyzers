@@ -281,7 +281,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; types should be suffixed properly.
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; types should be suffixed with &apos;EventArgs&apos;.
         /// </summary>
         public static string MiKo_1000_Title {
             get {
@@ -326,7 +326,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters on methods should be named properly.
+        ///   Looks up a localized string similar to &apos;System.EventArgs&apos; parameters should be named &apos;e&apos;.
         /// </summary>
         public static string MiKo_1001_Title {
             get {
@@ -371,7 +371,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for event handlers.
+        ///   Looks up a localized string similar to Parameters should be named according the .NET Framework Guidelines for event handlers.
         /// </summary>
         public static string MiKo_1002_Title {
             get {
@@ -416,7 +416,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event handling method name does not follow the .NET Framework Best Practices.
+        ///   Looks up a localized string similar to Event handling method names should follow the .NET Framework Best Practices.
         /// </summary>
         public static string MiKo_1003_Title {
             get {
@@ -516,7 +516,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events shall use &apos;EventHandler&lt;T&gt;&apos; with properly named &apos;EventArgs&apos; as &apos;T&apos;.
+        ///   Looks up a localized string similar to Events should use &apos;EventHandler&lt;T&gt;&apos; with &apos;EventArgs&apos; which are named after the event.
         /// </summary>
         public static string MiKo_1006_Title {
             get {
@@ -543,7 +543,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events and &apos;EventArgs&apos; types shall be located in the same namespace.
+        ///   Looks up a localized string similar to Events and their corresponding &apos;EventArgs&apos; types should be located in the same namespace.
         /// </summary>
         public static string MiKo_1007_Title {
             get {
@@ -579,7 +579,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers.
+        ///   Looks up a localized string similar to Parameters should be named according the .NET Framework Guidelines for DependencyProperty event handlers.
         /// </summary>
         public static string MiKo_1008_Title {
             get {
@@ -723,7 +723,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named &apos;Fire&apos;.
+        ///   Looks up a localized string similar to Methods should be named &apos;Raise&apos; instead of &apos;Fire&apos;.
         /// </summary>
         public static string MiKo_1012_Title {
             get {
@@ -796,7 +796,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named &apos;Check&apos;.
+        ///   Looks up a localized string similar to Methods should not be named with ambiguous &apos;Check&apos;.
         /// </summary>
         public static string MiKo_1014_Title {
             get {
@@ -832,7 +832,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods should not be named &apos;Init&apos;.
+        ///   Looks up a localized string similar to Methods should be named &apos;Initialize&apos; instead of &apos;Init&apos;.
         /// </summary>
         public static string MiKo_1015_Title {
             get {
