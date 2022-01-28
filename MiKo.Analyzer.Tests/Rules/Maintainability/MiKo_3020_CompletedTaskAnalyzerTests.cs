@@ -53,6 +53,174 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_lambda_method_that_returns_a_generic_task_in_arrow_clause() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<Task<bool>>, Task<bool>> callback)
+    {
+        return callback(() => Task.FromResult(true));
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_method_that_calls_lambda_method_that_returns_a_generic_task_in_arrow_clause() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<Task<bool>>, Task<bool>> callback) => callback(() => Task.FromResult(true));
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_lambda_method_that_returns_a_generic_task_in_arrow_clause_with_parameter_in_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback)
+    {
+        return callback((o) => Task.FromResult(true));
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_method_that_calls_lambda_method_that_returns_a_generic_task_in_arrow_clause_with_parameter_in_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback) => callback((o) => Task.FromResult(true));
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_lambda_method_that_returns_a_generic_task_in_arrow_clause_with_parameter_in_no_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback)
+    {
+        return callback(o => Task.FromResult(true));
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_method_that_calls_lambda_method_that_returns_a_generic_task_in_arrow_clause_with_parameter_in_no_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback) => callback(o => Task.FromResult(true));
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_lambda_method_that_returns_a_generic_task_in_return_statement_clause() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<Task<bool>>, Task<bool>> callback)
+    {
+        return callback(() =>
+                            {
+                                return Task.FromResult(true);
+                            });
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_method_that_calls_lambda_method_that_returns_a_generic_task_in_return_statement_clause() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<Task<bool>>, Task<bool>> callback) => callback(() =>
+                                                                                            {
+                                                                                                return Task.FromResult(true);
+                                                                                            });
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_lambda_method_that_returns_a_generic_task_in_return_statement_clause_with_parameter_in_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback)
+    {
+        return callback((o) =>
+                            {
+                                return Task.FromResult(true);
+                            });
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_method_that_calls_lambda_method_that_returns_a_generic_task_in_return_statement_clause_with_parameter_in_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback) => callback((o) =>
+                                                                                                    {
+                                                                                                        return Task.FromResult(true);
+                                                                                                    });
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_lambda_method_that_returns_a_generic_task_in_return_statement_clause_with_parameter_in_no_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback)
+    {
+        return callback(o =>
+                            {
+                                return Task.FromResult(true);
+                            });
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_arrow_clause_method_that_calls_lambda_method_that_returns_a_generic_task_in_return_statement_clause_with_parameter_in_no_parenthesis() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomething(Func<Func<object, Task<bool>>, Task<bool>> callback) => callback(o =>
+                                                                                                {
+                                                                                                    return Task.FromResult(true);
+                                                                                                });
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_a_method_that_returns_a_completed_task_from_a_result() => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
