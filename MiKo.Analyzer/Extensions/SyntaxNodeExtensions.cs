@@ -49,6 +49,8 @@ namespace MiKoSolutions.Analyzers
             return method.Parameters.Any(_ => _.Name == parameterName);
         }
 
+        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.Ancestors().OfType<T>().FirstOrDefault(_ => _.IsAnyKind(kinds));
+
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
 
         internal static T FirstChild<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.ChildNodes().FirstOrDefault(_ => _.IsKind(kind)) as T;
@@ -339,6 +341,11 @@ namespace MiKoSolutions.Analyzers
             var symbol = semanticModel.GetDeclaredSymbol(value);
 
             return symbol as IMethodSymbol;
+        }
+
+        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Compilation compilation)
+        {
+            return value.GetTypeSymbol(compilation.GetSemanticModel(value.SyntaxTree));
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)
