@@ -30,9 +30,10 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
         [Ignore("Just for now")]
-        [TestCase("TODO"), Explicit, Timeout(1 * 60 * 60 * 1000)]
+        [TestCase(@"TODO"), Explicit, Timeout(1 * 60 * 60 * 1000)]
         public static void Performance(string path)
         {
+            // ncrunch: no coverage start
             var files = GetDocuments(path).ToList();
             var sources = files.Select(File.ReadAllText).ToArray();
 
@@ -55,6 +56,8 @@ namespace MiKoSolutions.Analyzers.Rules
                     yield return file;
                 }
             }
+
+            // ncrunch: no coverage end
         }
 
         [Test]
