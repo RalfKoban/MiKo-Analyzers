@@ -19,15 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name == nameof(IDisposable.Dispose);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name == nameof(IDisposable.Dispose) && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
             var summaries = CommentExtensions.GetSummaries(commentXml);
             var results = summaries.Any() && summaries.All(_ => _ != SummaryPhrase)
                           ? new List<Diagnostic>(1) { Issue(symbol, SummaryPhrase) }

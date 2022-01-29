@@ -401,32 +401,44 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            foreach (var child in syntaxNode.ChildNodesAndTokens())
+            var commentOnNode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+            if (commentOnNode != null)
             {
-                if (child.IsToken)
+                return commentOnNode;
+            }
+
+            if (syntaxNode is BaseTypeDeclarationSyntax type)
+            {
+                // inspect for attributes
+                var attributeListSyntax = type.AttributeLists.FirstOrDefault();
+                if (attributeListSyntax != null)
                 {
-                    var trivia = child.AsToken().GetAllTrivia();
-                    var comment = FindDocumentationCommentTriviaSyntax(trivia);
-                    if (comment != null)
-                    {
-                        return comment;
-                    }
+                    return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                 }
-                else if (child.IsNode)
+
+                return null;
+            }
+
+            if (syntaxNode is BaseMethodDeclarationSyntax method)
+            {
+                var attributeListSyntax = method.AttributeLists.FirstOrDefault();
+                if (attributeListSyntax != null)
                 {
-                    var trivia = child.AsNode().ChildTokens().SelectMany(_ => _.GetAllTrivia());
-                    var comment = FindDocumentationCommentTriviaSyntax(trivia);
-                    if (comment != null)
-                    {
-                        return comment;
-                    }
+                    return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
+                }
+
+                if (method.ChildNodes().FirstOrDefault() is SyntaxNode child)
+                {
+                    return FindDocumentationCommentTriviaSyntaxForNode(child);
                 }
             }
 
             return null;
 
-            DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntax(IEnumerable<SyntaxTrivia> trivia)
+            DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
             {
+                var trivia = node.ChildTokens().SelectMany(_ => _.GetAllTrivia());
+
                 foreach (var t in trivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
                 {
                     if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)

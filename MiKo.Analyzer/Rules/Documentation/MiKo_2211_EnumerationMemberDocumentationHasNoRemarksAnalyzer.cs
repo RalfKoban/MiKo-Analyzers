@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsEnum();
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsEnum() && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
         {

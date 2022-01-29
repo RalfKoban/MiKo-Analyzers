@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -19,11 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
             var comments = CommentExtensions.GetExamples(commentXml).ToArray();
 
             return AnalyzeExample(symbol, comments);

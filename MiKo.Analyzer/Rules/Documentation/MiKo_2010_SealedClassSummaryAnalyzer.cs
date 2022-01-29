@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public && symbol.IsTestClass() is false;
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public && symbol.IsTestClass() is false && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => symbol.IsSealed is false || summaries.Any(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal))
                                                                                                                          ? Enumerable.Empty<Diagnostic>()

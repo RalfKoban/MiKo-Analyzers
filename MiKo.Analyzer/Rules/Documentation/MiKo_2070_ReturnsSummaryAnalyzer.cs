@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return false;
 
                 default:
-                    return true;
+                    return base.ShallAnalyze(symbol);
             }
         }
 

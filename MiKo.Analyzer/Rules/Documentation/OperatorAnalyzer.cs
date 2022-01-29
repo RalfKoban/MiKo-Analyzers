@@ -32,11 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
             var method = (IMethodSymbol)symbol;
 
             var violationsInSummaries = AnalyzeSummaries(method, commentXml);

@@ -22,19 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                yield break;
-            }
-
             var documentation = symbol.GetDocumentationCommentTriviaSyntax();
-            if (documentation is null)
-            {
-                // no documentation
-                yield break;
-            }
 
-            // var comment = CommentExtensions.GetExceptionComment(m_exceptionType.FullName, commentXml);
             foreach (var commentElement in GetExceptionComments(documentation))
             {
                 foreach (var issue in AnalyzeException(symbol, commentElement))
