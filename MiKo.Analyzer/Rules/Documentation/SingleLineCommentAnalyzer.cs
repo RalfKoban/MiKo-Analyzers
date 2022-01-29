@@ -38,6 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment, semanticModel);
         }
 
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
+
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
         {
             if (ShallAnalyze(context.GetEnclosingMethod()))

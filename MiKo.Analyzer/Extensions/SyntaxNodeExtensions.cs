@@ -172,16 +172,11 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case MethodDeclarationSyntax s:
-                    return semanticModel.GetDeclaredSymbol(s);
-                case PropertyDeclarationSyntax p:
-                    return semanticModel.GetDeclaredSymbol(p);
-                case ConstructorDeclarationSyntax c:
-                    return semanticModel.GetDeclaredSymbol(c);
-                case FieldDeclarationSyntax f:
-                    return semanticModel.GetDeclaredSymbol(f);
-                case EventDeclarationSyntax e:
-                    return semanticModel.GetDeclaredSymbol(e);
+                case MethodDeclarationSyntax s: return semanticModel.GetDeclaredSymbol(s);
+                case PropertyDeclarationSyntax p: return semanticModel.GetDeclaredSymbol(p);
+                case ConstructorDeclarationSyntax c: return semanticModel.GetDeclaredSymbol(c);
+                case FieldDeclarationSyntax f: return semanticModel.GetDeclaredSymbol(f);
+                case EventDeclarationSyntax e: return semanticModel.GetDeclaredSymbol(e);
                 default:
                     return semanticModel.GetEnclosingSymbol(value.GetLocation().SourceSpan.Start);
             }
@@ -401,7 +396,47 @@ namespace MiKoSolutions.Analyzers
 
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode syntaxNode)
         {
-            return syntaxNode?.DescendantNodes(__ => true, true).OfType<DocumentationCommentTriviaSyntax>().FirstOrDefault();
+            if (syntaxNode is null)
+            {
+                return null;
+            }
+
+            foreach (var child in syntaxNode.ChildNodesAndTokens())
+            {
+                if (child.IsToken)
+                {
+                    var trivia = child.AsToken().GetAllTrivia();
+                    var comment = FindDocumentationCommentTriviaSyntax(trivia);
+                    if (comment != null)
+                    {
+                        return comment;
+                    }
+                }
+                else if (child.IsNode)
+                {
+                    var trivia = child.AsNode().ChildTokens().SelectMany(_ => _.GetAllTrivia());
+                    var comment = FindDocumentationCommentTriviaSyntax(trivia);
+                    if (comment != null)
+                    {
+                        return comment;
+                    }
+                }
+            }
+
+            return null;
+
+            DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntax(IEnumerable<SyntaxTrivia> trivia)
+            {
+                foreach (var t in trivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+                {
+                    if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    {
+                        return syntax;
+                    }
+                }
+
+                return null;
+            }
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
@@ -534,7 +569,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode syntaxNode, IEnumerable<string> tags)
         {
             // we have to delve into the trivias to find the XML syntax nodes
-            return syntaxNode.DescendantNodes(__ => true, true).OfType<XmlEmptyElementSyntax>()
+            return syntaxNode.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
                              .Where(_ => tags.Contains(_.GetName()));
         }
 
