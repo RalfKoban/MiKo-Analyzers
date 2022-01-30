@@ -65,18 +65,28 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method_(
-                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                    [ValueSource(nameof(Tests))] string test)
-            => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_test_method()
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var test in Tests)
+                                           {
+                                               No_issue_is_reported_for(@"
+using NUnit;
+using System.Threading.Tasks;
+
 [" + testFixture + @"]
 public class TestMe
 {
     [" + test + @"]
-    public void DoSomething() { }
+    public Task DoSomething() => Task.CompletedTask;
 }
 ");
+                                           }
+                                       }
+                                   });
 
         [Test]
         public void No_issue_is_reported_for_TaskFactory_method_([ValueSource(nameof(TaskFactoryMethods))] string methodName) => No_issue_is_reported_for(@"
@@ -87,9 +97,131 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed() => VerifyCSharpFix(
-                                                  "using System.Threading.Tasks; class TestMe { Task DoSomething() { } }",
-                                                  "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { } }");
+        public void No_issue_is_reported_for_non_async_local_function() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void DoSomethingCore() { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_async_void_local_function() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async void DoSomethingAsync()
+    {
+        async void DoSomethingCoreAsync() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_async_void_local_function() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async void DoSomethingAsync()
+    {
+        async void DoSomethingCore() { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_Task_local_function() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomethingAsync()
+    {
+        async Task DoSomethingCoreAsync() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_Task_local_function() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task DoSomethingAsync()
+    {
+        async Task DoSomethingCore() { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_local_function_inside_test_method()
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var test in Tests)
+                                           {
+                                               No_issue_is_reported_for(@"
+using NUnit;
+using System.Threading.Tasks;
+
+[" + testFixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public Task DoSomething()
+    {
+        Task DoSomethingCoreAsync() => Task.CompletedTask;
+    }
+}
+");
+                                           }
+                                       }
+                                   });
+
+        [Test]
+        public void An_issue_is_reported_for_correctly_named_local_function_inside_test_method()
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var test in Tests)
+                                           {
+                                               An_issue_is_reported_for(@"
+using NUnit;
+using System.Threading.Tasks;
+
+[" + testFixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public Task DoSomething()
+    {
+        Task DoSomethingCore() => Task.CompletedTask;
+    }
+}
+");
+                                           }
+                                       }
+                                   });
+
+        [Test]
+        public void Code_gets_fixed_for_method() => VerifyCSharpFix(
+                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomething() { } }",
+                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { } }");
+
+        [Test]
+        public void Code_gets_fixed_for_local_function() => VerifyCSharpFix(
+                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { Task Core() { } } }",
+                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { Task CoreAsync() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1046_AsyncMethodsSuffixAnalyzer.Id;
 
