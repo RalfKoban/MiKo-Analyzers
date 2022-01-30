@@ -425,7 +425,7 @@ namespace MiKoSolutions.Analyzers
                 if (attributeListSyntax != null)
                 {
                     return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-        }
+                }
 
                 if (method.ChildNodes().FirstOrDefault() is SyntaxNode child)
                 {
