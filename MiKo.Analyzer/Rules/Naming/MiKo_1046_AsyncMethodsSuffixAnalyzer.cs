@@ -27,18 +27,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       && symbol.IsTestSetUpMethod() is false
                                                                       && symbol.IsTestTearDownMethod() is false;
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsAsyncTaskBased();
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
 
             if (methodName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal) || TaskFactoryMethods.Contains(methodName))
             {
-                return Enumerable.Empty<Diagnostic>();
+                // nothing to report here
             }
-
-            var betterName = FindBetterName(symbol);
-
-            return new[] { Issue(symbol, betterName) };
+            else
+            {
+                yield return Issue(symbol, FindBetterName(symbol));
+            }
         }
     }
 }
