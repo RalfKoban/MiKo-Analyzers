@@ -1202,6 +1202,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder..
+        /// </summary>
+        public static string MiKo_1028_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1028_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local function name exceeds limit of {2} chars by {1}.
+        /// </summary>
+        public static string MiKo_1028_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1028_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local function names should be limited in length.
+        /// </summary>
+        public static string MiKo_1028_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1028_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove base type indicator.
         /// </summary>
         public static string MiKo_1030_CodeFixTitle {
