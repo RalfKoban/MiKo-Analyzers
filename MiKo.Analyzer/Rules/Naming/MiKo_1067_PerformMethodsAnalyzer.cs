@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,15 +26,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Verbalizer.TryMakeVerb(name, out var result) ? result : name;
         }
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var methodName = symbol.Name;
 
-            var found = ContainsPhrase(methodName) && ContainsPhrase(methodName.Without("Performance").Without("Performed"));
-
-            return found
-                       ? new[] { Issue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (ContainsPhrase(methodName) && ContainsPhrase(methodName.Without("Performance").Without("Performed")))
+            {
+                yield return Issue(symbol);
+            }
         }
 
         private static bool ContainsPhrase(string methodName) => methodName.Contains(Phrase, StringComparison.Ordinal);
