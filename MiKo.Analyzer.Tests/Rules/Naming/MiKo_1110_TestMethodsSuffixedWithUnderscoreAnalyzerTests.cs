@@ -48,6 +48,21 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_local_function_inside_test_method() => No_issue_is_reported_for(@"
+using NUnit;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void DoSomething_does_something_(int i)
+    {
+        void DoSomething(int j) { }
+    }
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_method_with_wrong_name_(
                                                                     [ValueSource(nameof(TestFixtures))] string testFixture,

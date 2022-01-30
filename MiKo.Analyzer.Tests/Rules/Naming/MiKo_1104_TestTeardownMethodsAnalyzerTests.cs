@@ -56,7 +56,22 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
+        [Test]
+        public void No_issue_is_reported_for_local_function_inside_test_teardown_method() => No_issue_is_reported_for(@"
+using NUnit;
+
+[TestFixture]
+public class TestMe
+{
+    [TearDown]
+    public void CleanupTest()
+    {
+        void Teardown() { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_test_teardown_method_with_wrong_name_(
                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                             [ValueSource(nameof(TestTearDowns))] string test)

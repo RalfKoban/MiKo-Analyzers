@@ -21,9 +21,37 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ISymbol symbol)
+        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
+
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
+
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
+
+        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // don't consider local functions at all
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
+
+            if (Regex.IsMatch(symbolName, PascalCasingRegex))
+            {
+                if (symbolName.Contains("_"))
+                {
+                    var underlinesNr = symbolName.Count(_ => _ is '_');
+                    var upperCasesNr = symbolName.Count(_ => _.IsUpperCase());
+                    var diff = underlinesNr - upperCasesNr;
+                    if (diff >= 0)
+                    {
+                        yield break;
+                    }
+                }
+
+                yield return Issue(symbol);
+            }
+        }
+
+        private static string FindBetterName(string symbolName)
+        {
             if (symbolName.Length < 2)
             {
                 return symbolName;
@@ -77,31 +105,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return string.Intern(new string(characters.ToArray()));
-        }
-
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
-        {
-            var symbolName = symbol.Name;
-
-            if (Regex.IsMatch(symbolName, PascalCasingRegex) is false)
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
-            if (symbolName.Contains("_"))
-            {
-                var underlinesNr = symbolName.Count(_ => _ is '_');
-                var upperCasesNr = symbolName.Count(_ => _.IsUpperCase());
-                var diff = underlinesNr - upperCasesNr;
-                if (diff >= 0)
-                {
-                    return Enumerable.Empty<Diagnostic>();
-                }
-            }
-
-            return new[] { Issue(symbol) };
         }
     }
 }

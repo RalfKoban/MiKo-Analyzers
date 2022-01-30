@@ -21,8 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestOneTimeTearDownMethod();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Name == ExpectedName
-                                                                                                                     ? Enumerable.Empty<Diagnostic>()
-                                                                                                                     : new[] { Issue(symbol, ExpectedName) };
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
+
+        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // don't consider local functions at all
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            if (symbol.Name != ExpectedName)
+            {
+                yield return Issue(symbol, ExpectedName);
+            }
+        }
     }
 }
