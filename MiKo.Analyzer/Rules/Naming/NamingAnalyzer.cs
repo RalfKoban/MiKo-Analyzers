@@ -225,6 +225,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
+        {
+            var localFunctions = symbol.GetLocalFunctions().ToList();
+            if (localFunctions.Count > 0)
+            {
+                var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
+
+                foreach (var localFunction in localFunctions.Select(_ => _.GetSymbol(semanticModel)))
+                {
+                    if (ShallAnalyzeLocalFunction(localFunction))
+                    {
+                        foreach (var diagnostic in AnalyzeName(localFunction, compilation))
+                        {
+                            yield return diagnostic;
+                        }
+                    }
+                }
+            }
+        }
+
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {
             var name = symbolName.Without(Constants.Markers.Entities);
@@ -289,26 +309,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
-        {
-            var localFunctions = symbol.GetLocalFunctions().ToList();
-            if (localFunctions.Count > 0)
-            {
-                var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
-
-                foreach (var localFunction in localFunctions.Select(_ => _.GetSymbol(semanticModel)))
-                {
-                    if (ShallAnalyzeLocalFunction(localFunction))
-                    {
-                        foreach (var diagnostic in AnalyzeName(localFunction, compilation))
-                        {
-                            yield return diagnostic;
-                        }
-                    }
-                }
             }
         }
     }

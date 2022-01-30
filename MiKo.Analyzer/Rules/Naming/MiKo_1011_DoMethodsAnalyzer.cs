@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -57,15 +58,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return null;
         }
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol)
-        {
-            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsTestMethod())
-            {
-                return false;
-            }
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
-            return true;
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => symbol.IsTestMethod()
+                                                                                                                               ? Enumerable.Empty<Diagnostic>() // don't consider local functions inside tests
+                                                                                                                               : base.AnalyzeLocalFunctions(symbol, compilation);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
