@@ -31,6 +31,16 @@ public class TestMeFactory
 ");
 
         [Test]
+        public void No_issue_is_reported_for_ctor() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeFactory
+{
+    public TestMeFactory() { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_special_TaskFactory_class() => No_issue_is_reported_for(@"
 using System;
 
@@ -114,6 +124,24 @@ using System;
 public class TestMeFactory : BaseFactory
 {
     public override int BuildInt() => 42;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_local_function_inside_factory_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeFactory
+{
+    public int CreateInt()
+    {
+        return DoStuff();
+
+        int DoStuff()
+        {
+            return 42;
+        }
+    }
 }
 ");
 
