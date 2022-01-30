@@ -70,6 +70,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_local_function_inside_test_setup_method() => No_issue_is_reported_for(@"
+using NUnit;
+
+[TestFixture]
+public class TestMe
+{
+    [SetUp]
+    public void PrepareTest()
+    {
+        void Setup() { }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_([ValueSource(nameof(TestSetUps))] string test) => VerifyCSharpFix(
                                                               @"using System; class TestMe { [" + test + @"] void Setup()  { } }",
                                                               @"using System; class TestMe { [" + test + @"] void PrepareTest()  { } }");
