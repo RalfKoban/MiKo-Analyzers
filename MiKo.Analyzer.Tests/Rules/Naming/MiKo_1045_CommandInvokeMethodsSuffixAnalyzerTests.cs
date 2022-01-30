@@ -51,6 +51,35 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_command_local_function() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand(Action execute) => _execute = execute;
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => true;
+
+    public void Execute(object parameter) _execute();
+
+    private Action _execute;
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var testMeCommand = new TestMeCommand(SomethingCore);
+
+        void SomethingCore() { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_command_methods() => An_issue_is_reported_for(@"
 using System;
 using System.Windows.Input;
@@ -76,6 +105,35 @@ public class TestMe
     }
 
     private void TestCommand() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_command_local_function() => An_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand(Action execute) => _execute = execute;
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => true;
+
+    public void Execute(object parameter) _execute();
+
+    private Action _execute;
+}
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var testMeCommand = new TestMeCommand(TestCommand);
+
+        void TestCommand() { }
+    }
 }
 ");
 
@@ -141,7 +199,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_CanExecute_and_Execute_methods()
+        public void Code_gets_fixed_for_CanExecute_and_Execute_methods()
         {
             const string Template = @"
 using System;
@@ -174,6 +232,80 @@ public class TestMe
     private void ###() { }
 
     private bool Can###() => true;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "DoSomethingCommand"), Template.Replace("###", "DoSomething"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Execute_local_function()
+        {
+            const string Template = @"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand(Action execute) => _execute = execute;
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => true;
+
+    public void Execute(object parameter) _execute();
+
+    private Action _execute;
+}
+
+public class TestMe
+{
+    public void Initialize()
+    {
+        var testMeCommand = new TestMeCommand(###);
+
+        void ###() { }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "DoSomethingCommand"), Template.Replace("###", "DoSomething"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_CanExecute_and_Execute_local_functions()
+        {
+            const string Template = @"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand(Action execute, Func<bool> canExecute)
+    {
+        _execute = execute;
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => _canExecute();
+
+    public void Execute(object parameter) _execute();
+
+    private Action _execute;
+}
+
+public class TestMe
+{
+    public void Initialize()
+    {
+        var testMeCommand = new TestMeCommand(###, Can###);
+
+        void ###() { }
+
+        bool Can###() => true;
+    }
 }
 ";
 
