@@ -82,6 +82,21 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_local_function_inside_one_time_test_teardown_method() => No_issue_is_reported_for(@"
+using NUnit;
+
+[TestFixture]
+public class TestMe
+{
+    [OneTimeTearDown]
+    public void CleanupTestEnvironment()
+    {
+        void Teardown() { }
+    }
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_one_time_test_teardown_method_with_wrong_name_(
                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
