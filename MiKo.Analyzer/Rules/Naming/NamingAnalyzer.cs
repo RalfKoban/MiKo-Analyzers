@@ -228,21 +228,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
             var localFunctions = symbol.GetLocalFunctions().ToList();
-            if (localFunctions.Count > 0)
+            if (localFunctions.Count == 0)
             {
-                var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
-
-                foreach (var localFunction in localFunctions.Select(_ => _.GetSymbol(semanticModel)))
-                {
-                    if (ShallAnalyzeLocalFunction(localFunction))
-                    {
-                        foreach (var diagnostic in AnalyzeName(localFunction, compilation))
-                        {
-                            yield return diagnostic;
-                        }
-                    }
-                }
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
+
+            return localFunctions.Select(_ => _.GetSymbol(semanticModel))
+                                 .Where(ShallAnalyzeLocalFunction)
+                                 .SelectMany(_ => AnalyzeName(_, compilation));
         }
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
