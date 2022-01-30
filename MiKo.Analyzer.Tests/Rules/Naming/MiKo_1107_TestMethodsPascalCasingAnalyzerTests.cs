@@ -33,7 +33,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method_with_correct_Upper_and_lower_case_name_(
+        public void No_issue_is_reported_for_test_method_with_correct_upper_and_lower_case_name_(
                                                                         [ValueSource(nameof(TestFixtures))] string testFixture,
                                                                         [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
@@ -43,6 +43,21 @@ public class TestMe
 {
     [" + test + @"]
     public void DoSomething_does_something_with_MyEvent_stuff() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_local_function_inside_test_method() => No_issue_is_reported_for(@"
+using NUnit;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void DoSomething_does_something_with_MyEvent_stuff()
+    {
+        void DoSomethingMyEventCore() { }
+    }
 }
 ");
 
@@ -67,7 +82,7 @@ public class TestMe
         [TestCase("DoSomethingWithHTML", "Do_something_with_HTML")]
         [TestCase("DoSomethingWithHTMLandMore", "Do_something_with_HTML_and_more")]
         [TestCase("HTMLdoSomething", "HTML_do_something")]
-        public void Code_gets_fixed_(string original, string fix)
+        public void Code_gets_fixed_for_test_method_(string original, string fix)
         {
             const string Template = @"
 [TestFixture]
