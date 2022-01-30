@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -38,16 +37,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.ContainingSymbol is IMethodSymbol method && ShallAnalyze(method);
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
 
             if (symbolName.Contains(TestMarker))
             {
-                return new[] { Issue(symbol, GetTestMarker(symbolName)) };
+                yield return Issue(symbol, GetTestMarker(symbolName));
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         private static string GetTestMarker(string symbolName)
