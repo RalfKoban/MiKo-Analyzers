@@ -51,10 +51,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbol.IsPubliclyVisible() && base.ShallAnalyze(symbol);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)).ToList();
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Name.StartsWith(Prefix, StringComparison.Ordinal)
-                                                                                                                     ? Enumerable.Empty<Diagnostic>()
-                                                                                                                     : new[] { Issue(symbol) };
+        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // don't consider local functions at all
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation));
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            if (symbol.Name.StartsWith(Prefix, StringComparison.Ordinal) is false)
+            {
+                yield return Issue(symbol);
+            }
+        }
     }
 }
