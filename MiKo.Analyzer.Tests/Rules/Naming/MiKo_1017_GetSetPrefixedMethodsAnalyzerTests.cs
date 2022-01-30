@@ -25,6 +25,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_local_function_with_prefix_([ValueSource(nameof(ValidPrefixes))] string prefix) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void " + prefix + @"Something() { }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_special_CanOpen_method_([Values("GetCanOpenManager", "IsCanOpenManager", "SetCanOpenManager", "HasCanOpenManager")] string methodName) => No_issue_is_reported_for(@"
 namespace My.CanOpen.Namespace
 {
@@ -53,6 +64,17 @@ public class TestMe
 {
     public void " + prefix + @"Something(object o)
     {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_with_prefix_([ValueSource(nameof(InvalidPrefixes))] string prefix) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void " + prefix + @"Something(object o) { }
     }
 }
 ");
