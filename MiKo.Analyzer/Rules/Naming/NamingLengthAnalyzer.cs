@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 
@@ -18,16 +17,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected IEnumerable<Diagnostic> Analyze(ISymbol symbol)
         {
-            if (symbol.IsOverride)
+            if (symbol.IsOverride is false)
             {
-                return Enumerable.Empty<Diagnostic>();
+                var exceeding = GetExceedingCharacters(symbol.Name);
+
+                if (exceeding > 0)
+                {
+                    yield return Issue(symbol, exceeding);
+                }
             }
-
-            var exceeding = GetExceedingCharacters(symbol.Name);
-
-            return exceeding > 0
-                       ? new[] { Issue(symbol, exceeding) }
-                       : Enumerable.Empty<Diagnostic>();
         }
 
         protected Diagnostic Issue(ISymbol symbol, int exceeding) => Issue(symbol, exceeding, m_limit);
