@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,16 +19,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false && base.ShallAnalyze(symbol);
 
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false;
+
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             if (symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {
-                var betterName = FindBetterName(symbol);
-
-                return new[] { Issue(symbol, betterName) };
+                yield return Issue(symbol, FindBetterName(symbol));
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }
