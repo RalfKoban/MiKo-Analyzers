@@ -34,10 +34,32 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_local_function_([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void " + methodName + @"() { }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_wrong_named_method_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_named_local_function_([ValueSource(nameof(WrongNames))] string methodName) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void " + methodName + @"() { }
+    }
 }
 ");
 
@@ -51,7 +73,11 @@ public interface TestMe
 
         [TestCase("class TestMe { public void PerformAnalysis() { } }", "class TestMe { public void Analyze() { } }")]
         [TestCase("class TestMe { public void DoPerform() { } }", "class TestMe { public void Do() { } }")]
-        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+        public void Code_gets_fixed_for_method_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
+        [TestCase("class TestMe { public void DoSomething() { void PerformAnalysis() { } } }", "class TestMe { public void DoSomething() { void Analyze() { } } }")]
+        [TestCase("class TestMe { public void DoSomething() { void DoPerform() { } } }", "class TestMe { public void DoSomething() { void Do() { } } }")]
+        public void Code_gets_fixed_for_local_function_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1067_PerformMethodsAnalyzer.Id;
 
