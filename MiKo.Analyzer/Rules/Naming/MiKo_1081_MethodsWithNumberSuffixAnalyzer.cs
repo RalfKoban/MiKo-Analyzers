@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,8 +17,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.WithoutNumberSuffix();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => symbol.Name.EndsWithCommonNumber()
-                                                                                                                     ? new[] { Issue(symbol) }
-                                                                                                                     : Enumerable.Empty<Diagnostic>();
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            if (symbol.Name.EndsWithCommonNumber())
+            {
+                yield return Issue(symbol);
+            }
+        }
     }
 }

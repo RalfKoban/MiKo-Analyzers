@@ -12,7 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
-
 public class TestMe
 {
 }
@@ -20,7 +19,6 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_method_with_no_number_suffix() => No_issue_is_reported_for(@"
-
 public class TestMe
 {
     public void DoSomething() { }
@@ -28,17 +26,18 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_number_suffix_([Range(0, 10)] int number) => An_issue_is_reported_for(@"
-
+        public void No_issue_is_reported_for_local_function_with_no_number_suffix() => No_issue_is_reported_for(@"
 public class TestMe
 {
-    public void DoSomething" + number + @"() { }
+    public void DoSomething()
+    {
+        void DoSomethingCore() { }
+    }
 }
 ");
 
         [Test]
         public void No_issue_is_reported_for_method_with_OS_bit_number_suffix_([Values(32, 64)] int number) => No_issue_is_reported_for(@"
-
 public class TestMe
 {
     public void DoSomething" + number + @"() { }
@@ -46,9 +45,44 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed() => VerifyCSharpFix(
+        public void No_issue_is_reported_for_local_function_with_OS_bit_number_suffix_([Values(32, 64)] int number) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void DoSomethingCore" + number + @"() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_number_suffix_([Range(0, 10)] int number) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething" + number + @"() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_with_number_suffix_([Range(0, 10)] int number) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        void DoSomethingCore" + number + @"() { }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_method() => VerifyCSharpFix(
                                                          "class TestMe { void DoSomething42() { } }",
                                                          "class TestMe { void DoSomething() { } }");
+
+        [Test]
+        public void Code_gets_fixed_for_local_function() => VerifyCSharpFix(
+                                                         "class TestMe { void DoSomething() { void DoSomethingCore42() { } } }",
+                                                         "class TestMe { void DoSomething() { void DoSomethingCore() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1081_MethodsWithNumberSuffixAnalyzer.Id;
 
