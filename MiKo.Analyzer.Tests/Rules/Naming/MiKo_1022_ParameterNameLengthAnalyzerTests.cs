@@ -22,6 +22,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [Test]
         public void An_issue_is_reported_for_ctor_parameter_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("class TestMe { public TestMe(int " + name + ") { } }");
 
+        [Test]
+        public void No_issue_is_reported_for_local_function_parameter_with_fitting_length_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for("class TestMe { public void Something() { void Local(int " + name + ") { } } }");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_parameter_with_exceeding_length_([ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for("class TestMe { public void Something() { void Local(int " + name + ") { } } }");
+
         protected override string GetDiagnosticId() => MiKo_1022_ParameterNameLengthAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1022_ParameterNameLengthAnalyzer();

@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 320 rules that are currently provided by the analyzer.
+The following tables list all the 321 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -54,6 +54,7 @@ The following tables list all the 320 rules that are currently provided by the a
 |MiKo_1025|Event names should be limited in length|\-|\-|
 |MiKo_1026|Variable names should be limited in length|\-|\-|
 |MiKo_1027|Variable names in loops should be limited in length|\-|\-|
+|MiKo_1028|Local function names should be limited in length|\-|\-|
 |MiKo_1030|Types should not have an 'Abstract' or 'Base' marker to indicate that they are base types|&#x2713;|&#x2713;|
 |MiKo_1031|Entity types should not use a 'Model' suffix|&#x2713;|&#x2713;|
 |MiKo_1032|Methods dealing with entities should not use a 'Model' as marker|&#x2713;|&#x2713;|

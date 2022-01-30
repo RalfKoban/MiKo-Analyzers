@@ -502,6 +502,15 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
   <data name="MiKo_1027_Title" xml:space="preserve">
     <value>Variable names in loops should be limited in length</value>
   </data>
+  <data name="MiKo_1028_Description" xml:space="preserve">
+    <value>Names that have a lot of characters are hard to read when being used. This makes writing code and doing code reviews much harder.</value>
+  </data>
+  <data name="MiKo_1028_MessageFormat" xml:space="preserve">
+    <value>Local function name exceeds limit of {2} chars by {1}</value>
+  </data>
+  <data name="MiKo_1028_Title" xml:space="preserve">
+    <value>Local function names should be limited in length</value>
+  </data>
   <data name="MiKo_1030_CodeFixTitle" xml:space="preserve">
     <value>Remove base type indicator</value>
   </data>
