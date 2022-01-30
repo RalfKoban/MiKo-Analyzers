@@ -16,15 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsRoutedEvent();
+        protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsRoutedEvent() && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
             var symbolName = symbol.Name;
             if (symbolName.EndsWith(Constants.RoutedEventFieldSuffix, StringComparison.OrdinalIgnoreCase) is false)
             {

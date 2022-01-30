@@ -49,6 +49,8 @@ namespace MiKoSolutions.Analyzers
             return method.Parameters.Any(_ => _.Name == parameterName);
         }
 
+        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.Ancestors().OfType<T>().FirstOrDefault(_ => _.IsAnyKind(kinds));
+
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
 
         internal static T FirstChild<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.ChildNodes().FirstOrDefault(_ => _.IsKind(kind)) as T;
@@ -336,6 +338,11 @@ namespace MiKoSolutions.Analyzers
             return symbol as IMethodSymbol;
         }
 
+        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Compilation compilation)
+        {
+            return value.GetTypeSymbol(compilation.GetSemanticModel(value.SyntaxTree));
+        }
+
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)
         {
             var type = value.Expression.GetTypeSymbol(semanticModel);
@@ -394,32 +401,44 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            foreach (var child in syntaxNode.ChildNodesAndTokens())
+            var commentOnNode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+            if (commentOnNode != null)
             {
-                if (child.IsToken)
+                return commentOnNode;
+            }
+
+            if (syntaxNode is BaseTypeDeclarationSyntax type)
+            {
+                // inspect for attributes
+                var attributeListSyntax = type.AttributeLists.FirstOrDefault();
+                if (attributeListSyntax != null)
                 {
-                    var trivia = child.AsToken().GetAllTrivia();
-                    var comment = FindDocumentationCommentTriviaSyntax(trivia);
-                    if (comment != null)
-                    {
-                        return comment;
-                    }
+                    return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                 }
-                else if (child.IsNode)
+
+                return null;
+            }
+
+            if (syntaxNode is BaseMethodDeclarationSyntax method)
+            {
+                var attributeListSyntax = method.AttributeLists.FirstOrDefault();
+                if (attributeListSyntax != null)
                 {
-                    var trivia = child.AsNode().ChildTokens().SelectMany(_ => _.GetAllTrivia());
-                    var comment = FindDocumentationCommentTriviaSyntax(trivia);
-                    if (comment != null)
-                    {
-                        return comment;
-                    }
+                    return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
+        }
+
+                if (method.ChildNodes().FirstOrDefault() is SyntaxNode child)
+                {
+                    return FindDocumentationCommentTriviaSyntaxForNode(child);
                 }
             }
 
             return null;
 
-            DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntax(IEnumerable<SyntaxTrivia> trivia)
+            DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
             {
+                var trivia = node.ChildTokens().SelectMany(_ => _.GetAllTrivia());
+
                 foreach (var t in trivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
                 {
                     if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)

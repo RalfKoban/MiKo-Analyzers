@@ -19,21 +19,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                // ignore empty comments
-            }
-            else
-            {
-                var comment = commentXml.Without(Constants.Markers.Symbols);
+            var comment = commentXml.Without(Constants.Markers.Symbols);
 
-                var name = symbol.FullyQualifiedName();
+            var name = symbol.FullyQualifiedName();
 
-                if (comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref=\"{name}\"")
-                 || comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref='{name}'"))
-                {
-                    yield return Issue(symbol);
-                }
+            if (comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref=\"{name}\"")
+             || comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref='{name}'"))
+            {
+                yield return Issue(symbol);
             }
         }
     }

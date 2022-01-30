@@ -18,14 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace() is false)
+            var groups = CommentExtensions.GetExceptionsOfExceptionComments(commentXml)
+                                          .GroupBy(_ => _); // TODO: what about namespaces
+
+            foreach (var g in groups.Where(_ => _.Count() > 1))
             {
-                var groups = CommentExtensions.GetExceptionsOfExceptionComments(commentXml)
-                                              .GroupBy(_ => _); // TODO: what about namespaces
-                foreach (var g in groups.Where(_ => _.Count() > 1))
-                {
-                    yield return Issue(symbol, g.Key);
-                }
+                yield return Issue(symbol, g.Key);
             }
         }
     }

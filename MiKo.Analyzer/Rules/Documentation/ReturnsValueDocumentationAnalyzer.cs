@@ -51,11 +51,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
             if (ShallAnalyzeReturnType(returnType) is false)
             {
                 return Enumerable.Empty<Diagnostic>();

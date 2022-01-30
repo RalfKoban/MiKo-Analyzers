@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 case MethodKind.UserDefinedOperator:
                 case MethodKind.Conversion: // that's an unary operator, such as an implicit conversion call
-                    return symbol.Name == m_methodName;
+                    return symbol.Name == m_methodName && base.ShallAnalyze(symbol);
 
                 default:
                     return false;
@@ -32,27 +32,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
             var method = (IMethodSymbol)symbol;
 
             var violationsInSummaries = AnalyzeSummaries(method, commentXml);
             var violationsInParameters = AnalyzeParameters(method.Parameters, commentXml);
             var violationsInReturns = AnalyzeReturns(method, commentXml);
 
-            return violationsInSummaries.Concat(violationsInParameters).Concat(violationsInReturns).Where(_ => _ != null);
+            return violationsInSummaries.Concat(violationsInParameters).Concat(violationsInReturns);
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
             var phrases = GetSummaryPhrases(symbol);
 
-            return summaries.Any(_ => _.Trim().EqualsAny(phrases))
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
+            if (summaries.Any(_ => _.Trim().EqualsAny(phrases)))
+            {
+                yield break;
+            }
+
+            yield return Issue(symbol, Constants.XmlTag.Summary, phrases[0]);
         }
 
         private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, string commentXml)
@@ -60,9 +58,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = GetReturnsPhrases(symbol);
             var comments = CommentExtensions.GetReturns(commentXml);
 
-            return comments.Any(_ => _.Trim().EqualsAny(phrases))
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, Constants.XmlTag.Returns, phrases[0]) };
+            if (comments.Any(_ => _.Trim().EqualsAny(phrases)))
+            {
+                yield break;
+            }
+
+            yield return Issue(symbol, Constants.XmlTag.Returns, phrases[0]);
         }
 
         private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters, string commentXml)
@@ -70,7 +71,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (parameters.Length == 2)
             {
                 yield return AnalyzeParameter(commentXml, parameters[0], "The first value to compare.");
-
                 yield return AnalyzeParameter(commentXml, parameters[1], "The second value to compare.");
             }
         }

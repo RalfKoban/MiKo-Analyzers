@@ -30,7 +30,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            return returnType.IsBoolean() || returnType.IsEnum();
+            if (returnType.IsBoolean() || returnType.IsEnum())
+            {
+                return base.ShallAnalyze(symbol);
+            }
+
+            return false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)

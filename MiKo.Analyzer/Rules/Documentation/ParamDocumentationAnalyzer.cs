@@ -16,17 +16,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase)
         {
-            if (comment.StartsWithAny(phrase, StringComparison.Ordinal))
+            if (comment.StartsWithAny(phrase, StringComparison.Ordinal) is false)
             {
-                return Enumerable.Empty<Diagnostic>();
+                var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
+                var proposal = useAllPhrases
+                                   ? phrase.HumanizedConcatenated()
+                                   : phrase[0].SurroundedWithApostrophe();
+
+                yield return Issue(parameter, string.Intern(proposal));
             }
-
-            var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
-            var proposal = useAllPhrases
-                               ? phrase.HumanizedConcatenated()
-                               : phrase[0].SurroundedWithApostrophe();
-
-            return new[] { Issue(parameter, string.Intern(proposal)) };
         }
 
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;
@@ -35,12 +33,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, string commentXml)
         {
-            if (commentXml.IsNullOrWhiteSpace())
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
-            List<Diagnostic> results = null;
             foreach (var parameter in symbol.Parameters.Where(ShallAnalyzeParameter))
             {
                 var comment = parameter.GetComment(commentXml);
@@ -54,23 +46,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                AnalyzeParameters(parameter, comment, ref results);
-            }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        private void AnalyzeParameters(IParameterSymbol parameter, string comment, ref List<Diagnostic> results)
-        {
-            var findings = AnalyzeParameter(parameter, comment);
-            if (findings.Any())
-            {
-                if (results is null)
+                foreach (var issue in AnalyzeParameter(parameter, comment))
                 {
-                    results = new List<Diagnostic>(1);
+                    yield return issue;
                 }
-
-                results.AddRange(findings);
             }
         }
     }

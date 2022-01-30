@@ -16,11 +16,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsFactory();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsFactory(); // do not call base.ShallAnalyze() here to avoid that we don't inspect the methods of the type
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => base.AnalyzeType(symbol, compilation, commentXml).Concat(symbol.GetMethods().SelectMany(_ => AnalyzeMethod(_, compilation))).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml)
+        {
+            // let's see if the type contains a documentation XML
+            var typeIssues = base.ShallAnalyze(symbol)
+                                 ? base.AnalyzeType(symbol, compilation, commentXml)
+                                 : Enumerable.Empty<Diagnostic>();
+
+            return typeIssues.Concat(symbol.GetMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
         {
@@ -55,9 +63,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)
         {
-            return comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, phrases.First()) };
+            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            {
+                // fitting comment
+            }
+            else
+            {
+                yield return Issue(symbol, phrases.First());
+            }
         }
     }
 }

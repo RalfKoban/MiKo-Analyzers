@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsException();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsException(); // do not call base.ShallAnalyze() here to avoid that we don't inspect the methods of the type
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
@@ -30,13 +30,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
              || IsMessageExceptionCtor(symbol)
              || symbol.IsSerializationConstructor())
             {
-                return symbol.GetDocumentationCommentXml().IsNullOrWhiteSpace() is false;
+                return base.ShallAnalyze(symbol);
             }
 
             return false; // unknown ctor
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => base.AnalyzeType(symbol, compilation, commentXml).Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(_ => AnalyzeMethod(_, compilation))).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml)
+        {
+            // let's see if the type contains a documentation XML
+            var typeIssues = base.ShallAnalyze(symbol)
+                                 ? base.AnalyzeType(symbol, compilation, commentXml)
+                                 : Enumerable.Empty<Diagnostic>();
+
+            return typeIssues.Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(_ => AnalyzeMethod(_, compilation)));
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml) => base.AnalyzeMethod(symbol, compilation, commentXml).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
 
@@ -139,9 +147,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases) => comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)))
-                                                                                                                                                ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                : new[] { Issue(symbol, constant, phrases.First()) };
+        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
+        {
+            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            {
+                // fitting comment
+            }
+            else
+            {
+                yield return Issue(symbol, constant, phrases.First());
+            }
+        }
 
         private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<string> summaries, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, phrases);
 
@@ -157,12 +173,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, IReadOnlyList<string> phrase)
         {
             var comment = symbol.GetComment(commentXml);
+
             if (phrase.Any(_ => _ == comment))
             {
-                return Enumerable.Empty<Diagnostic>();
+                // fitting comment
             }
-
-            return new[] { Issue(symbol, Constants.XmlTag.Param, phrase[0]) };
+            else
+            {
+                yield return Issue(symbol, Constants.XmlTag.Param, phrase[0]);
+            }
         }
     }
 }

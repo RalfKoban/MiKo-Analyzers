@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // validated by rule MiKo_2006
             }
 
-            return true;
+            return base.ShallAnalyze(symbol);
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)

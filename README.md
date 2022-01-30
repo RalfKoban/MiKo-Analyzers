@@ -26,22 +26,22 @@ The following tables list all the 320 rules that are currently provided by the a
 ### Naming
 |ID|Title|Enabled by default|CodeFix available|
 |:-|:----|:----------------:|:---------------:|
-|MiKo_1000|'System.EventArgs' types should be suffixed properly|&#x2713;|&#x2713;|
-|MiKo_1001|'System.EventArgs' parameters on methods should be named properly|&#x2713;|&#x2713;|
-|MiKo_1002|Parameter names do not follow .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
-|MiKo_1003|Event handling method name does not follow the .NET Framework Best Practices|&#x2713;|&#x2713;|
+|MiKo_1000|'System.EventArgs' types should be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
+|MiKo_1001|'System.EventArgs' parameters should be named 'e'|&#x2713;|&#x2713;|
+|MiKo_1002|Parameters should be named according the .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
+|MiKo_1003|Event handling method names should follow the .NET Framework Best Practices|&#x2713;|&#x2713;|
 |MiKo_1004|Events should not contain term 'Event' in their names|&#x2713;|&#x2713;|
 |MiKo_1005|'System.EventArgs' variables should be named properly|&#x2713;|&#x2713;|
-|MiKo_1006|Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'|&#x2713;|\-|
-|MiKo_1007|Events and 'EventArgs' types shall be located in the same namespace|&#x2713;|\-|
-|MiKo_1008|Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers|&#x2713;|&#x2713;|
+|MiKo_1006|Events should use 'EventHandler&lt;T&gt;' with 'EventArgs' which are named after the event|&#x2713;|\-|
+|MiKo_1007|Events and their corresponding 'EventArgs' types should be located in the same namespace|&#x2713;|\-|
+|MiKo_1008|Parameters should be named according the .NET Framework Guidelines for DependencyProperty event handlers|&#x2713;|&#x2713;|
 |MiKo_1009|'System.EventHandler' variables should be named properly|&#x2713;|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names|&#x2713;|&#x2713;|
 |MiKo_1011|Methods should not contain 'Do' in their names|&#x2713;|&#x2713;|
-|MiKo_1012|Methods should not be named 'Fire'|&#x2713;|&#x2713;|
+|MiKo_1012|Methods should be named 'Raise' instead of 'Fire'|&#x2713;|&#x2713;|
 |MiKo_1013|Methods should not be named 'Notify' or 'OnNotify'|&#x2713;|&#x2713;|
-|MiKo_1014|Methods should not be named 'Check'|&#x2713;|&#x2713;|
-|MiKo_1015|Methods should not be named 'Init'|&#x2713;|&#x2713;|
+|MiKo_1014|Methods should not be named with ambiguous 'Check'|&#x2713;|&#x2713;|
+|MiKo_1015|Methods should be named 'Initialize' instead of 'Init'|&#x2713;|&#x2713;|
 |MiKo_1016|Factory methods should be named 'Create'|&#x2713;|&#x2713;|
 |MiKo_1017|Methods should not be prefixed with 'Get' or 'Set' if followed by 'Is', 'Can' or 'Has'|&#x2713;|&#x2713;|
 |MiKo_1018|Methods should not be suffixed with noun of a verb|&#x2713;|&#x2713;|

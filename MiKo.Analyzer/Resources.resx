@@ -194,7 +194,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Name it '{1}' instead</value>
   </data>
   <data name="MiKo_1000_Title" xml:space="preserve">
-    <value>'System.EventArgs' types should be suffixed properly</value>
+    <value>'System.EventArgs' types should be suffixed with 'EventArgs'</value>
   </data>
   <data name="MiKo_1001_CodeFixTitle" xml:space="preserve">
     <value>Rename event argument</value>
@@ -209,7 +209,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1001_Title" xml:space="preserve">
-    <value>'System.EventArgs' parameters on methods should be named properly</value>
+    <value>'System.EventArgs' parameters should be named 'e'</value>
   </data>
   <data name="MiKo_1002_CodeFixTitle" xml:space="preserve">
     <value>Rename event argument</value>
@@ -224,7 +224,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1002_Title" xml:space="preserve">
-    <value>Parameter names do not follow .NET Framework Guidelines for event handlers</value>
+    <value>Parameters should be named according the .NET Framework Guidelines for event handlers</value>
   </data>
   <data name="MiKo_1003_CodeFixTitle" xml:space="preserve">
     <value>Rename method according to event pattern</value>
@@ -239,7 +239,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1003_Title" xml:space="preserve">
-    <value>Event handling method name does not follow the .NET Framework Best Practices</value>
+    <value>Event handling method names should follow the .NET Framework Best Practices</value>
   </data>
   <data name="MiKo_1004_CodeFixTitle" xml:space="preserve">
     <value>Remove 'Event' suffix</value>
@@ -273,7 +273,7 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Use 'EventHandler&lt;{1}&gt;' instead</value>
   </data>
   <data name="MiKo_1006_Title" xml:space="preserve">
-    <value>Events shall use 'EventHandler&lt;T&gt;' with properly named 'EventArgs' as 'T'</value>
+    <value>Events should use 'EventHandler&lt;T&gt;' with 'EventArgs' which are named after the event</value>
   </data>
   <data name="MiKo_1007_Description" xml:space="preserve">
     <value>Events and their event arguments belong together logically. Hence, both should be located in the same namespace.</value>
@@ -282,7 +282,7 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Used '{1}' should be in namespace '{2}'</value>
   </data>
   <data name="MiKo_1007_Title" xml:space="preserve">
-    <value>Events and 'EventArgs' types shall be located in the same namespace</value>
+    <value>Events and their corresponding 'EventArgs' types should be located in the same namespace</value>
   </data>
   <data name="MiKo_1008_CodeFixTitle" xml:space="preserve">
     <value>Rename DependencyProperty event handler argument</value>
@@ -294,7 +294,7 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1008_Title" xml:space="preserve">
-    <value>Parameter names do not follow .NET Framework Guidelines for DependencyProperty event handlers</value>
+    <value>Parameters should be named according the .NET Framework Guidelines for DependencyProperty event handlers</value>
   </data>
   <data name="MiKo_1009_CodeFixTitle" xml:space="preserve">
     <value>Name event handler variable 'handler'</value>
@@ -342,7 +342,7 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1012_Title" xml:space="preserve">
-    <value>Methods should not be named 'Fire'</value>
+    <value>Methods should be named 'Raise' instead of 'Fire'</value>
   </data>
   <data name="MiKo_1013_CodeFixTitle" xml:space="preserve">
     <value>Rename 'Notify' to 'On'</value>
@@ -367,7 +367,7 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
     <value>Do not use ambiguous term 'Check'</value>
   </data>
   <data name="MiKo_1014_Title" xml:space="preserve">
-    <value>Methods should not be named 'Check'</value>
+    <value>Methods should not be named with ambiguous 'Check'</value>
   </data>
   <data name="MiKo_1015_CodeFixTitle" xml:space="preserve">
     <value>Rename 'Init' to 'Initialize'</value>
@@ -379,7 +379,7 @@ Example: Instead of 'NotifyPropertyChanged' use 'OnPropertyChanged'.</value>
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1015_Title" xml:space="preserve">
-    <value>Methods should not be named 'Init'</value>
+    <value>Methods should be named 'Initialize' instead of 'Init'</value>
   </data>
   <data name="MiKo_1016_CodeFixTitle" xml:space="preserve">
     <value>Rename factory method</value>
