@@ -56,19 +56,6 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_setup_method_with_wrong_name_(
-                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                    [ValueSource(nameof(TestSetUps))] string test)
-            => An_issue_is_reported_for(@"
-[" + testFixture + @"]
-public class TestMe
-{
-    [" + test + @"]
-    public void Setup() { }
-}
-");
-
         [Test]
         public void No_issue_is_reported_for_local_function_inside_test_setup_method() => No_issue_is_reported_for(@"
 using NUnit;
@@ -81,6 +68,19 @@ public class TestMe
     {
         void Setup() { }
     }
+}
+");
+
+        [Test, Combinatorial]
+        public void An_issue_is_reported_for_test_setup_method_with_wrong_name_(
+                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                    [ValueSource(nameof(TestSetUps))] string test)
+            => An_issue_is_reported_for(@"
+[" + testFixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public void Setup() { }
 }
 ");
 
