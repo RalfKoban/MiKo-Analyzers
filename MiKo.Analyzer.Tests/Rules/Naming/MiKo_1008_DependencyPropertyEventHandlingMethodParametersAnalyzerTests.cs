@@ -58,7 +58,31 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyObject() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_local_function() => No_issue_is_reported_for(@"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_DependencyObject_on_method() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -100,7 +124,31 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyChangedEventArgs() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_DependencyObject_on_local_function() => An_issue_is_reported_for(@"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            void OnWhatever(DependencyObject s, DependencyPropertyChangedEventArgs e) { }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyChangedEventArgs_on_method() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -141,7 +189,31 @@ namespace Bla
 }");
 
         [Test]
-        public void Code_gets_fixed()
+        public void An_issue_is_reported_for_incorrectly_named_DependencyPropertyChangedEventArgs_on_local_function() => An_issue_is_reported_for(@"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs args) { }
+        }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_method()
         {
             const string Template = @"
 namespace System.Windows
@@ -158,7 +230,38 @@ namespace Bla
 
     public class TestMe
     {
-        public override void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
+        public void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
+    }
+}";
+
+            var originalCode = Template.Replace("#1", "obj").Replace("#2", "args");
+            var fixedCode = Template.Replace("#1", "d").Replace("#2", "e");
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_local_function()
+        {
+            const string Template = @"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            void OnWhatever(DependencyObject #1, DependencyPropertyChangedEventArgs #2) { }
+        }
     }
 }";
 
