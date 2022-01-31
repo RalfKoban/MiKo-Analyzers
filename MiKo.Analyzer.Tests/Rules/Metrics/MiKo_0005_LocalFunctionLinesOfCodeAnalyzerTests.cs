@@ -189,7 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 ");
 
         [Test]
-        public void LocalFunction_with_exaclty_matching_ObjectInitializer_statement_as_return_statement_is_not_reported() => No_issue_is_reported_for(@"
+        public void LocalFunction_with_exactly_matching_ObjectInitializer_statement_as_return_statement_is_not_reported() => No_issue_is_reported_for(@"
 
     public class TypeWithMethod
     {
