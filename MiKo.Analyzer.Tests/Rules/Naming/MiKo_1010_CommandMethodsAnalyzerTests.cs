@@ -80,7 +80,7 @@ public class TestMe
         public void An_issue_is_reported_for_local_function_with_Execute_in_name() => An_issue_is_reported_for(@"
 public class TestMe
 {
-    private Something()
+    private void Something()
     {
         void DoExecute() { }
     }
@@ -91,7 +91,29 @@ public class TestMe
         public void An_issue_is_reported_for_local_function_with_CanExecute_in_name() => An_issue_is_reported_for(@"
 public class TestMe
 {
-    private Something()
+    private void Something()
+    {
+        void DoCanExecute() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_in_ctor_with_Execute_in_name() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    private TestMe()
+    {
+        void DoExecute() { }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_local_function_in_ctor_with_CanExecute_in_name() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    private TestMe()
     {
         void DoCanExecute() { }
     }
@@ -110,7 +132,18 @@ public class TestMe
         public void No_issue_is_reported_for_event_handling_local_function_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
-    private Something()
+    private void Something()
+    {
+        void " + methodName + @"() { }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_handling_local_function_in_ctor_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    private TestMe()
     {
         void " + methodName + @"() { }
     }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -33,6 +34,14 @@ namespace MiKoSolutions.Analyzers
                 ".g.cs",
                 ".generated.cs",
                 ".Designer.cs",
+            };
+
+        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
+            {
+                SyntaxKind.MethodDeclaration,
+                SyntaxKind.ConstructorDeclaration,
+                SyntaxKind.Block,
+                SyntaxKind.LocalFunctionStatement,
             };
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
@@ -69,7 +78,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers().OfType<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
 
-        internal static IEnumerable<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value) => value.GetSyntaxNodes().SelectMany(_ => _.DescendantNodes<LocalFunctionStatementSyntax>());
+        internal static IEnumerable<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
+        {
+            return value.GetSyntaxNodes().SelectMany(_ => _.DescendantNodes(__ => __.IsAnyKind(LocalFunctionContainerSyntaxKinds)).OfType<LocalFunctionStatementSyntax>());
+        }
 
         internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetExtensionMethods().Any();
 
