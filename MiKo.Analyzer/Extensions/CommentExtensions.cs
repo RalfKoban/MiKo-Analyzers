@@ -182,8 +182,8 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                // remove all code elements below the examples
-                var codeElements = e.Descendants(Constants.XmlTag.Code).Where(_ => _.Ancestors(Constants.XmlTag.Example).Any()).ToList();
+                // remove all code elements
+                var codeElements = e.Descendants(Constants.XmlTag.Code).ToList();
                 codeElements.ForEach(_ => _.Remove());
 
                 yield return Cleaned(e.Nodes().ConcatenatedWith());

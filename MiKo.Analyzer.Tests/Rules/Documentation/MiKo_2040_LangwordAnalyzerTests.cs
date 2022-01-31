@@ -186,12 +186,17 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_example_for_documentation_is_not_reported_on_class_([ValueSource(nameof(WrongItemsWithoutCode))] string finding) => No_issue_is_reported_for(@"
+        public void Valid_example_for_documentation_is_not_reported_on_class_([ValueSource(nameof(Terms))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
 /// <example>
-/// <code>" + finding + @"</code>
+/// <code>
+///     if (xyz is " + finding + @")
+///     {
+///         return " + finding + @";
+///     }
+/// </code>
 /// </example>
 public sealed class TestMe
 {
@@ -206,6 +211,26 @@ public sealed class TestMe
 /// <example>
 /// " + finding + @"
 /// </example>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void Valid_code_inside_remarks_section_for_documentation_is_not_reported_on_class_([ValueSource(nameof(Terms))] string finding) => No_issue_is_reported_for(@"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <remarks>
+/// <para>
+/// <code>
+///     if (xyz is " + finding + @")
+///     {
+///         return " + finding + @";
+///     }
+/// <code>
+/// </para>
+/// </remarks>
 public sealed class TestMe
 {
 }

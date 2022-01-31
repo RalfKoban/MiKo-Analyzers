@@ -26,9 +26,9 @@ namespace MiKoSolutions.Analyzers
                                                                     XmlCommentExterior,
                                                                 };
 
-        private static readonly string[] Booleans = { "true", "false" };
+        private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
-        private static readonly string[] Nulls = { "null" };
+        private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
