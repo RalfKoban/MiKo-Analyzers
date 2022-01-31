@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -59,17 +58,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (symbol.MatchesProperty() || symbol.MatchesField())
                 {
                     // ignore those ctor parameters that get assigned to a property having the same name
-                    return Enumerable.Empty<Diagnostic>();
+                    yield break;
                 }
             }
 
             if (method.IsOverride || method.IsInterfaceImplementation())
             {
                 // ignore overrides/interfaces as the signatures should match the base signature
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
-            return new[] { Issue(symbol) };
+            yield return Issue(symbol);
         }
     }
 }

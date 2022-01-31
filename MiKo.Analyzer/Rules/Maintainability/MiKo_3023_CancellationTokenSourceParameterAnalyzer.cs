@@ -16,18 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
-        {
-            foreach (var parameter in symbol.Parameters)
-            {
-                var parameterType = parameter.Type;
-                if (parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource)
-                {
-                    return new[] { Issue(parameter, nameof(CancellationToken)) };
-                }
-            }
-
-            return Enumerable.Empty<Diagnostic>();
-        }
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => from parameter in symbol.Parameters
+                                                                                                             let parameterType = parameter.Type
+                                                                                                             where parameterType.TypeKind == TypeKind.Class && parameterType.ToString() == TypeNames.CancellationTokenSource
+                                                                                                             select Issue(parameter, nameof(CancellationToken));
     }
 }

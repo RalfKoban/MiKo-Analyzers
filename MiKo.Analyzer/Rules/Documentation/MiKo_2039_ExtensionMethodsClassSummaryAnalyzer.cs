@@ -24,10 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (summaries.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
             {
-                return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
+                yield return Issue(symbol, Constants.XmlTag.Summary, phrases[0]);
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

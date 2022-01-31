@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,31 +18,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
+            if (HasIssue(symbol))
+            {
+                yield return Issue(symbol, Constants.ExceptionIdentifier, "exception");
+            }
+        }
+
+        private static bool HasIssue(IParameterSymbol symbol)
+        {
             switch (symbol.Name)
             {
                 case Constants.ExceptionIdentifier:
                 case "exception":
                 case "innerException":
-                    return Enumerable.Empty<Diagnostic>();
+                    return false;
 
                 case "inner":
-                    if (symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException())
-                    {
-                        return Enumerable.Empty<Diagnostic>();
-                    }
-
-                    break;
+                    return symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException()
+                               ? false
+                               : true;
 
                 default:
-                    if (symbol.ContainingSymbol.IsConstructor() && symbol.MatchesProperty())
-                    {
-                        return Enumerable.Empty<Diagnostic>();
-                    }
-
-                    break;
+                    return symbol.ContainingSymbol.IsConstructor() && symbol.MatchesProperty()
+                               ? false
+                               : true;
             }
-
-            return new[] { Issue(symbol, Constants.ExceptionIdentifier, "exception") };
         }
     }
 }

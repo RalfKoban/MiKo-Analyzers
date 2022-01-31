@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.IsStatic || symbol.IsSealed)
             {
                 // nothing to report
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
             if (symbol.DeclaredAccessibility == Accessibility.Private)
@@ -49,12 +49,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (otherClass.InheritsFrom(symbol.FullyQualifiedName()))
                     {
                         // we found a private base class, so nothing to report
-                        return Enumerable.Empty<Diagnostic>();
+                        yield break;
                     }
                 }
             }
 
-            return new[] { Issue(symbol) };
+            yield return Issue(symbol);
         }
     }
 }

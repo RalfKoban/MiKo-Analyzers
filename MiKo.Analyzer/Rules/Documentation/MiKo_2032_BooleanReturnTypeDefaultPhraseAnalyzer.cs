@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -25,10 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (comment.StartsWithAny(startingPhrases, Comparison) && comment.ContainsAny(endingPhrases, Comparison))
             {
-                return Enumerable.Empty<Diagnostic>();
+                // nothing to do here
             }
-
-            return new[] { Issue(owningSymbol, xmlTag, startingPhrases[0], endingPhrases[0]) };
+            else
+            {
+                yield return Issue(owningSymbol, xmlTag, startingPhrases[0], endingPhrases[0]);
+            }
         }
 
         // ReSharper disable once RedundantNameQualifier

@@ -25,10 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (HasIssue(symbol))
             {
-                return new[] { Issue(symbol) };
+                yield return Issue(symbol);
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(ISymbol symbol)

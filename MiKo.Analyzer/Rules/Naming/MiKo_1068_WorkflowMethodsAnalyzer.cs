@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,12 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var proposedMethodName = GetProposedMethodName(symbol);
 
-            if (symbol.Name == proposedMethodName)
+            if (symbol.Name != proposedMethodName)
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield return Issue(symbol, proposedMethodName);
             }
-
-            return new[] { Issue(symbol, proposedMethodName) };
         }
 
         private static string GetProposedMethodName(IMethodSymbol method)

@@ -29,11 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     var type = symbol.GetSyntax() as BaseTypeDeclarationSyntax;
                     var syntax = type.BaseList.Types.First(_ => _.Type.GetNameOnlyPart() == defaultInterfaceName);
 
-                    return new[] { Issue(symbol.Name, syntax, defaultInterfaceName) };
+                    yield return Issue(symbol.Name, syntax, defaultInterfaceName);
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool IsAtFirstPosition(INamedTypeSymbol symbol, string defaultInterfaceName)

@@ -36,10 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var propertyNames = FindPropertyNames(symbol);
             if (propertyNames.Any())
             {
-                return new[] { Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated()) };
+                yield return Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated());
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         private static IEnumerable<string> FindPropertyNames(IFieldSymbol symbol) => NamesFinder.FindPropertyNames(symbol, Suffix, Invocation);

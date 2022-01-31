@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -28,14 +27,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var className = symbol.Name;
 
-            if (className.EndsWith(Constants.TestsSuffix, StringComparison.Ordinal))
+            if (className.EndsWith(Constants.TestsSuffix, StringComparison.Ordinal) is false)
             {
-                return Enumerable.Empty<Diagnostic>();
+                var name = FindBetterName(className);
+
+                yield return Issue(symbol, name);
             }
-
-            var name = FindBetterName(className);
-
-            return new[] { Issue(symbol, name) };
         }
 
         private static string FindBetterName(string className)

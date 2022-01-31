@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
             // alternative check for enumerables
@@ -86,11 +86,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (summaries.Any(_ => _.StartsWith(StartingDefaultPhrase, Comparison)))
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    yield break;
                 }
             }
 
-            return new[] { Issue(symbol, phrase) };
+            yield return Issue(symbol, phrase);
         }
     }
 }
