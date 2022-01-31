@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,11 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (comment.ContainsAny(Constants.Comments.FuturePhrase))
                 {
-                    return new[] { Issue(parameter) };
+                    yield return Issue(parameter);
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

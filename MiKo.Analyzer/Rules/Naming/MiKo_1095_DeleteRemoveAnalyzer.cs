@@ -63,20 +63,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private IEnumerable<Diagnostic> AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
         {
             var documentation = symbol.GetDocumentationCommentTriviaSyntax();
-            if (documentation is null)
+            if (documentation != null)
             {
-                // no documentation, so nothing to do
-                return Enumerable.Empty<Diagnostic>();
+                var texts = documentation.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Select(_ => _.ValueText);
+
+                if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
+                {
+                    yield return Issue(symbol);
+                }
             }
-
-            var texts = documentation.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Select(_ => _.ValueText);
-
-            if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
-            {
-                return new[] { Issue(symbol) };
-            }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

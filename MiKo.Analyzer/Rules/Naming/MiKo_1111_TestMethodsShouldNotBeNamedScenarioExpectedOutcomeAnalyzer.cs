@@ -33,11 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var partsStartUpperCase = parts.Length >= 1 && parts.All(_ => _[0].IsUpperCase());
                 if (partsStartUpperCase)
                 {
-                    return new[] { Issue(symbol) };
+                    yield return Issue(symbol);
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

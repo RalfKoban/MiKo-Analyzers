@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -28,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment.EqualsAny(phrases) is false)
                 {
-                    return new[] { Issue(parameter, phrases[0]) };
+                    yield return Issue(parameter, phrases[0]);
                 }
             }
             else if (parameter.IsStreamingContextParameter())
@@ -37,11 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment.EqualsAny(phrases) is false)
                 {
-                    return new[] { Issue(parameter, phrases[0]) };
+                    yield return Issue(parameter, phrases[0]);
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

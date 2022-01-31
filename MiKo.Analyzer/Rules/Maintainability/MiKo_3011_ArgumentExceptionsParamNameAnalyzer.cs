@@ -44,9 +44,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var method = node.GetEnclosingMethod(semanticModel);
+
             if (method is null || method.Parameters.Length == 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
             var type = node.Type.ToString();
@@ -56,12 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (location != Location.None)
             {
                 var parameters = GetParameterNames(node, method);
-                var issue = Issue(type, location, parameters);
 
-                return new[] { issue };
+                yield return Issue(type, location, parameters);
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         private static Location InspectArgumentException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)

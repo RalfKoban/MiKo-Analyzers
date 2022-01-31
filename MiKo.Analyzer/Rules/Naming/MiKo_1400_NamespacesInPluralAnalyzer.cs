@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -64,12 +63,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // maybe it's a number, so we have to check for that
             if (name.IsAcronym() || name.EndsWithNumber() || name.EndsWithAny(AllowedSuffixes))
             {
-                return Enumerable.Empty<Diagnostic>();
+                // nothing to do here
             }
+            else
+            {
+                var pluralName = Pluralizer.GetPluralName(name);
 
-            var pluralName = Pluralizer.GetPluralName(name);
-
-            return new[] { Issue(qualifiedName, location, pluralName) };
+                yield return Issue(qualifiedName, location, pluralName);
+            }
         }
     }
 }

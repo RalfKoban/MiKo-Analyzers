@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -24,12 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            if (IsProperlyNamed(symbol))
+            if (IsProperlyNamed(symbol) is false)
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield return Issue(symbol, FindBetterName(symbol));
             }
-
-            return new[] { Issue(symbol, FindBetterName(symbol)) };
         }
 
         private static bool IsProperlyNamed(ISymbol symbol) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal);

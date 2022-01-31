@@ -49,10 +49,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (method.GetSyntax() is MethodDeclarationSyntax m)
             {
-                return new[] { Issue(m.GetName(), m.ReturnType, returnTypeName) };
+                yield return Issue(m.GetName(), m.ReturnType, returnTypeName);
             }
-
-            return new[] { Issue(method, returnTypeName) };
+            else
+            {
+                yield return Issue(method, returnTypeName);
+            }
         }
     }
 }

@@ -29,12 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (symbolName.ContainsAny(WrongNames))
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase));
-                var issue = Issue(symbol, wrongName, new Dictionary<string, string> { { WrongSuffixIndicator, wrongName } });
 
-                return new[] { issue };
+                yield return Issue(symbol, wrongName, new Dictionary<string, string> { { WrongSuffixIndicator, wrongName } });
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }
