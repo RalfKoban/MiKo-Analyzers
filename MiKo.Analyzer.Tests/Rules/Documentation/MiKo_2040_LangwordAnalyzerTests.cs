@@ -132,6 +132,18 @@ public sealed class TestMe
 ");
 
         [Test]
+        public void Wrong_documentation_is_reported_on_parameter() => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""flag"">True, if something. Otherwise False</param>
+    private void Malform(bool flag) { }
+}
+");
+
+        [Test]
         public void Valid_documentation_is_not_reported_on_class_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + finding + @"
@@ -329,6 +341,34 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_wrong_documentation_on_parameter_([Values(":", ",", "")] string delimiter)
+        {
+            var originalCode = @"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""flag"">True" + delimiter + @" if something. Otherwise False</param>
+    private void Malform(bool flag) { }
+}
+";
+
+            var fixedCode = @"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""flag""><see langword=""true""/>" + delimiter + @" if something. Otherwise <see langword=""false""/></param>
+    private void Malform(bool flag) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2040_LangwordAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2040_LangwordAnalyzer();
@@ -370,6 +410,7 @@ public class TestMe
                 results.Add(token + ".");
                 results.Add(token + "?");
                 results.Add(token + "!");
+                results.Add(token + ":");
                 results.Add("<see langref=\"" + token + "\" />");
                 results.Add("<see langref=\"" + token + "\"/>");
                 results.Add("<see langref=\"" + token + "\"></see>");

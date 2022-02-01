@@ -25,7 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                            "langwowd", // find typos
                                                                        };
 
-        private static readonly KeyValuePair<string, string>[] Items = CreateItems();
+        private static readonly KeyValuePair<string, string>[] StartParts = CreateStartParts();
+
+        private static readonly KeyValuePair<string, string>[] MiddleParts = CreateMiddleParts();
+
+        private static readonly KeyValuePair<string, string>[] EndParts = CreateEndParts();
 
         public MiKo_2040_LangwordAnalyzer() : base(Id)
         {
@@ -40,7 +44,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : AnalyzeComment(symbol.Name, comment);
         }
 
-        private static KeyValuePair<string, string>[] CreateItems()
+        private static KeyValuePair<string, string>[] CreateStartParts()
+        {
+            var results = new Dictionary<string, string>();
+
+            foreach (var phrase in Phrases)
+            {
+                var proposal = Proposal(phrase);
+
+                results.Add($"{phrase}.", $"{proposal}.");
+                results.Add($"{phrase}?", $"{proposal}.");
+                results.Add($"{phrase}!", $"{proposal}.");
+                results.Add($"{phrase},", $"{proposal},");
+                results.Add($"{phrase};", $"{proposal};");
+                results.Add($"{phrase}:", $"{proposal}:");
+            }
+
+            return results.ToArray();
+        }
+
+        private static KeyValuePair<string, string>[] CreateMiddleParts()
         {
             var results = new Dictionary<string, string>();
 
@@ -57,6 +80,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add($" {phrase}!", $" {proposal}.");
                 results.Add($" {phrase},", $" {proposal},");
                 results.Add($" {phrase};", $" {proposal};");
+                results.Add($" {phrase}:", $" {proposal}:");
+            }
+
+            return results.ToArray();
+        }
+
+        private static KeyValuePair<string, string>[] CreateEndParts()
+        {
+            var results = new Dictionary<string, string>();
+
+            foreach (var phrase in Phrases)
+            {
+                var proposal = Proposal(phrase);
+
+                results.Add($" {phrase}", $" {proposal}");
             }
 
             return results.ToArray();
@@ -74,8 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeComment(string symbolName, DocumentationCommentTriviaSyntax comment)
         {
-            var descendantNodes = comment.DescendantNodes(
-                                                          descendant =>
+            var descendantNodes = comment.DescendantNodes(descendant =>
                                                               {
                                                                   switch (descendant)
                                                                   {
@@ -149,7 +186,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 continue;
                             }
 
-                            foreach (var item in Items)
+                            // middle parts
+                            foreach (var item in MiddleParts)
                             {
                                 var wrongText = item.Key;
                                 var proposal = item.Value;
@@ -159,9 +197,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     var start = textToken.SpanStart + index + 1; // we do not want to underline the first char
                                     var end = start + wrongText.Length - 2; // as we do not want to underline the first char, we should also not underline the last char
 
-                                    var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+                                    yield return Issue(symbolName, textToken, start, end, wrongText, proposal);
+                                }
+                            }
 
-                                    yield return Issue(symbolName, location, wrongText, proposal);
+                            // start
+                            foreach (var item in StartParts)
+                            {
+                                var wrongText = item.Key;
+                                var proposal = item.Value;
+
+                                if (text.StartsWith(wrongText, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    var start = textToken.SpanStart;
+                                    var end = start + wrongText.Length - 1; // we do not want to underline the last char
+
+                                    yield return Issue(symbolName, textToken, start, end, wrongText, proposal);
+                                }
+                            }
+
+                            // end
+                            foreach (var item in EndParts)
+                            {
+                                var wrongText = item.Key;
+                                var proposal = item.Value;
+
+                                if (text.EndsWith(wrongText, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    var end = textToken.Span.End;
+                                    var start = end - wrongText.Length + 1; // we do not want to underline the first char
+
+                                    yield return Issue(symbolName, textToken, start, end, wrongText, proposal);
                                 }
                             }
                         }
@@ -170,6 +236,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
             }
+        }
+
+        private Diagnostic Issue(string symbolName, SyntaxToken textToken, int start, int end, string wrongText, string proposal)
+        {
+            var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+
+            return Issue(symbolName, location, wrongText, proposal);
         }
     }
 }
