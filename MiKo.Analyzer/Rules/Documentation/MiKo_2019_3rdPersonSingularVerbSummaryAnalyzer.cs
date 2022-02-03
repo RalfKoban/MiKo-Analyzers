@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 using MiKoSolutions.Analyzers.Linguistics;
 
@@ -23,20 +24,89 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsEnum() is false && symbol.IsException() is false && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(HasThirdPersonSingularVerb)
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol) };
-
-        private static bool HasThirdPersonSingularVerb(string summary)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            var trimmed = summary
-                              .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                              .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                              .Trim();
+            var summaryXmls = symbol.GetDocumentationCommentTriviaSyntax().GetSummaryXmls();
 
-            var firstWord = trimmed.FirstWord();
+            foreach (var summaryXml in summaryXmls)
+            {
+                yield return FindIssue(symbol, summaryXml);
+            }
+        }
 
-            return Verbalizer.IsThirdPersonSingularVerb(firstWord);
+        private Diagnostic FindIssue(ISymbol symbol, SyntaxNode summaryXml)
+        {
+            var descendantNodes = summaryXml.DescendantNodes();
+            foreach (var node in descendantNodes)
+            {
+                switch (node)
+                {
+                    case XmlElementStartTagSyntax startTag:
+                    {
+                        var tagName = startTag.GetName();
+                        switch (tagName)
+                        {
+                            case Constants.XmlTag.Summary:
+                            case Constants.XmlTag.Para:
+                                continue; // skip over the start tag and name syntax
+
+                            default:
+                                return Issue(node); // it's no text, so it must be something different
+                        }
+                    }
+
+                    case XmlNameSyntax _:
+                    case XmlElementSyntax e when e.GetName() == Constants.XmlTag.Para:
+                    case XmlEmptyElementSyntax ee when ee.GetName() == Constants.XmlTag.Para:
+                        continue; // skip over the start tag and name syntax
+
+                    case XmlTextSyntax text:
+                    {
+                        // report the location of the first word via the corresponding text token
+                        foreach (var textToken in text.TextTokens)
+                        {
+                            var summary = textToken.ValueText;
+
+                            if (summary.IsNullOrWhiteSpace())
+                            {
+                                // we found the first but empty /// line, so ignore it
+                                continue;
+                            }
+
+                            // we found some text
+                            var trimmed = summary
+                                              .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                              .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                              .Trim();
+
+                            var firstWord = trimmed.FirstWord();
+
+                            if (Verbalizer.IsThirdPersonSingularVerb(firstWord))
+                            {
+                                // it's a 3rd person singular verb, so we quit
+                                return null;
+                            }
+
+                            // it's no 3rd person singular verb, so we have an issue
+                            var position = summary.IndexOf(firstWord, StringComparison.Ordinal);
+                            var start = textToken.SpanStart + position; // find start position of first word for underlining
+                            var end = start + firstWord.Length; // find end position of first word
+                            var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+
+                            return Issue(symbol.Name, location);
+                        }
+
+                        // we found a completely empty /// line, so ignore it
+                        continue;
+                    }
+
+                    default:
+                        return Issue(node); // it's no text, so it must be something different
+                }
+            }
+
+            // nothing to report
+            return null;
         }
     }
 }

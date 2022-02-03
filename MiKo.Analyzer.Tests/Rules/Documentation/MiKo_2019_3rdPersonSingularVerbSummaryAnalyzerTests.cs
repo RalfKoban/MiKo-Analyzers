@@ -135,11 +135,42 @@ using Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_starting_verb_in_para_tag_in_passive_form_([ValueSource(nameof(ThirdPersonVerbs))] string verb) => No_issue_is_reported_for(@"
+using System;
+
+using Bla
+{
+    /// <summary>
+    /// <para>
+    /// " + verb + @" some test data.
+    /// </para>
+    /// </summary>
+    public class TestMe
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_class([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
 /// " + start + @" some test data.
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_class_in_para_tag_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
+using System;
+
+/// <summary>
+/// <para>
+/// " + start + @" some test data.
+/// </para>
 /// </summary>
 public class TestMe
 {
