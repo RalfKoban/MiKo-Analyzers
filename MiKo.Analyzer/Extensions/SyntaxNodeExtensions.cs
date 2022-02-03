@@ -278,6 +278,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.LocalName.ValueText;
 
+        internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.LocalName.ValueText;
+
         internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
 
         internal static ParameterSyntax[] GetParameters(this XmlElementSyntax value)
