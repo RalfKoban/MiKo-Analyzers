@@ -5372,7 +5372,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place outside &lt;summary&gt;.
+        ///   Looks up a localized string similar to Place XML tag outside &lt;summary&gt;.
         /// </summary>
         public static string MiKo_2041_CodeFixTitle {
             get {
@@ -5381,7 +5381,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;..
+        ///   Looks up a localized string similar to The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other XML tags in parallel to the &lt;summary&gt;..
         /// </summary>
         public static string MiKo_2041_Description {
             get {

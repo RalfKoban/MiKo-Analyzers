@@ -1937,10 +1937,10 @@ Or with: '{3}'</value>
     <value>&lt;see langword="..."/&gt; should be used instead of &lt;c&gt;...&lt;/c&gt;</value>
   </data>
   <data name="MiKo_2041_CodeFixTitle" xml:space="preserve">
-    <value>Place outside &lt;summary&gt;</value>
+    <value>Place XML tag outside &lt;summary&gt;</value>
   </data>
   <data name="MiKo_2041_Description" xml:space="preserve">
-    <value>The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other tags in parallel to the &lt;summary&gt;.</value>
+    <value>The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other XML tags in parallel to the &lt;summary&gt;.</value>
   </data>
   <data name="MiKo_2041_HelpLinkUri" xml:space="preserve">
     <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
