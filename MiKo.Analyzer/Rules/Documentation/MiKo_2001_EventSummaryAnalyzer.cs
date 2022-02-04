@@ -16,6 +16,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected override bool SummaryHasIssue(string summary, out string issue)
+        {
+            issue = null;
+
+            if (summary.StartsWith(Constants.Comments.EventSummaryStartingPhrase, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            issue = summary.FirstWord();
+
+            return true;
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(Constants.Comments.EventSummaryStartingPhrase, StringComparison.Ordinal))
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
                                                                                                                         : new[] { Issue(symbol, Constants.Comments.EventSummaryStartingPhrase) };
