@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,16 +18,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { Issue(symbol, StartingPhrase) }
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
 
-        private static bool StartsWithPhrase(string summary)
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrase);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).TrimStart() // skip over async starting phrase
-                                   .FirstWord();
+            var summary = textToken.ValueText;
 
-            return firstWord.EqualsAny(Words);
+            var trimmed = summary
+                          .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                          .TrimStart();
+
+            var firstWord = trimmed.FirstWord();
+
+            foreach (var word in Words)
+            {
+                if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase) is false)
+                {
+                    var location = GetLocation(textToken, word, StringComparison.OrdinalIgnoreCase);
+
+                    return Issue(symbol.Name, location, StartingPhrase);
+                }
+            }
+
+            return null;
         }
     }
 }
