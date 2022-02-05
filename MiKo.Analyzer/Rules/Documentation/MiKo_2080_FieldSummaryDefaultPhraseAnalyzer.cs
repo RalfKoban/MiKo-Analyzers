@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartingBooleanDefaultPhrase = "Indicates whether ";
         private const string StartingGuidDefaultPhrase = "The unique identifier for ";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
-
         public MiKo_2080_FieldSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
@@ -70,27 +68,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return base.ShallAnalyze(symbol);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetStartingPhrase((IFieldSymbol)symbol));
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
         {
             var fieldSymbol = (IFieldSymbol)symbol;
 
             var phrase = GetStartingPhrase(fieldSymbol);
 
-            if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
+            var summary = textToken.ValueText;
+
+            if (summary.StartsWith(phrase, StringComparison.Ordinal))
             {
-                yield break;
+                return null;
             }
 
-            // alternative check for enumerables
-            if (fieldSymbol.IsConst is false && fieldSymbol.Type.IsEnumerable())
-            {
-                if (summaries.Any(_ => _.StartsWith(StartingDefaultPhrase, Comparison)))
-                {
-                    yield break;
-                }
-            }
-
-            yield return Issue(symbol, phrase);
+            return Issue(symbol.Name, textToken, phrase);
         }
     }
 }
