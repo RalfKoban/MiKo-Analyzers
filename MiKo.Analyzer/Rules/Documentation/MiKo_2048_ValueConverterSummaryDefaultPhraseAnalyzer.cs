@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,8 +18,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => (symbol.IsValueConverter() || symbol.IsMultiValueConverter()) && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(StartingPhrase, StringComparison.Ordinal))
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, StartingPhrase) };
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrase);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            var summary = textToken.ValueText;
+
+            if (summary.StartsWith(StartingPhrase, StringComparison.Ordinal) is false)
+            {
+                var location = GetLocation(textToken, summary.FirstWord());
+
+                return Issue(symbol.Name, location, StartingPhrase);
+            }
+
+            return null;
+        }
     }
 }
