@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            return CommentStartingWith(comment, Constants.Comments.DelegateSummaryStartingPhrase);
+            return CommentStartingWith(comment, MiKo_2043_DelegateSummaryAnalyzer.StartingPhrase);
         }
     }
 }

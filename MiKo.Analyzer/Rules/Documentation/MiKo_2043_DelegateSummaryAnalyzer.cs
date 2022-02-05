@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2043";
 
-        private const string Phrase = Constants.Comments.DelegateSummaryStartingPhrase;
+        internal const string StartingPhrase = "Encapsulates a method that ";
 
         public MiKo_2043_DelegateSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -19,8 +18,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.Contains(Phrase))
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, Constants.XmlTag.Summary, Phrase) };
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrase);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            var summary = textToken.ValueText;
+
+            if (summary.StartsWith(StartingPhrase, StringComparison.Ordinal))
+            {
+                return null;
+            }
+
+            return Issue(symbol.Name, textToken, StartingPhrase);
+        }
     }
 }

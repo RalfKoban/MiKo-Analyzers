@@ -26,14 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summary = textToken.ValueText;
 
-            if (summary.StartsWith(StartingPhrase, StringComparison.Ordinal) is false)
+            if (summary.StartsWith(StartingPhrase, StringComparison.Ordinal))
             {
-                var location = GetLocation(textToken, summary.FirstWord());
-
-                return Issue(symbol.Name, location, StartingPhrase);
+                return null;
             }
 
-            return null;
+            return Issue(symbol.Name, textToken, StartingPhrase);
         }
     }
 }

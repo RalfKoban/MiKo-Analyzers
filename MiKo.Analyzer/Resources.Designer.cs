@@ -5480,7 +5480,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{1}&gt; with: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2043_MessageFormat {
             get {
