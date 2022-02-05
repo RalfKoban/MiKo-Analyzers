@@ -25,20 +25,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
-            var comment = exceptionComment.GetTextWithoutTrivia();
+            // get rid of the para tags as we are not interested into them
+            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTags().Trim();
 
             if (comment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison))
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
             // alternative check for Closed methods
             if (HasCloseMethod(symbol) && comment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
             {
-                return Enumerable.Empty<Diagnostic>();
+                yield break;
             }
 
-            return new[] { ExceptionIssue(exceptionComment, Constants.Comments.ObjectDisposedExceptionEndingPhrase) };
+            yield return ExceptionIssue(exceptionComment, Constants.Comments.ObjectDisposedExceptionEndingPhrase);
         }
 
         private static bool HasCloseMethod(ISymbol symbol) => symbol

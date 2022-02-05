@@ -81,8 +81,25 @@ public class TestMe
 }
 ");
 
-        [TestCase(nameof(Exception), "if the ", "")]
-        [TestCase(nameof(Exception), "If the ", "")]
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_para_tag_throwing_an_ObjectDisposedException() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException"">
+    /// <para>
+    /// If the object is disposed.
+    /// </para>
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+");
+
+        [TestCase(nameof(Exception), "If it's ", "It's ")]
         [TestCase(nameof(Exception), @"Gets thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"gets thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
@@ -94,7 +111,7 @@ public class TestMe
         [TestCase(nameof(Exception), @"Is thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase(nameof(Exception), @"Thrown if any error ", @"any error ")]
+        [TestCase(nameof(Exception), @"Thrown if any error ", @"Any error ")]
         [TestCase(nameof(Exception), @"Thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
@@ -103,7 +120,7 @@ public class TestMe
         [TestCase(nameof(Exception), @"Throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase(nameof(Exception), @"thrown if any error ", @"any error ")]
+        [TestCase(nameof(Exception), @"thrown if any error ", @"Any error ")]
         [TestCase(nameof(Exception), @"thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
@@ -111,6 +128,7 @@ public class TestMe
         [TestCase(nameof(Exception), @"throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(InvalidOperationException), @"Thrown in case that the file cannot be converted to ", @"The file cannot be converted to ")]
         public void Code_gets_fixed_for_(string exceptionType, string startingPhrase, string fixedPhrase)
         {
             var originalCode = @"
@@ -146,15 +164,15 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [TestCase(nameof(ObjectDisposedException), "If the ")]
-        [TestCase(nameof(ObjectDisposedException), @"Gets thrown when the")]
-        [TestCase(nameof(ObjectDisposedException), @"In case the")]
-        [TestCase(nameof(ObjectDisposedException), @"Is thrown when the")]
-        [TestCase(nameof(ObjectDisposedException), @"Thrown if the")]
-        [TestCase(nameof(ObjectDisposedException), @"Thrown when the")]
-        [TestCase(nameof(ObjectDisposedException), @"Throws if the")]
-        [TestCase(nameof(ObjectDisposedException), @"Throws when the")]
-        public void Code_gets_fixed_for_ObjectDisposedException_(string exceptionType, string startingPhrase)
+        [TestCase("If the ")]
+        [TestCase(@"Gets thrown when the")]
+        [TestCase(@"In case the")]
+        [TestCase(@"Is thrown when the")]
+        [TestCase(@"Thrown if the")]
+        [TestCase(@"Thrown when the")]
+        [TestCase(@"Throws if the")]
+        [TestCase(@"Throws when the")]
+        public void Code_gets_fixed_for_ObjectDisposedException_(string startingPhrase)
         {
             var originalCode = @"
 using System;
@@ -164,7 +182,7 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <exception cref=""" + exceptionType + @""">
+    /// <exception cref=""ObjectDisposedException"">
     /// " + startingPhrase + @"something.
     /// </exception>
     public void DoSomething(object o) { }
@@ -179,7 +197,45 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <exception cref=""" + exceptionType + @""">
+    /// <exception cref=""ObjectDisposedException"">
+    /// The current instance has been disposed.
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ObjectDisposedException_with_para_tag()
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException"">
+    /// <para>
+    /// If the object is disposed.
+    /// </para>
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException"">
     /// The current instance has been disposed.
     /// </exception>
     public void DoSomething(object o) { }

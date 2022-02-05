@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -28,7 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                yield return Issue(owningSymbol, xmlTag, startingPhrases[0], endingPhrases[0]);
+                var syntaxNode = owningSymbol.GetDocumentationCommentTriviaSyntax().FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+
+                yield return Issue(owningSymbol.Name, syntaxNode, xmlTag, startingPhrases[0], endingPhrases[0]);
             }
         }
 

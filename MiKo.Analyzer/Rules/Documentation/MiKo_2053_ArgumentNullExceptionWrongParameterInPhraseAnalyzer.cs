@@ -21,14 +21,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
-            var comment = exceptionComment.GetTextWithoutTrivia();
+            // get rid of the para tags as we are not interested into them
+            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTags().Trim();
 
             var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
 
             return parameterIndicators
                    .Where(_ => comment.Contains(_.Value))
-                   .Select(_ => Issue(owningSymbol, _.Key.Type.Name, _.Value + Constants.Comments.XmlElementEndingTag))
-                   .ToList();
+                   .Select(_ => Issue(owningSymbol, _.Key.Type.Name, _.Value + Constants.Comments.XmlElementEndingTag));
         }
     }
 }

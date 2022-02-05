@@ -49,6 +49,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_para_tags_throwing_an_ArgumentNullException_for_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <para>
+    /// <paramref name=""o""/> is <see langword=""null""/>.
+    /// </para>
+    /// </exception>
+    public void DoSomething(object o) { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_method_throwing_an_ArgumentNullException_for_Nullable_struct() => No_issue_is_reported_for(@"
 using System;
 
@@ -93,6 +111,24 @@ public class TestMe
     /// </summary>
     /// <exception cref=""ArgumentNullException"">
     /// <paramref name=""o""/> is <see langword=""null""/>.
+    /// </exception>
+    public void DoSomething(int o) { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_para_tags_throwing_an_ArgumentNullException() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <exception cref=""ArgumentNullException"">
+    /// <para>
+    /// <paramref name=""o""/> is <see langword=""null""/>.
+    /// </para>
     /// </exception>
     public void DoSomething(int o) { }
 }

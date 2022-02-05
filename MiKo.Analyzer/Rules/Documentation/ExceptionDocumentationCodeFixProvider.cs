@@ -15,33 +15,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "gets thrown when the ",
                 "Gets thrown when the ",
-                "is thrown when the ",
-                "Is thrown when the ",
                 "gets thrown when ",
                 "Gets thrown when ",
-                "thrown when the ",
-                "Thrown when the ",
-                "throws when the ",
-                "Throws when the ",
+                "is thrown when the ",
+                "Is thrown when the ",
                 "is thrown when ",
                 "Is thrown when ",
                 "thrown if the ",
                 "Thrown if the ",
+                "thrown in case that ",
+                "Thrown in case that ",
+                "thrown in case the ",
+                "Thrown in case the ",
+                "thrown in case ",
+                "Thrown in case ",
+                "thrown when the ",
+                "Thrown when the ",
                 "throws if the ",
                 "Throws if the ",
-                "throws when ",
-                "Throws when ",
-                "thrown when ",
-                "Thrown when ",
+                "throws in case that ",
+                "Throws in case that ",
+                "throws in case the ",
+                "Throws in case the ",
+                "throws in case ",
+                "Throws in case ",
+                "throws when the ",
+                "Throws when the ",
                 "thrown if ",
                 "Thrown if ",
+                "thrown when ",
+                "Thrown when ",
                 "throws if ",
                 "Throws if ",
+                "throws when ",
+                "Throws when ",
                 "in case the ",
                 "In case the ",
-                "In case the ",
                 "in case ",
-                "In case ",
                 "In case ",
                 "if the ",
                 "If the ",
@@ -100,14 +110,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return GetFixedExceptionCommentForArgumentException(exceptionComment);
         }
 
-        protected static XmlElementSyntax GetFixedStartingPhrase(XmlElementSyntax replaced)
+        protected static XmlElementSyntax GetFixedStartingPhrase(XmlElementSyntax comment)
         {
-            if (replaced.Content.First() is XmlTextSyntax text)
+            // TODO RKN: check for XML elements inside the content, such as a <paramref/> (but be aware of <para> tags)
+            if (comment.Content.First() is XmlTextSyntax text)
             {
-                replaced = ReplaceText(replaced, text, Phrases, string.Empty);
+                var replaced = ReplaceText(comment, text, Phrases, string.Empty);
+
+                if (replaced.Content.First() is XmlTextSyntax newText)
+                {
+                    var firstWord = newText.GetTextWithoutTrivia().FirstWord();
+
+                    if (firstWord.IsNullOrWhiteSpace() is false)
+                    {
+                        var fixedText = newText.ReplaceText(firstWord, firstWord.ToUpperCaseAt(0));
+
+                        return replaced.ReplaceNode(newText, fixedText);
+                    }
+                }
+
+                return replaced;
             }
 
-            return replaced;
+            return comment;
         }
 
         protected DocumentationCommentTriviaSyntax FixComment(CodeFixContext context, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
@@ -161,6 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (part.ContainsAny(parametersAsTextReferences))
                 {
                     var parameterName = part.Substring(1, part.Length - 2);
+
                     yield return ParamRef(parameterName);
                 }
                 else
