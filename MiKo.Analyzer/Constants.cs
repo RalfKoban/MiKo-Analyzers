@@ -626,17 +626,6 @@ namespace MiKoSolutions.Analyzers
 
             internal const string FieldIsReadOnly = "This field is read-only.";
 
-            internal static readonly string[] AttributeSummaryStartingPhrase =
-                {
-                    "Specifies ",
-                    "Indicates ",
-                    "Defines ",
-                    "Provides ",
-                    "Allows ",
-                    "Represents ",
-                    "Marks ",
-                };
-
             internal static readonly string[] NotContradictionPhrase =
                 {
                     "can't",

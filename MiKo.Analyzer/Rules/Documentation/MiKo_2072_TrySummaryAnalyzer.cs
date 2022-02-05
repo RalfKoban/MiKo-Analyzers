@@ -34,15 +34,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var word in Words)
             {
-                if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase) is false)
+                if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase))
                 {
-                    var location = GetLocation(textToken, word, StringComparison.OrdinalIgnoreCase);
-
-                    return Issue(symbol.Name, location, StartingPhrase);
+                    return null;
                 }
             }
 
-            return null;
+            var location = GetLocation(textToken, firstWord);
+
+            return Issue(symbol.Name, location, StartingPhrase);
         }
     }
 }
