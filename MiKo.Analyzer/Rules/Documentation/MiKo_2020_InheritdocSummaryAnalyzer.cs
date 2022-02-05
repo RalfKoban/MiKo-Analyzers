@@ -12,6 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2020";
 
+        private static readonly string[] SeeStartingPhrase = { "<see cref=", "<seealso cref=", "see <see cref=", "see <seealso cref=", "seealso <see cref=", "seealso <seealso cref=" };
+        private static readonly string[] SeeEndingPhrase = { "/>", "/>.", "/see>", "/see>.", "/seealso>", "/seealso>." };
+
         public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -22,6 +25,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                         ? new[] { Issue(symbol) }
                                                                                                                         : Enumerable.Empty<Diagnostic>();
 
-        private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(Constants.Comments.SeeStartingPhrase) && summary.EndsWithAny(Constants.Comments.SeeEndingPhrase);
+        private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(SeeStartingPhrase) && summary.EndsWithAny(SeeEndingPhrase);
     }
 }
