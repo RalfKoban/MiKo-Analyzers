@@ -13,6 +13,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected static Location GetLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var position = textToken.ValueText.IndexOf(value, comparison);
+
+            var start = textToken.SpanStart + position; // find start position for underlining
+            var end = start + value.Length; // find end position
+
+            var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+
+            return location;
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var summaryXmls = symbol.GetDocumentationCommentTriviaSyntax().GetSummaryXmls();
@@ -23,14 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected virtual bool SummaryHasIssue(string summary, out XXX issue)
-        {
-            issue = null;
+        protected virtual Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => null;
 
-            return false;
-        }
-
-        private Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
+        protected Diagnostic AnalyzeSummaryStart(ISymbol symbol, SyntaxNode summaryXml)
         {
             var descendantNodes = summaryXml.DescendantNodes();
             foreach (var node in descendantNodes)
@@ -47,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     continue; // skip over the start tag and name syntax
 
                                 default:
-                                    return Issue(node); // it's no text, so it must be something different
+                                    return SummaryIssue(symbol, node); // it's no text, so it must be something different
                             }
                         }
 
@@ -61,29 +68,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             // report the location of the text issue via the corresponding text token
                             foreach (var textToken in text.TextTokens)
                             {
-                                var summary = textToken.ValueText;
-
-                                if (summary.IsNullOrWhiteSpace())
+                                if (textToken.ValueText.IsNullOrWhiteSpace())
                                 {
                                     // we found the first but empty /// line, so ignore it
                                     continue;
                                 }
 
-                                // we found some text
-                                var hasIssue = SummaryHasIssue(summary, out var value);
-                                if (hasIssue)
-                                {
-                                    // we have an issue, so report the position
-                                    var position = summary.IndexOf(value, StringComparison.Ordinal);
-                                    var start = textToken.SpanStart + position; // find start position of first word for underlining
-                                    var end = start + value.Length; // find end position of first word
-                                    var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
-
-                                    return Issue(symbol.Name, location);
-                                }
-
-                                // no issue, so simply quit
-                                return null;
+                                return SummaryIssue(symbol, textToken);
                             }
 
                             // we found a completely empty /// line, so ignore it
@@ -91,12 +82,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                     default:
-                        return Issue(node); // it's no text, so it must be something different
+                        return SummaryIssue(symbol, node); // it's no text, so it must be something different
                 }
             }
 
             // nothing to report
             return null;
         }
+
+        protected virtual Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
+
+        protected virtual Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken) => Issue(symbol.Name, textToken);
     }
 }

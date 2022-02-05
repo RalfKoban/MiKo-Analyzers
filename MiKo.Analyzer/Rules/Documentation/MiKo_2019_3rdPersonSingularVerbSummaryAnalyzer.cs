@@ -21,9 +21,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsEnum() is false && symbol.IsException() is false && base.ShallAnalyze(symbol);
 
-        protected override bool SummaryHasIssue(string summary, out string issue)
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            issue = null;
+            var summary = textToken.ValueText;
 
             var trimmed = summary
                           .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
@@ -34,12 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (Verbalizer.IsThirdPersonSingularVerb(firstWord))
             {
-                return false;
+                return null;
             }
 
-            issue = firstWord;
+            var location = GetLocation(textToken, firstWord);
 
-            return true;
+            return Issue(symbol.Name, location);
         }
     }
 }

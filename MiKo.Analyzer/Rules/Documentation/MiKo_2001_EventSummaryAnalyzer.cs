@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,22 +14,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool SummaryHasIssue(string summary, out string issue)
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, Constants.Comments.EventSummaryStartingPhrase);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            issue = null;
+            var summary = textToken.ValueText;
 
             if (summary.StartsWith(Constants.Comments.EventSummaryStartingPhrase, StringComparison.Ordinal))
             {
-                return false;
+                return null;
             }
 
-            issue = summary.FirstWord();
+            var firstWord = summary.FirstWord();
+            var location = GetLocation(textToken, firstWord);
 
-            return true;
+            return Issue(symbol.Name, location, Constants.Comments.EventSummaryStartingPhrase);
         }
-
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(Constants.Comments.EventSummaryStartingPhrase, StringComparison.Ordinal))
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, Constants.Comments.EventSummaryStartingPhrase) };
     }
 }
