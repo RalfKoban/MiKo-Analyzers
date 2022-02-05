@@ -25,10 +25,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum();
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => symbol.GetFields().Where(ShallAnalyze).SelectMany(_ => AnalyzeSummaries(_, _.GetDocumentationCommentXml()));
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => symbol.GetFields().SelectMany(_ => AnalyzeField(_, compilation));
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
-                                                                                                                    where summary.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase)
-                                                                                                                    select Issue(symbol, summary.FirstWord());
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            var summary = textToken.ValueText;
+
+            foreach (var wrongPhrase in StartingPhrases)
+            {
+                if (summary.StartsWith(wrongPhrase, StringComparison.OrdinalIgnoreCase))
+                {
+                    var location = GetLocation(textToken, wrongPhrase, StringComparison.OrdinalIgnoreCase);
+
+                    return Issue(symbol.Name, location, wrongPhrase);
+                }
+            }
+
+            return null;
+        }
     }
 }
