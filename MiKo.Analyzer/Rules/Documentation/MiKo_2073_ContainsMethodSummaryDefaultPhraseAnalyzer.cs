@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,25 +18,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase) && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.All(StartsWithPhrase)
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, StartingPhrase) };
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
 
-        private static bool StartsWithPhrase(string summary)
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrase);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            // skip over async starting phrase
-            var withoutAsync = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).TrimStart();
+            var summary = textToken.ValueText;
 
-            var firstWord = withoutAsync.FirstWord();
+            var trimmed = summary
+                          .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                          .Trim();
 
-            if (firstWord.Equals(StartingPhrase.FirstWord(), StringComparison.OrdinalIgnoreCase))
+            if (trimmed.StartsWith(StartingPhrase, StringComparison.OrdinalIgnoreCase))
             {
-                var secondWord = withoutAsync.SecondWord();
-
-                return secondWord.Equals(StartingPhrase.SecondWord(), StringComparison.OrdinalIgnoreCase);
+                return null;
             }
 
-            return false;
+            var location = GetLocation(textToken, summary.FirstWord(), StringComparison.OrdinalIgnoreCase);
+
+            return Issue(symbol.Name, location, StartingPhrase);
         }
     }
 }
