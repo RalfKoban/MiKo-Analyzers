@@ -225,6 +225,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T1, T2, T3>(ISymbol symbol, T1 arg1, T2 arg2, T3 arg3, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
+        protected Diagnostic Issue<T1, T2, T3>(string name, SyntaxNode node, T1 arg1, T2 arg2, T3 arg3, Dictionary<string, string> properties = null) => CreateIssue(node.GetLocation(), properties, name, arg1.ToString(), arg2.ToString(), arg3.ToString());
+
+        protected Diagnostic Issue<T1, T2, T3>(string name, SyntaxToken token, T1 arg1, T2 arg2, T3 arg3, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, name, arg1.ToString(), arg2.ToString(), arg3.ToString());
+
+        protected Diagnostic Issue<T1, T2, T3>(string name, Location location, T1 arg1, T2 arg2, T3 arg3, Dictionary<string, string> properties = null) => CreateIssue(location, properties, name, arg1.ToString(), arg2.ToString(), arg3.ToString());
+
         private static void ReportDiagnostics<T>(SymbolAnalysisContext context, Func<T, Compilation, IEnumerable<Diagnostic>> analyzer) where T : ISymbol
         {
             var symbol = context.Symbol;
