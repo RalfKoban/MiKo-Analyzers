@@ -443,31 +443,6 @@ namespace MiKoSolutions.Analyzers
 
             internal const string NoDefaultPhrase = "This property has no default value.";
 
-            internal static readonly string[] InvalidSummaryCrefXmlTags =
-                {
-                    XmlTag.Example,
-                    XmlTag.Exception,
-                    XmlTag.Include,
-                    XmlTag.Inheritdoc,
-                    XmlTag.Overloads,
-                    XmlTag.Param,
-                    XmlTag.ParamRef,
-                    XmlTag.Permission,
-                    XmlTag.Remarks,
-                    XmlTag.Returns,
-                    XmlTag.SeeAlso,
-                    XmlTag.Summary,
-                    XmlTag.TypeParam,
-                    XmlTag.TypeParamRef,
-                    XmlTag.Value,
-                };
-
-            internal static readonly string[] InvalidSummaryCrefPhrases = Enumerable.Empty<string>()
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, " ")))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, "/")))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, ">")))
-                                                                                    .ToArray();
-
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
 
             internal const string ExceptionCtorSummaryStartingPhraseTemplate = "Initializes a new instance of the {0} class";

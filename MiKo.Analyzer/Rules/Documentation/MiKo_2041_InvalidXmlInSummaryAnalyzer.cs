@@ -12,17 +12,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2041";
 
+        internal static readonly HashSet<string> InvalidSummaryCrefXmlTags = new HashSet<string>
+                                                                                 {
+                                                                                     Constants.XmlTag.Example,
+                                                                                     Constants.XmlTag.Exception,
+                                                                                     Constants.XmlTag.Include,
+                                                                                     Constants.XmlTag.Inheritdoc,
+                                                                                     Constants.XmlTag.Overloads,
+                                                                                     Constants.XmlTag.Param,
+                                                                                     Constants.XmlTag.ParamRef,
+                                                                                     Constants.XmlTag.Permission,
+                                                                                     Constants.XmlTag.Remarks,
+                                                                                     Constants.XmlTag.Returns,
+                                                                                     Constants.XmlTag.SeeAlso,
+                                                                                     Constants.XmlTag.Summary,
+                                                                                     Constants.XmlTag.TypeParam,
+                                                                                     Constants.XmlTag.TypeParamRef,
+                                                                                     Constants.XmlTag.Value,
+                                                                                 };
+
         public MiKo_2041_InvalidXmlInSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         internal static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
-                                                                                                                    ? documentation.GetSummaryXmls(Constants.Comments.InvalidSummaryCrefXmlTags)
+                                                                                                                    ? documentation.GetSummaryXmls(InvalidSummaryCrefXmlTags)
                                                                                                                     : Enumerable.Empty<XmlNodeSyntax>();
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var documentation = symbol.GetDocumentationCommentTriviaSyntax();
 
