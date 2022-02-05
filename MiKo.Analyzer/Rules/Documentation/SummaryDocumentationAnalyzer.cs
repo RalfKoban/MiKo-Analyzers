@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return location;
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var summaryXmls = symbol.GetDocumentationCommentTriviaSyntax().GetSummaryXmls();
 

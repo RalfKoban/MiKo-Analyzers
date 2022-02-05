@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2045_InvalidParameterReferenceInSummaryAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2045_InvalidParameterReferenceInSummaryAnalyzer : DocumentationAnalyzer
     {
         public const string Id = "MiKo_2045";
 
@@ -26,18 +26,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                     ? documentation.GetSummaryXmls(InvalidTags)
                                                                                                                     : Enumerable.Empty<XmlNodeSyntax>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Length > 0 && base.ShallAnalyze(symbol);
+
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            var method = (IMethodSymbol)symbol;
+            var documentation = symbol.GetDocumentationCommentTriviaSyntax();
 
-            if (method.Parameters.Length != 0)
+            foreach (var node in GetIssues(documentation))
             {
-                var documentation = method.GetDocumentationCommentTriviaSyntax();
-
-                foreach (var node in GetIssues(documentation))
-                {
-                    yield return Issue(node);
-                }
+                yield return Issue(node);
             }
         }
     }
