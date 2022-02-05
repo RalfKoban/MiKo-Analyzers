@@ -48,15 +48,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var word in Phrases)
             {
-                if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase) is false)
+                if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase))
                 {
-                    var location = GetLocation(textToken, word, StringComparison.OrdinalIgnoreCase);
-
-                    return Issue(symbol.Name, location, GetProposal(symbol));
+                    return null;
                 }
             }
 
-            return null;
+            var location = GetLocation(textToken, firstWord);
+
+            return Issue(symbol.Name, location, GetProposal(symbol));
         }
 
         private static string GetProposal(ISymbol symbol)
