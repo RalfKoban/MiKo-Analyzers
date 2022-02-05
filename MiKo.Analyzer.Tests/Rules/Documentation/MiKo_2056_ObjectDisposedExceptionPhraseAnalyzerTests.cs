@@ -70,6 +70,26 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_para_tag() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException"">
+    /// <para>
+    /// The object has been disposed.
+    /// </para>
+    /// </exception>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
 using System;
 
@@ -79,6 +99,22 @@ public class TestMe
     /// Some documentation.
     /// </summary>
     /// <exception cref=""ObjectDisposedException"">Object gone.</exception>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_para_tags() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException""><para>Object gone.</para></exception>
     public void DoSomething()
     {
     }

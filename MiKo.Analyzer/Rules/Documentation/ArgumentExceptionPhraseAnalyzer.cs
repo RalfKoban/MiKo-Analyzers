@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
-            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTags();
+            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTags().Trim();
 
             // remove -or- separators and split comment into parts to inspect individually
             var parts = comment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
