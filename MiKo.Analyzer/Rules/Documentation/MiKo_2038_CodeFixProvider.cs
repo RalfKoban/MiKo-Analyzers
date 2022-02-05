@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var c = Comment((XmlElementSyntax)syntax, CommandReplacementMap.Keys, CommandReplacementMap);
 
-            return CommentStartingWith(c, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeInfinite);
+            return CommentStartingWith(c, MiKo_2038_CommandTypeSummaryAnalyzer.StartingPhrase, FirstWordHandling.MakeInfinite);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);

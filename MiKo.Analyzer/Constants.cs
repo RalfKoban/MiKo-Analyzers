@@ -563,8 +563,6 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ExampleDefaultPhrase = "The following example demonstrates ";
 
-            internal const string CommandSummaryStartingPhrase = "Represents a command that can ";
-
             internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =

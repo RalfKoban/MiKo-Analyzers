@@ -12,20 +12,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2038";
 
+        internal const string StartingPhrase = "Represents a command that can ";
+
         public MiKo_2038_CommandTypeSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsCommand() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
-        {
-            const string Phrase = Constants.Comments.CommandSummaryStartingPhrase;
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
 
-            if (summaries.None(_ => _.StartsWith(Phrase, StringComparison.Ordinal)))
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrase);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            var summary = textToken.ValueText;
+
+            if (summary.StartsWith(StartingPhrase, StringComparison.Ordinal))
             {
-                yield return Issue(symbol, Constants.XmlTag.Summary, Phrase);
+                return null;
             }
+
+            return Issue(symbol.Name, textToken, StartingPhrase);
         }
     }
 }
