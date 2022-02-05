@@ -50,13 +50,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase))
                 {
-                    return null;
+                    var location = GetLocation(textToken, firstWord);
+
+                    return Issue(symbol.Name, location, GetProposal(symbol));
                 }
             }
 
-            var location = GetLocation(textToken, firstWord);
-
-            return Issue(symbol.Name, location, GetProposal(symbol));
+            return null;
         }
 
         private static string GetProposal(ISymbol symbol)

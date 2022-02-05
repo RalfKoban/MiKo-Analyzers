@@ -25,10 +25,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return location;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
-            var summaryXmls = symbol.GetDocumentationCommentTriviaSyntax().GetSummaryXmls();
+            return AnalyzeSummary(symbol, symbol.GetDocumentationCommentTriviaSyntax());
+        }
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, DocumentationCommentTriviaSyntax documentation)
+        {
+            return AnalyzeSummary(symbol, documentation.GetSummaryXmls());
+        }
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
+        {
             foreach (var summaryXml in summaryXmls)
             {
                 yield return AnalyzeSummary(symbol, summaryXml);

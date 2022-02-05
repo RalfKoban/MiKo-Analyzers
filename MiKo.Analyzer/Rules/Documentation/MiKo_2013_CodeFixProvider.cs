@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2013_CodeFixProvider)), Shared]
     public sealed class MiKo_2013_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private const string Phrase = Constants.Comments.EnumStartingPhrase;
+        private const string Phrase = MiKo_2013_EnumSummaryAnalyzer.StartingPhrase;
 
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 

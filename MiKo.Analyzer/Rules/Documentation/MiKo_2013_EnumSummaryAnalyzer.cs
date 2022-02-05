@@ -12,17 +12,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2013";
 
+        internal const string StartingPhrase = "Defines values that specify ";
+
         public MiKo_2013_EnumSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrase);
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            return summaries.Any(_ => _.TrimStart().StartsWith(Constants.Comments.EnumStartingPhrase, StringComparison.Ordinal))
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, Constants.Comments.EnumStartingPhrase) };
+            var summary = textToken.ValueText;
+
+            if (summary.StartsWith(StartingPhrase, StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return Issue(symbol.Name, textToken, StartingPhrase);
         }
     }
 }

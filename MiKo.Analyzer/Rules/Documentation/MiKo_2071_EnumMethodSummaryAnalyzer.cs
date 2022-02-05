@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -27,9 +28,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() is true && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
-                                                                                                                    from phrase in BooleanPhrases
-                                                                                                                    where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)
-                                                                                                                    select Issue(symbol, phrase.Trim());
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
+        {
+            foreach (var textToken in summaryXmls.SelectMany(_ => _.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens)))
+            {
+                var text = textToken.ValueText;
+
+                if (text.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                foreach (var booleanPhrase in BooleanPhrases)
+                {
+                    var phrase = booleanPhrase.Trim();
+
+                    foreach (var index in text.AllIndexesOf(phrase))
+                    {
+                        var start = textToken.SpanStart + index;
+                        var end = start + phrase.Length;
+
+                        yield return Issue(symbol.Name, textToken, start, end, phrase);
+                    }
+                }
+            }
+        }
     }
 }

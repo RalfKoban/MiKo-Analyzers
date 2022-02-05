@@ -36,13 +36,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase))
                 {
-                    return null;
+                    var location = GetLocation(textToken, firstWord);
+
+                    return Issue(symbol.Name, location, StartingPhrase);
                 }
             }
 
-            var location = GetLocation(textToken, firstWord);
-
-            return Issue(symbol.Name, location, StartingPhrase);
+            return null;
         }
     }
 }
