@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,10 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { Issue(symbol, GetProposal(symbol)) }
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
-
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
             switch (symbol.Name)
@@ -38,12 +32,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static bool StartsWithPhrase(string summary)
-        {
-            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim() // skip over async starting phrase
-                                   .FirstWord();
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
 
-            return firstWord.EqualsAny(Phrases);
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetProposal(symbol));
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            var summary = textToken.ValueText;
+
+            var trimmed = summary
+                          .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                          .TrimStart();
+
+            var firstWord = trimmed.FirstWord();
+
+            foreach (var word in Phrases)
+            {
+                if (word.Equals(firstWord, StringComparison.OrdinalIgnoreCase) is false)
+                {
+                    var location = GetLocation(textToken, word, StringComparison.OrdinalIgnoreCase);
+
+                    return Issue(symbol.Name, location, GetProposal(symbol));
+                }
+            }
+
+            return null;
         }
 
         private static string GetProposal(ISymbol symbol)
