@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -12,13 +13,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2002";
 
-        private const string StartingPhrase = "Provides data for ";
-        private const string EndingPhraseMultiple = " events.";
-
-        private const string StartingPhraseConcrete = StartingPhrase + "the <see cref=\"";
-        private const string EndingPhraseConcrete = "/> event.";
-
-        private const StringComparison Comparison = StringComparison.Ordinal;
+        private const string Proposal = "Provides data for the <see cref=\" ... \"/> event.";
+        private const string StartingPhrase = "Provides data for the ";
+        private static readonly string[] EndingPhrases = { " event.", " events." };
 
         public MiKo_2002_EventArgsSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -26,25 +23,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEventArgs() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => HasEventSummary(summaries)
-                                                                                                                            ? Enumerable.Empty<Diagnostic>()
-                                                                                                                            : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
-
-        private static bool HasEventSummary(IEnumerable<string> summaries)
+        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            foreach (var summary in summaries.Select(_ => _.Without(Constants.Comments.SealedClassPhrase).Trim()))
+            if (textToken.ValueText.StartsWith(StartingPhrase))
             {
-                if (summary.StartsWith(StartingPhrase, Comparison))
-                {
-                    var phrase = summary.StartsWith(StartingPhraseConcrete, Comparison)
-                                     ? EndingPhraseConcrete
-                                     : EndingPhraseMultiple;
+                return null;
+            }
 
-                    return summary.EndsWith(phrase, Comparison);
+            return Issue(symbol.Name, textToken, Proposal);
+        }
+
+        protected override Diagnostic AnalyzeSummaryContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes)
+        {
+            var node = remainingNodes.ElementAtOrDefault(0);
+            var continueNode = remainingNodes.ElementAtOrDefault(1);
+
+            if (node.IsSeeCref() && continueNode is XmlTextSyntax text)
+            {
+                foreach (var token in text.TextTokens)
+                {
+                    var continueText = token.ValueText;
+
+                    if (continueText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
+
+                    if (continueText.StartsWithAny(EndingPhrases))
+                    {
+                        // no issue
+                        return null;
+                    }
+
+                    // we found an issue
+                    break;
                 }
             }
 
-            return false;
+            return node != null
+                    ? Issue(symbol.Name, node, Proposal)
+                    : Issue(symbol, Proposal);
         }
     }
 }

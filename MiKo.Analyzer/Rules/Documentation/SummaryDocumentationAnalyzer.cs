@@ -65,9 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected Diagnostic AnalyzeSummaryStart(ISymbol symbol, SyntaxNode summaryXml)
         {
             var elementsToSkip = 0;
+            bool analyzedFirstText = false;
 
             var descendantNodes = summaryXml.DescendantNodes();
-            foreach (var node in descendantNodes)
+            foreach (var node in descendantNodes.TakeWhile(_ => analyzedFirstText is false))
             {
                 elementsToSkip++;
 
@@ -103,7 +104,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     continue;
                                 }
 
-                                return SummaryStartIssue(symbol, textToken);
+                                analyzedFirstText = true;
+
+                                var issue = SummaryStartIssue(symbol, textToken);
+                                if (issue != null)
+                                {
+                                    return issue;
+                                }
                             }
 
                             // we found a completely empty /// line, so ignore it

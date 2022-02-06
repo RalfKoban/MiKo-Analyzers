@@ -4119,7 +4119,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;summary&gt; should follow pattern: &apos;{1} ... {2}&apos;.
+        ///   Looks up a localized string similar to &lt;summary&gt; should follow pattern: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2002_MessageFormat {
             get {
