@@ -23,19 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       && symbol.IsTestClass() is false
                                                                       && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
-        {
-            var textToken = summaryXml.DescendantNodes<XmlTextSyntax>()
-                                      .SelectMany(_ => _.TextTokens)
-                                      .LastOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
-
-            var location = GetLocation(textToken, Constants.Comments.SealedClassPhrase);
-            if (location is null)
-            {
-                return Issue(symbol.Name, textToken, Constants.Comments.SealedClassPhrase);
-            }
-
-            return null;
-        }
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryEnd(symbol, summaryXml, Constants.Comments.SealedClassPhrase);
     }
 }

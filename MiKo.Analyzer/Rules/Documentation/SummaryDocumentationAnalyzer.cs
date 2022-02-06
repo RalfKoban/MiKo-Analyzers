@@ -141,6 +141,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return AnalyzeSummaryContains(symbol, textTokens, phrases, comparison);
         }
 
+        protected Diagnostic AnalyzeSummaryEnd(ISymbol symbol, SyntaxNode summaryXml, string phrase)
+        {
+            var textToken = summaryXml.DescendantNodes<XmlTextSyntax>()
+                                      .SelectMany(_ => _.TextTokens)
+                                      .LastOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+
+            var location = GetLocation(textToken, phrase);
+            if (location is null)
+            {
+                return Issue(symbol.Name, textToken, phrase);
+            }
+
+            return null;
+        }
+
         protected virtual Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
 
         protected virtual Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken) => Issue(symbol.Name, textToken);
