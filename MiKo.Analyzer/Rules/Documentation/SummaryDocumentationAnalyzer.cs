@@ -20,9 +20,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var start = textToken.SpanStart + position; // find start position for underlining
             var end = start + value.Length; // find end position
 
-            var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+            return Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+        }
 
-            return location;
+        protected static IEnumerable<Location> GetLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var positions = textToken.ValueText.AllIndexesOf(value, comparison);
+
+            foreach (var position in positions)
+            {
+                var start = textToken.SpanStart + position; // find start position for underlining
+                var end = start + value.Length; // find end position
+
+                yield return Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+            }
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
