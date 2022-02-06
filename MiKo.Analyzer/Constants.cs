@@ -555,36 +555,6 @@ namespace MiKoSolutions.Analyzers
 
             internal const string ExampleDefaultPhrase = "The following example demonstrates ";
 
-            internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
-
-            internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =
-                {
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
-                };
-
-            internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
-
-            internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
-                {
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
-                };
-
-            internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
-
-            internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
-                {
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
-                };
-
             internal const string FieldIsReadOnly = "This field is read-only.";
 
             internal static readonly string[] NotContradictionPhrase =

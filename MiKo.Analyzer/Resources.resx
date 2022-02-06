@@ -1895,7 +1895,7 @@ Or with: '{3}'</value>
     <value>The documentation of a property that returns a command should start with a specific phrase that describes what command the property returns.</value>
   </data>
   <data name="MiKo_2037_MessageFormat" xml:space="preserve">
-    <value>Start &lt;{1}&gt; with: '{2}'</value>
+    <value>Start &lt;summary&gt; with: '{1}'</value>
   </data>
   <data name="MiKo_2037_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of command properties should have a default starting phrase</value>

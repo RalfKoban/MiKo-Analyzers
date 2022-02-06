@@ -11,10 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2037_CodeFixProvider)), Shared]
     public sealed class MiKo_2037_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly string[] GetOnly = string.Format(Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
-        private static readonly string[] SetOnly = string.Format(Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
-        private static readonly string[] GetSet = string.Format(Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate, '|').Split('|');
-
         public override string FixableDiagnosticId => MiKo_2037_CommandPropertySummaryAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2037_CodeFixTitle;
@@ -24,33 +20,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var element = (XmlElementSyntax)syntax;
 
             var property = syntax.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
-            var commentParts = GetCommentParts(property);
+            var commentPart = GetCommentStartPart(property);
 
-            return CommentStartingWith(element, commentParts[0], SeeCref("ICommand"), commentParts[1]);
+            return CommentStartingWith(element, commentPart, SeeCref("ICommand"), MiKo_2037_CommandPropertySummaryAnalyzer.ContinuePhrase);
         }
 
-        private static string[] GetCommentParts(PropertyDeclarationSyntax property)
+        private static string GetCommentStartPart(PropertyDeclarationSyntax property)
         {
             var isArrowGetterOnly = property.ChildNodes<ArrowExpressionClauseSyntax>().Any();
             if (isArrowGetterOnly)
             {
-                return GetOnly;
+                return MiKo_2037_CommandPropertySummaryAnalyzer.GetterOnlySummaryStartingPhrase;
             }
 
             // try to find a getter
             var getter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
             if (getter is null || getter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
-                return SetOnly;
+                return MiKo_2037_CommandPropertySummaryAnalyzer.SetterOnlySummaryStartingPhrase;
             }
 
             var setter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
             if (setter is null || setter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
-                return GetOnly;
+                return MiKo_2037_CommandPropertySummaryAnalyzer.GetterOnlySummaryStartingPhrase;
             }
 
-            return GetSet;
+            return MiKo_2037_CommandPropertySummaryAnalyzer.GetterSetterSummaryStartingPhrase;
         }
     }
 }
