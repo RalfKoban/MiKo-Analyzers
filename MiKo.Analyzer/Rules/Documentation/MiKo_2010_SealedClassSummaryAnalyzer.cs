@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,10 +17,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public && symbol.IsTestClass() is false && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsReferenceType
+                                                                      && symbol.IsSealed
+                                                                      && symbol.DeclaredAccessibility == Accessibility.Public
+                                                                      && symbol.IsTestClass() is false
+                                                                      && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => symbol.IsSealed is false || summaries.Any(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal))
-                                                                                                                         ? Enumerable.Empty<Diagnostic>()
-                                                                                                                         : new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) };
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
+        {
+            var textToken = summaryXml.DescendantNodes<XmlTextSyntax>()
+                                      .SelectMany(_ => _.TextTokens)
+                                      .LastOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+
+            var location = GetLocation(textToken, Constants.Comments.SealedClassPhrase);
+            if (location is null)
+            {
+                return Issue(symbol.Name, textToken, Constants.Comments.SealedClassPhrase);
+            }
+
+            return null;
+        }
     }
 }
