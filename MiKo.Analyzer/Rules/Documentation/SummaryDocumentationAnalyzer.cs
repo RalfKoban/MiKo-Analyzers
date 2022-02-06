@@ -60,13 +60,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected virtual Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => null;
+        protected virtual Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
 
         protected Diagnostic AnalyzeSummaryStart(ISymbol symbol, SyntaxNode summaryXml)
         {
+            var elementsToSkip = 0;
+
             var descendantNodes = summaryXml.DescendantNodes();
             foreach (var node in descendantNodes)
             {
+                elementsToSkip++;
+
                 switch (node)
                 {
                     case XmlElementStartTagSyntax startTag:
@@ -111,9 +115,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            // nothing to report
-            return null;
+            return AnalyzeSummaryContinue(symbol, descendantNodes.Skip(elementsToSkip));
         }
+
+        protected virtual Diagnostic AnalyzeSummaryContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes) => null; // nothing to report
 
         protected IEnumerable<Diagnostic> AnalyzeSummaryContains(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {

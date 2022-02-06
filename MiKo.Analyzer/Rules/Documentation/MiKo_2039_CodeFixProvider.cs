@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2039_CodeFixProvider)), Shared]
     public sealed class MiKo_2039_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly string[] Parts = string.Format(Constants.Comments.ExtensionMethodClassStartingPhraseTemplate, '|').Split('|');
-
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
 
         public override string FixableDiagnosticId => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
@@ -24,7 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = PrepareComment((XmlElementSyntax)syntax);
 
-            return CommentStartingWith(comment, Parts[0], SeeLangword("static"), Parts[1]);
+            return CommentStartingWith(
+                                    comment,
+                                    MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.StartingPhrase,
+                                    SeeLangword("static"),
+                                    MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.ContinuePhrase);
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);

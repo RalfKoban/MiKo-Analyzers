@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static readonly HashSet<string> WrongAttributes = new HashSet<string>
                                                                        {
-                                                                           Constants.XmlTag.Attribute.Langref,
+                                                                           "langref",
                                                                            "langowrd", // find typos
                                                                            "langwrod", // find typos
                                                                            "langwowd", // find typos

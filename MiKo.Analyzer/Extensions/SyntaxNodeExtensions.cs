@@ -638,7 +638,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();
 
-        internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangwordBool() || value.IsWrongBooleanTag();
+        internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangword(Booleans) || value.IsWrongBooleanTag();
 
         internal static bool IsBBool(this SyntaxNode value) => value.Is("b", Booleans);
 
@@ -888,49 +888,29 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsSeeLangword(this SyntaxNode value)
+        internal static bool IsSeeLangword(this SyntaxNode value, params string[] texts)
         {
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
             {
                 var attribute = syntax.Attributes.FirstOrDefault();
-                switch (attribute?.GetName())
+
+                if (attribute?.GetName() == Constants.XmlTag.Attribute.Langword)
                 {
-                    case Constants.XmlTag.Attribute.Langword:
-                    case Constants.XmlTag.Attribute.Langref:
+                    if (texts == null || texts.Length == 0)
                     {
                         return true;
                     }
-                }
-            }
 
-            return false;
-        }
-
-        internal static bool IsSeeLangwordBool(this SyntaxNode value)
-        {
-            if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
-            {
-                var attribute = syntax.Attributes.FirstOrDefault();
-                switch (attribute?.GetName())
-                {
-                    case Constants.XmlTag.Attribute.Langword:
-                    case Constants.XmlTag.Attribute.Langref:
+                    foreach (var token in attribute.DescendantTokens())
+                    {
+                        foreach (var text in texts)
                         {
-                            foreach (var token in attribute.DescendantTokens())
+                            if (text.Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
                             {
-                                if ("true".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    return true;
-                                }
-
-                                if ("false".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    return true;
-                                }
+                                return true;
                             }
-
-                            break;
                         }
+                    }
                 }
             }
 
