@@ -21,9 +21,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(IsSeeCrefLink)
-                                                                                                                        ? new[] { Issue(symbol) }
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => IsSeeCrefLink(summaryXml.ToString()) ? Issue(symbol) : null;
+
+/*
+ * TODO RKN:
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => node.IsSeeCref() ? Issue(symbol) : null;
+
+        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            var summary = textToken.ValueText;
+            var firstWord = summary.FirstWord();
+            switch (firstWord)
+            {
+                case "See":
+                case "Seealso":
+                case "see":
+                case "seealso":
+                    return Issue(symbol);
+
+                default:
+                    return null;
+            }
+        }
+*/
 
         private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(SeeStartingPhrase) && summary.EndsWithAny(SeeEndingPhrase);
     }

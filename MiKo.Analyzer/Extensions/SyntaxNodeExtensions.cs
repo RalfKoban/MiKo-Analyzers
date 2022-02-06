@@ -748,6 +748,125 @@ namespace MiKoSolutions.Analyzers
             return value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
         }
 
+        internal static bool IsSeeCref(this SyntaxNode value)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(emptyElement.Attributes);
+                    }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(element.StartTag.Attributes);
+                    }
+
+                default:
+                    {
+                        return false;
+                    }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax;
+        }
+
+        internal static bool IsSeeCref(this SyntaxNode value, string type)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(emptyElement.Attributes, type);
+                    }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(element.StartTag.Attributes, type);
+                    }
+
+                default:
+                    {
+                        return false;
+                    }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, string content) => syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute && attribute.Cref.ToString() == content;
+        }
+
+        internal static bool IsSeeCref(this SyntaxNode value, TypeSyntax type)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(emptyElement.Attributes, type);
+                    }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(element.StartTag.Attributes, type);
+                    }
+
+                default:
+                    {
+                        return false;
+                    }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, TypeSyntax t)
+            {
+                if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
+                {
+                    if (attribute.Cref is NameMemberCrefSyntax m)
+                    {
+                        return t is GenericNameSyntax
+                                   ? IsSameGeneric(m.Name, t)
+                                   : IsSameName(m.Name, t);
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        internal static bool IsSeeCref(this SyntaxNode value, TypeSyntax type, NameSyntax member)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(emptyElement.Attributes, type, member);
+                    }
+
+                case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
+                    {
+                        return IsCref(element.StartTag.Attributes, type, member);
+                    }
+
+                default:
+                    {
+                        return false;
+                    }
+            }
+
+            bool IsCref(SyntaxList<XmlAttributeSyntax> syntax, TypeSyntax t, NameSyntax name)
+            {
+                if (syntax.FirstOrDefault() is XmlCrefAttributeSyntax attribute)
+                {
+                    if (attribute.Cref is QualifiedCrefSyntax q && IsSameGeneric(q.Container, t))
+                    {
+                        if (q.Member is NameMemberCrefSyntax m && IsSameName(m.Name, name))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
         internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
 
         internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value) => value.GetTextWithoutTrivia().IsNullOrWhiteSpace();
@@ -1632,6 +1751,43 @@ namespace MiKoSolutions.Analyzers
         }
 
         private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+
+        private static bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)
+        {
+            if (t1 is GenericNameSyntax g1 && t2 is GenericNameSyntax g2)
+            {
+                if (g1.Identifier.ValueText == g2.Identifier.ValueText)
+                {
+                    var arguments1 = g1.TypeArgumentList.Arguments;
+                    var arguments2 = g2.TypeArgumentList.Arguments;
+
+                    if (arguments1.Count == arguments2.Count)
+                    {
+                        for (var i = 0; i < arguments1.Count; i++)
+                        {
+                            if (IsSameName(arguments1[i], arguments2[i]) is false)
+                            {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsSameName(TypeSyntax t1, TypeSyntax t2)
+        {
+            if (t1 is IdentifierNameSyntax n1 && t2 is IdentifierNameSyntax n2)
+            {
+                return n1.Identifier.ValueText == n2.Identifier.ValueText;
+            }
+
+            return t1.ToString() == t2.ToString();
+        }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 

@@ -24,17 +24,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var type = SyntaxFactory.ParseTypeName("Task<TResult>");
             var member = SyntaxFactory.ParseName(nameof(Task<object>.Result));
 
-            return IsSeeCref(value, type, member);
+            return value.IsSeeCref(type, member);
         }
 
         protected static bool IsSeeCrefTask(SyntaxNode value)
         {
-            if (IsSeeCref(value, SyntaxFactory.ParseTypeName("Task")))
+            if (value.IsSeeCref(SyntaxFactory.ParseTypeName("Task")))
             {
                 return true;
             }
 
-            if (IsSeeCref(value, SyntaxFactory.ParseTypeName("Task<TResult>")))
+            if (value.IsSeeCref(SyntaxFactory.ParseTypeName("Task<TResult>")))
             {
                 return true;
             }

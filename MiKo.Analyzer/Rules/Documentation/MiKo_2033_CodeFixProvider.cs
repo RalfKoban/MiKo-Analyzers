@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         newComment = ReplaceText(newComment, continueText1, "returning", "that returns");
                     }
 
-                    if (IsSeeCref(newComment.Content[3], "string") && newComment.Content[4] is XmlTextSyntax continueText2)
+                    if (newComment.Content[3].IsSeeCref("string") && newComment.Content[4] is XmlTextSyntax continueText2)
                     {
                         newComment = ReplaceText(newComment, continueText2, TextParts, "that contains");
                     }
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             else if (contents.Count >= 3)
             {
                 // we might have an almost complete string
-                if (contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
+                if (contents[0] is XmlTextSyntax startText && contents[1].IsSeeCref("string") && contents[2] is XmlTextSyntax continueText)
                 {
                     if (startText.TextTokens.Any(_ => _.ValueText.TrimStart() == commentStart))
                     {
