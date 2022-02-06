@@ -17,6 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var position = textToken.ValueText.IndexOf(value, comparison);
 
+            if (position == -1)
+            {
+                return null;
+            }
+
             var start = textToken.SpanStart + position; // find start position for underlining
             var end = start + value.Length; // find end position
 
