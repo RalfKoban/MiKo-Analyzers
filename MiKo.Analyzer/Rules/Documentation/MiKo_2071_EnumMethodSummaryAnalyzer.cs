@@ -28,30 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() is true && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
-        {
-            foreach (var textToken in summaryXmls.SelectMany(_ => _.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens)))
-            {
-                var text = textToken.ValueText;
-
-                if (text.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
-                foreach (var booleanPhrase in BooleanPhrases)
-                {
-                    var phrase = booleanPhrase.Trim();
-
-                    foreach (var index in text.AllIndexesOf(phrase))
-                    {
-                        var start = textToken.SpanStart + index;
-                        var end = start + phrase.Length;
-
-                        yield return Issue(symbol.Name, textToken, start, end, phrase);
-                    }
-                }
-            }
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls) => AnalyzeSummaryContains(symbol, summaryXmls, BooleanPhrases);
     }
 }

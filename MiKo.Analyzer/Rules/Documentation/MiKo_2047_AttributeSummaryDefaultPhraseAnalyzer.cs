@@ -32,9 +32,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
 
-        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrases);
+        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, StartingPhrases);
 
-        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken)
         {
             var summary = textToken.ValueText;
 

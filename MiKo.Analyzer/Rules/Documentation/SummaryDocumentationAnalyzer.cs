@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -78,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     continue; // skip over the start tag and name syntax
 
                                 default:
-                                    return SummaryIssue(symbol, node); // it's no text, so it must be something different
+                                    return SummaryStartIssue(symbol, node); // it's no text, so it must be something different
                             }
                         }
 
@@ -98,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     continue;
                                 }
 
-                                return SummaryIssue(symbol, textToken);
+                                return SummaryStartIssue(symbol, textToken);
                             }
 
                             // we found a completely empty /// line, so ignore it
@@ -106,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                     default:
-                        return SummaryIssue(symbol, node); // it's no text, so it must be something different
+                        return SummaryStartIssue(symbol, node); // it's no text, so it must be something different
                 }
             }
 
@@ -114,8 +115,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected virtual Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
+        protected IEnumerable<Diagnostic> AnalyzeSummaryContains(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            var textTokens = summaryXmls.SelectMany(_ => _.DescendantNodes<XmlTextSyntax>()).SelectMany(_ => _.TextTokens);
 
-        protected virtual Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken) => Issue(symbol.Name, textToken);
+            return AnalyzeSummaryContains(symbol, textTokens, phrases, comparison);
+        }
+
+        protected IEnumerable<Diagnostic> AnalyzeSummaryContains(ISymbol symbol, XmlElementSyntax summaryXml, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            var textTokens = summaryXml.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens);
+
+            return AnalyzeSummaryContains(symbol, textTokens, phrases, comparison);
+        }
+
+        protected virtual Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
+
+        protected virtual Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken) => Issue(symbol.Name, textToken);
+
+        protected virtual Diagnostic SummaryContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, phrase);
+
+        private IEnumerable<Diagnostic> AnalyzeSummaryContains(ISymbol symbol, IEnumerable<SyntaxToken> textTokens, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            foreach (var text in textTokens)
+            {
+                if (text.ValueText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                foreach (var phrase in phrases)
+                {
+                    var trimmedPhrase = phrase.Trim();
+
+                    var locations = GetLocations(text, trimmedPhrase, comparison);
+
+                    foreach (var location in locations)
+                    {
+                        yield return SummaryContainsIssue(symbol, location, trimmedPhrase);
+                    }
+                }
+            }
+        }
     }
 }

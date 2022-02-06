@@ -27,25 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
-        {
-            var textTokens = summaryXmls
-                                    .SelectMany(_ => _.DescendantNodes<XmlTextSyntax>())
-                                    .SelectMany(_ => _.TextTokens);
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls) => AnalyzeSummaryContains(symbol, summaryXmls, ForbiddenPhrases);
 
-            foreach (var text in textTokens)
-            {
-                foreach (var forbiddenPhrase in ForbiddenPhrases)
-                {
-                    var locations = GetLocations(text, forbiddenPhrase, StringComparison.OrdinalIgnoreCase);
-
-                    foreach (var location in locations)
-                    {
-                        yield return Issue(symbol.Name, location, AllowedWordsForRule, ForbiddenWordsForRule);
-                    }
-                }
-            }
-        }
+        protected override Diagnostic SummaryContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, AllowedWordsForRule, ForbiddenWordsForRule);
 
         private static IEnumerable<string> CreateForbiddenPhrases(IEnumerable<string> forbiddenWords) => from suffix in Constants.Comments.Delimiters from forbiddenWord in forbiddenWords select forbiddenWord + suffix;
     }

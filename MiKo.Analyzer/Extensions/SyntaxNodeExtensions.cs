@@ -502,7 +502,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XmlElementSyntax> GetValueXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Value);
 
         /// <summary>
-        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// Gets only the XML elements that are NOT empty (have some content) and have the given tag.
         /// </summary>
         /// <param name="syntax">
         /// The documentation syntax.
@@ -511,7 +511,7 @@ namespace MiKoSolutions.Analyzers
         /// The tag of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// A collection of <see cref="XmlElementSyntax"/> that are the non-empty XML elements (have some content) and have the given tag.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,IEnumerable{string})"/>
@@ -524,7 +524,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// Gets only the XML elements that are NOT empty (have some content) and have any of the given tags.
         /// </summary>
         /// <param name="syntax">
         /// The documentation syntax.
@@ -533,7 +533,7 @@ namespace MiKoSolutions.Analyzers
         /// The tags of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlElementSyntax"/> that are the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// A collection of <see cref="XmlElementSyntax"/> that are the non-empty XML elements (have some content) and have any of the given tags.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,IEnumerable{string})"/>
@@ -546,7 +546,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Only gets the XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
+        /// Gets only the XML elements that are empty (have NO content) and have the given tag.
         /// </summary>
         /// <param name="syntax">
         /// The documentation syntax.
@@ -555,7 +555,7 @@ namespace MiKoSolutions.Analyzers
         /// The tag of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the empty XML elements (have NO content) and have the given tag.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,IEnumerable{string})"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
@@ -568,7 +568,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         /// <summary>
-        /// Only gets the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// Gets only the XML elements that are empty (have NO content) and have any of the the given tags.
         /// </summary>
         /// <param name="syntaxNode">
         /// The starting point of the XML elements to consider.
@@ -577,7 +577,7 @@ namespace MiKoSolutions.Analyzers
         /// The tags of the XML elements to consider.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// A collection of <see cref="XmlEmptyElementSyntax"/> that are the empty XML elements (have NO content) and have any of the the given tags.
         /// </returns>
         /// <seealso cref="GetEmptyXmlSyntax(SyntaxNode,string)"/>
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>

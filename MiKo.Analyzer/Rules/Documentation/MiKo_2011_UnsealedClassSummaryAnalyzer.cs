@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -22,20 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       && symbol.IsTestClass() is false
                                                                       && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
         {
-            var textTokens = summaryXml.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens);
-
-            foreach (var text in textTokens)
-            {
-                var location = GetLocation(text, Constants.Comments.SealedClassPhrase);
-                if (location != null)
-                {
-                    return Issue(symbol.Name, location, Constants.Comments.SealedClassPhrase);
-                }
-            }
-
-            return null;
+            return AnalyzeSummaryContains(symbol, summaryXmls, new[] { Constants.Comments.SealedClassPhrase }, StringComparison.Ordinal);
         }
     }
 }
