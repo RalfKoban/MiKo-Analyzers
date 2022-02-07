@@ -38,6 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentHasIssue(comment, semanticModel);
         }
 
+        protected virtual IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
+        {
+            yield return Issue(name, trivia);
+        }
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
 
         private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
@@ -65,7 +70,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (hasIssue)
                 {
-                    yield return Issue(node.GetName(), trivia);
+                    var name = node.GetName();
+
+                    foreach (var issue in CollectIssues(name, trivia))
+                    {
+                        yield return issue;
+                    }
                 }
             }
         }
