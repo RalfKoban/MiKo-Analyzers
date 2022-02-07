@@ -129,6 +129,48 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_overridden_method_that_returns_a_generic_Dictionary()
+        {
+            const string Code = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMeBase
+{
+    public virtual Dictionary<int, string> DoSomething(int i) => new Dictionary<int, string>();
+}
+
+public class TestMe : TestMeBase
+{
+    public override Dictionary<int, string> DoSomething(int i) => new Dictionary<int, string>();
+}
+";
+
+            An_issue_is_reported_for(Code, 1); // it's only a single issue on the base class
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_interface_implementation_method_that_returns_a_generic_Dictionary()
+        {
+            const string Code = @"
+using System;
+using System.Collections.Generic;
+
+public interface ITestMe
+{
+    Dictionary<int, string> DoSomething(int i);
+}
+
+public class TestMe : ITestMe
+{
+    public Dictionary<int, string> DoSomething(int i) => new Dictionary<int, string>();
+}
+";
+
+            An_issue_is_reported_for(Code, 1); // it's only a single issue on the interface
+        }
+
         protected override string GetDiagnosticId() => MiKo_3072_MethodReturnsListAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3072_MethodReturnsListAnalyzer();

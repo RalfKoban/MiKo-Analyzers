@@ -15,7 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.ReturnsVoid is false && symbol.DeclaredAccessibility != Accessibility.Private && symbol.ReturnType.TypeKind == TypeKind.Class;
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol)
+                                                                   && symbol.ReturnsVoid is false
+                                                                   && symbol.DeclaredAccessibility != Accessibility.Private
+                                                                   && symbol.ReturnType.TypeKind == TypeKind.Class
+                                                                   && symbol.IsInterfaceImplementation() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
