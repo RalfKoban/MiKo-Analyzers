@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -9,6 +11,107 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected DocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base(nameof(Documentation), diagnosticId, symbolKind)
         {
+        }
+
+        protected static Location GetLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var syntaxTree = textToken.SyntaxTree;
+            var position = textToken.ValueText.IndexOf(value, comparison);
+
+            if (position == -1)
+            {
+                return null;
+            }
+
+            var start = textToken.SpanStart + position; // find start position for underlining
+            var end = start + value.Length; // find end position
+
+            return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+        }
+
+        protected static IEnumerable<Location> GetLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var syntaxTree = textToken.SyntaxTree;
+            var positions = textToken.ValueText.AllIndexesOf(value, comparison);
+
+            foreach (var position in positions)
+            {
+                var start = textToken.SpanStart + position; // find start position for underlining
+                var end = start + value.Length; // find end position
+
+                yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+            }
+        }
+
+        protected static IEnumerable<Location> GetLocations(SyntaxToken textToken, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var syntaxTree = textToken.SyntaxTree;
+
+            foreach (var value in values)
+            {
+                var positions = textToken.ValueText.AllIndexesOf(value, comparison);
+
+                foreach (var position in positions)
+                {
+                    var start = textToken.SpanStart + position; // find start position for underlining
+                    var end = start + value.Length; // find end position
+
+                    yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+                }
+            }
+        }
+
+        protected static Location GetLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var syntaxTree = trivia.SyntaxTree;
+            var text = trivia.ToFullString();
+
+            var position = text.IndexOf(value, comparison);
+
+            if (position == -1)
+            {
+                return null;
+            }
+
+            var start = trivia.SpanStart + position; // find start position for underlining
+            var end = start + value.Length; // find end position
+
+            return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+        }
+
+        protected static IEnumerable<Location> GetLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var syntaxTree = trivia.SyntaxTree;
+            var text = trivia.ToFullString();
+
+            var positions = text.AllIndexesOf(value, comparison);
+
+            foreach (var position in positions)
+            {
+                var start = trivia.SpanStart + position; // find start position for underlining
+                var end = start + value.Length; // find end position
+
+                yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+            }
+        }
+
+        protected static IEnumerable<Location> GetLocations(SyntaxTrivia trivia, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var syntaxTree = trivia.SyntaxTree;
+            var text = trivia.ToFullString();
+
+            foreach (var value in values)
+            {
+                var positions = text.AllIndexesOf(value, comparison);
+
+                foreach (var position in positions)
+                {
+                    var start = trivia.SpanStart + position; // find start position for underlining
+                    var end = start + value.Length; // find end position
+
+                    yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+                }
+            }
         }
 
         protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)

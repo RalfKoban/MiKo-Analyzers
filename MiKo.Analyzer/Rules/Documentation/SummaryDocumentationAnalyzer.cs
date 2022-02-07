@@ -4,7 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -12,34 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected SummaryDocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base(diagnosticId, symbolKind)
         {
-        }
-
-        protected static Location GetLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
-        {
-            var position = textToken.ValueText.IndexOf(value, comparison);
-
-            if (position == -1)
-            {
-                return null;
-            }
-
-            var start = textToken.SpanStart + position; // find start position for underlining
-            var end = start + value.Length; // find end position
-
-            return Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
-        }
-
-        protected static IEnumerable<Location> GetLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
-        {
-            var positions = textToken.ValueText.AllIndexesOf(value, comparison);
-
-            foreach (var position in positions)
-            {
-                var start = textToken.SpanStart + position; // find start position for underlining
-                var end = start + value.Length; // find end position
-
-                yield return Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
-            }
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
@@ -65,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected Diagnostic AnalyzeSummaryStart(ISymbol symbol, SyntaxNode summaryXml)
         {
             var elementsToSkip = 0;
-            bool analyzedFirstText = false;
+            var analyzedFirstText = false;
 
             var descendantNodes = summaryXml.DescendantNodes();
             foreach (var node in descendantNodes.TakeWhile(_ => analyzedFirstText is false))
