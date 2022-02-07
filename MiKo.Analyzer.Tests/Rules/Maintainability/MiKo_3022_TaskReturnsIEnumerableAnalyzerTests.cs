@@ -76,6 +76,50 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_overridden_method_that_returns_an_IEnumerable_task()
+        {
+            const string Code = @"
+using System;
+using System.Collections;
+using System.Threading.Tasks;
+
+public class TestMeBase
+{
+    public virtual Task<IEnumerable> DoSomething() => Task.FromResult(new ArrayList());
+}
+
+public class TestMe : TestMeBase
+{
+    public override Task<IEnumerable> DoSomething() => Task.FromResult(new ArrayList());
+}
+";
+
+            An_issue_is_reported_for(Code, 1); // it's only a single issue on the base class
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_interface_implementation_method_that_returns_an_IEnumerable_task()
+        {
+            const string Code = @"
+using System;
+using System.Collections;
+using System.Threading.Tasks;
+
+public interface ITestMe
+{
+    Task<IEnumerable> DoSomething();
+}
+
+public class TestMe : ITestMe
+{
+    public Task<IEnumerable> DoSomething() => Task.FromResult(new ArrayList());
+}
+";
+
+            An_issue_is_reported_for(Code, 1); // it's only a single issue on the interface
+        }
+
+        [Test]
         public void An_issue_is_reported_for_method_that_returns_a_generic_IEnumerable_task() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
