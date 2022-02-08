@@ -13,103 +13,74 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected static Location GetLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
+        protected static Location GetFirstLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
         {
-            var syntaxTree = textToken.SyntaxTree;
-            var position = textToken.ValueText.IndexOf(value, comparison);
-
-            if (position == -1)
-            {
-                return null;
-            }
-
-            var start = textToken.SpanStart + position; // find start position for underlining
-            var end = start + value.Length; // find end position
-
-            return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+            return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.IndexOf(value, comparison));
         }
 
-        protected static IEnumerable<Location> GetLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
+        protected static Location GetLastLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.LastIndexOf(value, comparison));
+        }
+
+        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal)
         {
             var syntaxTree = textToken.SyntaxTree;
-            var positions = textToken.ValueText.AllIndexesOf(value, comparison);
+            var spanStart = textToken.SpanStart;
 
-            foreach (var position in positions)
+            foreach (var position in textToken.ValueText.AllIndexesOf(value, comparison))
             {
-                var start = textToken.SpanStart + position; // find start position for underlining
-                var end = start + value.Length; // find end position
-
-                yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+                yield return CreateLocation(value, syntaxTree, spanStart, position);
             }
         }
 
-        protected static IEnumerable<Location> GetLocations(SyntaxToken textToken, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal)
+        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal)
         {
             var syntaxTree = textToken.SyntaxTree;
+            var spanStart = textToken.SpanStart;
 
             foreach (var value in values)
             {
-                var positions = textToken.ValueText.AllIndexesOf(value, comparison);
-
-                foreach (var position in positions)
+                foreach (var position in textToken.ValueText.AllIndexesOf(value, comparison))
                 {
-                    var start = textToken.SpanStart + position; // find start position for underlining
-                    var end = start + value.Length; // find end position
-
-                    yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+                    yield return CreateLocation(value, syntaxTree, spanStart, position);
                 }
             }
         }
 
-        protected static Location GetLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal)
+        protected static Location GetFirstLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal)
         {
-            var syntaxTree = trivia.SyntaxTree;
-            var text = trivia.ToFullString();
-
-            var position = text.IndexOf(value, comparison);
-
-            if (position == -1)
-            {
-                return null;
-            }
-
-            var start = trivia.SpanStart + position; // find start position for underlining
-            var end = start + value.Length; // find end position
-
-            return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+            return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().IndexOf(value, comparison));
         }
 
-        protected static IEnumerable<Location> GetLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal)
+        protected static Location GetLastLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal)
+        {
+            return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().LastIndexOf(value, comparison));
+        }
+
+        protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal)
         {
             var syntaxTree = trivia.SyntaxTree;
+            var spanStart = trivia.SpanStart;
             var text = trivia.ToFullString();
 
-            var positions = text.AllIndexesOf(value, comparison);
-
-            foreach (var position in positions)
+            foreach (var position in text.AllIndexesOf(value, comparison))
             {
-                var start = trivia.SpanStart + position; // find start position for underlining
-                var end = start + value.Length; // find end position
-
-                yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+                yield return CreateLocation(value, syntaxTree, spanStart, position);
             }
         }
 
-        protected static IEnumerable<Location> GetLocations(SyntaxTrivia trivia, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal)
+        protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal)
         {
             var syntaxTree = trivia.SyntaxTree;
+            var spanStart = trivia.SpanStart;
             var text = trivia.ToFullString();
 
             foreach (var value in values)
             {
-                var positions = text.AllIndexesOf(value, comparison);
-
-                foreach (var position in positions)
+                foreach (var position in text.AllIndexesOf(value, comparison))
                 {
-                    var start = trivia.SpanStart + position; // find start position for underlining
-                    var end = start + value.Length; // find end position
-
-                    yield return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+                    yield return CreateLocation(value, syntaxTree, spanStart, position);
                 }
             }
         }
@@ -185,5 +156,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, compilation, commentXml);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => Enumerable.Empty<Diagnostic>();
+
+        private static Location CreateLocation(string value, SyntaxTree syntaxTree, int spanStart, int position)
+        {
+            if (position == -1)
+            {
+                return null;
+            }
+
+            var start = spanStart + position; // find start position for underlining
+            var end = start + value.Length; // find end position
+
+            return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+        }
     }
 }
