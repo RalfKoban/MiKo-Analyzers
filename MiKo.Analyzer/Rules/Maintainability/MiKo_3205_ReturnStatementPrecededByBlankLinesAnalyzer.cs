@@ -59,7 +59,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var noBlankLinesBefore = statements.Where(_ => _.IsKind(SyntaxKind.YieldReturnStatement) is false)
                                                .Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
 
-            return noBlankLinesBefore ? Issue(returnStatement, true, false) : null;
+            if (noBlankLinesBefore)
+            {
+                if (returnStatement is ReturnStatementSyntax s)
+                {
+                    return Issue(s.ReturnKeyword, true, false);
+                }
+                else if (returnStatement is YieldStatementSyntax y)
+                {
+                    return Issue(y.YieldKeyword, true, false);
+                }
+            }
+
+            return null;
         }
     }
 }

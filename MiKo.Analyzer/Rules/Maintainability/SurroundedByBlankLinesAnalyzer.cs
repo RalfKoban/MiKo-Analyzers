@@ -34,6 +34,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected Diagnostic Issue(SyntaxNode call, bool noBlankLinesBefore, bool noBlankLinesAfter)
         {
+            return Issue(call.GetLocation(), noBlankLinesBefore, noBlankLinesAfter);
+        }
+
+        protected Diagnostic Issue(SyntaxToken token, bool noBlankLinesBefore, bool noBlankLinesAfter)
+        {
+            return Issue(token.GetLocation(), noBlankLinesBefore, noBlankLinesAfter);
+        }
+
+        protected Diagnostic Issue(Location location, bool noBlankLinesBefore, bool noBlankLinesAfter)
+        {
             // prepare additional data so that code fix can benefit from information
             var dictionary = new Dictionary<string, string>();
             if (noBlankLinesBefore)
@@ -46,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 dictionary.Add(NoLineAfter, string.Empty);
             }
 
-            return Issue(call, dictionary);
+            return Issue(location, dictionary);
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
@@ -101,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (noBlankLinesBefore)
             {
-                return Issue(statement, true, false);
+                return Issue(statement.Left, true, false);
             }
 
             return null;
