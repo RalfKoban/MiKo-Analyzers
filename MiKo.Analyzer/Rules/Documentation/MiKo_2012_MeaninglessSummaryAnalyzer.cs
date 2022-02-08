@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var phrase in symbolNames.Concat(phrases))
             {
-                var location = GetLocation(textToken, phrase);
+                var location = GetFirstLocation(textToken, phrase);
                 if (location != null)
                 {
                     return Issue(symbol.Name, location, "start with", textToken.ValueText.HumanizedTakeFirst(200));

@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (trimmed.StartsWith(wrongPhrase, StringComparison.OrdinalIgnoreCase))
                 {
-                    var location = GetLocation(textToken, wrongPhrase, StringComparison.OrdinalIgnoreCase);
+                    var location = GetFirstLocation(textToken, wrongPhrase, StringComparison.OrdinalIgnoreCase);
 
                     return Issue(symbol.Name, location, wrongPhrase, StartingPhrase);
                 }

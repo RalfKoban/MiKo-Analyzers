@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var firstWord = summary.FirstWord();
-            var location = GetLocation(textToken, firstWord);
+            var location = GetFirstLocation(textToken, firstWord);
 
             return Issue(symbol.Name, location, Constants.Comments.EventSummaryStartingPhrase);
         }

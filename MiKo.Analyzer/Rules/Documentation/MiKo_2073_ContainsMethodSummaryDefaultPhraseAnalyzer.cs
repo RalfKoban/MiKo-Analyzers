@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return null;
             }
 
-            var location = GetLocation(textToken, summary.FirstWord(), StringComparison.OrdinalIgnoreCase);
+            var location = GetFirstLocation(textToken, summary.FirstWord(), StringComparison.OrdinalIgnoreCase);
 
             return Issue(symbol.Name, location, StartingPhrase);
         }

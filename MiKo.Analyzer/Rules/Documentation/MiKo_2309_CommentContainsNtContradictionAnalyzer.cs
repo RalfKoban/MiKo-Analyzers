@@ -20,6 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentHasIssue(comment);
 
-        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => GetLocations(trivia, Constants.Comments.NotContradictionPhrase, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _));
+        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.NotContradictionPhrase, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _));
     }
 }

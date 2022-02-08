@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return null;
             }
 
-            var location = GetLocation(textToken, firstWord);
+            var location = GetFirstLocation(textToken, firstWord);
 
             return Issue(symbol.Name, location);
         }

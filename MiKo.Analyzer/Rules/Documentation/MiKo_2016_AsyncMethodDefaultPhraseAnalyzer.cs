@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (summary.StartsWith(Phrase, StringComparison.Ordinal))
             {
-                var location = GetLocation(textToken, Phrase);
+                var location = GetFirstLocation(textToken, Phrase);
 
                 return Issue(symbol.Name, location, Phrase);
             }

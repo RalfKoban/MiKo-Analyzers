@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in symbol.GetDocumentationCommentTriviaSyntax().DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
             {
-                foreach (var location in GetLocations(token, Constants.Comments.NotContradictionPhrase, StringComparison.OrdinalIgnoreCase))
+                foreach (var location in GetAllLocations(token, Constants.Comments.NotContradictionPhrase, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(symbol.Name, location);
                 }

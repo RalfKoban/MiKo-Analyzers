@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       .SelectMany(_ => _.TextTokens)
                                       .LastOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
 
-            var location = GetLocation(textToken, phrase);
+            var location = GetFirstLocation(textToken, phrase);
             if (location is null)
             {
                 return Issue(symbol.Name, textToken, phrase);
@@ -146,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var trimmedPhrase = phrase.Trim();
 
-                    var locations = GetLocations(text, trimmedPhrase, comparison);
+                    var locations = GetAllLocations(text, trimmedPhrase, comparison);
 
                     foreach (var location in locations)
                     {

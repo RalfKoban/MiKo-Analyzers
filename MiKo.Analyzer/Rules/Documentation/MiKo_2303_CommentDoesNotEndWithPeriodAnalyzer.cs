@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,5 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                       && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentHasIssue(comment);
+
+        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
+        {
+            yield return Issue(name, GetLastLocation(trivia, ".", StringComparison.OrdinalIgnoreCase));
+        }
     }
 }
