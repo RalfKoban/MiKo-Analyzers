@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private Diagnostic AnalyzeAwaitExpression(SyntaxList<StatementSyntax> statements, CSharpSyntaxNode node)
+        private Diagnostic AnalyzeAwaitExpression(SyntaxList<StatementSyntax> statements, AwaitExpressionSyntax node)
         {
             var callLineSpan = node.GetLocation().GetLineSpan();
 
@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (noBlankLinesBefore || noBlankLinesAfter)
             {
-                return Issue(node, noBlankLinesBefore, noBlankLinesAfter);
+                return Issue(node.AwaitKeyword, noBlankLinesBefore, noBlankLinesAfter);
             }
 
             return null;

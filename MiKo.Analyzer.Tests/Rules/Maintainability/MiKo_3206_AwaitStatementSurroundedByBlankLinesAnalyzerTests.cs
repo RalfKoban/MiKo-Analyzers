@@ -126,6 +126,28 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_awaited_call_preceded_by_blank_line_if_its_result_gets_assigned_to_local_variable() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+
+            var result = await Task.FromResult(true);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_awaited_call_followed_by_blank_line() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
@@ -136,6 +158,28 @@ namespace Bla
         public async Task DoSomething()
         {
             await Task.CompletedTask;
+
+            DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_awaited_call_followed_by_blank_line_if_its_result_gets_assigned_to_local_variable() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            var result = await Task.FromResult(true);
 
             DoSomethingElse();
         }
@@ -234,6 +278,48 @@ namespace Bla
 
                     break;
             }
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_awaited_call_not_preceded_by_blank_line_if_its_result_gets_assigned_to_local_variable() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+            var result = await Task.FromResult(true);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_awaited_call_not_followed_by_blank_line_if_its_result_gets_assigned_to_local_variable() => An_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            var result = await Task.FromResult(true);
+            DoSomethingElse();
         }
 
         private void DoSomethingElse()

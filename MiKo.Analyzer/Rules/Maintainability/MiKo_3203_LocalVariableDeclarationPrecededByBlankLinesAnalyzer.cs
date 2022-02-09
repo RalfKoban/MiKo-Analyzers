@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             ReportDiagnostics(context, issue);
         }
 
-        private Diagnostic AnalyzeLocalDeclarationStatement(StatementSyntax declaration)
+        private Diagnostic AnalyzeLocalDeclarationStatement(LocalDeclarationStatementSyntax declaration)
         {
             if (IsDeclaration(declaration))
             {
@@ -57,17 +57,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private Diagnostic AnalyzeLocalDeclarationStatement(SyntaxList<StatementSyntax> statements, CSharpSyntaxNode declaration)
+        private Diagnostic AnalyzeLocalDeclarationStatement(SyntaxList<StatementSyntax> statements, LocalDeclarationStatementSyntax declaration)
         {
             var callLineSpan = declaration.GetLocation().GetLineSpan();
 
             var noBlankLinesBefore = statements
-                                     .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                     .Any(_ => IsDeclaration(_) is false);
+                                             .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                             .Any(_ => IsDeclaration(_) is false);
 
             if (noBlankLinesBefore)
             {
-                return Issue(declaration, true, false);
+                return Issue(declaration.Declaration.Type, true, false);
             }
 
             return null;

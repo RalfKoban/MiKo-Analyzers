@@ -71,7 +71,7 @@ public class MyEventArgs : EventArgs
         [TestCase("Does something.")]
         [TestCase("Provides some stuff for the event.")]
         [TestCase("Provides data for the event.")]
-        public void An_issue_is_reported_for_correctly_commented_EventArgs_(string comment) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_EventArgs_(string comment) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>

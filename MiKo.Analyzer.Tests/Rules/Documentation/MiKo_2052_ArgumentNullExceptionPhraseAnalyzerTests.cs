@@ -288,7 +288,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_correctly_commented_generic_type_that_is_a_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_generic_type_that_is_a_class() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
