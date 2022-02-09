@@ -411,33 +411,57 @@ namespace MiKoSolutions.Analyzers
                 return commentOnNode;
             }
 
-            if (syntaxNode is BaseTypeDeclarationSyntax type)
+            switch (syntaxNode)
             {
-                // inspect for attributes
-                var attributeListSyntax = type.AttributeLists.FirstOrDefault();
-                if (attributeListSyntax != null)
-                {
-                    return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-                }
+                case BaseTypeDeclarationSyntax type:
+                    {
+                        // inspect for attributes
+                        var attributeListSyntax = type.AttributeLists.FirstOrDefault();
+                        if (attributeListSyntax != null)
+                        {
+                            return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
+                        }
 
-                return null;
+                        return null;
+                    }
+
+                case BaseMethodDeclarationSyntax method:
+                    {
+                        var attributeListSyntax = method.AttributeLists.FirstOrDefault();
+                        if (attributeListSyntax != null)
+                        {
+                            return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
+                        }
+
+                        if (method.ChildNodes().FirstOrDefault() is SyntaxNode child)
+                        {
+                            return FindDocumentationCommentTriviaSyntaxForNode(child);
+                        }
+
+                        return null;
+                    }
+
+                case BasePropertyDeclarationSyntax property:
+                    {
+                        var attributeListSyntax = property.AttributeLists.FirstOrDefault();
+                        if (attributeListSyntax != null)
+                        {
+                            return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
+                        }
+
+                        if (property.ChildNodes().FirstOrDefault() is SyntaxNode child)
+                        {
+                            return FindDocumentationCommentTriviaSyntaxForNode(child);
+                        }
+
+                        return null;
+                    }
+
+                default:
+                    {
+                        return null;
+                    }
             }
-
-            if (syntaxNode is BaseMethodDeclarationSyntax method)
-            {
-                var attributeListSyntax = method.AttributeLists.FirstOrDefault();
-                if (attributeListSyntax != null)
-                {
-                    return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-                }
-
-                if (method.ChildNodes().FirstOrDefault() is SyntaxNode child)
-                {
-                    return FindDocumentationCommentTriviaSyntaxForNode(child);
-                }
-            }
-
-            return null;
 
             DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
             {
