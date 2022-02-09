@@ -71,7 +71,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 /// <" + tag + @">" + phrase + @".</" + tag + @">
@@ -81,7 +81,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_method_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -92,7 +92,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_property_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_property_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -103,7 +103,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_event_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_event_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -114,7 +114,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_correctly_documented_summary_on_field_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_field_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -125,7 +125,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_summary_on_factory_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_factory_method() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
