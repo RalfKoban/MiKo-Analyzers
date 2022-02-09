@@ -56,20 +56,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
+        internal static string FindBetterName(string name)
         {
-            var name = qualifiedName.GetNameOnlyPart();
-
             // maybe it's a number, so we have to check for that
             if (name.IsAcronym() || name.EndsWithNumber() || name.EndsWithAny(AllowedSuffixes))
             {
                 // nothing to do here
+                return name;
             }
-            else
-            {
-                var pluralName = Pluralizer.GetPluralName(name);
 
-                yield return Issue(qualifiedName, location, pluralName);
+            return name == "Model"
+                    ? Pluralizer.GetPluralName("Entity")
+                    : Pluralizer.GetPluralName(name);
+        }
+
+        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
+        {
+            var name = qualifiedName.GetNameOnlyPart();
+            var betterName = FindBetterName(name);
+
+            if (name != betterName)
+            {
+                yield return Issue(qualifiedName, location, betterName);
             }
         }
     }
