@@ -192,12 +192,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var wrongText = item.Key;
                                 var proposal = item.Value;
 
-                                foreach (var index in text.AllIndexesOf(wrongText))
-                                {
-                                    var start = textToken.SpanStart + index + 1; // we do not want to underline the first char
-                                    var end = start + wrongText.Length - 2; // as we do not want to underline the first char, we should also not underline the last char
+                                const int StartOffset = 1; // we do not want to underline the first char
+                                const int EndOffset = 1; // we do not want to underline the last char
 
-                                    yield return Issue(symbolName, textToken, start, end, wrongText, proposal);
+                                foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset))
+                                {
+                                    yield return Issue(symbolName, location, wrongText, proposal);
                                 }
                             }
 
@@ -207,12 +207,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var wrongText = item.Key;
                                 var proposal = item.Value;
 
-                                if (text.StartsWith(wrongText, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    var start = textToken.SpanStart;
-                                    var end = start + wrongText.Length - 1; // we do not want to underline the last char
+                                const int StartOffset = 0;
+                                const int EndOffset = 1; // we do not want to underline the last char
 
-                                    yield return Issue(symbolName, textToken, start, end, wrongText, proposal);
+                                var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                                if (location != null)
+                                {
+                                    yield return Issue(symbolName, location, wrongText, proposal);
                                 }
                             }
 
@@ -222,12 +223,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var wrongText = item.Key;
                                 var proposal = item.Value;
 
-                                if (text.EndsWith(wrongText, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    var end = textToken.Span.End;
-                                    var start = end - wrongText.Length + 1; // we do not want to underline the first char
+                                const int StartOffset = 1; // we do not want to underline the first char
+                                const int EndOffset = 0;
 
-                                    yield return Issue(symbolName, textToken, start, end, wrongText, proposal);
+                                var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                                if (location != null)
+                                {
+                                    yield return Issue(symbolName, location, wrongText, proposal);
                                 }
                             }
                         }
@@ -236,13 +238,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
             }
-        }
-
-        private Diagnostic Issue(string symbolName, SyntaxToken textToken, int start, int end, string wrongText, string proposal)
-        {
-            var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
-
-            return Issue(symbolName, location, wrongText, proposal);
         }
     }
 }

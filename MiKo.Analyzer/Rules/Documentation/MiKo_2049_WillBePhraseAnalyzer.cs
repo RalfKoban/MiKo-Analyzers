@@ -23,7 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in symbol.GetDocumentationCommentTriviaSyntax().DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
             {
-                foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, 1))
+                const int Offset = 1; // we do not want to underline the first and last char
+                foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
                     yield return Issue(symbol.Name, location);
                 }
