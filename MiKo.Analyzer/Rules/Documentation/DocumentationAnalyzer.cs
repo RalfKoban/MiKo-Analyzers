@@ -27,10 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
+            var text = textToken.ValueText;
 
-            foreach (var position in textToken.ValueText.AllIndexesOf(value, comparison))
+            foreach (var position in text.AllIndexesOf(value, comparison))
             {
-                yield return CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                if (location != null)
+                {
+                    yield return location;
+                }
             }
         }
 
@@ -38,12 +43,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
+            var text = textToken.ValueText;
 
             foreach (var value in values)
             {
-                foreach (var position in textToken.ValueText.AllIndexesOf(value, comparison))
+                foreach (var position in text.AllIndexesOf(value, comparison))
                 {
-                    yield return CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                    var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                    if (location != null)
+                    {
+                        yield return location;
+                    }
                 }
             }
         }
@@ -66,7 +76,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var position in text.AllIndexesOf(value, comparison))
             {
-                yield return CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                if (location != null)
+                {
+                    yield return location;
+                }
             }
         }
 
@@ -80,7 +94,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var position in text.AllIndexesOf(value, comparison))
                 {
-                    yield return CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                    var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+                    if (location != null)
+                    {
+                        yield return location;
+                    }
                 }
             }
         }

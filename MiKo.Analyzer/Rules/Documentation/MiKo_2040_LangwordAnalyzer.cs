@@ -192,9 +192,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var wrongText = item.Key;
                                 var proposal = item.Value;
 
-                                const int Offset = 1; // we do not want to underline the first and last char
+                                const int StartOffset = 1; // we do not want to underline the first char
+                                const int EndOffset = 1; // we do not want to underline the last char
 
-                                foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                                foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset))
                                 {
                                     yield return Issue(symbolName, location, wrongText, proposal);
                                 }
@@ -206,10 +207,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var wrongText = item.Key;
                                 var proposal = item.Value;
 
+                                const int StartOffset = 0;
                                 const int EndOffset = 1; // we do not want to underline the last char
-                                var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, 0, EndOffset);
 
-                                yield return Issue(symbolName, location, wrongText, proposal);
+                                var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                                if (location != null)
+                                {
+                                    yield return Issue(symbolName, location, wrongText, proposal);
+                                }
                             }
 
                             // end
@@ -219,9 +224,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var proposal = item.Value;
 
                                 const int StartOffset = 1; // we do not want to underline the first char
-                                var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, 0);
+                                const int EndOffset = 0;
 
-                                yield return Issue(symbolName, location, wrongText, proposal);
+                                var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+                                if (location != null)
+                                {
+                                    yield return Issue(symbolName, location, wrongText, proposal);
+                                }
                             }
                         }
 
