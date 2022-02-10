@@ -24,32 +24,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var fieldSyntax = symbol.GetSyntax<FieldDeclarationSyntax>();
             var identifierNames = fieldSyntax.DescendantNodes<IdentifierNameSyntax>().ToList();
 
-            if (identifierNames.None())
+            if (identifierNames.Any())
             {
-                // nothing to inspect
-                return Enumerable.Empty<Diagnostic>();
-            }
+                var fieldLocation = fieldSyntax.GetLocation().GetLineSpan();
 
-            var fieldLocation = fieldSyntax.GetLocation().GetLineSpan();
+                // get all fields
+                var problematicFields = GetStaticFieldsFromBelowOrFromOtherPart(symbol, fieldLocation);
+                var problematicFieldNames = problematicFields.SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
 
-            // get all fields
-            var problematicFields = GetStaticFieldsFromBelowOrFromOtherPart(symbol, fieldLocation);
-            var problematicFieldNames = problematicFields.SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
-
-            var wrongReferences = new List<string>();
-            foreach (var identifier in identifierNames)
-            {
-                var name = identifier.GetName();
-
-                if (problematicFieldNames.Contains(name) && identifier.GetSymbol(compilation) is IFieldSymbol f && f.ContainingType == symbol.ContainingType)
+                var wrongReferences = new List<string>();
+                foreach (var identifier in identifierNames)
                 {
-                    wrongReferences.Add(name);
+                    var name = identifier.GetName();
+
+                    if (problematicFieldNames.Contains(name) && identifier.GetSymbol(compilation) is IFieldSymbol f && f.ContainingType == symbol.ContainingType)
+                    {
+                        wrongReferences.Add(name);
+                    }
+                }
+
+                if (wrongReferences.Any())
+                {
+                    yield return Issue(symbol, wrongReferences.HumanizedConcatenated("and"));
                 }
             }
-
-            return wrongReferences.Any()
-                       ? new[] { Issue(symbol, wrongReferences.HumanizedConcatenated("and")) }
-                       : Enumerable.Empty<Diagnostic>();
         }
 
         private static bool IsStaticField(IFieldSymbol symbol) => symbol.IsStatic && symbol.IsConst is false;
@@ -77,9 +75,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             foreach (var otherField in otherStaticFields)
             {
                 var otherFieldSyntax = otherField.GetSyntax<FieldDeclarationSyntax>();
-                var location = otherFieldSyntax.GetLocation();
 
-                if (location.IsInSource)
+                // we might not find the other field's syntax node, so be prepared for null
+                var location = otherFieldSyntax?.GetLocation();
+
+                if (location?.IsInSource is true)
                 {
                     yield return otherFieldSyntax;
                 }
