@@ -118,6 +118,14 @@ namespace Abc." + ns + @"
 }
 ");
 
+        [Test]
+        public void Model_namespace_gets_reported_as_Entities()
+        {
+            var betterName = MiKo_1400_NamespacesInPluralAnalyzer.FindBetterName("Model");
+
+            Assert.That(betterName, Is.EqualTo("Entities"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1400_NamespacesInPluralAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1400_NamespacesInPluralAnalyzer();

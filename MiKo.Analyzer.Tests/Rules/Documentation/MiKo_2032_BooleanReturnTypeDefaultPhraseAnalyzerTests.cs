@@ -213,6 +213,22 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_returns_tag_inside_summary_tag_and_wrong_commented_method_with_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
+            => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <returns>
+    /// " + comment + @"
+    /// </returns>
+    /// </summary>
+    public bool DoSomething(object o) => null;
+}
+");
+
         [TestCase("", "TODO")]
         [TestCase(" Something . ", "something")]
         [TestCase("Something.", "something")]
@@ -311,7 +327,7 @@ public class TestMe
         [TestCase("true: if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
         [TestCase("true if something else will return with false.")]
-        public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string returnsComment)
+        public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
         {
             var originalCode = @"
 using System;
@@ -320,7 +336,7 @@ using System.Threading.Tasks;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>" + returnsComment + @"</returns>
+    /// <returns>" + comment + @"</returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -487,7 +503,7 @@ public class TestMe
         [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
-        public void Code_gets_fixed_for_almost_correct_comment_on_generic_method_(string returnsComment)
+        public void Code_gets_fixed_for_almost_correct_comment_on_generic_method_(string comment)
         {
             var originalCode = @"
 using System;
@@ -496,7 +512,7 @@ using System.Threading.Tasks;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>" + returnsComment + @"</returns>
+    /// <returns>" + comment + @"</returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -537,7 +553,7 @@ public class TestMe
         [TestCase(@"Returns <see langref=""false""/> if something.")]
         [TestCase(@"Returns <see langword=""false""/> if something.")]
         [TestCase(@"false: if something, true: otherwise.")]
-        public void Code_gets_not_fixed_for_almost_correct_comment_on_non_generic_method_if_starting_with_false_(string returnsComment)
+        public void Code_gets_not_fixed_for_almost_correct_comment_on_non_generic_method_if_starting_with_false_(string comment)
         {
             var originalCode = @"
 using System;
@@ -546,7 +562,7 @@ using System.Threading.Tasks;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>" + returnsComment + @"</returns>
+    /// <returns>" + comment + @"</returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -560,7 +576,7 @@ public class TestMe
         [TestCase(@"A task that will complete with a result of <see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""false""/> if something, returns <see langword=""true""/> otherwise.")]
-        public void Code_gets_not_fixed_for_almost_correct_comment_on_generic_method_if_starting_with_false_(string returnsComment)
+        public void Code_gets_not_fixed_for_almost_correct_comment_on_generic_method_if_starting_with_false_(string comment)
         {
             var originalCode = @"
 using System;
@@ -569,7 +585,7 @@ using System.Threading.Tasks;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>" + returnsComment + @"</returns>
+    /// <returns>" + comment + @"</returns>
     public Task<bool> DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -652,7 +668,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_simple_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string returnsComment)
+        public void Code_gets_fixed_for_simple_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
         {
             var originalCode = @"
 using System;
@@ -660,7 +676,7 @@ using System;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>" + returnsComment + @" something.</returns>
+    /// <returns>" + comment + @" something.</returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -674,6 +690,40 @@ public class TestMe
     /// <returns>
     /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
     /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_returns_tag_inside_summary_tag_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <returns>
+    /// " + comment + @" something.
+    /// </returns>
+    /// </summary>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    /// </summary>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";

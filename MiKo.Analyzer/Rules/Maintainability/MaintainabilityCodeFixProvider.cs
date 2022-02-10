@@ -158,8 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var root = node.SyntaxTree.GetRoot();
 
-            return root.DescendantNodes<UsingDirectiveSyntax>()
-                       .Where(_ => _.Name.ToFullString() == usingNamespace)
+            return root.DescendantNodes<UsingDirectiveSyntax>(_ => _.Name.ToFullString() == usingNamespace)
                        .Select(root.Without)
                        .FirstOrDefault();
         }

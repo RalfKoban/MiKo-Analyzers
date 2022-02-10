@@ -29,7 +29,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                var syntaxNode = owningSymbol.GetDocumentationCommentTriviaSyntax().FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+                var documentation = owningSymbol.GetDocumentationCommentTriviaSyntax();
+
+                var syntaxNode = documentation.FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+                if (syntaxNode is null)
+                {
+                    // seems like returns is inside the summary tag
+                    syntaxNode = documentation.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+                }
 
                 yield return Issue(owningSymbol.Name, syntaxNode, xmlTag, startingPhrases[0], endingPhrases[0]);
             }

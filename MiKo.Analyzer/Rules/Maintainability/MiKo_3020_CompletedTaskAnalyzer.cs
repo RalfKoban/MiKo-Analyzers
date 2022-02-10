@@ -31,8 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             foreach (var invocation in symbol.GetSyntax()
-                                             .DescendantNodes<MemberAccessExpressionSyntax>()
-                                             .Where(_ => _.ToCleanedUpString() == Invocation)
+                                             .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == Invocation)
                                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>()))
             {
                 switch (invocation.Parent?.Kind())

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // inspect any 'if' or 'switch' or 'else if' to see if there is an exception involved
-            var expression = node.GetRelatedCondition()?.DescendantNodes<ExpressionSyntax>().FirstOrDefault(_ => _.GetTypeSymbol(semanticModel)?.IsException() is true);
+            var expression = node.GetRelatedCondition()?.FirstDescendant<ExpressionSyntax>(_ => _.GetTypeSymbol(semanticModel)?.IsException() is true);
             if (expression != null)
             {
                 return expression;
