@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers
                 return Enumerable.Empty<MemberAccessExpressionSyntax>();
             }
 
-            return field.DescendantNodes<MemberAccessExpressionSyntax>().Where(__ => __.ToCleanedUpString() == invocation);
+            return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);

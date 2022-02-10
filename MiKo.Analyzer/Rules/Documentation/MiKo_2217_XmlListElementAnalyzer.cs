@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static IEnumerable<XmlElementSyntax> GetProblematicElements(DocumentationCommentTriviaSyntax comment) => comment.DescendantNodes<XmlElementSyntax>().Where(_ => _.IsXmlTag(Constants.XmlTag.List));
+        internal static IEnumerable<XmlElementSyntax> GetProblematicElements(DocumentationCommentTriviaSyntax comment) => comment.DescendantNodes<XmlElementSyntax>(_ => _.IsXmlTag(Constants.XmlTag.List));
 
         internal static XmlTextAttributeSyntax GetListType(XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
                                                                                          .FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Type);

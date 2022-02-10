@@ -27,8 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodName = symbol.Name;
             var conditions = symbol.GetSyntax()
-                                   .DescendantNodes<MemberAccessExpressionSyntax>()
-                                   .Where(_ => _.ToCleanedUpString() == Invocation)
+                                   .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == Invocation)
                                    .Select(_ => Issue(methodName, _))
                                    .ToList();
 
