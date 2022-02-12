@@ -29,6 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var spanStart = textToken.SpanStart;
             var text = textToken.ValueText;
 
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
             foreach (var position in text.AllIndexesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
@@ -44,6 +50,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
             var text = textToken.ValueText;
+
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
 
             foreach (var value in values)
             {
@@ -74,6 +86,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var spanStart = trivia.SpanStart;
             var text = trivia.ToFullString();
 
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
             foreach (var position in text.AllIndexesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
@@ -89,6 +107,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = trivia.SyntaxTree;
             var spanStart = trivia.SpanStart;
             var text = trivia.ToFullString();
+
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
 
             foreach (var value in values)
             {
