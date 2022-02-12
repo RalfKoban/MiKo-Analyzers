@@ -136,13 +136,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode => value.FirstAncestorOrSelf<T>();
 
-        internal static T GetEnclosing<T>(this Location value, SemanticModel semanticModel) where T : class, ISymbol
-        {
-            var node = value.SourceTree?.GetRoot().FindNode(value.SourceSpan);
-
-            return node.GetEnclosingSymbol(semanticModel) as T;
-        }
-
         internal static SyntaxNode GetEnclosing(this SyntaxNode value, params SyntaxKind[] syntaxKinds)
         {
             var node = value;
