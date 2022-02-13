@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -35,5 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentHasIssue(comment);
+
+        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.WasNotSuccessfulPhrase).Select(_ => Issue(name, _));
     }
 }
