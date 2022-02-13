@@ -341,10 +341,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().First().Identifier.GetName();
-
-        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlNameAttributeSyntax>().First().Identifier.GetName();
-
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => GetCref(value, Constants.XmlTag.See);
 
         protected static DocumentationCommentTriviaSyntax GetXmlSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.Select(_ => _.GetDocumentationCommentTriviaSyntax())

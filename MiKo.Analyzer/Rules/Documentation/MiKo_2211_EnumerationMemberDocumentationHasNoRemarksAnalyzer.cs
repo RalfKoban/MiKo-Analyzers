@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -17,13 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.ContainingType.IsEnum() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            var comments = symbol.GetRemarks();
-
-            return comments.Any()
-                       ? new[] { Issue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+            foreach (var remarks in comment.GetRemarksXmls())
+            {
+                yield return Issue(symbol.Name, remarks);
+            }
         }
     }
 }

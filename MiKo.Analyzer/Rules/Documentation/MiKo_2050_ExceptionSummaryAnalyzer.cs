@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -36,24 +37,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false; // unknown ctor
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
             // let's see if the type contains a documentation XML
             var typeIssues = base.ShallAnalyze(symbol)
-                                 ? base.AnalyzeType(symbol, compilation, commentXml)
-                                 : Enumerable.Empty<Diagnostic>();
+                                ? base.AnalyzeType(symbol, compilation, comment)
+                                : Enumerable.Empty<Diagnostic>();
 
             return typeIssues.Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(_ => AnalyzeMethod(_, compilation)));
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml) => base.AnalyzeMethod(symbol, compilation, commentXml).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
+        {
+            return base.AnalyzeMethod(symbol, compilation, comment).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, comment)));
+        }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeTypeSummary(type, summaries);
-                case IMethodSymbol method: return AnalyzeMethodSummary(method, summaries);
+                case INamedTypeSymbol type: return AnalyzeTypeSummary(type, summaryXmls);
+                case IMethodSymbol method: return AnalyzeMethodSummary(method, summaryXmls);
                 default: return Enumerable.Empty<Diagnostic>();
             }
         }
@@ -93,13 +97,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Array.Empty<string>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeTypeSummary(INamedTypeSymbol symbol, IEnumerable<string> summaries) => AnalyzeSummaryPhrase(symbol, summaries, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
+        private IEnumerable<Diagnostic> AnalyzeTypeSummary(INamedTypeSymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls) => AnalyzeSummaryPhrase(symbol, summaryXmls, Constants.Comments.ExceptionTypeSummaryStartingPhrase);
 
-        private IEnumerable<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries)
+        private IEnumerable<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
         {
             var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => string.Format(_, symbol.ContainingType)).ToArray();
 
-            var findings = AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases);
+            var findings = AnalyzeSummaryPhrase(symbol, summaryXmls, defaultPhrases);
             if (findings.Any())
             {
                 return findings;
@@ -112,18 +116,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (IsMessageCtor(symbol))
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaryXmls, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase).ToArray());
             }
 
             if (IsMessageExceptionCtor(symbol))
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaryXmls, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase).ToArray());
             }
 
             if (symbol.IsSerializationConstructor())
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray())
-                    .Concat(AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
+                return Enumerable.Empty<Diagnostic>()
+                        .Concat(AnalyzeSummaryPhrase(symbol, summaryXmls, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray()))
+                        .Concat(AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
             }
 
             return Enumerable.Empty<Diagnostic>();
@@ -147,19 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
-        {
-            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
-            {
-                // fitting comment
-            }
-            else
-            {
-                yield return Issue(symbol, constant, phrases.First());
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<string> summaries, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, phrases);
+        private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, phrases);
 
         private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml)
         {
@@ -181,6 +174,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             else
             {
                 yield return Issue(symbol, Constants.XmlTag.Param, phrase[0]);
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
+        {
+            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            {
+                // fitting comment
+            }
+            else
+            {
+                yield return Issue(symbol, constant, phrases.First());
             }
         }
     }

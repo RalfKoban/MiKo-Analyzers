@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -38,9 +39,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, XmlElementSyntax comment, string xmlTag)
         {
-            if (comment.EndsWith(Constants.Comments.NoDefaultPhrase, StringComparison.Ordinal))
+            // TODO RKN: fix call
+            var xmlComment = comment.GetTextWithoutTrivia();
+
+            if (xmlComment.EndsWith(Constants.Comments.NoDefaultPhrase, StringComparison.Ordinal))
             {
                 return Enumerable.Empty<Diagnostic>();
             }
@@ -67,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                           .ToArray();
             }
 
-            return comment.EndsWithAny(endingPhrases, StringComparison.Ordinal)
+            return xmlComment.EndsWithAny(endingPhrases, StringComparison.Ordinal)
                        ? Enumerable.Empty<Diagnostic>()
                        : new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase, Constants.Comments.NoDefaultPhrase, properties) };
         }

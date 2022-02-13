@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.ContainsExtensionMethods() && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken)
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
             if (textToken.ValueText.StartsWith(StartingPhrase))
             {
@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Issue(symbol.Name, textToken, Proposal);
         }
 
-        protected override Diagnostic AnalyzeSummaryContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes)
+        protected override Diagnostic AnalyzeStartContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes)
         {
             var staticNode = remainingNodes.ElementAtOrDefault(0);
             var continueNode = remainingNodes.ElementAtOrDefault(1);

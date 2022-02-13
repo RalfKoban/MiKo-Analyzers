@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -17,16 +19,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            var comment = commentXml.Without(Constants.Markers.Symbols);
-
             var name = symbol.FullyQualifiedName();
 
-            if (comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref=\"{name}\"")
-             || comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref='{name}'"))
+            var crefs = Enumerable.Empty<XmlCrefAttributeSyntax>()
+                                  .Concat(comment.GetXmlSyntax(Constants.XmlTag.Inheritdoc).SelectMany(_ => _.GetAttributes<XmlCrefAttributeSyntax>()))
+                                  .Concat(comment.GetEmptyXmlSyntax(Constants.XmlTag.Inheritdoc).SelectMany(_ => _.GetAttributes<XmlCrefAttributeSyntax>()))
+                                  .Select(_ => _.Cref);
+
+            foreach (var cref in crefs)
             {
-                yield return Issue(symbol);
+                if (cref.ToString() == name)
+                {
+                    yield return Issue(symbol.Name, cref);
+                }
             }
         }
     }

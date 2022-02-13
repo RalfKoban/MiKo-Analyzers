@@ -13,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            return AnalyzeSummary(symbol, symbol.GetDocumentationCommentTriviaSyntax());
+            return AnalyzeSummary(symbol, comment);
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, DocumentationCommentTriviaSyntax documentation)
+        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
-            return AnalyzeSummary(symbol, documentation.GetSummaryXmls());
+            return AnalyzeSummary(symbol, comment.GetSummaryXmls());
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
@@ -33,70 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryStart(symbol, summaryXml);
 
-        protected Diagnostic AnalyzeSummaryStart(ISymbol symbol, SyntaxNode summaryXml)
-        {
-            var elementsToSkip = 0;
-            var analyzedFirstText = false;
-
-            var descendantNodes = summaryXml.DescendantNodes();
-            foreach (var node in descendantNodes.TakeWhile(_ => analyzedFirstText is false))
-            {
-                elementsToSkip++;
-
-                switch (node)
-                {
-                    case XmlElementStartTagSyntax startTag:
-                        {
-                            var tagName = startTag.GetName();
-                            switch (tagName)
-                            {
-                                case Constants.XmlTag.Summary:
-                                case Constants.XmlTag.Para:
-                                    continue; // skip over the start tag and name syntax
-
-                                default:
-                                    return SummaryStartIssue(symbol, node); // it's no text, so it must be something different
-                            }
-                        }
-
-                    case XmlNameSyntax _:
-                    case XmlElementSyntax e when e.GetName() == Constants.XmlTag.Para:
-                    case XmlEmptyElementSyntax ee when ee.GetName() == Constants.XmlTag.Para:
-                        continue; // skip over the start tag and name syntax
-
-                    case XmlTextSyntax text:
-                        {
-                            // report the location of the text issue via the corresponding text token
-                            foreach (var textToken in text.TextTokens)
-                            {
-                                if (textToken.ValueText.IsNullOrWhiteSpace())
-                                {
-                                    // we found the first but empty /// line, so ignore it
-                                    continue;
-                                }
-
-                                analyzedFirstText = true;
-
-                                var issue = SummaryStartIssue(symbol, textToken);
-                                if (issue != null)
-                                {
-                                    return issue;
-                                }
-                            }
-
-                            // we found a completely empty /// line, so ignore it
-                            continue;
-                        }
-
-                    default:
-                        return SummaryStartIssue(symbol, node); // it's no text, so it must be something different
-                }
-            }
-
-            return AnalyzeSummaryContinue(symbol, descendantNodes.Skip(elementsToSkip));
-        }
-
-        protected virtual Diagnostic AnalyzeSummaryContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes) => null; // nothing to report
+        protected Diagnostic AnalyzeSummaryStart(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeStart(symbol, Constants.XmlTag.Summary, summaryXml);
 
         protected IEnumerable<Diagnostic> AnalyzeSummaryContains(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -126,10 +63,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return null;
         }
-
-        protected virtual Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
-
-        protected virtual Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken) => Issue(symbol.Name, textToken);
 
         protected virtual Diagnostic SummaryContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, phrase);
 

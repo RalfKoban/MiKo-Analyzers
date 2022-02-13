@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -15,35 +17,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, params string[] exampleComments) => AnalyzeStartingPhrase(owningSymbol, exampleComments);
+        protected override IEnumerable<Diagnostic> AnalyzeExamples(ISymbol owningSymbol, IEnumerable<XmlElementSyntax> examples) => AnalyzeStartingPhrase(owningSymbol, examples);
 
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments)
+        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<XmlElementSyntax> examples)
         {
-            foreach (var comment in comments)
+            foreach (var example in examples)
             {
-                var index = comment.IndexOf("=", StringComparison.OrdinalIgnoreCase);
-                if (index < 0)
+                foreach (var token in example.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
                 {
-                    // nothing found
-                    continue;
-                }
+                    var comment = token.ValueText;
+                    var index = comment.IndexOf("=", StringComparison.OrdinalIgnoreCase);
+                    if (index < 0)
+                    {
+                        // nothing found
+                        continue;
+                    }
 
-                // determine if a '<code>' block is before and a '</code>' block is after the example
-                var codeTagStartIndex = comment.IndexOf("<code>", StringComparison.OrdinalIgnoreCase);
-                var codeTagEndIndex = comment.IndexOf("</code>", StringComparison.OrdinalIgnoreCase);
-                if (codeTagStartIndex < 0)
-                {
-                    // we have an issue
-                    yield return Issue(symbol);
-                }
-
-                if (codeTagStartIndex < index && index < codeTagEndIndex)
-                {
-                    // no issue, it's in between
-                }
-                else
-                {
-                    yield return Issue(symbol);
+                    // determine if the example is inside a '<code>' block
+                    var codeTag = token.Parent.FirstAncestor<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.Code);
+                    if (codeTag is null)
+                    {
+                        // we have an issue
+                        yield return Issue(token);
+                    }
                 }
             }
         }

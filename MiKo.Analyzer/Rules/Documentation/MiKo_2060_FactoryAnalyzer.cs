@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -12,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2060";
 
+        private const string Phrase = Constants.Comments.FactorySummaryPhrase;
+
         public MiKo_2060_FactoryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -20,23 +23,70 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
             // let's see if the type contains a documentation XML
-            var typeIssues = base.ShallAnalyze(symbol)
-                                 ? base.AnalyzeType(symbol, compilation, commentXml)
+            var typeIssues = comment != null && base.ShallAnalyze(symbol)
+                                 ? base.AnalyzeType(symbol, compilation, comment)
                                  : Enumerable.Empty<Diagnostic>();
 
             return typeIssues.Concat(symbol.GetMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaries, Constants.Comments.FactorySummaryPhrase);
+                case INamedTypeSymbol type: return AnalyzeSummaryStart(type, summaries, Phrase);
                 case IMethodSymbol method: return AnalyzeStartingPhrase(symbol, summaries, GetPhrases(method).ToArray());
                 default: return Enumerable.Empty<Diagnostic>();
+            }
+        }
+
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node)
+        {
+            switch (symbol)
+            {
+                case INamedTypeSymbol type: return Issue(symbol.Name, node, Phrase);
+                case IMethodSymbol method: return Issue(symbol.Name, node, Phrase);
+                default: return null;
+            }
+        } 
+
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            var summary = textToken.ValueText;
+
+            switch (symbol)
+            {
+                case INamedTypeSymbol type:
+                    {
+                        if (summary.StartsWith(Phrase, StringComparison.Ordinal))
+                        {
+                            return null;
+                        }
+
+                        var firstWord = summary.FirstWord();
+                        var location = GetFirstLocation(textToken, firstWord);
+
+                        return Issue(symbol.Name, location, Phrase);
+                    }
+
+                case IMethodSymbol method:
+                    {
+                        if (summary.StartsWith(Phrase, StringComparison.Ordinal))
+                        {
+                            return null;
+                        }
+
+                        var firstWord = summary.FirstWord();
+                        var location = GetFirstLocation(textToken, firstWord);
+
+                        return Issue(symbol.Name, location, Phrase);
+                    }
+
+                default:
+                    return null;
             }
         }
 

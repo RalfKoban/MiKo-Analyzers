@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -15,20 +16,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, symbol.GetDocumentationCommentXml());
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, comment);
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
-        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, string commentXml)
+        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
             var returnType = symbol.GetReturnType();
 
             return returnType != null
-                       ? AnalyzeReturnType(symbol, returnType, commentXml)
+                       ? AnalyzeReturnType(symbol, returnType, comment)
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
             var method = (IMethodSymbol)symbol;
             if (method.ReturnsVoid)
@@ -36,50 +37,56 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return AnalyzeReturnType(method, method.ReturnType, commentXml);
+            return AnalyzeReturnType(method, method.ReturnType, comment);
         }
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string comment, string xmlTag, string[] phrase) => comment.StartsWithAny(phrase, StringComparison.Ordinal)
-                                                                                                                                       ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                       : new[] { Issue(symbol, xmlTag, phrase[0]) };
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, XmlElementSyntax comment, string xmlTag, string[] phrase)
+        {
+            // TODO RKN: fix call
+            var xmlComment = comment.GetTextWithoutTrivia();
 
-        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, params string[] phrase) => phrase.Any(_ => _.Equals(comment, StringComparison.Ordinal))
-                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                    : new[] { Issue(symbol, xmlTag, phrase[0]) };
+            if (xmlComment.StartsWithAny(phrase, StringComparison.Ordinal) is false)
+            {
+                yield return Issue(symbol, xmlTag, phrase[0]);
+            }
+        }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag) => Enumerable.Empty<Diagnostic>();
+        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, XmlElementSyntax comment, string xmlTag, params string[] phrase)
+        {
+            // TODO RKN: fix call
+            var xmlComment = comment.GetTextWithoutTrivia();
 
-        private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml)
+            if (phrase.None(_ => _.Equals(xmlComment, StringComparison.Ordinal)))
+            {
+                yield return Issue(symbol, xmlTag, phrase[0]);
+            }
+        }
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, XmlElementSyntax comment, string xmlTag) => Enumerable.Empty<Diagnostic>();
+
+        private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment)
         {
             if (ShallAnalyzeReturnType(returnType) is false)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Returns)
-                   ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Value)
+            return TryAnalyzeReturnType(owningSymbol, returnType, comment, Constants.XmlTag.Returns)
+                   ?? TryAnalyzeReturnType(owningSymbol, returnType, comment, Constants.XmlTag.Value)
                    ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> TryAnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag)
+        private IEnumerable<Diagnostic> TryAnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string xmlTag)
         {
-            List<Diagnostic> results = null;
-
-            foreach (var comment in CommentExtensions.GetComments(commentXml, xmlTag).Where(_ => _ != null))
+            foreach (var node in comment.GetXmlSyntax(xmlTag))
             {
-                var findings = AnalyzeReturnType(owningSymbol, returnType, comment, xmlTag);
-                if (findings.Any())
-                {
-                    if (results is null)
-                    {
-                        results = new List<Diagnostic>(findings.Count());
-                    }
+                var findings = AnalyzeReturnType(owningSymbol, returnType, node, xmlTag);
 
-                    results.AddRange(findings);
+                foreach (var finding in findings)
+                {
+                    yield return finding;
                 }
             }
-
-            return results;
         }
     }
 }

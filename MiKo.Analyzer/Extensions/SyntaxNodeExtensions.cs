@@ -67,6 +67,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
 
+        internal static string GetParameterName(this XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
+
+        internal static string GetParameterName(this XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
+
+        internal static XmlElementSyntax GetParameterComment(this DocumentationCommentTriviaSyntax comment, string parameterName) => comment.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.Param && _.GetParameterName() == parameterName);
+
         internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
         {
             var ifStatement = value.FirstAncestorOrSelf<IfStatementSyntax>();
@@ -497,6 +503,8 @@ namespace MiKoSolutions.Analyzers
         internal static string GetTextWithoutTrivia(this XmlElementSyntax element) => element.Content.ToString().WithoutXmlCommentExterior();
 
         internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
+
+        internal static IEnumerable<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Example);
 
         internal static IEnumerable<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Exception);
 

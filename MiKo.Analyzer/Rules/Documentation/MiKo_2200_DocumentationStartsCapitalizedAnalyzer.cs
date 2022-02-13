@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -32,19 +33,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            var element = commentXml.GetCommentElement();
-
             foreach (var xmlTag in XmlTags)
             {
-                foreach (var unused in element.GetCommentElements(xmlTag)
-                                              .Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
-                                              .Select(_ => _.Without(Constants.Comments.SpecialOrPhrase))
-                                              .Where(_ => _.Length > 0)
-                                              .Where(_ => _[0].IsUpperCase() is false && _[0] != Constants.Comments.XmlElementStartingTag[0]))
+                foreach (var node in comment.GetXmlSyntax(xmlTag))
                 {
-                    yield return Issue(symbol, xmlTag);
+                    foreach (var token in node.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
+                    {
+                        var content = token.ValueText.TrimStart();
+
+                        if (content.Length > 0)
+                        {
+                            if (content == Constants.Comments.SpecialOrPhrase)
+                            {
+                                continue;
+                            }
+
+                            if (content[0].IsUpperCase() is false)
+                            {
+                                var location = GetFirstLocation(token, content[0].ToString());
+                                yield return Issue(symbol.Name, location, xmlTag);
+                            }
+                        }
+                    }
                 }
             }
         }

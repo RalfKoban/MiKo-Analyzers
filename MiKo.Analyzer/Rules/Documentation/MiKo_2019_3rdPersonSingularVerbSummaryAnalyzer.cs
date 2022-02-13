@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsEnum() is false && symbol.IsException() is false && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken)
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
             var summary = textToken.ValueText;
 

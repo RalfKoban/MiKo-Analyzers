@@ -29,11 +29,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (syntax)
             {
-                case XmlElementSyntax xes:
-                    return SyntaxFactory.XmlParamRefElement(GetParameterName(xes));
+                case XmlElementSyntax e:
+                    return SyntaxFactory.XmlParamRefElement(e.GetParameterName());
 
-                case XmlEmptyElementSyntax xees:
-                    return SyntaxFactory.XmlParamRefElement(GetParameterName(xees));
+                case XmlEmptyElementSyntax ee:
+                    return SyntaxFactory.XmlParamRefElement(ee.GetParameterName());
 
                 default:
                     return syntax;

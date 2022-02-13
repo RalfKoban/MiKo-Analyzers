@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -11,28 +12,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2042";
 
-        private static readonly string[] ParagraphTags =
-            {
-                "<p>",
-                "</p>",
-            };
-
         public MiKo_2042_BrParaAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            var comment = symbol.GetComment();
-
-            if (comment.Contains("<br", StringComparison.OrdinalIgnoreCase))
+            foreach (SyntaxNode node in comment.DescendantNodes(_ => true, true))
             {
-                yield return Issue(symbol, "<br/>");
+                var tag = GetTagName(node);
+
+                switch (tag)
+                {
+                    case "br":
+                        yield return Issue(symbol.Name, node, "<br/>");
+                        break;
+
+                    case "p":
+                        yield return Issue(symbol.Name, node, "<p>...</p>");
+                        break;
+                }
             }
 
-            if (comment.ContainsAny(ParagraphTags, StringComparison.OrdinalIgnoreCase))
+            string GetTagName(SyntaxNode node)
             {
-                yield return Issue(symbol, "<p>...</p>");
+                switch (node)
+                {
+                    case XmlEmptyElementSyntax ee: return ee.GetName();
+                    case XmlElementSyntax e: return e.GetName();
+                    default: return string.Empty;
+                }
             }
         }
     }

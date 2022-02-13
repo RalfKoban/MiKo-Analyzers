@@ -24,12 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static string GetListType(XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            var comment = symbol.GetDocumentationCommentTriviaSyntax();
             if (comment is null)
             {
-                // it might be that there is no documentation comment available (while the comment XML contains something like " <member name='xyz' ...> ")
+                // it might be that there is no documentation comment available
                 return Enumerable.Empty<Diagnostic>();
             }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -21,33 +22,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name == nameof(IDisposable.Dispose) && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            var summaries = CommentExtensions.GetSummaries(commentXml);
-            var results = summaries.Any() && summaries.All(_ => _ != SummaryPhrase)
-                          ? new List<Diagnostic>(1) { Issue(symbol, SummaryPhrase) }
-                          : null;
+            var summaries = comment.GetSummaryXmls();
 
-            // check for parameter
-            foreach (var parameter in symbol.Parameters)
+            foreach (var summary in summaries)
             {
-                var comment = parameter.GetComment(commentXml);
-                switch (comment)
+                if (summary.GetTextWithoutTrivia() != SummaryPhrase)
                 {
-                    case null:
-                    case ParameterPhrase:
-                        continue;
+                    yield return Issue(symbol, SummaryPhrase);
                 }
 
-                if (results is null)
+                // check for parameter
+                foreach (var parameter in symbol.Parameters)
                 {
-                    results = new List<Diagnostic>(1);
+                    var parameterComment = comment.GetParameterComment(parameter.Name);
+                    if (parameterComment != null)
+                    {
+                        var text = parameterComment.GetTextWithoutTrivia();
+                        if (text != ParameterPhrase)
+                        {
+                            yield return Issue(parameter, ParameterPhrase);
+                        }
+                    }
                 }
-
-                results.Add(Issue(parameter, ParameterPhrase));
             }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

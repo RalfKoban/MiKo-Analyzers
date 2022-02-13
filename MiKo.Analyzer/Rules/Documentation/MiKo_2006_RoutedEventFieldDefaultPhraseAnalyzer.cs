@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -18,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsRoutedEvent() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
             var symbolName = symbol.Name;
             if (symbolName.EndsWith(Constants.RoutedEventFieldSuffix, StringComparison.OrdinalIgnoreCase) is false)
@@ -39,8 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var containingTypeFullName = containingType.ToString();
 
             // loop over phrases for summaries and values
-            ValidatePhrases(symbol, CommentExtensions.GetSummaries(commentXml), () => Phrases(Constants.Comments.RoutedEventFieldSummaryPhrase, containingTypeFullName, eventName), Constants.XmlTag.Summary, ref results);
-            ValidatePhrases(symbol, CommentExtensions.GetValue(commentXml), () => Phrases(Constants.Comments.RoutedEventFieldValuePhrase, containingTypeFullName, eventName), Constants.XmlTag.Value, ref results);
+            ValidatePhrases(symbol, comment.GetSummaryXmls(), () => Phrases(Constants.Comments.RoutedEventFieldSummaryPhrase, containingTypeFullName, eventName), Constants.XmlTag.Summary, ref results);
+            ValidatePhrases(symbol, comment.GetValueXmls(), () => Phrases(Constants.Comments.RoutedEventFieldValuePhrase, containingTypeFullName, eventName), Constants.XmlTag.Value, ref results);
 
             return results ?? Enumerable.Empty<Diagnostic>();
         }
@@ -54,10 +55,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
 
-        private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<string> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
+        private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<XmlElementSyntax> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
         {
             var phrases = phrasesProvider();
-            foreach (var comment in comments)
+
+            // TODO RKN Fix code
+            foreach (var comment in comments.Select(_ => _.GetTextWithoutTrivia()))
             {
                 if (phrases.Any(_ => comment.StartsWith(_, StringComparison.Ordinal)))
                 {

@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -30,35 +31,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
             var method = (IMethodSymbol)symbol;
 
-            var violationsInSummaries = AnalyzeSummaries(method, commentXml);
-            var violationsInParameters = AnalyzeParameters(method.Parameters, commentXml);
-            var violationsInReturns = AnalyzeReturns(method, commentXml);
+            var violationsInSummaries = AnalyzeSummary(method, comment);
+            var violationsInParameters = AnalyzeParameters(method.Parameters, comment);
+            var violationsInReturns = AnalyzeReturns(method, comment);
 
             return violationsInSummaries.Concat(violationsInParameters).Concat(violationsInReturns);
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
         {
             var phrases = GetSummaryPhrases(symbol);
 
-            if (summaries.Any(_ => _.Trim().EqualsAny(phrases)))
+            // TODO RKN: fix summary
+            var summary = summaryXml.ToString().Trim();
+            if (summary.EqualsAny(phrases))
             {
-                yield break;
+                return null;
             }
 
-            yield return Issue(symbol, Constants.XmlTag.Summary, phrases[0]);
+            return Issue(symbol, Constants.XmlTag.Summary, phrases[0]);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
             var phrases = GetReturnsPhrases(symbol);
-            var comments = CommentExtensions.GetReturns(commentXml);
 
-            if (comments.Any(_ => _.Trim().EqualsAny(phrases)))
+            // TODO RKN: fix returns
+            var comments = comment.GetReturnsXmls();
+            if (comments.Any(_ => _.ToString().Trim().EqualsAny(phrases)))
             {
                 yield break;
             }
@@ -66,22 +70,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return Issue(symbol, Constants.XmlTag.Returns, phrases[0]);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters, DocumentationCommentTriviaSyntax comment)
         {
             if (parameters.Length == 2)
             {
-                yield return AnalyzeParameter(commentXml, parameters[0], "The first value to compare.");
-                yield return AnalyzeParameter(commentXml, parameters[1], "The second value to compare.");
+                yield return AnalyzeParameter(comment, parameters[0], "The first value to compare.");
+                yield return AnalyzeParameter(comment, parameters[1], "The second value to compare.");
             }
         }
 
-        private Diagnostic AnalyzeParameter(string commentXml, IParameterSymbol parameter, string phrase)
+        private Diagnostic AnalyzeParameter(DocumentationCommentTriviaSyntax comment, IParameterSymbol parameter, string phrase)
         {
-            var comment = parameter.GetComment(commentXml);
+            var parameterComment = comment.GetParameterComment(parameter.Name);
 
-            return comment == phrase
+            var hasPhrase = parameterComment.DescendantNodes<XmlTextSyntax>()
+                                            .SelectMany(_ => _.TextTokens)
+                                            .Any(_ => _.ValueText == phrase);
+
+            return hasPhrase
                        ? null
-                       : Issue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
+                       : Issue(parameter.Name, parameterComment, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
         }
     }
 }

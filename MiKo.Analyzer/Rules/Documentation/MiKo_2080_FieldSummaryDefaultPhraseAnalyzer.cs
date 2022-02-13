@@ -68,9 +68,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return base.ShallAnalyze(symbol);
         }
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetStartingPhrase((IFieldSymbol)symbol));
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetStartingPhrase((IFieldSymbol)symbol));
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken)
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
             var fieldSymbol = (IFieldSymbol)symbol;
 

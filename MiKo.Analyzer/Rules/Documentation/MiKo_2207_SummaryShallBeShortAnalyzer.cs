@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -20,9 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(HasIssue)
-                                                                                                                        ? new[] { Issue(symbol) }
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
+        {
+            var summary = string.Concat(summaryXml.DescendantNodes<XmlTextSyntax>().Select(_ => _.GetTextWithoutTrivia()));
+
+            return HasIssue(summary) ? Issue(symbol) : null;
+        }
 
         private static bool HasIssue(string summary)
         {

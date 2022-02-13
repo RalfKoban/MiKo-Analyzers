@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // we are called for each parameter, so we have to find out the correct XML element
             var fittingSyntaxNodes = FittingSyntaxNodes(syntaxNodes);
 
-            var parameterSyntax = GetXmlSyntax(Constants.XmlTag.Param, fittingSyntaxNodes).FirstOrDefault(_ => GetParameterName(_) == parameterName);
+            var parameterSyntax = GetXmlSyntax(Constants.XmlTag.Param, fittingSyntaxNodes).FirstOrDefault(_ => _.GetParameterName() == parameterName);
             if (parameterSyntax != null)
             {
                 return parameterSyntax;
@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
-            var parameterName = GetParameterName(parameterCommentSyntax);
+            var parameterName = parameterCommentSyntax.GetParameterName();
 
             var parameters = parameterCommentSyntax.GetParameters();
 

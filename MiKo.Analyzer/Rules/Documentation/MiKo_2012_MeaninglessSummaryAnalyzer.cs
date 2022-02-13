@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return issue;
         }
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, "start with", node.ToString().HumanizedTakeFirst(200));
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, "start with", node.ToString().HumanizedTakeFirst(200));
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken)
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
             var symbolNames = GetSelfSymbolNames(symbol);
             var phrases = GetPhrases(symbol);

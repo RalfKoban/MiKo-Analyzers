@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -161,47 +162,141 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
         }
 
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentTriviaSyntax() != null;
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.GetDocumentationCommentTriviaSyntax() != null;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.GetDocumentationCommentTriviaSyntax() != null;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.GetDocumentationCommentTriviaSyntax() != null;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => true;
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetDocumentationCommentTriviaSyntax() != null;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => true;
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                               ? AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml())
-                                                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected sealed override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            var comment = symbol.GetDocumentationCommentTriviaSyntax();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, compilation, commentXml);
+            return comment != null && ShallAnalyze(symbol)
+                      ? AnalyzeType(symbol, compilation, comment)
+                      : Enumerable.Empty<Diagnostic>();
+        }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                              ? AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml())
-                                                                                                                              : Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, comment);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, compilation, commentXml);
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
+        {
+            var comment = symbol.GetDocumentationCommentTriviaSyntax();
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                            ? AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml())
-                                                                                                                            : Enumerable.Empty<Diagnostic>();
+            return comment != null && ShallAnalyze(symbol)
+                  ? AnalyzeMethod(symbol, compilation, comment)
+                  : Enumerable.Empty<Diagnostic>();
+        }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, compilation, commentXml);
+        protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, comment);
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                            ? AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml())
-                                                                                                                            : Enumerable.Empty<Diagnostic>();
+        protected sealed override IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation)
+        {
+            var comment = symbol.GetDocumentationCommentTriviaSyntax();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, compilation, commentXml);
+            return comment != null && ShallAnalyze(symbol)
+                  ? AnalyzeEvent(symbol, compilation, comment)
+                  : Enumerable.Empty<Diagnostic>();
+        }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                                  ? AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml())
-                                                                                                                                  : Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, comment);
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol, compilation, commentXml);
+        protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation)
+        {
+            var comment = symbol.GetDocumentationCommentTriviaSyntax();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => Enumerable.Empty<Diagnostic>();
+            return comment != null && ShallAnalyze(symbol)
+                  ? AnalyzeField(symbol, compilation, comment)
+                  : Enumerable.Empty<Diagnostic>();
+        }
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, comment);
+
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation)
+        {
+            var comment = symbol.GetDocumentationCommentTriviaSyntax();
+
+            return comment != null && ShallAnalyze(symbol)
+                  ? AnalyzeProperty(symbol, compilation, comment)
+                  : Enumerable.Empty<Diagnostic>();
+        }
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, comment);
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
+
+        protected Diagnostic AnalyzeStart(ISymbol symbol, string tag, SyntaxNode startElement)
+        {
+            var elementsToSkip = 0;
+            var analyzedFirstText = false;
+
+            var descendantNodes = startElement.DescendantNodes();
+            foreach (var node in descendantNodes.TakeWhile(_ => analyzedFirstText is false))
+            {
+                elementsToSkip++;
+
+                switch (node)
+                {
+                    case XmlElementStartTagSyntax startTag:
+                        {
+                            var tagName = startTag.GetName();
+
+                            if (tagName == tag || tagName == Constants.XmlTag.Para)
+                            {
+                                continue; // skip over the start tag and name syntax
+                            }
+                            else
+                            {
+                                return StartIssue(symbol, node); // it's no text, so it must be something different
+                            }
+                        }
+
+                    case XmlNameSyntax _:
+                    case XmlElementSyntax e when e.GetName() == Constants.XmlTag.Para:
+                    case XmlEmptyElementSyntax ee when ee.GetName() == Constants.XmlTag.Para:
+                        continue; // skip over the start tag and name syntax
+
+                    case XmlTextSyntax text:
+                        {
+                            // report the location of the text issue via the corresponding text token
+                            foreach (var textToken in text.TextTokens)
+                            {
+                                if (textToken.ValueText.IsNullOrWhiteSpace())
+                                {
+                                    // we found the first but empty /// line, so ignore it
+                                    continue;
+                                }
+
+                                analyzedFirstText = true;
+
+                                var issue = StartIssue(symbol, textToken);
+                                if (issue != null)
+                                {
+                                    return issue;
+                                }
+                            }
+
+                            // we found a completely empty /// line, so ignore it
+                            continue;
+                        }
+
+                    default:
+                        return StartIssue(symbol, node); // it's no text, so it must be something different
+                }
+            }
+
+            return AnalyzeStartContinue(symbol, descendantNodes.Skip(elementsToSkip));
+        }
+
+        protected virtual Diagnostic AnalyzeStartContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes) => null; // nothing to report
+
+        protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
+
+        protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken) => Issue(symbol.Name, textToken);
 
         private static Location CreateLocation(string value, SyntaxTree syntaxTree, int spanStart, int position, int startOffset, int endOffset)
         {

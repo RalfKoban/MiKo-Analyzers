@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (original)
             {
                 case XmlElementSyntax e:
-                    return GetParameterName(e);
+                    return e.GetParameterName();
 
                 case XmlEmptyElementSyntax ee:
-                    return GetParameterName(ee);
+                    return ee.GetParameterName();
 
                 default:
                     return "TODO";

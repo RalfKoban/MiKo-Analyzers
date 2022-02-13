@@ -16,14 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, XmlElementSyntax comment, string xmlTag)
         {
             var startingPhrases = GetStartingPhrases(owningSymbol, returnType);
             var endingPhrases = GetEndingPhrases(returnType);
 
+            // TODO RKN: fix call
+            var xmlComment = comment.GetTextWithoutTrivia();
+
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            if (comment.StartsWithAny(startingPhrases, Comparison) && comment.ContainsAny(endingPhrases, Comparison))
+            if (xmlComment.StartsWithAny(startingPhrases, Comparison) && xmlComment.ContainsAny(endingPhrases, Comparison))
             {
                 // nothing to do here
             }

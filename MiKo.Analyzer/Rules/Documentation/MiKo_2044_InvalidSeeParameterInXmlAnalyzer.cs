@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -12,45 +13,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2044";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
         public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
             var method = (IMethodSymbol)symbol;
+            var parameters = method.Parameters;
 
-            if (method.Parameters.Length == 0)
+            if (parameters.Length > 0)
             {
-                return Enumerable.Empty<Diagnostic>();
+                var crefs = Enumerable.Empty<CrefSyntax>()
+                                      .Concat(CRefs(comment, Constants.XmlTag.See))
+                                      .Concat(CRefs(comment, Constants.XmlTag.SeeAlso));
+
+                foreach (var cref in crefs)
+                {
+                    foreach (var parameter in parameters)
+                    {
+                        if (cref.ToString() == parameter.Name)
+                        {
+                            // TODO RKN Add phrases
+                            yield return Issue(parameter.Name, cref);
+                        }
+                    }
+                }
             }
-
-            var comment = commentXml.Without(Constants.Markers.Symbols);
-
-            List<Diagnostic> findings = null;
-            foreach (var parameter in method.Parameters)
-            {
-                InspectPhrase("<see cref", parameter, comment, ref findings);
-                InspectPhrase("<seealso cref", parameter, comment, ref findings);
-            }
-
-            return findings ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private void InspectPhrase(string xmlTag, IParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
+        private static IEnumerable<CrefSyntax> CRefs(DocumentationCommentTriviaSyntax comment, string tagName)
         {
-            var phrase = xmlTag + "=\"" + parameter.Name + "\"";
-            if (commentXml.Contains(phrase, Comparison))
-            {
-                if (findings is null)
-                {
-                    findings = new List<Diagnostic>(1);
-                }
+            var crefs = Enumerable.Empty<XmlCrefAttributeSyntax>()
+                                  .Concat(comment.GetXmlSyntax(tagName).SelectMany(_ => _.GetAttributes<XmlCrefAttributeSyntax>()))
+                                  .Concat(comment.GetEmptyXmlSyntax(tagName).SelectMany(_ => _.GetAttributes<XmlCrefAttributeSyntax>()))
+                                  .Select(_ => _.Cref);
 
-                findings.Add(Issue(parameter, phrase + Constants.Comments.XmlElementEndingTag));
-            }
+            return crefs;
         }
     }
 }

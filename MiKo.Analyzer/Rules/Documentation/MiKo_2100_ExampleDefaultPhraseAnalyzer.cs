@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,15 +17,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, params string[] exampleComments) => AnalyzeStartingPhrase(owningSymbol, exampleComments, Constants.Comments.ExampleDefaultPhrase);
-
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)
+        protected override IEnumerable<Diagnostic> AnalyzeExamples(ISymbol owningSymbol, IEnumerable<XmlElementSyntax> examples)
         {
-            var found = comments.All(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal)));
+            foreach (var example in examples)
+            {
+                yield return AnalyzeStart(owningSymbol, Constants.XmlTag.Example, example);
+            }
+        }
 
-            return found
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, phrases[0]) };
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
+        {
+            if (textToken.ValueText.StartsWith(Constants.Comments.ExampleDefaultPhrase))
+            {
+                return null;
+            }
+
+            return Issue(symbol, Constants.Comments.ExampleDefaultPhrase);
         }
     }
 }

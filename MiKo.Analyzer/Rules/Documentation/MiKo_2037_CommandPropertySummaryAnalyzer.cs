@@ -24,9 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.Type.IsCommand() && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetProposal(symbol));
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetProposal(symbol));
 
-        protected override Diagnostic SummaryStartIssue(ISymbol symbol, SyntaxToken textToken)
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
             var startPhrase = GetStartingPhrase(symbol);
 
@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Issue(symbol.Name, textToken, GetProposal(symbol));
         }
 
-        protected override Diagnostic AnalyzeSummaryContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes)
+        protected override Diagnostic AnalyzeStartContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes)
         {
             var node = remainingNodes.FirstOrDefault();
 
