@@ -33,6 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield break;
             }
 
+            if (text.Length < value.Length)
+            {
+                // nothing to inspect as the text is too short
+                yield break;
+            }
+
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
 
@@ -50,17 +56,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var text = textToken.ValueText;
 
-            var syntaxTree = textToken.SyntaxTree;
-            var spanStart = textToken.SpanStart;
-
             if (text.Length <= 2 && text.IsNullOrWhiteSpace())
             {
                 // nothing to inspect as the text is too short and consists of whitespaces only
                 yield break;
             }
 
+            var syntaxTree = textToken.SyntaxTree;
+            var spanStart = textToken.SpanStart;
+
             foreach (var value in values)
             {
+                if (text.Length < value.Length)
+                {
+                    // nothing to inspect as the text is too short
+                    continue;
+                }
+
                 foreach (var position in text.AllIndexesOf(value, comparison))
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
@@ -92,6 +104,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield break;
             }
 
+            if (text.Length < value.Length)
+            {
+                // nothing to inspect as the text is too short
+                yield break;
+            }
+
             var syntaxTree = trivia.SyntaxTree;
             var spanStart = trivia.SpanStart;
 
@@ -120,6 +138,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var value in values)
             {
+                if (text.Length < value.Length)
+                {
+                    // nothing to inspect as the text is too short
+                    continue;
+                }
+
                 foreach (var position in text.AllIndexesOf(value, comparison))
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);

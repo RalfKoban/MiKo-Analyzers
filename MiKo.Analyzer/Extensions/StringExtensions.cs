@@ -19,6 +19,11 @@ namespace System
                 return Array.Empty<int>();
             }
 
+            if (finding.Length > value.Length)
+            {
+                return Array.Empty<int>();
+            }
+
             var indexes = new List<int>();
 
             for (var index = 0; ; index += finding.Length)
