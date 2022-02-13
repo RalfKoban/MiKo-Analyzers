@@ -99,6 +99,14 @@ public sealed class TestMe { }
 ");
 
         [Test]
+        public void No_issue_is_reported_for_comment_with_slash_and_see_langword_Null_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// The identifier - if not <see langword=""null""/> - for something.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test]
         public void Code_gets_fixed_with_text_at_beginning_for_([Values("-", "*")] string marker)
         {
             var originalCode = @"

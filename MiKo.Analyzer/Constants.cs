@@ -126,22 +126,6 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] CancellationTokenParameterPhrase = { "The token to monitor for cancellation requests." };
 
-            internal static readonly string[] InstanceOfPhrase =
-                {
-                    "An instance of ",
-                    "an instance of ",
-                    "A instance of ",
-                    "a instance of ",
-                    "The instance of ",
-                    "the instance of ",
-                    "An object of ",
-                    "an object of ",
-                    "A object of ",
-                    "a object of ",
-                    "The object of ",
-                    "the object of ",
-                };
-
             internal static readonly string[] MeaninglessStartingPhrase =
                 {
                     "A ",

@@ -25,9 +25,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
+            var text = textToken.ValueText;
+
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
-            var text = textToken.ValueText;
 
             foreach (var position in text.AllIndexesOf(value, comparison))
             {
@@ -41,9 +48,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
+            var text = textToken.ValueText;
+
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
-            var text = textToken.ValueText;
+
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
 
             foreach (var value in values)
             {
@@ -70,9 +84,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
+            var text = trivia.ToFullString();
+
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
             var syntaxTree = trivia.SyntaxTree;
             var spanStart = trivia.SpanStart;
-            var text = trivia.ToFullString();
 
             foreach (var position in text.AllIndexesOf(value, comparison))
             {
@@ -86,9 +107,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
+            var text = trivia.ToFullString();
+
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
             var syntaxTree = trivia.SyntaxTree;
             var spanStart = trivia.SpanStart;
-            var text = trivia.ToFullString();
 
             foreach (var value in values)
             {

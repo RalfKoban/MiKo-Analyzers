@@ -6530,7 +6530,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;identifier&apos; instead of &apos;id&apos; in documentation.
+        ///   Looks up a localized string similar to Use &apos;identifier&apos; instead of &apos;id&apos;.
         /// </summary>
         public static string MiKo_2202_MessageFormat {
             get {
@@ -6566,7 +6566,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;unique identifier&apos; instead of &apos;guid&apos; in documentation.
+        ///   Looks up a localized string similar to Use &apos;unique identifier&apos; instead of &apos;guid&apos;.
         /// </summary>
         public static string MiKo_2203_MessageFormat {
             get {
@@ -6795,7 +6795,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;information&apos; instead of &apos;info&apos; in documentation.
+        ///   Looks up a localized string similar to Use &apos;information&apos; instead of &apos;info&apos;.
         /// </summary>
         public static string MiKo_2210_MessageFormat {
             get {
@@ -6853,7 +6853,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change &apos;was not succesful&apos; to &apos;failed&apos;.
+        ///   Looks up a localized string similar to Change &apos;was not successful&apos; to &apos;failed&apos;.
         /// </summary>
         public static string MiKo_2212_CodeFixTitle {
             get {
@@ -6880,7 +6880,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;.
+        ///   Looks up a localized string similar to Documentation should use the phrase &apos;failed&apos; instead of &apos;was not successful&apos;.
         /// </summary>
         public static string MiKo_2212_Title {
             get {
@@ -7038,12 +7038,10 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to The documentation of a &lt;list&gt; is a little bit ambiguous.
-        ///There are 3 types of lists: &apos;number&apos;, &apos;bullet&apos; and &apos;table&apos;. Only the &apos;table&apos; can have a single &lt;listheader&gt; and multiple &lt;item&gt;s, the others have only &lt;item&gt;s.
+        ///There are 3 types of lists: &apos;number&apos;, &apos;bullet&apos; and &apos;table&apos;. Only the &apos;table&apos; can have a single &lt;listheader&gt; and multiple &lt;item&gt; entries, the others have only &lt;item&gt; entries.
         ///
         ///For a &apos;table&apos;, each &lt;listheader&gt; and &lt;item&gt;s can contain either a single but optional &lt;term&gt; and a single required &lt;description&gt;, or multiple &lt;term&gt; entries.
-        ///For a &apos;bullet&apos; or &apos;number&apos; list, each &lt;item&gt; can contain a single but optional &lt;term&gt; and a single required &lt;description&gt;.
-        ///
-        ///Any &lt;i [rest of string was truncated]&quot;;.
+        ///For a &apos;bullet&apos; or &apos;number&apos; list, each &lt;item&gt; can contain a single but optional &lt;term&gt; and a single required &lt;descripti [rest of string was truncated]&quot;;.
         /// </summary>
         public static string MiKo_2217_Description {
             get {
@@ -7365,7 +7363,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To shorten comments - and still be to the point - comments should use the phrase &apos;failed&apos; instead of &apos;was not succesful&apos;..
+        ///   Looks up a localized string similar to To shorten comments - and still be to the point - comments should use the phrase &apos;failed&apos; instead of &apos;was not successful&apos;..
         /// </summary>
         public static string MiKo_2307_Description {
             get {
@@ -7383,7 +7381,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comments should use the phrase &apos;failed&apos; instead of &apos;was not sucessful&apos;.
+        ///   Looks up a localized string similar to Comments should use the phrase &apos;failed&apos; instead of &apos;was not successful&apos;.
         /// </summary>
         public static string MiKo_2307_Title {
             get {

@@ -221,7 +221,7 @@ The following tables list all the 321 rules that are currently provided by the a
 |MiKo_2209|Do not use double periods in documentation|&#x2713;|&#x2713;|
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'|&#x2713;|&#x2713;|
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections|&#x2713;|&#x2713;|
-|MiKo_2212|Documentation should use the phrase 'failed' instead of 'was not sucessful'|&#x2713;|&#x2713;|
+|MiKo_2212|Documentation should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2213|Documentation should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_2214|Documentation should not contain empty lines|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
@@ -234,7 +234,7 @@ The following tables list all the 321 rules that are currently provided by the a
 |MiKo_2304|Do not formulate comments as questions|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments|&#x2713;|&#x2713;|
 |MiKo_2306|Do end comments with a period|\-|\-|
-|MiKo_2307|Comments should use the phrase 'failed' instead of 'was not sucessful'|&#x2713;|&#x2713;|
+|MiKo_2307|Comments should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
 
