@@ -2327,7 +2327,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>The XML documentation should not use the abbreviation 'id'. Instead, it should clearly document that this is an identifier. Hence, it should use the term 'identifier' instead.</value>
   </data>
   <data name="MiKo_2202_MessageFormat" xml:space="preserve">
-    <value>Use 'identifier' instead of 'id' in documentation</value>
+    <value>Use 'identifier' instead of 'id'</value>
   </data>
   <data name="MiKo_2202_Title" xml:space="preserve">
     <value>Documentation should use the term 'identifier' instead of 'id'</value>
@@ -2339,7 +2339,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>The XML documentation should not use the abbreviation 'guid'. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term 'unique identifier' instead.</value>
   </data>
   <data name="MiKo_2203_MessageFormat" xml:space="preserve">
-    <value>Use 'unique identifier' instead of 'guid' in documentation</value>
+    <value>Use 'unique identifier' instead of 'guid'</value>
   </data>
   <data name="MiKo_2203_Title" xml:space="preserve">
     <value>Documentation should use the term 'unique identifier' instead of 'guid'</value>
@@ -2418,7 +2418,7 @@ By having a more concrete description it makes it easier for a developer to unde
     <value>The XML documentation should not use the abbreviation 'info'. Instead, it should clearly document that this is an information. Hence, it should use the term 'information' instead.</value>
   </data>
   <data name="MiKo_2210_MessageFormat" xml:space="preserve">
-    <value>Use 'information' instead of 'info' in documentation</value>
+    <value>Use 'information' instead of 'info'</value>
   </data>
   <data name="MiKo_2210_Title" xml:space="preserve">
     <value>Documentation should use the term 'information' instead of 'info'</value>
@@ -2440,7 +2440,7 @@ Hence, to provide them with all the information they need, the information shoul
     <value>Enum members should not have &lt;remarks&gt; sections</value>
   </data>
   <data name="MiKo_2212_CodeFixTitle" xml:space="preserve">
-    <value>Change 'was not succesful' to 'failed'</value>
+    <value>Change 'was not successful' to 'failed'</value>
   </data>
   <data name="MiKo_2212_Description" xml:space="preserve">
     <value>To shorten documentation - and still be to the point - the documentation should use the phrase 'failed' instead of 'was not succesful'.</value>
@@ -2449,7 +2449,7 @@ Hence, to provide them with all the information they need, the information shoul
     <value>Use 'failed' instead of 'was not successful'</value>
   </data>
   <data name="MiKo_2212_Title" xml:space="preserve">
-    <value>Documentation should use the phrase 'failed' instead of 'was not sucessful'</value>
+    <value>Documentation should use the phrase 'failed' instead of 'was not successful'</value>
   </data>
   <data name="MiKo_2213_CodeFixTitle" xml:space="preserve">
     <value>Change "n't" to " not"</value>
@@ -2505,7 +2505,7 @@ So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;r
   </data>
   <data name="MiKo_2217_Description" xml:space="preserve">
     <value>The documentation of a &lt;list&gt; is a little bit ambiguous.
-There are 3 types of lists: 'number', 'bullet' and 'table'. Only the 'table' can have a single &lt;listheader&gt; and multiple &lt;item&gt;s, the others have only &lt;item&gt;s.
+There are 3 types of lists: 'number', 'bullet' and 'table'. Only the 'table' can have a single &lt;listheader&gt; and multiple &lt;item&gt; entries, the others have only &lt;item&gt; entries.
 
 For a 'table', each &lt;listheader&gt; and &lt;item&gt;s can contain either a single but optional &lt;term&gt; and a single required &lt;description&gt;, or multiple &lt;term&gt; entries.
 For a 'bullet' or 'number' list, each &lt;item&gt; can contain a single but optional &lt;term&gt; and a single required &lt;description&gt;.
@@ -2622,13 +2622,13 @@ This rule contradicts rule MiKo_2303.</value>
     <value>Replace with 'failed'</value>
   </data>
   <data name="MiKo_2307_Description" xml:space="preserve">
-    <value>To shorten comments - and still be to the point - comments should use the phrase 'failed' instead of 'was not succesful'.</value>
+    <value>To shorten comments - and still be to the point - comments should use the phrase 'failed' instead of 'was not successful'.</value>
   </data>
   <data name="MiKo_2307_MessageFormat" xml:space="preserve">
     <value>Use 'failed' instead of 'was not successful'</value>
   </data>
   <data name="MiKo_2307_Title" xml:space="preserve">
-    <value>Comments should use the phrase 'failed' instead of 'was not sucessful'</value>
+    <value>Comments should use the phrase 'failed' instead of 'was not successful'</value>
   </data>
   <data name="MiKo_2308_CodeFixTitle" xml:space="preserve">
     <value>Place comment before code</value>
