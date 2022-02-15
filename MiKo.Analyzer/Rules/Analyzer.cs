@@ -6,6 +6,7 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules
 {
@@ -71,6 +72,12 @@ namespace MiKoSolutions.Analyzers.Rules
                                                            InitializeCore(_);
                                                        });
         }
+
+        protected static Location CreateLocation(SyntaxNode node, int start, int end) => CreateLocation(node.SyntaxTree, start, end);
+
+        protected static Location CreateLocation(SyntaxToken token, int start, int end) => CreateLocation(token.SyntaxTree, start, end);
+
+        protected static Location CreateLocation(SyntaxTree syntaxTree, int start, int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
 
         protected static void ReportDiagnostics(CodeBlockAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
