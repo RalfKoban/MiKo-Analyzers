@@ -57,6 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         // case IfStatementSyntax _: required by MiKo_3201
                         case ElseClauseSyntax _:
+                        case CaseSwitchLabelSyntax _:
                         case ParenthesizedLambdaExpressionSyntax _:
                         case MethodDeclarationSyntax _:
                         case ClassDeclarationSyntax _:
