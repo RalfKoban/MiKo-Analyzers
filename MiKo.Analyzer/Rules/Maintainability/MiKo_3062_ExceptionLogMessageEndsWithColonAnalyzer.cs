@@ -96,22 +96,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (argument.Expression)
                 {
-                    case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression):
-                        return AnalyzeToken(literal.Token);
-
-                    case InterpolatedStringExpressionSyntax i when i.Contents.Last() is InterpolatedStringTextSyntax interpolated:
-                        return AnalyzeToken(interpolated.TextToken);
+                    case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) && literal.Token.ValueText.TrimEnd().EndsWith(':') is false:
+                    {
+                        return CreateIssue(literal.Token);
+                    }
 
                     case InterpolatedStringExpressionSyntax i:
-                        return Issue(i);
+                    {
+                        if (i.Contents.Last() is InterpolatedStringTextSyntax interpolated && interpolated.TextToken.ValueText.TrimEnd().EndsWith(':'))
+                        {
+                            // nothing to report
+                            return null;
+                        }
+
+                        return CreateIssue(i);
+                    }
                 }
             }
 
             return null;
         }
 
-        private Diagnostic AnalyzeToken(SyntaxToken token) => token.ValueText.TrimEnd().EndsWith(':')
-                                                                  ? null
-                                                                  : Issue(token);
+        private Diagnostic CreateIssue(SyntaxNode node)
+        {
+            var end = node.Span.End;
+            var start = Math.Max(node.SpanStart, end - 2); // we want to underline the last 2 characters
+            var location = CreateLocation(node, start, end);
+
+            return Issue(location);
+        }
+
+        private Diagnostic CreateIssue(SyntaxToken token)
+        {
+            var end = token.Span.End;
+            var start = Math.Max(token.SpanStart, end - 2); // we want to underline the last 2 characters
+            var location = CreateLocation(token, start, end);
+
+            return Issue(location);
+        }
     }
 }
