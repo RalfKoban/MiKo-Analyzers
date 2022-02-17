@@ -37,9 +37,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var method = node.GetEnclosingMethod(semanticModel);
+
             if (method != null && method.Parameters.Length == 0)
             {
-                yield return Issue(node.Type.ToString(), node);
+                yield return Issue(node.Type.ToString(), node.Type);
             }
         }
     }
