@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (method != null && method.Parameters.Length == 0)
             {
-                yield return Issue(node.Type.ToString(), node.Type);
+                yield return Issue(node.Type);
             }
         }
     }
