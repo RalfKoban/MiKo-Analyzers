@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            yield return Issue(node.Type.ToString(), node);
+            yield return Issue(node.Type);
         }
     }
 }

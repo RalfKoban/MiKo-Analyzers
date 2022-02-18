@@ -171,6 +171,36 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Log_call_in_case_section() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public static class Constants
+    {
+        public static class  ILog
+        {
+            public const string IsDebugEnabled = ""Some text"";
+        }
+    }
+
+    public class TestMe
+    {
+        public void DoSomething(string text)
+        {
+            switch (text)
+            {
+                case ""something"":
+                case Constants.ILog.IsDebugEnabled:
+                case ""something else"":
+                {
+                    return;
+                }
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Log_call_followed_by_if_block() => An_issue_is_reported_for(@"
 namespace Bla
 {

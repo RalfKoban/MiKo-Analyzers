@@ -266,6 +266,41 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_TimeSpan_ctor_with_hour_minute_seconds() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TimeSpan Create()
+        {
+            return new TimeSpan(2021, 1, 1);
+        }
+    }
+}
+");
+
+        [TestCase("FromSeconds(42)")]
+        [TestCase("FromMinutes(42)")]
+        [TestCase("FromHours(42)")]
+        [TestCase("FromDays(42)")]
+        public void No_issue_is_reported_for_TimeSpan_From_method_(string value) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TimeSpan Create()
+        {
+            return TimeSpan." + value + @";
+        }
+    }
+}
+");
+
         [TestCase("FromRgb(127, 42, 17)")]
         [TestCase("FromArgb(127, 42, 17, 815)")]
         public void No_issue_is_reported_for_Color_From_method_(string value) => No_issue_is_reported_for(@"

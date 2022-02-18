@@ -4,7 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -332,7 +331,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var start = spanStart + position + startOffset; // find start position for underlining
             var end = start + value.Length - startOffset - endOffset; // find end position
 
-            return Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
+            return CreateLocation(syntaxTree, start, end);
         }
     }
 }

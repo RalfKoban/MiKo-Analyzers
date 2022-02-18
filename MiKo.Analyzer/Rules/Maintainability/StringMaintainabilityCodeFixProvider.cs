@@ -28,7 +28,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First();
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        {
+            var node = syntaxNodes.First();
+            switch (node)
+            {
+                case InterpolationSyntax i when i.Parent is InterpolatedStringExpressionSyntax interpolated:
+                    return interpolated;
+
+                case IdentifierNameSyntax name when name.Parent is InterpolationSyntax i && i.Parent is InterpolatedStringExpressionSyntax interpolated:
+                    return interpolated;
+
+                default:
+                    return node;
+            }
+        }
 
         private static string GetFixedText(SyntaxToken token, string ending) => GetFixedText(token.ValueText, ending);
 

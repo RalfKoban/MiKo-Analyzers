@@ -30,9 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
-            if (node.ArgumentList?.Arguments.Count == 0)
+            var argumentList = node.ArgumentList;
+
+            if (argumentList?.Arguments.Count == 0)
             {
-                yield return Issue(node.Type.ToString(), node);
+                yield return Issue(node.Type.ToString(), argumentList);
             }
         }
     }

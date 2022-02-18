@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case ObjectCreationExpressionSyntax o:
                     {
                         var name = o.Type.GetNameOnlyPart();
-                        if (name == nameof(DateTime))
+                        if (name == nameof(DateTime) || name == nameof(TimeSpan))
                         {
                             const int MinimumArgumentsForHoursMinutesSeconds = 3;
 
@@ -144,10 +144,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             if (name.StartsWith("From", StringComparison.Ordinal))
                             {
                                 var typeName = i.GetName();
-                                if (typeName == "Color")
+                                switch (typeName)
                                 {
-                                    // ignore all Color.FromXyz calls
-                                    return true;
+                                    case "Color": // ignore all Color.FromXyz calls
+                                    case nameof(TimeSpan): // ignore all TimeSpan.FromXyz calls
+                                        return true;
                                 }
                             }
                         }
