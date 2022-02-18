@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2046";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
         public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -26,75 +24,102 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (symbol)
             {
                 case IMethodSymbol method:
-                    return AnalyzeComment(method, commentXml);
+                    return AnalyzeComment(method, comment);
 
                 case INamedTypeSymbol type:
-                    return AnalyzeComment(type, commentXml);
+                    return AnalyzeComment(type, comment);
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
             }
         }
 
-        private static IEnumerable<string> CreatePhrases(string parameterName) => new[]
-                                                                                      {
-                                                                                          string.Intern("<see cref=\"" + parameterName + "\""),
-                                                                                          string.Intern("<see name=\"" + parameterName + "\""),
-                                                                                          string.Intern("<seealso cref=\"" + parameterName + "\""),
-                                                                                          string.Intern("<seealso name=\"" + parameterName + "\""),
-                                                                                      };
-
-        private static string GetReplacement(ITypeParameterSymbol parameter) => string.Intern(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.TypeParamRef + " name=\"" + parameter.Name + "\"" + Constants.Comments.XmlElementEndingTag);
-
-        private IEnumerable<Diagnostic> AnalyzeComment(INamedTypeSymbol type, string commentXml)
+        private static XmlAttributeSyntax FindRelevantAttribute(SyntaxNode node)
         {
-            List<Diagnostic> findings = null;
+            switch (node)
+            {
+                case XmlElementSyntax e when IsRelevantTag(e.GetName()):
+                    return e.StartTag.Attributes.First();
 
+                case XmlEmptyElementSyntax ee when IsRelevantTag(ee.GetName()):
+                    return ee.Attributes.First();
+
+                default:
+                    return null;
+            }
+        }
+
+        private static bool IsRelevantTag(string tagName)
+        {
+            switch (tagName)
+            {
+                case Constants.XmlTag.See:
+                case Constants.XmlTag.SeeAlso:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        private static string GetAttributeValue(XmlAttributeSyntax attribute)
+        {
+            switch (attribute)
+            {
+                case XmlNameAttributeSyntax name:
+                    return name.Identifier.GetName();
+
+                case XmlCrefAttributeSyntax cref:
+                    return cref.Cref.ToString();
+
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private static string CreateProposal(string parameterName) => string.Intern(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.TypeParamRef + " name=\"" + parameterName + "\"" + Constants.Comments.XmlElementEndingTag);
+
+        private IEnumerable<Diagnostic> AnalyzeComment(INamedTypeSymbol type, DocumentationCommentTriviaSyntax comment)
+        {
             if (type.IsGenericType)
             {
-                var comment = commentXml.Without(Constants.Markers.Symbols);
+                var typeNames = type.TypeParameters.ToHashSet(_ => _.Name);
 
-                foreach (var parameter in type.TypeParameters)
-                {
-                    InspectPhrases(parameter, comment, ref findings);
-                }
+                return InspectPhrases(type, comment, typeNames);
             }
 
-            return findings ?? Enumerable.Empty<Diagnostic>();
+            return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeComment(IMethodSymbol method, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeComment(IMethodSymbol method, DocumentationCommentTriviaSyntax comment)
         {
-            List<Diagnostic> findings = null;
-
             if (method.IsGenericMethod || method.ContainingType.IsGenericType)
             {
-                var comment = commentXml.Without(Constants.Markers.Symbols);
+                var typeNames = method.TypeParameters.Concat(method.ContainingType.TypeParameters).ToHashSet(_ => _.Name);
 
-                foreach (var parameter in method.TypeParameters.Concat(method.ContainingType.TypeParameters))
-                {
-                    InspectPhrases(parameter, comment, ref findings);
-                }
+                return InspectPhrases(method, comment, typeNames);
             }
 
-            return findings ?? Enumerable.Empty<Diagnostic>();
+            return Enumerable.Empty<Diagnostic>();
         }
 
-        private void InspectPhrases(ITypeParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
+        private IEnumerable<Diagnostic> InspectPhrases(ISymbol symbol, DocumentationCommentTriviaSyntax comment, HashSet<string> typeParameterNames)
         {
-            var phrases = CreatePhrases(parameter.Name);
-
-            foreach (var phrase in phrases
-                                   .Where(_ => commentXml.Contains(_, Comparison))
-                                   .Select(_ => _.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison) ? _ + Constants.Comments.XmlElementEndingTag : _))
+            foreach (var node in comment.DescendantNodes())
             {
-                if (findings is null)
+                var attribute = FindRelevantAttribute(node);
+                if (attribute != null)
                 {
-                    findings = new List<Diagnostic>(1);
-                }
+                    var parameterName = GetAttributeValue(attribute);
 
-                var replacement = GetReplacement(parameter);
-                findings.Add(Issue(parameter, phrase, replacement));
+                    if (typeParameterNames.Contains(parameterName) is false)
+                    {
+                        var proposal = CreateProposal(parameterName);
+                        var phrase = node.ToString();
+
+                        yield return Issue(symbol.Name, node, phrase, proposal);
+                    }
+                }
             }
         }
     }

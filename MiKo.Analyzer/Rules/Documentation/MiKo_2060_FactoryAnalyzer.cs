@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case IMethodSymbol method: return Issue(symbol.Name, node, Phrase);
                 default: return null;
             }
-        } 
+        }
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {

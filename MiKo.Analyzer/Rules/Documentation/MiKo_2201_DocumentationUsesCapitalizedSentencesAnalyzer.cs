@@ -14,22 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2201";
 
-        private static readonly string[] XmlTags =
-            {
-                Constants.XmlTag.Summary,
-                Constants.XmlTag.Remarks,
-                Constants.XmlTag.Returns,
-                Constants.XmlTag.Value,
-                Constants.XmlTag.Param,
-                Constants.XmlTag.Exception,
-                Constants.XmlTag.TypeParam,
-                Constants.XmlTag.Example,
-                Constants.XmlTag.Note,
-                Constants.XmlTag.Overloads,
-                Constants.XmlTag.Para,
-                Constants.XmlTag.Permission,
-            };
-
         private static readonly string[] WellknownFileExtensions =
             {
                 ".bmp",
@@ -52,90 +36,53 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            var element = commentXml.GetCommentElement();
-
-            return XmlTags.Where(_ => element.GetCommentElements(_).SelectMany(__ => __.Nodes()).Any(CommentHasIssue)).Select(_ => Issue(symbol, _));
+            if (HasIssue(comment))
+            {
+                yield return Issue(symbol);
+            }
         }
 
-        private static bool CommentHasIssue(XNode node)
+        private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
         {
-            string comment;
-
-            if (node is XElement e)
+            if (comment is null)
             {
-                // skip <c> and <code>
-                var name = e.Name.ToString().ToLowerCase();
-                switch (name)
-                {
-                    case Constants.XmlTag.C:
-                    case Constants.XmlTag.Code:
-                        return false;
-
-                    default:
-                    {
-                        if (e.HasElements)
-                        {
-                            return e.Descendants().Any(CommentHasIssue);
-                        }
-
-                        comment = e.Value.TrimStart();
-
-                        // sentence starts lower case
-                        if (name == Constants.XmlTag.Para && comment.Length > 0 && comment[0].IsLowerCaseLetter())
-                        {
-                            return true;
-                        }
-
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                comment = node.ToString();
+                // it might be that there is no documentation comment available
+                return false;
             }
 
-            return CommentHasIssue(comment);
+            var elements = comment.DescendantNodes<XmlElementSyntax>().ToList();
+
+            var hasIssue = Analyze(elements, Constants.XmlTag.Overloads)
+                        || Analyze(elements, Constants.XmlTag.Summary)
+                        || Analyze(elements, Constants.XmlTag.Remarks)
+                        || Analyze(elements, Constants.XmlTag.Param)
+                        || Analyze(elements, Constants.XmlTag.Returns)
+                        || Analyze(elements, Constants.XmlTag.Value)
+                        || Analyze(elements, Constants.XmlTag.Exception)
+                        || Analyze(elements, Constants.XmlTag.TypeParam)
+                        || Analyze(elements, Constants.XmlTag.Example)
+                        || Analyze(elements, Constants.XmlTag.Note)
+                        || Analyze(elements, Constants.XmlTag.Para)
+                        || Analyze(elements, Constants.XmlTag.Permission);
+
+            return hasIssue;
         }
 
-        private static bool CommentHasIssue(string comment)
+        private static bool HasIssue(string text)
         {
-            var commentLength = comment.Length;
-            var last = commentLength - 1;
+            var sentences = text.Split(Constants.SentenceMarkers, StringSplitOptions.RemoveEmptyEntries);
 
-            for (var i = 0; i < commentLength; i++)
-            {
-                var c = comment[i];
-
-                SkipWhiteSpaces(comment, last, ref c, ref i);
-
-                if (c.IsSentenceEnding())
-                {
-                    // investigate next character after . ? or !
-                    if (i != last)
-                    {
-                        c = comment[++i];
-                    }
-
-                    SkipWhiteSpaces(comment, last, ref c, ref i);
-                    SkipAbbreviations(comment, last, ref c, ref i);
-
-                    if (c.IsLowerCaseLetter() && IsWellknownFileExtension(comment, i - 1) is false)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return sentences.Any(SentenceHasIssue);
         }
 
-        private static void SkipWhiteSpaces(string comment, int last, ref char c, ref int i)
+        private static bool Analyze(IEnumerable<XmlElementSyntax> nodes, string tagName) => nodes.Where(_ => _.GetName() == tagName).Select(ConstructComment).Any(HasIssue);
+
+        private static bool SentenceHasIssue(string sentence)
         {
-            while (c.IsWhiteSpace() && i < last)
-            {
-                c = comment[++i];
-            }
+            var text = sentence.TrimStart();
+
+            const int MinimumLength = 2; // we do not want to report abbreviations
+            return text.Length >= MinimumLength && text[0].IsLowerCaseLetter();
         }
 
         private static void SkipAbbreviations(string comment, int last, ref char c, ref int i)

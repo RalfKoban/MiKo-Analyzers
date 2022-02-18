@@ -23,13 +23,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            if (HasIssue(symbol, comment))
+            if (HasIssue(comment))
             {
                 yield return Issue(symbol);
             }
         }
 
-        private static bool HasIssue(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
+        private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
         {
             if (comment is null)
             {
@@ -46,31 +46,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         || Analyze(elements, Constants.XmlTag.Value)
                         || Analyze(elements, Constants.XmlTag.Exception)
                         || Analyze(elements, Constants.XmlTag.TypeParam)
-                        || Analyze(elements, Constants.XmlTag.Example);
+                        || Analyze(elements, Constants.XmlTag.Example)
+                        || Analyze(elements, Constants.XmlTag.Note)
+                        || Analyze(elements, Constants.XmlTag.Overloads)
+                        || Analyze(elements, Constants.XmlTag.Para)
+                        || Analyze(elements, Constants.XmlTag.Permission);
 
             return hasIssue;
         }
 
         private static bool HasIssue(string text)
         {
-            var sentences = text.Split(Constants.SentenceMarkers, StringSplitOptions.RemoveEmptyEntries);
+            var sentences = text.Split(Constants.SemiSentenceMarkers, StringSplitOptions.RemoveEmptyEntries);
 
             return sentences.Any(SentenceHasIssue);
         }
 
         private static bool Analyze(IEnumerable<XmlElementSyntax> nodes, string tagName) => nodes.Where(_ => _.GetName() == tagName).Select(ConstructComment).Any(HasIssue);
-
-        private static string ConstructComment(SyntaxNode comment)
-        {
-            var builder = new StringBuilder();
-
-            foreach (var text in comment.DescendantNodes(_ => _.IsCode() is false, true).OfType<XmlTextSyntax>())
-            {
-                builder.Append(' ').Append(text.WithoutXmlCommentExterior()).Append(' ');
-            }
-
-            return builder.ToString().Trim();
-        }
 
         private static bool SentenceHasIssue(string sentence)
         {
