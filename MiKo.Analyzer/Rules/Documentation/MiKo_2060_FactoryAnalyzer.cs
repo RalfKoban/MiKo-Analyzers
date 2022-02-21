@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2060";
 
-        private const string Phrase = Constants.Comments.FactorySummaryPhrase;
-
         public MiKo_2060_FactoryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -33,22 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return typeIssues.Concat(symbol.GetMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
-        {
-            switch (symbol)
-            {
-                case INamedTypeSymbol type: return AnalyzeSummaryStart(type, summaries, Phrase);
-                case IMethodSymbol method: return AnalyzeStartingPhrase(symbol, summaries, GetPhrases(method).ToArray());
-                default: return Enumerable.Empty<Diagnostic>();
-            }
-        }
-
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node)
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return Issue(symbol.Name, node, Phrase);
-                case IMethodSymbol method: return Issue(symbol.Name, node, Phrase);
+                case INamedTypeSymbol _: return Issue(symbol.Name, node, Constants.Comments.FactorySummaryPhrase);
+                case IMethodSymbol _: return Issue(symbol.Name, node, Phrase);
                 default: return null;
             }
         }
@@ -59,9 +47,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             switch (symbol)
             {
-                case INamedTypeSymbol type:
+                case INamedTypeSymbol _:
                     {
-                        if (summary.StartsWith(Phrase, StringComparison.Ordinal))
+                        if (summary.StartsWith(Constants.Comments.FactorySummaryPhrase, StringComparison.Ordinal))
                         {
                             return null;
                         }
@@ -69,12 +57,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var firstWord = summary.FirstWord();
                         var location = GetFirstLocation(textToken, firstWord);
 
-                        return Issue(symbol.Name, location, Phrase);
+                        return Issue(symbol.Name, location, Constants.Comments.FactorySummaryPhrase);
                     }
 
                 case IMethodSymbol method:
                     {
-                        if (summary.StartsWith(Phrase, StringComparison.Ordinal))
+                        var phrases = GetPhrases(method).ToArray();
+
+                        if (summary.StartsWithAny(phrases, StringComparison.Ordinal))
                         {
                             return null;
                         }
@@ -82,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var firstWord = summary.FirstWord();
                         var location = GetFirstLocation(textToken, firstWord);
 
-                        return Issue(symbol.Name, location, Phrase);
+                        return Issue(symbol.Name, location, phrases.First());
                     }
 
                 default:
