@@ -8,7 +8,8 @@ coverage:
   
 ignore:
       - MiKo.Analyzer.Tests/
-      - MiKo.Analyzer.Vsix/
+      - MiKo.Analyzer.Vsix2019/
+      - MiKo.Analyzer.Vsix2022/
 
 coverage:
   status:

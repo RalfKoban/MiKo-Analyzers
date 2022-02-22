@@ -1,0 +1,10 @@
+﻿<ProjectConfiguration>
+  <Settings>
+    <HiddenComponentWarnings>
+      <Value>NetCoreNetStandardLocalSystem</Value>
+    </HiddenComponentWarnings>
+    <RequiredCapabilities>
+      <Value>DotNetCore20</Value>
+    </RequiredCapabilities>
+  </Settings>
+</ProjectConfiguration>
