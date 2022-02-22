@@ -3,7 +3,7 @@
 # Semantic Versioning http://semver.org/
 version: 0.0.{build}
 
-image: Visual Studio 2019
+image: Visual Studio 2022
 
 # branches to build
 branches:

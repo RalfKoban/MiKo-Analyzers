@@ -2,9 +2,15 @@
 /.vs/
 /MiKo.Analyzer/bin/
 /MiKo.Analyzer/obj/
+/MiKo.Analyzer.2019/bin/
+/MiKo.Analyzer.2019/obj/
+/MiKo.Analyzer.2022/bin/
+/MiKo.Analyzer.2022/obj/
 /MiKo.Analyzer.Tests/bin/
 /MiKo.Analyzer.Tests/obj/
-/MiKo.Analyzer.Vsix/bin/
-/MiKo.Analyzer.Vsix/obj/
+/MiKo.Analyzer.Vsix2019/bin/
+/MiKo.Analyzer.Vsix2019/obj/
+/MiKo.Analyzer.Vsix2022/bin/
+/MiKo.Analyzer.Vsix2022/obj/
 /_NCrunch_MiKo.Analyzer/
 nCrunchTemp_*.csproj

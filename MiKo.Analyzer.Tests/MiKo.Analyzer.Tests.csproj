@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiKo.Analyzer\MiKo.Analyzer.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.2019\MiKo.Analyzer.2019.csproj" />
   </ItemGroup>
 
   <ItemGroup>
