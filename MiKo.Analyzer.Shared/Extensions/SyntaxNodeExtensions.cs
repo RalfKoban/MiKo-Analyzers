@@ -1588,7 +1588,12 @@ namespace MiKoSolutions.Analyzers
 
         private static bool IsBinaryCallTo(this BinaryExpressionSyntax expression, string methodName)
         {
-            if (expression?.OperatorToken.Kind() == SyntaxKind.AmpersandAmpersandToken)
+            if (expression is null)
+            {
+                return false;
+            }
+
+            if (expression.OperatorToken.IsKind(SyntaxKind.AmpersandAmpersandToken))
             {
                 if (expression.Left.IsCallTo(methodName) || expression.Right.IsCallTo(methodName))
                 {
