@@ -15,6 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Phrase = Constants.Comments.EnumStartingPhrase;
 
+        private static readonly string[] StartingPhrases =
+            {
+                "Defines",
+                "Indicates",
+                "Specifies",
+            };
+
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 
         protected override string Title => string.Format(Resources.MiKo_2013_CodeFixTitle, Phrase);
@@ -62,6 +69,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // fix starting text
                 var existingText = textTokens[0].WithoutTrivia().Text.Trim();
+                var firstWord = existingText.FirstWord();
+
+                if (firstWord.EqualsAny(StartingPhrases))
+                {
+                    existingText = existingText.WithoutFirstWord().TrimStart();
+                }
+
                 textTokens.RemoveAt(0);
                 textTokens.Insert(0, XmlTextToken(text + existingText));
             }

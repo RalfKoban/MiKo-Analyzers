@@ -195,6 +195,29 @@ public enum TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_almost_correct_documentation_([Values("Specifies", "Defines", "Indicates")] string firstWord)
+        {
+            var originalCode = @"
+/// <summary>
+/// " + firstWord + @" something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Defines values that specify something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2013_EnumSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2013_EnumSummaryAnalyzer();
