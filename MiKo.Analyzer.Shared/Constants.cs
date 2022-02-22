@@ -1,7 +1,4 @@
-﻿#pragma warning disable SA1203 // Constants should appear before fields
-#pragma warning disable CA1708 // Identifiers should differ by more than case
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -19,10 +16,8 @@ namespace MiKoSolutions.Analyzers
         internal const string Entity = "Entity";
         internal const string Entities = "Entities";
 
-#pragma warning disable SA1303 // Const field names should begin with upper-case letter
         internal const string entity = "entity";
         internal const string entities = "entities";
-#pragma warning restore SA1303 // Const field names should begin with upper-case letter
 
         internal static readonly char[] SentenceMarkers = ".?!;:".ToCharArray();
         internal static readonly char[] SentenceClauseMarkers = ",".ToCharArray();

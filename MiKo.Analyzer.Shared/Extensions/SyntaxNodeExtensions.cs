@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA1506 // Avoid excessive class coupling
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -1669,5 +1667,3 @@ namespace MiKoSolutions.Analyzers
         private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
     }
 }
-
-#pragma warning restore CA1506 // Avoid excessive class coupling

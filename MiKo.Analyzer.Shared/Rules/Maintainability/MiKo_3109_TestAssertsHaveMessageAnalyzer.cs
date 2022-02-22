@@ -13,6 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3109";
 
+        private static readonly int[] Zero = { 0 };
+        private static readonly int[] One = { 1 };
+        private static readonly int[] Two = { 2 };
+        private static readonly int[] OneTwo = { 1, 2 };
+        private static readonly int[] TwoThree = { 2, 3 };
+
         public MiKo_3109_TestAssertsHaveMessageAnalyzer() : base(Id)
         {
         }
@@ -93,7 +99,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-#pragma warning disable CA1502 // Avoid excessive complexity
         private static int[] GetExpectedMessageParameterIndices(string methodName)
         {
             switch (methodName)
@@ -102,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "Ignore":
                 case "Inconclusive":
                 case "Pass":
-                    return new[] { 0 };
+                    return Zero;
 
                 case "AllItemsAreNotNull":
                 case "AllItemsAreUnique":
@@ -125,7 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "Positive":
                 case "True":
                 case "Zero":
-                    return new[] { 1 };
+                    return One;
 
                 case "AllItemsAreInstancesOfType":
                 case "AreEqualIgnoringCase":
@@ -149,10 +154,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "Less":
                 case "LessOrEqual":
                 case "StartsWith":
-                    return new[] { 2 };
+                    return Two;
 
                 case "AreEqual": // 2 or 3, cannot determine for sure
-                    return new[] { 2, 3 };
+                    return TwoThree;
 
                 case "Catch": // 1 or 2, cannot determine for sure
                 case "CatchAsync": // 1 or 2, cannot determine for sure
@@ -164,12 +169,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "That": // 1 or 2, cannot determine for sure (based on comparer as last parameter)
                 case "Throws": // 1 or 2, cannot determine for sure (based on Generics)
                 case "ThrowsAsync": // 1 or 2, cannot determine for sure (based on Generics)
-                    return new[] { 1, 2 };
+                    return OneTwo;
 
                 default:
-                    return new[] { 0 };
+                    return Zero;
             }
         }
-#pragma warning restore CA1502
     }
 }
