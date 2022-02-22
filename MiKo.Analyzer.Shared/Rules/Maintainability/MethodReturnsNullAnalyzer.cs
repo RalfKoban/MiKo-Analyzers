@@ -38,9 +38,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case VariableDeclaratorSyntax variable:
                 {
-                    if (variable.Initializer != null && names.Contains(variable.GetName()))
+                    var initializer = variable.Initializer;
+                    if (initializer != null && names.Contains(variable.GetName()))
                     {
-                        return new[] { variable.Initializer.Value };
+                        return new[] { initializer.Value };
                     }
 
                     break;
