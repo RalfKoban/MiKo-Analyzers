@@ -84,6 +84,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static ExpressionSyntax GetRelatedCondition(this SyntaxNode syntax)
         {
+            var coalesceExpression = syntax.FirstAncestorOrSelf<BinaryExpressionSyntax>(_ => _.IsKind(SyntaxKind.CoalesceExpression));
+            if (coalesceExpression != null)
+            {
+                return coalesceExpression;
+            }
+
             // most probably it's a if/else, but it might be a switch statement as well
             var condition = syntax.GetRelatedIfStatement()?.Condition ?? syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression;
 

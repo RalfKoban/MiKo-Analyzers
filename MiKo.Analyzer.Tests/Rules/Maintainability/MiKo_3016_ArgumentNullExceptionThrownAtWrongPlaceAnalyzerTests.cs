@@ -19,6 +19,37 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             };
 
         [Test]
+        public void No_issue_is_reported_for_coalescence_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o ?? throw new " + exceptionName + @"();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_coalescence_based_if_independent_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s))
+        {
+            throw new ArgumentException();
+        }
+
+        var x = s ?? throw new " + exceptionName + @"();
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_pattern_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"
 using System;
 
