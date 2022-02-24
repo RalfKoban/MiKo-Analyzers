@@ -66,6 +66,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var c = characters[index];
 
+                if (c == '_')
+                {
+                    // keep the existing underline
+                    continue;
+                }
+
                 if (c.IsUpperCase())
                 {
                     if (index == CharacterToStartWith)
@@ -85,8 +91,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                             nextC = c;
                         }
 
-                        characters[index++] = '_';
-                        characters.Insert(index, nextC);
+                        if (characters[index - 1] == '_')
+                        {
+                            characters[index] = nextC;
+                        }
+                        else
+                        {
+                            // only add an underline if we not already have one
+                            characters[index] = '_';
+                            index++;
+                            characters.Insert(index, nextC);
+                        }
                     }
 
                     caseAlreadyFlipped = true;

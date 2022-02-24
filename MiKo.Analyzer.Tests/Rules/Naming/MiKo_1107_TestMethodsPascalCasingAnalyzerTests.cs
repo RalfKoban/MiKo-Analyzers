@@ -76,6 +76,8 @@ public class TestMe
 }
 ");
 
+        [TestCase("DoSomething_DoesSomething", "Do_something_does_something")]
+        [TestCase("DoSomething_doesSomething", "Do_something_does_something")]
         [TestCase("DoSomethingDoesSomething", "Do_something_does_something")]
         [TestCase("doSomethingDoesSomething", "do_something_does_something")]
         [TestCase("DoSomethingX", "Do_something_X")]
