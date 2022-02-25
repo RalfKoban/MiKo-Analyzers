@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA1506 // Avoid excessive class coupling
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -92,6 +90,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static ExpressionSyntax GetRelatedCondition(this SyntaxNode syntax)
         {
+            var coalesceExpression = syntax.FirstAncestorOrSelf<BinaryExpressionSyntax>(_ => _.IsKind(SyntaxKind.CoalesceExpression));
+            if (coalesceExpression != null)
+            {
+                return coalesceExpression;
+            }
+
             // most probably it's a if/else, but it might be a switch statement as well
             var condition = syntax.GetRelatedIfStatement()?.Condition ?? syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression;
 
@@ -1695,7 +1699,12 @@ namespace MiKoSolutions.Analyzers
 
         private static bool IsBinaryCallTo(this BinaryExpressionSyntax expression, string methodName)
         {
-            if (expression?.OperatorToken.Kind() == SyntaxKind.AmpersandAmpersandToken)
+            if (expression is null)
+            {
+                return false;
+            }
+
+            if (expression.OperatorToken.IsKind(SyntaxKind.AmpersandAmpersandToken))
             {
                 if (expression.Left.IsCallTo(methodName) || expression.Right.IsCallTo(methodName))
                 {
@@ -1808,5 +1817,3 @@ namespace MiKoSolutions.Analyzers
         private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
     }
 }
-
-#pragma warning restore CA1506 // Avoid excessive class coupling

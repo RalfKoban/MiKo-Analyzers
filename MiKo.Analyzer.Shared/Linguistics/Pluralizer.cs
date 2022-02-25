@@ -51,7 +51,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool IsAllowedListName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);
 
-#pragma warning disable CA1502 // Avoid excessive complexity
         private static string CreatePluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EndsWith("ay", comparison))
@@ -196,6 +195,5 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return candidate;
         }
-#pragma warning restore CA1502
     }
 }

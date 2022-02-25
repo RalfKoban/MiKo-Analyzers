@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                    : null;
         }
 
-        private Diagnostic AnalyzeMethod(ExpressionSyntax node, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private Diagnostic AnalyzeMethod(InvocationExpressionSyntax node, SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             var isEquals = IsObjectEqualsMethod(node.GetSymbol(semanticModel)) && IsStruct(semanticModel, arguments);
             if (isEquals)
@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 var method = node.GetEnclosingMethod(semanticModel);
                 if (method.MethodKind != MethodKind.UserDefinedOperator)
                 {
-                    return Issue(node);
+                    return Issue(node.Expression);
                 }
             }
 

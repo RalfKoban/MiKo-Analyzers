@@ -85,6 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "@formatter:off",
                 "@formatter:on",
                 "No-Op",
+                "not needed",
             };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)

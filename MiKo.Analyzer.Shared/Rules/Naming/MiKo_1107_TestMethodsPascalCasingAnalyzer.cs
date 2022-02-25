@@ -66,6 +66,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var c = characters[index];
 
+                if (c == '_')
+                {
+                    // keep the existing underline
+                    continue;
+                }
+
                 if (c.IsUpperCase())
                 {
                     if (index == CharacterToStartWith)
@@ -85,8 +91,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                             nextC = c;
                         }
 
-                        characters[index++] = '_';
-                        characters.Insert(index, nextC);
+                        if (characters[index - 1] == '_')
+                        {
+                            characters[index] = nextC;
+                        }
+                        else
+                        {
+                            // only add an underline if we not already have one
+                            characters[index] = '_';
+                            index++;
+                            characters.Insert(index, nextC);
+                        }
                     }
 
                     caseAlreadyFlipped = true;
@@ -104,7 +119,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return string.Intern(new string(characters.ToArray()));
+            // fix some corrections, such as for known exceptions
+            var result = new string(characters.ToArray())
+                         .Replace("argument_null_exception", nameof(ArgumentNullException))
+                         .Replace("argument_exception", nameof(ArgumentException))
+                         .Replace("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
+                         .Replace("invalid_operation_exception", nameof(InvalidOperationException))
+                         .Replace("object_disposed_exception", nameof(ObjectDisposedException));
+
+            return string.Intern(result);
         }
     }
 }

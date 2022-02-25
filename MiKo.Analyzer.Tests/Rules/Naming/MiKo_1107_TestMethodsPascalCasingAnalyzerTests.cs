@@ -76,12 +76,19 @@ public class TestMe
 }
 ");
 
+        [TestCase("DoSomething_DoesSomething", "Do_something_does_something")]
+        [TestCase("DoSomething_doesSomething", "Do_something_does_something")]
         [TestCase("DoSomethingDoesSomething", "Do_something_does_something")]
         [TestCase("doSomethingDoesSomething", "do_something_does_something")]
         [TestCase("DoSomethingX", "Do_something_X")]
         [TestCase("DoSomethingWithHTML", "Do_something_with_HTML")]
         [TestCase("DoSomethingWithHTMLandMore", "Do_something_with_HTML_and_more")]
         [TestCase("HTMLdoSomething", "HTML_do_something")]
+        [TestCase("ThrowsArgumentNullExceptionForSomething", "Throws_ArgumentNullException_for_something")]
+        [TestCase("ThrowsArgumentExceptionForSomething", "Throws_ArgumentException_for_something")]
+        [TestCase("ThrowsArgumentOutOfRangeExceptionForSomething", "Throws_ArgumentOutOfRangeException_for_something")]
+        [TestCase("ThrowsObjectDisposedExceptionForSomething", "Throws_ObjectDisposedException_for_something")]
+        [TestCase("ThrowsInvalidOperationExceptionForSomething", "Throws_InvalidOperationException_for_something")]
         public void Code_gets_fixed_for_test_method_(string original, string fix)
         {
             const string Template = @"

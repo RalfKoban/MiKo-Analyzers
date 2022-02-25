@@ -82,6 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "special handling",
                 "checked by",
                 "No-Op",
+                "not needed",
             };
 
         [Test]

@@ -51,7 +51,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-#pragma warning disable CA1502 // Avoid excessive complexity
         private static ExpressionSyntax UpdatedSyntax(string typeName, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args)
         {
             var methodName = syntax.GetName();
@@ -112,12 +111,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default: return null;
             }
         }
-#pragma warning restore CA1502
 
-        private static InvocationExpressionSyntax FixAllItemsAreInstancesOfType(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
-        {
-            return FixGenericIs("All", "InstanceOf", args, name);
-        }
+        private static InvocationExpressionSyntax FixAllItemsAreInstancesOfType(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name) => FixGenericIs("All", "InstanceOf", args, name);
 
         private static InvocationExpressionSyntax FixAllItemsAreNotNull(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("All", "Not", "Null"), 1, args);
 
