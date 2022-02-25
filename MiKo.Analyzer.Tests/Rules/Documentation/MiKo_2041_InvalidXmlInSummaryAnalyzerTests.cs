@@ -46,6 +46,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_documentation_with_typeparamref_tag() => No_issue_is_reported_for(@"
+/// <summary>
+/// Some documentation for <typeparamref name=""T"" />.
+/// </summary>
+public class TestMe<T>
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_class_with_ambiguous_phrase_([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
@@ -190,7 +200,6 @@ public class TestMe
                                   "<seealso />",
                                   "<summary />",
                                   "<typeparam />",
-                                  "<typeparamref />",
                                   "<value />",
                                   "<seealso>Bla</seealso>",
                               };

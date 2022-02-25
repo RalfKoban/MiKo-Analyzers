@@ -27,7 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                      Constants.XmlTag.SeeAlso,
                                                                                      Constants.XmlTag.Summary,
                                                                                      Constants.XmlTag.TypeParam,
-                                                                                     Constants.XmlTag.TypeParamRef,
                                                                                      Constants.XmlTag.Value,
                                                                                  };
 
