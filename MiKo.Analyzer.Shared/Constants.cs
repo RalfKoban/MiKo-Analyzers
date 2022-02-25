@@ -437,7 +437,6 @@ namespace MiKoSolutions.Analyzers
                     XmlTag.SeeAlso,
                     XmlTag.Summary,
                     XmlTag.TypeParam,
-                    XmlTag.TypeParamRef,
                     XmlTag.Value,
                 };
 
