@@ -11,9 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ThirdPersonVerbs =
             {
+                "Accesses",
                 "Allows",
                 "Breaks",
                 "Contains",
+                "Converts",
                 "Describes",
                 "Gets",
                 "Occurs",
@@ -222,10 +224,38 @@ using System;
 
 public class TestMe
 {
-        /// <summary>
-        /// " + term + @" loops over some test data.
-        /// </summary>
-        public void Loop() { }
+    /// <summary>
+    /// " + term + @" loops over some test data.
+    /// </summary>
+    public void Loop() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_private_class_with_see_cref_as_second_word() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Converts <see cref=""string""/> into something else.
+    /// </summary>
+    private class Converter
+    { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_private_class_with_see_cref_as_second_word() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Convert <see cref=""string""/> into something else.
+    /// </summary>
+    private class Converter
+    { }
 }
 ");
 

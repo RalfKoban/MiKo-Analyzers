@@ -118,9 +118,11 @@ namespace MiKoSolutions.Analyzers
                 return text.Substring(0, firstSpace);
             }
 
-            for (var index = 0; index < text.Length; index++)
+            // start at index 1 to skip first upper case character (and avoid return of empty word)
+            for (var index = 1; index < text.Length; index++)
             {
                 var c = text[index];
+
                 if (c.IsUpperCase())
                 {
                     var firstWord = text.Substring(0, index);
