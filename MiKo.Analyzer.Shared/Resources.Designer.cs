@@ -10177,6 +10177,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Assert.That(..., Has.Count....)&apos;.
+        /// </summary>
+        public static string MiKo_3110_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3110_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assertions such as Assert.That(...) using &apos;Count&apos; or &apos;Length&apos; assert for exact values.
         ///If such a test fails it is diffucult to find out why it exactly failed as the failure reason gives no useful hint (e.g. &apos;5&apos; expected but &apos;3&apos; received).
         ///
