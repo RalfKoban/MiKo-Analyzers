@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var assertions = GetAllAssertions(symbol.GetSyntax());
             if (assertions.Count > 1)
             {
-                foreach (var assertion in assertions.Where(_ => HasMessageParameter(_) is false))
+                foreach (var assertion in assertions.Where(_ => HasMessageParameter(_, compilation) is false))
                 {
                     yield return Issue(assertion);
                 }
@@ -45,9 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => node.Expression is IdentifierNameSyntax invokedType && Constants.Names.AssertionTypes.Contains(invokedType.GetName()) && node.GetName() != "Multiple";
 
-        private static bool HasMessageParameter(MemberAccessExpressionSyntax assertion) => assertion.Parent is InvocationExpressionSyntax i && HasMessageParameter(i, GetExpectedMessageParameterIndices(assertion.GetName()));
+        private static bool HasMessageParameter(MemberAccessExpressionSyntax assertion, Compilation compilation) => assertion.Parent is InvocationExpressionSyntax i && HasMessageParameter(i, GetExpectedMessageParameterIndices(assertion.GetName()), compilation);
 
-        private static bool HasMessageParameter(InvocationExpressionSyntax i, int[] expectedParameterNames)
+        private static bool HasMessageParameter(InvocationExpressionSyntax i, IReadOnlyList<int> expectedParameterIndices, Compilation compilation)
         {
             // last parameter must be a string and it must be at least the 3rd parameter (for assert.AreEqual)
             var arguments = i.ArgumentList.Arguments;
@@ -59,39 +59,45 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
-            if (expectedParameterNames.Length == 1)
+            if (expectedParameterIndices.Count == 1)
             {
-                var expectedParameterName = expectedParameterNames[0];
+                var expectedParameterIndex = expectedParameterIndices[0];
 
                 var index = count - 1;
-                if (expectedParameterName == index)
+                if (expectedParameterIndex == index)
                 {
                     // we have a message
                     return arguments[index].IsStringLiteral();
                 }
 
-                if (expectedParameterName > index)
+                if (expectedParameterIndex > index)
                 {
                     // we have no message
                     return false;
                 }
 
                 // we have some parameters and some arguments
-                return arguments[expectedParameterName].IsStringLiteral();
+                return arguments[expectedParameterIndex].IsStringLiteral();
             }
 
             // we are unsure, so we have to test
-            foreach (var expectedParameterName in expectedParameterNames)
+            foreach (var expectedParameterIndex in expectedParameterIndices)
             {
-                if (expectedParameterName >= count)
+                if (expectedParameterIndex >= count)
                 {
                     // we for sure do not have a message
                     return false;
                 }
 
-                if (arguments[expectedParameterName].IsStringLiteral())
+                var argument = arguments[expectedParameterIndex];
+                if (argument.IsStringLiteral())
                 {
-                    // TODO: we might have a message, but maybe it is also just a normal string parameter
+                    return true;
+                }
+
+                // we are still unsure, so we have to test via semantics
+                if (argument.Expression is IdentifierNameSyntax && argument.GetTypeSymbol(compilation).IsString())
+                {
                     return true;
                 }
             }
