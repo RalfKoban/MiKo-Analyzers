@@ -348,10 +348,32 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
-        [Test]
-        public void Code_gets_fixed_for_Task_with_generic_collection()
+        [TestCase("Some integers.", "some integers.")]
+        [TestCase("A task that can be used to await.", "")]
+        [TestCase("A task that can be used to await", "")]
+        [TestCase("A task to await.", "")]
+        [TestCase("A task to await", "")]
+        [TestCase("An awaitable task.", "")]
+        [TestCase("An awaitable task", "")]
+        public void Code_gets_fixed_for_Task_with_generic_collection_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + originalText + @"</returns>
+    public Task<IList<int>> DoSomething { get; set; }
+}
+";
+
+            var fixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -363,31 +385,12 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some integers.
-    /// </returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"</returns>
     public Task<IList<int>> DoSomething { get; set; }
 }
 ";
 
-            const string FixedCode = @"
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of some integers.
-    /// </returns>
-    public Task<IList<int>> DoSomething { get; set; }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [Test]
