@@ -71,7 +71,7 @@ namespace Bla
     {
         private static ILog Log = null;
 
-        public void DoSomething(int i) => Log.Error($""some text for {i} :   "");
+        public void DoSomething(int i) => Log.Error($""some text for {i}   "");
     }
 }
 ");
@@ -284,7 +284,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_body_with_dot_message_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_body_with_dot_message_([ValueSource(nameof(Methods))] string method, [Values("some text:", "some text.")] string text) => No_issue_is_reported_for(@"
 namespace Bla
 {
     public interface ILog
@@ -298,7 +298,7 @@ namespace Bla
 
         public void DoSomething()
         {
-            Log." + method + @"(""some text."");
+            Log." + method + "(" + text + @");
         }
     }
 }
@@ -384,7 +384,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_call_in_method_expression_body_with_interpolated_message_with_dot_at_end() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_call_in_method_expression_body_with_interpolated_message_with_specific_ending_([Values(".", ":")] string ending) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -398,7 +398,7 @@ namespace Bla
     {
         private static ILog Log = null;
 
-        public void DoSomething(int i) => Log.Error($""some text for {i}."");
+        public void DoSomething(int i) => Log.Error($""some text for {i}" + ending + @""");
     }
 }
 ");
@@ -512,7 +512,6 @@ namespace Bla
         [TestCase("some text ", "some text.")]
         [TestCase("some text?", "some text.")]
         [TestCase("some text!", "some text.")]
-        [TestCase("some text:", "some text.")]
         public void Code_gets_fixed_for_non_interpolated_log_message_(string originalText, string fixedText)
         {
             const string Template = @"
