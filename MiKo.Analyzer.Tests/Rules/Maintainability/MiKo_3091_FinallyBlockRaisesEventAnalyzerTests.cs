@@ -120,6 +120,56 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_event_add_in_finally_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public bool DoSomething()
+    {
+        try
+        {
+        }
+        finally
+        {
+            MyEvent += OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_remove_in_finally_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public event EventHandler MyEvent;
+
+    public bool DoSomething()
+    {
+        try
+        {
+        }
+        finally
+        {
+            MyEvent -= OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_event_raise_in_finally_block_of_method() => An_issue_is_reported_for(@"
 using System;
 
