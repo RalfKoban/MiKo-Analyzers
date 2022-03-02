@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -168,24 +170,24 @@ namespace Bla
 
         // IsNull
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null, ""my message""); }")]
 
         // NotNull
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.NotNull(o); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.NotNull(o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.NotNull(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Null, ""my message""); }")]
 
         // IsNotEmpty
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotEmpty(o); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Empty); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotEmpty(o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Empty); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNotEmpty(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Not.Empty, ""my message""); }")]
@@ -323,8 +325,8 @@ namespace Bla
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.AreEqual(o, null); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon)); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon)); }")]
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(8.5d, d, double.Epsilon, ""some message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(double.Epsilon), ""some message""); }")]
@@ -560,14 +562,14 @@ namespace Bla
              @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => StringAssert.DoesNotMatch(""some pattern"", ""actual""); }",
              @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(""actual"", Does.Not.Match(""some pattern"")); }")]
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => CollectionAssert.AllItemsAreInstancesOfType(collection, typeof(string)); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => Assert.That(collection, Is.All.InstanceOf<string>()); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => CollectionAssert.AllItemsAreInstancesOfType(collection, typeof(string)); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => Assert.That(collection, Is.All.InstanceOf<string>()); }")]
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrow(() => throw new ArgumentException()); }",
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new ArgumentException(), Throws.Nothing); }")]
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrow(() => throw new ArgumentException()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new ArgumentException(), Throws.Nothing); }")]
         [TestCase(
-             @"using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrowAsync(async () => await Task.CompletedTask); }",
-             @"using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(async () => await Task.CompletedTask, Throws.Nothing); }")]
+             "using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrowAsync(async () => await Task.CompletedTask); }",
+             "using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(async () => await Task.CompletedTask, Throws.Nothing); }")]
 
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => FileAssert.Exists(@""c:\pagefile.sys""); }",
@@ -582,6 +584,44 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => DirectoryAssert.DoesNotExist(@""c:\Windows""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(@""c:\Windows"", Does.Not.Exist); }")]
+
+        // Throws
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<ArgumentNullException>(() => throw new Exception()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentNullException); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<ArgumentNullException>(() => throw new Exception(), ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentNullException, ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<ArgumentException>(() => throw new Exception()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentException); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<ArgumentException>(() => throw new Exception(), ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentException, ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<InvalidOperationException>(() => throw new Exception()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.InvalidOperationException); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<InvalidOperationException>(() => throw new Exception(), ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.InvalidOperationException, ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<TargetInvocationException>(() => throw new Exception()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.TargetInvocationException); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<TargetInvocationException>(() => throw new Exception(), ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.TargetInvocationException, ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<NotSupportedException>(() => throw new Exception()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<NotSupportedException>()); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<NotSupportedException>(() => throw new Exception(), ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<NotSupportedException>(), ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws(typeof(ApplicationException), () => throw new Exception()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<ApplicationException>()); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws(typeof(ApplicationException), () => throw new Exception(), ""some message""); }",
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<ApplicationException>(), ""some message""); }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [Test]

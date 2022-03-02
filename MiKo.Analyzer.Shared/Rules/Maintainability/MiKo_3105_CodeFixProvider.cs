@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Reflection;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -107,6 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "Positive": return FixPositive(args);
                 case "StartsWith": return FixStartsWith(args);
                 case "True": return FixIsTrue(args);
+                case "Throws": return FixThrows(args, syntax.Name);
                 case "Zero": return FixZero(args);
                 default: return null;
             }
@@ -395,6 +397,37 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixStringAssertIsMatch(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Match", args[0]), 2, args);
 
+        private static InvocationExpressionSyntax FixThrows(SeparatedSyntaxList<ArgumentSyntax> args, SimpleNameSyntax name)
+        {
+            if (name is GenericNameSyntax generic)
+            {
+                var genericArguments = generic.TypeArgumentList.Arguments;
+                if (genericArguments.Count == 1)
+                {
+                    return AssertThat(args[0], GetExceptionArgument(genericArguments[0]), 1, args);
+                }
+            }
+
+            if (args[0].Expression is TypeOfExpressionSyntax typeOfExpression)
+            {
+                return AssertThat(args[1], Throws("TypeOf", typeOfExpression.Type), 2, args);
+            }
+
+            return AssertThat(args[1], Throws("Nothing"), 2, args);
+
+            ArgumentSyntax GetExceptionArgument(TypeSyntax exceptionType)
+            {
+                switch (exceptionType.GetName())
+                {
+                    case nameof(ArgumentNullException): return Throws(nameof(ArgumentNullException));
+                    case nameof(ArgumentException): return Throws(nameof(ArgumentException));
+                    case nameof(InvalidOperationException): return Throws(nameof(InvalidOperationException));
+                    case nameof(TargetInvocationException): return Throws(nameof(TargetInvocationException));
+                    default: return Throws("TypeOf", exceptionType);
+                }
+            }
+        }
+
         private static InvocationExpressionSyntax FixZero(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Zero"), 1, args);
 
         private static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
@@ -467,5 +500,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static ArgumentSyntax Does(params string[] names) => Argument(SimpleMemberAccess("Does", names));
 
         private static ArgumentSyntax Throws(string name) => Argument(SimpleMemberAccess("Throws", name));
+
+        private static ArgumentSyntax Throws(string name, params TypeSyntax[] types) => Argument(Invocation("Throws", name, types));
     }
 }

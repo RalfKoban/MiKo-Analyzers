@@ -21,7 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                   "CatchAsync",
                                                                                   "Catch",
                                                                                   "ThrowsAsync",
-                                                                                  "Throws",
                                                                                   "Multiple",
                                                                               };
 
