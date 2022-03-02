@@ -120,7 +120,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_event_add_in_finally_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_add_on_same_type_in_finally_block() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -145,7 +145,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_remove_in_finally_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_remove_on_same_type_in_finally_block() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -160,6 +160,194 @@ public class TestMe
         finally
         {
             MyEvent -= OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_add_on_separate_type_in_finally_block() => No_issue_is_reported_for(@"
+using System;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public bool DoSomething()
+    {
+        var provider = new EventProvider();
+        try
+        {
+        }
+        finally
+        {
+            provider.MyEvent += OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_remove_on_separate_type_in_finally_block() => No_issue_is_reported_for(@"
+using System;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    public bool DoSomething()
+    {
+        var provider = new EventProvider();
+        try
+        {
+        }
+        finally
+        {
+            provider.MyEvent -= OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_add_on_field_of_separate_type_in_finally_block() => No_issue_is_reported_for(@"
+using System;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    private EventProvider provider = new EventProvider();
+
+    public bool DoSomething()
+    {
+        try
+        {
+        }
+        finally
+        {
+            provider.MyEvent += OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_remove_on_field_of_separate_type_in_finally_block() => No_issue_is_reported_for(@"
+using System;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe
+{
+    private EventProvider provider = new EventProvider();
+
+    public bool DoSomething()
+    {
+        try
+        {
+        }
+        finally
+        {
+            provider.MyEvent -= OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_add_on_field_of_separate_type_in_finally_block_if_base_class_contains_similar_event() => No_issue_is_reported_for(@"
+using System;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMeBase
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe : TestMeBase
+{
+    private EventProvider provider = new EventProvider();
+
+    public bool DoSomething()
+    {
+        try
+        {
+        }
+        finally
+        {
+            provider.MyEvent += OnMyEvent;
+        }
+    }
+
+    private void OnMyEvent(object sender, EventArgs e)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_remove_on_field_of_separate_type_in_finally_block_if_base_class_contains_similar_event() => No_issue_is_reported_for(@"
+using System;
+
+public class EventProvider
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMeBase
+{
+    public event EventHandler MyEvent;
+}
+
+public class TestMe : TestMeBase
+{
+    private EventProvider provider = new EventProvider();
+
+    public bool DoSomething()
+    {
+        try
+        {
+        }
+        finally
+        {
+            provider.MyEvent -= OnMyEvent;
         }
     }
 
