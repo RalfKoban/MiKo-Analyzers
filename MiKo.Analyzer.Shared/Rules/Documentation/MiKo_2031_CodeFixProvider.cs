@@ -109,10 +109,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             yield return "An awaitable task.";
             yield return "An awaitable task and";
+            yield return "An awaitable task";
             yield return "A task to await.";
             yield return "A task to await and";
+            yield return "A task to await";
             yield return "A task that can be used to await.";
             yield return "A task that can be used to await and";
+            yield return "A task that can be used to await";
 
             foreach (var start in new[] { "A result", "A task", "The task" })
             {

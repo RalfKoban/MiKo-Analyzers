@@ -122,6 +122,23 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_is_reported_for_a_test_method_that_uses_a_parameter_as_assertion_message_() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(string message)
+        {
+            Assert.That(42, Is.EqualTo(42), message);
+            Assert.That(-1, Is.Negative, message);
+        }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_a_test_method_that_uses_more_than_1_assertion_with_no_message_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 

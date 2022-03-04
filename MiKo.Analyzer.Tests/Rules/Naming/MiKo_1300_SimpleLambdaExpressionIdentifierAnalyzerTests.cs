@@ -59,13 +59,15 @@ public class TestMe
 }
 ");
 
-        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(### => ### == null) { } } }")]
-        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(### => ###.Length == 0 || ###.Length == 1) { } } }")]
-        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(### => ###.Any(*** => ***.Equals('a'))) { } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(#1# => #1# == null) { } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(#1# => #1#.Length == 0 || #1#.Length == 1) { } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { if (items.Any(#1# => #1#.Any(#2# => #2#.Equals('a'))) { } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { void LocalFunction() { if (items.Any(#1# => #1#.Any(#2# => #2#.Equals('a'))) { } } } }")]
+        [TestCase("using System; using System.Collections.Generic; using System.Linq; class T { void D(List<string> items) { bool LocalFunction(char value) { return (items.Any(#1# => #1#.Any(#2# => #2#.Equals(value))) { } } } }")]
         public void Code_gets_fixed_(string template)
         {
-            var originalCode = template.Replace("###", "item").Replace("***", "c");
-            var fixedCode = template.Replace("###", "_").Replace("***", "__");
+            var originalCode = template.Replace("#1#", "item").Replace("#2#", "c");
+            var fixedCode = template.Replace("#1#", "_").Replace("#2#", "__");
 
             VerifyCSharpFix(originalCode, fixedCode);
         }

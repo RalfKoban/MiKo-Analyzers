@@ -45,7 +45,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (events.Contains(eventName) && token.GetSymbol(semanticModel) is IEventSymbol)
                 {
-                    yield return Issue(method.Name, token, eventName);
+                    var ancestor = token.Parent?.Parent;
+
+                    if (ancestor is AssignmentExpressionSyntax || ancestor?.Parent is AssignmentExpressionSyntax)
+                    {
+                        // add or remove from event, do not report an issue here
+                    }
+                    else
+                    {
+                        yield return Issue(method.Name, token, eventName);
+                    }
                 }
             }
         }

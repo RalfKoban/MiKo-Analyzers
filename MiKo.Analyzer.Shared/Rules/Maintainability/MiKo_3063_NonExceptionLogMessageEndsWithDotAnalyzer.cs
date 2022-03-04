@@ -96,14 +96,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (argument.Expression)
                 {
-                    case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) && literal.Token.ValueText.TrimEnd().EndsWith('.') is false:
+                    case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression) && literal.Token.ValueText.TrimEnd().EndsWithAny(".:") is false:
                     {
                         return CreateIssue(literal.Token);
                     }
 
                     case InterpolatedStringExpressionSyntax i:
                     {
-                        if (i.Contents.Last() is InterpolatedStringTextSyntax interpolated && interpolated.TextToken.ValueText.TrimEnd().EndsWith('.'))
+                        if (i.Contents.Last() is InterpolatedStringTextSyntax interpolated && interpolated.TextToken.ValueText.TrimEnd().EndsWithAny(".:"))
                         {
                             // nothing to report
                             return null;

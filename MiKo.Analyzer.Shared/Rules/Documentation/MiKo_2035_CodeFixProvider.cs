@@ -34,6 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "The read-only collection with ", string.Empty },
                                                                                     { "The readonly collection of ", string.Empty },
                                                                                     { "The readonly collection with ", string.Empty },
+                                                                                    { "An awaitable task.", string.Empty },
+                                                                                    { "An awaitable task", string.Empty },
+                                                                                    { "A task that can be used to await.", string.Empty },
+                                                                                    { "A task that can be used to await", string.Empty },
+                                                                                    { "A task to await.", string.Empty },
+                                                                                    { "A task to await", string.Empty },
                                                                                 };
 
         private static readonly Dictionary<string, string> ByteArrayReplacementMap = new Dictionary<string, string>

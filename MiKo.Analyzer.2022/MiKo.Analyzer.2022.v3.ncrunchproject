@@ -3,6 +3,7 @@
     <HiddenComponentWarnings>
       <Value>NetCoreNetStandardLocalSystem</Value>
     </HiddenComponentWarnings>
+    <IgnoreThisComponentCompletely>True</IgnoreThisComponentCompletely>
     <RequiredCapabilities>
       <Value>DotNetCore20</Value>
     </RequiredCapabilities>

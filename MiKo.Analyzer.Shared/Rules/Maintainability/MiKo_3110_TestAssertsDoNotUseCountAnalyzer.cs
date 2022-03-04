@@ -20,6 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            "AreNotEqual",
                                                                            "AreSame",
                                                                            "AreNotSame",
+                                                                           "Less",
+                                                                           "LessOrEqual",
+                                                                           "Greater",
+                                                                           "GreaterOrEqual",
                                                                        };
 
         public MiKo_3110_TestAssertsDoNotUseCountAnalyzer() : base(Id)
