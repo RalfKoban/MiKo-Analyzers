@@ -2539,6 +2539,18 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   <data name="MiKo_2217_Title" xml:space="preserve">
     <value>&lt;list&gt; documentation is done properly</value>
   </data>
+  <data name="MiKo_2218_CodeFixTitle" xml:space="preserve">
+    <value>Shorten term to 'to'</value>
+  </data>
+  <data name="MiKo_2218_Description" xml:space="preserve">
+    <value>Terms such as 'that is used to' or 'which shall be used to' are simply bloated and should be shortened to the equivalent term 'to'.</value>
+  </data>
+  <data name="MiKo_2218_MessageFormat" xml:space="preserve">
+    <value>Shorten '{1}' to '{2}'</value>
+  </data>
+  <data name="MiKo_2218_Title" xml:space="preserve">
+    <value>Documentation should use shorter term 'to' instead of longer term '... used to'</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>

@@ -7131,6 +7131,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shorten term to &apos;to&apos;.
+        /// </summary>
+        public static string MiKo_2218_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2218_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terms such as &apos;that is used to&apos; or &apos;which shall be used to&apos; are simply bloated and should be shortened to the equivalent term &apos;to&apos;..
+        /// </summary>
+        public static string MiKo_2218_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2218_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shorten &apos;{1}&apos; to &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2218_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2218_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use shorter term &apos;to&apos; instead of longer term &apos;... used to&apos;.
+        /// </summary>
+        public static string MiKo_2218_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2218_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>

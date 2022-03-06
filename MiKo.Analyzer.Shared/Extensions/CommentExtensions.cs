@@ -109,8 +109,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 
-        internal static string FirstWord(this string text)
+        internal static string FirstWord(this string value)
         {
+            var text = value.TrimStart();
+
             var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
             if (firstSpace != -1)
             {
