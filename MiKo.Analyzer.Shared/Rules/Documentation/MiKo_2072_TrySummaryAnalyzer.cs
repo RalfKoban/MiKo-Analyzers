@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool StartsWithPhrase(string summary)
         {
-            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).TrimStart() // skip over async starting phrase
+            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
                                    .FirstWord();
 
             return firstWord.EqualsAny(Words);

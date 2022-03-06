@@ -132,6 +132,33 @@ namespace System
 
         public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Equals(_, comparison));
 
+        public static string FirstWord(this string value)
+        {
+            var text = value.TrimStart();
+
+            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+            if (firstSpace != -1)
+            {
+                // we found a whitespace
+                return text.Substring(0, firstSpace);
+            }
+
+            // start at index 1 to skip first upper case character (and avoid return of empty word)
+            for (var index = 1; index < text.Length; index++)
+            {
+                var c = text[index];
+
+                if (c.IsUpperCase())
+                {
+                    var firstWord = text.Substring(0, index);
+
+                    return firstWord;
+                }
+            }
+
+            return text;
+        }
+
         public static string GetNameOnlyPart(this string fullName)
         {
             var genericIndexStart = fullName.IndexOf('<');
@@ -261,6 +288,8 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
+
+        public static string SecondWord(this string text) => text.WithoutFirstWord().FirstWord();
 
         public static IEnumerable<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -402,6 +431,35 @@ namespace System
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
         public static string Without(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Without(s));
+
+        public static string WithoutFirstWord(this string value)
+        {
+            var text = value.TrimStart();
+
+            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+            if (firstSpace < 0)
+            {
+                // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space
+                return " ";
+            }
+
+            return text.Substring(firstSpace);
+        }
+
+        public static string WithoutFirstWords(this string value, params string[] words)
+        {
+            var text = value.TrimStart();
+
+            foreach (var word in words)
+            {
+                if (word.Equals(text.FirstWord(), StringComparison.OrdinalIgnoreCase))
+                {
+                    text = text.WithoutFirstWord().TrimStart();
+                }
+            }
+
+            return text.TrimStart();
+        }
 
         public static string WithoutNumberSuffix(this string value)
         {
