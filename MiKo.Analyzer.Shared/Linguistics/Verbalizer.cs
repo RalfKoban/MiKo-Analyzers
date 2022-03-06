@@ -133,6 +133,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
+            if (value.EndsWith('y'))
+            {
+                return value.Substring(0, value.Length - 1) + "ies";
+            }
+
             if (value.EndsWith('s'))
             {
                 if (value.EndsWith("ss", StringComparison.Ordinal))
