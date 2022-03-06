@@ -15,13 +15,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Dictionary<string, string> Map = new Dictionary<string, string>
                                                                      {
+                                                                         { "can be used to", "allows to" },
                                                                          { "that is used to", "to" },
+                                                                         { "that it is used to", "to" },
                                                                          { "that are used to", "to" },
                                                                          { "that shall be used to", "to" },
                                                                          { "which is used to", "to" },
                                                                          { "which are used to", "to" },
                                                                          { "which shall be used to", "to" },
-                                                                         { "used to", "to" },
                                                                      };
 
         private static readonly string[] WrongPhrases = Map.Keys.ToArray();
@@ -44,7 +45,7 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_wrong_text_in_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
-/// This " + phrase + @" intended.
+/// It " + phrase + @" do something.
 /// </summary>
 public class TestMe
 {
@@ -55,7 +56,7 @@ public class TestMe
         {
             const string Template = @"
 /// <summary>
-/// This ### intended.
+/// It ### do something.
 /// </summary>
 public class TestMe
 {
@@ -64,10 +65,14 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", phrase), Template.Replace("###", Map[phrase]));
         }
 
-        [TestCase("Used to analyze stuff.", "Analyzes stuff.")]
-        [TestCase("Does something. Used to analyze stuff.", "Does something. Analyzes stuff.")]
+        [TestCase("Callback used to analyze stuff.", "Callback to analyze stuff.")]
+        [TestCase("Can be used to analyze stuff.", "Allows to analyze stuff.")]
+        [TestCase("Does something. It is used to analyze stuff. Performs something more.", "Does something. It analyzes stuff. Performs something more.")]
         [TestCase("Does something. Used to analyze stuff. Performs something more.", "Does something. Analyzes stuff. Performs something more.")]
-        public void Code_gets_fixed_for_upper_case_text_(string originalCode, string fixedCode)
+        [TestCase("Does something. Used to analyze stuff.", "Does something. Analyzes stuff.")]
+        [TestCase("It can be used to analyze stuff.", "It allows to analyze stuff.")]
+        [TestCase("Used to analyze stuff.", "Analyzes stuff.")]
+        public void Code_gets_fixed_for_special_case_text_(string originalCode, string fixedCode)
         {
             const string Template = @"
 public class TestMe

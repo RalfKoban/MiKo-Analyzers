@@ -2540,7 +2540,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>&lt;list&gt; documentation is done properly</value>
   </data>
   <data name="MiKo_2218_CodeFixTitle" xml:space="preserve">
-    <value>Shorten term to 'to'</value>
+    <value>Shorten term</value>
   </data>
   <data name="MiKo_2218_Description" xml:space="preserve">
     <value>Terms such as 'that is used to' or 'which shall be used to' are simply bloated and should be shortened to the equivalent term 'to'.</value>

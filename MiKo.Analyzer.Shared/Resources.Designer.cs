@@ -7131,7 +7131,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shorten term to &apos;to&apos;.
+        ///   Looks up a localized string similar to Shorten term.
         /// </summary>
         public static string MiKo_2218_CodeFixTitle {
             get {
