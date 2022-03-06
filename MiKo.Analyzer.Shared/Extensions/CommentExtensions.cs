@@ -109,60 +109,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 
-        internal static string FirstWord(this string text)
-        {
-            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
-            if (firstSpace != -1)
-            {
-                // we found a whitespace
-                return text.Substring(0, firstSpace);
-            }
-
-            // start at index 1 to skip first upper case character (and avoid return of empty word)
-            for (var index = 1; index < text.Length; index++)
-            {
-                var c = text[index];
-
-                if (c.IsUpperCase())
-                {
-                    var firstWord = text.Substring(0, index);
-
-                    return firstWord;
-                }
-            }
-
-            return text;
-        }
-
-        internal static string WithoutFirstWord(this string text)
-        {
-            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
-            if (firstSpace < 0)
-            {
-                // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space
-                return " ";
-            }
-
-            return text.Substring(firstSpace);
-        }
-
-        internal static string WithoutFirstWords(this string text, params string[] words)
-        {
-            var remainingText = text.TrimStart();
-
-            foreach (var word in words)
-            {
-                if (word.Equals(remainingText.FirstWord(), StringComparison.OrdinalIgnoreCase))
-                {
-                    remainingText = remainingText.WithoutFirstWord().TrimStart();
-                }
-            }
-
-            return remainingText.TrimStart();
-        }
-
-        internal static string SecondWord(this string text) => text.TrimStart().WithoutFirstWord().TrimStart().FirstWord();
-
         private static string FlattenComment(IEnumerable<XElement> comments)
         {
             if (comments.Any())

@@ -24,9 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summary = textToken.ValueText;
 
-            var trimmed = summary
-                          .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                          .Trim();
+            var trimmed = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                 .TrimStart();
 
             if (trimmed.StartsWith(StartingPhrase, StringComparison.OrdinalIgnoreCase))
             {

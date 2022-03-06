@@ -25,12 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var summary = textToken.ValueText;
 
-            var trimmed = summary
-                          .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                          .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                          .Trim();
-
-            var firstWord = trimmed.FirstWord();
+            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                   .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                   .FirstWord();
 
             if (Verbalizer.IsThirdPersonSingularVerb(firstWord))
             {

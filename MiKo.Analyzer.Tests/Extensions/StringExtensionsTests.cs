@@ -98,5 +98,30 @@ namespace MiKoSolutions.Analyzers.Extensions
                                     Assert.That(new[] { "a", "b", "c", "d", "e" }.HumanizedConcatenated(), Is.EqualTo("'a', 'b', 'c', 'd' or 'e'"), "5 values");
                                 });
         }
+
+        [Test]
+        public static void FirstWord_returns_only_first_word()
+        {
+            Assert.Multiple(() =>
+                                {
+                                    Assert.That("bla blubb".FirstWord(), Is.EqualTo("bla"), "without whitespace");
+                                    Assert.That("bla blubb ".FirstWord(), Is.EqualTo("bla"), "without whitespace at start");
+                                    Assert.That(" bla blubb".FirstWord(), Is.EqualTo("bla"), "with single whitespace at start");
+                                    Assert.That("    bla blubb".FirstWord(), Is.EqualTo("bla"), "with multiple whitespace at start");
+                                    Assert.That("    bla".FirstWord(), Is.EqualTo("bla"), "only word with multiple whitespaces at start");
+                                });
+        }
+
+        [Test]
+        public static void SecondWord_returns_only_2nd_word()
+        {
+            Assert.Multiple(() =>
+                                {
+                                    Assert.That("bla blubb".SecondWord(), Is.EqualTo("blubb"), "without whitespaces");
+                                    Assert.That("bla blubb ".SecondWord(), Is.EqualTo("blubb"), "with single whitespace at end");
+                                    Assert.That("bla blubb    ".SecondWord(), Is.EqualTo("blubb"), "with multiple whitespaces at end");
+                                    Assert.That("bla blubb blubdiblub".SecondWord(), Is.EqualTo("blubb"), "with 3 words");
+                                });
+        }
     }
 }

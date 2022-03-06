@@ -16,5 +16,13 @@ namespace MiKoSolutions.Analyzers
         {
             return value.SourceTree?.GetText().GetSubText(value.SourceSpan).ToString();
         }
+
+        internal static bool Contains(this Location value, Location other)
+        {
+            var valueSourceSpan = value.SourceSpan;
+            var otherSourceSpan = other.SourceSpan;
+
+            return valueSourceSpan.Start <= otherSourceSpan.Start && otherSourceSpan.End <= valueSourceSpan.End;
+        }
     }
 }

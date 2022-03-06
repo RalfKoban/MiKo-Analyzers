@@ -68,16 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textTokens.Any())
             {
                 // fix starting text
-                var existingText = textTokens[0].WithoutTrivia().Text.Trim();
+                var existingText = textTokens[0].WithoutTrivia().Text;
                 var firstWord = existingText.FirstWord();
 
                 if (firstWord.EqualsAny(StartingPhrases))
                 {
-                    existingText = existingText.WithoutFirstWord().TrimStart();
+                    existingText = existingText.WithoutFirstWord();
                 }
 
                 textTokens.RemoveAt(0);
-                textTokens.Insert(0, XmlTextToken(text + existingText));
+                textTokens.Insert(0, XmlTextToken(text + existingText.Trim()));
             }
             else
             {
