@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
+        internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.AncestorsAndSelf().OfType<T>();
+
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
         internal static IEnumerable<T> ChildNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes().OfType<T>();
@@ -51,7 +53,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
-        internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors().OfType<T>().FirstOrDefault(predicate);
+        internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
 
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
 

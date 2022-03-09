@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argumentList = node.ArgumentList;
 
-            foreach (var lambda in node.AncestorsAndSelf().OfType<SimpleLambdaExpressionSyntax>())
+            foreach (var lambda in node.Ancestors<SimpleLambdaExpressionSyntax>())
             {
                 if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
                 {

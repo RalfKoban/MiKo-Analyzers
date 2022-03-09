@@ -7149,7 +7149,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shorten &apos;{1}&apos; to &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace &apos;{1}&apos; with &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2218_MessageFormat {
             get {
