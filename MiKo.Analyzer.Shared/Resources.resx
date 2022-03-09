@@ -2546,7 +2546,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Terms such as 'that is used to' or 'which shall be used to' are simply bloated and should be shortened to the equivalent term 'to'.</value>
   </data>
   <data name="MiKo_2218_MessageFormat" xml:space="preserve">
-    <value>Shorten '{1}' to '{2}'</value>
+    <value>Replace '{1}' with '{2}'</value>
   </data>
   <data name="MiKo_2218_Title" xml:space="preserve">
     <value>Documentation should use shorter term 'to' instead of longer term '... used to'</value>
