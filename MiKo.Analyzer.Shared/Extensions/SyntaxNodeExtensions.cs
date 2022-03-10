@@ -635,7 +635,20 @@ namespace MiKoSolutions.Analyzers
             return value.InsertNodesBefore(nodeInList, new[] { modifiedNode });
         }
 
-        internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds) => kinds.ToHashSet().Contains(value.Kind());
+        internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds)
+        {
+            var valueKind = value.Kind();
+
+            foreach (var kind in kinds)
+            {
+                if (kind == valueKind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         internal static bool IsBoolean(this TypeSyntax value)
         {

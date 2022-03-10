@@ -322,7 +322,7 @@ The following tables list all the 322 rules that are currently provided by the a
 |MiKo_3104|Use NUnit's [Combinatorial] attribute properly|&#x2713;|&#x2713;|
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach|&#x2713;|&#x2713;|
 |MiKo_3106|Assertions should not use equality or comparison operators|&#x2713;|\-|
-|MiKo_3107|Moq Mock condition matchers should be used on mocks only|&#x2713;|\-|
+|MiKo_3107|Moq Mock condition matchers should be used on mocks only|&#x2713;|&#x2713;|
 |MiKo_3108|Test methods should use assertions|&#x2713;|\-|
 |MiKo_3109|Multiple assertions shall use assertion messages|&#x2713;|\-|
 |MiKo_3110|Assertions should not use 'Count' or 'Length'|&#x2713;|&#x2713;|
