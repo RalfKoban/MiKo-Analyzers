@@ -1189,6 +1189,27 @@ namespace MiKoSolutions.Analyzers
             return syntax.WithTextTokens(textTokens);
         }
 
+        internal static T WitTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            return value
+                    .WithLeadingTriviaFrom(node)
+                    .WithTrailingTriviaFrom(node);
+        }
+
+        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            return node.HasLeadingTrivia
+                    ? value.WithLeadingTrivia(node.GetLeadingTrivia())
+                    : value;
+        }
+
+        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            return node.HasTrailingTrivia
+                    ? value.WithTrailingTrivia(node.GetTrailingTrivia())
+                    : value;
+        }
+
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
 
         internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)

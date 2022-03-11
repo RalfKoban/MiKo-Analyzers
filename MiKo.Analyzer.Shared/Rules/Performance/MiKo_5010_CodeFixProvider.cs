@@ -49,12 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var right = arguments[1].Expression;
             var expression = SyntaxFactory.BinaryExpression(kind, left, right);
 
-            if (syntax.HasTrailingTrivia)
-            {
-                return expression.WithTrailingTrivia(syntax.GetTrailingTrivia());
-            }
-
-            return expression;
+            return expression.WithTrailingTriviaFrom(syntax);
         }
 
         private static InvocationExpressionSyntax GetInvocationExpressionSyntax(SyntaxNode syntax, out SyntaxKind kind)

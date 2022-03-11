@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         if (fixedSyntax != null)
                         {
                             // ensure that we keep leading trivia, such as comments
-                            return fixedSyntax.WithLeadingTrivia(original.GetLeadingTrivia());
+                            return fixedSyntax.WithLeadingTriviaFrom(original);
                         }
 
                         break;

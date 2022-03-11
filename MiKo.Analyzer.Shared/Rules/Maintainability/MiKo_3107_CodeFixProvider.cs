@@ -25,7 +25,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var invocation = (InvocationExpressionSyntax)syntax;
-            if (invocation.Expression is MemberAccessExpressionSyntax maes&& maes.Name is GenericNameSyntax generic)
+
+            return GetReplacementFor(invocation).WitTriviaFrom(invocation);
+        }
+
+        private static SyntaxNode GetReplacementFor(InvocationExpressionSyntax invocation)
+        {
+            if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Name is GenericNameSyntax generic)
             {
                 var typeSyntax = generic.TypeArgumentList.Arguments.First();
                 if (typeSyntax is PredefinedTypeSyntax p)
@@ -34,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     switch (kind)
                     {
                         case SyntaxKind.BoolKeyword: return Literal(SyntaxKind.FalseLiteralExpression);
-                        case SyntaxKind.CharKeyword:  return Literal(SyntaxFactory.Literal(Char.MinValue));
+                        case SyntaxKind.CharKeyword: return Literal(SyntaxFactory.Literal(Char.MinValue));
                         case SyntaxKind.DecimalKeyword: return Literal(SyntaxFactory.Literal(Decimal.Zero));
                         case SyntaxKind.DoubleKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(Double.NaN));
                         case SyntaxKind.FloatKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(Single.NaN));

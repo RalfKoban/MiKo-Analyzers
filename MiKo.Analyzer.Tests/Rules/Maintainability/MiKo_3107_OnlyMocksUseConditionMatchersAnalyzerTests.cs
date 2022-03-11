@@ -375,6 +375,40 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_multiline()
+        {
+            const string Template = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(object o1, object o2) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new TestMe();
+
+            ObjectUnderTest.DoSomething(
+                                    ###,
+                                    new object());
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "It.IsAny<object>()"), Template.Replace("###", "null"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer();

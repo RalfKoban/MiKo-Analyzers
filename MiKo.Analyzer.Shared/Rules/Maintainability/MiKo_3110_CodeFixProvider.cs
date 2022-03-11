@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (fixedInvocation != null)
                     {
                         // ensure that we keep leading trivia, such as comments
-                        return original.ReplaceNode(invocation, fixedInvocation.WithLeadingTrivia(invocation.GetLeadingTrivia()));
+                        return original.ReplaceNode(invocation, fixedInvocation.WithLeadingTriviaFrom(invocation));
                     }
                 }
             }
