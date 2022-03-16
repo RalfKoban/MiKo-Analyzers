@@ -948,6 +948,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
+        internal static bool IsPartial(this IMethodSymbol value) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(_ => _.IsKind(SyntaxKind.PartialKeyword));
+
         internal static bool IsPubliclyVisible(this ISymbol symbol)
         {
             switch (symbol.DeclaredAccessibility)

@@ -32,6 +32,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
+            if (method.IsPartial())
+            {
+                return true;
+            }
+
             if (method.IsConstructor())
             {
                 return method.IsSerializationConstructor();
