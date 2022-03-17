@@ -42,6 +42,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().ToArray();
 
+        private static readonly string[] DelimiterPhrases =
+            {
+                ",",
+                ";",
+                ":",
+            };
+
         private static readonly string[] OtherStartingPhrases =
             {
                 "If ",
@@ -186,13 +193,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove boolean <see langword="..."/> and <c>...</c>
             var adjustedComment = RemoveBooleansTags(comment);
 
-            var nodes = adjustedComment.WithoutStartText(SimpleStartingPhrases)
-                                        .WithoutStartText(OtherStartingPhrases)
-                                        .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
-                                        .WithoutText(Phrases)
-                                        .WithoutFirstXmlNewLine()
-                                        .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
-                                        .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
+            var nodes = adjustedComment.WithoutStartText(DelimiterPhrases)
+                                       .WithoutStartText(SimpleStartingPhrases)
+                                       .WithoutStartText(OtherStartingPhrases)
+                                       .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
+                                       .WithoutText(Phrases)
+                                       .WithoutFirstXmlNewLine()
+                                       .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
+                                       .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
 
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
