@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Phrases =
             {
                 " if ",
+                "A task that has the result ",
                 "A task that will complete with a result of ",
                 "a task that will complete with a result of ",
                 "TRUE:",
@@ -52,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 " otherwise",
                 " otherwise with a result of",
+                " otherwise the task has the result",
                 " else it",
                 " else with",
                 ", ; else",
