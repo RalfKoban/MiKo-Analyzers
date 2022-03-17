@@ -84,6 +84,7 @@ public class TestMe
         [TestCase("DoSomethingWithHTML", "Do_something_with_HTML")]
         [TestCase("DoSomethingWithHTMLandMore", "Do_something_with_HTML_and_more")]
         [TestCase("HTMLdoSomething", "HTML_do_something")]
+        [TestCase("ShowsAWarning", "Shows_a_warning")]
         [TestCase("ThrowsArgumentNullExceptionForSomething", "Throws_ArgumentNullException_for_something")]
         [TestCase("ThrowsArgumentExceptionForSomething", "Throws_ArgumentException_for_something")]
         [TestCase("ThrowsArgumentOutOfRangeExceptionForSomething", "Throws_ArgumentOutOfRangeException_for_something")]

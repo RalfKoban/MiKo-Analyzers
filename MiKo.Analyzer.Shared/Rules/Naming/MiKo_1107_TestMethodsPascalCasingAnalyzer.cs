@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
 
-        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // don't consider local functions at all
+        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // do not consider local functions at all
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
@@ -80,12 +80,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         caseAlreadyFlipped = true;
                     }
 
+                    // let's consider an upper-case 'A' as a special situation as that is a single word
+                    var isSpecialCharA = c == 'A';
+
                     if (caseAlreadyFlipped is false)
                     {
                         var nextC = c.ToLowerCase();
 
                         var nextIndex = index + 1;
-                        if (nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase()))
+                        if (nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase()) && isSpecialCharA is false)
                         {
                             // multiple upper cases in a line, so do not flip
                             nextC = c;
@@ -104,7 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         }
                     }
 
-                    caseAlreadyFlipped = true;
+                    caseAlreadyFlipped = isSpecialCharA is false;
                 }
                 else
                 {
