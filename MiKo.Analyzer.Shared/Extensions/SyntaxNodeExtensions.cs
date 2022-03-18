@@ -787,6 +787,17 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsInvocationOnObjectUnderTest(this ExpressionStatementSyntax value) => value.Expression is InvocationExpressionSyntax i && i.Expression.IsAccessOnObjectUnderTest();
+
+        internal static bool IsAccessOnObjectUnderTest(this ExpressionSyntax value)
+        {
+            var found = value is MemberAccessExpressionSyntax mae
+                    && mae.Expression is IdentifierNameSyntax ins
+                    && Constants.Names.ObjectUnderTestNames.Contains(ins.GetName());
+
+            return found;
+        }
+
         internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName)
         {
             return value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);

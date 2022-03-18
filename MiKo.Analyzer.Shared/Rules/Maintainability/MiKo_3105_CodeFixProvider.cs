@@ -173,6 +173,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         return AssertThat(arg0, Is(call, arg1), 2, args);
                     }
+
+            }
+
+            if (arg0.Expression is IdentifierNameSyntax || arg0.Expression.IsAccessOnObjectUnderTest())
+            {
+                return AssertThat(arg0, Is(call, arg1), 2, args);
             }
 
             return AssertThat(arg1, Is(call, arg0), 2, args);
@@ -240,14 +246,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arg0 = args[0];
 
+            switch (arg0.Expression)
+            {
+                case TypeOfExpressionSyntax t:
+                    return AssertThat(args[1], Is(methodName, new[] { t.Type }), 2, args);
+
+                case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax nameSyntax:
+                    return AssertThat(Argument(nameSyntax.Identifier.Text), Is(methodName, GetTypeSyntaxes(i, name)), 2, args);
+            }
+
             if (name is GenericNameSyntax gns)
             {
                 return AssertThat(arg0, Is(methodName, gns.TypeArgumentList.Arguments.ToArray()), 1, args);
-            }
-
-            if (arg0.Expression is TypeOfExpressionSyntax t)
-            {
-                return AssertThat(args[1], Is(methodName, new[] { t.Type }), 2, args);
             }
 
             // TODO: this code is not tested as the case does not exist
@@ -258,19 +268,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arg0 = args[0];
 
+            switch (arg0.Expression)
+            {
+                case TypeOfExpressionSyntax t:
+                    return AssertThat(args[1], Is(propertyName, methodName, new[] { t.Type }), 2, args);
+
+                case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax nameSyntax:
+                    return AssertThat(Argument(nameSyntax.Identifier.Text), Is(propertyName, methodName, GetTypeSyntaxes(i, name)), 2, args);
+            }
+
             if (name is GenericNameSyntax gns)
             {
                 return AssertThat(arg0, Is(propertyName, methodName, gns.TypeArgumentList.Arguments.ToArray()), 1, args);
             }
 
-            var arg1 = args[1];
-
-            if (arg0.Expression is TypeOfExpressionSyntax t0)
-            {
-                return AssertThat(arg1, Is(propertyName, methodName, new[] { t0.Type }), 2, args);
-            }
-
-            if (arg1.Expression is TypeOfExpressionSyntax t1)
+            if (args[1].Expression is TypeOfExpressionSyntax t1)
             {
                 return AssertThat(arg0, Is(propertyName, methodName, new[] { t1.Type }), 2, args);
             }
@@ -291,27 +303,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argument = args[0];
 
-            if (argument.Expression is BinaryExpressionSyntax b)
+            switch (argument.Expression)
             {
-                var leftIsNull = b.Left.IsKind(SyntaxKind.NullLiteralExpression);
-                var rightIsNull = b.Right.IsKind(SyntaxKind.NullLiteralExpression);
-
-                switch (b.Kind())
+                case BinaryExpressionSyntax b:
                 {
-                    case SyntaxKind.EqualsExpression:
-                        return leftIsNull || rightIsNull
-                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), 1, args)
-                                   : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), 1, args);
+                    var leftIsNull = b.Left.IsKind(SyntaxKind.NullLiteralExpression);
+                    var rightIsNull = b.Right.IsKind(SyntaxKind.NullLiteralExpression);
 
-                    case SyntaxKind.NotEqualsExpression:
-                        return leftIsNull || rightIsNull
-                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), 1, args)
-                                   : AssertThat(b.Left, Is("EqualTo", b.Right), 1, args);
+                    switch (b.Kind())
+                    {
+                        case SyntaxKind.EqualsExpression:
+                            return leftIsNull || rightIsNull
+                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), 1, args)
+                                       : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), 1, args);
 
-                    case SyntaxKind.LessThanExpression: return AssertThat(b.Left, Is("GreaterThanOrEqualTo", b.Right), 1, args);
-                    case SyntaxKind.LessThanOrEqualExpression: return AssertThat(b.Left, Is("GreaterThan", b.Right), 1, args);
-                    case SyntaxKind.GreaterThanExpression: return AssertThat(b.Left, Is("LessThanOrEqualTo", b.Right), 1, args);
-                    case SyntaxKind.GreaterThanOrEqualExpression: return AssertThat(b.Left, Is("LessThan", b.Right), 1, args);
+                        case SyntaxKind.NotEqualsExpression:
+                            return leftIsNull || rightIsNull
+                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), 1, args)
+                                       : AssertThat(b.Left, Is("EqualTo", b.Right), 1, args);
+
+                        case SyntaxKind.LessThanExpression: return AssertThat(b.Left, Is("GreaterThanOrEqualTo", b.Right), 1, args);
+                        case SyntaxKind.LessThanOrEqualExpression: return AssertThat(b.Left, Is("GreaterThan", b.Right), 1, args);
+                        case SyntaxKind.GreaterThanExpression: return AssertThat(b.Left, Is("LessThanOrEqualTo", b.Right), 1, args);
+                        case SyntaxKind.GreaterThanOrEqualExpression: return AssertThat(b.Left, Is("LessThan", b.Right), 1, args);
+                    }
+
+                    break;
+                }
+
+                case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes:
+                {
+                    switch (maes.GetName())
+                    {
+                        case "IsAssignableFrom": return FixIsNotAssignableFrom(args, maes.Name); // reverse logic as we are in the 'IsFalse' case
+                        case "IsNotAssignableFrom": return FixIsAssignableFrom(args, maes.Name); // reverse logic as we are in the 'IsFalse' case
+                    }
+
+                    break;
                 }
             }
 
@@ -348,27 +376,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argument = args[0];
 
-            if (argument.Expression is BinaryExpressionSyntax b)
+            switch (argument.Expression)
             {
-                var leftIsNull = b.Left.IsKind(SyntaxKind.NullLiteralExpression);
-                var rightIsNull = b.Right.IsKind(SyntaxKind.NullLiteralExpression);
-
-                switch (b.Kind())
+                case BinaryExpressionSyntax b:
                 {
-                    case SyntaxKind.EqualsExpression:
-                        return leftIsNull || rightIsNull
-                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), 1, args)
-                                   : AssertThat(b.Left, Is("EqualTo", b.Right), 1, args);
+                    var leftIsNull = b.Left.IsKind(SyntaxKind.NullLiteralExpression);
+                    var rightIsNull = b.Right.IsKind(SyntaxKind.NullLiteralExpression);
 
-                    case SyntaxKind.NotEqualsExpression:
-                        return leftIsNull || rightIsNull
-                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), 1, args)
-                                   : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), 1, args);
+                    switch (b.Kind())
+                    {
+                        case SyntaxKind.EqualsExpression:
+                            return leftIsNull || rightIsNull
+                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), 1, args)
+                                       : AssertThat(b.Left, Is("EqualTo", b.Right), 1, args);
 
-                    case SyntaxKind.LessThanExpression: return AssertThat(b.Left, Is("LessThan", b.Right), 1, args);
-                    case SyntaxKind.LessThanOrEqualExpression: return AssertThat(b.Left, Is("LessThanOrEqualTo", b.Right), 1, args);
-                    case SyntaxKind.GreaterThanExpression: return AssertThat(b.Left, Is("GreaterThan", b.Right), 1, args);
-                    case SyntaxKind.GreaterThanOrEqualExpression: return AssertThat(b.Left, Is("GreaterThanOrEqualTo", b.Right), 1, args);
+                        case SyntaxKind.NotEqualsExpression:
+                            return leftIsNull || rightIsNull
+                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), 1, args)
+                                       : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), 1, args);
+
+                        case SyntaxKind.LessThanExpression: return AssertThat(b.Left, Is("LessThan", b.Right), 1, args);
+                        case SyntaxKind.LessThanOrEqualExpression: return AssertThat(b.Left, Is("LessThanOrEqualTo", b.Right), 1, args);
+                        case SyntaxKind.GreaterThanExpression: return AssertThat(b.Left, Is("GreaterThan", b.Right), 1, args);
+                        case SyntaxKind.GreaterThanOrEqualExpression: return AssertThat(b.Left, Is("GreaterThanOrEqualTo", b.Right), 1, args);
+                    }
+
+                    break;
+                }
+
+                case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes:
+                {
+                    switch (maes.GetName())
+                    {
+                        case "IsAssignableFrom": return FixIsAssignableFrom(args, maes.Name);
+                        case "IsNotAssignableFrom": return FixIsNotAssignableFrom(args, maes.Name);
+                    }
+
+                    break;
                 }
             }
 
@@ -502,5 +546,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static ArgumentSyntax Throws(string name) => Argument(SimpleMemberAccess("Throws", name));
 
         private static ArgumentSyntax Throws(string name, params TypeSyntax[] types) => Argument(Invocation("Throws", name, types));
+
+        private static TypeSyntax[] GetTypeSyntaxes(InvocationExpressionSyntax i, SimpleNameSyntax name)
+        {
+            if (name is GenericNameSyntax g)
+            {
+                return g.TypeArgumentList.Arguments.ToArray();
+            }
+
+            var arguments = i.ArgumentList.Arguments;
+            if (arguments.Count == 1 && arguments[0].Expression is TypeOfExpressionSyntax t)
+            {
+                return new[] { t.Type };
+            }
+
+            return Array.Empty<TypeSyntax>();
+        }
     }
 }

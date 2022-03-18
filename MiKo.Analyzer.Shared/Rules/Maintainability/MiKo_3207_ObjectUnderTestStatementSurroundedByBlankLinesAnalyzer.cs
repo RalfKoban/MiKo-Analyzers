@@ -13,13 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3207";
 
-        private static readonly HashSet<string> ObjectUnderTestNames = Enumerable.Empty<string>()
-                                                                                 .Concat(Constants.Names.TypeUnderTestFieldNames)
-                                                                                 .Concat(Constants.Names.TypeUnderTestVariableNames)
-                                                                                 .Concat(Constants.Names.TypeUnderTestPropertyNames)
-                                                                                 .OrderBy(_ => _)
-                                                                                 .ToHashSet();
-
         public MiKo_3207_ObjectUnderTestStatementSurroundedByBlankLinesAnalyzer() : base(Id)
         {
         }
@@ -33,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var statement in statements)
             {
-                if (statement is ExpressionStatementSyntax ess && IsInvocationOnObjectUnderTest(ess))
+                if (statement is ExpressionStatementSyntax ess && ess.IsInvocationOnObjectUnderTest())
                 {
                     continue;
                 }
@@ -42,16 +35,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return false;
-        }
-
-        private static bool IsInvocationOnObjectUnderTest(ExpressionStatementSyntax node)
-        {
-            var found = node.Expression is InvocationExpressionSyntax i
-                     && i.Expression is MemberAccessExpressionSyntax mae
-                     && mae.Expression is IdentifierNameSyntax ins
-                     && ObjectUnderTestNames.Contains(ins.GetName());
-
-            return found;
         }
 
         private void AnalyzeExpressionStatement(SyntaxNodeAnalysisContext context)
@@ -64,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic AnalyzeExpressionStatement(ExpressionStatementSyntax node)
         {
-            if (IsInvocationOnObjectUnderTest(node))
+            if (node.IsInvocationOnObjectUnderTest())
             {
                 return AnalyzeExpressionStatementBlock(node);
             }

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -339,6 +337,12 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.AreEqual(d, 8.5d, 0.1d, ""some message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(double d) => Assert.That(d, Is.EqualTo(8.5d).Within(0.1d), ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(GCNotificationStatus status) => Assert.AreEqual(status, GCNotificationStatus.Failed); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(GCNotificationStatus status) => Assert.That(status, Is.EqualTo(GCNotificationStatus.Failed)); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(GCNotificationStatus status) => Assert.AreEqual(GCNotificationStatus.Failed, status); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(GCNotificationStatus status) => Assert.That(status, Is.EqualTo(GCNotificationStatus.Failed)); }")]
 
         // AreNotEqual
         [TestCase(
@@ -543,6 +547,8 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.Positive(i); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(int i) => Assert.That(i, Is.Positive); }")]
+
+        // IsAssignableFrom
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsAssignableFrom(typeof(object), new object()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.AssignableFrom<object>()); }")]
@@ -555,6 +561,31 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsNotAssignableFrom<object>(new object()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsTrue(type.IsAssignableFrom(typeof(object)); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsTrue(type.IsAssignableFrom<object>()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsTrue(type.IsNotAssignableFrom(typeof(object)); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsTrue(type.IsNotAssignableFrom<object>()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsFalse(type.IsAssignableFrom(typeof(object)); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsFalse(type.IsAssignableFrom<object>()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsFalse(type.IsNotAssignableFrom(typeof(object)); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsFalse(type.IsNotAssignableFrom<object>()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.AssignableFrom<object>()); }")]
+
         [TestCase(
              @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => StringAssert.IsMatch(""some pattern"", ""actual""); }",
              @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(""actual"", Does.Match(""some pattern"")); }")]
@@ -662,6 +693,34 @@ class TestMe
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase("Assert.AreEqual(GCNotificationStatus.Failed, ObjectUnderTest.Status)", "Assert.That(ObjectUnderTest.Status, Is.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreEqual(ObjectUnderTest.Status, GCNotificationStatus.Failed)", "Assert.That(ObjectUnderTest.Status, Is.EqualTo(GCNotificationStatus.Failed))")]
+        public void Code_gets_fixed_for_Assert_on_object_under_test_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+public interface ITestee
+{
+    GCNotificationStatus Status { get; }
+}
+
+[TestFixture]
+public class TestMe
+{
+    private ITestee ObjectUnderTest { get; set; }
+
+    [Test]
+    void Do()
+    {
+        ###;
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
         protected override string GetDiagnosticId() => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
