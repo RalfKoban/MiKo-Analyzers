@@ -913,9 +913,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
 
-        internal static bool IsStringLiteral(this ArgumentSyntax value)
+        internal static bool IsStringLiteral(this ArgumentSyntax value) => value?.Expression.IsStringLiteral() is true;
+
+        internal static bool IsStringLiteral(this ExpressionSyntax value)
         {
-            switch (value?.Expression?.Kind())
+            switch (value?.Kind())
             {
                 case SyntaxKind.StringLiteralExpression:
                 case SyntaxKind.InterpolatedStringExpression:

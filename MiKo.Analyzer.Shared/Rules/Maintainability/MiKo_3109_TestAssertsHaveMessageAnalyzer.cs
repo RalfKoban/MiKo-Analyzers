@@ -95,8 +95,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return true;
                 }
 
+                // we seem to concatenate strings
+                if (IsStringConcatenation(argument.Expression))
+                {
+                    return true;
+                }
+
                 // we are still unsure, so we have to test via semantics
                 if (argument.Expression is IdentifierNameSyntax && argument.GetTypeSymbol(compilation).IsString())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsStringConcatenation(ExpressionSyntax expression)
+        {
+            if (expression is BinaryExpressionSyntax b)
+            {
+                if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
+                {
+                    return true;
+                }
+
+                if (IsStringConcatenation(b.Left) || IsStringConcatenation(b.Right))
                 {
                     return true;
                 }

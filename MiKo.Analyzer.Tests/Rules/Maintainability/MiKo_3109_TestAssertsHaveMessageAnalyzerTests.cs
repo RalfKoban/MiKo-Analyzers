@@ -23,7 +23,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] AssertionsWithMessages =
             {
                 @"Assert.That(42, Is.Not.EqualTo(0815), ""some message {0}"", 42)",
+                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42)",
                 @"Assert.That(42, Is.Not.EqualTo(0815), ""some message"")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), 42 + "" some message "")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), $""{42} some message "")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), $""some message {42} "")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"" + 0815)",
                 @"Assert.AreEqual(42, 0815, ""some message"")",
                 @"Assert.IsNull(null, ""some message {0}"", 42)",
                 @"Assert.IsNull(null, ""some message"")",
