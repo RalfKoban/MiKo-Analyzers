@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
+using Microsoft.CodeAnalysis.CSharp;
+
 using MiKoSolutions.Analyzers;
 
 // ReSharper disable once CheckNamespace
@@ -277,6 +279,8 @@ namespace System
         }
 
         public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.All(_ => _.IsLowerCaseLetter() is false);
+
+        public static bool IsCSharpKeyword(this string value) => SyntaxFactory.ParseToken(value).IsKeyword();
 
         public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
 
