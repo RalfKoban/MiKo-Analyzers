@@ -3609,6 +3609,9 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3108_Title" xml:space="preserve">
     <value>Test methods should use assertions</value>
   </data>
+  <data name="MiKo_3109_CodeFixTitle" xml:space="preserve">
+    <value>Add default assertion message</value>
+  </data>
   <data name="MiKo_3109_Description" xml:space="preserve">
     <value>Assertions should contain messages that tell the reason(s) why something was expected but failed. This makes it easier to understand why a test failed in particular.</value>
   </data>

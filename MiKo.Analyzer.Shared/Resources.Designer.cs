@@ -10195,6 +10195,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add default assertion message.
+        /// </summary>
+        public static string MiKo_3109_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3109_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assertions should contain messages that tell the reason(s) why something was expected but failed. This makes it easier to understand why a test failed in particular..
         /// </summary>
         public static string MiKo_3109_Description {
