@@ -32,6 +32,45 @@ public interface ITestMe : IDisposable
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_class() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMeTests : IDisposable
+{
+    private bool _isDisposed;
+
+    [Test]
+    public void TestSomething()
+    {
+    }
+
+    public void Dispose() => _isDisposed = true;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_method_in_non_test_class() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+public class TestMeTests : IDisposable
+{
+    private bool _isDisposed;
+
+    [Test]
+    public void TestSomething()
+    {
+    }
+
+    public void Dispose() => _isDisposed = true;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_non_disposable_type() => No_issue_is_reported_for(@"
 using System;
 

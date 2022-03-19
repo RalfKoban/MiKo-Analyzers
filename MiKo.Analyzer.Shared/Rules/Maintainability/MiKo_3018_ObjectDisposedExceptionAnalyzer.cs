@@ -19,11 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind != TypeKind.Interface && symbol.Implements<IDisposable>();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind != TypeKind.Interface && symbol.Implements<IDisposable>() && symbol.IsTestClass() is false;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            if (ShallAnalyze(symbol.ContainingType) && symbol.IsPubliclyVisible())
+            if (ShallAnalyze(symbol.ContainingType) && symbol.IsPubliclyVisible() && symbol.IsTestMethod() is false)
             {
                 switch (symbol.MethodKind)
                 {
@@ -83,8 +83,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
-
         private static bool ThrowsObjectDisposedException(SyntaxNode node) => node is ThrowStatementSyntax t && t.Expression is ObjectCreationExpressionSyntax o && o.Type.IsException<ObjectDisposedException>();
+
+        private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
     }
 }
