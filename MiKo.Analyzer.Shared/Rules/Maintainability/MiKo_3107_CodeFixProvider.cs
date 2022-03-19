@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -26,29 +25,55 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var invocation = (InvocationExpressionSyntax)syntax;
 
-            return GetReplacementFor(invocation).WitTriviaFrom(invocation);
+            return ReplacementFor(context, invocation).WitTriviaFrom(invocation);
         }
 
-        private static SyntaxNode GetReplacementFor(InvocationExpressionSyntax invocation)
+        private static SyntaxNode ReplacementFor(CodeFixContext context, InvocationExpressionSyntax invocation)
         {
             if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Name is GenericNameSyntax generic)
             {
-                var typeSyntax = generic.TypeArgumentList.Arguments.First();
-                if (typeSyntax is PredefinedTypeSyntax p)
+                return ReplacementFor(context, generic.TypeArgumentList.Arguments.First());
+            }
+
+            return Literal(SyntaxKind.NullLiteralExpression);
+        }
+
+        private static SyntaxNode ReplacementFor(PredefinedTypeSyntax type)
+        {
+            var kind = type.Keyword.Kind();
+            switch (kind)
+            {
+                case SyntaxKind.BoolKeyword: return Literal(SyntaxKind.FalseLiteralExpression);
+                case SyntaxKind.CharKeyword: return Literal(SyntaxFactory.Literal(char.MinValue));
+                case SyntaxKind.DecimalKeyword: return Literal(SyntaxFactory.Literal(decimal.Zero));
+                case SyntaxKind.DoubleKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(double.NaN));
+                case SyntaxKind.FloatKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(float.NaN));
+                case SyntaxKind.ObjectKeyword: return Literal(SyntaxKind.NullLiteralExpression);
+                case SyntaxKind.StringKeyword: return Literal(SyntaxKind.NullLiteralExpression);
+                default: return Literal(SyntaxFactory.Literal(0));
+            }
+        }
+
+        private static SyntaxNode ReplacementFor(CodeFixContext context, TypeSyntax typeSyntax)
+        {
+            if (typeSyntax is PredefinedTypeSyntax predefined)
+            {
+                return ReplacementFor(predefined);
+            }
+
+            // it might be a struct or an an enum, so let's check that
+            var semanticModel = GetSemanticModel(context);
+            var type = typeSyntax.GetTypeSymbol(semanticModel);
+            if (type.IsValueType)
+            {
+                if (type.IsEnum())
                 {
-                    var kind = p.Keyword.Kind();
-                    switch (kind)
-                    {
-                        case SyntaxKind.BoolKeyword: return Literal(SyntaxKind.FalseLiteralExpression);
-                        case SyntaxKind.CharKeyword: return Literal(SyntaxFactory.Literal(Char.MinValue));
-                        case SyntaxKind.DecimalKeyword: return Literal(SyntaxFactory.Literal(Decimal.Zero));
-                        case SyntaxKind.DoubleKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(Double.NaN));
-                        case SyntaxKind.FloatKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(Single.NaN));
-                        case SyntaxKind.ObjectKeyword: return Literal(SyntaxKind.NullLiteralExpression);
-                        case SyntaxKind.StringKeyword: return Literal(SyntaxKind.NullLiteralExpression);
-                        default: return Literal(SyntaxFactory.Literal(0));
-                    }
+                    // take the first value
+                    return SimpleMemberAccess(typeSyntax, type.GetFields().First().Name);
                 }
+
+                // we have a struct
+                return SyntaxFactory.DefaultExpression(typeSyntax);
             }
 
             return Literal(SyntaxKind.NullLiteralExpression);

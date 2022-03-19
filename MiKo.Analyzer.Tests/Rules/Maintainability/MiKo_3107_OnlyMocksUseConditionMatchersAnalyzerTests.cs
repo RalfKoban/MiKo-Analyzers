@@ -344,6 +344,7 @@ namespace Bla
         [TestCase("It.IsAny<object>()", "null")]
         [TestCase("It.IsAny<string>()", "null")]
         [TestCase("It.IsAny<TestMe>()", "null")]
+        [TestCase("It.IsAny<GCNotificationStatus>()", "GCNotificationStatus.Succeeded")]
         public void Code_gets_fixed_for_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -407,6 +408,44 @@ namespace Bla
 ";
 
             VerifyCSharpFix(Template.Replace("###", "It.IsAny<object>()"), Template.Replace("###", "null"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_struct()
+        {
+            const string Template = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public struct TestMeStruct
+    {
+    }
+
+    public class TestMe
+    {
+        public void DoSomething(TestMeStruct value)
+        {
+        }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new TestMe();
+
+            ObjectUnderTest.DoSomething(###);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "It.IsAny<TestMeStruct>()"), Template.Replace("###", "default(TestMeStruct)"));
         }
 
         protected override string GetDiagnosticId() => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;
