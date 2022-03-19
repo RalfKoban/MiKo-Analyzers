@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -203,8 +204,36 @@ namespace Bla
 }",
 2); // 1 issue for each assertion
 
+        [TestCase("Assert.That(values.Length, Is.EqualTo(42))", @"Assert.That(values.Length, Is.EqualTo(42), ""wrong length"")")]
+        [TestCase("Assert.That(values.GetHashCode(), Is.EqualTo(42))", @"Assert.That(values.GetHashCode(), Is.EqualTo(42), ""wrong hash code"")")]
+        [TestCase("Assert.That(values.GetId(), Is.EqualTo(42))", @"Assert.That(values.GetId(), Is.EqualTo(42), ""wrong identifier"")")]
+        public void Code_gets_fixed_for_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            ###;
+            Assert.Fail(""some error reason"");
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3109_TestAssertsHaveMessageAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3109_CodeFixProvider();
     }
 }

@@ -159,6 +159,33 @@ namespace System
             return text;
         }
 
+        public static IEnumerable<string> Words(this string text)
+        {
+            var startIndex = 0;
+
+            // start at index 1 to skip first upper case character (and avoid return of empty word)
+            var index = 1;
+
+            for (; index < text.Length; index++)
+            {
+                var c = text[index];
+
+                if (c.IsUpperCase())
+                {
+                    var word = text.Substring(startIndex, index - startIndex);
+                    startIndex = index;
+
+                    yield return word;
+                }
+            }
+
+            // return the remaining word
+            if (index == text.Length)
+            {
+                yield return text.Substring(startIndex);
+            }
+        }
+
         public static string GetNameOnlyPart(this string fullName)
         {
             var genericIndexStart = fullName.IndexOf('<');
