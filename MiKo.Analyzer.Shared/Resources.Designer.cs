@@ -7149,7 +7149,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shorten &apos;{1}&apos; to &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace &apos;{1}&apos; with &apos;{2}&apos;.
         /// </summary>
         public static string MiKo_2218_MessageFormat {
             get {
@@ -7943,6 +7943,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3013_Title {
             get {
                 return ResourceManager.GetString("MiKo_3013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add a default reason.
+        /// </summary>
+        public static string MiKo_3014_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3014_CodeFixTitle", resourceCulture);
             }
         }
         
@@ -10132,6 +10141,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change Moq call to default value.
+        /// </summary>
+        public static string MiKo_3107_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3107_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is troublesome to have code that attemps to use Moq mocks but actually does not use them properly. So condition matchers should be used on mocks to setup or verify conditions. Such matchers should not be used on constructors or methods of non-mocks as they don&apos;t make sense there..
         /// </summary>
         public static string MiKo_3107_Description {
@@ -10182,6 +10200,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3108_Title {
             get {
                 return ResourceManager.GetString("MiKo_3108_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add default assertion message.
+        /// </summary>
+        public static string MiKo_3109_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3109_CodeFixTitle", resourceCulture);
             }
         }
         

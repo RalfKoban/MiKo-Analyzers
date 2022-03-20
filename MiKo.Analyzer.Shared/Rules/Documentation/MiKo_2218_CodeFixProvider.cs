@@ -16,9 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var affectedTokens = syntax.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens);
+            var affectedNodes = syntax.DescendantNodes<XmlTextSyntax>().Where(_ => _.GetLocation().Contains(diagnostic.Location));
 
-            return syntax.ReplaceTokens(affectedTokens, (original, rewritten) => original.WithText(MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer.GetBetterText(original.Text)));
+            return syntax.ReplaceNodes(affectedNodes, (original, rewritten) => MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer.GetBetterText(original));
         }
     }
 }

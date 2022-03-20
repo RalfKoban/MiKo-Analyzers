@@ -18,13 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
-
-            PrepareAnalyzeMethod(context.Compilation);
-        }
-
-        protected virtual void PrepareAnalyzeMethod(Compilation compilation)
-        {
-            // nothing to do here per default
         }
 
         protected abstract bool CommentHasIssue(string comment, SemanticModel semanticModel);

@@ -14,6 +14,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         // Ordinal is important here as we want to have only those with a suffix and not all (e.g. we want 'comparisonView' but not 'view')
         private const StringComparison Comparison = StringComparison.Ordinal;
 
+        private static readonly string[] AcceptedPrefixes =
+            {
+                "source",
+                "target",
+            };
+
         private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>
                                                                                {
                                                                                    { "Comparer", "comparer" },
@@ -66,17 +72,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
                 else if (name.EndsWith("Element", Comparison))
                 {
-                    var proposedAlternative = name == "frameworkElement"
-                                                  ? "element"
-                                                  : name.WithoutSuffix("Element");
-
-                    yield return Issue(name, location, proposedAlternative);
+                    yield return Issue(name, location, name == "frameworkElement" ? "element" : name.WithoutSuffix("Element"));
                 }
                 else
                 {
                     foreach (var pair in WrongSuffixes)
                     {
-                        if (name.EndsWith(pair.Key, Comparison))
+                        if (name.EndsWith(pair.Key, Comparison) && name.StartsWithAny(AcceptedPrefixes, Comparison) is false)
                         {
                             yield return Issue(name, location, pair.Value);
                         }

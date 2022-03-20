@@ -2546,7 +2546,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Terms such as 'that is used to' or 'which shall be used to' are simply bloated and should be shortened to the equivalent term 'to'.</value>
   </data>
   <data name="MiKo_2218_MessageFormat" xml:space="preserve">
-    <value>Shorten '{1}' to '{2}'</value>
+    <value>Replace '{1}' with '{2}'</value>
   </data>
   <data name="MiKo_2218_Title" xml:space="preserve">
     <value>Documentation should use shorter term 'to' instead of longer term '... used to'</value>
@@ -2820,6 +2820,9 @@ That is they should return a Boolean and have the last parameter as [out] parame
   </data>
   <data name="MiKo_3013_Title" xml:space="preserve">
     <value>The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException</value>
+  </data>
+  <data name="MiKo_3014_CodeFixTitle" xml:space="preserve">
+    <value>Add a default reason</value>
   </data>
   <data name="MiKo_3014_Description" xml:space="preserve">
     <value>To ease maintenance, a thrown InvalidOperationException, NotImplementedException or NotSupportedException should have a reason that explains the circumstances why the exception has been thrown and - ideally - how to solve the situation.</value>
@@ -3588,6 +3591,9 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3106_Title" xml:space="preserve">
     <value>Assertions should not use equality or comparison operators</value>
   </data>
+  <data name="MiKo_3107_CodeFixTitle" xml:space="preserve">
+    <value>Change Moq call to default value</value>
+  </data>
   <data name="MiKo_3107_Description" xml:space="preserve">
     <value>It is troublesome to have code that attemps to use Moq mocks but actually does not use them properly. So condition matchers should be used on mocks to setup or verify conditions. Such matchers should not be used on constructors or methods of non-mocks as they don't make sense there.</value>
   </data>
@@ -3605,6 +3611,9 @@ In contrast, the failure would be much easier to understand if the test would im
   </data>
   <data name="MiKo_3108_Title" xml:space="preserve">
     <value>Test methods should use assertions</value>
+  </data>
+  <data name="MiKo_3109_CodeFixTitle" xml:space="preserve">
+    <value>Add default assertion message</value>
   </data>
   <data name="MiKo_3109_Description" xml:space="preserve">
     <value>Assertions should contain messages that tell the reason(s) why something was expected but failed. This makes it easier to understand why a test failed in particular.</value>

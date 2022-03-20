@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -332,8 +333,125 @@ namespace Bla
 }
 ");
 
+        [TestCase("It.IsAny<bool>()", "false")]
+        [TestCase("It.IsAny<byte>()", "0")]
+        [TestCase("It.IsAny<char>()", @"'\0'")]
+        [TestCase("It.IsAny<decimal>()", "0M")]
+        [TestCase("It.IsAny<double>()", "double.NaN")]
+        [TestCase("It.IsAny<float>()", "float.NaN")]
+        [TestCase("It.IsAny<int>()", "0")]
+        [TestCase("It.IsAny<uint>()", "0")]
+        [TestCase("It.IsAny<object>()", "null")]
+        [TestCase("It.IsAny<string>()", "null")]
+        [TestCase("It.IsAny<TestMe>()", "null")]
+        [TestCase("It.IsAny<GCNotificationStatus>()", "GCNotificationStatus.Succeeded")]
+        public void Code_gets_fixed_for_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(object o) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new TestMe();
+
+            ObjectUnderTest.DoSomething(###);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multiline()
+        {
+            const string Template = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(object o1, object o2) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new TestMe();
+
+            ObjectUnderTest.DoSomething(
+                                    ###,
+                                    new object());
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "It.IsAny<object>()"), Template.Replace("###", "null"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_struct()
+        {
+            const string Template = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public struct TestMeStruct
+    {
+    }
+
+    public class TestMe
+    {
+        public void DoSomething(TestMeStruct value)
+        {
+        }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new TestMe();
+
+            ObjectUnderTest.DoSomething(###);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "It.IsAny<TestMeStruct>()"), Template.Replace("###", "default(TestMeStruct)"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3107_CodeFixProvider();
     }
 }

@@ -133,6 +133,7 @@ public interface TestMe
 ");
 
         [TestCase("Whatever_it_Does")]
+        [TestCase("Do_whatever_you_want_to_do")]
         public void No_issue_is_reported_for_test_method_(string methodName) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -145,6 +146,7 @@ public class TestMe
 ");
 
         [TestCase("Whatever_it_Does")]
+        [TestCase("Do_whatever_you_want_to_do")]
         public void No_issue_is_reported_for_local_function_inside_test_method_(string methodName) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 

@@ -767,6 +767,13 @@ internal const string entity = "entity";
                                                                                               "testObject",
                                                                                           };
 
+            internal static readonly IEnumerable<string> ObjectUnderTestNames = Enumerable.Empty<string>()
+                                                                                          .Concat(TypeUnderTestFieldNames)
+                                                                                          .Concat(TypeUnderTestVariableNames)
+                                                                                          .Concat(TypeUnderTestPropertyNames)
+                                                                                          .OrderBy(_ => _)
+                                                                                          .ToHashSet();
+
             internal static readonly IEnumerable<string> AssertionTypes = new HashSet<string>
                                                                               {
                                                                                   "Assert",

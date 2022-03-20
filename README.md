@@ -256,7 +256,7 @@ The following tables list all the 322 rules that are currently provided by the a
 |MiKo_3011|Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name|&#x2713;|&#x2713;|
 |MiKo_3012|Thrown ArgumentOutOfRangeExceptions (or its subtypes) shall provide the actual value that causes the exception to be thrown|&#x2713;|&#x2713;|
 |MiKo_3013|The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException|&#x2713;|&#x2713;|
-|MiKo_3014|InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message|&#x2713;|\-|
+|MiKo_3014|InvalidOperationException, NotImplementedException and NotSupportedException should have a reason as message|&#x2713;|&#x2713;|
 |MiKo_3015|Throw InvalidOperationExceptions (instead of ArgumentExceptions or its subtypes) to indicate inappropriate states of parameterless methods|&#x2713;|&#x2713;|
 |MiKo_3016|Do not throw ArgumentNullException for inappropriate states of property return values|&#x2713;|&#x2713;|
 |MiKo_3017|Do not swallow exceptions when throwing new exceptions|&#x2713;|&#x2713;|
@@ -322,9 +322,9 @@ The following tables list all the 322 rules that are currently provided by the a
 |MiKo_3104|Use NUnit's [Combinatorial] attribute properly|&#x2713;|&#x2713;|
 |MiKo_3105|Test methods should use NUnit's fluent Assert approach|&#x2713;|&#x2713;|
 |MiKo_3106|Assertions should not use equality or comparison operators|&#x2713;|\-|
-|MiKo_3107|Moq Mock condition matchers should be used on mocks only|&#x2713;|\-|
+|MiKo_3107|Moq Mock condition matchers should be used on mocks only|&#x2713;|&#x2713;|
 |MiKo_3108|Test methods should use assertions|&#x2713;|\-|
-|MiKo_3109|Multiple assertions shall use assertion messages|&#x2713;|\-|
+|MiKo_3109|Multiple assertions shall use assertion messages|&#x2713;|&#x2713;|
 |MiKo_3110|Assertions should not use 'Count' or 'Length'|&#x2713;|&#x2713;|
 |MiKo_3201|Log statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|
 |MiKo_3202|Assertion statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using MiKoSolutions.Analyzers.Rules.Ordering;
+
 using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Extensions
@@ -122,6 +124,12 @@ namespace MiKoSolutions.Analyzers.Extensions
                                     Assert.That("bla blubb    ".SecondWord(), Is.EqualTo("blubb"), "with multiple whitespaces at end");
                                     Assert.That("bla blubb blubdiblub".SecondWord(), Is.EqualTo("blubb"), "with 3 words");
                                 });
+        }
+
+        [Test, Timeout(250)]
+        public static void Words()
+        {
+            Assert.That("GetHashCode".Words(), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -28,6 +29,45 @@ using System;
 public interface ITestMe : IDisposable
 {
     void DoSomething();
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_class() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMeTests : IDisposable
+{
+    private bool _isDisposed;
+
+    [Test]
+    public void TestSomething()
+    {
+    }
+
+    public void Dispose() => _isDisposed = true;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_test_method_in_non_test_class() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+public class TestMeTests : IDisposable
+{
+    private bool _isDisposed;
+
+    [Test]
+    public void TestSomething()
+    {
+    }
+
+    public void Dispose() => _isDisposed = true;
 }
 ");
 
@@ -348,6 +388,37 @@ public class TestMeEnhanced : TestMe
     {
         VerifyDisposed();
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_of_disposable_type_that_throws_a_([Values(nameof(NotImplementedException), nameof(NotSupportedException))] string exception) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    public void DoSomething()
+    {
+        throw new " + exception + @";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_expression_body_of_disposable_type_that_throws_a_([Values(nameof(NotImplementedException), nameof(NotSupportedException))] string exception) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    public void DoSomething() => throw new " + exception + @";
 }
 ");
 

@@ -35,7 +35,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return "value";
                 }
 
-                return parameterName.ToLowerCaseAt(0);
+                var name = parameterName.ToLowerCaseAt(0);
+
+                if (CodeDetector.IsCSharpKeyword(name) is false)
+                {
+                    return name;
+                }
             }
 
             return "result";

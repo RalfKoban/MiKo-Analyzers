@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var method = context.GetEnclosingMethod();
 
             var issues = finallyBlock.DescendantNodesAndSelf().OfType<ThrowStatementSyntax>()
-                                     .Select(_ => Issue(method, _.GetLocation()));
+                                     .Select(_ => Issue(method.Name, _));
 
             ReportDiagnostics(context, issues);
         }

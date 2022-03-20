@@ -71,6 +71,7 @@ public class TestMe
         [TestCase("Does something. Used to analyze stuff. Performs something more.", "Does something. Analyzes stuff. Performs something more.")]
         [TestCase("Does something. Used to analyze stuff.", "Does something. Analyzes stuff.")]
         [TestCase("It can be used to analyze stuff.", "It allows to analyze stuff.")]
+        [TestCase("Markers are used to analyze stuff.", "Markers analyze stuff.")]
         [TestCase("Used to analyze stuff.", "Analyzes stuff.")]
         public void Code_gets_fixed_for_special_case_text_(string originalCode, string fixedCode)
         {
@@ -86,6 +87,68 @@ public class TestMe
 }";
 
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("The information can be used to do something.", "The information to do something.")]
+        [TestCase("The information. It can be used to analyze stuff.", "The information. It allows to analyze stuff.")]
+        [TestCase("The information. Can be used to analyze stuff.", "The information. Allows to analyze stuff.")]
+        [TestCase(
+             @"<see langword=""true""/> to indicate something; otherwise, <see langword=""false""/>. This information can be used to hide specific stuff. The default is <see langword=""false""/>.",
+             @"<see langword=""true""/> to indicate something; otherwise, <see langword=""false""/>. This information allows to hide specific stuff. The default is <see langword=""false""/>.")]
+        public void Code_gets_fixed_for_param_text_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""o"">###</param>
+    public void DoSomething(object o)
+    {
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_param_text_with_multiple_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""o"">
+    /// <see langword=""true""/> to indicate something; otherwise, <see langword=""false""/>.
+    /// This information can be used to hide specific stuff.
+    /// The default is <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(object o)
+    {
+    }
+}";
+
+            // issue is with 2 separate text tokens
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""o"">
+    /// <see langword=""true""/> to indicate something; otherwise, <see langword=""false""/>.
+    /// This information allows to hide specific stuff.
+    /// The default is <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(object o)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer.Id;

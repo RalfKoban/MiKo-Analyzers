@@ -12,10 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CanRunConcurrently => false;
+        protected override bool CanRunConcurrently => true;
 
-        protected override void PrepareAnalyzeMethod(Compilation compilation) => CodeDetector.RefreshKnownTypes(compilation);
-
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CodeDetector.IsCommentedOutCodeLine(comment);
+        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CodeDetector.IsCommentedOutCodeLine(comment, semanticModel);
     }
 }

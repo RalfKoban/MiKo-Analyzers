@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -23,7 +24,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] AssertionsWithMessages =
             {
                 @"Assert.That(42, Is.Not.EqualTo(0815), ""some message {0}"", 42)",
+                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42)",
                 @"Assert.That(42, Is.Not.EqualTo(0815), ""some message"")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), 42 + "" some message "")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), $""{42} some message "")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), $""some message {42} "")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"")",
+                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"" + 0815)",
                 @"Assert.AreEqual(42, 0815, ""some message"")",
                 @"Assert.IsNull(null, ""some message {0}"", 42)",
                 @"Assert.IsNull(null, ""some message"")",
@@ -197,8 +204,41 @@ namespace Bla
 }",
 2); // 1 issue for each assertion
 
+        [TestCase("Assert.That(values.Length, Is.EqualTo(42))", @"Assert.That(values.Length, Is.EqualTo(42), ""wrong length"")")]
+        [TestCase("Assert.That(values.GetHashCode(), Is.EqualTo(42))", @"Assert.That(values.GetHashCode(), Is.EqualTo(42), ""wrong hash code"")")]
+        [TestCase("Assert.That(values.GetId(), Is.EqualTo(42))", @"Assert.That(values.GetId(), Is.EqualTo(42), ""wrong identifier"")")]
+        [TestCase("Assert.That(values.HasId(), Is.True)", @"Assert.That(values.HasId(), Is.True, ""wrong identifier"")")]
+        [TestCase("Assert.That(values.IsId(), Is.True)", @"Assert.That(values.IsId(), Is.True, ""wrong identifier"")")]
+        [TestCase("Assert.That(values.CanSave(), Is.True)", @"Assert.That(values.CanSave(), Is.True, ""wrong save"")")]
+        [TestCase("Assert.That(values.Contains(42), Is.True)", @"Assert.That(values.Contains(42), Is.True, ""wrong containment"")")]
+        [TestCase("Assert.That(values, Is.Not.Null)", @"Assert.That(values, Is.Not.Null, ""missing values"")")]
+        public void Code_gets_fixed_for_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            ###;
+            Assert.Fail(""some error reason"");
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3109_TestAssertsHaveMessageAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3109_CodeFixProvider();
     }
 }

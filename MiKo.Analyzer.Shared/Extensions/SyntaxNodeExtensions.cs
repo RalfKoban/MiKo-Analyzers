@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
+        internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.AncestorsAndSelf().OfType<T>();
+
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
         internal static IEnumerable<T> ChildNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes().OfType<T>();
@@ -51,7 +53,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
-        internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors().OfType<T>().FirstOrDefault(predicate);
+        internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
 
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
 
@@ -641,7 +643,20 @@ namespace MiKoSolutions.Analyzers
             return value.InsertNodesBefore(nodeInList, new[] { modifiedNode });
         }
 
-        internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds) => kinds.ToHashSet().Contains(value.Kind());
+        internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds)
+        {
+            var valueKind = value.Kind();
+
+            foreach (var kind in kinds)
+            {
+                if (kind == valueKind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         internal static bool IsBoolean(this TypeSyntax value)
         {
@@ -778,6 +793,17 @@ namespace MiKoSolutions.Analyzers
 
                 return false;
             }
+        }
+
+        internal static bool IsInvocationOnObjectUnderTest(this ExpressionStatementSyntax value) => value.Expression is InvocationExpressionSyntax i && i.Expression.IsAccessOnObjectUnderTest();
+
+        internal static bool IsAccessOnObjectUnderTest(this ExpressionSyntax value)
+        {
+            var found = value is MemberAccessExpressionSyntax mae
+                    && mae.Expression is IdentifierNameSyntax ins
+                    && Constants.Names.ObjectUnderTestNames.Contains(ins.GetName());
+
+            return found;
         }
 
         internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName)
@@ -994,9 +1020,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
 
-        internal static bool IsStringLiteral(this ArgumentSyntax value)
+        internal static bool IsStringLiteral(this ArgumentSyntax value) => value?.Expression.IsStringLiteral() is true;
+
+        internal static bool IsStringLiteral(this ExpressionSyntax value)
         {
-            switch (value?.Expression?.Kind())
+            switch (value?.Kind())
             {
                 case SyntaxKind.StringLiteralExpression:
                 case SyntaxKind.InterpolatedStringExpression:
@@ -1029,6 +1057,10 @@ namespace MiKoSolutions.Analyzers
             // ignore the latest versions (or above)
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
+
+        internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
+
+        internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
 
         internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
 
@@ -1170,6 +1202,19 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
+        internal static bool Throws<T>(this SyntaxNode node) where T : Exception
+        {
+            switch (node)
+            {
+                case ThrowStatementSyntax ts when ts.Expression is ObjectCreationExpressionSyntax tso && tso.Type.IsException<T>():
+                case ThrowExpressionSyntax te when te.Expression is ObjectCreationExpressionSyntax teo && teo.Type.IsException<T>():
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
         internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
@@ -1279,6 +1324,27 @@ namespace MiKoSolutions.Analyzers
             var textTokens = syntax.TextTokens.WithoutLastXmlNewLine();
 
             return syntax.WithTextTokens(textTokens);
+        }
+
+        internal static T WitTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            return value
+                    .WithLeadingTriviaFrom(node)
+                    .WithTrailingTriviaFrom(node);
+        }
+
+        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            return node.HasLeadingTrivia
+                    ? value.WithLeadingTrivia(node.GetLeadingTrivia())
+                    : value;
+        }
+
+        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            return node.HasTrailingTrivia
+                    ? value.WithTrailingTrivia(node.GetTrailingTrivia())
+                    : value;
         }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
@@ -1620,6 +1686,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
+        internal static IEnumerable<string> GetAttributeNames(this ClassDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+
+        internal static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+
         private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
             var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();
@@ -1650,8 +1720,6 @@ namespace MiKoSolutions.Analyzers
 
             ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier("value"), default);
         }
-
-        private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 
         private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
         {

@@ -40,6 +40,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_properly_named_source_and_target_variable_([Values("Item", "View")] string name) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        object source" + name + @";
+        object target" + name + @";
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_incorrectly_named_variable_([Values("myComparer", "myView", "myItem", "myEntity", "myElement")] string name) => An_issue_is_reported_for(@"
 
 public class TestMe

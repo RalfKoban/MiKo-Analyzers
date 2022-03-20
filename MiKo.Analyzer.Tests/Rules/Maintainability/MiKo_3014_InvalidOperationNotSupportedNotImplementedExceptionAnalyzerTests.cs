@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -73,8 +74,34 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_type_inside_of_test_class_for_([ValueSource(nameof(MatchingExceptions))] string exceptionName)
+        {
+            const string Template = @"
+using System;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class Tests
+{
+    private class TestMe
+    {
+        public void DoSomething(int x)
+        {
+            throw new ###;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", exceptionName + "()"), Template.Replace("###", exceptionName + @"(""It's a mock."")"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3014_CodeFixProvider();
     }
 }

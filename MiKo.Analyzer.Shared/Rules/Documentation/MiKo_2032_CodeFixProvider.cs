@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Phrases =
             {
                 " if ",
+                "A task that has the result ",
                 "A task that will complete with a result of ",
                 "a task that will complete with a result of ",
                 "TRUE:",
@@ -41,6 +42,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().ToArray();
 
+        private static readonly string[] DelimiterPhrases =
+            {
+                ",",
+                ";",
+                ":",
+            };
+
         private static readonly string[] OtherStartingPhrases =
             {
                 "If ",
@@ -52,6 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 " otherwise",
                 " otherwise with a result of",
+                " otherwise the task has the result",
                 " else it",
                 " else with",
                 ", ; else",
@@ -184,13 +193,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove boolean <see langword="..."/> and <c>...</c>
             var adjustedComment = RemoveBooleansTags(comment);
 
-            var nodes = adjustedComment.WithoutStartText(SimpleStartingPhrases)
-                                        .WithoutStartText(OtherStartingPhrases)
-                                        .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
-                                        .WithoutText(Phrases)
-                                        .WithoutFirstXmlNewLine()
-                                        .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
-                                        .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
+            var nodes = adjustedComment.WithoutStartText(DelimiterPhrases)
+                                       .WithoutStartText(SimpleStartingPhrases)
+                                       .WithoutStartText(OtherStartingPhrases)
+                                       .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
+                                       .WithoutText(Phrases)
+                                       .WithoutFirstXmlNewLine()
+                                       .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
+                                       .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
 
             // remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)

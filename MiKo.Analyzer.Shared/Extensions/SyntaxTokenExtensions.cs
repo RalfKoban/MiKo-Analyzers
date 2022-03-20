@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTokenExtensions
     {
+        internal static IEnumerable<T> Ancestors<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
+
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().Where(_ => _.IsKind(kind));
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();

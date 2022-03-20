@@ -62,6 +62,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(SyntaxFactory.Token(kind));
 
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(PredefinedTypeSyntax type, string methodName)
+        {
+            var method = SyntaxFactory.IdentifierName(methodName);
+
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
+        }
+
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName)
         {
             var type = SyntaxFactory.IdentifierName(typeName);
@@ -105,6 +112,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
+
+        protected static LiteralExpressionSyntax Literal(SyntaxToken token) => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, token);
 
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {

@@ -72,6 +72,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("buzzes", ExpectedResult = "buzzes")]
         [TestCase("caches", ExpectedResult = "caches")]
         [TestCase("continue", ExpectedResult = "continues")]
+        [TestCase("display", ExpectedResult = "displays")]
         [TestCase("do", ExpectedResult = "does")]
         [TestCase("does", ExpectedResult = "does")]
         [TestCase("hash", ExpectedResult = "hashes")]
@@ -88,6 +89,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("pops", ExpectedResult = "pops")]
         [TestCase("register", ExpectedResult = "registers")]
         [TestCase("registers", ExpectedResult = "registers")]
+        [TestCase("survey", ExpectedResult = "surveys")]
         [TestCase("test", ExpectedResult = "tests")]
         [TestCase("tests", ExpectedResult = "tests")]
         public static string MakeThirdPersonSingularVerb_finds_proper_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
