@@ -62,11 +62,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                             {
                                                 switch (_)
                                                 {
-                                                    case "get":
-                                                    case "set":
                                                     case "add":
+                                                    case "can":
+                                                    case "get":
+                                                    case "has":
+                                                    case "is":
                                                     case "remove":
+                                                    case "set":
                                                         return string.Empty;
+
+                                                    case "contains":
+                                                        return "containment";
 
                                                     case "id":
                                                         return "identifier";

@@ -207,6 +207,10 @@ namespace Bla
         [TestCase("Assert.That(values.Length, Is.EqualTo(42))", @"Assert.That(values.Length, Is.EqualTo(42), ""wrong length"")")]
         [TestCase("Assert.That(values.GetHashCode(), Is.EqualTo(42))", @"Assert.That(values.GetHashCode(), Is.EqualTo(42), ""wrong hash code"")")]
         [TestCase("Assert.That(values.GetId(), Is.EqualTo(42))", @"Assert.That(values.GetId(), Is.EqualTo(42), ""wrong identifier"")")]
+        [TestCase("Assert.That(values.HasId(), Is.True)", @"Assert.That(values.HasId(), Is.True, ""wrong identifier"")")]
+        [TestCase("Assert.That(values.IsId(), Is.True)", @"Assert.That(values.IsId(), Is.True, ""wrong identifier"")")]
+        [TestCase("Assert.That(values.CanSave(), Is.True)", @"Assert.That(values.CanSave(), Is.True, ""wrong save"")")]
+        [TestCase("Assert.That(values.Contains(42), Is.True)", @"Assert.That(values.Contains(42), Is.True, ""wrong containment"")")]
         public void Code_gets_fixed_for_(string originalCode, string fixedCode)
         {
             const string Template = @"
