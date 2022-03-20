@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
-namespace MiKoSolutions.Analyzers.Rules.Documentation
+namespace MiKoSolutions.Analyzers.Rules
 {
     public static class CodeDetector
     {
@@ -124,6 +125,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+
+        public static bool IsCSharpKeyword(string value) => SyntaxFactory.ParseToken(value).IsKeyword();
 
         public static bool IsCommentedOutCodeLine(string line)
         {

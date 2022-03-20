@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 var name = parameterName.ToLowerCaseAt(0);
 
-                if (name.IsCSharpKeyword() is false)
+                if (CodeDetector.IsCSharpKeyword(name) is false)
                 {
                     return name;
                 }

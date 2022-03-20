@@ -280,8 +280,6 @@ namespace System
 
         public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.All(_ => _.IsLowerCaseLetter() is false);
 
-        public static bool IsCSharpKeyword(this string value) => SyntaxFactory.ParseToken(value).IsKeyword();
-
         public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
