@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -53,7 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (ThrowsObjectDisposedException(symbol) is false)
             {
-                yield return Issue(symbol);
+                if (AlwaysThrows<NotImplementedException, NotSupportedException>(symbol) is false)
+                {
+                    yield return Issue(symbol);
+                }
             }
         }
 
@@ -83,8 +87,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool ThrowsObjectDisposedException(SyntaxNode node) => node is ThrowStatementSyntax t && t.Expression is ObjectCreationExpressionSyntax o && o.Type.IsException<ObjectDisposedException>();
+        private static bool ThrowsObjectDisposedException(SyntaxNode node) => node.Throws<ObjectDisposedException>();
 
         private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
+
+        private static bool AlwaysThrows<T1, T2>(IMethodSymbol symbol)
+            where T1 : Exception
+            where T2 : Exception
+        {
+            foreach (var node in symbol.GetSyntax().ChildNodes())
+            {
+                switch (node)
+                {
+                    case BlockSyntax block:
+                        return block.ChildNodes().Any(_ => _.Throws<T1>() || _.Throws<T2>());
+
+                    case ArrowExpressionClauseSyntax a when a.Expression.Throws<T1>() || a.Expression.Throws<T2>():
+                        return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

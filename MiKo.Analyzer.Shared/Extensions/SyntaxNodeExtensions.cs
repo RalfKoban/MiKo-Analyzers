@@ -1091,6 +1091,19 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
+        internal static bool Throws<T>(this SyntaxNode node) where T : Exception
+        {
+            switch (node)
+            {
+                case ThrowStatementSyntax ts when ts.Expression is ObjectCreationExpressionSyntax tso && tso.Type.IsException<T>():
+                case ThrowExpressionSyntax te when te.Expression is ObjectCreationExpressionSyntax teo && teo.Type.IsException<T>():
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
         internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
