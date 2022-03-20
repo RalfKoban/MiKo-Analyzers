@@ -7947,6 +7947,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a default reason.
+        /// </summary>
+        public static string MiKo_3014_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3014_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, a thrown InvalidOperationException, NotImplementedException or NotSupportedException should have a reason that explains the circumstances why the exception has been thrown and - ideally - how to solve the situation..
         /// </summary>
         public static string MiKo_3014_Description {

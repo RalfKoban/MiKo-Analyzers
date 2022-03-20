@@ -951,6 +951,10 @@ namespace MiKoSolutions.Analyzers
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
 
+        internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
+
+        internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
+
         internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
 
         internal static bool IsTestOneTimeSetUpMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
@@ -1575,6 +1579,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
 
+        internal static IEnumerable<string> GetAttributeNames(this ClassDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+
+        internal static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+
         private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
             var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();
@@ -1605,8 +1613,6 @@ namespace MiKoSolutions.Analyzers
 
             ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier("value"), default);
         }
-
-        private static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 
         private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
         {

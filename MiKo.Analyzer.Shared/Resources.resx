@@ -2821,6 +2821,9 @@ That is they should return a Boolean and have the last parameter as [out] parame
   <data name="MiKo_3013_Title" xml:space="preserve">
     <value>The 'default' clause in 'switch' statements should throw an ArgumentOutOfRangeException (or subtype), but no ArgumentException</value>
   </data>
+  <data name="MiKo_3014_CodeFixTitle" xml:space="preserve">
+    <value>Add a default reason</value>
+  </data>
   <data name="MiKo_3014_Description" xml:space="preserve">
     <value>To ease maintenance, a thrown InvalidOperationException, NotImplementedException or NotSupportedException should have a reason that explains the circumstances why the exception has been thrown and - ideally - how to solve the situation.</value>
   </data>
