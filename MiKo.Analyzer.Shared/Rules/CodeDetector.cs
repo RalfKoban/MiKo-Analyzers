@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -85,50 +82,11 @@ namespace MiKoSolutions.Analyzers.Rules
                 "lock(",
             };
 
-        private static readonly ConcurrentDictionary<string, string> KnownTypeNames = new ConcurrentDictionary<string, string>();
-        private static readonly ConcurrentDictionary<string, string> KnownAssemblyNames = new ConcurrentDictionary<string, string>();
-
-        public static void RefreshKnownTypes(Compilation compilation)
-        {
-            var assemblySymbols = new List<IAssemblySymbol>
-                                      {
-                                          compilation.Assembly,
-                                      };
-            try
-            {
-                var assemblies = compilation.GetUsedAssemblyReferences()
-                                            .Select(compilation.GetAssemblyOrModuleSymbol)
-                                            .OfType<IAssemblySymbol>();
-                assemblySymbols.AddRange(assemblies);
-            }
-            catch (InvalidOperationException)
-            {
-                // promise to not enqueue, may happen during multiple test runs
-            }
-
-            // to speed up the lookup, add known assemblies and their types only once
-            foreach (var assemblySymbol in assemblySymbols)
-            {
-                var assemblyName = string.Intern(assemblySymbol.FullyQualifiedName());
-
-                if (KnownAssemblyNames.TryAdd(assemblyName, assemblyName))
-                {
-                    foreach (var typeName in assemblySymbol.TypeNames)
-                    {
-                        if (typeName[0] == '<')
-                        {
-                            continue;
-                        }
-
-                        KnownTypeNames.TryAdd(typeName, typeName);
-                    }
-                }
-            }
-        }
-
         public static bool IsCSharpKeyword(string value) => SyntaxFactory.ParseToken(value).IsKeyword();
 
-        public static bool IsCommentedOutCodeLine(string line)
+        public static bool IsCommentedOutCodeLine(string line) => IsCommentedOutCodeLine(line, null);
+
+        public static bool IsCommentedOutCodeLine(string line, SemanticModel semanticModel)
         {
             if (line.IsNullOrWhiteSpace())
             {
@@ -209,10 +167,19 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
 
                 // attempt to find a type because it's likely commented out code if we find some
-                var firstWord = line.FirstWord();
-                if (KnownTypeNames.ContainsKey(firstWord))
+                if (semanticModel != null)
                 {
-                    return true;
+                    var firstWord = line.FirstWord();
+
+                    /*
+var type = semanticModel.GetTypeInfo(node).Type;
+var convertedType = semanticModel.GetTypeInfo(node).ConvertedType;
+                    */
+                    var type = semanticModel.Compilation.GetTypeByMetadataName(firstWord);
+                    if (type != null)
+                    {
+                        return true;
+                    }
                 }
             }
 
