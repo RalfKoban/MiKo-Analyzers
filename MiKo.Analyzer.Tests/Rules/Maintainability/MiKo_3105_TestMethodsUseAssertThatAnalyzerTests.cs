@@ -723,6 +723,26 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
+        [Test] // TODO Fix me later because currently we do not know how to fix that situation
+        public void Code_gets_currently_not_fixed_for_Assert_Throws_if_exception_is_assigned()
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    void Do()
+    {
+        var ex = Assert.Throws<Exception>(() => { });
+    }
+}";
+
+            VerifyCSharpFix(Template, Template);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3105_TestMethodsUseAssertThatAnalyzer();

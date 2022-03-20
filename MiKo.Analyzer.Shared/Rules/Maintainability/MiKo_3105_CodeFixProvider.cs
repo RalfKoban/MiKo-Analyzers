@@ -24,6 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var original = (InvocationExpressionSyntax)syntax;
 
+            if (original.Parent is EqualsValueClauseSyntax)
+            {
+                // TODO Fix me later because currently we do not know how to fix that situation
+                return original;
+            }
+
             if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)
             {
                 var typeName = type.GetName();
