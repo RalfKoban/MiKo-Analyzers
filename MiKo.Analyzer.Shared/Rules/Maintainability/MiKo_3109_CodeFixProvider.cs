@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var original = (InvocationExpressionSyntax)syntax;
 
-            if (original.Expression is MemberAccessExpressionSyntax maes  && maes.Expression is IdentifierNameSyntax type)
+            if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)
             {
                 var typeName = type.GetName();
 
@@ -84,7 +84,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 .Where(_ => string.IsNullOrEmpty(_) is false)
                                 .ToList();
 
-            finalText.Insert(0, "wrong");
+            var firstWord = GetStartingWord(arguments);
+
+            finalText.Insert(0, firstWord);
 
             return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
         }
@@ -93,15 +95,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (expression)
             {
-                case MemberAccessExpressionSyntax member:
-                    return member.GetName();
-
-                case InvocationExpressionSyntax method:
-                    return method.Expression.GetName();
-
-                default:
-                    return expression.GetName();
+                case MemberAccessExpressionSyntax member: return member.GetName();
+                case InvocationExpressionSyntax method: return method.Expression.GetName();
+                default: return expression.GetName();
             }
         }
+
+        // let's see if we have the special case 'Is.Not.Null'
+        private static string GetStartingWord(SeparatedSyntaxList<ArgumentSyntax> arguments) => arguments[1].Expression.ToString() == "Is.Not.Null"
+                                                                                                    ? "missing"
+                                                                                                    : "wrong";
     }
 }

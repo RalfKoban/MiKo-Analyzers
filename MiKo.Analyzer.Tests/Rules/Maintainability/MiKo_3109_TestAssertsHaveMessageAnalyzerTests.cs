@@ -211,6 +211,7 @@ namespace Bla
         [TestCase("Assert.That(values.IsId(), Is.True)", @"Assert.That(values.IsId(), Is.True, ""wrong identifier"")")]
         [TestCase("Assert.That(values.CanSave(), Is.True)", @"Assert.That(values.CanSave(), Is.True, ""wrong save"")")]
         [TestCase("Assert.That(values.Contains(42), Is.True)", @"Assert.That(values.Contains(42), Is.True, ""wrong containment"")")]
+        [TestCase("Assert.That(values, Is.Not.Null)", @"Assert.That(values, Is.Not.Null, ""missing values"")")]
         public void Code_gets_fixed_for_(string originalCode, string fixedCode)
         {
             const string Template = @"
