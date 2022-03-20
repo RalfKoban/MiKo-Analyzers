@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -57,11 +58,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return symbolName;
             }
 
+            var correctedSymbolName = symbolName
+                                            .Replace("MustBe", "Is")
+                                            .Replace("MustNotBe", "IsNot")
+                                            .Replace("ShallBe", "Is")
+                                            .Replace("ShallNotBe", "IsNot")
+                                            .Replace("ShouldBe", "Is")
+                                            .Replace("ShouldNotBe", "IsNot");
+
             var caseAlreadyFlipped = false;
 
             const int CharacterToStartWith = 1;
 
-            var characters = new List<char>(symbolName);
+            var characters = new List<char>(correctedSymbolName);
             for (var index = CharacterToStartWith; index < characters.Count; index++)
             {
                 var c = characters[index];
@@ -128,7 +137,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                          .Replace("argument_exception", nameof(ArgumentException))
                          .Replace("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
                          .Replace("invalid_operation_exception", nameof(InvalidOperationException))
-                         .Replace("object_disposed_exception", nameof(ObjectDisposedException));
+                         .Replace("object_disposed_exception", nameof(ObjectDisposedException))
+                         .Replace("not_supported_exception", nameof(NotSupportedException))
+                         .Replace("not_implemented_exception", nameof(NotImplementedException))
+                         .Replace("task_canceled_exception", nameof(TaskCanceledException))
+                         .Replace("operation_canceled_exception", nameof(OperationCanceledException));
 
             return string.Intern(result);
         }
