@@ -10282,6 +10282,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Zero&apos;.
+        /// </summary>
+        public static string MiKo_3111_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3111_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For clarity, tests that assert for zero should use &apos;Is.Zero&apos; instead of &apos;Is.EqualTo(0)&apos;..
+        /// </summary>
+        public static string MiKo_3111_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3111_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Zero&apos; instead.
+        /// </summary>
+        public static string MiKo_3111_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3111_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertions should use &apos;Is.Zero&apos; instead of &apos;Is.EqualTo(0)&apos;.
+        /// </summary>
+        public static string MiKo_3111_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3111_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_3201_CodeFixTitle {
