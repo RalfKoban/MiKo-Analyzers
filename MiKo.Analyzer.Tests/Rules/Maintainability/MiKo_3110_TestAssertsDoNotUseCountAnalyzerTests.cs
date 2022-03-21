@@ -1,15 +1,13 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    [TestFixture, Isolated]
+    [TestFixture]
     public sealed class MiKo_3110_TestAssertsDoNotUseCountAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AssertionMethods =
