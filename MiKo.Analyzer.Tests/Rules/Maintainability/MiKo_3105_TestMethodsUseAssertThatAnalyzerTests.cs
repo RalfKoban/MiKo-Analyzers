@@ -170,8 +170,13 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+
+        // Null
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o, ""my message""); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.Null(o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.Null(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null, ""my message""); }")]
 
         // NotNull

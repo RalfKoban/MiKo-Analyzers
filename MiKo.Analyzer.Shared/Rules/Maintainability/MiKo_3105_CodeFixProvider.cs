@@ -111,6 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "Negative": return FixNegative(args);
                 case "NotNull": return FixNotNull(args);
                 case "NotZero": return FixNotZero(args);
+                case "Null": return FixIsNull(args);
                 case "Positive": return FixPositive(args);
                 case "StartsWith": return FixStartsWith(args);
                 case "True": return FixIsTrue(args);
