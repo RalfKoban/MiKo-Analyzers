@@ -11089,5 +11089,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_5012_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Array.Empty&lt;&gt;().
+        /// </summary>
+        public static string MiKo_5013_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_5013_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To avoid unnecessary memory consumption and pressure on the garbage collector, empty arrays should not be created manuelly. Instead, the method &apos;Array.Empty&lt;T&gt;()&apos; should be used..
+        /// </summary>
+        public static string MiKo_5013_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5013_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not create empty array.
+        /// </summary>
+        public static string MiKo_5013_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5013_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not create empty arrays.
+        /// </summary>
+        public static string MiKo_5013_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5013_Title", resourceCulture);
+            }
+        }
     }
 }
