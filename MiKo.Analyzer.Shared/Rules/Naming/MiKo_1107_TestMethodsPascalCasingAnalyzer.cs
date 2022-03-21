@@ -64,7 +64,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                             .Replace("ShallBe", "Is")
                                             .Replace("ShallNotBe", "IsNot")
                                             .Replace("ShouldBe", "Is")
-                                            .Replace("ShouldNotBe", "IsNot");
+                                            .Replace("ShouldNotBe", "IsNot")
+                                            .Replace("ShouldFail", "Fails")
+                                            .Replace("ShouldReturn", "Returns")
+                                            .Replace("ShouldThrow", "Throws");
 
             var caseAlreadyFlipped = false;
 
