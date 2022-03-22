@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,28 +24,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (InvocationExpressionSyntax)context.Node;
 
-            if (HasIssue(node))
-            {
-                ReportDiagnostics(context, Issue(node));
-            }
+            var issues = Analyze(node);
+
+            ReportDiagnostics(context, issues);
         }
 
-        private static bool HasIssue(InvocationExpressionSyntax node)
+        private IEnumerable<Diagnostic> Analyze(InvocationExpressionSyntax node)
         {
-            if (node.Expression.GetName() == "EqualTo")
+            if (node.Expression is MemberAccessExpressionSyntax maes && maes.Name.GetName() == "EqualTo")
             {
-                var arguments = node.ArgumentList.Arguments;
+                var argumentList = node.ArgumentList;
+                var arguments = argumentList.Arguments;
 
-                if (arguments.Count == 1)
+                if (arguments.Count == 1 && arguments[0].Expression is LiteralExpressionSyntax literal && literal.Token.ValueText == "0")
                 {
-                    if (arguments[0].Expression is LiteralExpressionSyntax literal && literal.Token.ValueText == "0")
-                    {
-                        return true;
-                    }
+                    var location = CreateLocation(node, maes.Name.Span.Start, argumentList.Span.End);
+
+                    yield return Issue(location);
                 }
             }
-
-            return false;
         }
     }
 }
