@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3105_CodeFixProvider)), Shared]
-    public sealed class MiKo_3105_CodeFixProvider : MaintainabilityCodeFixProvider
+    public sealed class MiKo_3105_CodeFixProvider : UnitTestCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
@@ -485,94 +485,5 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static InvocationExpressionSyntax FixZero(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Zero"), 1, args);
-
-        private static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
-            => AssertThat(Argument(expression), constraint, skip, arguments);
-
-        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
-        {
-            var args = new List<ArgumentSyntax>(Math.Max(2, 2 + arguments.Count - skip));
-            args.Add(argument);
-            args.Add(constraint);
-
-            if (arguments.Count > skip)
-            {
-                args.AddRange(arguments.Skip(skip));
-            }
-
-            return AssertThat(args.ToArray());
-        }
-
-        private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => Invocation("Assert", "That", arguments);
-
-        private static InvocationExpressionSyntax InvocationIs(string name, ArgumentSyntax argument) => Invocation("Is", name, argument);
-
-        private static ArgumentSyntax Is(string name) => Argument(SimpleMemberAccess("Is", name));
-
-        private static ArgumentSyntax Is(string name, ArgumentSyntax argument) => Argument(InvocationIs(name, argument));
-
-        private static ArgumentSyntax Is(string name, ExpressionSyntax expression) => Is(name, Argument(expression));
-
-        private static ArgumentSyntax Is(string name, TypeSyntax[] items) => Argument(Invocation("Is", name, items));
-
-        private static ArgumentSyntax Is(string name, string name1, TypeSyntax[] items) => Argument(Invocation("Is", name, name1, items));
-
-        private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Is", name, name1), argument);
-
-        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
-        {
-            var expression = InvocationIs(name, argument);
-
-            return Argument(SimpleMemberAccess(expression, name1));
-        }
-
-        private static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, Argument(expression));
-
-        private static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, string name2)
-        {
-            var expression = SimpleMemberAccess("Is", name, name1);
-            var invocation = Invocation(expression, argument);
-
-            return Argument(SimpleMemberAccess(invocation, name2));
-        }
-
-        private static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1, ArgumentSyntax argument1)
-        {
-            var isCall = InvocationIs(name, argument);
-            var appendixCall = SimpleMemberAccess(isCall, name1);
-
-            return Argument(appendixCall, argument1);
-        }
-
-        private static ArgumentSyntax Is(params string[] names) => Argument(SimpleMemberAccess("Is", names));
-
-        private static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
-                                                               || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
-
-        private static ArgumentSyntax Does(string name, ArgumentSyntax argument) => Argument(Invocation("Does", name, argument));
-
-        private static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Does", name, name1), argument);
-
-        private static ArgumentSyntax Does(params string[] names) => Argument(SimpleMemberAccess("Does", names));
-
-        private static ArgumentSyntax Throws(string name) => Argument(SimpleMemberAccess("Throws", name));
-
-        private static ArgumentSyntax Throws(string name, params TypeSyntax[] types) => Argument(Invocation("Throws", name, types));
-
-        private static TypeSyntax[] GetTypeSyntaxes(InvocationExpressionSyntax i, SimpleNameSyntax name)
-        {
-            if (name is GenericNameSyntax g)
-            {
-                return g.TypeArgumentList.Arguments.ToArray();
-            }
-
-            var arguments = i.ArgumentList.Arguments;
-            if (arguments.Count == 1 && arguments[0].Expression is TypeOfExpressionSyntax t)
-            {
-                return new[] { t.Type };
-            }
-
-            return Array.Empty<TypeSyntax>();
-        }
     }
 }

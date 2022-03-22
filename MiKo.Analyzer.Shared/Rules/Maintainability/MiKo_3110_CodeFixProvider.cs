@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -11,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3110_CodeFixProvider)), Shared]
-    public sealed class MiKo_3110_CodeFixProvider : MaintainabilityCodeFixProvider
+    public sealed class MiKo_3110_CodeFixProvider : UnitTestCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_3110_TestAssertsDoNotUseCountAnalyzer.Id;
 
@@ -117,24 +116,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             const int MinimalArguments = 2; // skip both arguments in the original call as we have to correct those
 
-            var args = new List<ArgumentSyntax>(Math.Max(MinimalArguments, arguments.Count));
-
-            args.Add(GetFixedArgument(argument));
-            args.Add(constraint);
-
-            if (arguments.Count > MinimalArguments)
-            {
-                args.AddRange(arguments.Skip(MinimalArguments));
-            }
-
-            return AssertThat(args.ToArray());
+            return AssertThat(GetFixedArgument(argument), constraint, MinimalArguments, arguments);
         }
-
-        private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => Invocation("Assert", "That", arguments);
-
-        private static ArgumentSyntax HasCount(string name, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Has", "Count", name), argument);
-
-        private static ArgumentSyntax HasCount(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Has", "Count", name, name1), argument);
 
         private static ArgumentSyntax GetFixedArgument(ArgumentSyntax argument)
         {

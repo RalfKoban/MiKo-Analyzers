@@ -10318,6 +10318,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Is.Empty&apos;.
+        /// </summary>
+        public static string MiKo_3112_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3112_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For clarity, tests that assert on collections for emptiness should use &apos;Is.Empty&apos; instead of &apos;Has.Count.Zero&apos;..
+        /// </summary>
+        public static string MiKo_3112_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3112_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Is.Empty&apos; instead.
+        /// </summary>
+        public static string MiKo_3112_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3112_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertions should use &apos;Is.Empty&apos; instead of &apos;Has.Count.Zero&apos;.
+        /// </summary>
+        public static string MiKo_3112_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3112_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_3201_CodeFixTitle {
