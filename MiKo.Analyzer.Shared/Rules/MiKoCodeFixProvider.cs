@@ -64,6 +64,18 @@ namespace MiKoSolutions.Analyzers.Rules
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
 
+        protected static bool IsEnum(CodeFixContext context, ArgumentSyntax syntax)
+        {
+            var expression = (MemberAccessExpressionSyntax)syntax.Expression;
+
+            if (GetSymbol(context, expression.Expression) is ITypeSymbol type)
+            {
+                return type.IsEnum();
+            }
+
+            return false;
+        }
+
         protected virtual bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => true;
 
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(context.Document.Project.Solution);

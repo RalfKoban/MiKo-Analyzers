@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var args = original.ArgumentList.Arguments;
 
-                        var fixedSyntax = UpdatedSyntax(typeName, maes, args);
+                        var fixedSyntax = UpdatedSyntax(context, maes, args, typeName);
                         if (fixedSyntax != null)
                         {
                             // ensure that we keep leading trivia, such as comments
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        private static ExpressionSyntax UpdatedSyntax(string typeName, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args)
+        private static ExpressionSyntax UpdatedSyntax(CodeFixContext context, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
         {
             var methodName = syntax.GetName();
 
@@ -67,16 +67,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "AllItemsAreInstancesOfType": return FixAllItemsAreInstancesOfType(args, syntax.Name);
                 case "AllItemsAreNotNull": return FixAllItemsAreNotNull(args);
                 case "AllItemsAreUnique": return FixAllItemsAreUnique(args);
-                case "AreEqual": return FixAreEqual(args);
+                case "AreEqual": return FixAreEqual(context, args);
                 case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
                 case "AreEquivalent": return FixAreEquivalent(args);
-                case "AreNotEqual": return FixAreNotEqual(args);
+                case "AreNotEqual": return FixAreNotEqual(context, args);
                 case "AreNotEqualIgnoringCase": return FixAreNotEqualIgnoringCase(args);
                 case "AreNotEquivalent": return FixAreNotEquivalent(args);
-                case "AreNotSame": return FixAreNotSame(args);
-                case "AreSame": return FixAreSame(args);
+                case "AreNotSame": return FixAreNotSame(context, args);
+                case "AreSame": return FixAreSame(context, args);
                 case "Contains": return FixContains(typeName, args);
-                case "DoesNotContain": return FixDoesNotContain(typeName, args);
+                case "DoesNotContain": return FixDoesNotContain(args, typeName);
                 case "DoesNotMatch": return FixStringAssertDoesNotMatch(args);
                 case "DoesNotEndWith": return FixDoesNotEndWith(args);
                 case "DoesNotExist": return FixDoesNotExist(args);
@@ -127,11 +127,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAllItemsAreUnique(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Unique"), 1, args);
 
-        private static InvocationExpressionSyntax FixAreEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(args, "EqualTo");
+        private static InvocationExpressionSyntax FixAreEqual(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(context, args, "EqualTo");
 
         private static InvocationExpressionSyntax FixAreEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0], "IgnoreCase"), 2, args);
 
-        private static InvocationExpressionSyntax FixAreEqualOrSame(SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static InvocationExpressionSyntax FixAreEqualOrSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -143,20 +143,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Null"), 2, args);
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is(call, arg0), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
+                {
+                    if (args.Count > 2)
                     {
-                        if (args.Count > 2)
+                        var arg2 = args[2];
+
+                        if (IsNumeric(arg2))
                         {
-                            var arg2 = args[2];
-
-                            if (IsNumeric(arg2))
-                            {
-                                // seems we have a tolerance parameter
-                                return AssertThat(arg1, Is(call, arg0, "Within", arg2), 3, args);
-                            }
+                            // seems we have a tolerance parameter
+                            return AssertThat(arg1, Is(call, arg0, "Within", arg2), 3, args);
                         }
-
-                        return AssertThat(arg1, Is(call, arg0), 2, args);
                     }
+
+                    return AssertThat(arg1, Is(call, arg0), 2, args);
+                }
+
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is(call, arg0), 2, args);
             }
 
             switch (arg1.Expression.Kind())
@@ -166,21 +168,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Null"), 2, args);
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is(call, arg1), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
+                {
+                    if (args.Count > 2)
                     {
-                        if (args.Count > 2)
+                        var arg2 = args[2];
+
+                        if (IsNumeric(arg2))
                         {
-                            var arg2 = args[2];
-
-                            if (IsNumeric(arg2))
-                            {
-                                // seems we have a tolerance parameter
-                                return AssertThat(arg0, Is(call, arg1, "Within", arg2), 3, args);
-                            }
+                            // seems we have a tolerance parameter
+                            return AssertThat(arg0, Is(call, arg1, "Within", arg2), 3, args);
                         }
-
-                        return AssertThat(arg0, Is(call, arg1), 2, args);
                     }
 
+                    return AssertThat(arg0, Is(call, arg1), 2, args);
+                }
+
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is(call, arg1), 2, args);
             }
 
             if (arg0.Expression is IdentifierNameSyntax || arg0.Expression.IsAccessOnObjectUnderTest())
@@ -193,11 +196,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args, "EqualTo");
+        private static InvocationExpressionSyntax FixAreNotEqual(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(context, args, "EqualTo");
 
         private static InvocationExpressionSyntax FixAreNotEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EqualTo", args[0], "IgnoreCase"), 2, args);
 
-        private static InvocationExpressionSyntax FixAreNotEqualOrSame(SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static InvocationExpressionSyntax FixAreNotEqualOrSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -209,6 +212,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Not", "Null"), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is("Not", call, arg0), 2, args);
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is("Not", call, arg0), 2, args);
             }
 
             switch (arg1.Expression.Kind())
@@ -218,6 +222,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Not", "Null"), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is("Not", call, arg1), 2, args);
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is("Not", call, arg1), 2, args);
             }
 
             return AssertThat(arg1, Is("Not", call, arg0), 2, args);
@@ -225,9 +230,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreNotEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), 2, args);
 
-        private static InvocationExpressionSyntax FixAreNotSame(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args, "SameAs");
+        private static InvocationExpressionSyntax FixAreNotSame(CodeFixContext context,  SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(context, args, "SameAs");
 
-        private static InvocationExpressionSyntax FixAreSame(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(args, "SameAs");
+        private static InvocationExpressionSyntax FixAreSame(CodeFixContext context,  SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(context, args, "SameAs");
 
         private static InvocationExpressionSyntax FixCollectionAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), 2, args);
 
@@ -235,7 +240,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixContains(string typeName, SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertContains(args) : FixStringAssertContains(args);
 
-        private static InvocationExpressionSyntax FixDoesNotContain(string typeName, SeparatedSyntaxList<ArgumentSyntax> args) => typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
+        private static InvocationExpressionSyntax FixDoesNotContain(SeparatedSyntaxList<ArgumentSyntax> args, string typeName) => typeName == "CollectionAssert" ? FixCollectionAssertDoesNotContain(args) : FixStringAssertDoesNotContain(args);
 
         private static InvocationExpressionSyntax FixDoesNotEndWith(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Does("Not", "EndWith", args[0]), 2, args);
 
