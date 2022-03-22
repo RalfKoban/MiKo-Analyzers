@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "seconds",
                 "Seconds",
                 "SetupNonExistentDevice",
+                "someone",
                 "sone",
                 "Sone",
                 "tone",

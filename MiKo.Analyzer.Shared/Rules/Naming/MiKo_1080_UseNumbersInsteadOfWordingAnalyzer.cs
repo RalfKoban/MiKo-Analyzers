@@ -83,6 +83,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "oxone",
                                                                          "Oxone",
                                                                          "sEven", // 'isEvent'
+                                                                         "someone", // 'someone'
+                                                                         "Someone", // 'someone'
                                                                          "sone",
                                                                          "Sone",
                                                                          "seconds",
