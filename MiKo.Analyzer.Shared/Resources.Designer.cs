@@ -10240,7 +10240,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;Assert.That(..., Has.Count....)&apos;.
+        ///   Looks up a localized string similar to Use &apos;Assert.That(..., Has...)&apos;.
         /// </summary>
         public static string MiKo_3110_CodeFixTitle {
             get {
@@ -10250,7 +10250,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to Assertions such as Assert.That(...) using &apos;Count&apos; or &apos;Length&apos; assert for exact values.
-        ///If such a test fails it is diffucult to find out why it exactly failed as the failure reason gives no useful hint (e.g. &apos;5&apos; expected but &apos;3&apos; received).
+        ///If such a test fails it is difficult to find out why it exactly failed as the failure reason gives no useful hint (e.g. &apos;5&apos; expected but &apos;3&apos; received).
         ///
         ///So the failure needs to be carefully inspected. At worst the test needs to be debugged to find out what went wrong.
         ///That is annoying and becomes even more annoying if the test itself is a shaky one.

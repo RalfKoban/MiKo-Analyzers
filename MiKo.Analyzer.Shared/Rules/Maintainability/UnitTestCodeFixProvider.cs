@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static InvocationExpressionSyntax InvocationIs(string name, ArgumentSyntax argument) => Invocation("Is", name, argument);
 
-        protected static ArgumentSyntax Is(string name) => Argument(SimpleMemberAccess("Is", name));
+        protected static ArgumentSyntax Is(string name) => Argument(MemberIs(name));
 
         protected static ArgumentSyntax Is(string name, ArgumentSyntax argument) => Argument(InvocationIs(name, argument));
 
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Is(string name, string name1, TypeSyntax[] items) => Argument(Invocation("Is", name, name1, items));
 
-        protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Is", name, name1), argument);
+        protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument) => Argument(MemberIs(name, name1), argument);
 
         protected static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
         {
@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, string name2)
         {
-            var expression = SimpleMemberAccess("Is", name, name1);
+            var expression = MemberIs(name, name1);
             var invocation = Invocation(expression, argument);
 
             return Argument(SimpleMemberAccess(invocation, name2));
@@ -68,20 +68,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Argument(appendixCall, argument1);
         }
 
-        protected static ArgumentSyntax Is(params string[] names) => Argument(SimpleMemberAccess("Is", names));
+        protected static ArgumentSyntax Is(params string[] names) => Argument(MemberIs(names));
 
         protected static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
                                                                   || (argument.Expression is MemberAccessExpressionSyntax mae && mae.Expression.IsKind(SyntaxKind.PredefinedType));
 
         protected static ArgumentSyntax Does(string name, ArgumentSyntax argument) => Argument(Invocation("Does", name, argument));
 
-        protected static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Does", name, name1), argument);
+        protected static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument) => Argument(MemberDoes(name, name1), argument);
 
-        protected static ArgumentSyntax Does(params string[] names) => Argument(SimpleMemberAccess("Does", names));
+        protected static ArgumentSyntax Does(params string[] names) => Argument(MemberDoes(names));
 
-        protected static ArgumentSyntax HasCount(string name, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Has", "Count", name), argument);
+        protected static ArgumentSyntax Has(string name, ArgumentSyntax argument) => Argument(MemberHas(name), argument);
 
-        protected static ArgumentSyntax HasCount(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Has", "Count", name, name1), argument);
+        protected static ArgumentSyntax Has(string name, ArgumentSyntax argument, string name1)
+        {
+            var hasCall = Invocation(MemberHas(name), argument);
+            var appendixCall = SimpleMemberAccess(hasCall, name1);
+
+            return Argument(appendixCall);
+        }
+
+        protected static ArgumentSyntax HasCount(string name, ArgumentSyntax argument) => Argument(MemberHas("Count", name), argument);
+
+        protected static ArgumentSyntax HasCount(string name, string name1, ArgumentSyntax argument) => Argument(MemberHas("Count", name, name1), argument);
+
+        protected static ArgumentSyntax HasCount(string name, string name1, ExpressionSyntax expression) => Argument(MemberHas("Count", name, name1), Argument(expression));
+
+        protected static MemberAccessExpressionSyntax MemberDoes(params string[] names) => SimpleMemberAccess("Does", names);
+
+        protected static MemberAccessExpressionSyntax MemberHas(params string[] names) => SimpleMemberAccess("Has", names);
+
+        protected static MemberAccessExpressionSyntax MemberIs(params string[] names) => SimpleMemberAccess("Is", names);
 
         protected static ArgumentSyntax Throws(string name) => Argument(SimpleMemberAccess("Throws", name));
 

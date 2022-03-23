@@ -67,15 +67,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arg0.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg1, HasCount("EqualTo", arg0), args);
+                return AssertThat(arg1, Has("Exactly", arg0, "Items"), args);
             }
 
             if (arg1.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg0, HasCount("EqualTo", arg1), args);
+                return AssertThat(arg0, Has("Exactly", arg1, "Items"), args);
             }
 
-            return AssertThat(arg1, HasCount("EqualTo", arg0), args);
+            return AssertThat(arg1, Has("Exactly", arg0, "Items"), args);
         }
 
         private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args);
@@ -87,12 +87,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arg0.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg1, HasCount("Not", "EqualTo", Argument(arg0.Expression)), args);
+                return AssertThat(arg1, HasCount("Not", "EqualTo", arg0.Expression), args);
             }
 
             if (arg1.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg0, HasCount("Not", "EqualTo", Argument(arg1.Expression)), args);
+                return AssertThat(arg0, HasCount("Not", "EqualTo", arg1.Expression), args);
             }
 
             return AssertThat(arg1, HasCount("Not", "EqualTo", arg0), args);
@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], HasCount("LessThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], HasCount("EqualTo", Argument(args[1].FirstDescendant<ExpressionSyntax>(SyntaxKind.NumericLiteralExpression))), args);
+        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Has("Exactly", Argument(args[1].FirstDescendant<ExpressionSyntax>(SyntaxKind.NumericLiteralExpression)), "Items"), args);
 
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {

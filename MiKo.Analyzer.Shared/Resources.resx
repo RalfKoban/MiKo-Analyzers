@@ -3625,11 +3625,11 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Multiple assertions shall use assertion messages</value>
   </data>
   <data name="MiKo_3110_CodeFixTitle" xml:space="preserve">
-    <value>Use 'Assert.That(..., Has.Count....)'</value>
+    <value>Use 'Assert.That(..., Has...)'</value>
   </data>
   <data name="MiKo_3110_Description" xml:space="preserve">
     <value>Assertions such as Assert.That(...) using 'Count' or 'Length' assert for exact values.
-If such a test fails it is diffucult to find out why it exactly failed as the failure reason gives no useful hint (e.g. '5' expected but '3' received).
+If such a test fails it is difficult to find out why it exactly failed as the failure reason gives no useful hint (e.g. '5' expected but '3' received).
 
 So the failure needs to be carefully inspected. At worst the test needs to be debugged to find out what went wrong.
 That is annoying and becomes even more annoying if the test itself is a shaky one.
