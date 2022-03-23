@@ -39,6 +39,32 @@ public enum TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_enum_type_in_NativeDeclarations_type() => No_issue_is_reported_for(@"
+using System;
+
+public class NativeDeclarations
+{
+    public enum TestMe
+    {
+        None = 0;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_enum_type_in_Interop_namespace() => No_issue_is_reported_for(@"
+using System;
+
+namespace Something.Interop
+{
+    public enum TestMe
+    {
+        None = 0;
+    }
+}
+");
+
         [Test, Ignore("Roslyn attribute issue: Detection of attribute's ctor currently does not work within test, but works in production code.")]
         public void No_issue_is_reported_for_documented_enum_type_with_description() => No_issue_is_reported_for(@"
 using System;
