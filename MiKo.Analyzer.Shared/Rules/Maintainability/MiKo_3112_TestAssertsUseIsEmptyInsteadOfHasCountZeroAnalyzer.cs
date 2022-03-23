@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case "Has.Count.Zero":
                 case "Has.Not.Count.Zero":
+                case "Has.Exactly(0).Items":
                     return true;
 
                 default:
