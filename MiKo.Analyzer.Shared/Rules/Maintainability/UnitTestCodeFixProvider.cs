@@ -10,10 +10,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class UnitTestCodeFixProvider : MaintainabilityCodeFixProvider
     {
-        protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
-            => AssertThat(Argument(expression), constraint, skip, arguments);
+        protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments)
+            => AssertThat(Argument(expression), constraint, arguments, 1); // skip the first argument
 
-        protected static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, int skip, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        protected static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 2) // skip both arguments in the original call as we have to correct those
         {
             var args = new List<ArgumentSyntax>(Math.Max(2, 2 + arguments.Count - skip));
             args.Add(argument);

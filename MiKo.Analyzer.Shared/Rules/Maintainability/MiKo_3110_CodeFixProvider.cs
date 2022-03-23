@@ -112,12 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Has("Exactly", Argument(args[1].FirstDescendant<ExpressionSyntax>(SyntaxKind.NumericLiteralExpression)), "Items"), args);
 
-        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments)
-        {
-            const int MinimalArguments = 2; // skip both arguments in the original call as we have to correct those
-
-            return AssertThat(GetFixedArgument(argument), constraint, MinimalArguments, arguments);
-        }
+        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments) => UnitTestCodeFixProvider.AssertThat(GetFixedArgument(argument), constraint, arguments);
 
         private static ArgumentSyntax GetFixedArgument(ArgumentSyntax argument)
         {
