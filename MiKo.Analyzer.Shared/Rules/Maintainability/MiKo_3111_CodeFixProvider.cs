@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3111_CodeFixProvider)), Shared]
-    public class MiKo_3111_CodeFixProvider : MaintainabilityCodeFixProvider
+    public class MiKo_3111_CodeFixProvider : UnitTestCodeFixProvider
     {
         public sealed override string FixableDiagnosticId => MiKo_3111_TestAssertsUseZeroInsteadOfEqualToAnalyzer.Id;
 
@@ -23,6 +23,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (node.Expression is MemberAccessExpressionSyntax m)
             {
+                if (m.Expression.ToString() == "Has.Count")
+                {
+                    return MemberIs("Empty");
+                }
+
                 return SimpleMemberAccess(m.Expression, "Zero");
             }
 

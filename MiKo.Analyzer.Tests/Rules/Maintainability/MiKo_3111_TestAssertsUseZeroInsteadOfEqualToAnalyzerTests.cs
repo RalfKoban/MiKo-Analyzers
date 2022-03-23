@@ -31,8 +31,8 @@ public class TestMe
         [TestCase("Assert.That(42, Is.Not.EqualTo(0815))")]
         [TestCase("Assert.That(42, Is.Zero)")]
         [TestCase("Assert.That(42, Is.Not.Zero)")]
-        [TestCase("Assert.That(42, Has.Count.EqualTo(0815))")]
         [TestCase("Assert.That(42, Is.Not.Negative.And.Not.EqualTo(0815)")]
+        [TestCase("Assert.That(42, Has.Count.EqualTo(0815))")]
         public void No_issue_is_reported_for_correct_usage_in_a_test_method_(string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -50,8 +50,8 @@ namespace Bla
 
         [TestCase("Assert.That(42, Is.EqualTo(0))")]
         [TestCase("Assert.That(42, Is.Not.EqualTo(0))")]
-        [TestCase("Assert.That(42, Has.Count.EqualTo(0))")]
         [TestCase("Assert.That(42, Is.Not.Negative.And.Not.EqualTo(0))")]
+        [TestCase("Assert.That(42, Has.Count.EqualTo(0))")]
         public void An_issue_is_reported_for_incorrect_usage_in_a_test_method_(string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -69,8 +69,8 @@ namespace Bla
 
         [TestCase("Is.EqualTo(0)", "Is.Zero")]
         [TestCase("Is.Not.EqualTo(0)", "Is.Not.Zero")]
-        [TestCase("Has.Count.EqualTo(0)", "Has.Count.Zero")]
         [TestCase("Is.Not.Negative.And.Not.EqualTo(0)", "Is.Not.Negative.And.Not.Zero")]
+        [TestCase("Has.Count.EqualTo(0)", "Is.Empty")]
         public void Code_gets_fixed_(string originalCode, string fixedCode)
         {
             const string Template = @"
