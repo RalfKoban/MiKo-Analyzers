@@ -138,6 +138,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             switch (arg0.Expression.Kind())
             {
+                // constants & enums
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is(call, arg0), 2, args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg0): return AssertThat(arg1, Is(call, arg0), 2, args);
+
+                // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("False"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg1, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Null"), 2, args);
@@ -157,12 +162,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     return AssertThat(arg1, Is(call, arg0), 2, args);
                 }
-
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is(call, arg0), 2, args);
             }
 
             switch (arg1.Expression.Kind())
             {
+                // constants & enums
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is(call, arg1), 2, args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg1): return AssertThat(arg0, Is(call, arg1), 2, args);
+
+                // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("False"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg0, Is("True"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Null"), 2, args);
@@ -182,13 +190,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     return AssertThat(arg0, Is(call, arg1), 2, args);
                 }
-
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is(call, arg1), 2, args);
-            }
-
-            if (arg0.Expression is IdentifierNameSyntax || arg0.Expression.IsAccessOnObjectUnderTest())
-            {
-                return AssertThat(arg0, Is(call, arg1), 2, args);
             }
 
             return AssertThat(arg1, Is(call, arg0), 2, args);
@@ -207,22 +208,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             switch (arg0.Expression.Kind())
             {
+                // constants & enums
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is("Not", call, arg0), 2, args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg0): return AssertThat(arg1, Is("Not", call, arg0), 2, args);
+
+                // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("True"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg1, Is("False"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg1, Is("Not", "Null"), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg1, Is("Not", call, arg0), 2, args);
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is("Not", call, arg0), 2, args);
             }
 
             switch (arg1.Expression.Kind())
             {
+                // constants & enums
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is("Not", call, arg1), 2, args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg1): return AssertThat(arg0, Is("Not", call, arg1), 2, args);
+
+                // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("True"), 2, args);
                 case SyntaxKind.TrueLiteralExpression: return AssertThat(arg0, Is("False"), 2, args);
                 case SyntaxKind.NullLiteralExpression: return AssertThat(arg0, Is("Not", "Null"), 2, args);
                 case SyntaxKind.NumericLiteralExpression:
                 case SyntaxKind.StringLiteralExpression: return AssertThat(arg0, Is("Not", call, arg1), 2, args);
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is("Not", call, arg1), 2, args);
             }
 
             return AssertThat(arg1, Is("Not", call, arg0), 2, args);

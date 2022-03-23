@@ -799,6 +799,70 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
+        [TestCase("Assert.AreEqual(value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(value))")]
+        [TestCase("Assert.AreEqual(ObjectUnderTest.TestValue, value)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(value))")]
+        [TestCase("Assert.AreNotEqual(value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(value))")]
+        [TestCase("Assert.AreNotEqual(ObjectUnderTest.TestValue, value)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(value))")]
+        public void Code_gets_fixed_for_Assert_on_constant_value_defined_in_method_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+public interface ITestee
+{
+    string TestValue { get; }
+}
+
+[TestFixture]
+public class TestMe
+{
+    private ITestee ObjectUnderTest { get; set; }
+
+    [Test]
+    public void Do()
+    {
+        const string value = ""some value"";
+
+        ###;
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.AreEqual(Value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(Value))")]
+        [TestCase("Assert.AreEqual(ObjectUnderTest.TestValue, Value)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(Value))")]
+        [TestCase("Assert.AreNotEqual(Value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(Value))")]
+        [TestCase("Assert.AreNotEqual(ObjectUnderTest.TestValue, Value)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(Value))")]
+        public void Code_gets_fixed_for_Assert_on_constant_value_defined_in_class_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+public interface ITestee
+{
+    string TestValue { get; }
+}
+
+[TestFixture]
+public class TestMe
+{
+    private ITestee ObjectUnderTest { get; set; }
+
+    [Test]
+    public void Do()
+    {
+        ###;
+    }
+
+    private const string Value = ""some value"";
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         [Test] // TODO Fix me later because currently we do not know how to fix that situation
         public void Code_gets_currently_not_fixed_for_Assert_Throws_if_exception_is_assigned()
         {
