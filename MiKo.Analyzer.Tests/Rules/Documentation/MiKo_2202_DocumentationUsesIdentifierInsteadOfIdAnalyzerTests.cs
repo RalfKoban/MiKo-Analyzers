@@ -69,6 +69,16 @@ public sealed class TestMe { }
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Id_in_code_tag_([Values("c", "code")] string xmlTag) => No_issue_is_reported_for(@"
+/// <summary>
+/// <" + xmlTag + @">
+/// var id = 42;
+/// </" + xmlTag + @">
+/// </summary>
+public sealed class TestMe { }
+");
+
+        [Test]
         public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongIds))] string wrongText)
         {
             const string Template = @"
