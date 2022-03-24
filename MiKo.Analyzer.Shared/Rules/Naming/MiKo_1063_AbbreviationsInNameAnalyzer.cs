@@ -99,6 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "ires",
                 "ixtures",
                 "kept",
+                "mpt", // prompt
                 "rupt",
                 "ures",
                 "wares",
