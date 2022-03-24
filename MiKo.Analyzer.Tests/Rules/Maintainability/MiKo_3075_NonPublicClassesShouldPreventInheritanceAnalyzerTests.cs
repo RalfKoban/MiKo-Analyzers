@@ -34,7 +34,6 @@ namespace Bla
 }
 ");
 
-
         [Test]
         public void No_issue_is_reported_for_sealed_class_with_accessibility_([Values("public", "internal", "protected", "private")] string accessibility) => No_issue_is_reported_for(@"
 using System;
