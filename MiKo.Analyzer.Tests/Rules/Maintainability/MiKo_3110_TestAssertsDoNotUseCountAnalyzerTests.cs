@@ -122,7 +122,10 @@ namespace Bla
                                                                                                       });
 
         [TestCase("Assert.That(values.Length, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
         [TestCase("Assert.That(values.Count, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.That(values.Count, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(Random.Next()))", "Assert.That(values, Has.Exactly(Random.Next()).Items)")]
         [TestCase("Assert.AreEqual(42, values.Length)", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreEqual(42, values.Count)", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreEqual(values.Length, 42)", "Assert.That(values, Has.Exactly(42).Items)")]
@@ -262,6 +265,50 @@ namespace Bla
             var objectUnderTest = new TestMe();
 
             Assert.That(objectUnderTest.Values, Has.Exactly(42).Items);
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_local_function_call()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMeTests
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            int Factorial(int number) => number <= 1 ? 1 : number * Factorial(number - 1);
+
+            Assert.That(values.Length, Is.EqualTo(Factorial(42)));
+        }
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMeTests
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            int Factorial(int number) => number <= 1 ? 1 : number * Factorial(number - 1);
+
+            Assert.That(values, Has.Exactly(Factorial(42)).Items);
         }
     }
 }";

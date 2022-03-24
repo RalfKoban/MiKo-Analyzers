@@ -110,7 +110,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], HasCount("LessThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Has("Exactly", Argument(args[1].FirstDescendant<ExpressionSyntax>(SyntaxKind.NumericLiteralExpression)), "Items"), args);
+        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args)
+        {
+            var args1 = args[1];
+
+            foreach (var descendant in args1.DescendantNodes())
+            {
+                switch (descendant)
+                {
+                    case ExpressionSyntax expression when expression.IsKind(SyntaxKind.NumericLiteralExpression):
+                        return AssertThat(args[0], Has("Exactly", Argument(expression), "Items"), args);
+
+                    case ArgumentSyntax argument: // seems like we have a method call
+                        return AssertThat(args[0], Has("Exactly", argument, "Items"), args);
+                }
+            }
+
+            return null;
+        }
 
         private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments) => UnitTestCodeFixProvider.AssertThat(GetFixedArgument(argument), constraint, arguments);
 
