@@ -77,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var firstWord = summary
                                                 .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
                                                 .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                                .Without(",") // skip over first comma
                                                 .FirstWord();
 
                             if (Verbalizer.IsThirdPersonSingularVerb(firstWord))
@@ -89,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var position = summary.IndexOf(firstWord, StringComparison.Ordinal);
                             var start = textToken.SpanStart + position; // find start position of first word for underlining
                             var end = start + firstWord.Length; // find end position of first word
-                            var location = Location.Create(textToken.SyntaxTree, TextSpan.FromBounds(start, end));
+                            var location = CreateLocation(textToken, start, end);
 
                             return Issue(symbol.Name, location);
                         }
