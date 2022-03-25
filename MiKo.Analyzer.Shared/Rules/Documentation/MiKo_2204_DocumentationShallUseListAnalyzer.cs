@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Triggers = Enumerable.Concat(
                                                                   new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => string.Concat(delimiter, _, " ")),
-                                                                  new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(_, delimiter, " ")))
+                                                                  new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
                                                               .Concat(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
                                                               .OrderBy(_ => _.Length).ThenBy(_ => _)
                                                               .ToArray();
