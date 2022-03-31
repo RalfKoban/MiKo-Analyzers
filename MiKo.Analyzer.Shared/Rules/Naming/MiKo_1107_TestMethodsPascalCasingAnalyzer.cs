@@ -40,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var underlinesNr = symbolName.Count(_ => _ is '_');
                     var upperCasesNr = symbolName.Count(_ => _.IsUpperCase());
+
                     var diff = underlinesNr - upperCasesNr;
                     if (diff >= 0)
                     {
@@ -69,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                             .Replace("ShouldReturn", "Returns")
                                             .Replace("ShouldThrow", "Throws");
 
-            var caseAlreadyFlipped = false;
+            var multipleUpperCases = false;
 
             const int CharacterToStartWith = 1;
 
@@ -89,48 +90,57 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     if (index == CharacterToStartWith)
                     {
                         // multiple upper cases in a line at beginning of the name, so do not flip
-                        caseAlreadyFlipped = true;
+                        multipleUpperCases = true;
+                    }
+
+                    if (multipleUpperCases)
+                    {
+                        // let's see if we start with an IXyz interface
+                        if (characters[index - 1] == 'I')
+                        {
+                            // seems we are in an IXyz interface
+                            multipleUpperCases = false;
+                        }
+
+                        continue;
                     }
 
                     // let's consider an upper-case 'A' as a special situation as that is a single word
                     var isSpecialCharA = c == 'A';
 
-                    if (caseAlreadyFlipped is false)
+                    multipleUpperCases = isSpecialCharA is false;
+
+                    var nextC = c.ToLowerCase();
+
+                    var nextIndex = index + 1;
+                    if (nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase()) && isSpecialCharA is false)
                     {
-                        var nextC = c.ToLowerCase();
-
-                        var nextIndex = index + 1;
-                        if (nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase()) && isSpecialCharA is false)
-                        {
-                            // multiple upper cases in a line, so do not flip
-                            nextC = c;
-                        }
-
-                        if (characters[index - 1] == '_')
-                        {
-                            characters[index] = nextC;
-                        }
-                        else
-                        {
-                            // only add an underline if we not already have one
-                            characters[index] = '_';
-                            index++;
-                            characters.Insert(index, nextC);
-                        }
+                        // multiple upper cases in a line, so do not flip
+                        nextC = c;
                     }
 
-                    caseAlreadyFlipped = isSpecialCharA is false;
+                    if (characters[index - 1] == '_')
+                    {
+                        characters[index] = nextC;
+                    }
+                    else
+                    {
+                        // only add an underline if we not already have one
+                        characters[index] = '_';
+                        index++;
+                        characters.Insert(index, nextC);
+                    }
                 }
                 else
                 {
-                    if (caseAlreadyFlipped && characters[index - 1].IsUpperCase())
+                    if (multipleUpperCases && characters[index - 1].IsUpperCase())
                     {
                         // we are behind multiple upper cases in a line, so add an underline
                         characters[index++] = '_';
                         characters.Insert(index, c);
                     }
 
-                    caseAlreadyFlipped = false;
+                    multipleUpperCases = false;
                 }
             }
 

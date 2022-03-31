@@ -88,6 +88,8 @@ public class TestMe
         [TestCase("DoSomethingShouldNotBeSomething", "Do_something_is_not_something")]
         [TestCase("DoSomethingWithHTML", "Do_something_with_HTML")]
         [TestCase("DoSomethingWithHTMLandMore", "Do_something_with_HTML_and_more")]
+        [TestCase("DoSomethingWithIGraphAndMore", "Do_something_with_IGraph_and_more", Description = "Codefix recognizes interfaces in method name")]
+        [TestCase("DoSomethingWithAIGraphAndMore", "Do_something_with_a_IGraph_and_more", Description = "Codefix recognizes interfaces in method name after 'a'")]
         [TestCase("DoSomethingX", "Do_something_X")]
         [TestCase("HTMLdoSomething", "HTML_do_something")]
         [TestCase("ShowsAWarning", "Shows_a_warning")]
