@@ -10606,6 +10606,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use lambda expression body.
+        /// </summary>
+        public static string MiKo_3210_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3210_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        /// </summary>
+        public static string MiKo_3210_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3210_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use lambda expression body instead.
+        /// </summary>
+        public static string MiKo_3210_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3210_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements.
+        /// </summary>
+        public static string MiKo_3210_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3210_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
