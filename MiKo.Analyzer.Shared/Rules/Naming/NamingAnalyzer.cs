@@ -95,8 +95,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
-
         protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
 
         protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.IsOverride is false && symbol.IsInterfaceImplementation() is false;
@@ -104,6 +102,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
 
         protected virtual bool ShallAnalyze(IParameterSymbol symbol) => symbol.IsOverride is false;
+
+        protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
 
         protected virtual IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
