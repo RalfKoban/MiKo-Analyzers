@@ -366,6 +366,54 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_with_throw_statement()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            DoSomethingCore(() => { throw new NotImplementedException(""Something went wrong""); });
+        }
+
+        private void DoSomethingCore(Action callback)
+        {
+        }
+    }
+}}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            DoSomethingCore(() => throw new NotImplementedException(""Something went wrong""));
+        }
+
+        private void DoSomethingCore(Action callback)
+        {
+        }
+    }
+}}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer();

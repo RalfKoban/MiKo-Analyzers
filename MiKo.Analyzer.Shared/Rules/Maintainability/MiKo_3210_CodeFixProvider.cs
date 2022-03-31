@@ -51,6 +51,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ExpressionStatementSyntax statement:
                     return statement.Expression;
 
+                case ThrowStatementSyntax statement when statement.Expression != null:
+                    return SyntaxFactory.ThrowExpression(statement.Expression);
+
                 default:
                     return body;
             }
