@@ -55,6 +55,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
 
+        internal static SyntaxNode FirstChild(this SyntaxNode value) => value.ChildNodes().FirstOrDefault();
+
+        internal static SyntaxNode FirstChild(this SyntaxNode value, Func<SyntaxNode, bool> predicate) => value.ChildNodes().FirstOrDefault(predicate);
+
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
 
         internal static T FirstChild<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.FirstChild<T>(_ => _.IsKind(kind));
@@ -440,7 +444,7 @@ namespace MiKoSolutions.Analyzers
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                         }
 
-                        if (method.ChildNodes().FirstOrDefault() is SyntaxNode child)
+                        if (method.FirstChild() is SyntaxNode child)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(child);
                         }
@@ -456,7 +460,7 @@ namespace MiKoSolutions.Analyzers
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                         }
 
-                        if (property.ChildNodes().FirstOrDefault() is SyntaxNode child)
+                        if (property.FirstChild() is SyntaxNode child)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(child);
                         }

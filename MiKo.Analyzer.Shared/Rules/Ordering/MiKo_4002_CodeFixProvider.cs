@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             // fix tree
             var modifiedType = typeSyntax.RemoveNodesAndAdjustOpenCloseBraces(methodNodes);
-            var node = modifiedType.ChildNodes().First(_ => _.IsEquivalentTo(orientationNode));
+            var node = modifiedType.FirstChild(_ => _.IsEquivalentTo(orientationNode));
 
             return modifiedType.InsertNodesAfter(node, replacements);
         }
