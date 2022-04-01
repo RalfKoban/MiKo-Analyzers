@@ -76,6 +76,46 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_with_empty_statement_inside_block() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            DoSomethingCore(() => { ; });
+        }
+
+        private void DoSomethingCore(Action callback)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_with_single_variable_declaration_statement_inside_block() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            DoSomethingCore(() => { var x = 123; });
+        }
+
+        private void DoSomethingCore(Action callback)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_with_multiple_statements_inside_block() => No_issue_is_reported_for(@"
 using System;
 
