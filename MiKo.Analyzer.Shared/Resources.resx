@@ -3750,6 +3750,18 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3207_Title" xml:space="preserve">
     <value>Test statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_3208_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_3208_Description" xml:space="preserve">
+    <value>To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3208_MessageFormat" xml:space="preserve">
+    <value>Precede using directive with a blank line</value>
+  </data>
+  <data name="MiKo_3208_Title" xml:space="preserve">
+    <value>Using directives should be preceded by blank lines</value>
+  </data>
   <data name="MiKo_3210_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

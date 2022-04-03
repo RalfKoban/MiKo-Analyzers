@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 326 rules that are currently provided by the analyzer.
+The following tables list all the 327 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -335,6 +335,7 @@ The following tables list all the 326 rules that are currently provided by the a
 |MiKo_3205|Return statements should be preceded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3206|Awaited statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3207|Test statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_3208|Using directives should be preceded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3210|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
 

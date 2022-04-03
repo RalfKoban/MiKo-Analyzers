@@ -10606,6 +10606,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_3208_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3208_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3208_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3208_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede using directive with a blank line.
+        /// </summary>
+        public static string MiKo_3208_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3208_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directives should be preceded by blank lines.
+        /// </summary>
+        public static string MiKo_3208_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3208_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3210_CodeFixTitle {

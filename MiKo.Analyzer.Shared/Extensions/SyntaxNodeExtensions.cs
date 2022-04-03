@@ -285,6 +285,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
 
+        internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
+
         internal static string GetName(this XmlAttributeSyntax value) => value?.Name.LocalName.ValueText;
 
         internal static string GetName(this XmlElementSyntax value) => value?.StartTag.Name.LocalName.ValueText;
@@ -1097,6 +1099,20 @@ namespace MiKoSolutions.Analyzers
             }
 
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
+        }
+
+        internal static IList<SyntaxNode> Siblings(this SyntaxNode node) => Siblings<SyntaxNode>(node);
+
+        internal static IList<T> Siblings<T>(this SyntaxNode node) where T : SyntaxNode
+        {
+            var parent = node?.Parent;
+
+            if (parent != null)
+            {
+                return parent.ChildNodes<T>().ToList();
+            }
+
+            return Array.Empty<T>();
         }
 
         internal static bool Throws<T>(this SyntaxNode node) where T : Exception
