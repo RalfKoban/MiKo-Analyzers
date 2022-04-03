@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeOverloadsSummaryPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
         {
-            var summaries = symbol.GetOverloadSummaries();
+            var summaries = symbol.GetDocumentationCommentTriviaSyntax().GetOverloadsXmls().Select(_ => _.FirstDescendant<XmlElementSyntax>(__ => __.GetName() == Constants.XmlTag.Summary));
 
             return summaries.Any()
                        ? AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases)
@@ -145,16 +145,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeRemarksPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
         {
-            var comments = symbol.GetRemarks();
+            var comments = symbol.GetDocumentationCommentTriviaSyntax().GetRemarksXmls();
 
             return comments.Any()
                        ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, defaultPhrases)
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, phrases);
+        private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaryXmls, phrases);
 
-        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, DocumentationCommentTriviaSyntax commentXml)
         {
             var phrases = GetParameterPhrases(symbol);
 
@@ -163,9 +163,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        : AnalyzeParameter(symbol, commentXml, phrases);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, IReadOnlyList<string> phrase)
+        private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, DocumentationCommentTriviaSyntax commentXml, IReadOnlyList<string> phrase)
         {
-            var comment = symbol.GetComment(commentXml);
+            var comment = commentXml.GetParameterComment(symbol.Name)
+                                    .ToString();
 
             if (phrase.Any(_ => _ == comment))
             {
@@ -177,9 +178,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
+        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<XmlElementSyntax> comments, params string[] phrases)
         {
-            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            if (comments.Any(_ => phrases.Any(__ => _.ToString().StartsWith(__, StringComparison.Ordinal))))
             {
                 // fitting comment
             }

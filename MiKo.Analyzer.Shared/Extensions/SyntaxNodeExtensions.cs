@@ -540,6 +540,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static IEnumerable<XmlElementSyntax> GetOverloadsXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Overloads);
+
         internal static IEnumerable<XmlElementSyntax> GetRemarksXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Remarks);
 
         internal static IEnumerable<XmlElementSyntax> GetReturnsXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Returns);
@@ -986,9 +988,39 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsSee(this SyntaxNode value, HashSet<string> attributeNames)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax ee:
+                    return ee.IsSee(attributeNames);
+
+                case XmlElementSyntax e:
+                    return e.IsSee(attributeNames);
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsSee(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
 
         internal static bool IsSee(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
+
+        internal static bool IsSeeAlso(this SyntaxNode value, HashSet<string> attributeNames)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax ee:
+                    return ee.IsSeeAlso(attributeNames);
+
+                case XmlElementSyntax e:
+                    return e.IsSeeAlso(attributeNames);
+
+                default:
+                    return false;
+            }
+        }
 
         internal static bool IsSeeAlso(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.SeeAlso, attributeNames);
 

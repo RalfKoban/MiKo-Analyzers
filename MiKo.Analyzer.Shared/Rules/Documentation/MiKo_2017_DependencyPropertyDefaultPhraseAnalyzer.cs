@@ -40,8 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var containingTypeFullName = containingType.ToString();
 
             // loop over phrases for summaries and values
-            ValidatePhrases(symbol, CommentExtensions.GetSummaries(commentXml), () => Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName), Constants.XmlTag.Summary, ref results);
-            ValidatePhrases(symbol, CommentExtensions.GetValue(commentXml), () => Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName), Constants.XmlTag.Value, ref results);
+            ValidatePhrases(symbol, comment.GetSummaryXmls(), () => Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName), Constants.XmlTag.Summary, ref results);
+            ValidatePhrases(symbol, comment.GetValueXmls(), () => Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName), Constants.XmlTag.Value, ref results);
 
             return results ?? Enumerable.Empty<Diagnostic>();
         }
@@ -55,12 +55,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
 
-        private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<string> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
+        private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<XmlElementSyntax> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
         {
             var phrases = phrasesProvider();
             foreach (var comment in comments)
             {
-                if (phrases.Any(_ => comment.StartsWith(_, StringComparison.Ordinal)))
+                if (phrases.Any(_ => comment.ToString().StartsWith(_, StringComparison.Ordinal)))
                 {
                     return;
                 }

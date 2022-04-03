@@ -100,11 +100,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return node;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
             var locations = new List<Location>();
 
-            var issues = AnalyzeCommentXml(symbol);
+            var issues = AnalyzeCommentXml(symbol, comment);
 
             foreach (var issue in issues)
             {
@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeCommentXml(ISymbol symbol)
+        private IEnumerable<Diagnostic> AnalyzeCommentXml(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
             foreach (var token in symbol.GetDocumentationCommentTriviaSyntax().DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
             {

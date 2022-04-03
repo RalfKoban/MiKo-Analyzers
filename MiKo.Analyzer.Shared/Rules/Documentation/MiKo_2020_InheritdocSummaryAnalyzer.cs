@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -12,8 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2020";
 
-        private static readonly string[] SeeStartingPhrase = { "<see cref=", "<seealso cref=", "see <see cref=", "see <seealso cref=", "seealso <see cref=", "seealso <seealso cref=" };
-        private static readonly string[] SeeEndingPhrase = { "/>", "/>.", "/see>", "/see>.", "/seealso>", "/seealso>." };
+        private static readonly HashSet<string> AttributeNames = new HashSet<string>
+                                                                     {
+                                                                         Constants.XmlTag.Attribute.Cref,
+                                                                     };
 
         public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -21,30 +23,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => IsSeeCrefLink(summaryXml.ToString()) ? Issue(symbol) : null;
-
-/*
- * TODO RKN:
-        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxNode node) => node.IsSeeCref() ? Issue(symbol) : null;
-
-        protected override Diagnostic SummaryIssue(ISymbol symbol, SyntaxToken textToken)
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
         {
-            var summary = textToken.ValueText;
-            var firstWord = summary.FirstWord();
-            switch (firstWord)
+            var item = summaryXml.FirstDescendant<XmlNodeSyntax>(_ => _.IsAnyKind(SyntaxKind.XmlEmptyElement, SyntaxKind.XmlElement));
+
+            if (item.IsSee(AttributeNames) || item.IsSeeAlso(AttributeNames))
             {
-                case "See":
-                case "Seealso":
-                case "see":
-                case "seealso":
-                    return Issue(symbol);
-
-                default:
-                    return null;
+                // TODO RKN: Enhance to see if it is really an inherited symbol that's linked inside the XML
+                return Issue(symbol);
             }
-        }
-*/
 
-        private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(SeeStartingPhrase) && summary.EndsWithAny(SeeEndingPhrase);
+            return null;
+        }
     }
 }

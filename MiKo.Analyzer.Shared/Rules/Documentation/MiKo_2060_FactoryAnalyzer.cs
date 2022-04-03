@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (symbol)
             {
                 case INamedTypeSymbol _: return Issue(symbol.Name, node, Constants.Comments.FactorySummaryPhrase);
-                case IMethodSymbol _: return Issue(symbol.Name, node, Phrase);
+                case IMethodSymbol _: return Issue(symbol.Name, node, Constants.Comments.FactoryCreateMethodSummaryStartingPhrase);
                 default: return null;
             }
         }
