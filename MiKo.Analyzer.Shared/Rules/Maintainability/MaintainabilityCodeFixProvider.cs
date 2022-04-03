@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (usings.Count == 0)
             {
-                return root.InsertNodeBefore(root.ChildNodes().First(), directive);
+                return root.InsertNodeBefore(root.FirstChild(), directive);
             }
 
             // add using at correct place inside the using block

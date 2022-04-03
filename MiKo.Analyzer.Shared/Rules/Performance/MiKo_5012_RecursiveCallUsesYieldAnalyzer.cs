@@ -23,9 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool ReturnsEnumerable(MethodDeclarationSyntax method)
         {
-            foreach (var unknown in method.ChildNodes())
+            foreach (var child in method.ChildNodes())
             {
-                switch (unknown)
+                switch (child)
                 {
                     case GenericNameSyntax g when g.GetName() == nameof(IEnumerable):
                     case IdentifierNameSyntax i when i.GetName() == nameof(IEnumerable):

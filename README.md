@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 322 rules that are currently provided by the analyzer.
+The following tables list all the 328 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -326,6 +326,8 @@ The following tables list all the 322 rules that are currently provided by the a
 |MiKo_3108|Test methods should use assertions|&#x2713;|\-|
 |MiKo_3109|Multiple assertions shall use assertion messages|&#x2713;|&#x2713;|
 |MiKo_3110|Assertions should not use 'Count' or 'Length'|&#x2713;|&#x2713;|
+|MiKo_3111|Assertions should use 'Is.Zero' instead of 'Is.EqualTo(0)'|&#x2713;|&#x2713;|
+|MiKo_3112|Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'|&#x2713;|&#x2713;|
 |MiKo_3201|Log statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|
 |MiKo_3202|Assertion statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|
 |MiKo_3203|Local variable statements should be preceded by blank lines|&#x2713;|&#x2713;|
@@ -333,6 +335,9 @@ The following tables list all the 322 rules that are currently provided by the a
 |MiKo_3205|Return statements should be preceded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3206|Awaited statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3207|Test statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_3208|Using directives should be preceded by blank lines|&#x2713;|&#x2713;|
+|MiKo_3210|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
+|MiKo_3211|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
 
 ### Ordering
@@ -357,3 +362,4 @@ The following tables list all the 322 rules that are currently provided by the a
 |MiKo_5010|Do not use 'object.Equals()' on value types|&#x2713;|&#x2713;|
 |MiKo_5011|Do not concatenate strings with += operator|&#x2713;|\-|
 |MiKo_5012|Do not use 'yield return' for recursively defined structures|&#x2713;|\-|
+|MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
                                    .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                   .Without(",") // skip over first comma
                                    .FirstWord();
 
             if (Verbalizer.IsThirdPersonSingularVerb(firstWord))

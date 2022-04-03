@@ -64,6 +64,39 @@ namespace MiKoSolutions.Analyzers.Rules
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
 
+        protected static bool IsConst(CodeFixContext context, ArgumentSyntax arg0)
+        {
+            var identifierName = arg0.Expression.GetName();
+
+            var method = arg0.GetEnclosingMethod(GetSemanticModel(context));
+            var type = method.FindContainingType();
+
+            var isConst = type.GetMembers(identifierName).OfType<IFieldSymbol>().Any(_ => _.IsConst);
+            if (isConst)
+            {
+                // const value inside class
+                return true;
+            }
+
+            // local const variable
+            var isLocalConst = method.GetSyntax().DescendantNodes<LocalDeclarationStatementSyntax>(_ => _.IsConst)
+                                     .Any(_ => _.Declaration.Variables.Any(__ => __.GetName() == identifierName));
+
+            return isLocalConst;
+        }
+
+        protected static bool IsEnum(CodeFixContext context, ArgumentSyntax syntax)
+        {
+            var expression = (MemberAccessExpressionSyntax)syntax.Expression;
+
+            if (GetSymbol(context, expression.Expression) is ITypeSymbol type)
+            {
+                return type.IsEnum();
+            }
+
+            return false;
+        }
+
         protected virtual bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => true;
 
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(context.Document.Project.Solution);

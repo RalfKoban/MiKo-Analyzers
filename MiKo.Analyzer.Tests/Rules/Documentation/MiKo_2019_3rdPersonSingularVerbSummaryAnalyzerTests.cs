@@ -154,6 +154,21 @@ using Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_starting_verb_in_passive_form_followed_by_comma() => No_issue_is_reported_for(@"
+using System;
+
+using Bla
+{
+    /// <summary>
+    /// Represents, provides or includes some test data.
+    /// </summary>
+    public class TestMe
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_class([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
 using System;
 

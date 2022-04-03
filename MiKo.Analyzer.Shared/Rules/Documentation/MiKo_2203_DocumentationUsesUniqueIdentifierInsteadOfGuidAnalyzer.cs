@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,16 +14,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2203";
 
         internal static readonly string[] Guids = new[] { "guid", " Guid", "GUID" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => " " + _ + delimiter).ToArray();
+        internal static readonly string[] CodeTags = { Constants.XmlTag.C, Constants.XmlTag.Code };
 
         public MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer() : base(Id)
         {
         }
 
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol);
+
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
+            foreach (var token in comment.GetDocumentationCommentTriviaSyntax()
+                                         .DescendantNodes<XmlElementSyntax>()
+                                         .Where(_ => CodeTags.Contains(_.GetName()) is false)
+                                         .SelectMany(_ => _.ChildNodes<XmlTextSyntax>())
+                                         .SelectMany(_ => _.TextTokens))
             {
                 const int Offset = 1; // we do not want to underline the first and last char
+
                 foreach (var location in GetAllLocations(token, Guids, StringComparison.Ordinal, Offset, Offset))
                 {
                     yield return Issue(symbol.Name, location);

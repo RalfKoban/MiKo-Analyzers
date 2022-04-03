@@ -68,6 +68,16 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_Guid_in_code_tag_([Values("c", "code")] string xmlTag, [ValueSource(nameof(WrongGuids))] string guid) => No_issue_is_reported_for(@"
+/// <summary>
+/// <" + xmlTag + @">
+/// The " + guid + @" something.
+/// </" + xmlTag + @">
+/// </summary>
+public sealed class TestMe { }
+");
+
         [Test]
         public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongGuids))] string wrongText)
         {

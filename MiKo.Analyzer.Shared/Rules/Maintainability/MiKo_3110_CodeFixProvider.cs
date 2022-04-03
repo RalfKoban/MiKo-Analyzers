@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -11,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3110_CodeFixProvider)), Shared]
-    public sealed class MiKo_3110_CodeFixProvider : MaintainabilityCodeFixProvider
+    public sealed class MiKo_3110_CodeFixProvider : UnitTestCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_3110_TestAssertsDoNotUseCountAnalyzer.Id;
 
@@ -68,15 +67,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arg0.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg1, HasCount("EqualTo", arg0), args);
+                return AssertThat(arg1, Has("Exactly", arg0, "Items"), args);
             }
 
             if (arg1.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg0, HasCount("EqualTo", arg1), args);
+                return AssertThat(arg0, Has("Exactly", arg1, "Items"), args);
             }
 
-            return AssertThat(arg1, HasCount("EqualTo", arg0), args);
+            return AssertThat(arg1, Has("Exactly", arg0, "Items"), args);
         }
 
         private static InvocationExpressionSyntax FixAreNotEqual(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args);
@@ -88,12 +87,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arg0.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg1, HasCount("Not", "EqualTo", Argument(arg0.Expression)), args);
+                return AssertThat(arg1, HasCount("Not", "EqualTo", arg0.Expression), args);
             }
 
             if (arg1.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
             {
-                return AssertThat(arg0, HasCount("Not", "EqualTo", Argument(arg1.Expression)), args);
+                return AssertThat(arg0, HasCount("Not", "EqualTo", arg1.Expression), args);
             }
 
             return AssertThat(arg1, HasCount("Not", "EqualTo", arg0), args);
@@ -111,30 +110,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], HasCount("LessThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], HasCount("EqualTo", Argument(args[1].FirstDescendant<ExpressionSyntax>(SyntaxKind.NumericLiteralExpression))), args);
-
-        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments)
+        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args)
         {
-            const int MinimalArguments = 2; // skip both arguments in the original call as we have to correct those
+            var args1 = args[1];
 
-            var args = new List<ArgumentSyntax>(Math.Max(MinimalArguments, arguments.Count));
-
-            args.Add(GetFixedArgument(argument));
-            args.Add(constraint);
-
-            if (arguments.Count > MinimalArguments)
+            foreach (var descendant in args1.DescendantNodes())
             {
-                args.AddRange(arguments.Skip(MinimalArguments));
+                switch (descendant)
+                {
+                    case ExpressionSyntax expression when expression.IsKind(SyntaxKind.NumericLiteralExpression):
+                        return AssertThat(args[0], Has("Exactly", Argument(expression), "Items"), args);
+
+                    case ArgumentSyntax argument: // seems like we have a method call
+                        return AssertThat(args[0], Has("Exactly", argument, "Items"), args);
+                }
             }
 
-            return AssertThat(args.ToArray());
+            return null;
         }
 
-        private static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => Invocation("Assert", "That", arguments);
-
-        private static ArgumentSyntax HasCount(string name, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Has", "Count", name), argument);
-
-        private static ArgumentSyntax HasCount(string name, string name1, ArgumentSyntax argument) => Argument(SimpleMemberAccess("Has", "Count", name, name1), argument);
+        private static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments) => UnitTestCodeFixProvider.AssertThat(GetFixedArgument(argument), constraint, arguments);
 
         private static ArgumentSyntax GetFixedArgument(ArgumentSyntax argument)
         {

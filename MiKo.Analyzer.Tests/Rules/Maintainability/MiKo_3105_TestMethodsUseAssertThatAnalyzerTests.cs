@@ -170,8 +170,13 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+
+        // Null
         [TestCase(
-             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.IsNull(o, ""my message""); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.Null(o); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null); }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.Null(o, ""my message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(object o) => Assert.That(o, Is.Null, ""my message""); }")]
 
         // NotNull
@@ -697,6 +702,8 @@ class TestMe
 
         [TestCase("Assert.AreEqual(GCNotificationStatus.Failed, ObjectUnderTest.Status)", "Assert.That(ObjectUnderTest.Status, Is.EqualTo(GCNotificationStatus.Failed))")]
         [TestCase("Assert.AreEqual(ObjectUnderTest.Status, GCNotificationStatus.Failed)", "Assert.That(ObjectUnderTest.Status, Is.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreNotEqual(GCNotificationStatus.Failed, ObjectUnderTest.Status)", "Assert.That(ObjectUnderTest.Status, Is.Not.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreNotEqual(ObjectUnderTest.Status, GCNotificationStatus.Failed)", "Assert.That(ObjectUnderTest.Status, Is.Not.EqualTo(GCNotificationStatus.Failed))")]
         public void Code_gets_fixed_for_Assert_on_object_under_test_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -718,6 +725,139 @@ public class TestMe
     {
         ###;
     }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.AreEqual(GCNotificationStatus.Failed, result)", "Assert.That(result, Is.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreEqual(result, GCNotificationStatus.Failed)", "Assert.That(result, Is.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreNotEqual(GCNotificationStatus.Failed, result)", "Assert.That(result, Is.Not.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreNotEqual(result, GCNotificationStatus.Failed)", "Assert.That(result, Is.Not.EqualTo(GCNotificationStatus.Failed))")]
+        public void Code_gets_fixed_for_Assert_on_object_under_test_return_value_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+public interface ITestee
+{
+    GCNotificationStatus DoSomething();
+}
+
+[TestFixture]
+public class TestMe
+{
+    private ITestee ObjectUnderTest { get; set; }
+
+    [Test]
+    void Do()
+    {
+        var result = ObjectUnderTest.DoSomething();
+
+        ###;
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.AreEqual(GCNotificationStatus.Failed, result.Value)", "Assert.That(result.Value, Is.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreEqual(result.Value, GCNotificationStatus.Failed)", "Assert.That(result.Value, Is.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreNotEqual(GCNotificationStatus.Failed, result.Value)", "Assert.That(result.Value, Is.Not.EqualTo(GCNotificationStatus.Failed))")]
+        [TestCase("Assert.AreNotEqual(result.Value, GCNotificationStatus.Failed)", "Assert.That(result.Value, Is.Not.EqualTo(GCNotificationStatus.Failed))")]
+        public void Code_gets_fixed_for_Assert_on_object_under_test_returned_property_value_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+public interface ITestee
+{
+    ITestee2 DoSomething();
+}
+
+public interface ITestee2
+{
+    GCNotificationStatus Value;
+}
+
+[TestFixture]
+public class TestMe
+{
+    private ITestee ObjectUnderTest { get; set; }
+
+    [Test]
+    void Do()
+    {
+        var result = ObjectUnderTest.DoSomething();
+
+        ###;
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.AreEqual(value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(value))")]
+        [TestCase("Assert.AreEqual(ObjectUnderTest.TestValue, value)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(value))")]
+        [TestCase("Assert.AreNotEqual(value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(value))")]
+        [TestCase("Assert.AreNotEqual(ObjectUnderTest.TestValue, value)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(value))")]
+        public void Code_gets_fixed_for_Assert_on_constant_value_defined_in_method_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+public interface ITestee
+{
+    string TestValue { get; }
+}
+
+[TestFixture]
+public class TestMe
+{
+    private ITestee ObjectUnderTest { get; set; }
+
+    [Test]
+    public void Do()
+    {
+        const string value = ""some value"";
+
+        ###;
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.AreEqual(Value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(Value))")]
+        [TestCase("Assert.AreEqual(ObjectUnderTest.TestValue, Value)", "Assert.That(ObjectUnderTest.TestValue, Is.EqualTo(Value))")]
+        [TestCase("Assert.AreNotEqual(Value, ObjectUnderTest.TestValue)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(Value))")]
+        [TestCase("Assert.AreNotEqual(ObjectUnderTest.TestValue, Value)", "Assert.That(ObjectUnderTest.TestValue, Is.Not.EqualTo(Value))")]
+        public void Code_gets_fixed_for_Assert_on_constant_value_defined_in_class_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using NUnit.Framework;
+
+public interface ITestee
+{
+    string TestValue { get; }
+}
+
+[TestFixture]
+public class TestMe
+{
+    private ITestee ObjectUnderTest { get; set; }
+
+    [Test]
+    public void Do()
+    {
+        ###;
+    }
+
+    private const string Value = ""some value"";
 }";
 
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));

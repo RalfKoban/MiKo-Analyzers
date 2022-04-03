@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -24,6 +26,30 @@ namespace TestHelper
         /// <returns>The CodeFixProvider to be used for CSharp code.</returns>
         protected virtual CodeFixProvider GetCSharpCodeFixProvider() => null;
 
+        protected void Codefix_causes_no_exception_in_folder_(string path)
+        {
+            Assert.Multiple(() =>
+                                {
+                                    foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories))
+                                    {
+                                        var oldSource = File.ReadAllText(file);
+
+                                        var issues = GetDiagnostics(oldSource);
+                                        if (issues.Any())
+                                        {
+                                            try
+                                            {
+                                                Assert.Multiple(() => VerifyCSharpFix(oldSource, oldSource, allowNewCompilerDiagnostics: true, assertResult: false));
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Assert.Fail($"'{file}' failed with {ex}");
+                                            }
+                                        }
+                                    }
+                                });
+        }
+
         /// <summary>
         /// Called to test a C# codefix when applied on the inputted string as a source.
         /// </summary>
@@ -31,9 +57,10 @@ namespace TestHelper
         /// <param name="newSource">A class in the form of a string after the CodeFix was applied to it.</param>
         /// <param name="codeFixIndex">Index determining which codefix to apply if there are multiple.</param>
         /// <param name="allowNewCompilerDiagnostics">A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied.</param>
-        protected void VerifyCSharpFix(string oldSource, string newSource, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false)
+        /// <param name="assertResult">A bool controlling whether or not the test will assert the result of the CodeFix after being applied.</param>
+        protected void VerifyCSharpFix(string oldSource, string newSource, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, bool assertResult = true)
         {
-            VerifyFix(LanguageNames.CSharp, GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics);
+            VerifyFix(LanguageNames.CSharp, GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
         }
 
         /// <summary>
@@ -49,7 +76,8 @@ namespace TestHelper
         /// <param name="newSource">A class in the form of a string after the CodeFix was applied to it.</param>
         /// <param name="codeFixIndex">Index determining which codefix to apply if there are multiple.</param>
         /// <param name="allowNewCompilerDiagnostics">A bool controlling whether or not the test will fail if the CodeFix introduces other warnings after being applied.</param>
-        private void VerifyFix(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics)
+        /// <param name="assertResult">A bool controlling whether or not the test will assert the result of the CodeFix after being applied.</param>
+        private void VerifyFix(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
@@ -103,16 +131,19 @@ New document:
                 }
             }
 
-            // after applying all of the code fixes, compare the resulting string to the inputted one
-            var actual = GetStringFromDocument(document);
+            if (assertResult)
+            {
+                // after applying all of the code fixes, compare the resulting string to the inputted one
+                var actual = GetStringFromDocument(document);
 
-            var message = @"Fix created unexpected document.
+                var message = @"Fix created unexpected document.
 New document:
 ################################################
 " + actual + @"
 ################################################";
 
-            Assert.That(actual, Is.EqualTo(newSource), message);
+                Assert.That(actual, Is.EqualTo(newSource), message);
+            }
         }
     }
 }

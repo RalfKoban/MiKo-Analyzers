@@ -1,15 +1,13 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    [TestFixture, Isolated]
+    [TestFixture]
     public sealed class MiKo_3110_TestAssertsDoNotUseCountAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AssertionMethods =
@@ -49,7 +47,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correct_usage_in_a_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_HasCount_usage_in_a_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -60,6 +58,22 @@ namespace Bla
         public void DoSomething(int[] values)
         {
             Assert.That(values, Has.Count.EqualTo(42));
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_HasExactlyItems_usage_in_a_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething(int[] values)
+        {
+            Assert.That(values, Has.Exactly(42).Items);
         }
     }
 }");
@@ -107,11 +121,14 @@ namespace Bla
                                                                                                           }
                                                                                                       });
 
-        [TestCase("Assert.That(values.Length, Is.EqualTo(42))", "Assert.That(values, Has.Count.EqualTo(42))")]
-        [TestCase("Assert.That(values.Count, Is.EqualTo(42))", "Assert.That(values, Has.Count.EqualTo(42))")]
-        [TestCase("Assert.AreEqual(42, values.Length)", "Assert.That(values, Has.Count.EqualTo(42))")]
-        [TestCase("Assert.AreEqual(42, values.Count)", "Assert.That(values, Has.Count.EqualTo(42))")]
-        [TestCase("Assert.AreEqual(values.Length, 42)", "Assert.That(values, Has.Count.EqualTo(42))")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
+        [TestCase("Assert.That(values.Count, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.That(values.Count, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(Random.Next()))", "Assert.That(values, Has.Exactly(Random.Next()).Items)")]
+        [TestCase("Assert.AreEqual(42, values.Length)", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.AreEqual(42, values.Count)", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.AreEqual(values.Length, 42)", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreNotEqual(42, values.Length)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
         [TestCase("Assert.AreNotEqual(42, values.Count)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
         [TestCase("Assert.AreNotEqual(values.Length, 42)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
@@ -141,9 +158,9 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
-        [TestCase("Assert.That(values.Count(), Is.EqualTo(42))", "Assert.That(values, Has.Count.EqualTo(42))")]
-        [TestCase("Assert.AreEqual(42, values.Count())", "Assert.That(values, Has.Count.EqualTo(42))")]
-        [TestCase("Assert.AreEqual(values.Count(), 42)", "Assert.That(values, Has.Count.EqualTo(42))")]
+        [TestCase("Assert.That(values.Count(), Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.AreEqual(42, values.Count())", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.AreEqual(values.Count(), 42)", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreNotEqual(42, values.Count())", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
         [TestCase("Assert.AreNotEqual(values.Count(), 42)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
         public void Code_gets_fixed_for_Linq_call_(string originalCode, string fixedCode)
@@ -247,7 +264,51 @@ namespace Bla
         {
             var objectUnderTest = new TestMe();
 
-            Assert.That(objectUnderTest.Values, Has.Count.EqualTo(42));
+            Assert.That(objectUnderTest.Values, Has.Exactly(42).Items);
+        }
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_local_function_call()
+        {
+            const string OriginalCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMeTests
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            int Factorial(int number) => number <= 1 ? 1 : number * Factorial(number - 1);
+
+            Assert.That(values.Length, Is.EqualTo(Factorial(42)));
+        }
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMeTests
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            int Factorial(int number) => number <= 1 ? 1 : number * Factorial(number - 1);
+
+            Assert.That(values, Has.Exactly(Factorial(42)).Items);
         }
     }
 }";

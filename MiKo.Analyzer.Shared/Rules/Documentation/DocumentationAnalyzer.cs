@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,9 +18,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.IndexOf(value, comparison), startOffset, endOffset);
         }
 
+        protected static Location GetFirstLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        {
+            return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().IndexOf(value, comparison), startOffset, endOffset);
+        }
+
         protected static Location GetLastLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.LastIndexOf(value, comparison), startOffset, endOffset);
+        }
+
+        protected static Location GetLastLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        {
+            return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().LastIndexOf(value, comparison), startOffset, endOffset);
         }
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
@@ -84,36 +94,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
-        {
-            var returnType = symbolReturnType.ToString();
-
-            var returnTypeFullyQualified = symbolReturnType.FullyQualifiedName();
-            if (returnTypeFullyQualified.Contains('.') is false)
-            {
-                returnTypeFullyQualified = symbolReturnType.FullyQualifiedName(false);
-            }
-
-            symbolReturnType.TryGetGenericArgumentCount(out var count);
-            if (count <= 0)
-            {
-                return Enumerable.Empty<string>()
-                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnType)))
-                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeFullyQualified)));
-            }
-
-            var ts = symbolReturnType.GetGenericArgumentsAsTs();
-
-            var length = returnType.IndexOf('<'); // just until the first one
-
-            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
-            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
-
-            return Enumerable.Empty<string>()
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
-        }
-
         protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             var text = trivia.ToFullString();
@@ -142,8 +122,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
-
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
@@ -177,17 +155,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+        protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
+        {
+            var returnType = symbolReturnType.ToString();
+
+            var returnTypeFullyQualified = symbolReturnType.FullyQualifiedName();
+            if (returnTypeFullyQualified.Contains('.') is false)
+            {
+                returnTypeFullyQualified = symbolReturnType.FullyQualifiedName(false);
+            }
+
+            symbolReturnType.TryGetGenericArgumentCount(out var count);
+            if (count <= 0)
+            {
+                return Enumerable.Empty<string>()
+                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnType)))
+                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeFullyQualified)));
+            }
+
+            var ts = symbolReturnType.GetGenericArgumentsAsTs();
+
+            var length = returnType.IndexOf('<'); // just until the first one
+
+            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
+            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
+
+            return Enumerable.Empty<string>()
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
+                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
+        }
+
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
+
         protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
-
-        protected static Location GetLastLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
-        {
-            return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().LastIndexOf(value, comparison), startOffset, endOffset);
-        }
-
-        protected static Location GetFirstLocation(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
-        {
-            return CreateLocation(value, trivia.SyntaxTree, trivia.SpanStart, trivia.ToFullString().IndexOf(value, comparison), startOffset, endOffset);
-        }
 
         protected virtual bool ShallAnalyze(IEventSymbol symbol) => true;
 

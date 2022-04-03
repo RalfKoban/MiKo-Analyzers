@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
-            if (symbol.IsStatic || symbol.IsSealed)
+            if (symbol.IsStatic || symbol.IsSealed || symbol.IsAbstract)
             {
                 // nothing to report
                 yield break;

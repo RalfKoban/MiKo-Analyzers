@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -933,7 +933,7 @@ In addition, they distract the reader's attention as they have to translate the 
     <value>Do not use abbreviations in names</value>
   </data>
   <data name="MiKo_1064_Description" xml:space="preserve">
-    <value>To ease maintenance, parameter names should be based on the parameter’s meaning rather than the parameter’s type.</value>
+    <value>To ease maintenance, parameter names should be based on the parameter's meaning rather than the parameter's type.</value>
   </data>
   <data name="MiKo_1064_MessageFormat" xml:space="preserve">
     <value>Name parameter based on its meaning instead of its type</value>
@@ -980,7 +980,7 @@ Hence, their methods should be named 'CanRun' or 'Run' (similar to commands wher
     <value>Workflow methods should be named 'CanRun' or 'Run'</value>
   </data>
   <data name="MiKo_1069_Description" xml:space="preserve">
-    <value>To ease maintenance, property names should be based on the property’s meaning rather than its type.</value>
+    <value>To ease maintenance, property names should be based on the property's meaning rather than its type.</value>
   </data>
   <data name="MiKo_1069_MessageFormat" xml:space="preserve">
     <value>Name property based on its meaning instead of its type</value>
@@ -3625,11 +3625,11 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Multiple assertions shall use assertion messages</value>
   </data>
   <data name="MiKo_3110_CodeFixTitle" xml:space="preserve">
-    <value>Use 'Assert.That(..., Has.Count....)'</value>
+    <value>Use 'Assert.That(..., Has...)'</value>
   </data>
   <data name="MiKo_3110_Description" xml:space="preserve">
     <value>Assertions such as Assert.That(...) using 'Count' or 'Length' assert for exact values.
-If such a test fails it is diffucult to find out why it exactly failed as the failure reason gives no useful hint (e.g. '5' expected but '3' received).
+If such a test fails it is difficult to find out why it exactly failed as the failure reason gives no useful hint (e.g. '5' expected but '3' received).
 
 So the failure needs to be carefully inspected. At worst the test needs to be debugged to find out what went wrong.
 That is annoying and becomes even more annoying if the test itself is a shaky one.
@@ -3641,6 +3641,30 @@ In contrast, the failure would be much easier to understand if the test would im
   </data>
   <data name="MiKo_3110_Title" xml:space="preserve">
     <value>Assertions should not use 'Count' or 'Length'</value>
+  </data>
+  <data name="MiKo_3111_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Zero'</value>
+  </data>
+  <data name="MiKo_3111_Description" xml:space="preserve">
+    <value>For clarity, tests that assert for zero should use 'Is.Zero' instead of 'Is.EqualTo(0)'.</value>
+  </data>
+  <data name="MiKo_3111_MessageFormat" xml:space="preserve">
+    <value>Use 'Zero' instead</value>
+  </data>
+  <data name="MiKo_3111_Title" xml:space="preserve">
+    <value>Assertions should use 'Is.Zero' instead of 'Is.EqualTo(0)'</value>
+  </data>
+  <data name="MiKo_3112_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Is.Empty'</value>
+  </data>
+  <data name="MiKo_3112_Description" xml:space="preserve">
+    <value>For clarity, tests that assert on collections for emptiness should use 'Is.Empty' instead of 'Has.Count.Zero'.</value>
+  </data>
+  <data name="MiKo_3112_MessageFormat" xml:space="preserve">
+    <value>Use 'Is.Empty' instead</value>
+  </data>
+  <data name="MiKo_3112_Title" xml:space="preserve">
+    <value>Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
@@ -3725,6 +3749,42 @@ In contrast, the failure would be much easier to understand if the test would im
   </data>
   <data name="MiKo_3207_Title" xml:space="preserve">
     <value>Test statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_3208_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_3208_Description" xml:space="preserve">
+    <value>To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3208_MessageFormat" xml:space="preserve">
+    <value>Precede using directive with a blank line</value>
+  </data>
+  <data name="MiKo_3208_Title" xml:space="preserve">
+    <value>Using directives should be preceded by blank lines</value>
+  </data>
+  <data name="MiKo_3210_CodeFixTitle" xml:space="preserve">
+    <value>Use lambda expression body</value>
+  </data>
+  <data name="MiKo_3210_Description" xml:space="preserve">
+    <value>Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+  </data>
+  <data name="MiKo_3210_MessageFormat" xml:space="preserve">
+    <value>Use lambda expression body instead</value>
+  </data>
+  <data name="MiKo_3210_Title" xml:space="preserve">
+    <value>Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements</value>
+  </data>
+  <data name="MiKo_3211_CodeFixTitle" xml:space="preserve">
+    <value>Remove braces around parameter</value>
+  </data>
+  <data name="MiKo_3211_Description" xml:space="preserve">
+    <value>Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+  </data>
+  <data name="MiKo_3211_MessageFormat" xml:space="preserve">
+    <value>Use simple lambda expression body instead</value>
+  </data>
+  <data name="MiKo_3211_Title" xml:space="preserve">
+    <value>Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
@@ -3916,5 +3976,17 @@ Instead the equality operator should be used to compare value types.</value>
   </data>
   <data name="MiKo_5012_Title" xml:space="preserve">
     <value>Do not use 'yield return' for recursively defined structures</value>
+  </data>
+  <data name="MiKo_5013_CodeFixTitle" xml:space="preserve">
+    <value>Use Array.Empty&lt;&gt;()</value>
+  </data>
+  <data name="MiKo_5013_Description" xml:space="preserve">
+    <value>To avoid unnecessary memory consumption and pressure on the garbage collector, empty arrays should not be created manually. Instead, the method 'Array.Empty&lt;T&gt;()' should be used.</value>
+  </data>
+  <data name="MiKo_5013_MessageFormat" xml:space="preserve">
+    <value>Do not create empty array</value>
+  </data>
+  <data name="MiKo_5013_Title" xml:space="preserve">
+    <value>Do not create empty arrays</value>
   </data>
 </root>

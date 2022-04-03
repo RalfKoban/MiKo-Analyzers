@@ -18,7 +18,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum();
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol)
+        {
+            if (symbol.IsEnum() is false)
+            {
+                return false;
+            }
+
+            // ignore Win32 interop types
+            return symbol.ContainingType?.Name != "NativeDeclarations" && symbol.ContainingNamespace?.Name != "Interop";
+        }
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {

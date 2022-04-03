@@ -121,6 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "measures",
                 "mixtures",
                 "number",
+                "prompt",
                 "tires",
                 "Enum",
                 "Enumeration",

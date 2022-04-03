@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     kind = SyntaxKind.NotEqualsExpression;
 
-                    var child = syntax.ChildNodes().First();
+                    var child = syntax.FirstChild();
                     switch (child)
                     {
                         case ParenthesizedExpressionSyntax p when p.Expression is InvocationExpressionSyntax pi:

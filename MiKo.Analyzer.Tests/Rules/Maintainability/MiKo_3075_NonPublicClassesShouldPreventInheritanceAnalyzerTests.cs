@@ -11,6 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public class MiKo_3075_NonPublicClassesShouldPreventInheritanceAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_abstract_class_with_accessibility_([Values("public", "internal", "protected", "private")] string accessibility) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    " + accessibility + @" abstract class TestMe
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_static_class_with_accessibility_([Values("public", "internal", "protected", "private")] string accessibility) => No_issue_is_reported_for(@"
 using System;
 
