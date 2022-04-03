@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var newContent = exception.Content;
 
                 // combine all remaining nodes into first one
-                var siblings = exception.Parent?.ChildNodes().ToList();
+                var siblings = exception.Siblings();
                 foreach (var duplicate in duplicates)
                 {
                     obsoleteNodes.Add(duplicate);
