@@ -366,6 +366,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3208_UsingDirectivePrecededByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3210_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3211_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3211_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3401_NamespaceDepthAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityCodeFixProvider.cs" />

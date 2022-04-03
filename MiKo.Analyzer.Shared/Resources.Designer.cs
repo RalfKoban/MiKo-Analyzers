@@ -10678,6 +10678,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove braces around parameter.
+        /// </summary>
+        public static string MiKo_3211_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3211_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        /// </summary>
+        public static string MiKo_3211_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use simple lambda expression body instead.
+        /// </summary>
+        public static string MiKo_3211_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3211_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters.
+        /// </summary>
+        public static string MiKo_3211_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
