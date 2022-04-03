@@ -2460,7 +2460,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, parameter names should be based on the parameter’s meaning rather than the parameter’s type..
+        ///   Looks up a localized string similar to To ease maintenance, parameter names should be based on the parameter&apos;s meaning rather than the parameter&apos;s type..
         /// </summary>
         public static string MiKo_1064_Description {
             get {
@@ -2597,7 +2597,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, property names should be based on the property’s meaning rather than its type..
+        ///   Looks up a localized string similar to To ease maintenance, property names should be based on the property&apos;s meaning rather than its type..
         /// </summary>
         public static string MiKo_1069_Description {
             get {

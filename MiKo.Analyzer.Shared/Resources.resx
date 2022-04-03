@@ -933,7 +933,7 @@ In addition, they distract the reader's attention as they have to translate the 
     <value>Do not use abbreviations in names</value>
   </data>
   <data name="MiKo_1064_Description" xml:space="preserve">
-    <value>To ease maintenance, parameter names should be based on the parameter’s meaning rather than the parameter’s type.</value>
+    <value>To ease maintenance, parameter names should be based on the parameter's meaning rather than the parameter's type.</value>
   </data>
   <data name="MiKo_1064_MessageFormat" xml:space="preserve">
     <value>Name parameter based on its meaning instead of its type</value>
@@ -980,7 +980,7 @@ Hence, their methods should be named 'CanRun' or 'Run' (similar to commands wher
     <value>Workflow methods should be named 'CanRun' or 'Run'</value>
   </data>
   <data name="MiKo_1069_Description" xml:space="preserve">
-    <value>To ease maintenance, property names should be based on the property’s meaning rather than its type.</value>
+    <value>To ease maintenance, property names should be based on the property's meaning rather than its type.</value>
   </data>
   <data name="MiKo_1069_MessageFormat" xml:space="preserve">
     <value>Name property based on its meaning instead of its type</value>
