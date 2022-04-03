@@ -11208,7 +11208,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To avoid unnecessary memory consumption and pressure on the garbage collector, empty arrays should not be created manuelly. Instead, the method &apos;Array.Empty&lt;T&gt;()&apos; should be used..
+        ///   Looks up a localized string similar to To avoid unnecessary memory consumption and pressure on the garbage collector, empty arrays should not be created manually. Instead, the method &apos;Array.Empty&lt;T&gt;()&apos; should be used..
         /// </summary>
         public static string MiKo_5013_Description {
             get {
