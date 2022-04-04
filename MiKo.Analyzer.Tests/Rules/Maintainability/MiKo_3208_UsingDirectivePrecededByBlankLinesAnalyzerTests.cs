@@ -36,6 +36,15 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_multiple_usings_that_share_the_same_identifier_and_are_part_of_AssemblyInfo_cs() => No_issue_is_reported_for(@"
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows;
+
+[assembly: AssemblyTitle(""Test title"")]
+");
+
         [TestCase("System", "NUnit")]
         [TestCase("System.IO", "NUnit.Framework")]
         [TestCase("Bla.BlaBlubb", "Blablubb")]
