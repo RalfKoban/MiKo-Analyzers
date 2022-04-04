@@ -22,8 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.GetDocumentationCommentTriviaSyntax()
-                                         .DescendantNodes<XmlElementSyntax>()
+            foreach (var token in comment.DescendantNodes<XmlElementSyntax>()
                                          .Where(_ => CodeTags.Contains(_.GetName()) is false)
                                          .SelectMany(_ => _.ChildNodes<XmlTextSyntax>())
                                          .SelectMany(_ => _.TextTokens))
