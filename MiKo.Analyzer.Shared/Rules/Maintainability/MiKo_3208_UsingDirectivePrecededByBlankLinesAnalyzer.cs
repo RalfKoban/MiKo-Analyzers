@@ -54,7 +54,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static string GetName(UsingDirectiveSyntax node)
         {
-            return node.Name is QualifiedNameSyntax q ? q.Left.GetName() : node.Name.GetName();
+            return GetName(node.Name);
+        }
+
+        private static string GetName(NameSyntax node)
+        {
+            while (true)
+            {
+                if (node is QualifiedNameSyntax q)
+                {
+                    node = q.Left;
+                }
+                else
+                {
+                    return node.GetName();
+                }
+            }
         }
     }
 }
