@@ -66,17 +66,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment)
         {
-            if (ShallAnalyzeReturnType(returnType) is false)
+            var issues = Enumerable.Empty<Diagnostic>();
+
+            if (ShallAnalyzeReturnType(returnType))
             {
-                return Enumerable.Empty<Diagnostic>();
+                return issues
+                            .Concat(AnalyzeReturnType(owningSymbol, returnType, comment, Constants.XmlTag.Returns))
+                            .Concat(AnalyzeReturnType(owningSymbol, returnType, comment, Constants.XmlTag.Value));
             }
 
-            return TryAnalyzeReturnType(owningSymbol, returnType, comment, Constants.XmlTag.Returns)
-                   ?? TryAnalyzeReturnType(owningSymbol, returnType, comment, Constants.XmlTag.Value)
-                   ?? Enumerable.Empty<Diagnostic>();
+            return issues;
+
         }
 
-        private IEnumerable<Diagnostic> TryAnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string xmlTag)
+        private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string xmlTag)
         {
             foreach (var node in comment.GetXmlSyntax(xmlTag))
             {
