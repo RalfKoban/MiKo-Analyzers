@@ -37,6 +37,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_multiple_usings_with_name_aliases() => No_issue_is_reported_for(@"
+using System;
+using System.IO;
+
+using File = System.IO.File;
+using BlaBlubb = Bla.BlaBlubb;
+
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_multiple_usings_that_share_the_same_identifier_and_are_part_of_AssemblyInfo_cs() => No_issue_is_reported_for(@"
 using System.Reflection;
 using System.Runtime.InteropServices;

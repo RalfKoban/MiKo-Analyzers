@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,17 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeUsingDirectiveSyntax, SyntaxKind.UsingDirective);
         }
 
-        private void AnalyzeUsingDirectiveSyntax(SyntaxNodeAnalysisContext context)
-        {
-            var node = (UsingDirectiveSyntax)context.Node;
-
-            if (HasIssue(node))
-            {
-                var issue = Issue(node, true, false);
-
-                ReportDiagnostics(context, issue);
-            }
-        }
+        private static bool ShallAnalyze(UsingDirectiveSyntax node) => node.ChildNodes<NameEqualsSyntax>().None();
 
         private static bool HasIssue(UsingDirectiveSyntax node)
         {
@@ -52,10 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static string GetName(UsingDirectiveSyntax node)
-        {
-            return GetName(node.Name);
-        }
+        private static string GetName(UsingDirectiveSyntax node) => GetName(node.Name);
 
         private static string GetName(NameSyntax node)
         {
@@ -68,6 +57,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 else
                 {
                     return node.GetName();
+                }
+            }
+        }
+
+        private void AnalyzeUsingDirectiveSyntax(SyntaxNodeAnalysisContext context)
+        {
+            var node = (UsingDirectiveSyntax)context.Node;
+
+            if (ShallAnalyze(node))
+            {
+                if (HasIssue(node))
+                {
+                    var issue = Issue(node, true, false);
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }
