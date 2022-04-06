@@ -72,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                         return string.Empty;
 
                                                     case "contains":
-                                                        return "containment";
+                                                        return "value";
 
                                                     case "id":
                                                         return "identifier";
@@ -95,9 +95,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (expression)
             {
-                case MemberAccessExpressionSyntax member: return member.GetName();
-                case InvocationExpressionSyntax method: return method.Expression.GetName();
-                default: return expression.GetName();
+                case MemberAccessExpressionSyntax member:
+                {
+                    return member.GetName();
+                }
+
+                case InvocationExpressionSyntax method:
+                {
+                    var name = method.Expression.GetName();
+
+                    if (name == "Parse")
+                    {
+                        return method.ArgumentList?.Arguments.FirstOrDefault()?.GetName();
+                    }
+
+                    return name;
+                }
+
+                case ObjectCreationExpressionSyntax creation:
+                {
+                    return creation.Type.GetNameOnlyPart();
+                }
+
+                default:
+                {
+                    return expression.GetName();
+                }
             }
         }
 
