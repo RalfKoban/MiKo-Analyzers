@@ -47,12 +47,13 @@ public class TestMe
         [TestCase("string.IsNullOrWhiteSpace")]
         [TestCase("!string.IsNullOrEmpty")]
         [TestCase("!string.IsNullOrWhiteSpace")]
+        [TestCase(nameof(GetHashCode))]
         public void No_issue_is_reported_for_conditional_expression_using_(string value) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    public bool DoSomething(string someStringToCheck) => " + value + @"(someStringToCheck)
+    public bool DoSomething(string someVeryLongStringToCheckSoThatWeExceedTheLimits) => " + value + @"(someVeryLongStringToCheckSoThatWeExceedTheLimits)
                                          ? true
                                          : false;
 }");

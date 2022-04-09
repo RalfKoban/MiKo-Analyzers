@@ -60,40 +60,50 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool InvocationCannotBeShortened(InvocationExpressionSyntax syntax)
         {
-            if (syntax.Expression is MemberAccessExpressionSyntax m && m.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            switch (syntax.Expression)
             {
-                var name = m.GetName();
+                case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                    return SimpleMemberAccessCannotBeShortened(m);
 
-                if (name.StartsWith("Try", StringComparison.Ordinal))
-                {
-                    return true;
-                }
+                case IdentifierNameSyntax n when n.GetName() == nameof(GetHashCode):
+                    return true; // we assume that any GetHashCode invocation cannot be shortened anymore
 
-                switch (name)
-                {
-                    case nameof(Enumerable.Empty) when m.Expression is IdentifierNameSyntax i:
-                    {
-                        switch (i.GetName())
-                        {
-                            case nameof(Array):
-                            case nameof(Enumerable):
-                            {
-                                return true;
-                            }
-                        }
+                default:
+                    return false;
+            }
+        }
 
-                        break;
-                    }
+        private static bool SimpleMemberAccessCannotBeShortened(MemberAccessExpressionSyntax m)
+        {
+            var name = m.GetName();
 
-                    case nameof(string.IsNullOrEmpty):
-                    case nameof(string.IsNullOrWhiteSpace):
-                    {
-                        return true;
-                    }
-                }
+            if (name.StartsWith("Try", StringComparison.Ordinal))
+            {
+                return true;
             }
 
-            return false;
+            switch (name)
+            {
+                case nameof(Enumerable.Empty) when m.Expression is IdentifierNameSyntax i:
+                {
+                    switch (i.GetName())
+                    {
+                        case nameof(Array):
+                        case nameof(Enumerable):
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                }
+
+                case nameof(string.IsNullOrEmpty):
+                case nameof(string.IsNullOrWhiteSpace):
+                    return true;
+
+                default:
+                    return false;
+            }
         }
 
         private static bool AnalyzeLength(SyntaxNode node, SemanticModel semanticModel)
