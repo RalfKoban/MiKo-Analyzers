@@ -129,6 +129,27 @@ namespace TestHelper
             }
         }
 
+        protected IEnumerable<Diagnostic> Collect_issues_in_folder_(string path)
+        {
+            foreach (var directory in Directory.EnumerateDirectories(path))
+            {
+                var issues = Collect_issues_in_folder_(directory);
+                foreach (var issue in issues)
+                {
+                    yield return issue;
+                }
+            }
+
+            foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+            {
+                var issues = GetDiagnostics(File.ReadAllText(file));
+                foreach (var issue in issues)
+                {
+                    yield return issue;
+                }
+            }
+        }
+
         /// <summary>
         /// Applies a C# <see cref="DiagnosticAnalyzer"/> on the single inputted string and returns the found results.
         /// </summary>

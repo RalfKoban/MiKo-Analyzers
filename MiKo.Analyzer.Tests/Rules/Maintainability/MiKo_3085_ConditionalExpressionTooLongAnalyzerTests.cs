@@ -43,6 +43,20 @@ public class TestMe
                                          : false;
 }");
 
+        [TestCase("string.IsNullOrEmpty")]
+        [TestCase("string.IsNullOrWhiteSpace")]
+        [TestCase("!string.IsNullOrEmpty")]
+        [TestCase("!string.IsNullOrWhiteSpace")]
+        public void No_issue_is_reported_for_conditional_expression_using_(string value) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(string someStringToCheck) => " + value + @"(someStringToCheck)
+                                         ? true
+                                         : false;
+}");
+
         [Test]
         public void An_issue_is_reported_for_conditional_expression_with_long_condition_and_short_paths() => An_issue_is_reported_for(@"
 using System;

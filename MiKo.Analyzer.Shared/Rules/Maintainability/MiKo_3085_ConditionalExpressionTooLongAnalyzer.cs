@@ -69,15 +69,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return true;
                 }
 
-                if (name == nameof(Enumerable.Empty) && m.Expression is IdentifierNameSyntax i)
+                switch (name)
                 {
-                    switch (i.GetName())
+                    case nameof(Enumerable.Empty) when m.Expression is IdentifierNameSyntax i:
                     {
-                        case nameof(Array):
-                        case nameof(Enumerable):
+                        switch (i.GetName())
                         {
-                            return true;
+                            case nameof(Array):
+                            case nameof(Enumerable):
+                            {
+                                return true;
+                            }
                         }
+
+                        break;
+                    }
+
+                    case nameof(string.IsNullOrEmpty):
+                    case nameof(string.IsNullOrWhiteSpace):
+                    {
+                        return true;
                     }
                 }
             }
@@ -111,8 +122,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return false; // ignore as it cannot be shorted anymore
                 }
 
+                case PrefixUnaryExpressionSyntax logic when logic.Operand is InvocationExpressionSyntax i && InvocationCannotBeShortened(i):
+                {
+                    return false; // ignore as it cannot be shorted anymore (it could be refactored but that does not shorten it enough)
+                }
+
                 default:
+                {
                     return true;
+                }
             }
         }
 
