@@ -123,24 +123,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case InterpolatedStringExpressionSyntax _:
                 case ObjectCreationExpressionSyntax o when ObjectCreationCannotBeShortened(o, semanticModel):
-                {
-                    return false; // ignore as it cannot be shorted anymore
-                }
-
                 case InvocationExpressionSyntax i when InvocationCannotBeShortened(i):
-                {
                     return false; // ignore as it cannot be shorted anymore
-                }
 
                 case PrefixUnaryExpressionSyntax logic when logic.Operand is InvocationExpressionSyntax i && InvocationCannotBeShortened(i):
-                {
                     return false; // ignore as it cannot be shorted anymore (it could be refactored but that does not shorten it enough)
-                }
 
                 default:
-                {
                     return true;
-                }
             }
         }
 
