@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,19 +16,21 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxNodeExtensions
     {
+        private const string DefaultPropertyParameterName = "value";
+
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
 
         internal static readonly SyntaxTrivia[] XmlCommentStart =
-            {
-                SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
-                XmlCommentExterior,
-            };
+                                                                {
+                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
+                                                                    XmlCommentExterior,
+                                                                };
 
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
-        private static readonly string[] DefaultPropertyParameterNames = { "value" };
+        private static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
 
         private static readonly HashSet<string> WrongContainerTags = new HashSet<string>
                                                                 {
@@ -1792,7 +1794,7 @@ namespace MiKoSolutions.Analyzers
 
             return Enumerable.Empty<ParameterSyntax>();
 
-            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier("value"), default);
+            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(DefaultPropertyParameterName), default);
         }
 
         private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
