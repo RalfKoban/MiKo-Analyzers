@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Resources.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Analyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\CodeDetector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\DiagnosticLocationEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ArgumentExceptionPhraseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationCodeFixProvider.cs" />

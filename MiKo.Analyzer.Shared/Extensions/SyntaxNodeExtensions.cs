@@ -704,6 +704,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsBNull(this SyntaxNode value) => value.Is("b", Nulls);
 
+        internal static bool IsC(this SyntaxNode value) => value.Is(Constants.XmlTag.C);
+
         internal static bool IsCBool(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Booleans);
 
         internal static bool IsCNull(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Nulls);
@@ -1803,6 +1805,11 @@ namespace MiKoSolutions.Analyzers
             }
 
             return enclosingNode as IfStatementSyntax;
+        }
+
+        private static bool Is(this SyntaxNode value, string tagName)
+        {
+            return value is XmlElementSyntax syntax && string.Equals(tagName, syntax.GetName(), StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool Is(this SyntaxNode value, string tagName, params string[] contents)

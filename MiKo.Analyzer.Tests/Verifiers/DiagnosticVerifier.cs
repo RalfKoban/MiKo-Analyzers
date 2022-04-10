@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace TestHelper
 {
@@ -38,15 +37,21 @@ namespace TestHelper
         {
             Assert.Multiple(() =>
                                 {
-                                    var constraint = (violations == 0) ? Is.GreaterThan(violations) : (IResolveConstraint)Is.EqualTo(violations);
-
                                     var results = GetDiagnostics(fileContent);
 
-                                    Assert.That(results.Length, constraint, string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
+                                    var errorMessage = string.Join(Environment.NewLine, results.Select(_ => _.ToString()));
+                                    if (violations == 0)
+                                    {
+                                        Assert.That(results.Length, Is.GreaterThan(violations), errorMessage);
+                                    }
+                                    else
+                                    {
+                                        Assert.That(results.Length, Is.EqualTo(violations), errorMessage);
+                                    }
 
                                     foreach (var result in results)
                                     {
-                                        Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+                                        Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()), "Wrong diagnostic identifier");
 
                                         var message = result.GetMessage();
 

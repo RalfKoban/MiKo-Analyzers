@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -24,7 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 builder.Append(' ').Append(text.WithoutXmlCommentExterior()).Append(' ');
             }
 
-            return builder.ToString().Trim();
+            var result = builder.ToString().Trim();
+
+            return result;
         }
 
         protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field, SymbolKind.TypeParameter);

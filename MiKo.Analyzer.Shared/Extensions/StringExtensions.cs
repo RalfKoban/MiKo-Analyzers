@@ -3,8 +3,6 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-using Microsoft.CodeAnalysis.CSharp;
-
 using MiKoSolutions.Analyzers;
 
 // ReSharper disable once CheckNamespace
@@ -14,23 +12,46 @@ namespace System
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        public static IEnumerable<int> AllIndexesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IEnumerable<int> AllIndexesOf(this string value, string stringToSeek, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {
                 return Array.Empty<int>();
             }
 
-            if (finding.Length > value.Length)
+            if (stringToSeek.Length > value.Length)
             {
                 return Array.Empty<int>();
             }
 
             var indexes = new List<int>();
 
-            for (var index = 0; ; index += finding.Length)
+            for (var index = 0; ; index += stringToSeek.Length)
             {
-                index = value.IndexOf(finding, index, comparison);
+                index = value.IndexOf(stringToSeek, index, comparison);
+
+                if (index == -1)
+                {
+                    // nothing more to find
+                    return indexes;
+                }
+
+                indexes.Add(index);
+            }
+        }
+
+        public static IEnumerable<int> AllIndexesOfAny(this string value, char[] charactersToSeek)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return Array.Empty<int>();
+            }
+
+            var indexes = new List<int>();
+
+            for (var index = 0; ; index ++)
+            {
+                index = value.IndexOfAny(charactersToSeek, index);
 
                 if (index == -1)
                 {
@@ -121,6 +142,8 @@ namespace System
         public static bool EndsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[value.Length - 1] == character;
 
         public static bool EndsWithAny(this string value, string suffixCharacters) => suffixCharacters.Any(value.EndsWith);
+
+        public static bool EndsWithAny(this string value, char[] suffixCharacters) => suffixCharacters.Any(value.EndsWith);
 
         public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
 
