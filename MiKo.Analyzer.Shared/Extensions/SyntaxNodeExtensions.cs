@@ -19,14 +19,24 @@ namespace MiKoSolutions.Analyzers
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
 
         internal static readonly SyntaxTrivia[] XmlCommentStart =
-                                                                {
-                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
-                                                                    XmlCommentExterior,
-                                                                };
+            {
+                SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
+                XmlCommentExterior,
+            };
 
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
+
+        private static readonly string[] DefaultPropertyParameterNames = { "value" };
+
+        private static readonly HashSet<string> WrongContainerTags = new HashSet<string>
+                                                                {
+                                                                    "b",
+                                                                    Constants.XmlTag.C,
+                                                                    Constants.XmlTag.Code,
+                                                                    Constants.XmlTag.Value,
+                                                                };
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.AncestorsAndSelf().OfType<T>();
 
@@ -334,7 +344,7 @@ namespace MiKoSolutions.Analyzers
 
                     case BasePropertyDeclarationSyntax property:
                         return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
-                                   ? new[] { "value" }
+                                   ? DefaultPropertyParameterNames
                                    : Array.Empty<string>();
                 }
             }
@@ -694,25 +704,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
+        internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.Is(WrongContainerTags, Booleans)|| (value.IsSee(Booleans) && value.IsSeeLangword(Booleans) is false);
 
-        internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();
+        internal static bool IsWrongNullTag(this SyntaxNode value) => value.Is(WrongContainerTags, Nulls);
 
         internal static bool IsBooleanTag(this SyntaxNode value) => value.IsSeeLangword(Booleans) || value.IsWrongBooleanTag();
 
-        internal static bool IsBBool(this SyntaxNode value) => value.Is("b", Booleans);
-
-        internal static bool IsBNull(this SyntaxNode value) => value.Is("b", Nulls);
-
         internal static bool IsC(this SyntaxNode value) => value.Is(Constants.XmlTag.C);
-
-        internal static bool IsCBool(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Booleans);
-
-        internal static bool IsCNull(this SyntaxNode value) => value.Is(Constants.XmlTag.C, Nulls);
-
-        internal static bool IsCodeBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Booleans);
-
-        internal static bool IsCodeNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Code, Nulls);
 
         internal static bool IsCode(this SyntaxNode value) => value is XmlElementSyntax xes && xes.IsCode();
 
@@ -1005,6 +1003,32 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsSee(this SyntaxNode value, params string[] texts)
+        {
+            if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
+            {
+                if (texts == null || texts.Length == 0)
+                {
+                    return true;
+                }
+
+                var attribute = syntax.Attributes.First();
+
+                foreach (var token in attribute.DescendantTokens())
+                {
+                    foreach (var text in texts)
+                    {
+                        if (text.Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsSee(this XmlEmptyElementSyntax value, HashSet<string> attributeNames) => value.IsEmpty(Constants.XmlTag.See, attributeNames);
 
         internal static bool IsSee(this XmlElementSyntax value, HashSet<string> attributeNames) => value.IsNonEmpty(Constants.XmlTag.See, attributeNames);
@@ -1115,10 +1139,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsTypeUnderTestCreationMethod(this MethodDeclarationSyntax value) => Constants.Names.TypeUnderTestMethodNames.Contains(value.GetName());
 
         internal static bool IsTypeUnderTestVariable(this VariableDeclaratorSyntax value) => Constants.Names.TypeUnderTestVariableNames.Contains(value.GetName());
-
-        internal static bool IsValueBool(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Booleans);
-
-        internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
 
@@ -1815,6 +1835,18 @@ namespace MiKoSolutions.Analyzers
         private static bool Is(this SyntaxNode value, string tagName, params string[] contents)
         {
             if (value is XmlElementSyntax syntax && string.Equals(tagName, syntax.GetName(), StringComparison.OrdinalIgnoreCase))
+            {
+                var content = syntax.Content.ToString().Trim();
+
+                return contents.Any(expected => expected.Equals(content, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return false;
+        }
+
+        private static bool Is(this SyntaxNode value, IEnumerable<string> tagNames, params string[] contents)
+        {
+            if (value is XmlElementSyntax syntax && tagNames.Contains(syntax.GetName()))
             {
                 var content = syntax.Content.ToString().Trim();
 
