@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxNodeExtensions
     {
+        private const string DefaultPropertyParameterName = "value";
+
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
 
         internal static readonly SyntaxTrivia[] XmlCommentStart =
@@ -27,6 +29,8 @@ namespace MiKoSolutions.Analyzers
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
+
+        private static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.AncestorsAndSelf().OfType<T>();
 
@@ -328,7 +332,7 @@ namespace MiKoSolutions.Analyzers
 
                     case BasePropertyDeclarationSyntax property:
                         return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
-                                   ? new[] { "value" }
+                                   ? DefaultPropertyParameterNames
                                    : Array.Empty<string>();
                 }
             }
@@ -1631,7 +1635,7 @@ namespace MiKoSolutions.Analyzers
 
             return Enumerable.Empty<ParameterSyntax>();
 
-            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier("value"), default);
+            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(DefaultPropertyParameterName), default);
         }
 
         private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
