@@ -976,9 +976,11 @@ namespace MiKoSolutions.Analyzers
 
                     foreach (var token in attribute.DescendantTokens())
                     {
+                        var valueText = token.ValueText;
+
                         foreach (var text in texts)
                         {
-                            if (text.Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                            if (text.Equals(valueText, StringComparison.OrdinalIgnoreCase))
                             {
                                 return true;
                             }
@@ -1018,9 +1020,11 @@ namespace MiKoSolutions.Analyzers
 
                 foreach (var token in attribute.DescendantTokens())
                 {
+                    var valueText = token.ValueText;
+
                     foreach (var text in texts)
                     {
-                        if (text.Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                        if (text.Equals(valueText, StringComparison.OrdinalIgnoreCase))
                         {
                             return true;
                         }
@@ -1248,14 +1252,16 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var token in value.TextTokens)
             {
-                var text = token.ValueText;
+                var originalText = token.ValueText;
+
+                var text = originalText;
 
                 foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
                 {
                     text = text.Replace(phrase, replacement);
                 }
 
-                if (ReferenceEquals(token.ValueText, text) is false)
+                if (ReferenceEquals(originalText, text) is false)
                 {
                     map[token] = token.WithText(text);
                 }
