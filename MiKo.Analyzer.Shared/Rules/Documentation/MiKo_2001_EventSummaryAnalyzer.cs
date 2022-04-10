@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            var summary = textToken.ValueText;
+            var summary = textToken.ValueText.TrimStart();
 
             if (summary.StartsWith(Constants.Comments.EventSummaryStartingPhrase, StringComparison.Ordinal))
             {

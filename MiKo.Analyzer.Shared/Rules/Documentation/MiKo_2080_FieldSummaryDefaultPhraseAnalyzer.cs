@@ -12,40 +12,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2080";
 
-        private const string StartingDefaultPhrase = "The ";
-        private const string StartingEnumerableDefaultPhrase = "Contains ";
-        private const string StartingBooleanDefaultPhrase = "Indicates whether ";
-        private const string StartingGuidDefaultPhrase = "The unique identifier for ";
+        private static readonly string[] StartingDefaultPhrases = { "The " };
+        private static readonly string[] StartingEnumerableDefaultPhrases = { "Contains ", "The " };
+        private static readonly string[] StartingBooleanDefaultPhrases = { "Indicates whether " };
+        private static readonly string[] StartingGuidDefaultPhrases = { "The unique identifier for " };
 
         public MiKo_2080_FieldSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
 
-        internal static string GetStartingPhrase(IFieldSymbol symbol)
+        internal static string[] GetStartingPhrases(IFieldSymbol symbol)
         {
             if (symbol.IsConst)
             {
-                return StartingDefaultPhrase;
+                return StartingDefaultPhrases;
             }
 
             var type = symbol.Type;
 
             if (type.IsBoolean())
             {
-                return StartingBooleanDefaultPhrase;
+                return StartingBooleanDefaultPhrases;
             }
 
             if (type.IsGuid())
             {
-                return StartingGuidDefaultPhrase;
+                return StartingGuidDefaultPhrases;
             }
 
             if (type.IsEnumerable())
             {
-                return StartingEnumerableDefaultPhrase;
+                return StartingEnumerableDefaultPhrases;
             }
 
-            return StartingDefaultPhrase;
+            return StartingDefaultPhrases;
         }
 
         protected override bool ShallAnalyze(IFieldSymbol symbol)
@@ -68,22 +68,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return base.ShallAnalyze(symbol);
         }
 
-        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetStartingPhrase((IFieldSymbol)symbol));
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node, GetStartingPhrases((IFieldSymbol)symbol));
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
             var fieldSymbol = (IFieldSymbol)symbol;
 
-            var phrase = GetStartingPhrase(fieldSymbol);
+            var phrases = GetStartingPhrases(fieldSymbol);
 
-            var summary = textToken.ValueText;
+            var summary = textToken.ValueText.TrimStart();
 
-            if (summary.StartsWith(phrase, StringComparison.Ordinal))
+            if (summary.StartsWithAny(phrases, StringComparison.Ordinal))
             {
                 return null;
             }
 
-            return Issue(symbol.Name, textToken, phrase);
+            return Issue(symbol.Name, textToken, phrases[0]);
         }
     }
 }

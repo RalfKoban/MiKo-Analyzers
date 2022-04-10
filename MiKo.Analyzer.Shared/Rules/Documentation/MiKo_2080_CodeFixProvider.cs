@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var field = fieldDeclaration?.Declaration.Variables.First();
 
             var symbol = (IFieldSymbol)GetSymbol(context, field);
-            var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
+            var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrases(symbol)[0];
 
             return CommentStartingWith(comment, phrase);
         }

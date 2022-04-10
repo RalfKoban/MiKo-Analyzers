@@ -312,7 +312,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return AnalyzeStartContinue(symbol, descendantNodes.Skip(elementsToSkip));
+            var remainingNodes = descendantNodes
+                                             .Skip(elementsToSkip)
+                                             .SkipWhile(_ => _.Ancestors<XmlElementEndTagSyntax>().Any()); // do not inspect end tags
+
+            return AnalyzeStartContinue(symbol, remainingNodes);
         }
 
         protected virtual Diagnostic AnalyzeStartContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes) => null; // nothing to report

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            var summary = textToken.ValueText;
+            var text = textToken.ValueText.TrimStart();
 
-            if (summary.StartsWith(Constants.Comments.EventHandlerSummaryStartingPhrase, StringComparison.Ordinal))
+            if (text.StartsWith(Constants.Comments.EventHandlerSummaryStartingPhrase, StringComparison.Ordinal))
             {
                 return null;
             }

@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxToken textToken)
         {
-            var summary = textToken.ValueText;
+            var summary = textToken.ValueText.TrimStart();
 
             foreach (var wrongPhrase in StartingPhrases)
             {
