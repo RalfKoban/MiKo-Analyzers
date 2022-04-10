@@ -79,10 +79,20 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_placed_documentation_is_reported() => An_issue_is_reported_for(@"
+        public void Wrong_placed_documentation_is_reported_for_multi_line_comment() => An_issue_is_reported_for(@"
 /// <summary>
 /// This class cannot be inherited.
 /// Some documentation
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void Wrong_placed_documentation_is_reported_for_single_line_comment() => An_issue_is_reported_for(@"
+/// <summary>
+/// Some text. This class cannot be inherited. Some documentation.
 /// </summary>
 public sealed class TestMe
 {

@@ -55,13 +55,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       .SelectMany(_ => _.TextTokens)
                                       .LastOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
 
-            var location = GetFirstLocation(textToken, phrase);
-            if (location is null)
+            var text = textToken.ValueText.TrimEnd();
+            if (text.EndsWith(phrase, StringComparison.Ordinal))
             {
-                return Issue(symbol.Name, textToken, phrase);
+                return null;
             }
 
-            return null;
+            return Issue(symbol.Name, textToken, phrase);
         }
 
         protected virtual Diagnostic SummaryContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, phrase);

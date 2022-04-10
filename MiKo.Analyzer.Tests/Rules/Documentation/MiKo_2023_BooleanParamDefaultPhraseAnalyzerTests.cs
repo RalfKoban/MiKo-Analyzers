@@ -247,7 +247,7 @@ public class TestMe
         [TestCase(@"Indicates whether some condition.")]
         [TestCase(@"If set to true if some condition.")]
         [TestCase(@"True if some condition. Otherwise false.")]
-        public void Code_gets_fixed_on_same_line_For_special_phrase_(string phrase)
+        public void Code_gets_fixed_on_same_line_for_special_phrase_(string phrase)
         {
             var originalCode = @"
 using System;
