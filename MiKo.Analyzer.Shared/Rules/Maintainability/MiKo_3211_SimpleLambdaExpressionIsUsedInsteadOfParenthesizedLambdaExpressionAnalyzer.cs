@@ -25,8 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (node.ExpressionBody != null)
             {
-                // simplification works only if it is a single parameter
-                if (node.ParameterList.Parameters.Count == 1)
+                // simplification works only if it is a single parameter that has no type information
+                var parameters = node.ParameterList.Parameters;
+                if (parameters.Count == 1 && parameters.First().Type is null)
                 {
                     ReportDiagnostics(context, Issue(node));
                 }
