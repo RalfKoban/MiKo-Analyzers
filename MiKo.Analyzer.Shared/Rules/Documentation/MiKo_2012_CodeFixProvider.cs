@@ -263,6 +263,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "Class",
                                      "Classes implementing the interfaces",
                                      "Classes implementing the interfaces,",
+                                     "Extension method",
                                      "Factory method",
                                      "Function",
                                      "Help function",

@@ -150,6 +150,7 @@ namespace MiKoSolutions.Analyzers
                     "Event",
                     "Extension class of",
                     "Extension of",
+                    "Extension method ",
                     "Factory",
                     "Fake ",
                     "Field",

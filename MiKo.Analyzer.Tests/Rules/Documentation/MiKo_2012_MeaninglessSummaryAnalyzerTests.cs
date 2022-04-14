@@ -670,7 +670,7 @@ public class TestMeCommand
         [TestCase(@"Used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
         [TestCase(@"Used for creating something", @"Provides support for creating something")]
         [TestCase(@"Used for creating <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
-        public void Code_gets_fixed_for_factory_Types_(string originalComment, string fixedComment)
+        public void Code_gets_fixed_for_factory_types_(string originalComment, string fixedComment)
         {
             const string Template = @"
 /// <summary>
@@ -707,6 +707,25 @@ public class TestMe
     /// ###
     /// </summary>
     void OnSomething(object sender, EventArgs e);
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Extension method that initializes the given value.", "Initializes the given value.")]
+        [TestCase("Extension method that will initialize the given value.", "Initializes the given value.")]
+        [TestCase("Extension method which initializes the given value.", "Initializes the given value.")]
+        [TestCase("Extension method which will initialize the given value.", "Initializes the given value.")]
+        public void Code_gets_fixed_for_extension_method_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ###
+    /// </summary>
+    public static void DoSomething(this TestMe value) { }
 }
 ";
 
@@ -766,6 +785,10 @@ public class TestMe
                                   "Called ",
                                   "Does implement ",
                                   "Extension class of ",
+                                  "Extension method that will ",
+                                  "Extension method which will ",
+                                  "Extension method that ",
+                                  "Extension method which ",
                                   "Extension of ",
                                   "Helper class",
                                   "Implement ",
