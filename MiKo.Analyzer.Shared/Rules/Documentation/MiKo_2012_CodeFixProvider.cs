@@ -21,10 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "Allow",
                 "Create",
                 "Describe",
+                "Detect",
                 "Enhance",
                 "Extend",
                 "Generate",
                 "Initialize",
+                "Handle",
                 "Manipulate",
                 "Offer",
                 "Perform",
@@ -226,6 +228,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Interface for factories to create ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Interface for factories that create ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Interface for factories which create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Interface of a factory creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Interface of a factory that creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Interface of a factory which creates ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Used to create ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Used for creating ", Constants.Comments.FactorySummaryPhrase);
 
@@ -242,7 +247,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("Every class that implements the interface can ", "Allows to ");
             yield return new KeyValuePair<string, string>("Every class that implements this interface can ", "Allows to ");
             yield return new KeyValuePair<string, string>("Extension of ", "Extends the ");
+            yield return new KeyValuePair<string, string>("Interface definition for ", "Represents ");
+            yield return new KeyValuePair<string, string>("Interface for a ", "Represents a ");
+            yield return new KeyValuePair<string, string>("Interface for an ", "Represents an ");
             yield return new KeyValuePair<string, string>("Interface for the ", "Represents a ");
+            yield return new KeyValuePair<string, string>("Interface of ", "Represents ");
             yield return new KeyValuePair<string, string>("Interface that serves ", "Provides ");
             yield return new KeyValuePair<string, string>("Interface which serves ", "Provides ");
             yield return new KeyValuePair<string, string>("The class offers ", "Provides ");
@@ -271,6 +280,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "Helper class",
                                      "Helper function",
                                      "Helper method",
+                                     "Interface definition of helper",
+                                     "Interface definition of a helper",
+                                     "Interface definition of an helper",
+                                     "Interface definition of the helper",
                                      "Interface for classes",
                                      "Interface for elements",
                                      "Interface for items",
@@ -279,6 +292,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "Interface for workflows",
                                      "Interface for work flows",
                                      "Interface for",
+                                     "Interface implemented to",
                                      "Interface",
                                      "Method",
                                      "The class implementing the interface",
