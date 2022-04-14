@@ -26,10 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (node.ExpressionBody != null)
             {
                 // simplification works only if it is a single parameter that has no type information
-                var parameters = node.ParameterList.Parameters;
+                var parameterList = node.ParameterList;
+                var parameters = parameterList.Parameters;
                 if (parameters.Count == 1 && parameters.First().Type is null)
                 {
-                    ReportDiagnostics(context, Issue(node));
+                    ReportDiagnostics(context, Issue(parameterList));
                 }
             }
         }
