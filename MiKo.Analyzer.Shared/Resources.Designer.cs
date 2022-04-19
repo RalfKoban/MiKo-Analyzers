@@ -6713,6 +6713,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;an instance of&apos;.
+        /// </summary>
+        public static string MiKo_2208_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2208_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation should use a more meaningful description than the phrase &apos;an instance of&apos;.
         ///By having a more concrete description it makes it easier for a developer to understand the meaning..
         /// </summary>

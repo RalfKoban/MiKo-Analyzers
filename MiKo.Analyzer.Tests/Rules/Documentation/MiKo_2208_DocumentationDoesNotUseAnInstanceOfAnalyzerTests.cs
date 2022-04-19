@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -18,12 +21,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "A object of ",
                 "The object of ",
 
-                "handles an instance of something",
-                "handles a instance of something",
-                "handles the instance of something",
-                "handles an object of something",
-                "handles a object of something",
-                "handles the object of something",
+                "an instance of ",
+                "a instance of ",
+                "the instance of ",
+                "an object of ",
+                "a object of ",
+                "the object of ",
+
+                "An instance if ", // 'semi'-typo by intent
+                "A instance if ", // 'semi'-typo by intent
+                "The instance if ", // 'semi'-typo by intent
+                "an instance if ", // 'semi'-typo by intent
+                "a instance if ", // 'semi'-typo by intent
+                "the instance if ", // 'semi'-typo by intent
             };
 
         private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
@@ -74,7 +84,7 @@ public class TestMe
         public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
-/// <" + tag + @">" + phrase + @".</" + tag + @">
+/// <" + tag + ">" + phrase + "something.</" + tag + @">
 public class TestMe
 {
 }
@@ -86,7 +96,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + @".</" + tag + @">
+    /// <" + tag + ">Handles " + phrase + "something.</" + tag + @">
     public void DoSomething() { }
 }
 ");
@@ -97,7 +107,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + @".</" + tag + @">
+    /// <" + tag + ">Handles " + phrase + "something.</" + tag + @">
     public int Age { get; set; }
 }
 ");
@@ -108,7 +118,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + @".</" + tag + @">
+    /// <" + tag + ">Handles " + phrase + "something.</" + tag + @">
     public event EventHandler<T> MyEvent;
 }
 ");
@@ -119,7 +129,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + @".</" + tag + @">
+    /// <" + tag + ">Handles " + phrase + "something.</" + tag + @">
     private bool m_field;
 }
 ");
@@ -137,8 +147,28 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_([ValueSource(nameof(Phrases))] string text)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public TestMe DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", text + "an"), Template.Replace("###", text[0].IsUpperCase() ? "An" : "an"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2208_CodeFixProvider();
     }
 }
