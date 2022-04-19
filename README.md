@@ -217,7 +217,7 @@ The following tables list all the 328 rules that are currently provided by the a
 |MiKo_2205|Documentation should use &lt;note&gt; for important information|&#x2713;|\-|
 |MiKo_2206|Documentation should not use the term 'flag'|&#x2713;|\-|
 |MiKo_2207|&lt;summary&gt; documentation shall be short|&#x2713;|\-|
-|MiKo_2208|Documentation should not use the term 'an instance of'|&#x2713;|\-|
+|MiKo_2208|Documentation should not use the term 'an instance of'|&#x2713;|&#x2713;|
 |MiKo_2209|Do not use double periods in documentation|&#x2713;|&#x2713;|
 |MiKo_2210|Documentation should use the term 'information' instead of 'info'|&#x2713;|&#x2713;|
 |MiKo_2211|Enum members should not have &lt;remarks&gt; sections|&#x2713;|&#x2713;|

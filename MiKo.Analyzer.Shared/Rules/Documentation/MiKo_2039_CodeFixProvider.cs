@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2039_CodeFixProvider)), Shared]
     public sealed class MiKo_2039_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().Distinct().ToDictionary(_ => _, _ => string.Empty);
 
         public override string FixableDiagnosticId => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
 
@@ -36,13 +36,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var starts = new[]
                              {
                                  string.Empty,
+                                 "Class containing",
                                  "Contains",
                                  "Offers",
-                                 "Offers the",
                                  "Provides",
                                  "Static collection of",
                                  "The",
                              };
+
+            var preMiddles = new[]
+                                 {
+                                     string.Empty,
+                                     " different",
+                                     " the",
+                                 };
 
             var middles = new[]
                              {
@@ -67,13 +74,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var start in starts)
             {
-                foreach (var middle in middles)
+                foreach (var preMiddle in preMiddles)
                 {
-                    foreach (var end in ends)
+                    foreach (var middle in middles)
                     {
-                        yield return start.IsNullOrWhiteSpace()
-                                         ? string.Concat(middle.ToUpperCaseAt(0), " ", end)
-                                         : string.Concat(start, " ", middle, " ", end);
+                        foreach (var end in ends)
+                        {
+                            yield return start.IsNullOrWhiteSpace()
+                                             ? string.Concat(middle.ToUpperCaseAt(0), " ", end)
+                                             : string.Concat(start, preMiddle, " ", middle, " ", end);
+                        }
                     }
                 }
             }

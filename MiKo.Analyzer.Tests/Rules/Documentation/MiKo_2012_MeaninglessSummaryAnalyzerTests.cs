@@ -411,6 +411,14 @@ public class TestMe : ITestMe
         [TestCase("Help method that generates", "Generates")]
         [TestCase("Help method which generates", "Generates")]
         [TestCase("Interface describing", "Describes")]
+        [TestCase("Interface definition for something", "Represents something")]
+        [TestCase("Interface definition for a something", "Represents a something")]
+        [TestCase("Interface definition for an something", "Represents an something")]
+        [TestCase("Interface definition for the something", "Represents the something")]
+        [TestCase("Interface definition of helper which provides", "Provides")]
+        [TestCase("Interface definition of a helper which provides", "Provides")]
+        [TestCase("Interface definition of an helper which provides", "Provides")]
+        [TestCase("Interface definition of the helper which provides", "Provides")]
         [TestCase("Interface for classes that represent", "Represents")]
         [TestCase("Interface for classes that provide", "Provides")]
         [TestCase("Interface for classes that can provide", "Provides")]
@@ -432,6 +440,8 @@ public class TestMe : ITestMe
         [TestCase("Interface for objects which represent", "Represents")]
         [TestCase("Interface for processing", "Processes")]
         [TestCase("Interface for storing", "Stores")]
+        [TestCase("Interface for a", "Represents a")]
+        [TestCase("Interface for an", "Represents an")]
         [TestCase("Interface for the", "Represents a")]
         [TestCase("Interface for view models describing", "Describes")]
         [TestCase("Interface for view models representing", "Represents")]
@@ -440,6 +450,11 @@ public class TestMe : ITestMe
         [TestCase("Interface for work flows that perform", "Performs")]
         [TestCase("Interface for work flows which perform", "Performs")]
         [TestCase("Interface for wrapping", "Wraps")]
+        [TestCase("Interface implemented to detect", "Detects")]
+        [TestCase("Interface of a factory creating", "Provides support for creating")]
+        [TestCase("Interface of a factory that creates", "Provides support for creating")]
+        [TestCase("Interface of a factory which creates", "Provides support for creating")]
+        [TestCase("Interface of a view model", "Represents a view model")]
         [TestCase("Interface providing", "Provides")]
         [TestCase("Interface representing", "Represents")]
         [TestCase("Interface that serves", "Provides")]
@@ -670,7 +685,7 @@ public class TestMeCommand
         [TestCase(@"Used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
         [TestCase(@"Used for creating something", @"Provides support for creating something")]
         [TestCase(@"Used for creating <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
-        public void Code_gets_fixed_for_factory_Types_(string originalComment, string fixedComment)
+        public void Code_gets_fixed_for_factory_types_(string originalComment, string fixedComment)
         {
             const string Template = @"
 /// <summary>
@@ -707,6 +722,25 @@ public class TestMe
     /// ###
     /// </summary>
     void OnSomething(object sender, EventArgs e);
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Extension method that initializes the given value.", "Initializes the given value.")]
+        [TestCase("Extension method that will initialize the given value.", "Initializes the given value.")]
+        [TestCase("Extension method which initializes the given value.", "Initializes the given value.")]
+        [TestCase("Extension method which will initialize the given value.", "Initializes the given value.")]
+        public void Code_gets_fixed_for_extension_method_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ###
+    /// </summary>
+    public static void DoSomething(this TestMe value) { }
 }
 ";
 
@@ -766,6 +800,10 @@ public class TestMe
                                   "Called ",
                                   "Does implement ",
                                   "Extension class of ",
+                                  "Extension method that will ",
+                                  "Extension method which will ",
+                                  "Extension method that ",
+                                  "Extension method which ",
                                   "Extension of ",
                                   "Helper class",
                                   "Implement ",

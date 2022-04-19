@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers
         internal const string Entity = "Entity";
         internal const string Entities = "Entities";
 
-internal const string entity = "entity";
+        internal const string entity = "entity";
         internal const string entities = "entities";
 
         internal static readonly char[] SentenceMarkers = ".?!:".ToCharArray();
@@ -151,6 +151,7 @@ internal const string entity = "entity";
                     "Event",
                     "Extension class of",
                     "Extension of",
+                    "Extension method ",
                     "Factory",
                     "Fake ",
                     "Field",

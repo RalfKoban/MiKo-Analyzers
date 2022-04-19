@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
                 }
 
-                ReportDiagnostics(context, Issue(node));
+                ReportDiagnostics(context, Issue(node.Block));
             }
         }
     }

@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2208";
 
-        private static readonly string[] InstanceOfPhrase =
+        internal static readonly string[] InstanceOfPhrase =
             {
                 "An instance of ",
                 "an instance of ",
@@ -27,6 +27,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "a object of ",
                 "The object of ",
                 "the object of ",
+
+                // 'semi'-typos
+                "An instance if ",
+                "an instance if ",
+                "A instance if ",
+                "a instance if ",
+                "The instance if ",
+                "the instance if ",
             };
 
         public MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer() : base(Id)
