@@ -163,6 +163,7 @@ public class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", text + "an"), Template.Replace("###", text[0].IsUpperCase() ? "An" : "an"));
+            VerifyCSharpFix(Template.Replace("###", text.Trim()), Template.Replace("###", text.FirstWord()));
         }
 
         protected override string GetDiagnosticId() => MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.Id;
