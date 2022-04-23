@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls)
         {
-            return AnalyzeSummaryContains(symbol, summaryXmls, new[] { Constants.Comments.SealedClassPhrase }, StringComparison.Ordinal);
+            return AnalyzeContains(symbol, summaryXmls, new[] { Constants.Comments.SealedClassPhrase }, StringComparison.Ordinal);
         }
     }
 }

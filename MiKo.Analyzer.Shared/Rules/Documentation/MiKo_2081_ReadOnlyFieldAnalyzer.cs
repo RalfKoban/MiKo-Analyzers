@@ -32,6 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryEnd(symbol, summaryXml, Constants.Comments.FieldIsReadOnly);
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeEnd(symbol, summaryXml, Constants.Comments.FieldIsReadOnly);
     }
 }

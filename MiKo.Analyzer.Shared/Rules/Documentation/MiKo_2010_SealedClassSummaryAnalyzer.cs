@@ -18,6 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       && symbol.IsTestClass() is false
                                                                       && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeSummaryEnd(symbol, summaryXml, Constants.Comments.SealedClassPhrase);
+        protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml) => AnalyzeEnd(symbol, summaryXml, Constants.Comments.SealedClassPhrase);
     }
 }

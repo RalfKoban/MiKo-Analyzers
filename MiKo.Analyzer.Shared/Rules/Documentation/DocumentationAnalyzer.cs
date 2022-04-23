@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -320,6 +321,65 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected virtual Diagnostic AnalyzeStartContinue(ISymbol symbol, IEnumerable<SyntaxNode> remainingNodes) => null; // nothing to report
+
+        protected IEnumerable<Diagnostic> AnalyzeContains(ISymbol symbol, IEnumerable<XmlElementSyntax> xmls, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            var textTokens = xmls.SelectMany(_ => _.DescendantNodes<XmlTextSyntax>()).SelectMany(_ => _.TextTokens);
+
+            return AnalyzeContains(symbol, textTokens, phrases, comparison);
+        }
+
+        protected IEnumerable<Diagnostic> AnalyzeContains(ISymbol symbol, XmlElementSyntax xml, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            var textTokens = xml.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens);
+
+            return AnalyzeContains(symbol, textTokens, phrases, comparison);
+        }
+
+        protected Diagnostic AnalyzeEnd(ISymbol symbol, SyntaxNode xml, string phrase)
+        {
+            var textToken = xml.DescendantNodes<XmlTextSyntax>()
+                               .SelectMany(_ => _.TextTokens)
+                               .LastOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+
+            var text = textToken.ValueText.TrimEnd();
+            if (text.EndsWith(phrase, StringComparison.Ordinal))
+            {
+                return null;
+            }
+
+            return Issue(symbol.Name, textToken, phrase);
+        }
+
+        protected virtual Diagnostic ContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, phrase);
+
+        private IEnumerable<Diagnostic> AnalyzeContains(ISymbol symbol, IEnumerable<SyntaxToken> textTokens, IEnumerable<string> phrases, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            foreach (var phrase in phrases)
+            {
+                var trimmedPhrase = phrase.Trim();
+
+                foreach (var text in textTokens)
+                {
+                    if (text.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
+                    if (text.ValueText.IsNullOrWhiteSpace())
+                    {
+                        continue;
+                    }
+
+                    var locations = GetAllLocations(text, trimmedPhrase, comparison);
+
+                    foreach (var location in locations)
+                    {
+                        yield return ContainsIssue(symbol, location, trimmedPhrase);
+                    }
+                }
+            }
+        }
 
         protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => Issue(symbol.Name, node);
 

@@ -23,11 +23,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Diagnostic AnalyzeSummary(ISymbol symbol, SyntaxNode summaryXml)
         {
-            var issue = AnalyzeSummaryStart(symbol, summaryXml);
+            var issue = AnalyzeStart(symbol, Constants.XmlTag.Summary, summaryXml);
 
             if (issue is null)
             {
-                issue = AnalyzeSummaryContains(symbol, (XmlElementSyntax)summaryXml, Constants.Comments.MeaninglessPhrase).FirstOrDefault();
+                issue = AnalyzeContains(symbol, (XmlElementSyntax)summaryXml, Constants.Comments.MeaninglessPhrase).FirstOrDefault();
             }
 
             return issue;
@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected override Diagnostic SummaryContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, "contain", phrase.HumanizedTakeFirst(200));
+        protected override Diagnostic ContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, "contain", phrase.HumanizedTakeFirst(200));
 
         private static IEnumerable<string> GetPhrases(ISymbol symbol)
         {

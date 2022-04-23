@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2015_FireMethodsAnalyzer : SummaryDocumentationAnalyzer
+    public sealed class MiKo_2015_FireMethodsAnalyzer : OverallDocumentationAnalyzer
     {
         public const string Id = "MiKo_2015";
 
@@ -21,15 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ForbiddenPhrases = CreateForbiddenPhrases(ForbiddenWords).ToArray();
 
-        public MiKo_2015_FireMethodsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_2015_FireMethodsAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
+        {
+            return comment.Content.OfType<XmlElementSyntax>().SelectMany(_ => AnalyzeContains(symbol, _, ForbiddenPhrases));
+        }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<XmlElementSyntax> summaryXmls) => AnalyzeSummaryContains(symbol, summaryXmls, ForbiddenPhrases);
-
-        protected override Diagnostic SummaryContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, AllowedWordsForRule, ForbiddenWordsForRule);
+        protected override Diagnostic ContainsIssue(ISymbol symbol, Location location, string phrase) => Issue(symbol.Name, location, AllowedWordsForRule, ForbiddenWordsForRule);
 
         private static IEnumerable<string> CreateForbiddenPhrases(IEnumerable<string> forbiddenWords) => from suffix in Constants.Comments.Delimiters from forbiddenWord in forbiddenWords select forbiddenWord + suffix;
     }
