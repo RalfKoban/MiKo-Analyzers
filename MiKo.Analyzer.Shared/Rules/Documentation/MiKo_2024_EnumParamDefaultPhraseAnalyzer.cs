@@ -19,14 +19,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
         {
             var phrases = Constants.Comments.EnumParameterStartingPhrase;
+            var values = new List<string>(phrases.Length);
 
-            for (var i = 0; i < phrases.Length; i++)
+            foreach (var phrase in phrases)
             {
-                // apply full qualified name here as this is applied under the hood to the comment itself
-                phrases[i] = string.Format(phrases[i], parameter.Type.FullyQualifiedName());
+                if (phrase.Contains("{0}"))
+                {
+                    // apply full qualified name here as this is applied under the hood to the comment itself
+                    values.Add(string.Format(phrase, parameter.Type.FullyQualifiedName()));
+                    values.Add(string.Format(phrase, parameter.Type.Name));
+                }
+                else
+                {
+                    values.Add(phrase);
+                }
             }
 
-            return AnalyzeStartingPhrase(parameter, comment, phrases);
+            return AnalyzeStartingPhrase(parameter, comment, values.ToArray());
         }
     }
 }
