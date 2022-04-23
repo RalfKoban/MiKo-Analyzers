@@ -92,7 +92,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Malformed_documentation_is_not_reported() => No_issue_is_reported_for(@"
+        public void Malformed_documentation_is_reported() => An_issue_is_reported_for(@"
 /// <summary>
 /// Saves & Loads the relevant layout inforamtion of the ribbon within <see cref=""XmlRibbonLayout""/>
 /// This class cannot be inherited.

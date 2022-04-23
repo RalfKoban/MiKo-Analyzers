@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -510,23 +511,49 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
+        internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax value)
         {
-            return text != null
-                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
+            return value != null
+                       ? string.Concat(value.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
                        : null;
         }
 
-        internal static string GetTextWithoutTrivia(this XmlTextSyntax text)
+        internal static string GetTextWithoutTrivia(this XmlTextSyntax value)
         {
-            return text != null
-                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
+            return value != null
+                       ? string.Concat(value.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
                        : null;
         }
 
-        internal static string GetTextWithoutTrivia(this XmlElementSyntax element) => element.Content.ToString().WithoutXmlCommentExterior();
+        internal static string GetTextWithoutTrivia(this XmlElementSyntax value)
+        {
+            var contents = new StringBuilder();
 
-        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
+            foreach (var node in value.Content)
+            {
+                if (node.IsPara())
+                {
+                    if (node is XmlElementSyntax e)
+                    {
+                        contents.Append(e.Content.ToString());
+                    }
+                    else
+                    {
+                        // filter empty <para/> tags
+                    }
+                }
+                else
+                {
+                    contents.Append(node);
+                }
+            }
+
+            var text = contents.ToString().WithoutXmlCommentExterior();
+
+            return text;
+        }
+
+        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax value) => value.WithoutXmlCommentExterior();
 
         internal static IEnumerable<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Example);
 

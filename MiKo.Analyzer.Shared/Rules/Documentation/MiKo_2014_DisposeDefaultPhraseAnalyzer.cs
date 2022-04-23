@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -28,7 +27,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var summary in summaries)
             {
-                if (summary.GetTextWithoutTrivia() != SummaryPhrase)
+                var textWithoutTrivia = summary.GetTextWithoutTrivia();
+                if (textWithoutTrivia != SummaryPhrase)
                 {
                     yield return Issue(symbol, SummaryPhrase);
                 }
