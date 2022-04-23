@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -10,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Distinct().ToArray();
+
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
 using System;
@@ -216,20 +221,8 @@ public class TestMeFactory
 }
 ");
 
-        [TestCase("A factory for")]
-        [TestCase("A factory that creates")]
-        [TestCase("A factory which creates")]
-        [TestCase("Creates")]
-        [TestCase("Factory for creating")]
-        [TestCase("Factory for")]
-        [TestCase("Factory to create")]
-        [TestCase("Provides methods to create")]
-        [TestCase("Provides")]
-        [TestCase("Represents a factory that creates")]
-        [TestCase("Represents a factory which creates")]
-        [TestCase("Used for creating")]
-        [TestCase("Used to create")]
-        public void Code_gets_fixed_for_class_summary_(string summary)
+        [Test]
+        public void Code_gets_fixed_for_class_summary_([ValueSource(nameof(TypeSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -254,41 +247,12 @@ public class TestMeFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase("A factory that creates")]
-        [TestCase("A factory which creates")]
-        [TestCase("A interface for factories that create")]
-        [TestCase("A interface for factories which create")]
-        [TestCase("A interface that is implemented by factories that create")]
-        [TestCase("A interface that is implemented by factories which create")]
-        [TestCase("A interface to create")]
-        [TestCase("A interface which is implemented by factories that create")]
-        [TestCase("A interface which is implemented by factories which create")]
-        [TestCase("An interface for factories that create")]
-        [TestCase("An interface that is implemented by factories that create")]
-        [TestCase("An interface that is implemented by factories which create")]
-        [TestCase("An interface to create")]
-        [TestCase("An interface which is implemented by factories that create")]
-        [TestCase("An interface which is implemented by factories which create")]
-        [TestCase("Creates")]
-        [TestCase("Interface for factories that create")]
-        [TestCase("Interface for factories which create")]
-        [TestCase("Interface to create")]
-        [TestCase("Represents a factory that creates")]
-        [TestCase("Represents the factory which creates")]
-        [TestCase("The factory that creates")]
-        [TestCase("The factory which creates")]
-        [TestCase("The interface that is implemented by factories that create")]
-        [TestCase("The interface that is implemented by factories which create")]
-        [TestCase("The interface which is implemented by factories that create")]
-        [TestCase("The interface which is implemented by factories which create")]
-        [TestCase("This interface is implemented by factories that create")]
-        [TestCase("This interface is implemented by factories which create")]
-        [TestCase("Used for creating")]
-        public void Code_gets_fixed_for_interface_summary_(string summary)
+        [Test]
+        public void Code_gets_fixed_for_interface_summary_([ValueSource(nameof(TypeSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
-/// " + summary + @" a <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
+/// " + summary + @" <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
 /// </summary>
 public interface ITestMeFactory
 {
@@ -297,7 +261,7 @@ public interface ITestMeFactory
 
             const string FixedCode = @"
 /// <summary>
-/// Provides support for creating a <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
+/// Provides support for creating <see cref=""Xyz"" /> for a given <see cref=""IXyz"" /> object.
 /// </summary>
 public interface ITestMeFactory
 {
@@ -317,6 +281,8 @@ public interface ITestMeFactory
         [TestCase("The factory method for creating a")]
         [TestCase("The factory method that creates a")]
         [TestCase("The factory method which creates a")]
+        [TestCase("This factory method creates a")]
+        [TestCase("This method creates a")]
         [TestCase("Used for creating a")]
         [TestCase("Used to create a")]
         public void Code_gets_fixed_for_method_summary_(string summary)
@@ -404,14 +370,35 @@ internal interface IFactory
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_specific_method_summary()
+        [TestCase("Create a instance of the")]
+        [TestCase("Create a instance of")]
+        [TestCase("Create a new instance of the")]
+        [TestCase("Create a new instance of")]
+        [TestCase("Create a new")]
+        [TestCase("Create a")]
+        [TestCase("Create an instance of the")]
+        [TestCase("Create an instance of")]
+        [TestCase("Create instances of the")]
+        [TestCase("Create instances of")]
+        [TestCase("Create new instances of the")]
+        [TestCase("Creates a instance of the")]
+        [TestCase("Creates a instance of")]
+        [TestCase("Creates a new")]
+        [TestCase("Creates a")]
+        [TestCase("Creates an instance of the")]
+        [TestCase("Creates an instance of")]
+        [TestCase("Creates an new instance of the")]
+        [TestCase("Creates an new instance of")]
+        [TestCase("Creates instances of the")]
+        [TestCase("Creates instances of")]
+        [TestCase("Creates new instances of the")]
+        public void Code_gets_fixed_for_almost_correct_method_summary_starting_phrase_(string summary)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 internal interface IFactory
 {
     /// <summary>
-    /// Creates a <see cref=""Xyz""/> type.
+    /// " + summary + @" <see cref=""Xyz""/> type.
     /// </summary>
     IXyz Create();
 }
@@ -427,7 +414,7 @@ internal interface IFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2060_FactoryAnalyzer.Id;
@@ -435,5 +422,157 @@ internal interface IFactory
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2060_FactoryAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2060_CodeFixProvider();
+
+        private static IEnumerable<string> CreateTypeSummaryStartingPhrases()
+        {
+            var startingPhrases = new[]
+                                      {
+                                          "A factory for creation of",
+                                          "A factory for the creation of",
+                                          "A factory for",
+                                          "A factory that creates",
+                                          "A factory that provides methods to create",
+                                          "A factory to create",
+                                          "A factory to provide methods to create",
+                                          "A factory which creates",
+                                          "A factory which provides methods to create",
+                                          "A interface for factories that create",
+                                          "A interface for factories to create",
+                                          "A interface for factories which create",
+                                          "A interface implemented by factories that create",
+                                          "A interface implemented by factories to create",
+                                          "A interface implemented by factories which create",
+                                          "A interface that is implemented by factories that create",
+                                          "A interface that is implemented by factories which create",
+                                          "A interface to create",
+                                          "A interface which is implemented by factories that create",
+                                          "A interface which is implemented by factories which create",
+                                          "An interface for factories that create",
+                                          "An interface for factories to create",
+                                          "An interface for factories which create",
+                                          "An interface implemented by factories that create",
+                                          "An interface implemented by factories to create",
+                                          "An interface implemented by factories which create",
+                                          "An interface that is implemented by factories that create",
+                                          "An interface that is implemented by factories which create",
+                                          "An interface to create",
+                                          "An interface which is implemented by factories that create",
+                                          "An interface which is implemented by factories which create",
+                                          "Create",
+                                          "Creates",
+                                          "Defines a factory that can create",
+                                          "Defines a factory that creates",
+                                          "Defines a factory to create",
+                                          "Defines a factory which can create",
+                                          "Defines a factory which creates",
+                                          "Defines a method to create",
+                                          "Defines methods to create",
+                                          "Defines the factory that can create",
+                                          "Defines the factory that creates",
+                                          "Defines the factory to create",
+                                          "Defines the factory which can create",
+                                          "Defines the factory which creates",
+                                          "Factory for creating",
+                                          "Factory for creation of",
+                                          "Factory for the creation of",
+                                          "Factory for",
+                                          "Factory that can create",
+                                          "Factory that provides methods to create",
+                                          "Factory that provides",
+                                          "Factory to create",
+                                          "Factory to provide methods to create",
+                                          "Factory to provide",
+                                          "Factory which can create",
+                                          "Factory which provides methods to create",
+                                          "Factory which provides",
+                                          "Interface for factories that create",
+                                          "Interface for factories to create",
+                                          "Interface for factories which create",
+                                          "Interface that creates",
+                                          "Interface to create",
+                                          "Interface which creates",
+                                          "Provides a factory that creates",
+                                          "Provides a factory to create",
+                                          "Provides a factory which creates",
+                                          "Provides a method to create",
+                                          "Provides methods to create",
+                                          "Provides the factory that creates",
+                                          "Provides the factory to create",
+                                          "Provides the factory which creates",
+                                          "Provides",
+                                          "Represents a factory that can create",
+                                          "Represents a factory that creates",
+                                          "Represents a factory to create",
+                                          "Represents a factory which can create",
+                                          "Represents a factory which creates",
+                                          "Represents the factory that can create",
+                                          "Represents the factory that creates",
+                                          "Represents the factory to create",
+                                          "Represents the factory which can create",
+                                          "Represents the factory which creates",
+                                          "The factory that can create",
+                                          "The factory that creates",
+                                          "The factory that provides methods to create",
+                                          "The factory to create",
+                                          "The factory to provide methods to create",
+                                          "The factory which can create",
+                                          "The factory which creates",
+                                          "The factory which provides methods to create",
+                                          "The interface implemented by factories that create",
+                                          "The interface implemented by factories to create",
+                                          "The interface implemented by factories which create",
+                                          "The interface that is implemented by factories that create",
+                                          "The interface that is implemented by factories to create",
+                                          "The interface that is implemented by factories which create",
+                                          "The interface which is implemented by factories that create",
+                                          "The interface which is implemented by factories to create",
+                                          "The interface which is implemented by factories which create",
+                                          "This factory creates",
+                                          "This factory provides methods to create",
+                                          "This interface is implemented by factories that create",
+                                          "This interface is implemented by factories to create",
+                                          "This interface is implemented by factories which create",
+                                          "Used for creating",
+                                          "Used for creation of",
+                                          "Used for the creation of",
+                                          "Used to create",
+                                          "Uses for creating", // typo in 'used'
+                                          "Uses for creation of", // typo in 'used'
+                                          "Uses for the creation of", // typo in 'used'
+                                          "Uses to create", // typo in 'used'
+                                      };
+
+            var articles = new[]
+                               {
+                                   string.Empty,
+                                   " a",
+                                   " an",
+                                   " the",
+                               };
+
+            var middles = new[]
+                              {
+                                  string.Empty,
+                                  " instance of",
+                                  " instances of",
+                                  " new instance of",
+                                  " new instances of",
+                              };
+
+            foreach (var start in startingPhrases)
+            {
+                foreach (var article in articles)
+                {
+                    foreach (var middle in middles)
+                    {
+                        var phrase = string.IsNullOrWhiteSpace(middle)
+                                         ? start + article
+                                         : start + article + middle + article;
+
+                        yield return phrase;
+                    }
+                }
+            }
+        }
     }
 }
