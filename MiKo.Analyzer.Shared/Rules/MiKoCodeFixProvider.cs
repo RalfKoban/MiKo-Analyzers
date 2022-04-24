@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
 
             var semanticModel = await context.Document.GetSemanticModelAsync(cancellationToken);
+
             if (syntax is TypeSyntax typeSyntax)
             {
                return semanticModel?.GetTypeInfo(typeSyntax, cancellationToken).Type;
@@ -64,11 +65,11 @@ namespace MiKoSolutions.Analyzers.Rules
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
 
-        protected static bool IsConst(CodeFixContext context, ArgumentSyntax arg0)
+        protected static bool IsConst(CodeFixContext context, ArgumentSyntax syntax)
         {
-            var identifierName = arg0.Expression.GetName();
+            var identifierName = syntax.Expression.GetName();
 
-            var method = arg0.GetEnclosingMethod(GetSemanticModel(context));
+            var method = syntax.GetEnclosingMethod(GetSemanticModel(context));
             var type = method.FindContainingType();
 
             var isConst = type.GetMembers(identifierName).OfType<IFieldSymbol>().Any(_ => _.IsConst);

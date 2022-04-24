@@ -14,6 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3105_CodeFixProvider)), Shared]
     public sealed class MiKo_3105_CodeFixProvider : UnitTestCodeFixProvider
     {
+        private static readonly string[] ActualMarkers = { "actual", "Actual" };
+        private static readonly string[] ExpectedMarkers = { "expected", "Expected" };
+
         public override string FixableDiagnosticId => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3105_CodeFixTitle;
@@ -140,7 +143,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // constants & enums
                 case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is(call, arg0), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg0): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg0) || IsExpected(arg0): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is(call, arg1), args);
 
                 // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("False"), args);
@@ -168,7 +172,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // constants & enums
                 case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is(call, arg1), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg1): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg1) || IsExpected(arg1): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is(call, arg0), args);
 
                 // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("False"), args);
@@ -210,7 +215,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // constants & enums
                 case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg0) || IsExpected(arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is("Not", call, arg1), args);
 
                 // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg1, Is("True"), args);
@@ -224,7 +230,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // constants & enums
                 case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.IdentifierName when IsConst(context, arg1) || IsExpected(arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is("Not", call, arg0), args);
 
                 // literals
                 case SyntaxKind.FalseLiteralExpression: return AssertThat(arg0, Is("True"), args);
@@ -494,5 +501,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static InvocationExpressionSyntax FixZero(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Zero"), args, 1);
+
+        private static bool IsActual(ArgumentSyntax syntax)
+        {
+            var name = syntax.Expression.GetName();
+
+            return name.ContainsAny(ActualMarkers);
+        }
+
+        private static bool IsExpected(ArgumentSyntax syntax)
+        {
+            var name = syntax.Expression.GetName();
+
+            return name.ContainsAny(ExpectedMarkers);
+        }
     }
 }
