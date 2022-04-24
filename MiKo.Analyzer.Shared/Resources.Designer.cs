@@ -7176,6 +7176,37 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XML documentation is intended for other developers. It shall contain all the information that is important for them in a way that they can easily read and understand.
+        ///- Ending a text with an exclamation mark is more difficult to spot than e.g. placing the text inside a &lt;note type=&quot;important&quot;&gt; tag.
+        ///   So ending texts with exclamation marks should be avoided.
+        ///- Ending a text with a question mark shows that the whole sentence is a question.
+        ///   However, documention should state and not question things - so  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_2219_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2219_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in documentation.
+        /// </summary>
+        public static string MiKo_2219_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2219_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use question or explamation marks in documentation.
+        /// </summary>
+        public static string MiKo_2219_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2219_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
