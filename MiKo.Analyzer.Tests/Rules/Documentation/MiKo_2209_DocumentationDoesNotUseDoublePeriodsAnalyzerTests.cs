@@ -30,7 +30,7 @@ using NUnit.Framework;
 
 public class TestMe
 {
-    /// <" + tag + @">Some text.</" + tag + @">
+    /// <" + tag + ">Some text.</" + tag + @">
     public void DoSomething()
     {
     }
@@ -120,7 +120,7 @@ public class TestMe
 
 public class TestMe
 {
-    /// <" + tag + @">Some text..</" + tag + @">
+    /// <" + tag + ">Some text..</" + tag + @">
     public void DoSomething()
     {
     }
