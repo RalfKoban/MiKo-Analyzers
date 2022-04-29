@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                yield return Issue(propertyName, name, linqCall);
+                yield return Issue(propertyName, name.Identifier, linqCall);
             }
 
             foreach (var yieldKeyword in node.DescendantTokens(SyntaxKind.YieldKeyword))
