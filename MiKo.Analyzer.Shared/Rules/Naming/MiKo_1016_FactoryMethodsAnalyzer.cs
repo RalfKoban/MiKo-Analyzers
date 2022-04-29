@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1016";
 
-        private const string Prefix = "Create";
+        internal const string Prefix = "Create";
 
         public MiKo_1016_FactoryMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
