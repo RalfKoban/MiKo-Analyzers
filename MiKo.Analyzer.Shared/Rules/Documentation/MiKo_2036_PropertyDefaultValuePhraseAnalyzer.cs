@@ -54,16 +54,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 properties.Add(BooleanKey, string.Empty);
 
-                proposedEndingPhrase = string.Format(Constants.Comments.DefaultLangwordPhrase, "...");
+                proposedEndingPhrase = Constants.Comments.DefaultLangwordPhrase.FormatWith("...");
 
                 endingPhrases = Constants.Comments.DefaultBooleanLangwordPhrases;
             }
             else
             {
-                proposedEndingPhrase = string.Format(Constants.Comments.DefaultCrefPhrase, "...");
+                proposedEndingPhrase = Constants.Comments.DefaultCrefPhrase.FormatWith("...");
 
                 endingPhrases = returnType.GetFields()
-                                          .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => string.Format(phrase, symbol))
+                                          .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol))
                                           .ToArray();
             }
 

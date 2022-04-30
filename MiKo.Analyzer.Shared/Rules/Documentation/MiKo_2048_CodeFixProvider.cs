@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer.Id;
 
-        protected override string Title => string.Format(Resources.MiKo_2048_CodeFixTitle, Phrase);
+        protected override string Title => Resources.MiKo_2048_CodeFixTitle.FormatWith(Phrase);
 
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => CommentStartingWith((XmlElementSyntax)syntax, Phrase);
     }

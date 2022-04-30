@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeMethodSummary(IMethodSymbol symbol, IEnumerable<string> summaries)
         {
-            var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => string.Format(_, symbol.ContainingType)).ToArray();
+            var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => _.FormatWith(symbol.ContainingType)).ToArray();
 
             var findings = AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases);
             if (findings.Any())

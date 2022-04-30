@@ -12,10 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2032_CodeFixProvider)), Shared]
     public sealed class MiKo_2032_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-        private static readonly string[] NonGenericStartParts = string.Format(Constants.Comments.BooleanReturnTypeStartingPhraseTemplate, "|").Split('|');
-        private static readonly string[] NonGenericEndParts = string.Format(Constants.Comments.BooleanReturnTypeEndingPhraseTemplate, "|").Split('|');
-        private static readonly string[] GenericStartParts = string.Format(Constants.Comments.BooleanTaskReturnTypeStartingPhraseTemplate, "|").Split('|');
-        private static readonly string[] GenericEndParts = string.Format(Constants.Comments.BooleanTaskReturnTypeEndingPhraseTemplate, "|").Split('|');
+        private static readonly string[] NonGenericStartParts = Constants.Comments.BooleanReturnTypeStartingPhraseTemplate.FormatWith("|").Split('|');
+        private static readonly string[] NonGenericEndParts = Constants.Comments.BooleanReturnTypeEndingPhraseTemplate.FormatWith("|").Split('|');
+        private static readonly string[] GenericStartParts = Constants.Comments.BooleanTaskReturnTypeStartingPhraseTemplate.FormatWith("|").Split('|');
+        private static readonly string[] GenericEndParts = Constants.Comments.BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("|").Split('|');
 
         private static readonly string[] Phrases =
             {

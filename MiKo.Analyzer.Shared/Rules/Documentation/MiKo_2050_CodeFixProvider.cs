@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -85,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax FixParameterlessCtor(TypeSyntax type)
         {
-            var parts = string.Format(Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate + ".", '|').Split('|');
+            var parts = (Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate + ".").FormatWith('|').Split('|');
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), parts[0], SeeCref(type), parts[1]);
 
@@ -96,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + ".";
 
-            var parts = string.Format(Template, '|').Split('|');
+            var parts = Template.FormatWith('|').Split('|');
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), parts[0], SeeCref(type), parts[1]);
             var param = MessageParameterComment(messageParameter);
@@ -113,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase
                                     + ".";
 
-            var summaryParts = string.Format(Template, '|').Split('|');
+            var summaryParts = Template.FormatWith('|').Split('|');
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), summaryParts[0], SeeCref(type), summaryParts[1]);
             var param1 = MessageParameterComment(messageParameter);
@@ -131,7 +132,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase
                                     + ".";
 
-            var summaryParts = string.Format(Template, '|').Split('|');
+            var summaryParts = Template.FormatWith('|').Split('|');
 
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), summaryParts[0], SeeCref(type), summaryParts[1]);
 
@@ -151,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var parameterName = exceptionParameter.GetName();
 
-            var parts = string.Format(Constants.Comments.ExceptionCtorExceptionParamPhraseTemplate, '|', '|', '|', '|').Split('|');
+            var parts = Constants.Comments.ExceptionCtorExceptionParamPhraseTemplate.FormatWith('|', '|', '|', '|').Split('|');
 
             var catchBlock = XmlElement("b", XmlText("catch"));
             var paramRef = SyntaxFactory.XmlParamRefElement(parameterName);

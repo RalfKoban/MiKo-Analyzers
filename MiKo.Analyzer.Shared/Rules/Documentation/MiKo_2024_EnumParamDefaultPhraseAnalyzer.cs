@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             for (var i = 0; i < phrases.Length; i++)
             {
                 // apply full qualified name here as this is applied under the hood to the comment itself
-                phrases[i] = string.Format(phrases[i], parameter.Type.FullyQualifiedName());
+                phrases[i] = phrases[i].FormatWith(parameter.Type.FullyQualifiedName());
             }
 
             return AnalyzeStartingPhrase(parameter, comment, phrases);

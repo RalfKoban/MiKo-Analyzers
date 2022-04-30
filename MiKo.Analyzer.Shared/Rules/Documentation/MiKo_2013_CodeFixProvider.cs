@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 
-        protected override string Title => string.Format(Resources.MiKo_2013_CodeFixTitle, Phrase);
+        protected override string Title => Resources.MiKo_2013_CodeFixTitle.FormatWith(Phrase);
 
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => CommentWithStartingPhrase((XmlElementSyntax)syntax, Phrase);
 

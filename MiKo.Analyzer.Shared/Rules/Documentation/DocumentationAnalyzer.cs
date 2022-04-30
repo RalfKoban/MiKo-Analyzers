@@ -184,8 +184,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (count <= 0)
             {
                 return Enumerable.Empty<string>()
-                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnType)))
-                                 .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeFullyQualified)));
+                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
+                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
             }
 
             var ts = symbolReturnType.GetGenericArgumentsAsTs();
@@ -196,8 +196,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
 
             return Enumerable.Empty<string>()
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithTs))) // for the phrases to show to the user
-                             .Concat(startingPhrases.Select(_ => string.Format(_, returnTypeWithGenericCount))); // for the real check
+                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
+                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
         }
 
         protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentTriviaSyntax() != null;

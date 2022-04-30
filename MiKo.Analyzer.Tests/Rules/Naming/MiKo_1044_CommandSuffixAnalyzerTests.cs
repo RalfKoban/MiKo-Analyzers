@@ -49,6 +49,30 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_command_indexer() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    public ICommand this[string key] => Create(key);
+
+    private ICommand Create(string key) => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_factory_method() => No_issue_is_reported_for(@"
+using System;
+using System.Windows.Input;
+
+public class TestMe
+{
+    public ICommand Create(string key) => null;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_non_command_field() => No_issue_is_reported_for(@"
 using System;
 

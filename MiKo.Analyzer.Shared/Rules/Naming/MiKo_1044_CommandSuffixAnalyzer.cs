@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1044";
 
         internal const string Suffix = "Command";
+        private const string CreatePrefix = MiKo_1016_FactoryMethodsAnalyzer.Prefix;
 
         private static readonly string[] SingleSuffix = { Suffix };
         private static readonly string[] Suffixes = { "_command", Suffix };
@@ -25,9 +26,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCommand();
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => ShallAnalyze(symbol.ReturnType) && symbol.ContainingType.IsTestClass() is false;
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        {
+            if (symbol.AssociatedSymbol is IPropertySymbol)
+            {
+                // ignore property getters or setters as they are already reported
+                return false;
+            }
 
-        protected override bool ShallAnalyze(IPropertySymbol symbol) => ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
+            if (ShallAnalyze(symbol.ReturnType) is false)
+            {
+                return false;
+            }
+
+            if (symbol.Name.StartsWith(CreatePrefix, StringComparison.Ordinal))
+            {
+                // ignore factory methods
+                return false;
+            }
+
+            if (symbol.ContainingType.IsTestClass())
+            {
+                // ignore code in tests, such as test methods
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.IsIndexer is false && ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => ShallAnalyze(symbol.Type) && symbol.ContainingType.IsTestClass() is false;
 

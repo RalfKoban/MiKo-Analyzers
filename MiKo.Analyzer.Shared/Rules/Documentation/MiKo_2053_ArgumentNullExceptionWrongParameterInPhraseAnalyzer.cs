@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // get rid of the para tags as we are not interested into them
             var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTags().Trim();
 
-            var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
+            var parameterIndicators = parameters.ToDictionary(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name));
 
             return parameterIndicators
                    .Where(_ => comment.Contains(_.Value))

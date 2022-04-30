@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -32,8 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly IEnumerable<string> ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToList();
 
-        private static readonly string[] StartPhraseParts = string.Format(Constants.Comments.BooleanParameterStartingPhraseTemplate, '|').Split('|');
-        private static readonly string[] EndPhraseParts = string.Format(Constants.Comments.BooleanParameterEndingPhraseTemplate, '|').Split('|');
+        private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
 
         public override string FixableDiagnosticId => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
 

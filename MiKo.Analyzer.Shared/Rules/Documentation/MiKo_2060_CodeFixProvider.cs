@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -57,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             returnType = g.TypeArgumentList.Arguments[0];
                         }
 
-                        var parts = string.Format(template, '|').Split('|');
+                        var parts = template.FormatWith('|').Split('|');
 
                         var fixedComment = CommentStartingWith(preparedComment, parts[0], SeeCref(returnType), parts[1]);
 

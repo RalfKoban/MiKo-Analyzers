@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return symbol.ReturnType.TryGetGenericArgumentType(out var argumentType, count - 1)
                        ? GetStartingPhrases(argumentType, startingPhrases)
-                       : startingPhrases.Select(_ => string.Format(_, argumentType));
+                       : startingPhrases.Select(_ => _.FormatWith(argumentType));
         }
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)

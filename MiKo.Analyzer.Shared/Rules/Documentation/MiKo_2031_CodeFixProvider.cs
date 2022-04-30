@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2031_CodeFixProvider)), Shared]
     public sealed class MiKo_2031_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-        private static readonly string[] Parts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", "|").Split('|');
+        private static readonly string[] Parts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
         private static readonly string[] ContinueTextParts =
             {
@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case nameof(Task.WhenAll): return Comment(comment, Constants.Comments.WhenAllTaskReturnTypeStartingPhrase);
                 case nameof(Task.WhenAny):
                 {
-                    var parts = string.Format(Constants.Comments.WhenAnyTaskReturnTypeStartingPhraseTemplate, "task", "|").Split('|');
+                    var parts = Constants.Comments.WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
                     return Comment(comment, parts[0], SeeCrefTaskResult(), parts[1]);
                 }
