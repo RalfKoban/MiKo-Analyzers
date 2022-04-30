@@ -360,31 +360,11 @@ namespace System
             return results;
         }
 
+        public static bool StartsWithAny(this string value, IEnumerable<char> characters) => string.IsNullOrEmpty(value) is false && characters.Contains(value[0]);
+
         public static bool StartsWithAny(this string value, string[] prefixes) => StartsWithAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
-
-        public static bool StartsWithAnyChar(this string value, string characters)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return false;
-            }
-
-            var character = value[0];
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < characters.Length; index++)
-            {
-                if (character == characters[index])
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         public static bool StartsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[0].IsNumber();
 

@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static string GetEventArgsStartingPhrase(string name) => name.StartsWithAnyChar("AEIOU") ? "An " : "A ";
+        internal static string GetEventArgsStartingPhrase(string name) => name.StartsWithAny("AEIOU") ? "An " : "A ";
 
         internal static string GetEventArgsEndingPhrase() => " that contains the event data";
 
