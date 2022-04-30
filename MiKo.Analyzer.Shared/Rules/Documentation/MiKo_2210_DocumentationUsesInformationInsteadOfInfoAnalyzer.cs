@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal const string Term = "info";
 
-        internal static readonly string[] Terms = Constants.Comments.Delimiters.Select(_ => " " + Term + _).ToArray();
+        internal static readonly string[] Terms = GetWithDelimiters(Term);
 
         public MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer() : base(Id)
         {

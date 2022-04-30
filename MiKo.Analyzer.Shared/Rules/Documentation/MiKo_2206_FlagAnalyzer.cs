@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2206";
 
-        private static readonly string[] Phrases = CreatePhrases(" flag", " flags").ToArray();
+        private static readonly string[] Phrases = GetWithDelimiters("flag", "flags");
 
         public MiKo_2206_FlagAnalyzer() : base(Id)
         {
@@ -30,7 +30,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
-
-        private static IEnumerable<string> CreatePhrases(params string[] forbiddenTerms) => from suffix in Constants.Comments.Delimiters from forbiddenTerm in forbiddenTerms select forbiddenTerm + suffix;
     }
 }

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal const string Term = "id";
 
-        internal static readonly string[] Terms = Constants.Comments.Delimiters.Select(_ => " " + Term + _).ToArray();
+        internal static readonly string[] Terms = GetWithDelimiters(Term);
         internal static readonly string[] CodeTags = { Constants.XmlTag.C, Constants.XmlTag.Code };
 
         public MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer() : base(Id)

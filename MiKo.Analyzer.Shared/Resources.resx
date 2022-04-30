@@ -2220,6 +2220,20 @@ Instead, the documentation should describe what the method is intended to do.</v
   <data name="MiKo_2074_Title" xml:space="preserve">
     <value>Documentation of parameter of 'Contains' method should have a default ending phrase</value>
   </data>
+  <data name="MiKo_2075_CodeFixTitle" xml:space="preserve">
+    <value>Change to '{0}'</value>
+  </data>
+  <data name="MiKo_2075_Description" xml:space="preserve">
+    <value>XML documentation is intended for other developers. If you mention 'Action' or 'Function' delegates in your documentation, the developers already have the type information available. So those delegates should not be mentioned as 'action', 'func' or 'function'.
+
+Instead, they should be mentioned as 'callback' because - as delegates represent references to methods with a particular parameter list and return type - they actually act as callbacks to those methods when used within code.</value>
+  </data>
+  <data name="MiKo_2075_MessageFormat" xml:space="preserve">
+    <value>Replace '{1}' with '{2}'</value>
+  </data>
+  <data name="MiKo_2075_Title" xml:space="preserve">
+    <value>Documentation should use the term 'callback' instead of 'action', 'func' or 'function'</value>
+  </data>
   <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
     <value>Start field with default phrase</value>
   </data>

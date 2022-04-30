@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2049";
 
-        private static readonly string[] Phrases = Constants.Comments.Delimiters.SelectMany(_ => new[] { " will be", " will also be", " will as well be" }, (delimiter, phrase) => phrase + delimiter).ToArray();
+        private static readonly string[] Phrases = GetWithDelimiters("will be", "will also be", "will as well be");
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {
