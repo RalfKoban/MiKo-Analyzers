@@ -11349,7 +11349,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Array.Empty&lt;&gt;().
+        ///   Looks up a localized string similar to Use &apos;Array.Empty&lt;&gt;()&apos;.
         /// </summary>
         public static string MiKo_5013_CodeFixTitle {
             get {
@@ -11381,6 +11381,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_5013_Title {
             get {
                 return ResourceManager.GetString("MiKo_5013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Array.Empty&lt;&gt;()&apos;.
+        /// </summary>
+        public static string MiKo_5014_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_5014_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To avoid unnecessary memory consumption and pressure on the garbage collector, empty lists should not be created manually. Instead, the method &apos;Array.Empty&lt;T&gt;()&apos; should be used..
+        /// </summary>
+        public static string MiKo_5014_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5014_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not create empty lists.
+        /// </summary>
+        public static string MiKo_5014_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5014_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not create empty lists if the return value is read-only.
+        /// </summary>
+        public static string MiKo_5014_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5014_Title", resourceCulture);
             }
         }
     }

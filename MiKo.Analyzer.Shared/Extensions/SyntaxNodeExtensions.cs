@@ -301,6 +301,23 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
 
+        internal static string GetNameOnlyPartWithoutGeneric(this TypeSyntax value)
+        {
+            var type = GetNameLocal();
+
+            return type.GetNameOnlyPart();
+
+            string GetNameLocal()
+            {
+                switch (value)
+                {
+                    case GenericNameSyntax generic: return generic.GetName();
+                    case SimpleNameSyntax simple: return simple.GetName();
+                    default: return value?.ToString();
+                }
+            }
+        }
+
         internal static ParameterSyntax[] GetParameters(this XmlElementSyntax value)
         {
             foreach (var ancestor in value.Ancestors())

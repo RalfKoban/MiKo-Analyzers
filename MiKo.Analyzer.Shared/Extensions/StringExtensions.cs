@@ -213,6 +213,17 @@ namespace System
             return fullName.GetPartAfterLastDot();
         }
 
+        public static string GetNameOnlyPartWithoutGeneric(this string fullName)
+        {
+            var genericIndexStart = fullName.IndexOf('<');
+
+            var name = genericIndexStart > 0
+                           ? fullName.Substring(0, genericIndexStart)
+                           : fullName;
+
+            return name.GetPartAfterLastDot();
+        }
+
         public static string GetPartAfterLastDot(this string value) => value?.Substring(value.LastIndexOf('.') + 1);
 
         public static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);

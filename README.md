@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 330 rules that are currently provided by the analyzer.
+The following tables list all the 331 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -365,3 +365,4 @@ The following tables list all the 330 rules that are currently provided by the a
 |MiKo_5011|Do not concatenate strings with += operator|&#x2713;|\-|
 |MiKo_5012|Do not use 'yield return' for recursively defined structures|&#x2713;|\-|
 |MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|
+|MiKo_5014|Do not create empty lists if the return value is read-only|&#x2713;|&#x2713;|
