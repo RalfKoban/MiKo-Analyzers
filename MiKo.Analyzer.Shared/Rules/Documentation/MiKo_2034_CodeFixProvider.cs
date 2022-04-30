@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -9,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2034_CodeFixProvider)), Shared]
     public sealed class MiKo_2034_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-        private static readonly string[] Parts = string.Format(Constants.Comments.EnumTaskReturnTypeStartingPhraseTemplate, "task", "|").Split('|');
+        private static readonly string[] Parts = Constants.Comments.EnumTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
         public override string FixableDiagnosticId => MiKo_2034_EnumReturnTypeDefaultPhraseAnalyzer.Id;
 

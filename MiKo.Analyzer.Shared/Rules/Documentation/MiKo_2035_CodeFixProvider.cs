@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 " which contains ",
             };
 
-        private static readonly string[] TaskParts = string.Format(Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate, "task", '|').Split('|');
+        private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
 
         public override string FixableDiagnosticId => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
 

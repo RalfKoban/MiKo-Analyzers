@@ -3,8 +3,6 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-using Microsoft.CodeAnalysis.CSharp;
-
 using MiKoSolutions.Analyzers;
 
 // ReSharper disable once CheckNamespace
@@ -160,6 +158,14 @@ namespace System
 
             return text;
         }
+
+        public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
+
+        public static string FormatWith(this string format, object arg0, object arg1) => string.Format(format, arg0, arg1);
+
+        public static string FormatWith(this string format, object arg0, object arg1, object arg2) => string.Format(format, arg0, arg1, arg2);
+
+        public static string FormatWith(this string format, object arg0, object arg1, object arg2, object arg3) => string.Format(format, arg0, arg1, arg2, arg3);
 
         public static IEnumerable<string> Words(this string text)
         {

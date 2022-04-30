@@ -12,8 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2017_CodeFixProvider)), Shared]
     public sealed class MiKo_2017_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        private static readonly string[] SummaryText = string.Format(Constants.Comments.DependencyPropertyFieldSummaryPhraseTemplate, "|").Split('|');
-        private static readonly string[] ValueText = string.Format(Constants.Comments.DependencyPropertyFieldValuePhraseTemplate, "|").Split('|');
+        private static readonly string[] SummaryText = Constants.Comments.DependencyPropertyFieldSummaryPhraseTemplate.FormatWith("|").Split('|');
+        private static readonly string[] ValueText = Constants.Comments.DependencyPropertyFieldValuePhraseTemplate.FormatWith("|").Split('|');
 
         public override string FixableDiagnosticId => MiKo_2017_DependencyPropertyDefaultPhraseAnalyzer.Id;
 

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => MiKo_2018_ChecksSummaryAnalyzer.Id;
 
-        protected override string Title => string.Format(Resources.MiKo_2018_CodeFixTitle, StartingPhrase);
+        protected override string Title => Resources.MiKo_2018_CodeFixTitle.FormatWith(StartingPhrase);
 
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {

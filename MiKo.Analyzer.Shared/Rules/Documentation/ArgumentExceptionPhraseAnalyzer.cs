@@ -38,10 +38,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // create default proposal for parameter names
             var proposal = parameters
-                           .Select(_ => string.Format(m_exceptionPhrases[0], _.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Environment.NewLine)
+                           .Select(_ => m_exceptionPhrases[0].FormatWith(_.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Environment.NewLine)
                            .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Environment.NewLine);
 
-            var parameterIndicators = parameters.ToDictionary(_ => _, _ => string.Format(Constants.Comments.ParamRefBeginningPhrase, _.Name));
+            var parameterIndicators = parameters.ToDictionary(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name));
             var allParameterIndicatorPhrases = parameterIndicators.Values.ToArray();
 
             const StringComparison Comparison = StringComparison.Ordinal;
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var parameter in parameters)
                 {
                     var parameterIndicatorPhrase = parameterIndicators[parameter];
-                    var phrases = m_exceptionPhrases.Select(_ => string.Format(_, parameter.Name)).ToArray();
+                    var phrases = m_exceptionPhrases.Select(_ => _.FormatWith(parameter.Name)).ToArray();
 
                     results.AddRange(parts
                                      .Where(_ => _.Contains(parameterIndicatorPhrase))

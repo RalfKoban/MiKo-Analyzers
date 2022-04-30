@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return AnalyzeTable(list);
 
                 default: // unknown type
-                    return new[] { Issue(string.Empty, listType, string.Format(Resources.MiKo_2217_MessageArgument_UnknownTypeSpecified, type)) };
+                    return new[] { Issue(string.Empty, listType, Resources.MiKo_2217_MessageArgument_UnknownTypeSpecified.FormatWith(type)) };
             }
         }
 

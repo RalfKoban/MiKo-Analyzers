@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -11,9 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2037_CodeFixProvider)), Shared]
     public sealed class MiKo_2037_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly string[] GetOnly = string.Format(Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
-        private static readonly string[] SetOnly = string.Format(Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate, '|').Split('|');
-        private static readonly string[] GetSet = string.Format(Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate, '|').Split('|');
+        private static readonly string[] GetOnly = Constants.Comments.CommandPropertyGetterOnlySummaryStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] SetOnly = Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string[] GetSet = Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith('|').Split('|');
 
         public override string FixableDiagnosticId => MiKo_2037_CommandPropertySummaryAnalyzer.Id;
 

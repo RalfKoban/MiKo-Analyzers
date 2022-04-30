@@ -215,13 +215,13 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] WhenAnyTaskReturnTypeStartingPhrase =
                 {
-                    string.Format(WhenAnyTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"Task{TResult}.Result\" />"), // this is just to have a proposal how to optimize
-                    string.Format(WhenAnyTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
-                    string.Format(WhenAnyTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
-                    string.Format(WhenAnyTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
-                    string.Format(WhenAnyTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
-                    string.Format(WhenAnyTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
-                    string.Format(WhenAnyTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "<see cref=\"Task{TResult}.Result\" />"), // this is just to have a proposal how to optimize
+                    WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    WhenAnyTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
                 };
 
             internal const string NonGenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation.";
@@ -230,52 +230,52 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] NonGenericTaskReturnTypePhrase =
                 {
-                    string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "task"),
-                    string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task\"/>"),
-                    string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task\" />"),
+                    NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task"),
+                    NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task\"/>"),
+                    NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task\" />"),
                 };
 
             internal static readonly string[] GenericTaskReturnTypeStartingPhrase =
                 {
-                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"Task{TResult}.Result\" />"), // this is just to have a proposal how to optimize
-                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
-                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "task", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
-                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
-                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
-                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
-                    string.Format(GenericTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "<see cref=\"Task{TResult}.Result\" />"), // this is just to have a proposal how to optimize
+                    GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\" />", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
+                    GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\" />"),
+                    GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1\"/>", "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>"),
                 };
 
             internal const string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
 
             internal static readonly string[] BooleanReturnTypeStartingPhrase =
                 {
-                    string.Format(BooleanReturnTypeStartingPhraseTemplate, "<see langword=\"true\"/>"),
-                    string.Format(BooleanReturnTypeStartingPhraseTemplate, "<see langword=\"true\" />"),
+                    BooleanReturnTypeStartingPhraseTemplate.FormatWith("<see langword=\"true\"/>"),
+                    BooleanReturnTypeStartingPhraseTemplate.FormatWith("<see langword=\"true\" />"),
                 };
 
             internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
 
             internal static readonly string[] BooleanReturnTypeEndingPhrase =
                 {
-                    string.Format(BooleanReturnTypeEndingPhraseTemplate, "<see langword=\"false\"/>"),
-                    string.Format(BooleanReturnTypeEndingPhraseTemplate, "<see langword=\"false\" />"),
+                    BooleanReturnTypeEndingPhraseTemplate.FormatWith("<see langword=\"false\"/>"),
+                    BooleanReturnTypeEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                 };
 
             internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
 
             internal static readonly string[] BooleanParameterStartingPhrase =
                 {
-                    string.Format(BooleanParameterStartingPhraseTemplate, "<see langword=\"true\"/>"),
-                    string.Format(BooleanParameterStartingPhraseTemplate, "<see langword=\"true\" />"),
+                    BooleanParameterStartingPhraseTemplate.FormatWith("<see langword=\"true\"/>"),
+                    BooleanParameterStartingPhraseTemplate.FormatWith("<see langword=\"true\" />"),
                 };
 
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
 
             internal static readonly string[] BooleanParameterEndingPhrase =
                 {
-                    string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\"/>"),
-                    string.Format(BooleanParameterEndingPhraseTemplate, "<see langword=\"false\" />"),
+                    BooleanParameterEndingPhraseTemplate.FormatWith("<see langword=\"false\"/>"),
+                    BooleanParameterEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                 };
 
             internal static readonly string[] BooleanPropertySetterStartingPhrase = BooleanReturnTypeStartingPhrase.Concat(BooleanParameterStartingPhrase).Distinct().ToArray();
@@ -284,50 +284,50 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                 {
-                    string.Format(BooleanTaskReturnTypeStartingPhraseTemplate, "<see langword=\"true\"/>"),
-                    string.Format(BooleanTaskReturnTypeStartingPhraseTemplate, "<see langword=\"true\" />"),
+                    BooleanTaskReturnTypeStartingPhraseTemplate.FormatWith("<see langword=\"true\"/>"),
+                    BooleanTaskReturnTypeStartingPhraseTemplate.FormatWith("<see langword=\"true\" />"),
                 };
 
             internal const string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
 
             internal static readonly string[] BooleanTaskReturnTypeEndingPhrase =
                 {
-                    string.Format(BooleanTaskReturnTypeEndingPhraseTemplate, "<see langword=\"false\"/>"),
-                    string.Format(BooleanTaskReturnTypeEndingPhraseTemplate, "<see langword=\"false\" />"),
+                    BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("<see langword=\"false\"/>"),
+                    BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                 };
 
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "contains"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "contains"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "contains"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "consists of"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "consists of"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "consists of"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "consists of"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\"/>", "represents"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"string\" />", "represents"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\"/>", "represents"),
-                    string.Format(StringReturnTypeStartingPhraseTemplate, "<see cref=\"System.String\" />", "represents"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "contains"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "contains"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "contains"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "represents"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "represents"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "represents"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "represents"),
                 };
 
-            internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = string.Format(NonGenericTaskReturnTypeStartingPhraseTemplate, "task") + " The {0} property on the task object returns a {1} that {2} ";
+            internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task") + " The {0} property on the task object returns a {1} that {2} ";
 
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
                 {
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"Task{TResult}.Result\"/>", "<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\"/>", "contains"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\" />", "contains"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\"/>", "contains"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "contains"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"Task{TResult}.Result\"/>", "<see cref=\"string\"/>", "consists of"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\"/>", "consists of"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\" />", "consists of"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\"/>", "consists of"),
-                    string.Format(StringTaskReturnTypeStartingPhraseTemplate, "<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "consists of"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"Task{TResult}.Result\"/>", "<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\"/>", "contains"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\" />", "contains"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\"/>", "contains"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "contains"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"Task{TResult}.Result\"/>", "<see cref=\"string\"/>", "consists of"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\"/>", "consists of"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\" />", "consists of"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\" />", "<see cref=\"System.String\"/>", "consists of"),
+                    StringTaskReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.Threading.Tasks.Task`1.Result\"/>", "<see cref=\"System.String\" />", "consists of"),
                 };
 
             internal const string EnumStartingPhrase = "Defines values that specify ";
@@ -361,32 +361,32 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                 {
-                    string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\"/>"),
-                    string.Format(DependencyPropertyFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
+                    DependencyPropertyFieldSummaryPhraseTemplate.FormatWith("<see cref=\"{0}\"/>"),
+                    DependencyPropertyFieldSummaryPhraseTemplate.FormatWith("<see cref=\"{0}\" />"),
                 };
 
             internal const string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
 
             internal static readonly string[] DependencyPropertyFieldValuePhrase =
                 {
-                    string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\"/>"),
-                    string.Format(DependencyPropertyFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
+                    DependencyPropertyFieldValuePhraseTemplate.FormatWith("<see cref=\"{0}\"/>"),
+                    DependencyPropertyFieldValuePhraseTemplate.FormatWith("<see cref=\"{0}\" />"),
                 };
 
             internal const string RoutedEventFieldSummaryPhraseTemplate = "Identifies the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldSummaryPhrase =
                 {
-                    string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\"/>"),
-                    string.Format(RoutedEventFieldSummaryPhraseTemplate, "<see cref=\"{0}\" />"),
+                    RoutedEventFieldSummaryPhraseTemplate.FormatWith("<see cref=\"{0}\"/>"),
+                    RoutedEventFieldSummaryPhraseTemplate.FormatWith("<see cref=\"{0}\" />"),
                 };
 
             internal const string RoutedEventFieldValuePhraseTemplate = "The identifier for the {0} routed event.";
 
             internal static readonly string[] RoutedEventFieldValuePhrase =
                 {
-                    string.Format(RoutedEventFieldValuePhraseTemplate, "<see cref=\"{0}\"/>"),
-                    string.Format(RoutedEventFieldValuePhraseTemplate, "<see cref=\"{0}\" />"),
+                    RoutedEventFieldValuePhraseTemplate.FormatWith("<see cref=\"{0}\"/>"),
+                    RoutedEventFieldValuePhraseTemplate.FormatWith("<see cref=\"{0}\" />"),
                 };
 
             internal const string SealedClassPhrase = "This class cannot be inherited.";
@@ -453,8 +453,8 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionCtorSummaryStartingPhrase =
                 {
-                    string.Format(ExceptionCtorSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
-                    string.Format(ExceptionCtorSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
+                    ExceptionCtorSummaryStartingPhraseTemplate.FormatWith("<see cref=\"{0}\"/>"),
+                    ExceptionCtorSummaryStartingPhraseTemplate.FormatWith("<see cref=\"{0}\" />"),
                 };
 
             internal const string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
@@ -471,10 +471,10 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionCtorExceptionParamPhrase =
                 {
-                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException""/>", @"<see langword=""null""/>", @"<b>catch</b>"),
-                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException"" />", @"<see langword=""null"" />", @"<b>catch</b>"),
-                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException"" />", @"<see langword=""null""/>", @"<b>catch</b>"),
-                    string.Format(ExceptionCtorExceptionParamPhraseTemplate, " ", @"<paramref name=""innerException""/>", @"<see langword=""null"" />", @"<b>catch</b>"),
+                    ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException""/>", @"<see langword=""null""/>", @"<b>catch</b>"),
+                    ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException"" />", @"<see langword=""null"" />", @"<b>catch</b>"),
+                    ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException"" />", @"<see langword=""null""/>", @"<b>catch</b>"),
+                    ExceptionCtorExceptionParamPhraseTemplate.FormatWith(" ", @"<paramref name=""innerException""/>", @"<see langword=""null"" />", @"<b>catch</b>"),
                 };
 
             internal const string FactorySummaryPhrase = "Provides support for creating ";
@@ -483,16 +483,16 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] FactoryCreateMethodSummaryStartingPhrase =
                 {
-                    string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
-                    string.Format(FactoryCreateMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
+                    FactoryCreateMethodSummaryStartingPhraseTemplate.FormatWith("<see cref=\"{0}\"/>"),
+                    FactoryCreateMethodSummaryStartingPhraseTemplate.FormatWith("<see cref=\"{0}\" />"),
                 };
 
             internal const string FactoryCreateCollectionMethodSummaryStartingPhraseTemplate = "Creates a collection of new instances of the {0} type with ";
 
             internal static readonly string[] FactoryCreateCollectionMethodSummaryStartingPhrase =
                 {
-                    string.Format(FactoryCreateCollectionMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\"/>"),
-                    string.Format(FactoryCreateCollectionMethodSummaryStartingPhraseTemplate, "<see cref=\"{0}\" />"),
+                    FactoryCreateCollectionMethodSummaryStartingPhraseTemplate.FormatWith("<see cref=\"{0}\"/>"),
+                    FactoryCreateCollectionMethodSummaryStartingPhraseTemplate.FormatWith("<see cref=\"{0}\" />"),
                 };
 
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
@@ -505,8 +505,8 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExtensionMethodClassStartingPhrase =
                 {
-                    string.Format(ExtensionMethodClassStartingPhraseTemplate, "<see langword=\"static\"/>"),
-                    string.Format(ExtensionMethodClassStartingPhraseTemplate, "<see langword=\"static\" />"),
+                    ExtensionMethodClassStartingPhraseTemplate.FormatWith("<see langword=\"static\"/>"),
+                    ExtensionMethodClassStartingPhraseTemplate.FormatWith("<see langword=\"static\" />"),
                 };
 
             internal static readonly string[] ArgumentNullExceptionStartingPhrase =
@@ -577,30 +577,30 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] CommandPropertyGetterSetterSummaryStartingPhrase =
                 {
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
-                    string.Format(CommandPropertyGetterSetterSummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
+                    CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith(@"<see cref=""ICommand""/>"),
+                    CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith(@"<see cref=""ICommand"" />"),
+                    CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith(@"<see cref=""System.Windows.Input.ICommand""/>"),
+                    CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith(@"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
             internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
 
             internal static readonly string[] CommandPropertyGetterOnlySummaryStartingPhrase =
                 {
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
-                    string.Format(CommandPropertyGetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
+                    CommandPropertyGetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""ICommand""/>"),
+                    CommandPropertyGetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""ICommand"" />"),
+                    CommandPropertyGetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""System.Windows.Input.ICommand""/>"),
+                    CommandPropertyGetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
             internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
 
             internal static readonly string[] CommandPropertySetterOnlySummaryStartingPhrase =
                 {
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand""/>"),
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""ICommand"" />"),
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand""/>"),
-                    string.Format(CommandPropertySetterOnlySummaryStartingPhraseTemplate, @"<see cref=""System.Windows.Input.ICommand"" />"),
+                    CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""ICommand""/>"),
+                    CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""ICommand"" />"),
+                    CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""System.Windows.Input.ICommand""/>"),
+                    CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith(@"<see cref=""System.Windows.Input.ICommand"" />"),
                 };
 
             internal const string FieldIsReadOnly = "This field is read-only.";

@@ -232,7 +232,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
 
-            var parts = string.Format(expectedTitle, '|').Split('|');
+            var parts = StringExtensions.FormatWith(expectedTitle, '|').Split('|');
             if (parts.Length <= 1)
             {
                 Assert.That(codeFixTitle, Is.EqualTo(expectedTitle), "No codefix title found at all");
