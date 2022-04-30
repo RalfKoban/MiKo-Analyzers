@@ -56,6 +56,14 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_specific_string_extension_method() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
+}
+");
+
+        [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
                                                          "class TestMe { void Method(object o1) { } }",
                                                          "class TestMe { void Method(object o) { } }");
