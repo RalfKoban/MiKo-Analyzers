@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string Value = "value";
         private const string Values = "values";
         private const string Source = "source";
+        private const string Format = "format";
 
         public MiKo_1039_ExtensionMethodsParameterAnalyzer() : base(Id)
         {
@@ -27,8 +28,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Source;
             }
 
+            if (IsStringFormatExtension(symbol) && symbol.Type.SpecialType == SpecialType.System_String)
+            {
+                return Format;
+            }
+
             return symbol.Type.IsEnumerable() ? Values : Value;
         }
+
+        internal static bool IsStringFormatExtension(IParameterSymbol symbol) => symbol.ContainingSymbol is IMethodSymbol method && IsStringFormatExtension(method);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtensionMethod;
 
@@ -36,9 +44,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameter = symbol.Parameters[0];
 
-            return IsConversionExtension(symbol)
-                   ? AnalyzeName(parameter, Source)
-                   : AnalyzeName(parameter, Value, Values, Source);
+            if (IsConversionExtension(symbol))
+            {
+                return AnalyzeName(parameter, Source);
+            }
+
+            if (IsStringFormatExtension(symbol))
+            {
+                return AnalyzeName(parameter, Format);
+            }
+
+            return AnalyzeName(parameter, Value, Values, Source);
         }
 
         private static bool IsConversionExtension(IMethodSymbol method)
@@ -70,6 +86,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return false;
         }
+
+        private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType == SpecialType.System_String && method.Name.StartsWith("Format", StringComparison.Ordinal);
 
         private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names) => names.Any(_ => _ == parameter.Name)
                                                                                                               ? Enumerable.Empty<Diagnostic>()

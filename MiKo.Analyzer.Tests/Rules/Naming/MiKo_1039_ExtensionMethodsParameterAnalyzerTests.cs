@@ -40,6 +40,14 @@ public static class TestMeExtensions
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_specific_string_extension_method() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
+}
+");
+
         [Test, Combinatorial]
         public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_(
                                                                                     [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
@@ -138,6 +146,24 @@ public static class TestMeExtensions
 
             var originalCode = Template.Replace("#NAME#", "nodes");
             var fixedCode = Template.Replace("#NAME#", "values");
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_specific_string_extension_method()
+        {
+            const string Template = @"
+using System.Collections.Generic;
+
+public static class TestMeExtensions
+{
+    public static string FormatWith(this string #NAME#, object arg0) => string.Format(#NAME#, arg0);
+}
+";
+
+            var originalCode = Template.Replace("#NAME#", "i");
+            var fixedCode = Template.Replace("#NAME#", "format");
 
             VerifyCSharpFix(originalCode, fixedCode);
         }
