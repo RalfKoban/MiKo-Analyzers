@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2005";
 
-        private static readonly string[] Phrases = Constants.Comments.Delimiters.SelectMany(_ => new[] { " event args", " event arg" }, (delimiter, phrase) => phrase + delimiter).ToArray();
+        private static readonly string[] Phrases = GetWithDelimiters("event args", "event arg");
 
         public MiKo_2005_EventArgsInDocumentationAnalyzer() : base(Id, (SymbolKind)(-1))
         {

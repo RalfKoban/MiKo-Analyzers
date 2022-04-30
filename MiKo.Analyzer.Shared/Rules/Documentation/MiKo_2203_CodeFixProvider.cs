@@ -20,14 +20,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return Comment(syntax, MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Guids, ReplacementMap);
+            return Comment(syntax, MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Phrases, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
             var dictionary = new Dictionary<string, string>();
 
-            foreach (var term in MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Guids)
+            foreach (var term in MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Phrases)
             {
                 var replacement = term.ToUpperInvariant().Replace("GUID", Replacement);
                 dictionary.Add(term, replacement);

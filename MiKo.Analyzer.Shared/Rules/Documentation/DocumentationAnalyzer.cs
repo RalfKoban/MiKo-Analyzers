@@ -12,6 +12,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        /// <summary>
+        /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        protected static string[] GetWithDelimiters(params string[] values)
+        {
+            var result = new List<string>();
+
+            foreach (var delimiter in Constants.Comments.Delimiters)
+            {
+                foreach (var phrase in values)
+                {
+                    result.Add(' ' + phrase + delimiter);
+                    result.Add('(' + phrase + delimiter);
+                }
+            }
+
+            return result.ToArray();
+        }
+
         protected static Location GetFirstLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             return CreateLocation(value, textToken.SyntaxTree, textToken.SpanStart, textToken.ValueText.IndexOf(value, comparison), startOffset, endOffset);

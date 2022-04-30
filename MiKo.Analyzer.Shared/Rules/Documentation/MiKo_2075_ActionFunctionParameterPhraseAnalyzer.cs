@@ -9,15 +9,17 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer : OverallDocumentationAnalyzer
+    public sealed class MiKo_2075_ActionFunctionParameterPhraseAnalyzer : OverallDocumentationAnalyzer
     {
-        public const string Id = "MiKo_2210";
+        public const string Id = "MiKo_2075";
 
-        internal const string Term = "info";
+        internal const string Replacement = "callback";
 
-        internal static readonly string[] Terms = GetWithDelimiters(Term);
+        internal static readonly string[] Terms = { "action", "Action", "function", "Function", "func", "Func" };
 
-        public MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzer() : base(Id)
+        private static readonly string[] Phrases = GetWithDelimiters(Terms);
+
+        public MiKo_2075_ActionFunctionParameterPhraseAnalyzer() : base(Id)
         {
         }
 
@@ -26,9 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var token in symbol.GetDocumentationCommentTriviaSyntax().DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
             {
                 const int Offset = 1; // we do not want to underline the first and last char
-                foreach (var location in GetAllLocations(token, Terms, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                foreach (var location in GetAllLocations(token, Phrases, StringComparison.Ordinal, Offset, Offset))
                 {
-                    yield return Issue(symbol.Name, location);
+                    yield return Issue(symbol.Name, location, location.GetText(), Replacement);
                 }
             }
         }

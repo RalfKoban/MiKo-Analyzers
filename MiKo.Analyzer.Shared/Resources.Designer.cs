@@ -6214,6 +6214,44 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change to &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_2075_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2075_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML documentation is intended for other developers. If you mention &apos;Action&apos; or &apos;Function&apos; delegates in your documentation, the developers already have the type information available. So those delegates should not be mentioned as &apos;action&apos;, &apos;func&apos; or &apos;function&apos;.
+        ///
+        ///Instead, they should be mentioned as &apos;callback&apos; because - as delegates represent references to methods with a particular parameter list and return type - they actually act as callbacks to those methods when used within code..
+        /// </summary>
+        public static string MiKo_2075_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2075_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;{1}&apos; with &apos;{2}&apos;.
+        /// </summary>
+        public static string MiKo_2075_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2075_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use the term &apos;callback&apos; instead of &apos;action&apos;, &apos;func&apos; or &apos;function&apos;.
+        /// </summary>
+        public static string MiKo_2075_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2075_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         public static string MiKo_2080_CodeFixTitle {
