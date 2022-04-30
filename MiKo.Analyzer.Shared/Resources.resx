@@ -4008,7 +4008,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Do not use 'yield return' for recursively defined structures</value>
   </data>
   <data name="MiKo_5013_CodeFixTitle" xml:space="preserve">
-    <value>Use Array.Empty&lt;&gt;()</value>
+    <value>Use 'Array.Empty&lt;&gt;()'</value>
   </data>
   <data name="MiKo_5013_Description" xml:space="preserve">
     <value>To avoid unnecessary memory consumption and pressure on the garbage collector, empty arrays should not be created manually. Instead, the method 'Array.Empty&lt;T&gt;()' should be used.</value>
@@ -4018,5 +4018,17 @@ Instead the equality operator should be used to compare value types.</value>
   </data>
   <data name="MiKo_5013_Title" xml:space="preserve">
     <value>Do not create empty arrays</value>
+  </data>
+  <data name="MiKo_5014_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Array.Empty&lt;&gt;()'</value>
+  </data>
+  <data name="MiKo_5014_Description" xml:space="preserve">
+    <value>To avoid unnecessary memory consumption and pressure on the garbage collector, empty lists should not be created manually. Instead, the method 'Array.Empty&lt;T&gt;()' should be used.</value>
+  </data>
+  <data name="MiKo_5014_MessageFormat" xml:space="preserve">
+    <value>Do not create empty lists</value>
+  </data>
+  <data name="MiKo_5014_Title" xml:space="preserve">
+    <value>Do not create empty lists if the return value is read-only</value>
   </data>
 </root>

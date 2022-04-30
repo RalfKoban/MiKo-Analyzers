@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules
@@ -42,6 +43,33 @@ namespace MiKoSolutions.Analyzers.Rules
                     context.RegisterCodeFix(codeFix, diagnostic);
                 }
             }
+        }
+
+        protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
+
+        protected static InvocationExpressionSyntax Invocation(MemberAccessExpressionSyntax member, params ArgumentSyntax[] arguments)
+        {
+            // that's for the argument
+            var argumentList = ArgumentList(arguments);
+
+            // combine both to complete call
+            return SyntaxFactory.InvocationExpression(member, argumentList);
+        }
+
+        protected static InvocationExpressionSyntax Invocation(string typeName, string methodName, params TypeSyntax[] items)
+        {
+            // that's for the method call
+            var member = SimpleMemberAccess(typeName, methodName, items);
+
+            return Invocation(member);
+        }
+
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName, TypeSyntax[] items)
+        {
+            var type = SyntaxFactory.IdentifierName(typeName);
+            var method = SyntaxFactory.GenericName(methodName).AddTypeArgumentListArguments(items);
+
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
         protected static SemanticModel GetSemanticModel(CodeFixContext context) => context.Document.GetSemanticModelAsync(context.CancellationToken).Result;

@@ -5,7 +5,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Performance
@@ -23,12 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var node = (ArrayCreationExpressionSyntax)syntax;
 
-            var type = SyntaxFactory.IdentifierName(nameof(Array));
-            var method = SyntaxFactory.GenericName(nameof(Array.Empty)).AddTypeArgumentListArguments(node.Type.ElementType);
-
-            var expression = SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
-
-            return SyntaxFactory.InvocationExpression(expression);
+            return Invocation(nameof(Array), nameof(Array.Empty), node.Type.ElementType);
         }
     }
 }
