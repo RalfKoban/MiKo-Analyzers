@@ -65,15 +65,13 @@ namespace Bla
                                                                                                         });
 
         [Test]
-        public void An_issue_is_reported_for_test_class_with_incorrect_namespace() => Assert.Multiple(() =>
-                                                                                                          {
-                                                                                                             foreach (var namespaceName in WrongNamespaceNames)
-                                                                                                             {
-                                                                                                                 foreach (var testFixture in TestFixtures)
-                                                                                                                 {
-                                                                                                                     foreach (var test in Tests)
-                                                                                                                     {
-                                                                                                                          An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_test_class_with_incorrect_namespace_([ValueSource(nameof(WrongNamespaceNames))] string namespaceName) => Assert.Multiple(() =>
+                                                                                                                                                                          {
+                                                                                                                                                                              foreach (var testFixture in TestFixtures)
+                                                                                                                                                                              {
+                                                                                                                                                                                  foreach (var test in Tests)
+                                                                                                                                                                                  {
+                                                                                                                                                                                      An_issue_is_reported_for(@"
 namespace " + namespaceName + @"
 {
   [" + testFixture + @"]
@@ -84,10 +82,9 @@ namespace " + namespaceName + @"
   }
 }
 ");
-                                                                                                                     }
-                                                                                                                 }
-                                                                                                             }
-                                                                                                          });
+                                                                                                                                                                                  }
+                                                                                                                                                                              }
+                                                                                                                                                                          });
 
         protected override string GetDiagnosticId() => MiKo_1407_TestNamespaceAnalyzer.Id;
 
