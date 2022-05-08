@@ -3432,6 +3432,16 @@ So it assists in thinking about whether the value is the intended one.</value>
   <data name="MiKo_3077_Title" xml:space="preserve">
     <value>Properties that return an Enum should have a default value</value>
   </data>
+  <data name="MiKo_3078_Description" xml:space="preserve">
+    <value>Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
+Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a 'shared' variable and do a break afterwards.</value>
+  </data>
+  <data name="MiKo_3078_MessageFormat" xml:space="preserve">
+    <value>Place switch statement in separate method and return value within case blocks</value>
+  </data>
+  <data name="MiKo_3078_Title" xml:space="preserve">
+    <value>Use 'switch ... return' instead of 'switch ... break' when assigning variables</value>
+  </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
   </data>
