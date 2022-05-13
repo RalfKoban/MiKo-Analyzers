@@ -50,6 +50,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Office",
                 "PostSharp",
                 "NDepend",
+
+                // language names
+                "CSharp",
+                "VisualBasic",
+                "CPlusPlus",
+                "TypeScript",
+                "JavaScript",
+                "Perl",
             };
 
         public MiKo_1400_NamespacesInPluralAnalyzer() : base(Id)
