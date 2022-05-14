@@ -114,6 +114,8 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
+        [TestCase("StringComparison.Ordinal", "StringComparison.OrdinalIgnoreCase")]
+        [TestCase("StringComparison.Ordinal", "(object)StringComparison.OrdinalIgnoreCase")] // with cast to object
         public void No_issue_is_reported_for_IEquatable_equals_method_on_structs_(string x, string y) => No_issue_is_reported_for(@"
 using System;
 
@@ -259,6 +261,24 @@ public class TestMe
         [TestCase(
              "using System; class TestMe { void Do(Guid x, bool b) { if (b && Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x, bool b) { if (b && x == Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(StringComparison x) { if (Equals(x, StringComparison.Ordinal)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x) { if (x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(StringComparison x) { if (!Equals(x, StringComparison.Ordinal)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x) { if (x != StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(StringComparison x) { if (!(Equals(x, StringComparison.Ordinal))) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x) { if (x != StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(StringComparison x) { if (Equals(x, StringComparison.Ordinal) != true) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x) { if (x != StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(StringComparison x, bool b) { if (b && Equals(x, StringComparison.Ordinal)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x, bool b) { if (b && x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(StringComparison x) { if (x.Equals((object)StringComparison.Ordinal)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x) { if (x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_5010_EqualsAnalyzer.Id;

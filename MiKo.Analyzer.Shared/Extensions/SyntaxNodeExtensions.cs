@@ -970,6 +970,20 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsObject(this TypeSyntax value)
+        {
+            switch (value.ToString())
+            {
+                case "object":
+                case nameof(Object):
+                case nameof(System) + "." + nameof(Object):
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsSupported(this SyntaxNodeAnalysisContext value, LanguageVersion expectedVersion)
         {
             var languageVersion = ((CSharpParseOptions)value.Node.SyntaxTree.Options).LanguageVersion;

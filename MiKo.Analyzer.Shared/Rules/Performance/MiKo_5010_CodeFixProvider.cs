@@ -45,11 +45,33 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             var arguments = invocation.ArgumentList.Arguments;
-            var left = arguments[0].Expression;
-            var right = arguments[1].Expression;
-            var expression = SyntaxFactory.BinaryExpression(kind, left, right);
+            switch (arguments.Count)
+            {
+                case 1 when invocation.Expression is MemberAccessExpressionSyntax maes:
+                {
+                    var left = maes.Expression;
+                    var right = arguments[0].Expression;
+                    if (right is CastExpressionSyntax cast)
+                    {
+                        right = cast.Expression;
+                    }
 
-            return expression.WithTrailingTriviaFrom(syntax);
+                    var expression = SyntaxFactory.BinaryExpression(kind, left, right);
+
+                    return expression.WithTrailingTriviaFrom(syntax);
+                }
+
+                case 2:
+                {
+                    var left = arguments[0].Expression;
+                    var right = arguments[1].Expression;
+                    var expression = SyntaxFactory.BinaryExpression(kind, left, right);
+
+                    return expression.WithTrailingTriviaFrom(syntax);
+                }
+            }
+
+            return syntax;
         }
 
         private static InvocationExpressionSyntax GetInvocationExpressionSyntax(SyntaxNode syntax, out SyntaxKind kind)
