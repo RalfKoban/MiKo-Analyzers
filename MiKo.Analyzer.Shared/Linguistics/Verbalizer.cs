@@ -106,6 +106,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                 .ThenBy(_ => _)
                                                                 .ToArray();
 
+        private static readonly string[] MiddlePhrases = new[]
+                                                               {
+                                                                   "InformAbout",
+                                                                   "InformsAbout",
+                                                                   "InformedAbout",
+                                                                   "BelongsTo",
+                                                               }.OrderBy(_ => _.Length)
+                                                                .ThenBy(_ => _)
+                                                                .ToArray();
+
         public static string MakeInfiniteVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -221,6 +231,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
+            if (HasAcceptableMiddlePhrase(value))
+            {
+                return false;
+            }
+
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var pair in Endings)
             {
@@ -252,6 +267,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
 
             return false;
+        }
+
+        private static bool HasAcceptableMiddlePhrase(string value)
+        {
+            return value.ContainsAny(MiddlePhrases);
         }
     }
 }
