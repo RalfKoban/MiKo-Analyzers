@@ -8,9 +8,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class ParameterNamingCodeFixProvider : NamingCodeFixProvider
     {
-        protected abstract string FindBetterName(IParameterSymbol symbol);
+        protected virtual string FindBetterName(IParameterSymbol symbol) => null;
 
-        protected sealed override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => FindBetterName((IParameterSymbol)symbol);
+        protected virtual string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic) => FindBetterName(symbol);
+
+        protected sealed override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => FindBetterName((IParameterSymbol)symbol, diagnostic);
 
         protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().First();
     }

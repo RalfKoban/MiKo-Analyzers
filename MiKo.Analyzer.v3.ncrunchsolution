@@ -4,12 +4,13 @@
     <HotSpotsExclusionList>
       <Value>Rules\Analyzer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </HotSpotsExclusionList>
+    <MaxTestRunnerProcessesToPool>2</MaxTestRunnerProcessesToPool>
     <MetricsExclusionList>
       <Value>Resources.Designer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
-    <SlidingBuildDelayInMilliseconds>250</SlidingBuildDelayInMilliseconds>
+    <SlidingBuildDelayInMilliseconds>1000</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>
