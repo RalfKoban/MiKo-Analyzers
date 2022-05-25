@@ -117,22 +117,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case ObjectCreationExpressionSyntax o:
                     {
                         var name = o.Type.GetNameOnlyPart();
-                        if (name == nameof(DateTime) || name == nameof(TimeSpan))
+                        switch (name)
                         {
-                            const int MinimumArgumentsForHoursMinutesSeconds = 3;
-
-                            if (list.Arguments.Count >= MinimumArgumentsForHoursMinutesSeconds)
+                            case nameof(DateTime):
+                            case nameof(DateTimeOffset):
+                            case nameof(TimeSpan):
                             {
+                                const int MinimumArgumentsForHoursMinutesSeconds = 3;
+
+                                return list.Arguments.Count >= MinimumArgumentsForHoursMinutesSeconds;
+                            }
+
+                            case nameof(Version):
+                            {
+                                // ignore version ctors
                                 return true;
                             }
-                        }
-                        else if (name.Contains("Progress"))
-                        {
-                            // ignore progress ctors
-                            return true;
-                        }
 
-                        break;
+                            default:
+                            {
+                                // ignore progress ctors
+                                return name.Contains("Progress");
+                            }
+                        }
                     }
 
                     case InvocationExpressionSyntax i:
@@ -151,17 +158,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                         return true;
                                 }
                             }
-                        }
-                        else
-                        {
-                            if (name.Contains("Progress"))
-                            {
-                                // ignore progress
-                                return true;
-                            }
+
+                            return false;
                         }
 
-                        break;
+                        // ignore progress
+                        return name.Contains("Progress");
                     }
                 }
             }
