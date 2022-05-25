@@ -251,6 +251,22 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Version_ctor() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public Version Create()
+        {
+            return new Version(1, 2, 3, 4);
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_DateTime_ctor_with_hour_minute_seconds() => No_issue_is_reported_for(@"
 using System;
 
