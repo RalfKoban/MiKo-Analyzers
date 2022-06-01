@@ -22,7 +22,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 
-        public static string GetPluralName(string name, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => PluralNames.GetOrAdd(name, _ => CreatePluralName(proposedName, comparison));
+        public static string GetPluralName(string name, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            if (name.EndsWith("trivia", comparison))
+            {
+                return null;
+            }
+
+            return PluralNames.GetOrAdd(name, _ => CreatePluralName(proposedName, comparison));
+        }
 
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
