@@ -61,13 +61,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (noBlankLinesBefore)
             {
-                if (returnStatement is ReturnStatementSyntax s)
+                switch (returnStatement)
                 {
-                    return Issue(s.ReturnKeyword, true, false);
-                }
-                else if (returnStatement is YieldStatementSyntax y)
-                {
-                    return Issue(y.YieldKeyword, true, false);
+                    case ReturnStatementSyntax s when s.Expression is null:
+                        return null; // no issue
+
+                    case ReturnStatementSyntax s:
+                        return Issue(s.ReturnKeyword, true, false);
+
+                    case YieldStatementSyntax y:
+                        return Issue(y.YieldKeyword, true, false);
                 }
             }
 

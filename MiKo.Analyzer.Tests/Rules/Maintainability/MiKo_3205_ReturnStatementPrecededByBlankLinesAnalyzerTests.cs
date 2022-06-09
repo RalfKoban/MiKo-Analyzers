@@ -226,6 +226,26 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_return_void_statement_as_last_statement_in_if_block() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                DoSomething(false);
+                return;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_return_statement_preceded_by_if_block_without_separate_blank_line() => An_issue_is_reported_for(@"
 namespace Bla
 {
