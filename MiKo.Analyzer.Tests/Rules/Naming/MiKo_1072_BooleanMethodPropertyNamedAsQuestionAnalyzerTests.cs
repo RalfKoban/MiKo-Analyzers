@@ -22,6 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "IsReadOnly",
                 "IsReadWrite",
                 "IsWriteProtected",
+                "IsInDesign",
+                "IsInDesignMode",
+                "IsInDesignerMode",
             };
 
         private static readonly string[] WrongNames =
