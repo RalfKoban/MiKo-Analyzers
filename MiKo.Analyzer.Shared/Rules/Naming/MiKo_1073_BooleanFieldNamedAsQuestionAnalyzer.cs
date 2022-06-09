@@ -23,6 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] Prefixes = Constants.Markers.FieldPrefixes.SelectMany(_ => RawPrefixes, (prefix, name) => prefix + name).ToArray();
 
+        private static readonly string[] AllowedPrefixes = Constants.Markers.FieldPrefixes.Select(_ => _ + "IsInDesign").ToArray();
+
         public MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
@@ -40,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield break;
             }
 
-            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
+            if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2) && name.StartsWithAny(AllowedPrefixes, StringComparison.Ordinal) is false)
             {
                 yield return Issue(symbol);
             }

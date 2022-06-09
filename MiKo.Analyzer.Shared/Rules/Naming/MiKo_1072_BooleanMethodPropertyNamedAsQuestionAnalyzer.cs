@@ -28,6 +28,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "IsWriteProtected",
             };
 
+        private static readonly string[] WellKnownPrefixes =
+            {
+                "IsSame",
+                "IsInDesign",
+            };
+
         public MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer() : base(Id)
         {
         }
@@ -59,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
             {
                 // skip all well known names
-                if (name.StartsWith("IsSame", StringComparison.Ordinal) || AllowedNames.Contains(name))
+                if (name.StartsWithAny(WellKnownPrefixes, StringComparison.Ordinal) || AllowedNames.Contains(name))
                 {
                     yield break;
                 }

@@ -16,6 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "connected",
                 "hasConnectionEstablished",
                 "canBeConnected",
+                "isInDesign",
+                "isInDesignMode",
+                "isInDesignerMode",
             };
 
         private static readonly string[] WrongNames =
