@@ -78,14 +78,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "0x",
                 "://",
-                "checked by",
-                "ignore",
-                "nothing",
-                "special handling",
                 "@formatter:off",
                 "@formatter:on",
+                "blank",
+                "checked by",
+                "ignore",
+                "intentionally",
                 "No-Op",
                 "not needed",
+                "nothing",
+                "special handling",
             };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
