@@ -1204,6 +1204,15 @@ Therefore, both terms should not be used together in documentation and naming (s
   <data name="MiKo_1095_Title" xml:space="preserve">
     <value>Do not use 'Delete' and 'Remove' both in names and documentation</value>
   </data>
+  <data name="MiKo_1096_Description" xml:space="preserve">
+    <value>To be more explicit and direct, names should use 'Failed' instead of 'NotSuccesful'.</value>
+  </data>
+  <data name="MiKo_1096_MessageFormat" xml:space="preserve">
+    <value>Use 'Failed' instead of 'NotSuccessful'</value>
+  </data>
+  <data name="MiKo_1096_Title" xml:space="preserve">
+    <value>Names should use 'Failed' instead of 'NotSuccessful'</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
