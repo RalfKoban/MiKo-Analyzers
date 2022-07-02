@@ -15,8 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <summary>
         /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
         /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
         protected static string[] GetWithDelimiters(params string[] values)
         {
             var result = new List<string>();
