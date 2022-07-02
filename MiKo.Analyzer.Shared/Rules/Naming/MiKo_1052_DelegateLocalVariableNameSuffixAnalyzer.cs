@@ -20,10 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(identifiers);
 
-        private IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, IEnumerable<SyntaxToken> identifiers) => from identifier in identifiers
-                                                                                                                                 where identifier.ValueText.EndsWithAny(WrongNames)
-                                                                                                                                 select Issue(identifier.GetSymbol(semanticModel));
+        private IEnumerable<Diagnostic> AnalyzeIdentifiers(IEnumerable<SyntaxToken> identifiers) => identifiers.Where(_ => _.ValueText.EndsWithAny(WrongNames))
+                                                                                                                                      .Where(_ => _.ValueText.EndsWith("ransaction", StringComparison.OrdinalIgnoreCase) is false)
+                                                                                                                                      .Select(_ => Issue(_));
     }
 }

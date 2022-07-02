@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2049";
 
-        private static readonly string[] Phrases = GetWithDelimiters("will be", "will also be", "will as well be");
+        private static readonly string[] Phrases = GetWithDelimiters("will be", "will also be", "will as well be", "will");
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {

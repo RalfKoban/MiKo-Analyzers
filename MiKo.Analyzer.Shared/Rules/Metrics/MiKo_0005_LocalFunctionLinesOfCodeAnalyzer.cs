@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                 if (loc > MaxLinesOfCode)
                 {
-                    yield return Issue(localFunction.GetName(), localFunction, loc, MaxLinesOfCode);
+                    yield return Issue(localFunction.GetName(), localFunction.Identifier, loc, MaxLinesOfCode);
                 }
             }
         }

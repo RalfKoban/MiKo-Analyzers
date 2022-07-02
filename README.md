@@ -112,6 +112,7 @@ The following tables list all the 333 rules that are currently provided by the a
 |MiKo_1093|Do not use the suffix 'Object' or 'Struct'|&#x2713;|&#x2713;|
 |MiKo_1094|Do not suffix types with passive namespace names|&#x2713;|\-|
 |MiKo_1095|Do not use 'Delete' and 'Remove' both in names and documentation|&#x2713;|\-|
+|MiKo_1096|Names should use 'Failed' instead of 'NotSuccessful'|&#x2713;|\-|
 |MiKo_1100|Test classes should start with the name of the type under test|&#x2713;|\-|
 |MiKo_1101|Test classes should end with 'Tests'|&#x2713;|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test' in their names|&#x2713;|&#x2713;|

@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
 
-        private static readonly string[] Phrases = { "It will be.", "It will also be.", "It will as well be." };
+        private static readonly string[] Phrases = { "It will be.", "It will also be.", "It will as well be.", "It will return.", "It is something (will leave something)" };
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"

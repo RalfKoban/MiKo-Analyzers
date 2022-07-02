@@ -74,15 +74,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] AllowedComments =
             {
-                "nothing to do",
-                "do nothing",
-                "do nothing here",
-                "ignore",
-                "ignore this",
-                "special handling",
+                "blank by intent",
                 "checked by",
+                "do nothing here",
+                "do nothing",
+                "ignore this",
+                "ignore",
+                "intentionally left empty",
                 "No-Op",
                 "not needed",
+                "nothing to do",
+                "special handling",
             };
 
         [Test]

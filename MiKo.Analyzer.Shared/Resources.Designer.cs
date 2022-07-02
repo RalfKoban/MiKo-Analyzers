@@ -3242,6 +3242,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To be more explicit and direct, names should use &apos;Failed&apos; instead of &apos;NotSuccesful&apos;..
+        /// </summary>
+        public static string MiKo_1096_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1096_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Failed&apos; instead of &apos;NotSuccessful&apos;.
+        /// </summary>
+        public static string MiKo_1096_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1096_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Names should use &apos;Failed&apos; instead of &apos;NotSuccessful&apos;.
+        /// </summary>
+        public static string MiKo_1096_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1096_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
