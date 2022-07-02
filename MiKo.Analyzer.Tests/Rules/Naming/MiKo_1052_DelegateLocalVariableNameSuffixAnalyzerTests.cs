@@ -36,13 +36,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         [TestCase("string s")]
         [TestCase("int i")]
-        public void No_issue_is_reported_for_non_delegate_variable_(string name) => No_issue_is_reported_for(@"
+        [TestCase("object transaction")]
+        public void No_issue_is_reported_for_non_delegate_parameter_(string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething(" + name + @")
     {
+    }
+}
+");
+
+        [TestCase("string s")]
+        [TestCase("int i")]
+        [TestCase("object transaction")]
+        public void No_issue_is_reported_for_non_delegate_variable_(string name) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        " + name + @";
     }
 }
 ");
