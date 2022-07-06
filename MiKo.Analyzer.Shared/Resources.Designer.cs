@@ -3661,6 +3661,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix &quot;Yoda-speak&quot; method name.
+        /// </summary>
+        public static string MiKo_1111_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1111_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to For maintenance reasons, the names of test methods should be easy to read.
         ///They should describe the scenario that is tested in a fluent way and not in a &apos;Yoda&apos; like way.
         ///
@@ -3674,7 +3683,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use Yoda speak for method names.
+        ///   Looks up a localized string similar to Do not use &quot;Yoda-speak&quot; for method names.
         /// </summary>
         public static string MiKo_1111_MessageFormat {
             get {

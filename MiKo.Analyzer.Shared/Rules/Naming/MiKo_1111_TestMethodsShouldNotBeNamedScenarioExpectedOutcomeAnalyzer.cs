@@ -14,11 +14,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly char[] Underscores = { '_' };
 
+        private static readonly string[] ExpectedOutcomeMarkers =
+        {
+            "IsExceptional",
+            "Return",
+            "Throw",
+        };
+
         public MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {
         }
 
         protected override bool IsUnitTestAnalyzer => true;
+
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var parts = symbol.Name.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 2)
+            {
+                var addIf = parts[0].StartsWith("If") is false;
+
+                var reversed = addIf
+                                ? parts[1] + "If" + parts[0]
+                                : parts[1] + parts[0];
+
+                return NamesFinder.FindBetterTestName(reversed);
+            }
+
+            return symbol.Name;
+        }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 

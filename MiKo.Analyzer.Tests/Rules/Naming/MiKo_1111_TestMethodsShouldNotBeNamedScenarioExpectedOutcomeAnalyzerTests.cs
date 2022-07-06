@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -55,8 +56,17 @@ public class TestMe
 }
 ");
 
+        [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_does_something")]
+        [TestCase("NoDocumentIsDirty_ProjectIsNotDirty", "Project_is_not_dirty_if_no_document_is_dirty")]
+        [TestCase("IfLoadFails_ReturnsNull", "Returns_null_if_load_fails")]
+        public void Code_gets_fixed_(string originalName, string fixedName) => VerifyCSharpFix(
+                                                                                         "class TestMe { [Test] void " + originalName + "() { } }",
+                                                                                         "class TestMe { [Test] void " + fixedName + "() { } }");
+
         protected override string GetDiagnosticId() => MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1111_CodeFixProvider();
     }
 }

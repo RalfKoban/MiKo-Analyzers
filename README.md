@@ -124,7 +124,7 @@ The following tables list all the 333 rules that are currently provided by the a
 |MiKo_1108|Do not name variables, parameters, fields and properties 'Mock', 'Stub', 'Fake' or 'Shim'|&#x2713;|&#x2713;|
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore|&#x2713;|&#x2713;|
-|MiKo_1111|Test methods should be named in a fluent way|&#x2713;|\-|
+|MiKo_1111|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
 |MiKo_1112|Do not name test data 'arbitrary'|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
