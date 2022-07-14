@@ -101,6 +101,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
             }
+
+            foreach (var condition in conditions)
+            {
+                yield return $"Indicates {condition} ";
+            }
         }
 
         protected override XmlElementSyntax GenericComment(CodeFixContext context, XmlElementSyntax comment, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
