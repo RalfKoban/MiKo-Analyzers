@@ -237,6 +237,31 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
+        [TestCase("Assert.That(values.Any(_ => _ == 42))", @"Assert.That(values.Any(_ => _ == 42), ""wrong values"")")]
+        public void Code_gets_fixed_for_Linq_call(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using System.Linq;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            ###;
+            Assert.Fail(""some error reason"");
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3109_TestAssertsHaveMessageAnalyzer();
