@@ -94,6 +94,8 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EventSourcePhrase = new[] { "The source of the event.", "The source of the event" }.Concat(UnusedPhrase).Distinct().ToArray();
 
+            internal static readonly string[] ParameterStartingCodefixPhrases = { "A", "An", "The" };
+
             internal static readonly string[] FieldStartingPhrase = { "A ", "An ", "The " };
 
             internal static readonly string[] ParameterStartingPhrase = { "A ", "An ", "The " };
