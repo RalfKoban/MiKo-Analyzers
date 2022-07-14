@@ -26,7 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             ? SyntaxKind.StaticKeyword
                             : SyntaxKind.SealedKeyword;
 
-            return declaration.AddModifiers(SyntaxFactory.Token(keyword));
+            var modifiers = CreateModifiers(declaration, keyword);
+
+            return declaration.WithModifiers(modifiers);
         }
 
         private static bool MakeStatic(CodeFixContext context, ClassDeclarationSyntax syntax)
@@ -41,6 +43,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return false;
+        }
+
+        private static SyntaxTokenList CreateModifiers(MemberDeclarationSyntax declaration, SyntaxKind keyword)
+        {
+            var modifiers = declaration.Modifiers;
+            var position = modifiers.IndexOf(SyntaxKind.PartialKeyword);
+
+            var syntaxToken = SyntaxFactory.Token(keyword);
+
+            return position > -1
+                       ? modifiers.Insert(position, syntaxToken)
+                       : modifiers.Add(syntaxToken);
         }
     }
 }
