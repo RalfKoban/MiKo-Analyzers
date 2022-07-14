@@ -128,6 +128,12 @@ public class TestMe
 
         [TestCase("Something.", "something.")]
         [TestCase(@"Something, such as <see cref=""string.Empty""/>.", @"something, such as <see cref=""string.Empty""/>.")]
+        [TestCase("The something.", "something.")]
+        [TestCase("the something.", "something.")]
+        [TestCase("A something.", "something.")]
+        [TestCase("a something.", "something.")]
+        [TestCase("An something.", "something.")]
+        [TestCase("an something.", "something.")]
         public void Code_gets_fixed_for_non_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"
@@ -163,6 +169,8 @@ public class TestMe
 
         [TestCase("Something.", "something.")]
         [TestCase(@"Something, such as <see cref=""string.Empty""/>.", @"something, such as <see cref=""string.Empty""/>.")]
+        [TestCase("The something.", "something.")]
+        [TestCase("the something.", "something.")]
         public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"
