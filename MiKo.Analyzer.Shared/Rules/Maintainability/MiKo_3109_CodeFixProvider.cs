@@ -12,6 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3109_CodeFixProvider)), Shared]
     public sealed class MiKo_3109_CodeFixProvider : MaintainabilityCodeFixProvider
     {
+        private static readonly HashSet<string> EnumerableMethods = typeof(Enumerable).GetMethods().Select(_ => _.Name)
+                                                                                      .Except(typeof(object).GetMethods().Select(_ => _.Name)) // get rid of GetHashCode() or Equals()
+                                                                                      .Except(new[] { "Contains" }) // special handling
+                                                                                      .ToHashSet();
+
         public override string FixableDiagnosticId => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3109_CodeFixTitle;
@@ -109,6 +114,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return method.ArgumentList?.Arguments.FirstOrDefault()?.GetName();
                     }
 
+                    if (EnumerableMethods.Contains(name))
+                    {
+                        return method.GetName();
+                    }
+
                     return name;
                 }
 
@@ -125,7 +135,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         // let's see if we have the special case 'Is.Not.Null'
-        private static string GetStartingWord(SeparatedSyntaxList<ArgumentSyntax> arguments) => arguments[1].Expression.ToString() == "Is.Not.Null"
+        private static string GetStartingWord(SeparatedSyntaxList<ArgumentSyntax> arguments) => arguments.Count > 1 && arguments[1].Expression.ToString() == "Is.Not.Null"
                                                                                                     ? "missing"
                                                                                                     : "wrong";
     }
