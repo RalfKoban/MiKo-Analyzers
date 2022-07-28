@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 "MethodName_Scenario_ExpectedOutcome",
                 "DoSomething_WithUnnecessaryData_ReturnsTrue",
-                "DoSomething_WithUnnecessaryDataForSomething",
+                "DoSomething_WithUnnecessaryDataForSomething_ThrowsException",
             };
 
         [Test]
@@ -59,6 +59,8 @@ public class TestMe
         [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_does_something")]
         [TestCase("NoDocumentIsDirty_ProjectIsNotDirty", "Project_is_not_dirty_if_no_document_is_dirty")]
         [TestCase("IfLoadFails_ReturnsNull", "Returns_null_if_load_fails")]
+        [TestCase("MethodName_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails")]
+        [TestCase("ClassName_MethodName_LoadFails_ReturnNull", "Class_name_method_name_returns_null_if_load_fails")]
         public void Code_gets_fixed_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                          "class TestMe { [Test] void " + originalName + "() { } }",
                                                                                          "class TestMe { [Test] void " + fixedName + "() { } }");

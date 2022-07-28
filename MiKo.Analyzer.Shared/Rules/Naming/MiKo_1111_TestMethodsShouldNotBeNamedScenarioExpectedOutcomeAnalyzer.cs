@@ -16,9 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] ExpectedOutcomeMarkers =
         {
+            "Actual",
+            "Expect",
+            "IsEmpty",
             "IsExceptional",
+            "IsNot",
+            "IsNull",
             "Return",
+            "Shall",
+            "Should",
             "Throw",
+            "Will",
         };
 
         public MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
@@ -27,21 +35,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ISymbol symbol)
+        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
+
+        internal static string FindBetterName(string symbolName)
         {
-            var parts = symbol.Name.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length == 2)
+            var parts = symbolName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
+
+            if (TryGetReversed(parts, out var reversed))
             {
-                var addIf = parts[0].StartsWith("If") is false;
-
-                var reversed = addIf
-                                ? parts[1] + "If" + parts[0]
-                                : parts[1] + parts[0];
-
                 return NamesFinder.FindBetterTestName(reversed);
             }
 
-            return symbol.Name;
+            return NamesFinder.FindBetterTestName(symbolName);
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
@@ -54,10 +59,56 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var parts = methodName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
 
-                var partsStartUpperCase = parts.Length >= 1 && parts.All(_ => _[0].IsUpperCase());
-                if (partsStartUpperCase)
+                var hasIssue = parts.Length >= 1 && parts.All(_ => _[0].IsUpperCase()) && parts.Last().ContainsAny(ExpectedOutcomeMarkers);
+                if (hasIssue)
                 {
                     yield return Issue(symbol);
+                }
+            }
+        }
+
+        private static bool TryGetReversed(string[] parts, out string reversed)
+        {
+            switch (parts.Length)
+            {
+                case 2:
+                {
+                    var addIf = parts[0].StartsWith("If", StringComparison.Ordinal) is false;
+
+                    reversed = addIf
+                                   ? parts[1] + "If" + parts[0]
+                                   : parts[1] + parts[0];
+
+                    return true;
+                }
+
+                case 3:
+                {
+                    var addIf = parts[1].StartsWith("If", StringComparison.Ordinal) is false;
+
+                    reversed = addIf
+                                   ? parts[0] + parts[2] + "If" + parts[1]
+                                   : parts[0] + parts[2] + parts[1];
+
+                    return true;
+                }
+
+                case 4:
+                {
+                    var addIf = parts[2].StartsWith("If", StringComparison.Ordinal) is false;
+
+                    reversed = addIf
+                                   ? parts[0] + parts[1] + parts[3] + "If" + parts[2]
+                                   : parts[0] + parts[1] + parts[3] + parts[2];
+
+                    return true;
+                }
+
+                default:
+                {
+                    reversed = null;
+
+                    return false;
                 }
             }
         }
