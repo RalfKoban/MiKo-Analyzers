@@ -148,7 +148,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                          .Replace("not_supported_exception", nameof(NotSupportedException))
                          .Replace("not_implemented_exception", nameof(NotImplementedException))
                          .Replace("task_canceled_exception", nameof(TaskCanceledException))
-                         .Replace("operation_canceled_exception", nameof(OperationCanceledException));
+                         .Replace("operation_canceled_exception", nameof(OperationCanceledException))
+                         .Replace("_return_", "_returns_");
 
             return string.Intern(result);
         }
