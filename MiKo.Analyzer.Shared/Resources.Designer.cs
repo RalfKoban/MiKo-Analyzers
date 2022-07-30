@@ -7310,6 +7310,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace with &apos;to seek&apos;.
+        /// </summary>
+        public static string MiKo_2220_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2220_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terms such as &apos;to look for&apos;, &apos;to inspect for&apos; or &apos;to test for&apos; all mean the same - to seek for something. Hence, they should be changed to the equivalent term &apos;to seek&apos;..
+        /// </summary>
+        public static string MiKo_2220_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2220_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;to seek&apos; instead.
+        /// </summary>
+        public static string MiKo_2220_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2220_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use &apos;to seek&apos; instead of &apos;to look for&apos;, &apos;to inspect for&apos; or &apos;to test for&apos;.
+        /// </summary>
+        public static string MiKo_2220_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2220_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
