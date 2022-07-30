@@ -1387,6 +1387,17 @@ Example:
   <data name="MiKo_1112_Title" xml:space="preserve">
     <value>Do not name test data 'arbitrary'</value>
   </data>
+  <data name="MiKo_1113_Description" xml:space="preserve">
+    <value>The BDD style via "Given ... When ... Then ..." is considered to be used with stakeholders that are no developers.
+
+The audience of unit tests, however, are developers. Hence, such tests should not use the BDD style at all as that makes them harder to read and understand.</value>
+  </data>
+  <data name="MiKo_1113_MessageFormat" xml:space="preserve">
+    <value>Do not name BDD style</value>
+  </data>
+  <data name="MiKo_1113_Title" xml:space="preserve">
+    <value>Do not name unit test methods BDD style</value>
+  </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
   </data>

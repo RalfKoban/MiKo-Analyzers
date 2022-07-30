@@ -32,6 +32,18 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_method_([Values("RefreshAllChildren", "CreateShallowCopy")] string methodName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void " + methodName + @"()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_type_([ValueSource(nameof(Marker))] string marker) => An_issue_is_reported_for(@"
 using System;
 
@@ -121,8 +133,8 @@ public class TestMe
         [TestCase("Something_should_be_Anything", "Something_is_Anything")]
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
-                                                                                                 @"using System; class TestMe { void " + method + "() { } }",
-                                                                                                 @"using System; class TestMe { void " + wanted + "() { } }");
+                                                                                                 "using System; class TestMe { void " + method + "() { } }",
+                                                                                                 "using System; class TestMe { void " + wanted + "() { } }");
 
         [TestCase("SomethingShouldHaveAnything", "SomethingHaveAnything")]
         [TestCase("SomethingShouldNotHaveAnything", "SomethingDoNotHaveAnything")]
@@ -142,8 +154,8 @@ public class TestMe
         [TestCase("Something_should_be_Anything", "Something_is_Anything")]
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
-                                                                                                 @"using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
-                                                                                                 @"using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
+                                                                                                 "using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
+                                                                                                 "using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1049_RequirementTermAnalyzer.Id;
 

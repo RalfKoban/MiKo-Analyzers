@@ -3737,6 +3737,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The BDD style via &quot;Given ... When ... Then ...&quot; is considered to be used with stakeholders that are no developers.
+        ///
+        ///The audience of unit tests, however, are developers. Hence, such tests should not use the BDD style at all as that makes them harder to read and understand..
+        /// </summary>
+        public static string MiKo_1113_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1113_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name BDD style.
+        /// </summary>
+        public static string MiKo_1113_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1113_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name unit test methods BDD style.
+        /// </summary>
+        public static string MiKo_1113_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1113_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename exception.
         /// </summary>
         public static string MiKo_1200_CodeFixTitle {
