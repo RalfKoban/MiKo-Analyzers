@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
@@ -14,7 +17,36 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetText(this Location value)
         {
-            return value.SourceTree?.GetText().GetSubText(value.SourceSpan).ToString();
+            return value.SourceTree?.GetText().ToString(value.SourceSpan);
+        }
+
+        internal static string GetSurroundingWord(this Location value)
+        {
+            var tree = value.SourceTree;
+            if (tree != null)
+            {
+                var sourceText = tree.GetText();
+                var text = sourceText.ToString(TextSpan.FromBounds(0, value.SourceSpan.End));
+
+                var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
+                if (lastIndexOfFirstSpace != -1)
+                {
+                    var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();
+
+                    var firstIndexOfNextSpace = followUpText.StartsWith("<", StringComparison.Ordinal) // seems like the comment finished
+                                                    ? 0
+                                                    : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
+
+                    if (firstIndexOfNextSpace != -1)
+                    {
+                        var result = sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
+
+                        return result;
+                    }
+                }
+            }
+
+            return null;
         }
 
         internal static bool Contains(this Location value, Location other)

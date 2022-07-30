@@ -61,6 +61,15 @@ public class TestMe
 {
 }");
 
+        [Test]
+        public void No_issue_is_reported_for_hyperlink() => No_issue_is_reported_for(@"
+/// <summary>
+/// See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/loggermessage?view=aspnetcore-6.0.
+/// </summary>
+public class TestMe
+{
+}");
+
         protected override string GetDiagnosticId() => MiKo_2219_DocumentationContainsNoQuestionOrExclamationMarkAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2219_DocumentationContainsNoQuestionOrExclamationMarkAnalyzer();
