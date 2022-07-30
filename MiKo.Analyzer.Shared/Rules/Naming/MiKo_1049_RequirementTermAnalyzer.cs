@@ -64,7 +64,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            var symbolName = symbol.Name;
+            var symbolName = symbol.Name
+                                   .Replace("efresh", "#")  // filter 'refresh' and 'Refresh'
+                                   .Replace("hallow", "#"); // filter 'shallow' and 'Shallow'
 
             return Constants.Markers.Requirements
                             .Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))
