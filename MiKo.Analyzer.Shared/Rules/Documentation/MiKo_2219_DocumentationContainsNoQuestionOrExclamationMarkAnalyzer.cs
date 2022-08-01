@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -33,6 +34,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var location in GetAllLocations(token, Terms))
                 {
+                    var word = location.GetSurroundingWord();
+
+                    if (word.IsHyperlink())
+                    {
+                        continue;
+                    }
+
                     yield return Issue(symbol.Name, location, location.GetText());
                 }
             }
