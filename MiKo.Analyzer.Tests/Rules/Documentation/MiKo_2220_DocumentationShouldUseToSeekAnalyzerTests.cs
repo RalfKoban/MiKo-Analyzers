@@ -15,9 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Dictionary<string, string> Map = new Dictionary<string, string>
                                                                      {
+                                                                         { "to find", "to seek" },
                                                                          { "to inspect for", "to seek" },
                                                                          { "to look for", "to seek" },
                                                                          { "to test for", "to seek" },
+
+                                                                         { "to find.", "to seek." },
+                                                                         { "to inspect for.", "to seek." },
+                                                                         { "to look for.", "to seek." },
+                                                                         { "to test for.", "to seek." },
                                                                      };
 
         private static readonly string[] WrongPhrases = Map.Keys.ToArray();
