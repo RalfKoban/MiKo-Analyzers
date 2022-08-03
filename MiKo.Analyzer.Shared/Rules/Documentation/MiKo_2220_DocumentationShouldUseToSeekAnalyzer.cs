@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -14,7 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal const string Replacement = "to seek";
 
-        internal static readonly string[] Terms = { "to inspect for", "to look for", "to test for" };
+        internal static readonly string[] Terms =  { "to find", "to inspect for", "to look for", "to test for" };
+
+        private static readonly string[] TermsWithDelimiters = GetWithDelimiters(Terms);
 
         public MiKo_2220_DocumentationShouldUseToSeekAnalyzer() : base(Id)
         {
@@ -24,7 +27,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in symbol.GetDocumentationCommentTriviaSyntax().DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
             {
-                foreach (var location in GetAllLocations(token, Terms))
+                const int Offset = 1; // we do not want to underline the first and last char
+                foreach (var location in GetAllLocations(token, TermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
                     yield return Issue(symbol.Name, location, Replacement);
                 }
