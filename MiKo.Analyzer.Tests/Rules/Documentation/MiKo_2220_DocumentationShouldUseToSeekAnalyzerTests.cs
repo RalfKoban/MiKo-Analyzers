@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "to look for", "to seek" },
                                                                          { "to test for", "to seek" },
 
+                                                                         // endings with dot
                                                                          { "to find.", "to seek." },
                                                                          { "to inspect for.", "to seek." },
                                                                          { "to look for.", "to seek." },
