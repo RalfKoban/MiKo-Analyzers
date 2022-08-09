@@ -32,15 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                        .Replace(term + "NotBe", "IsNot")
                                        .Replace(term + "NtBe", "IsNot")
                                        .Replace(term + "ntBe", "IsNot")
+                                       .Replace(term, "Does")
                                        .Replace("_" + lowerTerm + "_have_", "_has_")
                                        .Replace("_" + lowerTerm + "_not_have_", "_does_not_have_")
                                        .Replace("_" + lowerTerm + "_not_be_", "_is_not_")
-                                       .Replace("_" + lowerTerm + "_be_", "_is_");
-            }
-
-            foreach (var term in Constants.Markers.Requirements)
-            {
-                symbolName = symbolName.Replace(term, "Does");
+                                       .Replace("_" + lowerTerm + "_be_", "_is_")
+                                       .Replace("_" + lowerTerm +"_", "_does_");
             }
 
             return symbolName;

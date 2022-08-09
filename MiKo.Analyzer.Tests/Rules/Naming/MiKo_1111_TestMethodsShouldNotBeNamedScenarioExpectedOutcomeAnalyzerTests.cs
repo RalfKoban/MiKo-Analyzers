@@ -61,6 +61,7 @@ public class TestMe
         [TestCase("IfLoadFails_ReturnsNull", "Returns_null_if_load_fails")]
         [TestCase("MethodName_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails")]
         [TestCase("ClassName_MethodName_LoadFails_ReturnNull", "Class_name_method_name_returns_null_if_load_fails")]
+        [TestCase("Initialize_NothingCanBeFound_ShouldNotDoAnything", "Initialize_should_not_do_anything_if_nothing_can_be_found")]
         public void Code_gets_fixed_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                          "class TestMe { [Test] void " + originalName + "() { } }",
                                                                                          "class TestMe { [Test] void " + fixedName + "() { } }");

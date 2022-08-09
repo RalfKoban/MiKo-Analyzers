@@ -153,6 +153,7 @@ public class TestMe
         [TestCase("Something_should_not_have_Anything", "Something_does_not_have_Anything")]
         [TestCase("Something_should_be_Anything", "Something_is_Anything")]
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
+        [TestCase("Something_should_not_do_Anything", "Something_does_not_do_Anything")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
                                                                                                  "using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
                                                                                                  "using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
