@@ -10885,6 +10885,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3209_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3209_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate try statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3209_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3209_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround try statement with a blank line.
+        /// </summary>
+        public static string MiKo_3209_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3209_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_3209_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3209_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3210_CodeFixTitle {
