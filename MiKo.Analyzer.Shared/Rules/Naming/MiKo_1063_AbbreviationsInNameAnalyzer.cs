@@ -187,16 +187,39 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool CompleteTermHasIssue(string key, string symbolName) => string.Equals(symbolName, key, StringComparison.Ordinal);
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        private static IEnumerable<KeyValuePair<string, string>> AnalyzeName(string symbolName)
         {
-            var symbolName = symbol.Name.Without(AllowedNames);
+            symbolName = symbolName.Without(AllowedNames);
 
             var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
             var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
             var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
             var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
 
-            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance).Select(_ => Issue(symbol, _.Key, _.Value));
+            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        {
+            return AnalyzeName(symbol.Name).Select(_ => Issue(symbol, _.Key, _.Value));
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
+        {
+            var symbolName = GetFieldNameWithoutPrefix(symbol.Name);
+
+            return AnalyzeName(symbolName).Select(_ => Issue(symbol, _.Key, _.Value));
+
+            string GetFieldNameWithoutPrefix(string fieldName)
+            {
+                // remove any field marker
+                foreach (var fieldMarker in Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0 && fieldName.StartsWith(_, StringComparison.Ordinal)))
+                {
+                    return fieldName.Substring(fieldMarker.Length);
+                }
+
+                return fieldName;
+            }
         }
 
         private sealed class KeyComparer : IEqualityComparer<KeyValuePair<string, string>>
