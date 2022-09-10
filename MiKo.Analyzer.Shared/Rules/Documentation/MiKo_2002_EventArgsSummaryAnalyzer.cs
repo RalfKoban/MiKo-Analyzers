@@ -26,9 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEventArgs() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => HasEventSummary(summaries)
-                                                                                                                            ? Enumerable.Empty<Diagnostic>()
-                                                                                                                            : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => HasEventSummary(summaries)
+                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                 : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
 
         private static bool HasEventSummary(IEnumerable<string> summaries)
         {

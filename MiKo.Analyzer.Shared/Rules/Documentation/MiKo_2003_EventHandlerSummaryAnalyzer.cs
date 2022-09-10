@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(Constants.Comments.EventHandlerSummaryStartingPhrase, StringComparison.Ordinal))
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, Constants.Comments.EventHandlerSummaryStartingPhrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(Constants.Comments.EventHandlerSummaryStartingPhrase, StringComparison.Ordinal))
+                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                 : new[] { Issue(symbol, Constants.Comments.EventHandlerSummaryStartingPhrase) };
     }
 }

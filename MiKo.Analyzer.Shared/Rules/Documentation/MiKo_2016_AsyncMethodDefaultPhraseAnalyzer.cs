@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(Phrase, StringComparison.Ordinal))
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, Phrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(Phrase, StringComparison.Ordinal))
+                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                 : new[] { Issue(symbol, Phrase) };
     }
 }
