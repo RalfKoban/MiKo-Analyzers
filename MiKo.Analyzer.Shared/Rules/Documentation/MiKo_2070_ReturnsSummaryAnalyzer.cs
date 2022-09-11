@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { Issue(symbol, GetProposal(symbol)) }
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
+                                                                                                                                                 ? new[] { Issue(symbol, GetProposal(symbol)) }
+                                                                                                                                                 : Enumerable.Empty<Diagnostic>();
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {

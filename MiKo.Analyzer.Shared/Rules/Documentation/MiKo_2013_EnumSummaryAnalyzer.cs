@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
         {
             return summaries.Any(_ => _.TrimStart().StartsWith(Constants.Comments.EnumStartingPhrase, StringComparison.Ordinal))
                        ? Enumerable.Empty<Diagnostic>()

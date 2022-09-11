@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase) && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.All(StartsWithPhrase)
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, StartingPhrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.All(StartsWithPhrase)
+                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                 : new[] { Issue(symbol, StartingPhrase) };
 
         private static bool StartsWithPhrase(string summary)
         {

@@ -19,8 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(_ => _.Contains(Phrase))
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : new[] { Issue(symbol, Constants.XmlTag.Summary, Phrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(_ => _.Contains(Phrase))
+                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                 : new[] { Issue(symbol, Constants.XmlTag.Summary, Phrase) };
     }
 }

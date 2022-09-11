@@ -25,10 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum();
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => symbol.GetFields().Where(ShallAnalyze).SelectMany(_ => AnalyzeSummaries(_, _.GetDocumentationCommentXml()));
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => symbol.GetFields().Where(ShallAnalyze).SelectMany(_ => AnalyzeSummaries(_, compilation, _.GetDocumentationCommentXml()));
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
-                                                                                                                    where summary.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase)
-                                                                                                                    select Issue(symbol, summary.FirstWord());
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => from summary in summaries
+                                                                                                                                             where summary.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase)
+                                                                                                                                             select Issue(symbol, summary.FirstWord());
     }
 }

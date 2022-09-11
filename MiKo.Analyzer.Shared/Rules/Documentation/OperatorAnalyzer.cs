@@ -34,14 +34,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var method = (IMethodSymbol)symbol;
 
-            var violationsInSummaries = AnalyzeSummaries(method, commentXml);
+            var violationsInSummaries = AnalyzeSummaries(method, compilation, commentXml);
             var violationsInParameters = AnalyzeParameters(method.Parameters, commentXml);
             var violationsInReturns = AnalyzeReturns(method, commentXml);
 
             return violationsInSummaries.Concat(violationsInParameters).Concat(violationsInReturns);
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
         {
             var phrases = GetSummaryPhrases(symbol);
 

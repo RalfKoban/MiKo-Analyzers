@@ -11,17 +11,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => AnalyzeSummaries(symbol, commentXml);
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => AnalyzeSummaries(symbol, compilation, commentXml);
 
-        protected IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, string commentXml)
+        protected IEnumerable<Diagnostic> AnalyzeSummaries(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var summaries = CommentExtensions.GetSummaries(commentXml);
 
             return summaries.Any()
-                       ? AnalyzeSummary(symbol, summaries)
+                       ? AnalyzeSummary(symbol, compilation, summaries)
                        : Enumerable.Empty<Diagnostic>();
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => Enumerable.Empty<Diagnostic>();
     }
 }
