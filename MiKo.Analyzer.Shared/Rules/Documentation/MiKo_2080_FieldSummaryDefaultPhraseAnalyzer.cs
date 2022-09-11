@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return base.ShallAnalyze(symbol);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
         {
             var fieldSymbol = (IFieldSymbol)symbol;
 

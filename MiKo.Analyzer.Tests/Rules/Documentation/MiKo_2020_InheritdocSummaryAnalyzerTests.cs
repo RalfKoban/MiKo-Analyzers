@@ -14,29 +14,86 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2020_InheritdocSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Phrases = CreatePhrases();
+        private const string Marker = "###";
 
-        [TestCase("interface")]
-        [TestCase("class")]
-        [TestCase("enum")]
-        public void An_issue_is_reported_for_XML_summary_of_named_type_(string type) => An_issue_is_reported_for(@"
+        private static readonly string[] Phrases = CreatePhrases(Marker);
 
+        [Test]
+        public void No_issue_is_reported_for_non_inheritable_link_in_XML_summary_of_method_([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + phrase.Replace(Marker, "<see cref=\"\"string.Format(string,object)\"\"/>") + @"
+    /// </summary>
+    public void Bla()
+    {
+    }
+}
+");
+
+        [Test] // fields cannot be inherited and defined a second time
+        public void No_issue_is_reported_for_XML_summary_of_field_([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// " + phrase.Replace(Marker, "bla") + @"
+    /// </summary>
+    private int doSomething;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_XML_summary_of_named_enum_type([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
 /// <summary>
-/// <see cref='bla' />
+/// " + phrase.Replace(Marker, "bla") + @"
 /// </summary>
-public " + type + @" TestMe
+public enum TestMe
 {
 }
 ");
 
         [Test]
+        public void An_issue_is_reported_for_XML_summary_of_named_type_([Values("interface", "class")] string type, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public interface ITestMe
+    {
+    }
+
+    /// <summary>
+    /// " + phrase.Replace(Marker, "ITestMe") + @"
+    /// </summary>
+    public " + type + @" TestMe : ITestMe
+    {
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_XML_summary_of_method_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+    void DoSomething();
+}
+
+public class TestMe : ITestMe
+{
+    /// <summary>
+    /// " + phrase.Replace(Marker, "ITestMe.DoSomething") + @"
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_XML_summary_of_overridden_method_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
-    /// " + phrase + @"
+    /// " + phrase.Replace(Marker, "bla") + @"
     /// </summary>
-    public void DoSomething() { }
+    public override string ToString() => ""something"";
 }
 ");
 
@@ -45,20 +102,9 @@ public class TestMe
 public class TestMe
 {
     /// <summary>
-    /// " + phrase + @"
+    /// " + phrase.Replace(Marker, "bla") + @"
     /// </summary>
     public int DoSomething { get; set; }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_XML_summary_of_field_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// " + phrase + @"
-    /// </summary>
-    private int doSomething;
 }
 ");
 
@@ -67,7 +113,7 @@ public class TestMe
 public class TestMe
 {
     /// <summary>
-    /// " + phrase + @"
+    /// " + phrase.Replace(Marker, "bla") + @"
     /// </summary>
     public event EventHandler MyEvent;
 }
@@ -78,7 +124,7 @@ public class TestMe
         {
             const string OriginalCode = @"
 /// <summary>
-/// <see cref='bla'/>
+/// <see cref='System.Object'/>
 /// </summary>
 class TestMe { }";
 
@@ -93,25 +139,35 @@ class TestMe { }";
         public void Code_gets_fixed_for_method()
         {
             const string OriginalCode = @"
+public interface ITestMe
+{
+    void DoSomething();
+}
+
 /// <summary>
 /// Bla
 /// </summary>
-class TestMe
+class TestMe : ITestMe
 {
     /// <summary>
-    /// <see cref='bla'/>
+    /// <see cref='ITestMe.DoSomething'/>
     /// </summary>
-    void DoSomething() { }
+    public void DoSomething() { }
 }";
 
             const string FixedCode = @"
+public interface ITestMe
+{
+    void DoSomething();
+}
+
 /// <summary>
 /// Bla
 /// </summary>
-class TestMe
+class TestMe : ITestMe
 {
     /// <inheritdoc/>
-    void DoSomething() { }
+    public void DoSomething() { }
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
@@ -121,27 +177,37 @@ class TestMe
         public void Code_gets_fixed_for_method_with_returns_and_param_documentation()
         {
             const string OriginalCode = @"
+public interface ITestMe
+{
+    int DoSomething(int i);
+}
+
 /// <summary>
 /// Bla
 /// </summary>
-class TestMe
+class TestMe : ITestMe
 {
     /// <summary>
-    /// <see cref='bla'/>
+    /// <see cref='ITestMe.DoSomething'/>
     /// </summary>
     /// <param name=""i"">Some comment</param>
     /// <returns>Some result</returns>
-    int DoSomething(int i) => i;
+    public int DoSomething(int i) => i;
 }";
 
             const string FixedCode = @"
+public interface ITestMe
+{
+    int DoSomething(int i);
+}
+
 /// <summary>
 /// Bla
 /// </summary>
-class TestMe
+class TestMe : ITestMe
 {
     /// <inheritdoc/>
-    int DoSomething(int i) => i;
+    public int DoSomething(int i) => i;
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
@@ -154,23 +220,26 @@ class TestMe
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2020_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
-        private static string[] CreatePhrases()
+        private static string[] CreatePhrases(string marker)
         {
             var phrases = new[]
                               {
-                                  "<see cref='bla'/>",
-                                  "<see cref='bla' />",
-                                  "<seealso cref='bla'/>",
-                                  "<seealso cref='bla' />",
+                                  "<see cref='" + marker + "'/>",
+                                  "<see cref='" + marker + "' />",
+                                  "<seealso cref='" + marker + "'/>",
+                                  "<seealso cref='" + marker + "' />",
                               };
 
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _ + "."));
-            results.AddRange(phrases.Select(_ => "see " + _));
             results.AddRange(phrases.Select(_ => "see " + _ + "."));
-            results.AddRange(phrases.Select(_ => "seealso " + _));
+            results.AddRange(phrases.Select(_ => "See " + _ + "."));
+            results.AddRange(phrases.Select(_ => "see " + _));
+            results.AddRange(phrases.Select(_ => "See " + _));
             results.AddRange(phrases.Select(_ => "seealso " + _ + "."));
-            results.AddRange(results.Select(_ => _.ToUpper()).ToList());
+            results.AddRange(phrases.Select(_ => "SeeAlso " + _ + "."));
+            results.AddRange(phrases.Select(_ => "seealso " + _));
+            results.AddRange(phrases.Select(_ => "SeeAlso " + _));
 
             results.Sort();
 

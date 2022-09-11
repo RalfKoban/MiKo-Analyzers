@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                        ? new[] { Issue(symbol, StartingPhrase) }
-                                                                                                                        : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
+                                                                                                                                                 ? new[] { Issue(symbol, StartingPhrase) }
+                                                                                                                                                 : Enumerable.Empty<Diagnostic>();
 
         private static bool StartsWithPhrase(string summary)
         {

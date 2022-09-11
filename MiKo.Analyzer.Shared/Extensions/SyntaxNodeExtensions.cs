@@ -661,6 +661,40 @@ namespace MiKoSolutions.Analyzers
                              .Where(_ => tags.Contains(_.GetName()));
         }
 
+        internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax e: return GetCref(e.Attributes);
+                case XmlElementSyntax e: return GetCref(e.StartTag.Attributes);
+                default: return null;
+            }
+        }
+
+        internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value, string name)
+        {
+            switch (value)
+            {
+                case XmlEmptyElementSyntax e when e.GetName() == name: return GetCref(e.Attributes);
+                case XmlElementSyntax e when e.GetName() == name: return GetCref(e.StartTag.Attributes);
+                default: return null;
+            }
+        }
+
+        internal static TypeSyntax GetCrefType(this XmlCrefAttributeSyntax value)
+        {
+            if (value != null)
+            {
+                switch (value.Cref)
+                {
+                    case NameMemberCrefSyntax n: return n.Name;
+                    case QualifiedCrefSyntax q when q.Member is NameMemberCrefSyntax n: return n.Name;
+                }
+            }
+
+            return null;
+        }
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
         internal static TRoot InsertNodeAfter<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
@@ -767,21 +801,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsExceptionComment(this XmlElementSyntax value, Type exceptionType)
         {
-            var attribute = value?.StartTag.Attributes.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
-            if (attribute != null)
-            {
-                if (attribute.Cref is NameMemberCrefSyntax n && n.Name.IsException(exceptionType))
-                {
-                    return true;
-                }
+            var type = value?.StartTag.Attributes.OfType<XmlCrefAttributeSyntax>().FirstOrDefault().GetCrefType();
 
-                if (attribute.Cref is QualifiedCrefSyntax q && q.Member is NameMemberCrefSyntax nn && nn.Name.IsException(exceptionType))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return type != null && type.IsException(exceptionType);
         }
 
         internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
@@ -1682,6 +1704,8 @@ namespace MiKoSolutions.Analyzers
 
             ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(DefaultPropertyParameterName), default);
         }
+
+        private static XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
 
         private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
         {

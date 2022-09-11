@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                     ? documentation.GetSummaryXmls(InvalidTags)
                                                                                                                     : Enumerable.Empty<XmlNodeSyntax>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
         {
             var method = (IMethodSymbol)symbol;
 

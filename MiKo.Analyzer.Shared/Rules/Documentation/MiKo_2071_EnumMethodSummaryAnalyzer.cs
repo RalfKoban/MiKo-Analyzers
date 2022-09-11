@@ -27,9 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() is true && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, IEnumerable<string> summaries) => from summary in summaries
-                                                                                                                    from phrase in BooleanPhrases
-                                                                                                                    where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)
-                                                                                                                    select Issue(symbol, phrase.Trim());
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => from summary in summaries
+                                                                                                                                             from phrase in BooleanPhrases
+                                                                                                                                             where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)
+                                                                                                                                             select Issue(symbol, phrase.Trim());
     }
 }

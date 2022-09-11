@@ -126,7 +126,7 @@ The following tables list all the 336 rules that are currently provided by the a
 |MiKo_1110|Test methods with parameters should be suffixed with underscore|&#x2713;|&#x2713;|
 |MiKo_1111|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
 |MiKo_1112|Do not name test data 'arbitrary'|&#x2713;|&#x2713;|
-|MiKo_1112|Do not name unit test methods BDD style|&#x2713;|\-|
+|MiKo_1113|Do not name unit test methods BDD style|&#x2713;|\-|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
