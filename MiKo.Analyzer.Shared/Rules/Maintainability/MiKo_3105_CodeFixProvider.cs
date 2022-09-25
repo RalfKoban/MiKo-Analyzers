@@ -277,10 +277,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression)
             {
                 case TypeOfExpressionSyntax t:
+                {
                     return AssertThat(args[1], Is(methodName, new[] { t.Type }), args);
+                }
 
                 case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax nameSyntax:
-                    return AssertThat(Argument(nameSyntax.Identifier.Text), Is(methodName, GetTypeSyntaxes(i, name)), args);
+                {
+                    var typeSyntaxes = GetTypeSyntaxes(i, name);
+                    if (typeSyntaxes.Length > 0)
+                    {
+                        return AssertThat(Argument(nameSyntax.Identifier.Text), Is(methodName, typeSyntaxes), args);
+                    }
+
+                    var argument = i.ArgumentList.Arguments.FirstOrDefault();
+                    if (argument != null)
+                    {
+                        return AssertThat(Argument(nameSyntax.Identifier.Text), Is(methodName, argument), args, 1);
+                    }
+
+                    break;
+                }
             }
 
             if (name is GenericNameSyntax gns)
@@ -299,10 +315,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression)
             {
                 case TypeOfExpressionSyntax t:
+                {
                     return AssertThat(args[1], Is(propertyName, methodName, new[] { t.Type }), args);
+                }
 
                 case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax nameSyntax:
-                    return AssertThat(Argument(nameSyntax.Identifier.Text), Is(propertyName, methodName, GetTypeSyntaxes(i, name)), args);
+                {
+                    var typeSyntaxes = GetTypeSyntaxes(i, name);
+                    if (typeSyntaxes.Length > 0)
+                    {
+                        return AssertThat(Argument(nameSyntax.Identifier.Text), Is(propertyName, methodName, typeSyntaxes), args);
+                    }
+
+                    var argument = i.ArgumentList.Arguments.FirstOrDefault();
+                    if (argument != null)
+                    {
+                        return AssertThat(Argument(nameSyntax.Identifier.Text), Is(propertyName, methodName, argument), args, 1);
+                    }
+
+                    break;
+                }
             }
 
             if (name is GenericNameSyntax gns)
