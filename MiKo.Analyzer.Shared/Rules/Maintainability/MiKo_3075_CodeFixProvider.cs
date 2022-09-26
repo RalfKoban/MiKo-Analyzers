@@ -33,13 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool MakeStatic(CodeFixContext context, ClassDeclarationSyntax syntax)
         {
-            var semanticModel = GetSemanticModel(context);
-            var symbol = syntax.GetTypeSymbol(semanticModel);
+            var type = syntax.GetTypeSymbol(GetSemanticModel(context));
 
             // Inspect members, if all are static, then make it static, else make it sealed
-            if (symbol.BaseType is null || symbol.BaseType.IsObject())
+            if (type.BaseType is null || type.BaseType.IsObject())
             {
-                return symbol.GetMembers().All(_ => _.IsStatic || _.GetSyntax() is null);
+                return type.GetMembers().All(_ => _.IsStatic || _.GetSyntax() is null);
             }
 
             return false;
