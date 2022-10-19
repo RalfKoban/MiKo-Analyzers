@@ -10561,6 +10561,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Assert.That&apos;.
+        /// </summary>
+        public static string MiKo_3113_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3113_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FluentAssertions uses an approach where you define a &apos;Should&apos; method, followed by the assertion. That makes those assertions more difficult to read and spot. In contrast, NUnit&apos;s fluent assertion approach via &apos;Assert.That&apos; is much easier to spot..
+        /// </summary>
+        public static string MiKo_3113_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3113_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Assert.That&apos; instead of &apos;Should&apos;.
+        /// </summary>
+        public static string MiKo_3113_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3113_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use FluentAssertions.
+        /// </summary>
+        public static string MiKo_3113_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3113_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_3201_CodeFixTitle {

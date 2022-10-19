@@ -98,10 +98,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return AssertThat(arg1, HasCount("Not", "EqualTo", arg0), args);
         }
 
-        private static InvocationExpressionSyntax FixAreNotSame(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(args);
-
-        private static InvocationExpressionSyntax FixAreSame(SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(args);
-
         private static InvocationExpressionSyntax FixGreater(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], HasCount("GreaterThan", args[1]), args);
 
         private static InvocationExpressionSyntax FixGreaterOrEqual(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], HasCount("GreaterThanOrEqualTo", args[1]), args);

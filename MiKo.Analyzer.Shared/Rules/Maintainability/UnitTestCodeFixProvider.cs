@@ -10,10 +10,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class UnitTestCodeFixProvider : MaintainabilityCodeFixProvider
     {
-        protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments)
-            => AssertThat(Argument(expression), constraint, arguments, 1); // skip the first argument
+        protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 1, bool removeNameColon = false) // skip the first argument
+            => AssertThat(Argument(expression), constraint, arguments, skip, removeNameColon);
 
-        protected static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 2) // skip both arguments in the original call as we have to correct those
+        protected static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 2, bool removeNameColon = false) // skip both arguments in the original call as we have to correct those
         {
             var args = new List<ArgumentSyntax>(Math.Max(2, 2 + arguments.Count - skip));
             args.Add(argument);
@@ -21,7 +21,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arguments.Count > skip)
             {
-                args.AddRange(arguments.Skip(skip));
+                var otherArguments = arguments.Skip(skip);
+
+                if (removeNameColon)
+                {
+                    otherArguments = otherArguments.Select(_ => _.WithNameColon(null));
+                }
+
+                args.AddRange(otherArguments);
             }
 
             return AssertThat(args.ToArray());
@@ -29,11 +36,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static InvocationExpressionSyntax AssertThat(params ArgumentSyntax[] arguments) => Invocation("Assert", "That", arguments);
 
-        protected static InvocationExpressionSyntax InvocationIs(string name, ArgumentSyntax argument) => Invocation("Is", name, argument);
+        protected static InvocationExpressionSyntax InvocationIs(string name, params ArgumentSyntax[] arguments) => Invocation("Is", name, arguments);
 
         protected static ArgumentSyntax Is(string name) => Argument(MemberIs(name));
 
         protected static ArgumentSyntax Is(string name, ArgumentSyntax argument) => Argument(InvocationIs(name, argument));
+
+        protected static ArgumentSyntax Is(string name, ArgumentSyntax argument, ArgumentSyntax argument1) => Argument(InvocationIs(name, argument, argument1));
 
         protected static ArgumentSyntax Is(string name, ExpressionSyntax expression) => Is(name, Argument(expression));
 
@@ -42,6 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static ArgumentSyntax Is(string name, string name1, TypeSyntax[] items) => Argument(Invocation("Is", name, name1, items));
 
         protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument) => Argument(MemberIs(name, name1), argument);
+
+        protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, ArgumentSyntax argument1) => Argument(MemberIs(name, name1), argument, argument1);
 
         protected static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
         {
@@ -68,6 +79,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Argument(appendixCall, argument1);
         }
 
+        protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, string name2, ArgumentSyntax argument1)
+        {
+            var expression = MemberIs(name, name1);
+            var isCall = Invocation(expression, argument);
+            var appendixCall = SimpleMemberAccess(isCall, name2);
+
+            return Argument(appendixCall, argument1);
+        }
+
         protected static ArgumentSyntax Is(params string[] names) => Argument(MemberIs(names));
 
         protected static bool IsNumeric(ArgumentSyntax argument) => argument.Expression.IsKind(SyntaxKind.NumericLiteralExpression)
@@ -75,7 +95,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Does(string name, ArgumentSyntax argument) => Argument(Invocation("Does", name, argument));
 
+        protected static ArgumentSyntax Does(string name, ArgumentSyntax argument, string name1)
+        {
+            var doesCall = Invocation(MemberDoes(name), argument);
+            var appendixCall = SimpleMemberAccess(doesCall, name1);
+
+            return Argument(appendixCall);
+        }
+
         protected static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument) => Argument(MemberDoes(name, name1), argument);
+
+        protected static ArgumentSyntax Does(string name, string name1, ArgumentSyntax argument, string name2)
+        {
+            var doesCall = Invocation(MemberDoes(name, name1), argument);
+            var appendixCall = SimpleMemberAccess(doesCall, name2);
+
+            return Argument(appendixCall);
+        }
 
         protected static ArgumentSyntax Does(params string[] names) => Argument(MemberDoes(names));
 
@@ -88,6 +124,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return Argument(appendixCall);
         }
+
+        protected static ArgumentSyntax Has(string name, string name1, ArgumentSyntax argument, params TypeSyntax[] types) => Argument(SimpleMemberAccess("Has", name, name1, types), argument);
 
         protected static ArgumentSyntax HasCount(string name, ArgumentSyntax argument) => Argument(MemberHas("Count", name), argument);
 
