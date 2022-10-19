@@ -3741,6 +3741,18 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3112_Title" xml:space="preserve">
     <value>Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'</value>
   </data>
+  <data name="MiKo_3113_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Assert.That'</value>
+  </data>
+  <data name="MiKo_3113_Description" xml:space="preserve">
+    <value>FluentAssertions uses an approach where you define a 'Should' method, followed by the assertion. That makes those assertions more difficult to read and spot. In contrast, NUnit's fluent assertion approach via 'Assert.That' is much easier to spot.</value>
+  </data>
+  <data name="MiKo_3113_MessageFormat" xml:space="preserve">
+    <value>Use 'Assert.That' instead of 'Should'</value>
+  </data>
+  <data name="MiKo_3113_Title" xml:space="preserve">
+    <value>Do not use FluentAssertions</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>

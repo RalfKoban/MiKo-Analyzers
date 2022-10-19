@@ -19,6 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("Moq.Mock") != null;
+
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             base.InitializeCore(context);

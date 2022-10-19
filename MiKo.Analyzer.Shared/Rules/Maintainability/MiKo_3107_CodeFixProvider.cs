@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var invocation = (InvocationExpressionSyntax)syntax;
 
-            return ReplacementFor(context, invocation).WitTriviaFrom(invocation);
+            return ReplacementFor(context, invocation).WithTriviaFrom(invocation);
         }
 
         private static SyntaxNode ReplacementFor(CodeFixContext context, InvocationExpressionSyntax invocation)
@@ -44,13 +44,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (kind)
             {
                 case SyntaxKind.BoolKeyword: return Literal(SyntaxKind.FalseLiteralExpression);
-                case SyntaxKind.CharKeyword: return Literal(SyntaxFactory.Literal(char.MinValue));
-                case SyntaxKind.DecimalKeyword: return Literal(SyntaxFactory.Literal(decimal.Zero));
+                case SyntaxKind.CharKeyword: return Literal(char.MinValue);
+                case SyntaxKind.DecimalKeyword: return Literal(decimal.Zero);
                 case SyntaxKind.DoubleKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(double.NaN));
                 case SyntaxKind.FloatKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(float.NaN));
                 case SyntaxKind.ObjectKeyword: return Literal(SyntaxKind.NullLiteralExpression);
                 case SyntaxKind.StringKeyword: return Literal(SyntaxKind.NullLiteralExpression);
-                default: return Literal(SyntaxFactory.Literal(0));
+                default: return Literal(0);
             }
         }
 
