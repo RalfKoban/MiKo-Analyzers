@@ -3,5 +3,6 @@ namespace Moq
 {
     public class Mock
     {
+        public static T Of<T>() => default;
     }
 }

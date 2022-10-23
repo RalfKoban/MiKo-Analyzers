@@ -10597,6 +10597,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Mock.Of&lt;T&gt;()&apos;.
+        /// </summary>
+        public static string MiKo_3114_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3114_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance and increase readability,  &apos;Mock.Of&lt;T&gt;()&apos; is easier to identify as some necessary but unimportant mock than &apos;new Mock&lt;T&gt;().Object&apos;..
+        /// </summary>
+        public static string MiKo_3114_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3114_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Mock.Of&lt;T&gt;()&apos; instead.
+        /// </summary>
+        public static string MiKo_3114_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3114_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;.
+        /// </summary>
+        public static string MiKo_3114_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3114_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_3201_CodeFixTitle {
