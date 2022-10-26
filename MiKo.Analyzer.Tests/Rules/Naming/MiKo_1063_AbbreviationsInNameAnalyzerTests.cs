@@ -110,6 +110,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "adopt",
                 "adoptWhatever",
                 "allowedFeatures",
+                "attempt",
+                "attempts",
                 "corrupt",
                 "corruptNumber",
                 "declared",

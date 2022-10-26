@@ -102,6 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "ixtures",
                 "kept",
                 "mpt", // prompt
+                "mpts", // attempts
                 "rupt",
                 "ures",
                 "wares",
