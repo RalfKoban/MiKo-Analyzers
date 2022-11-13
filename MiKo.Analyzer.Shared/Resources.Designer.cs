@@ -9834,7 +9834,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred over a logical NOT condition.
+        ///   Looks up a localized string similar to Prefer pattern matching over a logical NOT condition.
         /// </summary>
         public static string MiKo_3081_Title {
             get {
@@ -9870,7 +9870,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred over a logical comparison with &apos;true&apos; or &apos;false&apos;.
+        ///   Looks up a localized string similar to Prefer pattern matching over a logical comparison with &apos;true&apos; or &apos;false&apos;.
         /// </summary>
         public static string MiKo_3082_Title {
             get {
@@ -9906,7 +9906,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred for null checks.
+        ///   Looks up a localized string similar to Prefer pattern matching for null checks.
         /// </summary>
         public static string MiKo_3083_Title {
             get {
