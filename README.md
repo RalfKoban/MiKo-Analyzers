@@ -281,7 +281,7 @@ The following tables list all the 338 rules that are currently provided by the a
 |MiKo_3033|Use 'nameof' for names of properties for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances|&#x2713;|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute|&#x2713;|&#x2713;|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts|&#x2713;|\-|
-|MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors|&#x2713;|\-|
+|MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors|&#x2713;|&#x2713;|
 |MiKo_3037|Do not use magic numbers for timeouts|&#x2713;|\-|
 |MiKo_3038|Do not use magic numbers|&#x2713;|\-|
 |MiKo_3039|Properties should not use Linq or yield|&#x2713;|\-|

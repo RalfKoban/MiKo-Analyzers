@@ -3117,6 +3117,9 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3035_Title" xml:space="preserve">
     <value>Do not invoke 'WaitOne' methods without timeouts</value>
   </data>
+  <data name="MiKo_3036_CodeFixTitle" xml:space="preserve">
+    <value>Use factory method</value>
+  </data>
   <data name="MiKo_3036_Description" xml:space="preserve">
     <value>The 'TimeSpan' .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as 'FromMinutes' or 'FromDays', these should be preferred. They are much easier to read and more explicit.
 
